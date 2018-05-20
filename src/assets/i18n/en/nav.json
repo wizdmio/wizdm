@@ -1,0 +1,18 @@
+{
+    "title": "Wizdm - Your app is done",
+    "description": "A community of app givers",
+
+    "menu": {    
+        "items": [
+            { "label": "How it works", "link": "home" },
+            { "label": "Join the community", "link": "join" },
+            { "label": "Manifesto", "link": "about" }
+        ],
+        "start": {"label": "Get started", "link": "apply"},
+        "language": "Language"
+    },
+
+    "search": {
+        "placeholder": "Search..."
+    }
+}

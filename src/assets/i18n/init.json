@@ -1,0 +1,21 @@
+{
+  "languages" : [
+    {    
+      "lang" : "it",
+      "label": "Italiano",
+      "img": "assets/img/it.svg"
+    },
+    {    
+      "lang" : "en",
+      "label": "English",
+      "img": "assets/img/gb.svg",
+      "default": true
+    }
+  ],
+
+  "modules" : {
+    "navigator": "nav.json",
+    "presentation": "intro.json",
+    "notFound": "notFound.json"
+  }
+}

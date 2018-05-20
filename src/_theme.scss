@@ -1,0 +1,20 @@
+
+@import '~@angular/material/theming';
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$wm-mat-typography: mat-typography-config(
+  $font-family: 'Ubuntu, sans-serif',
+  $headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(16px, 24px, 500)
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://www.google.com/design/spec/style/color.html
+$wm-mat-primary: mat-palette($mat-indigo);
+$wm-mat-accent:  mat-palette($mat-deep-purple, A200, A100, A400);
+$wm-mat-warn:    mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$wm-mat-theme: mat-light-theme($wm-mat-primary, $wm-mat-accent, $wm-mat-warn);

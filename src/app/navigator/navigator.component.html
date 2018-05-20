@@ -1,0 +1,19 @@
+
+<wm-toolbar [toggler]="snav.opened" (togglerChange)="snav.toggle()">
+</wm-toolbar>
+
+<mat-sidenav-container>
+
+  <mat-sidenav #snav mode="over">
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let item of msgs.menu.items" [routerLink]="item.link">
+        {{item.label}}
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+      <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

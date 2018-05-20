@@ -1,0 +1,26 @@
+<mat-toolbar fxLayout="row">
+ 
+  <section fxFlex="80" fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
+    <a mat-button *ngFor="let item of menu.items" 
+       routerLinkActive="link-active" [routerLink]="item.link">
+      {{item.label}}
+    </a>
+  </section>
+
+  <!--button mat-icon-button (click)="toggle()" fxFlex="50" fxHide="true" fxShow.lt-sm="true">
+    <mat-icon fontSet="fa" fontIcon="fa-bars"></mat-icon>
+  </button-->
+
+  <wm-toggler [status]="toggler" 
+              (statusChange)="toggle()" 
+              fxFlex="50" fxHide="true" fxShow.lt-sm="true">
+  </wm-toggler>
+
+  <button mat-button 
+          fxFlex="20" fxFlex.lt-sm="50" fxLayoutAlign="center center" 
+          [routerLink]="menu.start.link">
+    {{menu.start.label}}
+  </button>
+
+</mat-toolbar>
+<mat-divider></mat-divider>

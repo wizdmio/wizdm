@@ -1,0 +1,38 @@
+@import 'src/theme';
+
+mat-toolbar {
+  background-color: mat-contrast($wm-mat-primary, 600);
+  color: mat-color($wm-mat-primary, 600);
+}
+
+a {
+  font-size: mat-font-size($wm-mat-typography, subheading-1);
+  margin: 0 2px;
+}
+
+button {
+  font-size: mat-font-size($wm-mat-typography, title);
+  margin: 0 5px;
+
+  &[mat-button] {
+    background-color: mat-color($wm-mat-primary, 600);
+    color: mat-contrast($wm-mat-primary, 600);
+    }
+/*
+  &[mat-icon-button] {
+    background-color: mat-color($wm-mat-primary, 600);
+    color: mat-contrast($wm-mat-primary, 600);
+    }*/
+  }  
+
+.link-active {
+  text-decoration: underline;
+}
+/*
+mat-icon {
+  //align-content: center;
+  //vertical-align: center;
+  text-align: center;
+  line-height: 30px;
+  height: 30px;
+}*/

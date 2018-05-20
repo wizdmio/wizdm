@@ -1,0 +1,144 @@
+//@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/reboot";
+//@import "~bootstrap/scss/type";
+//@import "~bootstrap/scss/code";
+//@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/utilities";
+@import "src/variables";
+
+$ut-search-width:    200px !default;
+$ut-search-height:    40px !default;
+$ut-search-margin:    48px !default;
+$ut-search-position:  75px !default;
+
+$ut-submit-size:     80px !default;
+$ut-close-size:      36px !default;
+
+:host {
+  position:      absolute;
+	top:           $ut-search-margin * 0.75 -$ut-search-height / 2;
+	right:         $ut-search-position;
+  width:         $ut-search-height;
+	height:    		 $ut-search-height;
+	border-radius: $ut-search-height / 2;
+	z-index:       $zindex-fixed;
+	background:    $ut-white;
+	//border:        1px solid $ut-search-border;
+	//box-shadow:     2px 3px black;
+	
+	@include media-breakpoint-up(md) {
+		top: $ut-search-margin -$ut-search-height / 2;
+    //right: $ut-search-margin;
+    width: $ut-search-width;
+	}
+}
+
+svg.morphmag {
+	position: absolute;
+	top:    $ut-search-height / 4;
+	right:  $ut-search-height / 4;
+	width:  $ut-search-height / 2;
+  height: $ut-search-height / 2;
+	fill:   $ut-silver;
+	stroke: $ut-silver;
+	opacity: inherit; // IE requires
+}
+
+.morphform {
+	width: 100%;
+	height: $ut-search-height;
+	margin: 0 auto;
+	position: relative;
+}
+
+.morphinput {
+	width: 100%;
+	height: 100%;
+	padding: 0 10% 0 10px;
+	background: transparent;
+	color: $ut-silver;
+	border: none;
+	
+	font-family: 'Orbitron', sans-serif;
+  font-weight: 400;
+	//font-weight: 700;
+	font-size: 2em;
+	opacity: 0;
+
+	@include media-breakpoint-up(md) {
+		font-size: 7em;
+		opacity: 1;
+	}
+}
+
+.morphinput::placeholder {
+	font-family: 'Orbitron', sans-serif;
+  font-weight: 400;
+	color: $ut-silver;
+}
+
+.morphinput::-ms-clear { // removes the cross in IE
+  display: none;
+}
+
+.morphinput:focus,
+.morphsubmit:focus {
+	outline: none;
+}
+
+.morphsubmit {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	border: none;
+//	opacity: 0;
+
+	width: $ut-submit-size / 2;
+	height: $ut-submit-size / 2;
+
+	@include media-breakpoint-up(md) {
+		width: $ut-submit-size;
+		height: $ut-submit-size;
+	}
+
+	background: transparent url(/assets/img/magnifier.svg) no-repeat center center;
+	background-size: 100%;
+}
+
+.morph-close {
+	width: $ut-close-size;
+	height: $ut-close-size;
+	position: absolute;
+	right: 1em;
+	top: 1em;
+	cursor: pointer;
+}
+
+.morph-close::before,
+.morph-close::after {
+	content: '';
+	position: absolute;
+	width: 2px;
+	height: 100%;
+	top: 0;
+	left: 50%;
+	border-radius: 3px;
+	opacity: 0.2;
+	background: $ut-black;
+}
+
+.morph-close:hover.morph-close::before,
+.morph-close:hover.morph-close::after {
+	opacity: 1;
+}
+
+.morph-close::before {
+	transform: rotate(45deg);
+}
+
+.morph-close::after {
+	transform: rotate(-45deg);
+}

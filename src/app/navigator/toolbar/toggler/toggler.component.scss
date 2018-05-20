@@ -1,0 +1,30 @@
+@import 'src/theme';
+
+$wm-toggler-width:  24px !default;
+$wm-toggler-height: 20px !default;
+
+button {
+    cursor: pointer;
+
+    left: 50%;
+    margin-left: -$wm-toggler-width / 2;
+    
+    width: $wm-toggler-width;
+    height: $wm-toggler-height;
+
+    padding: 0;
+
+    background: transparent;
+
+    span {
+        content: '';
+        position: absolute;
+        
+        height: 3px;
+        background-color: mat-color($wm-mat-primary, 600);
+
+        &[top] { top: 0; left: 0; width: 100%;}
+        &[middle] { top: 50%; left: 0; width: 100%;}
+        &[bottom] { top: 100%; left: 0; width: 100%;}
+    }
+}

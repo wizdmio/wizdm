@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+
+//@import 'variables';
+@import 'preloader';
+
+//$fa-font-path: "~font-awesome/fonts";
+//@import "~font-awesome/scss/font-awesome";
+
+$fa-font-path: "~@fortawesome/fontawesome-free-webfonts/webfonts";
+@import "~@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
+@import "~@fortawesome/fontawesome-free-webfonts/scss/fa-brands";
+
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
+
+@import 'theme';
+
+// Include the common styles for Angular Material (make sure this is included only once)
+@include mat-core();
+
+// Apply custom theme styles and typography for core and each component used in your app.
+@include angular-material-theme($wm-mat-theme);
+@include angular-material-typography($wm-mat-typography);
+
+body {
+
+  // Applies material typography rules globally
+  @extend .mat-typography;
+
+  margin: 0;
+
+  //color: $wm-black;
+  //background-color: $wm-white;
+
+  // Locks the app to fit the viewport only.
+	//height: 100vh;
+  //overflow: hidden;
+}

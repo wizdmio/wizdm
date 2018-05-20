@@ -1,0 +1,54 @@
+
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch https://localhost with sourcemaps",
+			"type": "chrome",
+			"request": "launch",
+			"url": "https://localhost:4200",
+			"webRoot": "${workspaceRoot}",
+			"userDataDir": "${workspaceRoot}/.vscode/chrome",
+			"sourceMaps": true,
+			"sourceMapPathOverrides": {
+        "webpack:/./*": "${webRoot}/*",
+        "webpack:/src/*": "${webRoot}/src/*",
+        "webpack:/*": "*",
+        "webpack:/./~/*": "${webRoot}/node_modules/*"
+      }
+			// Uncomment this to get diagnostic logs in the console
+			// "diagnosticLogging": true
+		},
+		{
+			"name": "Launch http://localhost with sourcemaps",
+			"type": "chrome",
+			"request": "launch",
+			"url": "http://localhost:4200",
+			"webRoot": "${workspaceRoot}",
+			"userDataDir": "${workspaceRoot}/.vscode/chrome",
+			"sourceMaps": true,
+			"sourceMapPathOverrides": {
+        "webpack:/./*": "${webRoot}/*",
+        "webpack:/src/*": "${webRoot}/src/*",
+        "webpack:/*": "*",
+        "webpack:/./~/*": "${webRoot}/node_modules/*"
+      }
+			// Uncomment this to get diagnostic logs in the console
+			// "diagnosticLogging": true
+		},
+		{
+			"name": "Attach with sourcemaps",
+			"type": "chrome",
+			"request": "attach",
+			"port": 9222,
+			"webRoot": "${workspaceRoot}",
+			"sourceMaps": true,
+			"sourceMapPathOverrides": {
+        "webpack:/./*": "${webRoot}/*",
+        "webpack:/src/*": "${webRoot}/src/*",
+        "webpack:/*": "*",
+        "webpack:/./~/*": "${webRoot}/node_modules/*"
+      }
+		}
+	]
+}

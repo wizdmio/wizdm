@@ -1,0 +1,27 @@
+<div *ngIf="!search" @morphMagnifier>
+  <svg class="morphmag"> 
+    <use href="#magnifier"></use>
+  </svg>
+</div>
+
+<form class="morphform" [@morphForm]="triggerMorph">
+  <input class="morphinput" 
+          [@morphInput]="triggerMorph"
+          type="search" 
+          placeholder="{{msgs?.placeholder}}" 
+          (focus)="toggle(true)" />
+  <button class="morphsubmit" 
+          [@morphSubmit]="triggerMorph"
+          type="submit">
+  </button>
+</form>
+<span *ngIf="search" class="morph-close" 
+      (click)="toggle(false)" @morphClose>
+</span>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" display="none">
+  <symbol id="magnifier" viewBox="0 0 60 60">
+    <circle fill="none" stroke-width="3" cx="23.5" cy="23.5" r="18.5"/>
+    <line stroke-width="3" x1="35" y1="36" x2="56" y2="57"/>
+  </symbol>
+</svg>
