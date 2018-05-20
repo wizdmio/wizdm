@@ -15,6 +15,8 @@ import {
 import { NavComponent } from './navigator.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TogglerComponent } from './toolbar/toggler/toggler.component';
+import { FooterComponent } from './footer/footer.component';
+
 
 @NgModule({
   imports: [
@@ -32,7 +34,8 @@ import { TogglerComponent } from './toolbar/toggler/toggler.component';
   declarations: [
     NavComponent,
     ToolbarComponent,
-    TogglerComponent
+    TogglerComponent,
+    FooterComponent
   ],
   providers: [
   ]

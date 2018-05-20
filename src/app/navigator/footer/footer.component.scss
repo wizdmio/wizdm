@@ -1,0 +1,44 @@
+@import "src/theme";
+
+$wm-footer-height: 64px !default;
+
+footer {
+  min-height: $wm-footer-height;
+  width: 100%;
+  padding: 0 32px;
+  
+  color: mat-color($wm-mat-primary,400);
+  background-color: mat-contrast($wm-mat-primary,400);
+  /*
+  .footer-copyright {
+    min-height: 50px;
+    //vertical-align: middle;
+    //padding: 10px 0;
+  }
+
+  /*
+  .footer-social a {
+    color: white;
+    font-size: 2em;
+    padding: 15px;
+  }
+
+  .footer-social a:hover {
+    color: $wm-pink-dark;
+  }
+
+  .footer-copyright {
+    height: 50px;
+    vertical-align: middle;
+    padding: 10px 0;
+  }
+
+  .footer-copyright a {
+    color: white;
+  }
+
+  .footer-copyright a:hover {
+    color: $wm-pink-dark;
+  }*/
+}
+

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ContentManager, LanguageData } from 'app/content';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnInit, OnDestroy {
 
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input() toggler = false;
@@ -42,6 +42,13 @@ export class ToolbarComponent implements OnInit {
           this.toggle();
         }
       });
+    }
+
+    ngOnDestroy() {
+
+      if(this.sub) {
+        this.sub.unsubscribe();
+      }
     }
 
     private toggle() {

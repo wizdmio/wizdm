@@ -1,0 +1,40 @@
+@import '~bootstrap/scss/bootstrap';
+@import "src/variables";
+
+.consent-container {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+}
+
+.consent-shadow {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+
+  width: 100%;
+  min-height: 100px;
+  background-color: $nl-pink-dark;
+  color: transparent;
+  opacity: 0.8;
+}
+
+.consent-body {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+
+  width: 100%;
+  background-color: transparent;
+  color: white;
+}
+
+.row {
+    min-height: 100px;
+}

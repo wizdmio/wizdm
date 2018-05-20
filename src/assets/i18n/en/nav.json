@@ -8,11 +8,15 @@
             { "label": "Join the community", "link": "join" },
             { "label": "Manifesto", "link": "about" }
         ],
-        "start": {"label": "Get started", "link": "apply"},
-        "language": "Language"
+        "start": {"label": "Get started", "link": "apply"}
     },
 
     "search": {
         "placeholder": "Search..."
+    },
+
+    "footer": {
+        "terms": "Terms and Privacy",
+        "language": "Language"
     }
 }

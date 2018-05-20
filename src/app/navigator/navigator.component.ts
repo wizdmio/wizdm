@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostBinding, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ContentManager } from 'app/content';
