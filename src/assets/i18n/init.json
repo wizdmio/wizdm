@@ -10,6 +10,11 @@
       "label": "English",
       "img": "assets/img/gb.svg",
       "default": true
+    },
+    {    
+      "lang" : "ru",
+      "label": "Русский",
+      "img": "assets/img/ru.svg"
     }
   ],
 

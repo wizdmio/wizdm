@@ -8,6 +8,7 @@ import {
   MatMenuModule,
   MatListModule,
   MatButtonModule,
+  MatSelectModule,
   MatIconModule,
   MatDividerModule
 } from '@angular/material';
@@ -28,6 +29,7 @@ import { FooterComponent } from './footer/footer.component';
     //MatMenuModule,
     MatListModule,
     MatButtonModule,
+    MatSelectModule,
     MatIconModule,
     MatDividerModule
   ],

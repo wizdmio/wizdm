@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ContentManager, LanguageData } from 'app/content';
+import { ContentManager } from 'app/content';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -14,8 +14,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input() toggler = false;
 
-  private languages: LanguageData[];
-  private language: LanguageData;
   private menu: any = null;
 
   private sub: Subscription;
@@ -28,10 +26,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       // Gets the localized content
       this.menu = this.content.select("navigator.menu");
     
-      // Gets the list of available languages
-      this.languages = this.content.languages();
-      this.language = this.content.language();
-
       // Listen for NavigationEnd events to close the menu
       this.sub = this.router
       .events.pipe(filter(e => e instanceof NavigationEnd))
