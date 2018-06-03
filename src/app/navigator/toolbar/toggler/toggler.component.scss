@@ -1,11 +1,10 @@
+@import "src/variables";
 @import 'src/theme';
-
-$wm-toggler-width:  24px !default;
-$wm-toggler-height: 20px !default;
 
 button {
     cursor: pointer;
 
+    top: 0;
     left: 50%;
     margin-left: -$wm-toggler-width / 2;
     
@@ -21,10 +20,12 @@ button {
         position: absolute;
         
         height: 3px;
-        background-color: mat-color($wm-mat-primary, 600);
+        background-color: map-get($wm-theme-foreground, text);
 
         &[top] { top: 0; left: 0; width: 100%;}
         &[middle] { top: 50%; left: 0; width: 100%;}
         &[bottom] { top: 100%; left: 0; width: 100%;}
     }
 }
+
+

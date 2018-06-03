@@ -1,4 +1,5 @@
 {
+    "logo": "WIZDM",
     "title": "Wizdm - Your app is done",
     "description": "A community of app givers",
 
@@ -6,9 +7,9 @@
         "items": [
             { "label": "How it works", "link": "home" },
             { "label": "Join the community", "link": "join" },
-            { "label": "Manifesto", "link": "about" }
-        ],
-        "start": {"label": "Get started", "link": "apply"}
+            { "label": "Manifesto", "link": "about" },
+            {"label": "Get started", "link": "apply"}
+        ] 
     },
 
     "search": {

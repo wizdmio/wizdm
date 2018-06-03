@@ -1,10 +1,9 @@
-
 <wm-toolbar [toggler]="snav.opened" (togglerChange)="snav.toggle()">
 </wm-toolbar>
 
 <mat-sidenav-container>
 
-  <mat-sidenav #snav mode="over">
+  <mat-sidenav #snav mode="over" position="end">
     <mat-nav-list>
       <a mat-list-item *ngFor="let item of msgs.menu.items" [routerLink]="item.link">
         {{item.label}}

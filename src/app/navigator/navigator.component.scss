@@ -1,3 +1,4 @@
+@import 'src/variables';
 @import 'src/theme';
 
 :host {
@@ -8,12 +9,17 @@
   height: 100vh;
 }
 
-a {
-  &[mat-list-item]{
-    color: mat-color($wm-mat-primary, 600);
+mat-sidenav {
+  a:last-child {
+    background-color: mat-color($wm-primary, A400);
+    color: mat-contrast($wm-primary, A400);
   }
 }
 
 mat-sidenav-container {
   height: 100%;
+}
+
+mat-sidenav-content {
+  padding: $wm-content-margin;
 }

@@ -1,23 +1,69 @@
-
 @import '~@angular/material/theming';
 
 // Define a custom typography config that overrides the font-family as well as the
 // `headlines` and `body-1` levels.
-$wm-mat-typography: mat-typography-config(
+$wm-typography: mat-typography-config(
   $font-family: 'Ubuntu, sans-serif',
   $headline: mat-typography-level(32px, 48px, 700),
   $body-1: mat-typography-level(16px, 24px, 500)
 );
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://www.google.com/design/spec/style/color.html
-$wm-mat-primary: mat-palette($mat-indigo);
-$wm-mat-accent:  mat-palette($mat-deep-purple, A200, A100, A400);
-$wm-mat-warn:    mat-palette($mat-red);
+// Define the main theme palettes.
+$wm-primary: mat-palette($mat-blue);
+$wm-accent:  mat-palette($mat-deep-purple, A200, A100, A400);
+$wm-warn:    mat-palette($mat-red);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$wm-mat-theme: mat-light-theme($wm-mat-primary, $wm-mat-accent, $wm-mat-warn);
+// Custom background palette
+$wm-theme-background: (
+  status-bar: white,
+  app-bar:    white,
+  background: map_get($mat-grey, 50),
+  hover:      rgba(black, 0.04), // TODO(kara): check style with Material Design UX
+  card:       white,
+  dialog:     white,
+  disabled-button: rgba(black, 0.12),
+  raised-button: white,
+  focused-button: $dark-focused,
+  selected-button: map_get($mat-grey, 300),
+  selected-disabled-button: map_get($mat-grey, 400),
+  disabled-button-toggle: map_get($mat-grey, 200),
+  unselected-chip: map_get($mat-grey, 300),
+  disabled-list-option: map_get($mat-grey, 200),
+);
+
+// Custom foreground palette
+$wm-theme-foreground: (
+  base:              mat-color($wm-primary, 900),
+  divider:           $dark-dividers,
+  dividers:          $dark-dividers,
+  disabled:          $dark-disabled-text,
+  disabled-button:   rgba(mat-color($wm-primary, 900), 0.26),
+  disabled-text:     $dark-disabled-text,
+  hint-text:         $dark-disabled-text,
+  secondary-text:    $dark-secondary-text,
+  icon:              rgba(mat-color($wm-primary, 900), 0.54),
+  icons:             rgba(mat-color($wm-primary, 900), 0.54),
+  text:              rgba(mat-color($wm-primary, 900), 0.87),
+  slider-min:        rgba(mat-color($wm-primary, 900), 0.87),
+  slider-off:        rgba(mat-color($wm-primary, 900), 0.26),
+  slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
+);
+
+@function wm-app-theme($primary, $accent, $warn) {
+  @return (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: false,
+    foreground: $wm-theme-foreground,
+    background: $wm-theme-background,
+  );
+}
+
+// Create the customized theme
+$wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
+
+
 /*
 @mixin wm-gradient($color-stops...) {
   background: nth(nth($color-stops, 1), 1);
@@ -27,7 +73,3 @@ $wm-mat-theme: mat-light-theme($wm-mat-primary, $wm-mat-accent, $wm-mat-warn);
   background:         linear-gradient(to right, $color-stops); /// Standard syntax; must be last 
 }
 */
-@mixin wm-gradient($baseColor) {
-  background: $baseColor;
-  background: linear-gradient(135deg, $baseColor*1.3 1%, $baseColor*.75 25%, $baseColor 60%, $baseColor*.7 100%); /// Standard syntax; must be last 
-}

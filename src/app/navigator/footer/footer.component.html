@@ -28,7 +28,7 @@
   </div-->
   
   <mat-form-field fxFlexOrder.lt-sm="1">
-    <mat-select class="red" [value]="language.lang" (valueChange)=changeLanguage($event)>
+    <mat-select [value]="language.lang" (valueChange)=changeLanguage($event)>
       <mat-option *ngFor="let item of languages" [value]="item.lang">
         {{item.label}}
       </mat-option>

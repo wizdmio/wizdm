@@ -1,21 +1,17 @@
+@import "src/variables";
 @import "src/theme";
 
-$wm-footer-height: 64px !default;
-/*
-mat-select.mat-select-trigger.mat-select-value {
-  color: #FF0000 !important;
-}
-*/
 footer {
   min-height: $wm-footer-height;
   width: 100%;
   padding: 0 32px;
   
-  color: mat-color($wm-mat-primary,400);
-  background-color: mat-contrast($wm-mat-primary,400);
+  color: map-get($wm-theme-foreground,text);
+  background-color: map-get($wm-theme-background, status-bar);
+
 }
 
 mat-icon {
-  font-size: 24px;
+  font-size: mat-font-size($wm-typography, title);
 }
 

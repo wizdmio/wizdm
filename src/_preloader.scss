@@ -1,57 +1,56 @@
 
-$spin-size:       150px;
-$spin-thickness:  3px;
-$spin-distance:   6px;
-$spin-color:    #1980b3;
+@mixin preloader($size, $thickness, $color) {
 
-.preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1030;
-  perspective: 800px;
-
-  //background-color: $rs-white;
-  //background-size: cover;
-
-  & > div {
-    position: absolute;
-    left: calc(50% - #{$spin-size/2} );
-    top: calc(50% - #{$spin-size/2} );
-    width: $spin-size;
-    height: $spin-size;
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1030;
+    perspective: 800px;
   
-    border-radius: 50%;
-    border: $spin-thickness solid transparent;
+    & > div {
+      position: absolute;
+      left: calc(50% - #{$size/2} );
+      top: calc(50% - #{$size/2} );
+      width: $size;
+      height: $size;
+    
+      border-radius: 50%;
+      border: $thickness solid transparent;
+    }
+  
+    div:nth-child(1){
+      border-bottom-color: darken($color, 20%);;
+      animation: spin-one 1.0s linear infinite;
+    }
+  
+    div:nth-child(2){
+      border-right-color: $color;
+      animation: spin-two 1.0s linear infinite; 
+    }
+  
+    div:nth-child(3){
+      border-top-color: lighten($color, 20%);
+      animation: spin-three 1.0s linear infinite;
+    }
   }
 
-  div:nth-child(1){
-    border-bottom-color: $spin-color;
-    animation: spin-one 1.0s linear infinite;
-  }
-
-  div:nth-child(2){
-    border-right-color: lighten($spin-color, 20%);
-    animation: spin-two 1.0s linear infinite; 
-  }
-
-  div:nth-child(3){
-    border-top-color: lighten($spin-color, 40%);
-    animation: spin-three 1.0s linear infinite;
-  }
-}
-
-@keyframes spin-one {
+  @keyframes spin-one {
     0% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);}
-  100% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);}
+    100% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);}
+  }
+  @keyframes spin-two {
+      0% { transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);}
+    100% { transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);}
+  }
+  @keyframes spin-three {
+      0% { transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);}
+    100% { transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);}
+  }
 }
-@keyframes spin-two {
-    0% { transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);}
-  100% { transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);}
-}
-@keyframes spin-three {
-    0% { transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);}
-  100% { transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);}
-}
+
+
+
+

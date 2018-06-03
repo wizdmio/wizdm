@@ -15,6 +15,7 @@ import {
 
 import { NavComponent } from './navigator.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { LogoComponent } from './toolbar/logo/logo.component';
 import { TogglerComponent } from './toolbar/toggler/toggler.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -36,6 +37,7 @@ import { FooterComponent } from './footer/footer.component';
   declarations: [
     NavComponent,
     ToolbarComponent,
+    LogoComponent,
     TogglerComponent,
     FooterComponent
   ],

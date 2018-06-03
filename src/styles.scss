@@ -1,11 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
-//@import 'variables';
-@import 'preloader';
-
-//$fa-font-path: "~font-awesome/fonts";
-//@import "~font-awesome/scss/font-awesome";
-
 $fa-font-path: "~@fortawesome/fontawesome-free-webfonts/webfonts";
 @import "~@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
@@ -13,26 +5,25 @@ $fa-font-path: "~@fortawesome/fontawesome-free-webfonts/webfonts";
 
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
 
+@import 'variables';
 @import 'theme';
+@import 'preloader';
 
 // Include the common styles for Angular Material (make sure this is included only once)
 @include mat-core();
 
 // Apply custom theme styles and typography for core and each component used in your app.
-@include angular-material-theme($wm-mat-theme);
-@include angular-material-typography($wm-mat-typography);
+@include angular-material-typography($wm-typography);
+@include angular-material-theme($wm-theme);
+
+// Creates the .preloader spinner class applying the theme color
+@include preloader($wm-loader-size, $wm-loader-thick, mat-color($wm-primary, A400));
 
 body {
 
   // Applies material typography rules globally
   @extend .mat-typography;
-
+ 
+  // Removes the margin
   margin: 0;
-
-  //color: $wm-black;
-  //background-color: $wm-white;
-
-  // Locks the app to fit the viewport only.
-	//height: 100vh;
-  //overflow: hidden;
 }

@@ -27,8 +27,7 @@ import { Subscription } from 'rxjs';
   //styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy { 
-  title = 'rocketScience';
-
+  
   private loading: boolean = true;
 
   constructor(private content: ContentManager,
