@@ -17,7 +17,7 @@ $wm-warn:    mat-palette($mat-red);
 $wm-theme-background: (
   status-bar: white,
   app-bar:    white,
-  background: map_get($mat-grey, 50),
+  background: white, //map_get($mat-grey, 50),
   hover:      rgba(black, 0.04), // TODO(kara): check style with Material Design UX
   card:       white,
   dialog:     white,

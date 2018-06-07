@@ -7,7 +7,7 @@ import 'app/utils/handy/interpolate';
 import { $defaultMsgs } from './not-found-defaults';
 
 @Component({
-  selector: 'rs-not-found',
+  selector: 'wm-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss']
 })

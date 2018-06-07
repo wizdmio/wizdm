@@ -6,7 +6,7 @@ import { ContentManager } from 'app/content';
 //import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'rs-home',
+  selector: 'wm-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']//,
   //animations: homeAnimations

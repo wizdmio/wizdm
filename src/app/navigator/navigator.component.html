@@ -1,20 +1,32 @@
-<wm-toolbar [toggler]="snav.opened" (togglerChange)="snav.toggle()">
+<wm-toolbar [toggler]="snav.opened" 
+            (togglerChange)="snav.toggle()"
+            [divider]="divider && !snav.opened"
+            #toolbar>
 </wm-toolbar>
 
 <mat-sidenav-container>
 
-  <mat-sidenav #snav mode="over" position="end">
+  <mat-sidenav mode="over" 
+               position="end"
+               [fixedInViewport]="true"
+               [fixedTopGap]="top"
+               #snav>
+
     <mat-nav-list>
       <a mat-list-item *ngFor="let item of msgs.menu.items" [routerLink]="item.link">
         {{item.label}}
       </a>
     </mat-nav-list>
-  </mat-sidenav>
 
-  <mat-sidenav-content>
+  </mat-sidenav>  
+    
+  <mat-sidenav-content fxLayout="column" 
+                       (scroll)="onScroll($event)"
+                       #content>
+    <div fxFlex >
       <router-outlet></router-outlet>
+    </div>
+    <wm-footer></wm-footer>
   </mat-sidenav-content>
 
 </mat-sidenav-container>
-
-<wm-footer></wm-footer>
