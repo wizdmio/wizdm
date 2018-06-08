@@ -6,22 +6,18 @@ import { ContentManager } from 'app/content';
 @Component({
   selector: 'wm-navigator',
   templateUrl: './navigator.component.html',
-  styleUrls: ['./navigator.component.scss'],
+  styleUrls: ['./navigator.component.scss']/*,
   host: {
     '[style.top.px]' : 'top'
-  }
+  }*/
 })
-export class NavComponent implements OnInit, AfterViewInit {
-
-  @ViewChild('toolbar', { read: ElementRef })
-  private tbRef: ElementRef;
+export class NavComponent implements OnInit {//, AfterViewInit {
 
   @ViewChild('content', { read: ElementRef })
   private ctRef: ElementRef;
 
   private msgs: any = null;
   private divider = false;
-  private top = 0;
   
   constructor(private content: ContentManager, 
               private title: Title,
@@ -42,6 +38,24 @@ export class NavComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //@HostListener('window:scroll', ['$event']) 
+  private onScroll(event: Event) : void {
+    
+    let ofs = this.ctRef.nativeElement.scrollTop || 0;
+
+    // Triggers the appeareance of the toolbar's divider on scroll
+    this.divider = ofs > 20;//this.top / 2;
+
+    //console.log("scroll: " + ofs);
+  }
+
+/* This is part of a previous implementation using a fixed toolbar
+   plus the container dynamically adjusted to fit right below
+   
+  @ViewChild('toolbar', { read: ElementRef })
+  private tbRef: ElementRef;
+  private top = 0;
+
   // Adjust the top view according to the exact heigh tof the 
   // toolbar always fixed on top of the view
   updateTop() : void 
@@ -56,19 +70,8 @@ export class NavComponent implements OnInit, AfterViewInit {
     setTimeout(() => {this.updateTop()} );
   }
 
-  //@HostListener('window:scroll', ['$event']) 
-  private onScroll(event: Event) : void {
-    
-    let ofs = this.ctRef.nativeElement.scrollTop || 0;
-
-    // Triggers the appeareance of the toolbar's divider on scroll
-    this.divider = ofs > this.top / 2;
-
-    console.log("scroll: " + ofs);
-  }
-
   // Update view top on window resize
   @HostListener('window:resize',['$event']) onResize(event) {
     this.updateTop();
-  }
+  }*/
 }

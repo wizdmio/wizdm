@@ -4,12 +4,16 @@
             #toolbar>
 </wm-toolbar>
 
-<mat-sidenav-container>
+<mat-sidenav-container fxFlex fxLayout="column">
 
-  <mat-sidenav mode="over" 
+  <!--mat-sidenav mode="over" 
                position="end"
                [fixedInViewport]="true"
                [fixedTopGap]="top"
+               #snav-->
+
+  <mat-sidenav mode="over" 
+               position="end"
                #snav>
 
     <mat-nav-list>
@@ -20,10 +24,10 @@
 
   </mat-sidenav>  
     
-  <mat-sidenav-content fxLayout="column" 
+  <mat-sidenav-content fxFlex fxLayout="column" 
                        (scroll)="onScroll($event)"
                        #content>
-    <div fxFlex >
+    <div fxFlex>
       <router-outlet></router-outlet>
     </div>
     <wm-footer></wm-footer>

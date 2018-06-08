@@ -1,13 +1,13 @@
 {
     "logo": "WIZDM",
-    "title": "Wizdm - Your app is done",
+    "title": "Wizdm - Compassionate development",
     "description": "A community of app givers",
 
     "menu": {    
         "items": [
             { "label": "How it works", "link": "home" },
-            { "label": "Join the community", "link": "join" },
             { "label": "Manifesto", "link": "about" },
+            { "label": "Join the community", "link": "join" },
             {"label": "Get started", "link": "apply"}
         ] 
     },
