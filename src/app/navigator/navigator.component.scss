@@ -12,6 +12,7 @@
   // Same as fxLayout="column" on the host element
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 mat-sidenav {

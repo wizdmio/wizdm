@@ -1,6 +1,12 @@
 @import "src/variables";
 @import "src/theme";
-
+/*
+:host {
+  display: flex;
+  flex: none; // Inflexible
+  box-sizing: border-box;
+}
+*/
 footer {
   min-height: $wm-footer-height;
   width: 100%;

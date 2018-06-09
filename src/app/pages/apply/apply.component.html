@@ -1,0 +1,27 @@
+
+<form [formGroup]="form"
+      (ngSubmit)="onSubmit()" 
+      novalidate>
+  
+  <mat-form-field>
+
+    <input matInput placeholder="Email" 
+                    formControlName="email">
+
+    <mat-hint>Errors appear instantly!</mat-hint>
+
+    <mat-error *ngIf="form.controls.email.hasError('email') && !form.controls.email.hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    
+    <mat-error *ngIf="form.controls.email.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  
+  </mat-form-field>
+
+  <button mat-button type="submit" [disabled]="!form.valid">
+    Submit!
+  </button>
+
+</form>

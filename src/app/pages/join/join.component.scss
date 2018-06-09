@@ -1,4 +1,14 @@
 @import "src/variables";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  padding-top: $wm-content-padding;
+  margin: 0 $wm-content-margin;
+}
+
 /*
 :host {
   position: absolute;

@@ -5,6 +5,7 @@ import { ContentResolver } from 'app/content';
 import { NavComponent } from 'app/navigator/navigator.component';
 import { HomeComponent } from 'app/pages/home/home.component';
 import { JoinComponent } from 'app/pages/join/join.component';
+import { ApplyComponent } from 'app/pages/apply/apply.component';
 
 import { NotFoundComponent } from 'app/pages/not-found/not-found.component';
 
@@ -28,6 +29,8 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
 
       { path: 'join', component: JoinComponent },
+
+      { path: 'apply', component: ApplyComponent },
     
       // NotFound page with localized translation loaded
       { path: 'not-found', component: NotFoundComponent },
