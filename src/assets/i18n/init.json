@@ -20,6 +20,7 @@
 
   "modules" : {
     "navigator": "nav.json",
+    "login": "login.json",
     "presentation": "intro.json",
     "notFound": "notFound.json"
   }

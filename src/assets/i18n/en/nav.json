@@ -3,14 +3,12 @@
     "title": "Wizdm - Compassionate development",
     "description": "A community of app givers",
 
-    "menu": {    
-        "items": [
-            { "label": "How it works", "link": "home" },
-            { "label": "Manifesto", "link": "about" },
-            { "label": "Join the community", "link": "join" },
-            { "label": "Get started", "link": "apply"}
-        ] 
-    },
+    "menu": [
+        { "label": "How it works", "link": "home" },
+        { "label": "Manifesto", "link": "about" },
+        { "label": "Sign-in/Register", "link": "login" },
+        { "label": "Get started", "link": "apply"} 
+    ],
 
     "search": {
         "placeholder": "Search..."
@@ -18,6 +16,13 @@
 
     "footer": {
         "terms": "Terms and Privacy",
-        "language": "Language"
+        "language": "Language",
+        "items": [
+            { "icon": "fa:fa-envelope", "link": "mailto:me@wizdm.io" },
+            { "icon": "fab:fa-twitter", "link": "http://twitter.com" },
+            { "icon": "fab:fa-facebook", "link": "http://facebook.com" },
+            { "icon": "fab:fa-instagram", "link": "http://instagram.com" },
+            { "icon": "fab:fa-github", "link": "https://github.com" }
+        ]
     }
 }

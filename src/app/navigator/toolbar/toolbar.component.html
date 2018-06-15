@@ -1,18 +1,18 @@
-<mat-toolbar fxLayout="row">
+<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
 
-  <wm-logo fxFlex="20" fxFlex.lt-sm="90"></wm-logo>
+  <wm-logo></wm-logo>
  
-  <section fxFlex="80" fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
-    <a mat-button *ngFor="let item of menu.items" 
+  <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
+    <a mat-button *ngFor="let item of menu" 
        routerLinkActive="link-active" [routerLink]="item.link">
       {{item.label}}
     </a>
   </section>
 
-  <wm-toggler [status]="toggler" 
-              (statusChange)="toggle()" 
-              fxFlex="10" fxHide="true" fxShow.lt-sm="true">
-  </wm-toggler>
+  <button mat-icon-button fxHide="true" fxShow.lt-sm="true" (click)="toggle()">
+    <wm-toggler [status]="toggler">
+    </wm-toggler>
+  </button>
 
 </mat-toolbar>
 <mat-divider [@divider]="divider"></mat-divider>

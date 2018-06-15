@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ContentResolver } from 'app/content';
 import { NavComponent } from 'app/navigator/navigator.component';
 import { HomeComponent } from 'app/pages/home/home.component';
+import { LoginComponent } from 'app/pages/login/login.component';
 import { JoinComponent } from 'app/pages/join/join.component';
 import { ApplyComponent } from 'app/pages/apply/apply.component';
 
@@ -27,9 +28,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
 
       { path: 'home', component: HomeComponent },
-
+      { path: 'login', component: LoginComponent },
       { path: 'join', component: JoinComponent },
-
       { path: 'apply', component: ApplyComponent },
     
       // NotFound page with localized translation loaded

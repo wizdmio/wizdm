@@ -1,0 +1,26 @@
+@import "src/variables";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  justify-content: space-around;
+  align-items: center;
+
+  padding-top: $wm-content-padding;
+  margin: 0 $wm-content-margin;
+}
+
+form {
+  width: 300px;
+}
+
+p { margin: 12px 0; }
+
+.btn {
+  margin-top: 10px;
+  min-height: 48px;
+}
+.providers {
+  font-size: 1.5em;
+}

@@ -11,9 +11,8 @@ export let togglerAnimations = [
     trigger('top', [
         state('true', 
             style({
-                transform: 'translateY(10px) rotate(-135deg)',
-                width: '100%',
-                left: 0
+                transform: 'rotate(-135deg)',
+                top: '50%'
             })
         ),
         state('false', style('*')),
@@ -32,9 +31,8 @@ export let togglerAnimations = [
     trigger('bottom', [
         state('true', 
             style({
-                transform: 'translateY(-10px) rotate(-45deg)',
-                width: '100%',
-                left: 0
+                transform: 'rotate(-45deg)',
+                top: '50%'
             })
         ),
         state('false', style('*')),

@@ -1,31 +1,28 @@
 @import "src/variables";
 @import 'src/theme';
 
+$wm-toggler-line: 2px !default;
 
-button {
-    cursor: pointer;
-
-    top: 0;
-    left: 50%;
-    margin-left: -$wm-toggler-width / 2;
+:host {
+    display: inline-block;
+    position: absolute;
     
     width: $wm-toggler-width;
     height: $wm-toggler-height;
-
-    padding: 0;
-
-    background: transparent;
-
+    
+    margin-top: -$wm-toggler-height / 2;
+    margin-left: -$wm-toggler-width / 2;
+    
     span {
         content: '';
         position: absolute;
         
-        height: 3px;
+        height: $wm-toggler-line;
         background-color: map-get($wm-theme-foreground, text);
 
-        &[top] { top: 0; left: 0; width: 100%;}
-        &[middle] { top: 50%; left: 0; width: 100%;}
-        &[bottom] { top: 100%; left: 0; width: 100%;}
+        &[top] { top: 10%; left: 10%; width: 80%;}
+        &[middle] { top: 50%; left: 10%; width: 80%;}
+        &[bottom] { top: 90%; left: 10%; width: 80%;}
     }
 }
 

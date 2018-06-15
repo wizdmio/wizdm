@@ -1,0 +1,44 @@
+{
+  "pages": {
+    "signIn": {
+      "title": "Sign-in",
+      "caption": "Sign-in with my email" 
+    },
+    "register": {
+      "title": "Register",
+      "caption": "Register with my email" 
+    },
+    "reset": {
+      "title": "Reset",
+      "caption": "Reset the password" 
+    }
+  },
+
+  "labels": {
+    "fullname": "Full name",
+    "email": "Email",
+    "password": "Password"
+  },
+
+  "errors": {
+    "nameRequired": "Please specify your name here",
+    "emailRequired": "Please specify an email address",
+    "emailInvalid": "Ooops! it looks like this is not a valid email",
+    "passwordRequired": "A password is required"
+  },
+
+  "forgotPassword": "Forgot password?",
+  "newUser": "Are you a new user?",
+  "register": "Register",
+  "registeredUser": "Already have login and password?",
+  "signIn": "Sign-in",
+  "signInWith": "Or sign-in with:",
+
+  "providers": [
+    { "name": "google", "icon": "fab:fa-google", "color": "#EA4335", "contrast": "#FFFFFF" },
+    { "name": "facebook", "icon": "fab:fa-facebook", "color": "#3B5998", "contrast": "#FFFFFF" },
+    { "name": "twitter", "icon": "fab:fa-twitter", "color": "#55ACEE", "contrast": "#FFFFFF" },
+    { "name": "linkedin", "icon": "fab:fa-linkedin", "color": "#0077b5", "contrast": "#FFFFFF" },
+    { "name": "github", "icon": "fab:fa-github", "color": "#333333", "contrast": "#FFFFFF" }
+  ]
+}

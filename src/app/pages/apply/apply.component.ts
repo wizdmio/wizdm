@@ -12,7 +12,7 @@ import { MailerliteService, mlFormFields } from 'app/utils/mailerlite'
 export class ApplyComponent implements OnInit {
 
   // Move mlStuff in content
-  private mlAction = 'w3r2o2';
+  private mlAction = 'u8y1i2';
 
   private form: FormGroup;
   private result: string = '';

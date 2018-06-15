@@ -1,0 +1,64 @@
+
+<h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page].title }}</h1>
+
+<form [formGroup]="form" fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px" (ngSubmit)="signInOrRegister()">
+
+  <mat-form-field appearance="legacy" *ngIf="page == 'register'" @inflate>
+    <mat-label>{{ msgs.labels.fullname }}</mat-label>
+    <input matInput formControlName="name">
+    <mat-error *ngIf="form.controls.name.errors?.required">
+      {{ msgs.errors.nameRequired }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="legacy">
+    <mat-label>{{ msgs.labels.email }}</mat-label>
+    <input matInput formControlName="email">
+    <mat-error *ngIf="form.controls.email.errors?.required">
+      {{ msgs.errors.emailRequired }}
+    </mat-error>
+    <mat-error *ngIf="form.controls.email.errors?.email">
+      {{ msgs.errors.emailInvalid }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="legacy" *ngIf="page != 'reset'" @inflate>
+    <mat-label>{{ msgs.labels.password }}</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+    <mat-icon matSuffix (click)="hide = !hide">
+      {{ hide ? 'visibility_off' : 'visibility' }}
+    </mat-icon>
+    <mat-error *ngIf="form.controls.password.errors?.required">
+      {{ msgs.errors.passwordRequired }}
+    </mat-error>
+    <mat-hint class="mat-link" align="end" (click)="switchPage('reset')"  *ngIf="page == 'signIn'" @inflate>{{ msgs.forgotPassword }}</mat-hint>
+  </mat-form-field>
+
+  <button mat-stroked-button color="primary" type="submit" [disabled]="!form.valid" class="btn">
+    {{ msgs.pages[page].caption }}
+  </button>
+</form>
+
+<p class="mat-small" *ngIf="page == 'signIn'">
+  {{ msgs.newUser }}&nbsp;<span class="mat-link" (click)="switchPage('register')">{{ msgs.register }}</span>
+</p>
+
+<p class="mat-small" *ngIf="page != 'signIn'">
+  {{ msgs.registeredUser }}&nbsp;<span class="mat-link" (click)="switchPage('signIn')">{{ msgs.signIn }}</span>
+</p>
+
+<div fxLayout="column" fxLayoutAlign="center center" *ngIf="page == 'signIn'" @inflate>
+
+  <p class="mat-small">{{ msgs.signInWith }}</p>
+
+  <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+
+    <button mat-icon-button *ngFor="let p of msgs.providers" (click)="signInWith(p.name)">
+      <mat-icon class="providers"
+                [fontSet]="p.icon.split(':')[0]"
+                [fontIcon]="p.icon.split(':')[1]" 
+                [ngStyle]="{ color: p.color }">
+      </mat-icon>
+    </button>
+  </div>
+</div>
