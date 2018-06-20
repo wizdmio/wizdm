@@ -5,7 +5,13 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
 
-  padding-top: $wm-content-padding;
+  padding-top: $wm-content-padding / 2;
   margin: 0 $wm-content-margin;
+}
+
+.bit-of-space {
+  margin-top: 20px;
 }

@@ -1,10 +1,19 @@
+
+// Host material icons
+$material-icons-font-path: '~material-icons/iconfont/';
+@import '~material-icons/iconfont/material-icons.scss';
+
+// Uncomment this option to load material icons from the web
+//@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+// Host fontawesome free icons
 $fa-font-path: "~@fortawesome/fontawesome-free-webfonts/webfonts";
 @import "~@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
 @import "~@fortawesome/fontawesome-free-webfonts/scss/fa-brands";
 
+// Load the main Ubuntu google font from the web
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 @import 'variables';
 @import 'theme';

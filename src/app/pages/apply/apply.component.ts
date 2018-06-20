@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-//import {ErrorStateMatcher} from '@angular/material/core';
+import { FormBuilder, FormGroup, FormArray, Validators, FormControl} from '@angular/forms';
 import { ContentManager } from 'app/content';
-import { MailerliteService, mlFormFields } from 'app/utils/mailerlite' 
+//import { MailerliteService, mlFormFields } from 'app/utils/mailerlite' 
 
 @Component({
   selector: 'wm-apply',
@@ -11,50 +10,38 @@ import { MailerliteService, mlFormFields } from 'app/utils/mailerlite'
 })
 export class ApplyComponent implements OnInit {
 
-  // Move mlStuff in content
-  private mlAction = 'u8y1i2';
-
-  private form: FormGroup;
-  private result: string = '';
+  private nameForm: FormGroup;
+  private stepForms: FormGroup[] = new Array;
   private msgs;  
   
   constructor(private builder: FormBuilder,
-              private content: ContentManager,
-              private ml: MailerliteService) { }
+              private content: ContentManager) { }
 
-    
   ngOnInit() {
 
     // Gets the localized user messages from content manager
     this.msgs = this.content.select('apply');
 
-    this.form = this.builder.group({
-      email: ['', Validators.compose([ Validators.required, Validators.email ]) ],
+    this.nameForm = this.builder.group({
+      appname: ['', Validators.required ]
     });
+
+    this.msgs.questions.forEach(question => {
+      
+      let group: any = {};
+
+      question.fields.forEach( field => {
+
+        group[field.name] = new FormControl('', field.required ? Validators.required : null);
+
+      });
+
+      this.stepForms.push( new FormGroup(group) );
+    });
+
+    console.log("done");
   }
 
   private onSubmit() : void {
-
-    // Prepare the list of form-fields
-    let fields: mlFormFields[] = [
-    {
-      field: 'email',
-      value: this.form.controls.email.value
-    }];
-
-    this.result = 'progress';// Show the progress
-
-    // Post the for to Mailerlite
-    this.ml.postForm(this.mlAction,fields).then( msg => {
-
-      console.log('subscribe: ' + msg );
-
-      this.result = 'success';// Shows the success on completion      
-      this.form.reset();
-
-    }).catch( () => {
-
-      this.result = 'error';// Shows the error
-    });
   }
 }

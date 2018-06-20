@@ -12,7 +12,8 @@ import {
   MatIconModule, MatIconRegistry,
   MatCardModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatStepperModule
 } from '@angular/material';
 
 import { AngularFireModule } from 'angularfire2';
@@ -59,6 +60,7 @@ import { environment } from '../environments/environment';
     //MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatStepperModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'wizdm'),
     AngularFireAuthModule,

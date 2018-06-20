@@ -1,0 +1,89 @@
+{
+  "appName": {
+    
+    "title": "Name your application",
+    "description": "Do you already have a name you'd like to call your app with?",
+    "label": "App name", 
+    "hint": "This name will be used to save your application and can be changed any time",
+    "required": "Application name is mandatory to proceed, please specify it"
+  },
+
+  "questions": [
+    {
+      "name": "description",
+      "title": "Describe your business idea",
+      "description": "How you'd describe your business idea and the way your app should work to support it",
+      "fields": [
+        {
+          "name": "description",
+          "type": "textarea", 
+          "label": "Description", 
+          "hint": "This is a crucial step for the success of your application, take your time",
+          "required": "This is a mandatory field, please provide your best description"
+        }
+      ]
+    },
+    {
+      "name": "revenues",
+      "title": "Potential revenue streams",
+      "description": "How you'd imagine this app/idea be generating revenues, eventually",
+      "fields": [
+        {
+          "name": "description",
+          "type": "textarea", 
+          "label": "Revenues", 
+          "hint": "This is one of the parts we might be able to suggest something about"
+        }
+      ]
+    },
+    {
+      "name": "players",
+      "title": "Similar players",
+      "description": "Who else do you know is providing a similar app/service already and how you'd think to be different",
+      "fields": [
+        {
+          "name": "players",
+          "type": "textarea",
+          "rows": 3,
+          "label": "Other players", 
+          "hint": "Feel free to mention anyone you got inspiration from"
+        },
+        {
+          "name": "differences",
+          "type": "textarea",
+          "rows": 2, 
+          "label": "Differentiating factors", 
+          "hint": "Tell us how you imagine to delight your users/customers"
+        }
+      ]
+    },
+    {
+      "name": "market",
+      "title": "Target market",
+      "description": "Who you'd want to engage in using your app/services?",
+      "fields": [
+        {
+          "name": "users",
+          "type": "textarea",
+          "rows": 3,
+          "label": "Ideal users", 
+          "hint": "Describe your ideal user or customer"
+        },
+        {
+          "name": "geo",
+          "type": "textarea",
+          "rows": 2, 
+          "label": "Geo coverage", 
+          "hint": "Where do you want to start from and how do you see the possibilities world wide"
+        }
+      ]
+    }
+  ],
+
+  "buttons": {
+    "next": "Next",
+    "back": "Back",
+    "done": "Done",
+    "apply": "Apply"
+  }
+}

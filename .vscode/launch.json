@@ -9,13 +9,7 @@
 			"url": "https://localhost:4200",
 			"webRoot": "${workspaceRoot}",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
-			"sourceMaps": true,
-			"sourceMapPathOverrides": {
-        "webpack:/./*": "${webRoot}/*",
-        "webpack:/src/*": "${webRoot}/src/*",
-        "webpack:/*": "*",
-        "webpack:/./~/*": "${webRoot}/node_modules/*"
-      }
+			"sourceMaps": true
 			// Uncomment this to get diagnostic logs in the console
 			// "diagnosticLogging": true
 		},

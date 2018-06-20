@@ -1,27 +1,76 @@
 
-<form [formGroup]="form"
-      (ngSubmit)="onSubmit()" 
-      novalidate>
+<mat-vertical-stepper linear>
+
+  <mat-step [stepControl]="nameForm">
+
+    <form [formGroup]="nameForm">
+
+      <ng-template matStepLabel>{{msgs.appName.title}}</ng-template>
+      
+      <p class="mat-small">{{msgs.appName.description}}</p>
+
+      <mat-form-field appearance="legacy" fxFill>
+        <mat-label>{{msgs.appName.label}}</mat-label>
+        <input matInput formControlName="appname">
+        <mat-hint>{{msgs.appName.hint}}</mat-hint>
+        <mat-error *ngIf="nameForm.controls.appname.errors?.required">
+          {{msgs.appName.required}}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="bit-of-space">
+        <button mat-button matStepperNext type="button">{{msgs.buttons.next}}</button>
+      </div>
+    </form>
+      
+  </mat-step>
+
+  <mat-step *ngFor="let question of msgs.questions; let i=index" [stepControl]="stepForms[i]">
   
-  <mat-form-field>
+    <form [formGroup]="stepForms[i]">
 
-    <input matInput placeholder="Email" 
-                    formControlName="email">
+      <ng-template matStepLabel>{{question.title}}</ng-template>
+        
+      <p class="mat-small">{{question.description}}</p>
 
-    <mat-hint>Errors appear instantly!</mat-hint>
+      <ng-container *ngFor="let field of question.fields; let j=index">
 
-    <mat-error *ngIf="form.controls.email.hasError('email') && !form.controls.email.hasError('required')">
-      Please enter a valid email address
-    </mat-error>
-    
-    <mat-error *ngIf="form.controls.email.hasError('required')">
-      Email is <strong>required</strong>
-    </mat-error>
-  
-  </mat-form-field>
+        <ng-container [ngSwitch]="field.type">
 
-  <button mat-button type="submit" [disabled]="!form.valid">
-    Submit!
-  </button>
+          <mat-form-field *ngSwitchDefault appearance="legacy" fxFill>
+            <mat-label>{{field.label}}</mat-label>
+            <input matInput [formControlName]="field.name">
+            <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
+            <mat-error *ngIf="field.required && stepForms[i].controls[field.name].errors?.required">
+              {{field.required}}
+            </mat-error>
+          </mat-form-field>
 
-</form>
+          <mat-form-field *ngSwitchCase="'textarea'" appearance="legacy" fxFill>
+            <mat-label>{{field.label}}</mat-label>
+            <textarea matInput [formControlName]="field.name" [rows]="field.rows || 5" >
+            </textarea>      
+            <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
+            <mat-error *ngIf="field.required && stepForms[i].controls[field.name].errors?.required">
+              {{field.required}}
+            </mat-error>
+          </mat-form-field>
+
+          <div class="bit-of-space" *ngIf="j < question.fields.length - 1">
+          </div>
+
+        </ng-container>
+
+      </ng-container>
+
+      <div class="bit-of-space">
+        <button mat-button matStepperPrevious type="button">{{msgs.buttons.back}}</button>
+        <button mat-button matStepperNext type="button">
+          {{ (i < msgs.questions.length - 1) ? msgs.buttons.next : msgs.buttons.done }}
+        </button>
+      </div>
+    </form>
+  </mat-step>
+   
+</mat-vertical-stepper>
+ 

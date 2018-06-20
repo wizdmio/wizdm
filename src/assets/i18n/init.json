@@ -19,9 +19,9 @@
   ],
 
   "modules" : {
-    "navigator": "nav.json",
+    "navigator": "navigator.json",
     "login": "login.json",
-    "presentation": "intro.json",
+    "apply": "apply.json",
     "notFound": "notFound.json"
   }
 }
