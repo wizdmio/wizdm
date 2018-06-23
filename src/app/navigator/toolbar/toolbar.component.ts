@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ContentManager } from 'app/content';
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ContentManager } from 'app/core';
+
 import { toolbarAnimations } from './toolbar-animations';
 
 @Component({
@@ -16,6 +17,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input()  toggler = false;
   @Input()  divider = false;
+  @Input()  signedIn = false;
 
   private menu: any = null;
   private sub: Subscription;

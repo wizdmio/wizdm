@@ -19,20 +19,23 @@ import {
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-//import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { AppComponent } from 'app/app.component';
 import { NavigatorModule } from 'app/navigator/navigator.module';
 import { HomeComponent } from 'app/pages/home/home.component';
 import { LoginComponent } from 'app/pages/login/login.component';
-import { LoginService } from 'app/pages/login/login.service';
-import { JoinComponent } from 'app/pages/join/join.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ApplyComponent } from './pages/apply/apply.component';
+import { BrowserComponent } from './pages/browser/browser.component';
+import { ProjectComponent } from './pages/project/project.component';
 import { NotFoundComponent } from 'app/pages/not-found/not-found.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { ContentManager, ContentResolver } from 'app/content';
-import { MailerliteService } from 'app/utils/mailerlite';
+import { 
+  ContentManager, 
+  ContentResolver, 
+  AuthService
+} from 'app/core';
 
 import { environment } from '../environments/environment';
 
@@ -41,8 +44,10 @@ import { environment } from '../environments/environment';
     AppComponent,
     HomeComponent,
     LoginComponent,
-    JoinComponent,
+    DashboardComponent,
     ApplyComponent,
+    BrowserComponent,
+    ProjectComponent,
     NotFoundComponent
   ],
   imports: [
@@ -73,8 +78,7 @@ import { environment } from '../environments/environment';
     MatIconRegistry,
     ContentManager,
     ContentResolver,
-    LoginService,
-    MailerliteService
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

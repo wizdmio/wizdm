@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ContentResolver } from 'app/content';
 import { NavComponent } from 'app/navigator/navigator.component';
 import { HomeComponent } from 'app/pages/home/home.component';
 import { LoginComponent } from 'app/pages/login/login.component';
-import { JoinComponent } from 'app/pages/join/join.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ApplyComponent } from 'app/pages/apply/apply.component';
+import { BrowserComponent } from './pages/browser/browser.component';
+import { ProjectComponent } from './pages/project/project.component';
 
 import { NotFoundComponent } from 'app/pages/not-found/not-found.component';
+
+import { ContentResolver } from 'app/core';
 
 // Define navigation routes
 const routes: Routes = [
@@ -29,8 +32,11 @@ const routes: Routes = [
 
       { path: 'home', component: HomeComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'join', component: JoinComponent },
+      { path: 'signout', component: LoginComponent },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'apply', component: ApplyComponent },
+      { path: 'projects', component: BrowserComponent },
+      { path: 'projects/:id', component: ProjectComponent },
     
       // NotFound page with localized translation loaded
       { path: 'not-found', component: NotFoundComponent },

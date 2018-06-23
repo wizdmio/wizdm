@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { ContentManager } from 'app/content';
+import { ContentManager, AuthService } from 'app/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-navigator',
@@ -11,15 +11,17 @@ import { ContentManager } from 'app/content';
     '[style.top.px]' : 'top'
   }*/
 })
-export class NavComponent implements OnInit {//, AfterViewInit {
+export class NavComponent implements OnInit, OnDestroy {
 
   @ViewChild('content', { read: ElementRef })
   private ctRef: ElementRef;
-
   private msgs: any = null;
-  private divider = false;
+  private divider: boolean = false;
+  private signedIn: boolean = false;
+  private subAuth: Subscription;
   
   constructor(private content: ContentManager, 
+              private auth: AuthService,
               private title: Title,
               private meta: Meta) { }
 
@@ -36,6 +38,16 @@ export class NavComponent implements OnInit {//, AfterViewInit {
     if(this.msgs.description) {
       this.meta.updateTag({content: this.msgs.description}, "name='description'");
     }
+
+    this.subAuth = this.auth.user.subscribe( user => {
+
+      // Keeps track of user sign-in status
+      this.signedIn = user != null;
+    });
+  }
+
+  ngOnDestroy() {
+    this.subAuth.unsubscribe();
   }
 
   //@HostListener('window:scroll', ['$event']) 
@@ -44,34 +56,8 @@ export class NavComponent implements OnInit {//, AfterViewInit {
     let ofs = this.ctRef.nativeElement.scrollTop || 0;
 
     // Triggers the appeareance of the toolbar's divider on scroll
-    this.divider = ofs > 20;//this.top / 2;
+    this.divider = ofs > 20;
 
     //console.log("scroll: " + ofs);
   }
-
-/* This is part of a previous implementation using a fixed toolbar
-   plus the container dynamically adjusted to fit right below
-   
-  @ViewChild('toolbar', { read: ElementRef })
-  private tbRef: ElementRef;
-  private top = 0;
-
-  // Adjust the top view according to the exact heigh tof the 
-  // toolbar always fixed on top of the view
-  updateTop() : void 
-    { this.top = this.tbRef.nativeElement.offsetHeight || 0; 
-      console.log("top: " + this.top);
-    }
-
-  ngAfterViewInit() {
-
-    // Update the view top after the first view init using a timeout
-    // to avoid change-detection errors
-    setTimeout(() => {this.updateTop()} );
-  }
-
-  // Update view top on window resize
-  @HostListener('window:resize',['$event']) onResize(event) {
-    this.updateTop();
-  }*/
 }

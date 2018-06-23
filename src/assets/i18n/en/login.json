@@ -32,7 +32,7 @@
   "register": "Register",
   "registeredUser": "Already have login and password?",
   "signIn": "Sign-in",
-  "signInWith": "Or sign-in with:",
+  "signInWith": "Or single click sign-in with:",
 
   "providers": [
     { "name": "google", "icon": "fab:fa-google", "color": "#EA4335", "contrast": "#FFFFFF" },

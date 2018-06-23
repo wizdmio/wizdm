@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
 import { CookieService } from 'app/utils/cookie/cookie.service';
-import { ContentManager } from 'app/content';
+import { ContentManager } from 'app/core';
  
 @Component({
   selector: 'wm-consent',

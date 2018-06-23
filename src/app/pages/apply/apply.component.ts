@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl} from '@angular/forms';
-import { ContentManager } from 'app/content';
-//import { MailerliteService, mlFormFields } from 'app/utils/mailerlite' 
+import { ContentManager } from 'app/core';
 
 @Component({
   selector: 'wm-apply',

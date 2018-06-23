@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContentManager, LanguageData } from 'app/content';
+import { ContentManager } from 'app/core';
 
 @Component({
   selector: 'wm-footer',
@@ -10,9 +10,7 @@ import { ContentManager, LanguageData } from 'app/content';
 export class FooterComponent implements OnInit {
 
   private msgs;
-  private languages: LanguageData[];
-  private language: LanguageData;
-
+  
   constructor(private content: ContentManager, 
               private router: Router) {}
 
@@ -20,10 +18,6 @@ export class FooterComponent implements OnInit {
 
     // Gets the localized user messages from content service
     this.msgs = this.content.select('navigator.footer');
-
-     // Gets the list of available languages
-     this.languages = this.content.languages();
-     this.language = this.content.language();
   }
 
   changeLanguage(lang: string) {

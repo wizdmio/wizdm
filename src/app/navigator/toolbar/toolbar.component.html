@@ -3,12 +3,25 @@
   <wm-logo></wm-logo>
  
   <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
-    <a mat-button *ngFor="let item of menu" 
-       routerLinkActive="link-active" [routerLink]="item.link">
-      {{item.label}}
-    </a>
-  </section>
+    
+    <ng-container *ngIf="signedIn; else public">
+      <a mat-button *ngFor="let item of menu.private" 
+                     routerLinkActive="link-active" 
+                    [routerLink]="item.link">
+        {{item.label}}
+      </a>    
+    </ng-container>
 
+    <ng-template #public>
+      <a mat-button *ngFor="let item of menu.public" 
+                     routerLinkActive="link-active" 
+                    [routerLink]="item.link">
+        {{item.label}}
+      </a>
+    </ng-template>
+
+  </section>
+  
   <button mat-icon-button fxHide="true" fxShow.lt-sm="true" (click)="toggle()">
     <wm-toggler [status]="toggler">
     </wm-toggler>

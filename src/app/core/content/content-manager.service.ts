@@ -60,11 +60,11 @@ export class ContentManager implements OnDestroy {
     if(this.callback) { this.callback(this.deflang); } }
 
   // Returns the full list of languages
-  public languages(): LanguageData[] {
+  public get languages(): LanguageData[] {
     return this.config ? this.config.languages : null; }
 
   // Resturns the current glanguage
-  public language(): LanguageData {
+  public get language(): LanguageData {
     return this.lang; }
 
   // Checks if the requested language is already loaded

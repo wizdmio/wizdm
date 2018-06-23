@@ -25,7 +25,7 @@
     },
     {
       "name": "revenues",
-      "title": "Potential revenue streams",
+      "title": "Identify the potential revenue streams",
       "description": "How you'd imagine this app/idea be generating revenues, eventually",
       "fields": [
         {
@@ -37,8 +37,8 @@
       ]
     },
     {
-      "name": "players",
-      "title": "Similar players",
+      "name": "context",
+      "title": "List the similar players",
       "description": "Who else do you know is providing a similar app/service already and how you'd think to be different",
       "fields": [
         {
@@ -59,7 +59,7 @@
     },
     {
       "name": "market",
-      "title": "Target market",
+      "title": "Focus the target market",
       "description": "Who you'd want to engage in using your app/services?",
       "fields": [
         {
@@ -75,6 +75,19 @@
           "rows": 2, 
           "label": "Geo coverage", 
           "hint": "Where do you want to start from and how do you see the possibilities world wide"
+        }
+      ]
+    },
+    {
+      "name": "comments",
+      "title": "Add anything usefull",
+      "description": "Feel free to add any comment you'd want to be kep into consideration",
+      "fields": [
+        {
+          "name": "comments",
+          "type": "textarea", 
+          "label": "Comments", 
+          "hint": "This may help in clarifying the full picture"
         }
       ]
     }

@@ -3,15 +3,18 @@
     "title": "Wizdm - Compassionate development",
     "description": "A community of app givers",
 
-    "menu": [
-        { "label": "How it works", "link": "home" },
-        { "label": "Manifesto", "link": "about" },
-        { "label": "Sign-in/Register", "link": "login" },
-        { "label": "Get started", "link": "apply"} 
-    ],
-
-    "search": {
-        "placeholder": "Search..."
+    "menu": {
+        "public": [
+            { "label": "How it works", "link": "home" },
+            { "label": "Manifesto", "link": "about" },
+            { "label": "Sign-in/Register", "link": "login" },
+            { "label": "Get started", "link": "apply"} 
+        ],
+        "private": [
+            { "label": "Projects", "link": "projects" },
+            { "label": "Dashboard", "link": "dashboard" },
+            { "label": "Sign-out", "link": "signout"} 
+        ]
     },
 
     "footer": {

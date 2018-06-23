@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostBinding, HostListener } from '@angular/core';
-//import { ContentManager } from 'app/content';
+//import { ContentManager } from 'app/core';
 //import { logoAnimations } from './logo-animations';
 
 @Component({

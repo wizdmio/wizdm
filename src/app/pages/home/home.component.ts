@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostBinding, HostListener } from '@angular/core';
-import { ContentManager } from 'app/content';
+import { ContentManager } from 'app/core';
 //import { NavService } from 'app/navigator/navigator.service';
 //import { homeAnimations, scrollParams } from './home-animations';
 
