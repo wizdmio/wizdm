@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -10,7 +11,9 @@ import {
   MatCardModule,
   MatFormFieldModule,
   MatInputModule,
-  MatStepperModule
+  MatStepperModule,
+  MatExpansionModule,
+  MatListModule
 } from '@angular/material';
 
 import { HomeComponent } from './home/home.component';
@@ -26,6 +29,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
 
     FlexLayoutModule,
@@ -35,7 +39,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatStepperModule
+    MatStepperModule,
+    MatExpansionModule,
+    MatListModule
   ],
   declarations: [
     HomeComponent,

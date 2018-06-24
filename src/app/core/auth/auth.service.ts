@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth, User } from 'firebase';
 import { Observable } from 'rxjs';
-
-//export { User } from 'firebase';
+export { User } from 'firebase';
 
 @Injectable({
   providedIn: 'root'

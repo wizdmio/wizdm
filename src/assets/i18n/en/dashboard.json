@@ -1,0 +1,26 @@
+{
+  "title": "Dashboard",
+  "profile": {
+    "title": "My profile",
+    "icon": "account_circle",
+    "fields": [
+      {"label": "Name", "icon": "far:fa-user", "key": "displayName"},
+      {"label": "Email", "icon": "far:fa-envelope", "key": "email"},
+      {"label": "Phone", "icon": "fas:fa-phone", "key": "phone"}
+    ],
+    "buttons": {
+      "edit": "Edit",
+      "close": "Close"
+    }
+  },
+
+  "projects": {
+    "title": "My projects",
+    "icon": "list",
+    "buttons": {
+      "browse": "Browse existing projects",
+      "create": "Apply for a new project",
+      "close": "Close"
+    }
+  }
+}

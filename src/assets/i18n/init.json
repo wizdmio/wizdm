@@ -21,6 +21,8 @@
   "modules" : {
     "navigator": "navigator.json",
     "login": "login.json",
+    "dashboard": "dashboard.json",
+    "browser": "browser.json",
     "apply": "apply.json",
     "notFound": "notFound.json"
   }
