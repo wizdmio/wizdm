@@ -3,13 +3,10 @@ import { Component,
          OnDestroy, 
          ViewChild, 
          ElementRef } from '@angular/core';
-import { Router, 
-         ActivatedRoute } from '@angular/router';
 import { Title, 
          Meta } from '@angular/platform-browser';
 import { ContentManager, 
-         AuthService, 
-         AuthGuardService } from 'app/core';
+         AuthService } from 'app/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -28,13 +25,9 @@ export class NavComponent implements OnInit, OnDestroy {
   private divider: boolean = false;
   private signedIn: boolean = false;
   private subAuth: Subscription;
-  //private subGard: Subscription;
   
   constructor(private content: ContentManager, 
               private auth: AuthService,
-              //private guard: AuthGuardService,
-              //private router: Router,
-              //private route: ActivatedRoute,
               private title: Title,
               private meta: Meta) { }
 
@@ -56,16 +49,10 @@ export class NavComponent implements OnInit, OnDestroy {
     this.subAuth = this.auth.user.subscribe( user => {
       this.signedIn = user != null;
     });
-
-    // Redirects to Home in case of an attempts to access a guarded route
-    /*this.subGard = this.guard.onRedirect.subscribe( url => {
-      this.router.navigate(['home'], { relativeTo: this.route });
-    });*/
   }
 
   ngOnDestroy() {
     this.subAuth.unsubscribe();
-    //this.subGard.unsubscribe();
   }
 
   //@HostListener('window:scroll', ['$event']) 

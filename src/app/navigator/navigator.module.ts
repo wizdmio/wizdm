@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatToolbarModule,
   MatSidenavModule,
-  MatMenuModule,
   MatListModule,
   MatButtonModule,
   MatSelectModule,
@@ -19,7 +19,6 @@ import { LogoComponent } from './toolbar/logo/logo.component';
 import { TogglerComponent } from './toolbar/toggler/toggler.component';
 import { FooterComponent } from './footer/footer.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -27,7 +26,6 @@ import { FooterComponent } from './footer/footer.component';
     FlexLayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    //MatMenuModule,
     MatListModule,
     MatButtonModule,
     MatSelectModule,

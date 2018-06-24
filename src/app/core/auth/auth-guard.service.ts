@@ -7,10 +7,8 @@ import { Router,
          RouterStateSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 import { ContentManager } from '../content/content-manager.service';
-
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';    
-
 
 @Injectable({
   providedIn: 'root'

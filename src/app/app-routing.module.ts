@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { NavComponent } from 'app/navigator/navigator.component';
 import { HomeComponent } from 'app/pages/home/home.component';
+import { AboutComponent } from './pages/about/about.component';
+import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
 import { LoginComponent } from 'app/pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ApplyComponent } from 'app/pages/apply/apply.component';
@@ -31,11 +33,12 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
 
       { path: 'home', component: HomeComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'terms', component: TermsPrivacyComponent },
       { path: 'login', component: LoginComponent },
 
-      { path: '',
-        
-        canActivateChild: [AuthGuardService],
+      // Guards the following pages to prevent unauthorized access
+      { path: '', canActivateChild: [AuthGuardService],
         
         children: [
           { path: 'logout', component: LoginComponent },
