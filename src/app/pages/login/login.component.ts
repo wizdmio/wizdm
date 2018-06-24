@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
   private password: FormControl;
   private error: string;
   private subNav: Subscription;
+  private subAuth: Subscription;
   
   constructor(private content: ContentManager,
               private router : Router, 
@@ -53,10 +54,10 @@ export class LoginComponent implements OnInit, OnDestroy  {
     // Subscribe to the active route to check if we are signin-in or out
     this.subNav = this.route.url.subscribe( (segments: UrlSegment[]) => {
 
-      console.log('login: ' + segments[0]);
+      console.log('login action: ' + segments[0]);
 
       // If we are coming here 'cause of signout then:
-      if(segments[0].toString() === 'signout') {
+      if(segments[0].toString() === 'logout') {
 
         // Sign-out...
         this.auth.signOut();
@@ -65,10 +66,22 @@ export class LoginComponent implements OnInit, OnDestroy  {
         this.router.navigate(['..','home'], { relativeTo: this.route });
       }
     });
-  }
+
+    // Monitors the user signing-in and jumps to the dashboard on success
+    // This also works to prevent opening the login page when already logged-in
+    this.subAuth = this.auth.user.subscribe( user => {
+
+      // Jumps to the dashboard on successful login
+      if(user) {
+        console.log('logged in successfully as: ' + user.email);
+        this.router.navigate(['..','dashboard'], { relativeTo: this.route });
+      }
+    });
+   }
 
   ngOnDestroy() {
     this.subNav.unsubscribe();
+    this.subAuth.unsubscribe();
   }
 
   // This function switches among the form controls configurations dynamically 
@@ -120,11 +133,14 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
       default:
       case 'signIn':
-      this.signIn( this.email.value, this.password.value );
+      this.signIn( this.email.value, 
+                   this.password.value );
       break;
 
       case 'register':
-      this.registerNew( this.email.value, this.password.value, this.name.value );
+      this.registerNew( this.email.value, 
+                        this.password.value, 
+                        this.name.value );
       break;
 
       case 'reset':
@@ -134,26 +150,32 @@ export class LoginComponent implements OnInit, OnDestroy  {
   }
 
   signInWith(provider: string) { 
-    this.auth.signInWith( provider );
+
+    // Signing-in with a provider using the current language    
+    this.auth.signInWith( provider, this.content.language.lang )
+      .catch( error => {
+        // Keep the rror code on failure
+        this.error = error.code;
+      })
   }
 
   signIn(email: string, password: string) {
     
     // Sign-in using email/password
-    this.auth.signIn(email, password).then( user => {
-
-      // Jump to the dashboard on success
-      this.router.navigate(['..','dashboard'], { relativeTo: this.route });
-
-    }).catch(error => {
-
+    this.auth.signIn(email, password)
+      .catch( error => {
       // Keep the rror code on failure
       this.error = error.code;
     });
   }
 
   registerNew(email: string, password: string,name: string) {
-    this.auth.registerNew(email, password, name);
+
+    this.auth.registerNew(email, password, name)
+      .catch( error => {
+        // Keep the rror code on failure
+        this.error = error.code;
+      });
   }
 
   resetPassword(email: string) {

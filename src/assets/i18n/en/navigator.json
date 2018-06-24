@@ -11,9 +11,11 @@
             { "label": "Get started", "link": "apply"} 
         ],
         "private": [
+            { "label": "Home", "link": "home" },
             { "label": "Projects", "link": "projects" },
             { "label": "Dashboard", "link": "dashboard" },
-            { "label": "Sign-out", "link": "signout"} 
+            { "label": "About", "link": "about" },
+            { "label": "Sign-out", "link": "logout"} 
         ]
     },
 

@@ -3,8 +3,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { auth, User } from 'firebase';
 import { Observable } from 'rxjs';
 
-import { ContentManager } from 'app/core/content';
-
 //export { User } from 'firebase';
 
 @Injectable({
@@ -12,16 +10,26 @@ import { ContentManager } from 'app/core/content';
 })
 export class AuthService {
 
-  constructor(private content: ContentManager,
-              public afAuth: AngularFireAuth) { }
-
   public get user(): Observable<User|null> {
     return this.afAuth.user;
   }
-
+  
+  constructor(private afAuth: AngularFireAuth) {}
+  
   registerNew(email: string, password: string, name: string = ""): Promise<any> {
+    
     console.log("Registering a new user: " + email);
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+
+    // Create a new user with email and password
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+      .then( credential => {
+
+        // Once the user is registered updates the profile with the given name...
+        return (credential.user as User).updateProfile({ displayName: name, photoURL: undefined })
+
+          //...and returns the updated UserCredential 
+          .then(() => credential);
+    });
   }
 
   signIn(email: string, password: string): Promise<any>  {
@@ -33,12 +41,14 @@ export class AuthService {
     console.log("Resetting the password for: " + email);
   }
 
-  signInWith(provider: string): Promise<any> {
-    
-    // Instruct firebase to use the same locale of the content manager
-    this.afAuth.auth.languageCode = this.content.language.lang;
+  signInWith(provider: string, lang: string = undefined): Promise<any> {
+  
+    if(lang) {
+      // Instruct firebase to use a specific language
+      this.afAuth.auth.languageCode = lang;
+    }
 
-    console.log("Signing-in using: " + provider + " [" + this.content.language.lang + "]");
+    console.log("Signing-in using: " + provider);
 
     switch(provider) {
 
@@ -65,6 +75,7 @@ export class AuthService {
   }
 
   signOut() {
+    console.log("Signing-out");
     this.afAuth.auth.signOut();
   }
 }

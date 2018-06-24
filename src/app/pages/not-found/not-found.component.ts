@@ -26,9 +26,6 @@ export class NotFoundComponent implements OnInit, OnDestroy {
     // in case we have been redirected after content loading failure
     this.msgs = this.content.select('notFound', $defaultMsgs);
 
-    // Makes sure to use the 'red' navigation theme
-    this.content.emit({ reason: "theme", data: "red/red" });
-
     // Counts down 5 secs before redirecting to Home
     this.timeout = setInterval(() => {
 

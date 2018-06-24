@@ -27,6 +27,12 @@ export interface ContentConfig {
   modules: any;
 };
 
+export interface ContentEvent {
+
+  reason: 'loading' | 'load' | 'error' | 'complete';
+  data?: any;
+};
+
 @Injectable()
 export class ContentManager implements OnDestroy {
 
@@ -36,8 +42,8 @@ export class ContentManager implements OnDestroy {
   // reason = 'error' some error occurred, error details are in data
   // reason = 'complete' loading completed, data is null
   //
-  public events = new EventEmitter<{reason: string, data: any}>();
-  public emit(ev: {reason: string, data: any}) { this.events.emit(ev);}
+  public events = new EventEmitter<ContentEvent>();
+  public emit(ev: ContentEvent) { this.events.emit(ev);}
 
   private path: string = "assets/i18n/";
   private data: any = null;
@@ -45,19 +51,8 @@ export class ContentManager implements OnDestroy {
   private lang: LanguageData = null;
   private deflang: LanguageData = null;
   private modules: string[] = null;
-  private callback: (LanguageData) => void; 
-
+  
   constructor(private http: HttpClient) {}
-
-  // Instructs the ContentManager about the behaviour to 
-  // execute whenever something fail during contetn loading 
-  public setDefault(callbackfn: (LanguageData) => void) {
-    this.callback = callbackfn;
-  }
-
-  // Executes the default handler (this is meant to be called by ContentResolver only)
-  public doDefault() {
-    if(this.callback) { this.callback(this.deflang); } }
 
   // Returns the full list of languages
   public get languages(): LanguageData[] {

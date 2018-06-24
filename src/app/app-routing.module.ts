@@ -11,7 +11,7 @@ import { ProjectComponent } from './pages/project/project.component';
 
 import { NotFoundComponent } from 'app/pages/not-found/not-found.component';
 
-import { ContentResolver } from 'app/core';
+import { AuthGuardService, ContentResolver } from 'app/core';
 
 // Define navigation routes
 const routes: Routes = [
@@ -32,11 +32,19 @@ const routes: Routes = [
 
       { path: 'home', component: HomeComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'signout', component: LoginComponent },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'apply', component: ApplyComponent },
-      { path: 'projects', component: BrowserComponent },
-      { path: 'projects/:id', component: ProjectComponent },
+
+      { path: '',
+        
+        canActivateChild: [AuthGuardService],
+        
+        children: [
+          { path: 'logout', component: LoginComponent },
+          { path: 'dashboard', component: DashboardComponent },
+          { path: 'apply', component: ApplyComponent },
+          { path: 'projects', component: BrowserComponent },
+          { path: 'projects/:id', component: ProjectComponent }
+        ]
+      },
     
       // NotFound page with localized translation loaded
       { path: 'not-found', component: NotFoundComponent },

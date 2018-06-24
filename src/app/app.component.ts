@@ -41,15 +41,16 @@ export class AppComponent implements OnInit, OnDestroy {
     // Registers font awesome among the available sets of icons for mat-icon component
     this.icon.registerFontClassAlias('fontawesome', 'fa');
 
-    // Instruct the content manager re-routing to the 'not-found' page
-    // in case of loading errors or missing files 
-    this.content.setDefault( (deflang: LanguageData) => { this.router.navigate(['/not-found']);} );
-
     // Subscribes to the ContentManager events to  detect language loading
     // showing and hiding the loader accordingly
     this.sub = this.content
                     .events
                     .subscribe( e => {
+
+      // Jumps to the global 'not-found' page in case of loading errors or missing files 
+      if(e.reason === 'error') {
+        this.router.navigate(['/not-found']);
+      }
 
       // Shows the loader on status 'loading' (hides on 'error' or 'complete') 
       this.loading = e.reason === 'loading';

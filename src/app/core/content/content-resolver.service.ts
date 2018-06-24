@@ -18,12 +18,13 @@ export class ContentResolver implements Resolve<any> {
     let lang = route.params['lang'];
 
     // Loads the requested lanuage, perform defaults in case of errors  
-    return this.content.use(lang).pipe(catchError( error => {
+    // NOTE: error handling is already taken care by the ContentEvent
+    return this.content.use(lang);/*.pipe(catchError( error => {
 
       // This usually redirects to an error page
-      this.content.doDefault();
+      this.content.emit({ reason: 'error', data: lang });
       
       return of<any>(null);
-    }));     
+    }));*/
   }
 }
