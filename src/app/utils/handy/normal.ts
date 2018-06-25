@@ -1,6 +1,10 @@
+export {};
 
-interface Math {
+declare global {
+
+  interface Math {
     normal(): number;
+  }
 }
 
 // Extends Math with standard normal variate using Box-Muller transform.

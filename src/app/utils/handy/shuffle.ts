@@ -1,8 +1,13 @@
+export {};
 
+declare global {
 
-interface Array<T> {
-    shuffle(): T[];
+    interface Array<T> {
+        shuffle(): T[];
+    }
 }
+
+
 
 // Extends array with the Fisher-Yates shuffle algorithm
 Array.prototype.shuffle = function<T>(this: T[]): T[] {

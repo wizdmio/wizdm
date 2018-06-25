@@ -1,7 +1,12 @@
-interface String {
-  trim(): string;
-  camelize(): string;
-  hyphenize(string): string;
+export {};
+
+declare global {
+
+  interface String {
+    trim(): string;
+    camelize(): string;
+    hyphenize(string): string;
+  }
 }
 
 // Implements a set of string conversion functions between CamelCase and Hypen delimited notations

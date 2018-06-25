@@ -52,3 +52,5 @@ import './shuffle';
 // (so basically is a random generator with normal distribution)
 // 
 import './normal';
+
+// https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#augmenting-globalmodule-scope-from-modules

@@ -1,6 +1,10 @@
+export {};
 
-interface String {
-    interpolate(args: any): string;
+declare global {
+
+    interface String {
+        interpolate(args: any): string;
+    }
 }
 
 // Implements a simple interpolation funtion able to replace named {{variables}} into

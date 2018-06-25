@@ -1,6 +1,10 @@
+export {};
 
-interface String {
-    printf(...args: any[]): string;
+declare global {
+
+    interface String {
+        printf(...args: any[]): string;
+    }
 }
 
 // Implements a simple printf like function with limited support according to the syntax:

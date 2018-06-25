@@ -5,8 +5,6 @@ import { ContentManager, AuthService } from 'app/core';
 import { $loginAnimations } from './login-animations';
 import { Subscription } from 'rxjs';
 
-import 'app/utils/handy/naming';
-
 @Component({
   selector : 'wm-login',
   templateUrl : './login.component.html',
