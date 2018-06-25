@@ -33,6 +33,16 @@ import './interpolate';
 //
 import './printf';
 
+// camelCase vs hypen separated notation converters
+//
+// examples:
+//
+// "invalid-user".camelize(); returns "InvalidUser"
+//
+// "wrongParrword".hyphenize(); return "wrong-password"
+//
+import './naming';
+
 // shuffle extend Array implementing the Fisher-Yates shuffle algorithm 
 // (so basically shuffling the elements randomly)
 // 

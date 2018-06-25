@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ContentManager } from 'app/core';
 
 @Component({
   selector: 'wm-about',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutComponent implements OnInit {
 
-  constructor() { }
+  private msgs = null;
+  
+  constructor(private content: ContentManager) {}
 
   ngOnInit() {
-  }
 
+    // Gets the localized content
+    this.msgs = this.content.select('about');
+  }
 }

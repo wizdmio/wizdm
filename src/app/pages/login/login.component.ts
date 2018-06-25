@@ -5,6 +5,8 @@ import { ContentManager, AuthService } from 'app/core';
 import { $loginAnimations } from './login-animations';
 import { Subscription } from 'rxjs';
 
+import 'app/utils/handy/naming';
+
 @Component({
   selector : 'wm-login',
   templateUrl : './login.component.html',
@@ -13,7 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy  {
 
-  private page: 'signIn' | 'register' | 'reset';
+  private page: 'sign-in' | 'register' | 'reset';
   private msgs = null;
   private hide = true;
   
@@ -43,7 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     });
 
     // Makes sure to start from the sign-in page
-    this.switchPage(this.page = 'signIn');
+    this.switchPage(this.page = 'sign-in');
   }
 
   ngOnInit() {
@@ -84,14 +86,38 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.subAuth.unsubscribe();
   }
 
+  pageTitle(page: string): string {
+
+    let key = page.camelize();
+    return this.msgs.pages[key].title;
+  }
+
+  pageButton(page: string): string {
+    
+    let key = page.camelize();
+    return this.msgs.pages[key].caption; 
+  }
+
+  errorMessage(error: string): string {
+
+    // Turns the message code into camelCase
+    let key = error.camelize().replace('/','.');
+
+    // Look up the available error messages
+    let msg = this.content.select("login.errors." + key);
+
+    // returns the message, if any, the key otherwise
+    return msg || key;
+  }
+
   // This function switches among the form controls configurations dynamically 
   // to support 'morphing' across the different pages
-  switchPage(page: 'signIn' | 'register' | 'reset') {
+  switchPage(page: 'sign-in' | 'register' | 'reset') {
     
     switch(this.page = page) {
 
       default:
-      case 'signIn':
+      case 'sign-in':
 
       if(this.form.controls.name) { 
         this.form.removeControl('name');
@@ -132,7 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     switch(this.page) {
 
       default:
-      case 'signIn':
+      case 'sign-in':
       this.signIn( this.email.value, 
                    this.password.value );
       break;

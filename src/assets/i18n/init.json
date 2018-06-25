@@ -24,6 +24,8 @@
     "dashboard": "dashboard.json",
     "browser": "browser.json",
     "apply": "apply.json",
+    "about": "about.json",
+    "terms": "terms.json",
     "notFound": "notFound.json"
   }
 }

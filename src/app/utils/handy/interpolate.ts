@@ -4,8 +4,8 @@ interface String {
 }
 
 // Implements a simple interpolation funtion able to replace named {{variables}} into
-// their corrensponding values. It works at several deth levels {{object.section.value}}
-// recurses into the object down to value, if available
+// their corrensponding values. It works at several depth levels {{object.section.value}}
+// recurring into the object down to the value, if available
 String.prototype.interpolate = function(this: string, args: any): string {
 
 // Uses a regular expression to match for {{variableName}} capturing variableName

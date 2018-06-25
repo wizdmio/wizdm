@@ -3,32 +3,19 @@
 
 :host {
  	cursor: pointer;
-
-  .logo {
-    left: 0;
-    top: 0;
-    width: $wm-logo-size;
-    height: $wm-logo-size;
-    fill: mat-color($wm-primary, A400);
-    //stroke: transparent;
-
-  }
-
-
-/*
-  h1 {
-    font-weight: 400;
-    font-size: 1.2em;
-    line-height: $wm-logo-size;
-    vertical-align: baseline;
-
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 0;
-  }
-/*
-  & > h1:first-child {
-    font-weight: 700;
-  }
-*/
 }
+
+.logo {
+  //left: 0;
+  //top: 0;
+  //display: inline-block;
+  //position: absolute;
+
+  width: $wm-logo-size;
+  height: $wm-logo-size;
+  fill: mat-color($wm-primary, A400);
+}
+/*
+span {
+  line-height: 60px;
+}*/

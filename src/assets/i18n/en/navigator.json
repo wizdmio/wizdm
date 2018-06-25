@@ -8,7 +8,7 @@
             { "label": "How it works", "link": "home" },
             { "label": "Manifesto", "link": "about" },
             { "label": "Sign-in/Register", "link": "login" },
-            { "label": "Get started", "link": "apply"} 
+            { "label": "Get started", "link": "dashboard"} 
         ],
         "private": [
             { "label": "Home", "link": "home" },
