@@ -1,0 +1,7 @@
+
+<ng-container *ngFor="let segment of segments">
+  <ng-container *ngIf="segment.type ==='text'">{{segment.content}}</ng-container>
+  <a *ngIf="segment.type ==='link'" 
+     [class]="linkClass" 
+     [routerLink]="segment.link">{{segment.content}}</a>
+</ng-container>

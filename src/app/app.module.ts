@@ -14,9 +14,10 @@ import { PagesModule } from 'app/pages/pages.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 
 import { 
+  AuthService,
   ContentManager, 
-  ContentResolver, 
-  AuthService
+  ContentResolver,
+  PageGuardService
 } from 'app/core';
 
 import { environment } from '../environments/environment';
@@ -31,6 +32,7 @@ import { environment } from '../environments/environment';
     HttpClientModule,
 
     AngularFireModule.initializeApp(environment.firebase, 'wizdm'),
+    //AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFirestoreModule,
 
@@ -40,9 +42,10 @@ import { environment } from '../environments/environment';
   ],
   providers: [
     MatIconRegistry,
+    AuthService,
     ContentManager,
     ContentResolver,
-    AuthService
+    PageGuardService
   ],
   bootstrap: [AppComponent]
 })

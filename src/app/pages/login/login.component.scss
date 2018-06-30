@@ -1,5 +1,5 @@
 @import "src/variables";
-@import "src/theme";
+//@import "src/theme";
 
 :host {
   display: flex;
@@ -16,7 +16,9 @@ form {
   width: 300px;
 }
 
-p { margin: 12px 0; }
+.bit-of-space { 
+  margin: 12px 0; 
+}
 
 .btn {
   margin-top: 10px;
@@ -26,6 +28,3 @@ p { margin: 12px 0; }
   font-size: 1.5em;
 }
 
-.error {
-  color: mat-color($wm-warn);
-}

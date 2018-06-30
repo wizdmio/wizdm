@@ -1,0 +1,32 @@
+<mat-expansion-panel #profile>
+    
+  <mat-expansion-panel-header fxLayoutAlign="space-between center">
+    <mat-panel-title>{{msgs.title}}</mat-panel-title>
+    <mat-panel-description fxLayoutAlign="end center"> 
+      <mat-icon>{{msgs.icon}}</mat-icon>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  
+  <mat-list>
+    <!--mat-list-item>
+      <img matListAvatar [src]="userImage()">
+    </mat-list-item-->
+
+    <mat-list-item *ngFor="let field of msgs.fields">
+      <mat-icon mat-list-icon [fontSet]="field.icon.split(':')[0]" 
+                              [fontIcon]="field.icon.split(':')[1]">
+      </mat-icon>
+      <h3 mat-line>{{field.label}}</h3>
+      <p mat-line> {{ userData(field.key) }} </p>
+    </mat-list-item> 
+  </mat-list>
+
+  <mat-action-row>
+    <button mat-button color="primary" disabled>
+      {{msgs.buttons.edit}}
+    </button>
+    <button mat-button color="primary" (click)="profile.close()">
+      {{msgs.buttons.close}}
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>

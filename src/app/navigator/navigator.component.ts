@@ -1,13 +1,11 @@
 import { Component, 
          OnInit, 
-         OnDestroy, 
          ViewChild, 
          ElementRef } from '@angular/core';
 import { Title, 
          Meta } from '@angular/platform-browser';
 import { ContentManager, 
          AuthService } from 'app/core';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-navigator',
@@ -17,14 +15,12 @@ import { Subscription } from 'rxjs';
     '[style.top.px]' : 'top'
   }*/
 })
-export class NavComponent implements OnInit, OnDestroy {
+export class NavComponent implements OnInit {
 
   @ViewChild('content', { read: ElementRef })
   private ctRef: ElementRef;
   private msgs: any = null;
   private divider: boolean = false;
-  private signedIn: boolean = false;
-  private subAuth: Subscription;
   
   constructor(private content: ContentManager, 
               private auth: AuthService,
@@ -44,15 +40,10 @@ export class NavComponent implements OnInit, OnDestroy {
     if(this.msgs.description) {
       this.meta.updateTag({content: this.msgs.description}, "name='description'");
     }
-
-    // Keeps track of user sign-in status
-    this.subAuth = this.auth.user.subscribe( user => {
-      this.signedIn = user != null;
-    });
   }
 
-  ngOnDestroy() {
-    this.subAuth.unsubscribe();
+  get signedIn() {
+    return this.auth.authenticated;
   }
 
   //@HostListener('window:scroll', ['$event']) 

@@ -7,7 +7,8 @@
     <ng-container *ngIf="signedIn; else public">
       <a mat-button *ngFor="let item of menu.private" 
                      routerLinkActive="link-active" 
-                    [routerLink]="item.link">
+                    [routerLink]="item.link"
+                    [queryParams]="item.params">
         {{item.label}}
       </a>    
     </ng-container>
@@ -15,7 +16,8 @@
     <ng-template #public>
       <a mat-button *ngFor="let item of menu.public" 
                      routerLinkActive="link-active" 
-                    [routerLink]="item.link">
+                    [routerLink]="item.link"
+                    [queryParams]="item.params">
         {{item.label}}
       </a>
     </ng-template>

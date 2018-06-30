@@ -11,7 +11,9 @@
 
     <ng-container *ngIf="signedIn; else public">
       <mat-nav-list>
-        <a mat-list-item *ngFor="let item of msgs.menu.private" [routerLink]="item.link">
+        <a mat-list-item *ngFor="let item of msgs.menu.private" 
+                         [routerLink]="item.link"
+                         [queryParams]="item.params">
           {{item.label}}
         </a>
       </mat-nav-list>
@@ -19,7 +21,9 @@
     
     <ng-template #public>
       <mat-nav-list>
-        <a mat-list-item *ngFor="let item of msgs.menu.public" [routerLink]="item.link">
+        <a mat-list-item *ngFor="let item of msgs.menu.public" 
+                         [routerLink]="item.link"
+                         [queryParams]="item.params">
           {{item.label}}
         </a>
       </mat-nav-list>

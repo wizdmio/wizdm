@@ -15,7 +15,7 @@
             { "label": "Projects", "link": "projects" },
             { "label": "Dashboard", "link": "dashboard" },
             { "label": "About", "link": "about" },
-            { "label": "Sign-out", "link": "logout"} 
+            { "label": "Sign-out", "link": "login", "params": {"mode": "logout"}} 
         ]
     },
 

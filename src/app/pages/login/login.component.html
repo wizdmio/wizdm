@@ -1,11 +1,13 @@
 
 <h1 class="mat-title" [@vanish]="page">{{ pageTitle(page) }}</h1>
 
-<p *ngIf="error" class="error" @inflate>
+<mat-error *ngIf="error" @inflate>
   {{ errorMessage(error) }}
-</p>
+</mat-error>
 
-<form [formGroup]="form" fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px" (ngSubmit)="signInOrRegister()">
+<form [formGroup]="form" fxLayout="column" 
+                         fxLayoutAlign="space-around stretch" 
+                         fxLayoutGap="10px" (ngSubmit)="signInOrRegister()">
 
   <mat-form-field appearance="legacy" *ngIf="page == 'register'" @inflate>
     <mat-label>{{ msgs.labels.fullname }}</mat-label>
@@ -15,7 +17,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="legacy">
+  <mat-form-field appearance="legacy" *ngIf="page != 'renew'" @inflate>
     <mat-label>{{ msgs.labels.email }}</mat-label>
     <input matInput formControlName="email">
     <mat-error *ngIf="form.controls.email.errors?.required">
@@ -35,19 +37,23 @@
     <mat-error *ngIf="form.controls.password.errors?.required">
       {{ msgs.errors.passwordRequired }}
     </mat-error>
-    <mat-hint class="mat-link" align="end" (click)="switchPage('reset')"  *ngIf="page == 'sign-in'" @inflate>{{ msgs.forgotPassword }}</mat-hint>
+    <mat-hint class="mat-link" align="end" 
+             (click)="switchPage('reset')" *ngIf="page == 'sign-in'" 
+             @inflate>{{ msgs.forgotPassword }}</mat-hint>
   </mat-form-field>
 
   <button mat-stroked-button color="primary" type="submit" [disabled]="!form.valid" class="btn">
     {{ pageButton(page) }}
   </button>
+
+  <mat-progress-bar *ngIf="progress" mode="indeterminate" @inflate></mat-progress-bar>
 </form>
 
-<p class="mat-small" *ngIf="page == 'sign-in'">
+<p class="mat-small bit-of-space" *ngIf="page == 'sign-in'">
   {{ msgs.newUser }}&nbsp;<span class="mat-link" (click)="switchPage('register')">{{ msgs.register }}</span>
 </p>
 
-<p class="mat-small" *ngIf="page != 'sign-in'">
+<p class="mat-small bit-of-space" *ngIf="page != 'sign-in'">
   {{ msgs.registeredUser }}&nbsp;<span class="mat-link" (click)="switchPage('sign-in')">{{ msgs.signIn }}</span>
 </p>
 

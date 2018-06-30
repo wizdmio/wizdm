@@ -6,7 +6,7 @@
 
   <mat-step [stepControl]="nameForm">
 
-    <form [formGroup]="nameForm">
+    <form [formGroup]="nameForm" (ngSubmit)="renameProject()">
 
       <ng-template matStepLabel>{{msgs.appName.title}}</ng-template>
       
@@ -19,10 +19,13 @@
         <mat-error *ngIf="nameForm.controls.appname.errors?.required">
           {{msgs.appName.required}}
         </mat-error>
+        <mat-error *ngIf="nameForm.controls.appname.errors?.alreadyExist">
+          {{msgs.appName.alreadyExist}}
+        </mat-error>
       </mat-form-field>
 
       <div class="bit-of-space">
-        <button mat-button matStepperNext type="button">{{msgs.buttons.next}}</button>
+        <button mat-button matStepperNext type="submit">{{msgs.buttons.next}}</button>
       </div>
     </form>
       
@@ -30,7 +33,7 @@
 
   <mat-step *ngFor="let question of msgs.questions; let i=index" [stepControl]="stepForms[i]">
   
-    <form [formGroup]="stepForms[i]">
+    <form [formGroup]="stepForms[i]" (ngSubmit)="updateApplication(i)">
 
       <ng-template matStepLabel>{{question.title}}</ng-template>
         
@@ -68,11 +71,42 @@
 
       <div class="bit-of-space">
         <button mat-button matStepperPrevious type="button">{{msgs.buttons.back}}</button>
-        <button mat-button matStepperNext type="button">
-          {{ (i < msgs.questions.length - 1) ? msgs.buttons.next : msgs.buttons.done }}
+        <button mat-button matStepperNext type="submit">
+          {{msgs.buttons.next}}
         </button>
       </div>
     </form>
+  </mat-step>
+
+  <mat-step>
+
+    <ng-template matStepLabel>{{msgs.appDone.title}}</ng-template>
+    
+    <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+      <div class="disclaimer">
+        <p>{{msgs.appDone.description}}</p>
+        <p class="mat-small">
+          <wm-disclaimer [source]="msgs.appDone.disclaimer" linkClass="mat-link">
+          </wm-disclaimer>
+        </p>
+        <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+          <mat-checkbox labelPosition="before" color="primary" #agree>
+            <wm-disclaimer [source]="msgs.appDone.agree" linkClass="mat-link">
+            </wm-disclaimer>
+          </mat-checkbox>
+        </div>  
+      </div>
+    </div>
+
+    <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>
+
+    <div  *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
+      <button mat-button class="apply-btn" type="button" 
+             [disabled]="!agree.checked" (click)="submitProject()">
+        {{msgs.buttons.apply}}
+      </button>
+    </div>
+      
   </mat-step>
    
 </mat-vertical-stepper>

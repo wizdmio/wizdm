@@ -9,8 +9,12 @@
       "caption": "Register with my email" 
     },
     "reset": {
-      "title": "Reset",
+      "title": "Reset password",
       "caption": "Reset the password" 
+    },
+    "renew": {
+      "title": "New password",
+      "caption": "Renew the password" 
     }
   },
 
@@ -31,7 +35,8 @@
       "userNotFound": "This user doesn't exist",
       "emailAlreadyInUse": "This email is already registered",
       "invalidEmail": "This is not a valid email",
-      "weakPassword": "This password looks too weak"
+      "weakPassword": "This password looks too weak",
+      "networkRequestFailed": "There's some trouble with the network"
     }
   },
 

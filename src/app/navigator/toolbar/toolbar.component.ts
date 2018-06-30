@@ -48,7 +48,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         this.sub.unsubscribe();
       }
     }
-
+    
     private toggle() {
       this.togglerChange.emit(this.toggler = !this.toggler);
     }

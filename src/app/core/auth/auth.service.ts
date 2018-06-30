@@ -1,21 +1,76 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { DatabaseService, dbDocument } from '../database/database.service';
 import { auth, User } from 'firebase';
-import { Observable } from 'rxjs';
-export { User } from 'firebase';
+import { Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
+export interface UserData {
+
+  name?  : string,
+  email? : string,
+  phone? : string,
+  img?   : string,
+  lang?  : string
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  public get user(): Observable<User|null> {
+  private authState$: User = null;
+  public  userData: UserData = null;
+  public  redirectUrl: string = null;
+
+  get authState(): Observable<User|null> {
     return this.afAuth.user;
   }
   
-  constructor(private afAuth: AngularFireAuth) {}
-  
-  registerNew(email: string, password: string, name: string = ""): Promise<any> {
+  constructor(public  afAuth: AngularFireAuth,
+              private db: DatabaseService) {
+
+    // Keeps a snapshot of the current user auth state
+    this.authState.subscribe((auth) => {
+      this.authState$ = auth;
+    });
+
+    this.authState.pipe(
+      switchMap(user => {
+        return  user ? this.db.doc<UserData>(`users/${user.uid}`).valueChanges() : of(null);
+      })
+      //tap(data => localStorage.setItem('user', JSON.stringify(data))),
+      //startWith(JSON.parse(localStorage.getItem('user')))
+    ).subscribe( data => this.userData = data );
+  }
+
+  private updateUserData(user: User, lang: string = undefined): Promise<boolean> {
+
+    // Update user profile data with User Auth and custom data
+    let data = {  
+
+      name:  user.displayName,
+      email: user.email,
+      phone: user.phoneNumber,
+      img:   user.photoURL,
+      lang:  lang
+    
+    };
+    
+    return this.db.merge<UserData>(`users/${user.uid}`, data)
+      .then(() => true);
+  }
+
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState$ !== null;
+  }
+
+  get userId(): string {
+    return this.authenticated ? this.authState$.uid : null;
+  }
+
+  registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<boolean> {
     
     console.log("Registering a new user: " + email);
 
@@ -23,11 +78,8 @@ export class AuthService {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then( credential => {
 
-        // Once the user is registered updates the profile with the given name...
-        return (credential.user as User).updateProfile({ displayName: name, photoURL: undefined })
-
-          //...and returns the updated UserCredential 
-          .then(() => credential);
+        // Update user profile data with User Auth and custom data
+        return this.updateUserData({...credential.user, displayName: name}, lang);
     });
   }
 
@@ -36,12 +88,23 @@ export class AuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  resetPassword(email: string) {
+  resetPassword(email: string): Promise<boolean> {
+
     console.log("Resetting the password for: " + email);
+    return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
-  signInWith(provider: string, lang: string = undefined): Promise<any> {
-  
+  confirmPassword(code: string, password: string): Promise<boolean> {
+
+    // TODO: check how to do so
+    //this.afAuth.auth.verifyPasswordResetCode(code);
+
+    console.log("Confirming the password with code: " + code);
+    return this.afAuth.auth.confirmPasswordReset(code, password)
+  }
+
+  signInWith(provider: string, lang: string = undefined): Promise<boolean> {
+
     if(lang) {
       // Instruct firebase to use a specific language
       this.afAuth.auth.languageCode = lang;
@@ -49,31 +112,41 @@ export class AuthService {
 
     console.log("Signing-in using: " + provider);
 
+    let authProvider = null;
+
     switch(provider) {
 
       case 'google':
-      return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+      authProvider = new auth.GoogleAuthProvider();
 
       case 'facebook':
-      return this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
+      authProvider = new auth.FacebookAuthProvider();
       
       case 'twitter':
-      return this.afAuth.auth.signInWithPopup(new auth.TwitterAuthProvider());
+      authProvider = new auth.TwitterAuthProvider();
 
       case 'github':
-      return this.afAuth.auth.signInWithPopup(new auth.GithubAuthProvider());
+      authProvider = new auth.GithubAuthProvider();
 
       case 'linkedin':// TODO
       break;
     }
 
-    return Promise.reject({
-      code: 'auth/unsupported',
-      message: 'Unsupported provider'
-    });
+   if(authProvider === null) {
+      return Promise.reject({
+        code: 'auth/unsupported',
+        message: 'Unsupported provider'
+      });
+    }
+
+    return this.afAuth.auth.signInWithPopup(authProvider)
+      .then( credential => {
+        // Update user profile data with User Auth and custom data
+        return this.updateUserData(credential.user, lang);
+      }); 
   }
 
-  signOut() {
+  signOut(): void {
     console.log("Signing-out");
     this.afAuth.auth.signOut();
   }

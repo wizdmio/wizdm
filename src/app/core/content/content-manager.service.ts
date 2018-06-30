@@ -1,16 +1,7 @@
 import { Injectable, OnDestroy, EventEmitter } from '@angular/core';
-//import { Http, Response } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
-
-import { Observable, Subscription, of, forkJoin, throwError } from 'rxjs';
-import { zip, map, filter, tap, mergeMap } from 'rxjs/operators';
-
-/*
-declare interface Window {
-    navigator: any;
-}
-declare const window: Window;
-*/
+import { Observable, of, forkJoin, throwError } from 'rxjs';
+import { zip, map, tap, mergeMap } from 'rxjs/operators';
 
 export interface LanguageData {
 
@@ -158,8 +149,8 @@ export class ContentManager implements OnDestroy {
 
     // Catch the loading completion and notifies the listeners
     }), tap( data => { this.events.emit({reason: "load", data: data}); }, 
-           error => { this.events.emit({reason: "error", data: error});}, 
-           () => { this.events.emit({reason: "complete", data: this.lang});})); 
+             error => { this.events.emit({reason: "error", data: error});}, 
+             () => { this.events.emit({reason: "complete", data: this.lang});})); 
   }
 
   // Selects the requested portion of content data from the database
@@ -171,26 +162,12 @@ export class ContentManager implements OnDestroy {
     return select.split(".").reduce( (value, token) => {
 
       if(typeof value[token] === "undefined") { 
-        return defaults || value;}
+        return defaults;}
           
       return value[token];
       
     }, this.data);
   }
-
-/*
-  public getBrowserCultureLang(): string {
-      
-    if(typeof window === 'undefined' || typeof window.navigator === 'undefined') {
-        return undefined;}
-
-    let browserCultureLang: any = window.navigator.languages ? window.navigator.languages[0] : null;
-      
-    browserCultureLang = browserCultureLang || window.navigator.language || window.navigator.browserLanguage || window.navigator.userLanguage;
-
-    return browserCultureLang;
-  }
-*/
 
   ngOnDestroy() {}
 }

@@ -1,5 +1,5 @@
 @import 'src/variables';
-//@import 'src/theme';
+@import 'src/theme';
 
 :host {
   display: flex;
@@ -14,4 +14,19 @@
 
 .bit-of-space {
   margin-top: 20px;
+}
+
+.disclaimer {
+  max-width: 500px;
+  text-align: justify;
+}
+
+.apply-btn {
+  
+  color: mat-contrast($wm-primary, A400);
+  background-color: mat-color($wm-primary, A400);
+  
+  &[disabled] {
+    background-color: transparent;
+  }
 }

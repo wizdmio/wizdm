@@ -8,7 +8,9 @@
     "description": "Do you already have a name you'd like to call your app with?",
     "label": "App name", 
     "hint": "This name will be used to save your application and can be changed any time",
-    "required": "Application name is mandatory to proceed, please specify it"
+    "required": "Application name is mandatory to proceed, please specify it",
+    "alreadyExist": "Apologize, this name already exists",
+    "somethingWrong": "Something went wrong, try again later"
   },
 
   "questions": [
@@ -32,7 +34,7 @@
       "description": "How you'd imagine this app/idea be generating revenues, eventually",
       "fields": [
         {
-          "name": "description",
+          "name": "revenues",
           "type": "textarea", 
           "label": "Revenues", 
           "hint": "This is one of the parts we might be able to suggest something about"
@@ -73,7 +75,7 @@
           "hint": "Describe your ideal user or customer"
         },
         {
-          "name": "geo",
+          "name": "target",
           "type": "textarea",
           "rows": 2, 
           "label": "Geo coverage", 
@@ -96,10 +98,16 @@
     }
   ],
 
+  "appDone": {
+    "title": "Ready to apply",
+    "description": "You are all set!",
+    "disclaimer": "By subitting this new application I accept the <terms and privacy:[../terms]> conditions under which my application will be evaluated to become one of the active project within the wizdm.io community.",
+    "agree": "I do agree on the <terms:[../terms]>"
+  },
+
   "buttons": {
     "next": "Next",
     "back": "Back",
-    "done": "Done",
-    "apply": "Apply"
+    "apply": "Apply for a new project!"
   }
 }

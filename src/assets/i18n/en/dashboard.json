@@ -4,9 +4,10 @@
     "title": "My profile",
     "icon": "account_circle",
     "fields": [
-      {"label": "Name", "icon": "far:fa-user", "key": "displayName"},
+      {"label": "Name", "icon": "far:fa-user", "key": "name"},
       {"label": "Email", "icon": "far:fa-envelope", "key": "email"},
-      {"label": "Phone", "icon": "fas:fa-phone", "key": "phone"}
+      {"label": "Phone", "icon": "fas:fa-phone", "key": "phone"},
+      {"label": "Language", "icon": "fas:fa-language", "key": "lang"}
     ],
     "buttons": {
       "edit": "Edit",

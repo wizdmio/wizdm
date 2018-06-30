@@ -2,74 +2,10 @@
 
   <h1>{{msgs.title}}</h1>
 
-  <!-- User profile -->
-  <mat-expansion-panel #profile>
-    
-    <mat-expansion-panel-header fxLayoutAlign="space-between center">
-      <mat-panel-title>{{msgs.profile.title}}</mat-panel-title>
-      <mat-panel-description fxLayoutAlign="end center"> 
-        <mat-icon>{{msgs.profile.icon}}</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    
-    <mat-list>
-      <!--mat-list-item>
-        <img matListAvatar [src]="userImage()">
-      </mat-list-item-->
+  <wm-user-profile></wm-user-profile>
 
-      <mat-list-item *ngFor="let field of msgs.profile.fields">
-        <mat-icon mat-list-icon [fontSet]="field.icon.split(':')[0]" 
-                                [fontIcon]="field.icon.split(':')[1]">
-        </mat-icon>
-        <h3 mat-line>{{field.label}}</h3>
-        <p mat-line> {{ userData(field.key) }} </p>
-      </mat-list-item> 
-    </mat-list>
+  <wm-project-list></wm-project-list>
 
-    <mat-action-row>
-      <button mat-button color="primary" disabled>
-        {{msgs.profile.buttons.edit}}
-      </button>
-      <button mat-button color="primary" (click)="profile.close()">
-        {{msgs.profile.buttons.close}}
-      </button>
-    </mat-action-row>
-  </mat-expansion-panel>
-
-  <!-- Project list -->
-  <mat-expansion-panel #projects>
-    
-    <mat-expansion-panel-header fxLayoutAlign="space-between center">
-      <mat-panel-title>{{msgs.projects.title}}</mat-panel-title>
-      <mat-panel-description fxLayoutAlign="end center"> 
-        <mat-icon>{{msgs.projects.icon}}</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    
-    <mat-list>
-      <!--h3 mat-subheader>Folders</h3-->
-      <!--mat-list-item *ngFor="let field of msgs.profile.fields">
-        <mat-icon mat-list-icon [fontSet]="field.icon.split(':')[0]" 
-                                [fontIcon]="field.icon.split(':')[1]">
-        </mat-icon>
-        <h3 mat-line>{{field.label}}</h3>
-        <p mat-line> {{(auth.user | async)[field.key]}} </p>
-      </mat-list-item--> 
-    </mat-list>
-
-    <mat-action-row fxLayout="row" fxLayout.lt-sm="column">
-      <button mat-button color="primary" routerLink="../projects">
-        {{msgs.projects.buttons.browse}}
-      </button>
-      <button mat-button color="primary" routerLink="../apply">
-        {{msgs.projects.buttons.create}}
-      </button>
-      <button mat-button color="primary" (click)="projects.close()">
-        {{msgs.projects.buttons.close}}
-      </button>
-    </mat-action-row>
-  </mat-expansion-panel>
-  
 </section>
 
 <!--p>{{auth.user | async | json}}</p-->
