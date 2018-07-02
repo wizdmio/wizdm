@@ -1,18 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
-import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  MatToolbarModule,
-  MatSidenavModule,
-  MatListModule,
-  MatButtonModule,
-  MatSelectModule,
-  MatIconModule,
-  MatDividerModule
-} from '@angular/material';
-
+//-------
+import { SharedModule } from 'app/shared/shared.module';
 import { NavComponent } from './navigator.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { LogoComponent } from './toolbar/logo/logo.component';
@@ -23,14 +13,7 @@ import { FooterComponent } from './footer/footer.component';
   imports: [
     CommonModule,
     RouterModule,
-    FlexLayoutModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatIconModule,
-    MatDividerModule
+    SharedModule
   ],
   declarations: [
     NavComponent,

@@ -1,4 +1,5 @@
 {
+    
   "title": "New application",
   "description": "Follow the next simple steps to apply for a new project",
 
@@ -98,11 +99,18 @@
     }
   ],
 
-  "appDone": {
+  "appSubmit": {
     "title": "Ready to apply",
     "description": "You are all set!",
     "disclaimer": "By subitting this new application I accept the <terms and privacy:[../terms]> conditions under which my application will be evaluated to become one of the active project within the wizdm.io community.",
     "agree": "I do agree on the <terms:[../terms]>"
+  },
+
+  "canLeave": {
+    "title": "Unsaved changes",
+    "text": "Are you leaving? The draft of this application will be listed among your pending projects for you to be reviewed later.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
   },
 
   "buttons": {

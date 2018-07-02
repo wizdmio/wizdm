@@ -1,20 +1,10 @@
-
 @import "src/variables";
-/*
-:host {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  
-  color: $rs-red;
-  background-color: $ut-white;
-  background-image: url(/assets/img/gradient.png);
-  background-size: cover;
 
-  @extend .d-flex;
-  @extend .flex-column;
-  @extend .justify-content-center;
-  @extend .align-items-center;
-  @extend .text-center;
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  padding: $wm-content-padding 0;
+  margin: 0 $wm-content-margin;
 }
-*/

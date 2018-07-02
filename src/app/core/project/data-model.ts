@@ -17,7 +17,7 @@ export interface wmApplication {
     players?     : string,
     differences? : string
   },
-  market?        : {
+  market         : {
     users?       : string,
     target?      : string
   },

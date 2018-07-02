@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { DatabaseService, dbDocument } from '../database/database.service';
 import { auth, User } from 'firebase';
 import { Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, startWith, tap } from 'rxjs/operators';
 
 export interface UserData {
 
@@ -20,11 +20,19 @@ export interface UserData {
 export class AuthService {
 
   private authState$: User = null;
-  public  userData: UserData = null;
+  private userData$: UserData = null;
   public  redirectUrl: string = null;
 
   get authState(): Observable<User|null> {
     return this.afAuth.user;
+  }
+
+  get userData(): Observable<UserData|null> {
+    return this.authState.pipe(
+      switchMap(user => {
+        return  user ? this.db.doc<UserData>(`users/${user.uid}`).valueChanges() : of(null);
+      })
+    );
   }
   
   constructor(public  afAuth: AngularFireAuth,
@@ -35,26 +43,28 @@ export class AuthService {
       this.authState$ = auth;
     });
 
-    this.authState.pipe(
-      switchMap(user => {
-        return  user ? this.db.doc<UserData>(`users/${user.uid}`).valueChanges() : of(null);
-      })
+    // Keep a snapshot of the customized user profile
+    this.userData//.pipe(
+      
+      // Save the profile in the local storage
       //tap(data => localStorage.setItem('user', JSON.stringify(data))),
-      //startWith(JSON.parse(localStorage.getItem('user')))
-    ).subscribe( data => this.userData = data );
+
+      // Always start with the local stora copy of the profile to avoid flickering
+      //startWith(JSON.parse(localStorage.getItem('user'))) )
+
+      // Load the user profile and keep a snapshot always in sync
+    .subscribe( data => this.userData$ = data );
   }
 
   private updateUserData(user: User, lang: string = undefined): Promise<boolean> {
 
     // Update user profile data with User Auth and custom data
     let data = {  
-
       name:  user.displayName,
       email: user.email,
       phone: user.phoneNumber,
       img:   user.photoURL,
       lang:  lang
-    
     };
     
     return this.db.merge<UserData>(`users/${user.uid}`, data)
@@ -68,6 +78,10 @@ export class AuthService {
 
   get userId(): string {
     return this.authenticated ? this.authState$.uid : null;
+  }
+
+  get userProfile(): UserData {
+    return this.userData$;
   }
 
   registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<boolean> {
@@ -89,13 +103,11 @@ export class AuthService {
   }
 
   resetPassword(email: string): Promise<boolean> {
-
     console.log("Resetting the password for: " + email);
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
   confirmPassword(code: string, password: string): Promise<boolean> {
-
     // TODO: check how to do so
     //this.afAuth.auth.verifyPasswordResetCode(code);
 

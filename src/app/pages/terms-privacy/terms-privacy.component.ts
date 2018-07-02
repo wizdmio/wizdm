@@ -14,7 +14,13 @@ export class TermsPrivacyComponent implements OnInit {
 
   ngOnInit() {
 
-    // Gets the localized content
-    this.msgs = this.content.select('terms');
+    // Gets the localized content for the short version (default)
+    this.msgs = this.content.select('shortTerms');
+  }
+
+  private goFull() {
+
+    // Switch content to the full version
+    this.msgs = this.content.select('fullTerms');
   }
 }

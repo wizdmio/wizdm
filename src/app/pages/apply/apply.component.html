@@ -14,12 +14,12 @@
 
       <mat-form-field appearance="legacy" fxFill>
         <mat-label>{{msgs.appName.label}}</mat-label>
-        <input matInput formControlName="appname">
+        <input matInput formControlName="name">
         <mat-hint>{{msgs.appName.hint}}</mat-hint>
-        <mat-error *ngIf="nameForm.controls.appname.errors?.required">
+        <mat-error *ngIf="nameForm.controls.name.errors?.required">
           {{msgs.appName.required}}
         </mat-error>
-        <mat-error *ngIf="nameForm.controls.appname.errors?.alreadyExist">
+        <mat-error *ngIf="nameForm.controls.name.errors?.alreadyExist">
           {{msgs.appName.alreadyExist}}
         </mat-error>
       </mat-form-field>
@@ -79,35 +79,38 @@
   </mat-step>
 
   <mat-step>
-
-    <ng-template matStepLabel>{{msgs.appDone.title}}</ng-template>
+    <ng-template matStepLabel>{{msgs.appSubmit.title}}</ng-template>
     
     <div fxLayout="row" fxLayoutAlign="center center" fxFill>
       <div class="disclaimer">
-        <p>{{msgs.appDone.description}}</p>
+        <p>{{msgs.appSubmit.description}}</p>
         <p class="mat-small">
-          <wm-disclaimer [source]="msgs.appDone.disclaimer" linkClass="mat-link">
+          <wm-disclaimer [source]="msgs.appSubmit.disclaimer"
+                        (action)="popupTerms()"
+                          actionClass="mat-link">
           </wm-disclaimer>
         </p>
         <div fxLayout="row" fxLayoutAlign="center center" fxFill>
           <mat-checkbox labelPosition="before" color="primary" #agree>
-            <wm-disclaimer [source]="msgs.appDone.agree" linkClass="mat-link">
+            <wm-disclaimer [source]="msgs.appSubmit.agree"
+                          (action)="popupTerms()"
+                            actionClass="mat-link">
             </wm-disclaimer>
           </mat-checkbox>
-        </div>  
+        </div>
       </div>
     </div>
 
     <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>
 
-    <div  *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
+    <div *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
       <button mat-button class="apply-btn" type="button" 
-             [disabled]="!agree.checked" (click)="submitProject()">
-        {{msgs.buttons.apply}}
+              [disabled]="!agree.checked" 
+              (click)="submitProject()">
+        {{ msgs.buttons.apply }}
       </button>
     </div>
-      
+
   </mat-step>
-   
+      
 </mat-vertical-stepper>
- 

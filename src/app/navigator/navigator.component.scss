@@ -22,3 +22,11 @@ mat-sidenav {
   }
 }
 
+mat-sidenav-content {
+  overflow: auto;
+}
+
+//router-outlet + * {
+//  padding-bottom: $wm-content-margin;
+//}
+

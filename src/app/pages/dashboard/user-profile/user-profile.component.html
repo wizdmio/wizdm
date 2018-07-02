@@ -3,21 +3,19 @@
   <mat-expansion-panel-header fxLayoutAlign="space-between center">
     <mat-panel-title>{{msgs.title}}</mat-panel-title>
     <mat-panel-description fxLayoutAlign="end center"> 
-      <mat-icon>{{msgs.icon}}</mat-icon>
+      <wm-icon [icon]="msgs.icon">"</wm-icon>
     </mat-panel-description>
   </mat-expansion-panel-header>
   
-  <mat-list>
+  <mat-list dense>
     <!--mat-list-item>
       <img matListAvatar [src]="userImage()">
     </mat-list-item-->
 
     <mat-list-item *ngFor="let field of msgs.fields">
-      <mat-icon mat-list-icon [fontSet]="field.icon.split(':')[0]" 
-                              [fontIcon]="field.icon.split(':')[1]">
-      </mat-icon>
+      <wm-icon mat-list-icon [icon]="field.icon"></wm-icon>
       <h3 mat-line>{{field.label}}</h3>
-      <p mat-line> {{ userData(field.key) }} </p>
+      <p mat-line> {{ userProfile(field.key) }} </p>
     </mat-list-item> 
   </mat-list>
 

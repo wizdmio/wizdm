@@ -31,9 +31,10 @@
   <mat-form-field appearance="legacy" *ngIf="page != 'reset'" @inflate>
     <mat-label>{{ msgs.labels.password }}</mat-label>
     <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
-    <mat-icon matSuffix (click)="hide = !hide">
-      {{ hide ? 'visibility_off' : 'visibility' }}
-    </mat-icon>
+    <wm-icon matSuffix 
+            [icon]="hide ? 'visibility_off' : 'visibility'" 
+            (click)="hide = !hide">
+    </wm-icon>
     <mat-error *ngIf="form.controls.password.errors?.required">
       {{ msgs.errors.passwordRequired }}
     </mat-error>
@@ -64,11 +65,10 @@
   <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
 
     <button mat-icon-button *ngFor="let p of msgs.providers" (click)="signInWith(p.name)">
-      <mat-icon class="providers"
-                [fontSet]="p.icon.split(':')[0]"
-                [fontIcon]="p.icon.split(':')[1]" 
-                [ngStyle]="{ color: p.color }">
-      </mat-icon>
+      <wm-icon class="providers"
+              [icon]="p.icon"
+              [ngStyle]="{ color: p.color }">
+      </wm-icon>
     </button>
   </div>
 </div>

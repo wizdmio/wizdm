@@ -24,10 +24,10 @@ const routes: Routes = [
   // Redirection handler (for firebase password confirmation/reset and stuff)
   { path: 'handler', component: HandlerComponent },
 
-  // Redirection to the language resolver
-  { path: '', redirectTo: 'en', pathMatch: 'full' },
+  // Redirect to the language resolver asking for auto detection of the browser language
+  { path: '', redirectTo: 'auto', pathMatch: 'full' },
 
-  // Navigation component
+  // Load the navigation with the selected language
   { path: ':lang', component: NavComponent,
     
     // Uses the content manager resolver to pre-fetch language data

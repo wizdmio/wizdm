@@ -18,7 +18,24 @@ export class UserProfileComponent implements OnInit {
     this.msgs = this.content.select('dashboard.profile');
   }
 
-  userData(key: string): string {
-    return this.auth.userData ? this.auth.userData[key] : '';
+  private userLanguage(): string {
+    
+    if(this.auth.userProfile == null) {
+      return '';
+    }
+
+    let code = this.auth.userProfile.lang || 'en';
+    return this.content.languages.find( lang => {
+      return lang.lang == code;
+    }).label;
+  }
+
+  private userProfile(key: string): string {
+
+    if(key === 'lang') {
+      return this.userLanguage();
+    }
+
+    return this.auth.userProfile ? this.auth.userProfile[key] : '';
   }
 }

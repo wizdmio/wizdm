@@ -1,23 +1,25 @@
+
 <mat-divider></mat-divider>
 <footer fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
 
-  <div fxFlexOrder.lt-sm="3">
+<div fxFlexOrder.lt-sm="3">
     <a mat-button routerLink="terms">{{msgs.terms}}</a>
   </div>
   
   <div fxFlexOrder.lt-sm="2">
     <a mat-icon-button *ngFor="let item of msgs.items" [href]="item.link" target="_blank">
-      <mat-icon [fontSet]="item.icon.split(':')[0]" [fontIcon]="item.icon.split(':')[1]">
-      </mat-icon>
+      <wm-icon class="social" [icon]="item.icon"></wm-icon>
     </a>
   </div>
   
-  <mat-form-field fxFlexOrder.lt-sm="1">
-    <mat-select [value]="content.language.lang" (valueChange)=changeLanguage($event)>
-      <mat-option *ngFor="let item of content.languages" [value]="item.lang">
-        {{item.label}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
+  <div fxLayout="row" fxFlexOrder.lt-sm="1" *ngIf="!signedIn">
+    <mat-form-field>
+      <!--img matPrefix class="langImg" [src]="content.language.img"/-->
+      <mat-select [value]="content.language.lang" (valueChange)=changeLanguage($event)>
+        <mat-option *ngFor="let item of content.languages" [value]="item.lang">
+          {{item.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </footer>

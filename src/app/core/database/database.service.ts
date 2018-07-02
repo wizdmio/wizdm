@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, 
-         AngularFirestoreCollection, CollectionReference,
-         AngularFirestoreDocument, DocumentReference
+         AngularFirestoreCollection, QueryFn,
+         AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, tap, take, switchMap } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import * as firebase from 'firebase/app';
 
 export type dbCollection<T> = string | AngularFirestoreCollection<T>;
 export type dbDocument<T>   = string | AngularFirestoreDocument<T>;
+export type QueryFn = QueryFn;
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +21,17 @@ export class DatabaseService {
     return firebase.firestore.FieldValue.serverTimestamp();
   }
 
+  get sentinelId() {
+    return firebase.firestore.FieldPath.documentId();
+  }
+
   geopoint(lat: number, lng: number) {
     return new firebase.firestore.GeoPoint(lat, lng);
   }
 
   constructor(public afs: AngularFirestore) { }
 
-  col<T>(ref: dbCollection<T>, queryFn?): AngularFirestoreCollection<T> {
+  col<T>(ref: dbCollection<T>, queryFn?: QueryFn): AngularFirestoreCollection<T> {
     return typeof ref === 'string' ? this.afs.collection<T>(ref, queryFn) : ref;
   }
 
@@ -40,7 +45,7 @@ export class DatabaseService {
     );
   }
 
-  col$<T>(ref: dbCollection<T>, queryFn?): Observable<T[]> {
+  col$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(docs => {
         return docs.map(a => a.payload.doc.data()) as T[]
@@ -59,7 +64,7 @@ export class DatabaseService {
     );
   }
 
-  colWithIds$<T>(ref: dbCollection<T>, queryFn?): Observable<T[]> {
+  colWithIds$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {

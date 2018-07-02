@@ -1,2 +1,24 @@
 
-<h1>{{msgs.title}}</h1>
+<h1>{{msgs?.title}}</h1>
+<p>
+  <wm-disclaimer [source]="msgs.disclaimer" 
+                (action)="goFull()"
+                actionClass="mat-link">
+  </wm-disclaimer>
+</p>
+
+<section *ngFor="let section of msgs.sections">
+    
+  <h2>{{section?.title}}</h2>
+
+  <ng-container *ngFor="let paragraph of section.paragraphs">
+    <h4>{{paragraph?.title}}</h4>
+    <p>{{paragraph?.text}}</p>
+  </ng-container>
+
+</section>
+
+<section *ngIf="msgs.liability">
+  <h2>{{msgs.liability?.title}}</h2>
+  <p>{{msgs.liability?.text}}</p>
+</section>

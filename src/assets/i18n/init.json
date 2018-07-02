@@ -25,7 +25,8 @@
     "browser": "browser.json",
     "apply": "apply.json",
     "about": "about.json",
-    "terms": "terms.json",
+    "shortTerms": "terms-short.json",
+    "fullTerms": "terms-full.json",
     "notFound": "notFound.json"
   }
 }

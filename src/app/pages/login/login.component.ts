@@ -61,12 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
       // If we are coming here 'cause of signout then:
       if(mode === 'logout') {
-
-        // Sign-out...
-        this.auth.signOut();
-
-        //...and navigate to home
-        this.router.navigate(['..','home'], { relativeTo: this.route });
+        this.signOut();
       }
 
       // This option turns the page into the [asswor renew
@@ -105,19 +100,19 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.subAuth.unsubscribe();
   }
 
-  pageTitle(page: string): string {
+  private pageTitle(page: string): string {
 
     let key = page.camelize();
     return this.msgs.pages[key].title;
   }
 
-  pageButton(page: string): string {
+  private pageButton(page: string): string {
     
     let key = page.camelize();
     return this.msgs.pages[key].caption; 
   }
 
-  errorMessage(error: string): string {
+  private errorMessage(error: string): string {
 
     // Turns the message code into camelCase
     let key = error.camelize().replace('/','.');
@@ -128,7 +123,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
   // This function switches among the form controls configurations dynamically 
   // to support 'morphing' across the different pages
-  switchPage(page: 'sign-in' | 'register' | 'reset' | 'renew') {
+  private switchPage(page: 'sign-in' | 'register' | 'reset' | 'renew') {
 
     this.progress = false;
     
@@ -198,7 +193,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     }
   }
 
-  signInOrRegister() {
+  private signInOrRegister() {
     
     switch(this.page) {
 
@@ -225,7 +220,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     }
   }
 
-  signInWith(provider: string) { 
+  private signInWith(provider: string) { 
 
     this.progress = true;
 
@@ -238,7 +233,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
       })
   }
 
-  signIn(email: string, password: string) {
+  private signIn(email: string, password: string) {
     
     this.progress = true;
 
@@ -251,7 +246,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     });
   }
 
-  registerNew(email: string, password: string,name: string) {
+  private registerNew(email: string, password: string,name: string) {
 
     this.progress = true;
 
@@ -264,7 +259,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
       });
   }
 
-  resetPassword(email: string) {
+  private resetPassword(email: string) {
     
     this.progress = true;
 
@@ -274,5 +269,14 @@ export class LoginComponent implements OnInit, OnDestroy  {
         this.error = error.code;
         this.progress = false;
       })
+  }
+
+  private signOut(){
+    
+    // Sign-out...
+    this.auth.signOut();
+
+    //...and navigate to home
+    this.router.navigate(['..','home'], { relativeTo: this.route });
   }
 }  

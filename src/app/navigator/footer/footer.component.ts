@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ContentManager } from 'app/core';
 
@@ -9,6 +9,8 @@ import { ContentManager } from 'app/core';
 })
 export class FooterComponent implements OnInit {
 
+  @Input() signedIn = false;
+  
   private msgs;
   
   constructor(private content: ContentManager, 
