@@ -9,9 +9,11 @@
     "description": "Do you already have a name you'd like to call your app with?",
     "label": "App name", 
     "hint": "This name will be used to save your application and can be changed any time",
-    "required": "Application name is mandatory to proceed, please specify it",
-    "alreadyExist": "Apologize, this name already exists",
-    "somethingWrong": "Something went wrong, try again later"
+    "errors": {
+      "required": "Application name is mandatory to proceed, please specify it",
+      "alreadyExist": "Apologize, this name already exists",
+      "somethingWrong": "Something went wrong, try again later"
+    }
   },
 
   "questions": [
@@ -25,7 +27,9 @@
           "type": "textarea", 
           "label": "Description", 
           "hint": "This is a crucial step for the success of your application, take your time",
-          "required": "This is a mandatory field, please provide your best description"
+          "errors": {
+            "required": "This is a mandatory field, please provide your best description"
+          } 
         }
       ]
     },
@@ -108,7 +112,7 @@
 
   "canLeave": {
     "title": "Unsaved changes",
-    "text": "Are you leaving? The draft of this application will be listed among your pending projects for you to be reviewed later.",
+    "message": "Are you leaving? The draft of this application will be listed among your pending projects for you to be reviewed later.",
     "cancel": "Cancel",
     "ok": "Proceed"
   },

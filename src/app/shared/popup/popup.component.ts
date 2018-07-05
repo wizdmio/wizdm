@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface PopupData {
   title? : string,
-  text?: string,
+  message?: string,
   ok? : string,
   cancel?: string
 }

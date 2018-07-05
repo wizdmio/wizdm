@@ -26,7 +26,7 @@ export class UserProfileComponent implements OnInit {
   private userProfileField(field: any): ListItemField {
 
     let value = this.auth.userProfile ? this.auth.userProfile[field.key] : '';
-    let type = field.key == 'email' ? 'email' : 'input';
+    let type = 'input';
     let options = null;
 
     if(field.key == 'lang') {

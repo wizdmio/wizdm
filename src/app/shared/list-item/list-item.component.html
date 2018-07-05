@@ -14,10 +14,7 @@
     <h3 mat-line (click)="edit()">{{ field.label }}</h3>
     
     <p mat-line (click)="edit()">{{ field.value }}</p>
-    
-    <!--button mat-icon-button (click)="edit()">
-      <mat-icon mat-list-icon *ngIf="editable">edit</mat-icon>
-    </button-->
+
   </mat-list-item>
 </ng-template>
 
@@ -30,35 +27,18 @@
 
     <form mat-line [formGroup]="form" (ngSubmit)="updateControl()">
       <ng-container [ngSwitch]="field?.type">
-    
+
         <!-- type: INPUT -->
         <mat-form-field *ngSwitchDefault [appearance]="appearence" fxFill>
 
           <mat-label>{{ field.label }}</mat-label>
           
-          <input matInput [formControl]="control"
+          <input matInput formControlName="control"
                           (keydown)="keydown($event)" 
                           (blur)="updateControl()" #refControl>
 
           <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
           <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
-
-        </mat-form-field>
-    
-        <!-- type: TEXTAREA -->
-        <mat-form-field *ngSwitchCase="'textarea'" [appearance]="appearence">
-          
-          <mat-label>{{ field.label }}</mat-label>
-          
-          <textarea matInput [formControl]="control" 
-                             [rows]="field.rows || 5"
-                             (keydown)="keydown($event)"
-                             (blur)="updateControl()" #refControl>
-          </textarea>      
-          
-          <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
-          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
-        
         </mat-form-field>
 
         <!-- type: SELECT -->
@@ -66,11 +46,11 @@
           
           <mat-label>{{ field.label }}</mat-label>
 
-          <mat-select [formControl]="control"
-                      [value]="field.value"
-                      (valueChange)="changeSelect($event)"
+          <mat-select formControlName="control"
+                      (valueChange)="updateControl()"
+                      (openedChange)="skipSelect()"
                       (keydown)="keydown($event)"
-                      (blur)="blurSelect()" #refSelect>
+                      (blur)="skipSelect()" #refSelect>
 
             <mat-option *ngFor="let option of field.options" [value]="option">
               {{ option }}
@@ -83,12 +63,5 @@
         </mat-form-field>
       </ng-container>
     </form>
-
-    <!--button mat-icon-button type="submit">
-      <mat-icon mat-list-icon>done</mat-icon>
-    </button>
-    <button mat-icon-button type="button" (click)="edit = false">
-      <mat-icon mat-list-icon>cancel</mat-icon>
-    </button-->    
   </mat-list-item>
 </ng-template>

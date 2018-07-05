@@ -2,10 +2,11 @@
 
   <h1>{{msgs.title}}</h1>
 
-  <wm-user-profile></wm-user-profile>
-
-  <wm-project-list></wm-project-list>
-
+  <mat-accordion>
+    <wm-user-profile></wm-user-profile>
+    <wm-project-list></wm-project-list>
+  </mat-accordion>
+  
 </section>
 
 <!--p>{{auth.user | async | json}}</p-->

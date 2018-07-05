@@ -10,7 +10,7 @@ export type ListItemOption = {
 */
 export interface ListItemField {
   
-  type?: 'input' | 'email' | 'textarea' | 'select',
+  type?: 'input' | 'select',
   name?: string,
   icon?: string,
   label?: string,
@@ -53,11 +53,11 @@ export class ListItemComponent {
     }
   }
 
-  @Output() editStart  = new EventEmitter<void>();
+  @Output() editStart  = new EventEmitter<string>();
   @Output() editDone   = new EventEmitter<string>();
 
-  private control: FormControl;
   private form: FormGroup;
+  private control: FormControl;
   private editMode = false;// Switch between view/edit mode
   
   private errors: any = {};
@@ -72,28 +72,22 @@ export class ListItemComponent {
 
   constructor() { 
     this.control = new FormControl( '', null );
-    this.form = new FormGroup({ value: this.control });
-  }
-/*
-  private get fieldValue() {
-
-    if(typeof this.field.value === 'string'){
-      return this.field.value;
-    }
-
-    return (<ListItemOption>this.field.value).label;
+    this.form = new FormGroup({control: this.control});
   }
 
-  private compareSelect( opt: ListItemOption, val: ListItemOption) {
-    return opt.value === val.value;
+  private viewMode() {
+
+    // Switch back to view mode
+    this.editMode = false;
+    this.control.reset();
   }
-*/
+
   private setFocus() {
 
     // Makes sure the control gets the focus after rendering
     setTimeout( () => {
       
-      if(this.refControl) {
+      if(this.field.type ==='input' && this.refControl) {
         this.refControl.nativeElement.focus();}
 
       if(this.field.type ==='select' &&  this.refSelect) {
@@ -115,59 +109,47 @@ export class ListItemComponent {
       this.setFocus();
      
       // Emits editStart
-      this.editStart.emit();
+      this.editStart.emit(this.field.name);
     }
   }
 
   private updateControl() {
 
-    if(this.control.pristine) {
-      this.editMode = false;
-      return;
-    }
+    //console.log('debug', this.control);
 
-    // If there are actual modifications and all is fine
-    if(this.control.valid) {
+    // Wait one tick to make sure select control is up to date after a selection from the panel
+    setTimeout( () => {
 
-      console.log('Updating value: ', this.control.value);
+      // Skips on no changes
+      if(this.control.pristine || this.control.value == this.field.value) {
+        this.viewMode();
+        return;
+      }
 
-      // Emits editDone with the new value
-      this.editDone.emit(this.control.value);
+      // If there are actual modifications and all is fine
+      if(this.control.valid) {
 
-      // Switch back to view mode
-      this.editMode = false;
-
-      // Resets the control
-      this.control.reset();
-    }    
+        // Emits editDone with the new value
+        this.editDone.emit(this.control.value);
+        
+        // Switch back to view mode
+        this.viewMode();
+      }
+    });
   }
 
-  private changeSelect(newValue) {
-
-    // If there are actual modifications and all is fine
-    console.log('Updating value: ', newValue);
-
-    // Emits editDone with the new value
-    this.editDone.emit(newValue);
-
-    // Switch back to view mode
-    this.editMode = false;    
-  }
-
-  private blurSelect() {
+  private skipSelect() {
 
     // Work-around to prevend unwanted cancellation due to the blur event while selecting
     // an option from the panel 
     if(!this.refSelect.panelOpen){
-    
-      // Switch to edit mode
-      this.editMode = false;
+      this.viewMode();
     }
   }
 
   private keydown(ev) {
     if(ev.key === 'Escape') { // Cancel when pressing ESC
-      this.editMode = false;
+      this.viewMode();
     }
   }
 }

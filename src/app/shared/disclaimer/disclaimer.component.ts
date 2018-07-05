@@ -12,12 +12,13 @@ export class DisclaimerComponent {
   constructor() { }
   
   // Classes for links/actions - works only for global defined class due to ViewEncapsulation
-  @Input() linkClass = "";
-  @Input() actionClass = "";
+  // Supports the same syntax as 'ngClass'
+  @Input() linkClass: string | string[] | Set<string> | {[key: string]: any};
+  @Input() actionClass: string | string[] | Set<string> | {[key: string]: any};
 
-  // Styles to apply on links/actions
-  @Input() linkStyle: any = null;
-  @Input() actionStyle: any = null;
+  // Styles to apply on links/actions. Supports the same syntax as 'ngStyle'
+  @Input() linkStyle: {[key: string]: string};
+  @Input() actionStyle: {[key: string]: string};
 
   // Action event
   @Output() action = new EventEmitter<string>();

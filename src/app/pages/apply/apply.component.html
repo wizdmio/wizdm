@@ -6,21 +6,22 @@
 
   <mat-step [stepControl]="nameForm">
 
-    <form [formGroup]="nameForm" (ngSubmit)="renameProject()">
+    <!-- NAME step: here we create a new project -->
+    <form [formGroup]="nameForm" (ngSubmit)="draftProject()">
 
       <ng-template matStepLabel>{{msgs.appName.title}}</ng-template>
       
       <p class="mat-small">{{msgs.appName.description}}</p>
 
       <mat-form-field appearance="legacy" fxFill>
+
         <mat-label>{{msgs.appName.label}}</mat-label>
+        
         <input matInput formControlName="name">
+        
         <mat-hint>{{msgs.appName.hint}}</mat-hint>
-        <mat-error *ngIf="nameForm.controls.name.errors?.required">
-          {{msgs.appName.required}}
-        </mat-error>
-        <mat-error *ngIf="nameForm.controls.name.errors?.alreadyExist">
-          {{msgs.appName.alreadyExist}}
+        <mat-error *ngIf="nameForm.controls.name.errors" >
+          {{ errorMessage(nameForm.controls.name.errors, msgs.appName.errors) }}
         </mat-error>
       </mat-form-field>
 
@@ -31,6 +32,7 @@
       
   </mat-step>
 
+  <!-- QUESTION steps: here the list of questions dynamically build into the stepper  -->
   <mat-step *ngFor="let question of msgs.questions; let i=index" [stepControl]="stepForms[i]">
   
     <form [formGroup]="stepForms[i]" (ngSubmit)="updateApplication(i)">
@@ -43,22 +45,28 @@
 
         <ng-container [ngSwitch]="field.type">
 
+          <!-- INPUT -->
           <mat-form-field *ngSwitchDefault appearance="legacy" fxFill>
+            
             <mat-label>{{field.label}}</mat-label>
             <input matInput [formControlName]="field.name">
+            
             <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
-            <mat-error *ngIf="field.required && stepForms[i].controls[field.name].errors?.required">
-              {{field.required}}
+            <mat-error *ngIf="stepForms[i].controls[field.name].errors">
+              {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
             </mat-error>
           </mat-form-field>
 
+          <!-- TEXTAREA -->
           <mat-form-field *ngSwitchCase="'textarea'" appearance="legacy" fxFill>
+            
             <mat-label>{{field.label}}</mat-label>
             <textarea matInput [formControlName]="field.name" [rows]="field.rows || 5" >
-            </textarea>      
+            </textarea>
+
             <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
-            <mat-error *ngIf="field.required && stepForms[i].controls[field.name].errors?.required">
-              {{field.required}}
+            <mat-error *ngIf="stepForms[i].controls[field.name].errors">
+              {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
             </mat-error>
           </mat-form-field>
 
@@ -66,7 +74,6 @@
           </div>
 
         </ng-container>
-
       </ng-container>
 
       <div class="bit-of-space">
@@ -86,14 +93,14 @@
         <p>{{msgs.appSubmit.description}}</p>
         <p class="mat-small">
           <wm-disclaimer [source]="msgs.appSubmit.disclaimer"
-                        (action)="popupTerms()"
+                         (action)="popupTerms()"
                           actionClass="mat-link">
           </wm-disclaimer>
         </p>
         <div fxLayout="row" fxLayoutAlign="center center" fxFill>
           <mat-checkbox labelPosition="before" color="primary" #agree>
             <wm-disclaimer [source]="msgs.appSubmit.agree"
-                          (action)="popupTerms()"
+                           (action)="popupTerms()"
                             actionClass="mat-link">
             </wm-disclaimer>
           </mat-checkbox>

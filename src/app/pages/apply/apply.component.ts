@@ -1,27 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ContentManager, CanPageDeactivate, ProjectService, wmProject } from 'app/core';
 import { PopupComponent } from 'app/shared/popup/popup.component';
 import { TermsPrivacyPopupComponent } from 'app/pages/terms-privacy/terms-privacy-popup.component';
-import { map, take, tap, debounceTime } from 'rxjs/operators';
-//import { Subscription } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'wm-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss']
 })
-export class ApplyComponent implements OnInit, OnDestroy, CanPageDeactivate {
+export class ApplyComponent implements OnInit, CanPageDeactivate {
 
   private stepForms: FormGroup[] = new Array();
   private nameForm: FormGroup;
   private progress = false;
   private msgs;
-
-  //private newProject = false;
-  //private subNav: Subscription;
 
   constructor(private builder: FormBuilder, 
               private router:  Router,
@@ -37,44 +34,17 @@ export class ApplyComponent implements OnInit, OnDestroy, CanPageDeactivate {
 
     // Build the stepper forms
     this.buildForm();
-    this.draftProject();
-/*
-    // Check for action codes
-    this.subNav = this.route.queryParamMap.subscribe( (params: ParamMap) => {
-
-      let projectId = params.get('project');
-
-      // New project flag to show the appropriate messages
-      this.newProject = projectId == null;
-
-      // If a project id was specified...
-      if(projectId !== null) {
-
-        // Load the requested project data
-        this.loadProject(projectId);
-        console.log('Modify the application of: ' + projectId);
-      }
-      else { //...if not
-
-        // Create a new empty draft
-        this.draftProject();
-        console.log('New application');
-      }
-    });
-    */
   }
 
-  ngOnDestroy() {
-    //this.subNav.unsubscribe();
-  }
-
-  // Returns true if there are chnces to be saved
-  private get saveChanges(): boolean {
+  private errorMessage(controlErrors: any, errorMessages: any): string {
     
-    return this.nameForm.dirty || 
-           this.stepForms.some( form => form.dirty);
+    // Evaluates the validation reported errors
+    let codes = Object.keys(controlErrors);
+    
+    // Returns the relevant error message
+    return errorMessages && codes ? errorMessages[codes[0]] : '';
   }
-  
+
   // Project Name Validator Factory 
   get projectNameValidator() {
     
@@ -102,7 +72,10 @@ export class ApplyComponent implements OnInit, OnDestroy, CanPageDeactivate {
 
       // Build the group's controls
       question.fields.forEach( field => {
-        group[field.name] = new FormControl('', field.required ? Validators.required : null);
+
+        let required = field.errors && field.errors.required;
+
+        group[field.name] = new FormControl('', required ? Validators.required : null);
       });
 
       // Push the form group into the array
@@ -110,59 +83,26 @@ export class ApplyComponent implements OnInit, OnDestroy, CanPageDeactivate {
     });
   }
 
-  private loadProject(id: string) {
-
-    this.project.queryProject(id).pipe( 
-      take(1),
-      tap( (data: wmProject) => {
-
-        // Fill out the project name form
-        this.nameForm.patchValue({ name: data.name } );
-        
-        // Loops on form group steps
-        this.msgs.questions.forEach( (question, index) => { 
-          this.stepForms[index].patchValue( data.application );
-        });
-      })
-    ).subscribe();
-  }
-
   private draftProject() {
-
-    // Creates the new project with no information but the status 'draft'
-    this.project.addProject({ status: 'draft' } as wmProject)
-      .then(result => {
-
-        console.log("project created");
-        
-      }).catch(error => {
-
-        console.log("something wrong: " + error.code);
-
-      });
-  }
-
-  private renameProject() {
 
     // Proceed only upon proper name validation
     if(this.nameForm.invalid) {
 
-      console.log('Invalid project name, skipping to update');
+      console.log('Invalid project name, skipping draft');
       return;
     }
 
     let name = this.nameForm.controls.name.value;
 
-    // Update the draft project with the requeted name
-    this.project.renameProject(name)
-      .then(() => {
-        
-        console.log("project updated");
-        this.nameForm.markAsPristine();
+    // Creates the new project with no information but the status 'draft'
+    this.project.addProject({ name: name, status: 'draft' } as wmProject)
+      .then(result => {
 
+        console.log("project created: ", name);
+        
       }).catch(error => {
 
-        console.log("something wrong: " + error.code);
+        console.log("something wrong: ", error.code);
 
       });
   }
@@ -185,7 +125,6 @@ export class ApplyComponent implements OnInit, OnDestroy, CanPageDeactivate {
       .then(() => {
         
         console.log("application updated");
-        this.stepForms[step].markAsPristine();
 
       }).catch(error => {
 
@@ -224,30 +163,52 @@ export class ApplyComponent implements OnInit, OnDestroy, CanPageDeactivate {
       });
   }
 
-  public canDeactivate() {
-
-    // If there are no data changes
-    if(!this.saveChanges) {
-
-      // Delete the empty project and agree to leave
-      //if(this.newProject) {
-        this.project.deleteProject();
-      //}
-      return true;
-    }
-
-    // Otherwise, popup asking for a confirmation to leave
-    return this.dialog.open(PopupComponent, { 
-        data: this.msgs.canLeave,
-        maxWidth: 500,
-      })
-      .afterClosed()
-      .toPromise();
-  }
-
   private popupTerms() {
 
     // Pops up the terms-privacy conditions without leaving the page
     this.dialog.open(TermsPrivacyPopupComponent);
   }
+
+  public canDeactivate() {
+
+    // Gets the project data saved so far...
+    return this.project.queryProject().pipe( 
+      take(1),
+      switchMap( (data: wmProject) => {
+
+        // Checks if already submitted
+        if(data && data.status != 'submitted') {
+          
+          // If not, ask the user ho to proceed
+          return this.dialog.open(PopupComponent, { 
+            data: this.msgs.canLeave,
+            maxWidth: 500,
+          })
+          .afterClosed();
+        }
+      
+        // Proceeds otherwise
+        return of(true);
+      })
+    );
+  }
 }
+
+/*
+  private loadProject(id: string) {
+
+    this.project.queryProject(id).pipe( 
+      take(1),
+      tap( (data: wmProject) => {
+
+        // Fill out the project name form
+        this.nameForm.patchValue({ name: data.name } );
+        
+        // Loops on form group steps
+        this.msgs.questions.forEach( (question, index) => { 
+          this.stepForms[index].patchValue( data.application );
+        });
+      })
+    ).subscribe();
+  }
+*/

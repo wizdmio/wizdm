@@ -70,13 +70,19 @@ export class ProjectService {
     return this.updateProject({ name: name } as wmProject);
   }
 
-  public queryProject(ref: string): Observable<wmProject> {
-    return this.db.docWithId$<wmProject>(ref = `/projects/${ref}`).pipe(
-      tap( doc => {
-        this.currentId = doc.id;
-        this.currentRef = ref;
-      })
-    );
+  public queryProject(ref?: string): Observable<wmProject> {
+
+    if(ref || this.currentId) {
+
+      return this.db.docWithId$<wmProject>(ref = `/projects/${ref || this.currentId}`).pipe(
+        tap( doc => {
+          this.currentId = doc.id;
+          this.currentRef = ref;
+        })
+      );
+    }
+
+    return of(null);
   }
 
   public deleteProject(): Promise<void> {
