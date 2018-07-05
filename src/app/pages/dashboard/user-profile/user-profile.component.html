@@ -7,17 +7,20 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
   
-  <mat-list dense>
+  <mat-list>
     <!--mat-list-item>
       <img matListAvatar [src]="userImage()">
     </mat-list-item-->
-
-    <mat-list-item *ngFor="let field of msgs.fields">
-      <wm-icon mat-list-icon [icon]="field.icon"></wm-icon>
-      <h3 mat-line>{{field.label}}</h3>
-      <p mat-line> {{ userProfile(field.key) }} </p>
-    </mat-list-item> 
+    
+    <wm-list-item *ngFor="let field of msgs.fields" 
+                  [field]="userProfileField(field)"
+                  [validators]="userProfileValidators(field.key)"
+                  (editDone)="updateUserProfile(field.key, $event)">
+    </wm-list-item>
+  
   </mat-list>
+
+
 
   <mat-action-row>
     <button mat-button color="primary" disabled>

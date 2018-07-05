@@ -6,7 +6,7 @@ import { ContentManager, CanPageDeactivate, ProjectService, wmProject } from 'ap
 import { PopupComponent } from 'app/shared/popup/popup.component';
 import { TermsPrivacyPopupComponent } from 'app/pages/terms-privacy/terms-privacy-popup.component';
 import { map, take, tap, debounceTime } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+//import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-apply',

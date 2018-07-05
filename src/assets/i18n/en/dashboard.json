@@ -12,6 +12,10 @@
     "buttons": {
       "edit": "Edit",
       "close": "Close"
+    },
+    "errors": {
+      "required": "This is a mandatory field",
+      "email": "There's something wrong with this email"
     }
   },
 

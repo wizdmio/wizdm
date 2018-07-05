@@ -1,24 +1,34 @@
 
-<h1>{{msgs?.title}}</h1>
-<p>
-  <wm-disclaimer [source]="msgs.disclaimer" 
-                (action)="goFull()"
-                actionClass="mat-link">
-  </wm-disclaimer>
-</p>
+<div fxLayout="row">
+  
+  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!full"></div>
+  
+  <div fxFlex>
+    <h1>{{msgs?.title}}</h1>
+    <p>
+      <wm-disclaimer [source]="msgs.disclaimer" 
+                    (action)="goFull()"
+                    actionClass="mat-link">
+      </wm-disclaimer>
+    </p>
 
-<section *ngFor="let section of msgs.sections">
-    
-  <h2>{{section?.title}}</h2>
+    <section *ngFor="let section of msgs.sections">
+        
+      <h2>{{section?.title}}</h2>
 
-  <ng-container *ngFor="let paragraph of section.paragraphs">
-    <h4>{{paragraph?.title}}</h4>
-    <p>{{paragraph?.text}}</p>
-  </ng-container>
+      <ng-container *ngFor="let paragraph of section.paragraphs">
+        <h4>{{paragraph?.title}}</h4>
+        <p>{{paragraph?.text}}</p>
+      </ng-container>
 
-</section>
+    </section>
 
-<section *ngIf="msgs.liability">
-  <h2>{{msgs.liability?.title}}</h2>
-  <p>{{msgs.liability?.text}}</p>
-</section>
+    <section *ngIf="msgs.liability">
+      <h2>{{msgs.liability?.title}}</h2>
+      <p>{{msgs.liability?.text}}</p>
+    </section>
+  </div>
+
+  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!full"></div>
+
+</div>

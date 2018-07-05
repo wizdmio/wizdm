@@ -10,10 +10,17 @@ export class DisclaimerComponent {
   private segments: any[];
 
   constructor() { }
-
-  @Output() action = new EventEmitter<string>();
+  
+  // Classes for links/actions - works only for global defined class due to ViewEncapsulation
   @Input() linkClass = "";
   @Input() actionClass = "";
+
+  // Styles to apply on links/actions
+  @Input() linkStyle: any = null;
+  @Input() actionStyle: any = null;
+
+  // Action event
+  @Output() action = new EventEmitter<string>();
 
   private pushText(content: string){
     
@@ -45,44 +52,41 @@ export class DisclaimerComponent {
     // Check for parameters ( ex: ../jump-here?mode=set&value=max )
     let parts = link.split('?');
 
-    // No parameter ? Returns a plane link
-    if (parts.length > 1) {
-      
-      // Match for parameter pattern
-      const re = /(\w+)=(\w*)\&*/g;
-      let params = {};
+    // Parses the query parameters
+    let params = parts.length > 1 ? this.parseLinkParams(parts[1]) : null;
 
-      // Build the parameter object
-      parts[1].replace(re, (match: string, param: string, value: string) => {
+    // Pushes the link segment
+    this.segments.push({
+      type: "link",
+      link: parts[0],
+      params,
+      content
+    });
+  }
 
-        params[param] = value;
-        return '';
-      });
+  private parseLinkParams(input: string) {
 
-      // Pushes the link segment
-      this.segments.push({
-        type: "link",
-        link: parts[0],
-        params,
-        content
-      });
-    }
-    else {
+    // Match for parameter pattern
+    const re = /(\w+)=(\w*)\&*/g;
+    let params = {};
 
-      // Pushes a plain link object
-      this.segments.push({ 
-        link: parts[0], 
-        content
-      });
-    }
+    // Build the parameter object
+    input.replace(re, (match: string, param: string, value: string) => {
+
+      params[param] = value;
+      return '';
+    });
+
+    return params;
   }
 
   @Input('source') 
   set compileSegments(source: string) {
 
-    // Matches the fields looking like <text:[link]> where 'text' is the label to display and 'link' is the static
-    // link towards the router is pointing to
-    const re = /<([\w\.\s]+):\s*\[(@)*([\w\.\-/\?\&=]+)\]\s*>/g;
+    // Matches the fields looking like <text:[@link]> where 'text' is the label to display and 'link' is the static
+    // link towards the router is pointing to. When the @ flag is omitted, the mach is treated as a click action
+    // instead 
+    const re = /<([^<>]+):\s*\[(@)*([\w\.\-/\?\&=]+)\]\s*>/g;
     let start = 0;
 
     // Resets the segments array
@@ -122,5 +126,5 @@ export class DisclaimerComponent {
 
     console.log("disclaimer segments:");
     console.log(this.segments);
-  } 
+  }  
 }

@@ -45,18 +45,15 @@ export class AuthService {
 
     // Keep a snapshot of the customized user profile
     this.userData//.pipe(
-      
       // Save the profile in the local storage
       //tap(data => localStorage.setItem('user', JSON.stringify(data))),
-
       // Always start with the local stora copy of the profile to avoid flickering
       //startWith(JSON.parse(localStorage.getItem('user'))) )
-
       // Load the user profile and keep a snapshot always in sync
     .subscribe( data => this.userData$ = data );
   }
 
-  private updateUserData(user: User, lang: string = undefined): Promise<boolean> {
+  private updateUserData(user: User, lang: string = undefined): Promise<void> {
 
     // Update user profile data with User Auth and custom data
     let data = {  
@@ -67,8 +64,7 @@ export class AuthService {
       lang:  lang
     };
     
-    return this.db.merge<UserData>(`users/${user.uid}`, data)
-      .then(() => true);
+    return this.db.merge<UserData>(`users/${user.uid}`, data);
   }
 
   // Returns true if user is logged in
@@ -84,7 +80,11 @@ export class AuthService {
     return this.userData$;
   }
 
-  registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<boolean> {
+  updateUserProfile(data: UserData) : Promise<void> {
+    return this.db.merge<UserData>(`users/${this.userId}`, data);
+  }
+
+  registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
     
     console.log("Registering a new user: " + email);
 
@@ -115,7 +115,7 @@ export class AuthService {
     return this.afAuth.auth.confirmPasswordReset(code, password)
   }
 
-  signInWith(provider: string, lang: string = undefined): Promise<boolean> {
+  signInWith(provider: string, lang: string = undefined): Promise<void> {
 
     if(lang) {
       // Instruct firebase to use a specific language

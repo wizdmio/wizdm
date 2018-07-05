@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ContentManager } from 'app/core';
 
 @Component({
@@ -8,6 +8,7 @@ import { ContentManager } from 'app/core';
 })
 export class TermsPrivacyComponent implements OnInit {
 
+  @Input() full = false; // Force the content to fit the full screen
   private msgs = null;
   
   constructor(private content: ContentManager) {}

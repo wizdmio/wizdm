@@ -21,14 +21,18 @@ export class ContentResolver implements Resolve<any> {
               private auth: AuthService, 
               private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any {
 
     let lang = route.params['lang'];
 
     // Detects the browser language on request and re-route to it
     if(lang === 'auto') {
+      
       lang = this.detectLanguage();
+      console.log('Using browser language: ' + lang);
+
       this.router.navigate([lang || 'en']);
+      return null;
     }
 
     // Waits to check for authentication prior to load the content to avoid flickering at startup
@@ -39,6 +43,7 @@ export class ContentResolver implements Resolve<any> {
         // If authenticated, get the user preferred language
         if(profile != null) {
           lang = profile.lang || lang;
+          console.log('Switch to user language: ' + lang);
         }
 
         // Load the localized content

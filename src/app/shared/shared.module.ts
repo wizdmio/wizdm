@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
@@ -13,7 +14,6 @@ import {
   MatListModule,
   MatGridListModule,
   MatCheckboxModule,
-  MatProgressSpinnerModule,
   MatProgressBarModule,
   MatDialogModule,
   MatToolbarModule,
@@ -24,6 +24,7 @@ import {
 
 import { IconComponent } from './icon/icon.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
+import { ListItemComponent } from './list-item/list-item.component';
 import { PopupComponent } from './popup/popup.component';
 import { PopupService } from './popup/popup.service';
 
@@ -31,6 +32,7 @@ import { PopupService } from './popup/popup.service';
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
@@ -42,7 +44,6 @@ import { PopupService } from './popup/popup.service';
     MatListModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule,
     MatProgressBarModule,
     MatDialogModule,
     MatToolbarModule,
@@ -54,6 +55,7 @@ import { PopupService } from './popup/popup.service';
   declarations: [
     IconComponent,
     DisclaimerComponent,
+    ListItemComponent,
     PopupComponent
   ],
 
@@ -69,7 +71,6 @@ import { PopupService } from './popup/popup.service';
     MatListModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule,
     MatProgressBarModule,
     MatDialogModule,
     MatToolbarModule,
@@ -79,6 +80,7 @@ import { PopupService } from './popup/popup.service';
 //------------------------    
     IconComponent,
     DisclaimerComponent,
+    ListItemComponent,
     PopupComponent
   ],
 
