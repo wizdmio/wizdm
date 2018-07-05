@@ -12,7 +12,7 @@ declare global {
 // Implements a set of string conversion functions between CamelCase and Hypen delimited notations
 //
 String.prototype.trim = function(this: string): string {
-	return this.replace(/^\s+|\s+$/g, "");
+	return this.replace(/^\s+|\s+$/g,'');
 };
 
 String.prototype.camelize = function(this: string): string {

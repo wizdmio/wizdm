@@ -13,7 +13,7 @@ import { filter, map, tap, take, debounceTime } from 'rxjs/operators';
 export class ProjectService {
 
   private currentRef: dbDocument<wmProject> = null;
-  private currentId:  string = null;
+  public  currentId:  string = null;
 
   constructor(private auth: AuthService,
               private db:   DatabaseService) {
@@ -32,7 +32,7 @@ export class ProjectService {
     // Query the projects collection searching for a matching name
     // excluding the currentId to avoid false positive
     return this.db.col$<wmProject>('projects', ref => {
-        return ref.where('name', '==', name.toLowerCase())
+        return ref.where('lowerCaseName', '==', name.toLowerCase())
                   //.where(this.db.sentinelId, '<', this.currentId)
                   //.where(this.db.sentinelId, '>', this.currentId)
       } 
@@ -46,6 +46,11 @@ export class ProjectService {
   public addProject(data: wmProject): Promise<boolean> {
 
     const owner = this.auth.userId;
+    
+    if(data.name) {
+      data['lowerCaseName'] = data.name.toLowerCase();
+    }
+
     return this.db.add<wmProject>('/projects', { ...data, owner })
       .then( ref => {
         this.currentId = (ref ? (ref.ref ? ref.ref.id : null) : null);
@@ -54,6 +59,10 @@ export class ProjectService {
   }
 
   public updateProject(data: wmProject): Promise<void> {
+
+    if(data.name) {
+      data['lowerCaseName'] = data.name.toLowerCase();
+    }
 
     if(this.currentRef === null) {
       return Promise.reject('ref == null');
@@ -64,10 +73,6 @@ export class ProjectService {
 
   public updateApplication(data: wmApplication): Promise<void> {
     return this.updateProject({ application: {...data} } as wmProject);
-  }
-
-  public renameProject(name: string): Promise<void> {
-    return this.updateProject({ name: name } as wmProject);
   }
 
   public queryProject(ref?: string): Observable<wmProject> {

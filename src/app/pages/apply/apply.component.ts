@@ -52,7 +52,8 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
     // already exists
     return (control: AbstractControl): Promise<{[key: string]: any} | null> => {
       
-      return this.project.doesProjectExists(control.value)
+      let name: string = control.value;
+      return this.project.doesProjectExists( name.trim() )
         .then( r => r ? { alreadyExist: true } : null , e => e );
     };
   }
@@ -73,6 +74,7 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
       // Build the group's controls
       question.fields.forEach( field => {
 
+        // Only required validator is supported
         let required = field.errors && field.errors.required;
 
         group[field.name] = new FormControl('', required ? Validators.required : null);
@@ -92,19 +94,18 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
       return;
     }
 
-    let name = this.nameForm.controls.name.value;
+    let name: string = this.nameForm.controls.name.value;
+
+    let data = { name: name.trim(), status: 'draft' };
 
     // Creates the new project with no information but the status 'draft'
-    this.project.addProject({ name: name, status: 'draft' } as wmProject)
-      .then(result => {
+    if(this.project.currentId) {
 
-        console.log("project created: ", name);
-        
-      }).catch(error => {
-
-        console.log("something wrong: ", error.code);
-
-      });
+      this.project.updateProject(data as wmProject);
+    }
+    else {
+      this.project.addProject(data as wmProject);
+    }
   }
 
   private updateApplication(step: number) {
