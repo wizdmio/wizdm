@@ -13,7 +13,7 @@ import { ProjectComponent } from './pages/project/project.component';
 import { NotFoundComponent } from 'app/pages/not-found/not-found.component';
 import { HandlerComponent } from 'app/pages/handler/handler.component';
 
-import { ContentResolver, AuthGuardService, PageGuardService } from 'app/core';
+import { ResolverService, AuthGuardService, PageGuardService } from 'app/core';
 
 // Define navigation routes
 const routes: Routes = [
@@ -32,7 +32,7 @@ const routes: Routes = [
     
     // Uses the content manager resolver to pre-fetch language data
     // to be used by the children pages
-    resolve: { lang: ContentResolver },
+    resolve: { lang: ResolverService },
 
     // Localized pages
     children: [
@@ -71,7 +71,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),//, { useHash: true });
+    RouterModule.forRoot(routes)//, { onSameUrlNavigation: 'reload'} ),//, { useHash: true });
   ],
   exports: [
     RouterModule

@@ -4,8 +4,8 @@ import { Router,
          CanActivateChild, 
          ActivatedRouteSnapshot, 
          RouterStateSnapshot } from '@angular/router';
-import { AuthService } from './auth.service';
-import { ContentManager } from '../content/content-manager.service';
+import { AuthService } from '../auth/auth.service';
+import { ContentService } from '../content/content-manager.service';
 import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';    
 
@@ -15,7 +15,7 @@ import { map, take, tap } from 'rxjs/operators';
 export class AuthGuardService implements CanActivate, CanActivateChild {
   
   constructor(private auth: AuthService,
-              private content: ContentManager,
+              private content: ContentService,
               private router: Router) {}
 
   // To be used for router guarding 
@@ -35,10 +35,10 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
         if(!status) {
         
           // Store the attempted URL for redirecting
-          this.auth.redirectUrl = state.url;
+          //this.auth.redirectUrl = state.url;
 
           // Gets the current language when possible
-          let lang = this.content.language ? this.content.language.lang : 'en';
+          let lang = this.content.language || 'en';
 
           // Navigates to the login page
           this.router.navigate([lang, 'login']);

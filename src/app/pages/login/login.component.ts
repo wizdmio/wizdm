@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { ContentManager, AuthService } from 'app/core';
+import { ContentService, AuthService } from 'app/core';
 import { $loginAnimations } from './login-animations';
 import { Subscription } from 'rxjs';
 
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
   private subNav: Subscription;
   private subAuth: Subscription;
   
-  constructor(private content: ContentManager,
+  constructor(private content: ContentService,
               private router : Router, 
               private route : ActivatedRoute,
               private auth: AuthService) {
@@ -72,24 +72,21 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     // Monitors the user signing-in and jumps to the dashboard on success
     // This also works to prevent opening the login page when already logged-in
-    this.subAuth = this.auth.authState.subscribe( user => {
+    this.subAuth = this.auth.userData.subscribe( user => {
 
       // Jumps to the dashboard on successful login
       if(user) {
         console.log('logged in successfully as: ' + user.email);
 
-        // Gets the redirecting url or fallback to the dashboard
-        //let url = this.auth.redirectUrl || 'dashboard';
-        let url = 'dashboard';
-        
-        // Resets the redirect url saved by the guard
-        this.auth.redirectUrl = null;
-
         // Navigate to the requested page only if coming from a login procedure
         if(this.progress) {
           this.progress = false;
 
-          this.router.navigate(['..', url], { relativeTo: this.route });
+          // Checks for user preferrend language
+          let userLang = user.lang || 'en';
+
+          // Jump to the dashboard switching to the user language if needed
+          this.content.switch(userLang, ['dashboard']);
         }
       }
     });
@@ -225,7 +222,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.progress = true;
 
     // Signing-in with a provider using the current language    
-    this.auth.signInWith( provider, this.content.language.lang )
+    this.auth.signInWith( provider, this.content.language )
       .catch( error => {
         // Keep the rror code on failure
         this.error = error.code;
@@ -251,7 +248,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.progress = true;
 
     // Signing-in with a email/password using the current language
-    this.auth.registerNew(email, password, name, this.content.language.lang )
+    this.auth.registerNew(email, password, name, this.content.language )
       .catch( error => {
         // Keep the rror code on failure
         this.error = error.code;
@@ -276,7 +273,13 @@ export class LoginComponent implements OnInit, OnDestroy  {
     // Sign-out...
     this.auth.signOut();
 
-    //...and navigate to home
-    this.router.navigate(['..','home'], { relativeTo: this.route });
+    //...and navigate to home overwriting the logout route to prevent unwanted
+    // behaviours in case of navigating back after logout
+    this.router.navigate(['..','home'], 
+      { 
+        relativeTo: this.route,
+        replaceUrl: true
+      }
+    );
   }
 }  

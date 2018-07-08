@@ -4,20 +4,19 @@ import { Resolve,
          ActivatedRouteSnapshot,
          Router } from '@angular/router';
 
-import { ContentManager } from './content-manager.service';
 import { AuthService } from '../auth/auth.service';
-import { Observable, of, timer } from 'rxjs';
-import { switchMap, mergeMap, map, take } from 'rxjs/operators';
-
+import { ContentService } from '../content//content-manager.service';
+import { Observable, of } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 
 // Support for detectLanguage
 declare interface Window { navigator: any;}
 declare const window: Window;
 
 @Injectable()
-export class ContentResolver implements Resolve<any> {
+export class ResolverService implements Resolve<any> {
 
-  constructor(private content: ContentManager,
+  constructor(private content: ContentService,
               private auth: AuthService, 
               private router: Router) { }
 
@@ -41,9 +40,12 @@ export class ContentResolver implements Resolve<any> {
       switchMap( profile => {
 
         // If authenticated, get the user preferred language
-        if(profile != null) {
-          lang = profile.lang || lang;
-          console.log('Switch to user language: ' + lang);
+        if(profile != null && profile.lang != null && profile.lang != lang) {
+          
+          console.log('Switch to user language: ' + profile.lang);
+
+          this.router.navigate([profile.lang]);
+          return of(null);
         }
 
         // Load the localized content

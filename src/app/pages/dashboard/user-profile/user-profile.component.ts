@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Validators } from '@angular/forms';
-import { ContentManager, AuthService, UserData } from 'app/core';
+import { ContentService, AuthService, LanguageOption } from 'app/core';
 import { ListItemField, ListItemValidators } from 'app/shared/list-item/list-item.component';
 
 @Component({
@@ -12,15 +11,20 @@ import { ListItemField, ListItemValidators } from 'app/shared/list-item/list-ite
 export class UserProfileComponent implements OnInit {
 
   private msgs = null;
+  private options: LanguageOption[]; 
 
-  constructor(private content: ContentManager,
-              private router : Router, 
-              private route  : ActivatedRoute,
+  constructor(private content: ContentService,
               private auth   : AuthService) { }
 
   ngOnInit() {
     // Gets the localized content
     this.msgs = this.content.select('dashboard.profile');
+
+    // WARNING: we buffers languageOptions into a local variable to prevent
+    // the *ngFor on mat-select to run over an infinite loop due to an issue
+    // it seems they still can't fix
+    //return this.content.languageOptions;
+    this.options = this.content.languageOptions;
   }
 
   private userProfileField(field: any): ListItemField {
@@ -33,15 +37,9 @@ export class UserProfileComponent implements OnInit {
 
       type = 'select';
 
-      // Maps the languages array into the list item select options
-      // and turns the language code into the language description 
-      // at the same time
-      options = this.content.languages.map( lang => {
-        if(lang.lang == value) {
-          value = lang.label;//{ label: lang.label, value: lang.lang };
-        }
-        return lang.label;//{ label: lang.label, value: lang.lang };
-      });
+      // Shows the current and supported language label
+      value = this.content.language;
+      options = this.options;
     }
 
     // Returns a proper ListItemField object
@@ -67,12 +65,6 @@ export class UserProfileComponent implements OnInit {
 
   private updateUserProfile(key: string, value: any) {
 
-    if(key === 'lang') {
-      value = this.content.languages.find( lang => {
-        return lang.label === value;
-      }).lang;
-    }
-
     if(key === 'email') {
 
       // TODO: Initiate the email change procedure
@@ -84,7 +76,9 @@ export class UserProfileComponent implements OnInit {
 
       // Navigate to the new language
       if(key === 'lang') {
-        this.router.navigate(['/', value, 'dashboard']);
+
+        // Switch to the selected language
+        this.content.switch(value, ['dashboard']);
       }
     }
   }

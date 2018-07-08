@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentManager } from 'app/core';
+import { ContentService } from 'app/core';
 
 @Component({
   selector: 'wm-terms-privacy',
@@ -11,7 +11,7 @@ export class TermsPrivacyComponent implements OnInit {
   @Input() full = false; // Force the content to fit the full screen
   private msgs = null;
   
-  constructor(private content: ContentManager) {}
+  constructor(private content: ContentService) {}
 
   ngOnInit() {
 

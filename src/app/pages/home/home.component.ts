@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostBinding, HostListener } from '@angular/core';
-import { ContentManager } from 'app/core';
+import { ContentService } from 'app/core';
 //import { NavService } from 'app/navigator/navigator.service';
 //import { homeAnimations, scrollParams } from './home-animations';
 
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private subnav: Subscription;
 */
-  constructor(private content: ContentManager/*, private nav: NavService*/) { }
+  constructor(private content: ContentService/*, private nav: NavService*/) { }
 
   ngOnInit() {
     /*

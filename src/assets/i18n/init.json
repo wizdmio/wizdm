@@ -1,22 +1,22 @@
 {
-  "languages" : [
-    {
-      "lang" : "en",
+  "languages" : {
+    "en": {
       "label": "English",
-      "img": "assets/img/gb.svg",
+      "path": "assets/i18n/en/",
+      "image": "assets/img/gb.svg",
       "default": true
     },
-    {    
-      "lang" : "it",
+    "it": {
       "label": "Italiano",
-      "img": "assets/img/it.svg"
+      "path": "assets/i18n/it/",
+      "image": "assets/img/it.svg"
     },
-    {    
-      "lang" : "ru",
+    "ru": {
       "label": "Русский",
-      "img": "assets/img/ru.svg"
+      "path": "assets/i18n/ru/",
+      "image": "assets/img/ru.svg"
     }
-  ],
+  },
 
   "modules" : {
     "navigator": "navigator.json",

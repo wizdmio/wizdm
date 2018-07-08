@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { ContentManager, AuthService } from 'app/core';
+import { ContentService, AuthService } from 'app/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   constructor(private router: Router, 
               private route: ActivatedRoute, 
-              private content: ContentManager,
+              private content: ContentService,
               private auth: AuthService) {}
 
   ngOnInit() {

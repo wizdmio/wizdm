@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContentManager } from './content-manager.service';
+import { ContentService } from './content-manager.service';
 
-describe('ContentManager', () => {
+describe('ContentService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ContentManager]
+      providers: [ContentService]
     });
   });
 
-  it('should ...', inject([ContentManager], (service: ContentManager) => {
+  it('should ...', inject([ContentService], (service: ContentService) => {
     expect(service).toBeTruthy();
   }));
 });

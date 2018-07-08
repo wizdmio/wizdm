@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContentManager } from 'app/core';
+import { ContentService } from 'app/core';
 
 import { $defaultMsgs } from './not-found-defaults';
 
@@ -15,7 +15,7 @@ export class NotFoundComponent implements OnInit, OnDestroy {
   private timeout = null; 
   private msgs: any;
 
-  constructor(private content: ContentManager,
+  constructor(private content: ContentService,
               private router: Router) { }
 
   ngOnInit() {

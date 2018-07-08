@@ -26,7 +26,7 @@
             { "icon": "fa:fa-envelope", "link": "mailto:me@wizdm.io" },
             { "icon": "fab:fa-twitter", "link": "http://twitter.com" },
             { "icon": "fab:fa-facebook", "link": "http://facebook.com" },
-            { "icon": "fab:fa-instagram", "link": "http://instagram.com" },
+            { "icon": "fab:fa-slack", "link": "https://slack.com" },
             { "icon": "fab:fa-github", "link": "https://github.com" }
         ]
     }

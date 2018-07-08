@@ -21,7 +21,7 @@ export class AuthService {
 
   private authState$: User = null;
   private userData$: UserData = null;
-  public  redirectUrl: string = null;
+  //public  redirectUrl: string = null;
 
   get authState(): Observable<User|null> {
     return this.afAuth.user;

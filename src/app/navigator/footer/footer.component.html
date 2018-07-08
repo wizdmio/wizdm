@@ -15,9 +15,9 @@
   <div fxLayout="row" fxFlexOrder.lt-sm="1" *ngIf="!signedIn">
     <mat-form-field>
       <!--img matPrefix class="langImg" [src]="content.language.img"/-->
-      <mat-select [value]="content.language.lang" (valueChange)=changeLanguage($event)>
-        <mat-option *ngFor="let item of content.languages" [value]="item.lang">
-          {{item.label}}
+      <mat-select [value]="language" (valueChange)=changeLanguage($event)>
+        <mat-option *ngFor="let opt of options" [value]="opt.value">
+          {{ opt.label }}
         </mat-option>
       </mat-select>
     </mat-form-field>

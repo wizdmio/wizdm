@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { ContentManager, AuthService } from 'app/core';
+import { ContentService, AuthService } from 'app/core';
 
 @Component({
   selector: 'wm-navigator',
@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
   private msgs: any = null;
   private divider: boolean = false;
   
-  constructor(private content: ContentManager, 
+  constructor(private content: ContentService, 
               private auth: AuthService,
               private title: Title,
               private meta: Meta) { }

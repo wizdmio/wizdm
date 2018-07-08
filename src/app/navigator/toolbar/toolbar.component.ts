@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ContentManager, AuthService } from 'app/core';
+import { ContentService, AuthService } from 'app/core';
 import { toolbarAnimations } from './toolbar-animations';
 
 @Component({
@@ -21,7 +21,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private menu: any = null;
   private sub: Subscription;
 
-  constructor(private content: ContentManager,
+  constructor(private content: ContentService,
               private auth: AuthService,
               private router: Router) { }
 

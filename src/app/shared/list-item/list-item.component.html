@@ -13,7 +13,7 @@
     
     <h3 mat-line (click)="edit()">{{ field.label }}</h3>
     
-    <p mat-line (click)="edit()">{{ field.value }}</p>
+    <p mat-line (click)="edit()">{{ fieldValue }}</p>
 
   </mat-list-item>
 </ng-template>
@@ -52,8 +52,8 @@
                       (keydown)="keydown($event)"
                       (blur)="skipSelect()" #refSelect>
 
-            <mat-option *ngFor="let option of field.options" [value]="option">
-              {{ option }}
+            <mat-option *ngFor="let option of field.options" [value]="option.value || option">
+              {{ option.label || option }}
             </mat-option>
           </mat-select>
 

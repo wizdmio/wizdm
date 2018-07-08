@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
 import { CookieService } from 'app/utils/cookie/cookie.service';
-import { ContentManager } from 'app/core';
+import { ContentService } from 'app/core';
  
 @Component({
   selector: 'wm-consent',
@@ -31,7 +31,7 @@ export class ConsentComponent implements OnInit, AfterViewInit {
   private visible: boolean = true;
   private msgs;
 
-  constructor(private content: ContentManager,
+  constructor(private content: ContentService,
               private cookies: CookieService) { }
 
   ngOnInit() {

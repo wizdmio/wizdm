@@ -28,7 +28,10 @@ $fa-font-path: "~@fortawesome/fontawesome-free-webfonts/webfonts";
 @include angular-material-theme($wm-theme);
 
 // Creates the .preloader spinner class applying the theme color
-@include preloader($wm-loader-size, $wm-loader-thick, mat-color($wm-primary, A400));
+@include preloader($wm-loader-size, 
+                   $wm-loader-thick, 
+                   mat-color($wm-primary, A400), 
+                   map-get($wm-theme-background, background ));
 
 body {
 

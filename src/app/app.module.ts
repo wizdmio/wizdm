@@ -15,8 +15,8 @@ import { AppRoutingModule } from 'app/app-routing.module';
 
 import { 
   AuthService,
-  ContentManager, 
-  ContentResolver,
+  ContentService, 
+  ResolverService,
   PageGuardService
 } from 'app/core';
 
@@ -43,8 +43,8 @@ import { environment } from '../environments/environment';
   providers: [
     MatIconRegistry,
     AuthService,
-    ContentManager,
-    ContentResolver,
+    ContentService,
+    ResolverService,
     PageGuardService
   ],
   bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ContentManager } from 'app/core';
+import { ContentService } from 'app/core';
 
 @Component({
   selector: 'wm-terms-privacy-popup',
@@ -22,7 +22,7 @@ export class TermsPrivacyPopupComponent implements OnInit {
   //
   constructor(private ref: MatDialogRef<TermsPrivacyPopupComponent>, 
               @Inject(MAT_DIALOG_DATA) private data: any,
-              private content: ContentManager ) { }
+              private content: ContentService ) { }
 
   ngOnInit() {
 

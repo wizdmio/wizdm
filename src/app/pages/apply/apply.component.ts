@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ContentManager, CanPageDeactivate, ProjectService, wmProject } from 'app/core';
+import { ContentService, CanPageDeactivate, ProjectService, wmProject } from 'app/core';
 import { PopupComponent } from 'app/shared/popup/popup.component';
 import { TermsPrivacyPopupComponent } from 'app/pages/terms-privacy/terms-privacy-popup.component';
 import { switchMap, take } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
   constructor(private builder: FormBuilder, 
               private router:  Router,
               private route:   ActivatedRoute,
-              private content: ContentManager,
+              private content: ContentService,
               private project: ProjectService,
               private dialog:  MatDialog) { }
 

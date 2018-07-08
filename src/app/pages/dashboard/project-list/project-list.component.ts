@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { ContentManager, AuthService } from 'app/core';
+import { ContentService, AuthService } from 'app/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 
 @Component({
@@ -27,7 +27,7 @@ export class ProjectListComponent implements OnInit, AfterContentInit {
     { color: 'aquamarine' },
   ];
 
-  constructor(private content: ContentManager,
+  constructor(private content: ContentService,
               private auth: AuthService,
               private observableMedia: ObservableMedia) {}
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentManager } from 'app/core';
+import { ContentService } from 'app/core';
 
 @Component({
   selector: 'wm-browser',
@@ -10,7 +10,7 @@ export class BrowserComponent implements OnInit {
 
   private msgs = null;
 
-  constructor(private content: ContentManager) {}
+  constructor(private content: ContentService) {}
 
   ngOnInit() {
 

@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { MatSelect } from '@angular/material';
-/*
+
 export type ListItemOption = {
   
-  label: string,
-  value: string
+  value: string,
+  label: string
 }
-*/
+
 export interface ListItemField {
   
   type?: 'input' | 'select',
@@ -15,7 +15,7 @@ export interface ListItemField {
   icon?: string,
   label?: string,
   value?: string,
-  options?: string[],
+  options?: string[] | ListItemOption[],
   hint?: string,
 }
 
@@ -68,6 +68,24 @@ export class ListItemComponent {
     
     // Returns the relevant error message
     return errors ? this.errors[errors[0]] : '';
+  }
+
+  private get fieldValue(): string {
+    
+    // Checks if the control is of type select and options are specified
+    if(this.field.type == 'select' && this.field.options && this.field.options.length > 0) {
+
+      // Checks options are specified as ListItemOption objects
+      if(typeof this.field.options[0] != 'string') {
+
+        // Returns the relevant label instead of the raw value
+        const options: ListItemOption[] = <ListItemOption[]>this.field.options;
+        return options.find( opt => opt.value == this.field.value).label;
+      }
+    }
+
+    // Returns the raw value
+    return this.field.value;
   }
 
   constructor() { 
