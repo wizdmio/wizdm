@@ -8,19 +8,19 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 
-import { AppComponent } from 'app/app.component';
-import { NavigatorModule } from 'app/navigator/navigator.module';
-import { PagesModule } from 'app/pages/pages.module';
-import { AppRoutingModule } from 'app/app-routing.module';
+import { AppComponent } from './app.component';
+import { NavigatorModule } from './navigator/navigator.module';
+import { PagesModule } from './pages/pages.module';
+import { AppRoutingModule } from './app-routing.module';
 
 import { 
   AuthService,
   ContentService, 
   ResolverService,
   PageGuardService
-} from 'app/core';
+} from './core';
 
-import { environment } from '../environments/environment';
+import { environment } from 'environments/environment';
 
 @NgModule({
   declarations: [
@@ -42,6 +42,7 @@ import { environment } from '../environments/environment';
   ],
   providers: [
     MatIconRegistry,
+    //---
     AuthService,
     ContentService,
     ResolverService,

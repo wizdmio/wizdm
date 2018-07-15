@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormArray, AbstractControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ContentService, CanPageDeactivate, ProjectService, wmProject } from 'app/core';
-import { PopupComponent } from 'app/shared/popup/popup.component';
-import { TermsPrivacyPopupComponent } from 'app/pages/terms-privacy/terms-privacy-popup.component';
+import { ContentService, CanPageDeactivate, ProjectService, wmProject } from '../../core';
+import { PopupComponent } from '../../shared';
+import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
 import { switchMap, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -149,8 +149,8 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
         console.log("project submitted");
         this.progress = false;
 
-        // Navigate back to the dashboard reporting the creation of a new project
-        this.router.navigate(['..', 'dashboard'], {
+        // Navigate back to the project browser reporting the creation of a new project
+        this.router.navigate(['..', 'projects'], {
           relativeTo: this.route,
           queryParams: {
             project: 'new'

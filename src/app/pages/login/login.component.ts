@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, AuthService } from '../../core';
 import { $loginAnimations } from './login-animations';
 import { Subscription } from 'rxjs';
+
+type pageTypes = 'sign-in' | 'register' | 'reset' | 'change-password' | 'change-email' | 'delete';
 
 @Component({
   selector : 'wm-login',
@@ -13,7 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy  {
 
-  private page: 'sign-in' | 'register' | 'reset' | 'renew';// | 'confirm';
+  private page: pageTypes;
   private error: string = null;
   private progress = false;
   private msgs = null;
@@ -23,6 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy  {
   private name: FormControl;
   private email: FormControl;
   private password: FormControl;
+  private newEmail: FormControl;
+  private newPassword: FormControl;
   private subNav: Subscription;
   private subAuth: Subscription;
   
@@ -35,13 +39,11 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.name = new FormControl(null, Validators.required);
     this.email = new FormControl(null, [Validators.required, Validators.email]);
     this.password = new FormControl(null, Validators.required);
+    this.newEmail = new FormControl(null, [Validators.required, Validators.email]);
+    this.newPassword = new FormControl(null, Validators.required);
     
     // Group the controls
-    this.form = new FormGroup({
-      name: this.name,
-      email: this.email,
-      password: this.password
-    });
+    this.form = new FormGroup({});
 
     // Makes sure to start from the sign-in page
     this.switchPage(this.page = 'sign-in');
@@ -64,17 +66,28 @@ export class LoginComponent implements OnInit, OnDestroy  {
         this.signOut();
       }
 
-      // This option turns the page into the [asswor renew
-      if(mode === 'reset') {
-        this.switchPage('renew');
+      // This option turns the page into the Password change
+      if(mode === 'change-password') {
+        this.switchPage('change-password');
       }
+
+      // This option turns the page into the Email change
+      if(mode === 'change-email') {
+        this.switchPage('change-email');
+      }
+
+      // This option ask for re-authentication prior to delete the user profile and data
+      if(mode === 'delete') {
+        this.switchPage('delete');
+      }
+
     });
 
-    // Monitors the user signing-in and jumps to the dashboard on success
+    // Monitors the user signing-in and jumps to the projects browser on success
     // This also works to prevent opening the login page when already logged-in
-    this.subAuth = this.auth.userData.subscribe( user => {
+    this.subAuth = this.auth.userData$.subscribe( user => {
 
-      // Jumps to the dashboard on successful login
+      // Jumps to the projects browser on successful login
       if(user) {
         console.log('logged in successfully as: ' + user.email);
 
@@ -85,8 +98,8 @@ export class LoginComponent implements OnInit, OnDestroy  {
           // Checks for user preferrend language
           let userLang = user.lang || 'en';
 
-          // Jump to the dashboard switching to the user language if needed
-          this.content.switch(userLang, ['dashboard']);
+          // Jump to the projects browser switching to the user language if needed
+          this.content.switch(userLang, 'projects');
         }
       }
     });
@@ -97,15 +110,60 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.subAuth.unsubscribe();
   }
 
-  private pageTitle(page: string): string {
+  // This function switches among the form controls configurations dynamically 
+  // to support 'morphing' across the different pages
+  private switchPage(page: pageTypes) {
 
-    let key = page.camelize();
+    this.progress = false;
+
+    // Removes all the controls from the form group
+    Object.keys(this.form.controls).forEach( control => {
+      this.form.removeControl(control);
+    });
+    
+    // Add the relevant controls to the form according to selected page
+    switch(this.page = page) {
+
+      case 'register':
+      this.form.addControl('name', this.name);
+      this.form.addControl('email', this.email);
+      this.form.addControl('password', this.password);
+      break;
+
+      default:
+      case 'sign-in':
+      case 'delete':
+      this.form.addControl('email', this.email);
+      this.form.addControl('password', this.password);      
+      break;
+
+      case 'reset':
+      this.form.addControl('email', this.email);
+      break;
+
+      case 'change-password':
+      this.form.addControl('email', this.email);
+      this.form.addControl('password', this.password);
+      this.form.addControl('newPassword', this.newPassword);
+      break;
+
+      case 'change-email':
+      this.form.addControl('email', this.email);
+      this.form.addControl('password', this.password);
+      this.form.addControl('newEmail', this.newEmail);
+      break;
+    }
+  }
+
+  private get pageTitle(): string {
+
+    let key = this.page.camelize();
     return this.msgs.pages[key].title;
   }
 
-  private pageButton(page: string): string {
+  private get buttonCaption(): string {
     
-    let key = page.camelize();
+    let key = this.page.camelize();
     return this.msgs.pages[key].caption; 
   }
 
@@ -116,78 +174,6 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     // Look up the available error messages or return the error code if not found
     return this.content.select("login.errors." + key, error);
-  }
-
-  // This function switches among the form controls configurations dynamically 
-  // to support 'morphing' across the different pages
-  private switchPage(page: 'sign-in' | 'register' | 'reset' | 'renew') {
-
-    this.progress = false;
-    
-    switch(this.page = page) {
-
-      default:
-      case 'sign-in':
-
-      if(this.form.controls.name) { 
-        this.form.removeControl('name');
-      }
-
-      if(!this.form.controls.email) {
-        this.form.addControl('email', this.email);
-      }
-
-      if(!this.form.controls.password) { 
-        this.form.addControl('password', this.password);
-      }
-
-      break;
-
-      case 'register':
-      
-      if(!this.form.controls.name) { 
-        this.form.addControl('name', this.name);
-      }
-
-      if(!this.form.controls.email) {
-        this.form.addControl('email', this.email);
-      }
-
-      if(!this.form.controls.password) { 
-        this.form.addControl('password', this.password);
-      }
-      break;
-
-      case 'reset':
-
-      if(this.form.controls.name) { 
-        this.form.removeControl('name');
-      }
-
-      if(!this.form.controls.email) {
-        this.form.addControl('email', this.email);
-      }
-
-      if(this.form.controls.password) { 
-        this.form.removeControl('password');
-      }
-      break;
-
-      case 'renew':
-
-      if(this.form.controls.name) { 
-        this.form.removeControl('name');
-      }
-
-      if(this.form.controls.email) {
-        this.form.removeControl('email');
-      }
-
-      if(!this.form.controls.password) { 
-        this.form.addControl('password', this.password);
-      }
-      break;
-    }
   }
 
   private signInOrRegister() {
@@ -208,11 +194,15 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
       case 'reset':
       //this.resetPassword( this.email.value );
-      this.switchPage('renew');
       break;
 
-      case 'renew':
-      //this.confirmPassword( this.email.value );
+      case 'change-password':
+      break;
+
+      case 'change-email':
+      break;
+
+      case 'delete':
       break;
     }
   }
@@ -275,8 +265,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
-    this.router.navigate(['..','home'], 
-      { 
+    this.router.navigate(['..','home'], { 
         relativeTo: this.route,
         replaceUrl: true
       }

@@ -2,7 +2,7 @@
   "pages": {
     "signIn": {
       "title": "Sign-in",
-      "caption": "Sign-in with my email" 
+      "caption": "Sign-in with my email"
     },
     "register": {
       "title": "Register",
@@ -12,16 +12,26 @@
       "title": "Reset password",
       "caption": "Reset the password" 
     },
-    "renew": {
-      "title": "New password",
-      "caption": "Renew the password" 
+    "changePassword": {
+      "title": "Change password",
+      "caption": "update the password"
+    },
+    "changeEmail": {
+      "title": "Change email",
+      "caption": "update the email" 
+    },
+    "delete": {
+      "title": "Delete account",
+      "caption": "Confirm to delete"
     }
   },
 
   "labels": {
     "fullname": "Full name",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "newEmail": "New email",
+    "newPassword": " New password"
   },
 
   "errors": {

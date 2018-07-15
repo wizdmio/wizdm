@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { DatabaseService, dbDocument } from '../database/database.service';
-import { auth, User } from 'firebase';
+import { auth, User, UserInfo } from 'firebase';
 import { Observable, of } from 'rxjs';
 import { switchMap, startWith, tap } from 'rxjs/operators';
 
 export interface UserData {
 
-  name?  : string,
-  email? : string,
-  phone? : string,
-  img?   : string,
-  lang?  : string
+  img?    : string,
+  name?   : string,
+  email?  : string,
+  phone?  : string,
+  birth?  : string,
+  gender? : string,
+  motto?  : string,
+  lang?   : string
 }
 
 @Injectable({
@@ -19,16 +22,16 @@ export interface UserData {
 })
 export class AuthService {
 
-  private authState$: User = null;
-  private userData$: UserData = null;
+  public authState: User = null;
+  public userData: UserData = null;
   //public  redirectUrl: string = null;
 
-  get authState(): Observable<User|null> {
+  get authState$(): Observable<User|null> {
     return this.afAuth.user;
   }
 
-  get userData(): Observable<UserData|null> {
-    return this.authState.pipe(
+  get userData$(): Observable<UserData|null> {
+    return this.authState$.pipe(
       switchMap(user => {
         return  user ? this.db.doc<UserData>(`users/${user.uid}`).valueChanges() : of(null);
       })
@@ -39,18 +42,18 @@ export class AuthService {
               private db: DatabaseService) {
 
     // Keeps a snapshot of the current user auth state
-    this.authState.subscribe((auth) => {
-      this.authState$ = auth;
+    this.authState$.subscribe((auth) => {
+      this.authState = auth;
     });
 
     // Keep a snapshot of the customized user profile
-    this.userData//.pipe(
+    this.userData$//.pipe(
       // Save the profile in the local storage
       //tap(data => localStorage.setItem('user', JSON.stringify(data))),
       // Always start with the local stora copy of the profile to avoid flickering
       //startWith(JSON.parse(localStorage.getItem('user'))) )
       // Load the user profile and keep a snapshot always in sync
-    .subscribe( data => this.userData$ = data );
+    .subscribe( data => this.userData = data );
   }
 
   private updateUserData(user: User, lang: string = undefined): Promise<void> {
@@ -64,27 +67,30 @@ export class AuthService {
       lang:  lang
     };
     
-    return this.db.merge<UserData>(`users/${user.uid}`, data);
+    return this.db.upsert<UserData>(`users/${user.uid}`, data);
   }
 
-  // Returns true if user is logged in
+  // Returns true if user is logged in and profile data are available
   get authenticated(): boolean {
-    return this.authState$ !== null;
+    return this.authState !== null &&
+           this.userData !== null;
   }
 
   get userId(): string {
-    return this.authenticated ? this.authState$.uid : null;
+    return this.authState !== null ? 
+      this.authState.uid : null;
   }
 
   get userProfile(): UserData {
-    return this.userData$;
+    return this.authState !== null ? 
+      this.userData : {};
   }
 
-  updateUserProfile(data: UserData) : Promise<void> {
+  public updateUserProfile(data: UserData) : Promise<void> {
     return this.db.merge<UserData>(`users/${this.userId}`, data);
   }
 
-  registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
+  public registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
     
     console.log("Registering a new user: " + email);
 
@@ -97,17 +103,17 @@ export class AuthService {
     });
   }
 
-  signIn(email: string, password: string): Promise<any>  {
+  public signIn(email: string, password: string): Promise<any>  {
     console.log("Signing in as: " + email);
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  resetPassword(email: string): Promise<boolean> {
+  public resetPassword(email: string): Promise<boolean> {
     console.log("Resetting the password for: " + email);
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
-  confirmPassword(code: string, password: string): Promise<boolean> {
+  public confirmPassword(code: string, password: string): Promise<boolean> {
     // TODO: check how to do so
     //this.afAuth.auth.verifyPasswordResetCode(code);
 
@@ -115,7 +121,7 @@ export class AuthService {
     return this.afAuth.auth.confirmPasswordReset(code, password)
   }
 
-  signInWith(provider: string, lang: string = undefined): Promise<void> {
+  public signInWith(provider: string, lang: string = undefined): Promise<void> {
 
     if(lang) {
       // Instruct firebase to use a specific language
@@ -158,8 +164,17 @@ export class AuthService {
       }); 
   }
 
-  signOut(): void {
+  public signOut(): void {
     console.log("Signing-out");
     this.afAuth.auth.signOut();
+  }
+
+  public deleteUser(): Promise<void> {
+    
+    console.log("Deleting the user...");
+    // Deletes the user custom data...
+    return this.db.delete<UserData>(`users/${this.userId}`)
+      // Then deletes the account and sign-out
+      .then( ()=> this.authState.delete() );
   }
 }

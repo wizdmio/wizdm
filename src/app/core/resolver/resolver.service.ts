@@ -5,9 +5,11 @@ import { Resolve,
          Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
-import { ContentService } from '../content//content-manager.service';
+import { ContentService } from '../content/content-manager.service';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
+
+import * as moment from 'moment';
 
 // Support for detectLanguage
 declare interface Window { navigator: any;}
@@ -35,7 +37,7 @@ export class ResolverService implements Resolve<any> {
     }
 
     // Waits to check for authentication prior to load the content to avoid flickering at startup
-    return this.auth.userData.pipe(
+    return this.auth.userData$.pipe(
       take(1),
       switchMap( profile => {
 
@@ -47,6 +49,9 @@ export class ResolverService implements Resolve<any> {
           this.router.navigate([profile.lang]);
           return of(null);
         }
+
+        // Sets the moment locale globally
+        moment.locale(lang);
 
         // Load the localized content
         return this.content.use(lang);

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, AuthService } from '../core';
 
 @Component({
   selector: 'wm-navigator',
@@ -37,7 +37,7 @@ export class NavComponent implements OnInit {
     }
   }
 
-  get signedIn() {
+  get signedIn(): boolean {
     return this.auth.authenticated;
   }
 

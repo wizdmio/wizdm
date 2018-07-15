@@ -15,7 +15,8 @@
   height: $wm-logo-size;
   fill: mat-color($wm-primary, A400);
 }
-/*
+
 span {
-  line-height: 60px;
-}*/
+  line-height: $wm-logo-size;
+  vertical-align: middle;
+}

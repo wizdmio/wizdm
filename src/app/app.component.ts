@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { MatIconRegistry } from '@angular/material';
 
-import { ContentService } from 'app/core';
+import { ContentService } from './core';
 import { Subscription } from 'rxjs';
 
 @Component({

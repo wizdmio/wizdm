@@ -27,14 +27,19 @@ export class ProjectService {
     return this.db.colWithIds$<wmProject>('/projects', queryFn);
   }
 
+  public listOwnProjects(): Observable<wmProject[]> {
+    return this.db.colWithIds$<wmProject>('/projects', ref => 
+      ref.where('owner', '==', this.owner));
+  }
+
   public doesProjectExists(name: string): Promise<boolean> {
     
     // Query the projects collection searching for a matching name
     // excluding the currentId to avoid false positive
     return this.db.col$<wmProject>('projects', ref => {
-        return ref.where('lowerCaseName', '==', name.toLowerCase())
+        return ref.where('lowerCaseName', '==', name.toLowerCase());
                   //.where(this.db.sentinelId, '<', this.currentId)
-                  //.where(this.db.sentinelId, '>', this.currentId)
+                  //.where(this.db.sentinelId, '>', this.currentId);
       } 
     ).pipe(
       debounceTime(500),
@@ -47,6 +52,7 @@ export class ProjectService {
 
     const owner = this.auth.userId;
     
+    // Creates a lower case version of the name for searching purposes
     if(data.name) {
       data['lowerCaseName'] = data.name.toLowerCase();
     }
@@ -60,6 +66,7 @@ export class ProjectService {
 
   public updateProject(data: wmProject): Promise<void> {
 
+    // Makes sure to keep a lower case version of the name for searching purposes
     if(data.name) {
       data['lowerCaseName'] = data.name.toLowerCase();
     }

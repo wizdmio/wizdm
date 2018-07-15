@@ -1,0 +1,27 @@
+
+<!--div fxLayout="column" fxFill-->
+
+  <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-icon-button>
+      <wm-icon [icon]="msgs.icons.info"></wm-icon>
+    </button>
+    <button mat-icon-button>
+      <wm-icon [icon]="msgs.icons.open"></wm-icon>
+    </button>
+  </div>
+
+  <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center center">
+    <span class="mat-small mat-link" 
+          routerLink="../projects" 
+          [queryParams]="{ id: project.id }">
+      {{ project.name }}
+    </span>
+  </div>
+
+  <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="end center">
+      <!--wm-icon [icon]="msgs.icons.info"></wm-icon-->
+    <button mat-icon-button>
+      <wm-icon [icon]="msgs.icons.delete"></wm-icon>
+    </button>
+  </div>
+<!--/div-->

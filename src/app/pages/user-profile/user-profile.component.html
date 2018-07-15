@@ -1,0 +1,68 @@
+<h1>{{msgs.title}}</h1>
+<p>{{msgs.description}}</p>
+
+<mat-accordion>
+
+  <!-- PROFILE PANELS -->
+  <mat-expansion-panel *ngFor="let panel of msgs.panels; let i = index" 
+                      [expanded]="panel.expanded" (closed)=panelClose(i)>
+
+    <!-- PANEL HEADER -->
+    <mat-expansion-panel-header fxLayoutAlign="space-between center">
+      <mat-panel-title>{{panel.title}}</mat-panel-title>
+      <mat-panel-description fxLayoutAlign="end center"> 
+        <wm-icon [icon]="panel?.icon">"</wm-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+
+      <!-- PANEL ITEM LIST -->
+      <wm-profile-item *ngFor="let field of panel.fields"
+                       [name]="field.key"
+                       [label]="field.label"
+                       [icon]="field.icon"
+                       [hint]="field.hint"
+                       [type]="field.type"
+                       [value]="profileValue(field.key)"
+                       [options]="profileOptions(field.key)"
+                       [validators]="profileValidators(field.key)"
+                       [editable]="profileEditable(field.key)"
+                       (editDone)="updateUserProfile(field.key, $event)">
+      </wm-profile-item>
+
+    </mat-list>
+
+    <mat-action-row fxLayout="row" fxLayout.lt-sm="column" *ngIf="panel.buttons || panel.applyChanges">
+
+      <!-- ACTION BUTTONS or LINKS -->
+      <ng-container *ngFor="let btn of panel.buttons">
+
+        <button *ngIf="btn.action" 
+                 mat-button color="primary" 
+                 (click)="action(btn.action)">
+          {{btn.caption}}
+        </button>
+
+        <button *ngIf="btn.link" 
+                 mat-button color="primary" 
+                [routerLink]="btn.link"
+                [queryParams]="btn.params">
+          {{btn.caption}}
+        </button>
+
+      </ng-container>
+
+      <!-- APPLY CHANGES BUTTON -->
+      <button mat-button *ngIf="panel.applyChanges"
+                          color="primary" 
+                         [disabled]="!itemChanges"
+                         (click)="applyAllItemChanges()">
+        {{panel.applyChanges}}
+      </button>
+
+    </mat-action-row>
+
+  </mat-expansion-panel>
+</mat-accordion>
+

@@ -1,0 +1,102 @@
+{
+  "title": "My profile",
+  "description": "Here you'll find all the information about you",
+
+  "panels": [
+    {
+      "title": "Personal information",
+      "icon": "account_box",
+      "fields": [
+        {"key": "name", "label": "Name", "icon": "far:fa-user", "type": "input", "hint": "Your name goes here"},
+        {"key": "email", "label": "Email", "icon": "far:fa-envelope", "type": "input", "hint": "This is how you'll be contacted"},
+        {"key": "phone", "label": "Phone", "icon": "fas:fa-phone", "type": "input", "hint": "This is how you'll be contacted"},
+        {"key": "birth", "label": "Birthday", "icon": "fas:fa-birthday-cake", "type": "date", "hint": "We'll wish you happy birthday"},
+        {"key": "gender", "label": "Gender", "icon": "fas:fa-genderless", "type": "select"},
+        {"key": "motto", "label": "About me", "icon": "far:fa-comment", "type": "input"}
+      ],
+      "applyChanges": "Apply changes",
+      "expanded": true
+    },
+    {
+      "title": "Sign-in & security",
+      "icon": "lock",
+      "fields": [
+        {"key": "provider", "label": "Sign-in provider", "icon": "fas:fa-user-shield", "type": "input"},
+        {"key": "accountEmail", "label": "Account email", "icon": "fas:fa-envelope", "type": "input"}
+      ],
+      "buttons": [
+        { "caption": "Change email", "action": "changeEmail" },
+        { "caption": "Change password", "action": "changePassword" }
+      ]
+    },
+    {
+      "title": "Account preferences",
+      "icon": "settings",
+      "fields": [
+        {"key": "created", "label": "Account created", "icon": "far:fa-calendar", "type": "date"},
+        {"key": "lang", "label": "Language", "icon": "fas:fa-language", "type": "select"}
+      ],
+      "buttons": [
+        { "caption": "Delete account", "action": "deleteAccount" },
+        { "caption": "Sign-out", "link": "../login", "params": { "mode": "logout" } }
+      ]
+    }
+  ],
+
+  "genders": [
+    { "label": "Genderless", "icon": "fas:fa-genderless", "value": "u" },
+    { "label": "Male", "icon": "fas:fa-mars", "value": "m" },
+    { "label": "Female", "icon": "fas:fa-venus", "value": "f" },
+    { "label": "Beyond", "icon": "fas:fa-transgender-alt", "value": "x" }
+  ],
+
+  "errors": {
+    "required": "This is a mandatory field",
+    "email": "There's something wrong with this email"
+  },
+
+  "projects": {
+    "title": "My projects",
+    "icon": "list",
+    "buttons": {
+      "browse": "Browse existing projects",
+      "create": "Apply for a new project",
+      "close": "Close"
+    },
+    "tile": {
+      "icons": {
+        "info": "info",
+        "open": "open_in_new",
+        "delete": "delete"
+      }
+    }
+  },
+
+  "canLeave": {
+    "title": "Unsaved changes",
+    "message": "If you leave now, changes won't be saved",
+    "cancel": "Cancel",
+    "ok": "Ok"
+  },
+
+  "canChange": {
+    "title": "Changing account email",
+    "message": "You'll be asked to confirm your identity by re-authenticating.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
+  },
+
+  "canReset": {
+    "title": "Changing account password",
+    "message": "You'll be asked to confirm your identity by re-authenticating.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
+  },
+
+  "canDelete": {
+    "title": "Deleting account",
+    "message": "WARNING, by proceeding you'll permanently delete your account and all the related data. You'll be asked to confirm your identity by re-authenticating.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
+  }
+}

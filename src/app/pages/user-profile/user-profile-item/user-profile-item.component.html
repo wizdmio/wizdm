@@ -1,0 +1,176 @@
+
+<!--*** VIEW MODE template **********************************-->
+<mat-list-item *ngIf="!edit" @slideout>
+
+    <wm-icon mat-list-icon *ngIf="icon" [icon]="displayIcon"></wm-icon>
+    
+    <h3 mat-line>{{ label }}</h3>
+    
+    <p mat-line>{{ displayValue }}</p>
+  
+    <button *ngIf="editable" mat-icon-button (click)="editMode()">
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+    
+  </mat-list-item>
+  
+  <!--*** EDIT MODE template **********************************-->
+  <mat-list-item *ngIf="edit" @slidein>
+  
+    <wm-icon mat-list-icon *ngIf="icon" [icon]="displayIcon"></wm-icon>
+    
+    <h3 mat-line></h3>
+  
+    <form mat-line [formGroup]="form" (ngSubmit)="updateControl()">
+      <ng-container [ngSwitch]="type">
+  
+        <!-- type: INPUT -->
+        <mat-form-field *ngSwitchDefault appearance="legacy" fxFill>
+  
+          <mat-label>{{ label }}</mat-label>
+          
+          <input matInput formControlName="control">
+  
+          <button mat-icon-button matSuffix type="submit">
+            <mat-icon>save</mat-icon>
+          </button>
+  
+          <mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
+        
+        </mat-form-field>
+  
+          <!-- type: DATE -->
+        <mat-form-field *ngSwitchCase="'date'" appearance="legacy" fxFill>
+          
+          <mat-label>{{ label }}</mat-label>
+  
+          <input matInput formControlName="control" [matDatepicker]="picker">
+  
+          <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker [touchUi]="mobile" #picker></mat-datepicker>
+
+          <button mat-icon-button matSuffix type="submit">
+            <mat-icon>save</mat-icon>
+          </button>
+  
+          <mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
+        
+        </mat-form-field>
+  
+        <!-- type: SELECT -->
+        <mat-form-field *ngSwitchCase="'select'" appearance="legacy" fxFill>
+          
+          <mat-label>{{ label }}</mat-label>
+  
+          <mat-select formControlName="control">
+            <mat-option *ngFor="let option of options" [value]="option.value || option">
+              {{ option.label || option }}
+            </mat-option>
+          </mat-select>
+
+          <button mat-icon-button matSuffix type="submit">
+            <mat-icon>save</mat-icon>
+          </button>
+  
+          <mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
+        
+        </mat-form-field>
+      </ng-container>
+  
+    </form>
+  
+    <!--button mat-icon-button>
+      <mat-icon>cancel</mat-icon>
+    </button>
+  
+     <button mat-icon-button>
+      <mat-icon>save</mat-icon>
+    </button-->
+  
+  </mat-list-item>
+
+<!--ng-container *ngIf="editMode then editTemplate; else viewTemplate">
+
+</ng-container-->
+
+<!--*** VIEW MODE template **********************************-->
+<!--ng-template #viewTemplate>
+  <mat-list-item>
+
+    <wm-icon mat-list-icon *ngIf="field.icon" [icon]="fieldIcon"></wm-icon>
+    
+    <h3 mat-line (click)="edit()">{{ field.label }}</h3>
+    
+    <p mat-line (click)="edit()">{{ fieldValue }}</p>
+
+  </mat-list-item>
+</ng-template-->
+
+<!--*** EDIT MODE template **********************************-->
+<!--ng-template #editTemplate>
+  <mat-list-item>
+    <wm-icon mat-list-icon *ngIf="field.icon" [icon]="fieldIcon"></wm-icon>
+    
+    <h3 mat-line></h3>
+
+    <form mat-line [formGroup]="form" (ngSubmit)="updateControl()">
+      <ng-container [ngSwitch]="field?.type">
+
+
+        <mat-form-field *ngSwitchDefault [appearance]="appearence" fxFill>
+
+          <mat-label>{{ field.label }}</mat-label>
+          
+          <input matInput formControlName="control"
+                          (keydown)="keydown($event)" 
+                          (blur)="updateControl()" #refControl>
+
+          <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field *ngSwitchCase="'date'" [appearance]="appearence">
+          
+          <mat-label>{{ field.label }}</mat-label>
+
+          <input matInput formControlName="control"
+                          [matDatepicker]="picker"
+                          (keydown)="keydown($event)" 
+                          (blur)="updateControl()" #refControl>
+          <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
+        
+        </mat-form-field>
+
+   
+        <mat-form-field *ngSwitchCase="'select'" [appearance]="appearence">
+          
+          <mat-label>{{ field.label }}</mat-label>
+
+          <mat-select formControlName="control"
+                      (valueChange)="updateControl()"
+                      (openedChange)="skipSelect()"
+                      (keydown)="keydown($event)"
+                      (blur)="skipSelect()" #refSelect>
+
+            <mat-option *ngFor="let option of field.options" [value]="option.value || option">
+              {{ option.label || option }}
+            </mat-option>
+          </mat-select>
+
+          <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+          <mat-error *ngIf="control.errors" >{{ errorMessage }}</mat-error>
+        
+        </mat-form-field>
+
+      </ng-container>
+    </form>
+  </mat-list-item>
+</ng-template-->

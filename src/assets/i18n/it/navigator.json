@@ -8,14 +8,12 @@
             { "label": "Come funziona", "link": "home" },
             { "label": "Manifesto", "link": "about" },
             { "label": "Entra/Registrati", "link": "login" },
-            { "label": "Inizio", "link": "dashboard"} 
+            { "label": "Inizio", "link": "projects"} 
         ],
         "private": [
             { "label": "Principale", "link": "home" },
             { "label": "Progetti", "link": "projects" },
-            { "label": "Cruscotto", "link": "dashboard" },
-            { "label": "A proposito di noi", "link": "about" },
-            { "label": "Esci", "link": "login", "params": {"mode": "logout"}} 
+            { "label": "A proposito di noi", "link": "about" }
         ]
     },
 

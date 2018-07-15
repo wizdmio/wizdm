@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostBinding, HostListener } from '@angular/core';
-//import { ContentService } from 'app/core';
+import { ContentService } from '../../../core';
 //import { logoAnimations } from './logo-animations';
 
 @Component({
@@ -10,11 +10,11 @@ import { Component, OnInit, Input, HostBinding, HostListener } from '@angular/co
 })
 export class LogoComponent implements OnInit {
 
-  //private logo: string;
+  private logo: string;
 
-  constructor(/*private content: ContentService*/) { }
+  constructor(private content: ContentService) { }
 
   ngOnInit() {
-    //this.logo = this.content.select("navigator.logo") as string;
+    this.logo = this.content.select("navigator.logo") as string;
   }
 }

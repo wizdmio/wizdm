@@ -46,8 +46,8 @@ export class ContentService {
   private lang: string = null;
   private data: any = {};
 
-  constructor(private http: HttpClient,
-              private router: Router) {}
+  constructor(private http   : HttpClient,
+              private router : Router) {}
 
   // Returns the full list of languages
   public get languages(): Languages {
@@ -251,11 +251,9 @@ export class ContentService {
     }, this.data);
   }
 
-  public switch(lang: string, segments: string[] = []) {
+  public switch(lang: string, url?: string) {
 
-    let urlTree = ['/', lang].concat(segments);
-
-    // Checks if language chence is requested
+    // Checks if a language change is requested
     if(lang !== this.lang) {
 
       // Force reloading component strategy backing-up the current reuse strategy function
@@ -273,7 +271,18 @@ export class ContentService {
       });
     }
 
-     // Navigate to the selected page applying the requested language
-     this.router.navigate(urlTree);
+    const re = new RegExp(`^\/${this.lang}\/+`);
+
+    // Computes the target path....
+    let target = url ? 
+    
+      // ...to the requested url when specified
+      `/${lang}/${url}` : 
+
+      // ...or to the exact same page as the current one
+      this.router.url.replace(re, `/${lang}/`);
+
+    // Navigate to the target page (switching language if necessary)
+    this.router.navigateByUrl(target);
   }
 }

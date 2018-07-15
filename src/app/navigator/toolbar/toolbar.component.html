@@ -5,29 +5,44 @@
   <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
     
     <ng-container *ngIf="signedIn; else public">
-      <a mat-button *ngFor="let item of menu.private" 
+      <a mat-button *ngFor="let item of msgs.menu.private" 
                      routerLinkActive="link-active" 
                     [routerLink]="item.link"
-                    [queryParams]="item.params">
+                    [queryParams]="item.params"
+                    [ngClass]="{'highlight': item.highlight}">
         {{item.label}}
-      </a>    
+      </a>
+
+      <button mat-icon-button [routerLink]="msgs.user.link">
+        <img class="avatar" [src]="userImage">
+      </button>
     </ng-container>
 
     <ng-template #public>
-      <a mat-button *ngFor="let item of menu.public" 
+      <a mat-button *ngFor="let item of msgs.menu.public" 
                      routerLinkActive="link-active" 
                     [routerLink]="item.link"
-                    [queryParams]="item.params">
+                    [queryParams]="item.params"
+                    [ngClass]="{'highlight': item.highlight}">
         {{item.label}}
       </a>
     </ng-template>
 
   </section>
-  
-  <button mat-icon-button fxHide="true" fxShow.lt-sm="true" (click)="toggle()">
-    <wm-toggler [status]="toggler">
-    </wm-toggler>
-  </button>
+      
+  <section fxLayout="row" fxLayoutAlign="end center" fxHide="true" fxShow.lt-sm="true">
+
+    <button mat-icon-button 
+           [routerLink]="msgs.user.link"
+           *ngIf="signedIn">
+      <img class="avatar" [src]="userImage">
+    </button>
+
+    <button mat-icon-button (click)="toggle()">
+      <wm-toggler [status]="toggler">
+      </wm-toggler>
+    </button>
+</section>
 
 </mat-toolbar>
 <mat-divider [@divider]="divider"></mat-divider>

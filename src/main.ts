@@ -1,11 +1,8 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
-
-// Import hammerjs to enable gestures for AngularMaterial
-import 'hammerjs';
+import { AppModule } from 'app/app.module';
+import { environment } from 'environments/environment';
 
 // Import handy utils to extend global objects with useful functions
 import 'app/utils/handy/naming';

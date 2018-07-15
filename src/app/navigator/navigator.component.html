@@ -1,8 +1,7 @@
 <wm-toolbar fxFlex="0 0 auto"
             [toggler]="snav.opened" 
             (togglerChange)="snav.toggle()"
-            [divider]="divider && !snav.opened"
-            [signedIn]="signedIn">
+            [divider]="divider && !snav.opened">
 </wm-toolbar>
 
 <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column">
@@ -35,7 +34,7 @@
     <div fxFlex="1 1 auto">
       <router-outlet></router-outlet>
     </div>
-    <wm-footer fxFlex="0 0 auto" [signedIn]="signedIn"></wm-footer>
+    <wm-footer fxFlex="0 0 auto"></wm-footer>
   </mat-sidenav-content>
 
 </mat-sidenav-container>

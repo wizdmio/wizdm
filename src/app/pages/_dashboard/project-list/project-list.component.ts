@@ -1,6 +1,8 @@
 import { Component, OnInit, AfterContentInit } from '@angular/core';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, ProjectService, wmProject } from '../../../core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import { Subscription, Observable } from 'rxjs';
+import {  map, filter, take, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-project-list',
@@ -10,30 +12,22 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 export class ProjectListComponent implements OnInit, AfterContentInit {
 
   private msgs = null;
+  
+  private colsBreakpoint = { xl: 8, lg: 6, md: 4, sm: 2, xs: 1}
   private cols = 1;
 
-  private colsBreakpoint = {
-    xl: 8,
-    lg: 6,
-    md: 4,
-    sm: 2,
-    xs: 1
-  }
-
-  private tiles = [
-    { color: 'lightpink' },
-    { color: 'lightblue' },
-    { color: 'lightgreen' },
-    { color: 'aquamarine' },
-  ];
+  private projects$: Observable<wmProject[]>;
 
   constructor(private content: ContentService,
-              private auth: AuthService,
+              private projects: ProjectService,
               private observableMedia: ObservableMedia) {}
 
   ngOnInit() {
     // Gets the localized content
     this.msgs = this.content.select('dashboard.projects');
+
+    // Lists the projects I'm the owner of
+    this.projects$ = this.projects.listOwnProjects();
   }
 
   ngAfterContentInit() {
@@ -41,5 +35,4 @@ export class ProjectListComponent implements OnInit, AfterContentInit {
       this.cols = this.colsBreakpoint[change.mqAlias];
     });
   }
-
 }

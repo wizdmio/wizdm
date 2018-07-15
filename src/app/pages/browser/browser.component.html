@@ -1,3 +1,41 @@
 <section fxLayout="column">
-  <h1>{{msgs.title}}</h1>
+  <h1>{{ msgs.title }}</h1>
+  <p>{{ msgs.description }}</p>
 </section>  
+
+<mat-tab-group dynamicHeight (selectedIndexChange)="changeFilters($event)">
+
+  <!-- ACTIVE PROJECTS TAB -->
+  <mat-tab [label]="msgs.filters.active">
+    <ng-container *ngTemplateOutlet="projectList">
+    </ng-container>
+  </mat-tab>
+
+  <!-- PENDING PROJECTS TAB -->
+  <mat-tab [label]="msgs.filters.pending">
+    <ng-container *ngTemplateOutlet="projectList">
+    </ng-container>
+  </mat-tab>
+
+  <!-- MY PROJECTS TAB -->
+  <mat-tab [label]="msgs.filters.personal" [disabled]="!myProjects">
+    <ng-container *ngTemplateOutlet="projectList">
+    </ng-container>
+  </mat-tab>
+
+</mat-tab-group>
+
+<!-- SHARED PROJECT LIST TEMPLATE -->
+<ng-template #projectList>
+  
+  <mat-grid-list rowHeight="2:1" [cols]="cols" gutterSize="10">
+      
+    <mat-grid-tile *ngFor="let prj of projects$ | async" class="mat-elevation-z4">
+      <span class="mat-small mat-link" [routerLink]="['.', prj.id ]">
+        {{ prj.id }}
+      </span>
+    </mat-grid-tile>
+    
+  </mat-grid-list>
+
+</ng-template>

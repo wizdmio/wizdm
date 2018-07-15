@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentService } from 'app/core';
+import { ContentService } from '../../core';
 
 @Component({
   selector: 'wm-terms-privacy',

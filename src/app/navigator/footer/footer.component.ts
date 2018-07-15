@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ContentService, LanguageOption } from 'app/core';
+import { Component, OnInit } from '@angular/core';
+import { ContentService, LanguageOption, AuthService } from '../../core';
 
 export interface LanguageData {
 
@@ -16,13 +16,12 @@ export interface LanguageData {
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-
-  @Input() signedIn = false;
   
   private _options: LanguageOption[];
   private msgs;
 
-  constructor(private content: ContentService) {}
+  constructor(private content: ContentService,
+              private auth: AuthService,) {}
 
   ngOnInit() {
 
@@ -31,6 +30,10 @@ export class FooterComponent implements OnInit {
 
     // Local copy of the available language options to prevent the infinite loop bug to occur
     this._options = this.content.languageOptions;
+  }
+
+  get signedIn(): boolean {
+    return this.auth.authenticated;
   }
 
   private get options(): LanguageOption[] {

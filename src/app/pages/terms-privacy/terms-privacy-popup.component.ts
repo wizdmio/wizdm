@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ContentService } from 'app/core';
+import { ContentService } from '../../core';
 
 @Component({
   selector: 'wm-terms-privacy-popup',

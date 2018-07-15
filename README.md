@@ -6,16 +6,20 @@ Wizdm uses a minimal clean interface based on Angular Material and FlexLayout to
 
 The app runs on Angular 6 + Material + FlexLayout.
 Icon set comes from both Material and Font awesome.
+Including hammerjs (https://hammerjs.github.io) to handle gestures for material components
+Using moment (https://momentjs.com) for time and locale management
 
 ## Multi-language
 
-We use a content manager service to dynamically load contents in different languages by use of a resolver to pre-fetch localilzed content from 'assets/i18n' prior to load the navigator component.
+We use a content manager service to dynamically load contents in different languages by use of a resolver to pre-fetch localilzed content from 'assets/i18n' prior to load the navigator component. 
 
 We use the navigation system to switch among languages, so, from the user perspective, it looks like having multiple apps in different languages (e.g. https://wizdm.io/en/home for English or https://wizdm.io/it/home for Italian).
 
 The service is then injectend into the components needing to get localized contents.  
 
 This approach makes sure the content is always fully loaded and available to the navigator and all the children components (aka no need of observables).
+
+The same resolver is used to ensure user authentication syncs prior to load and to fetch user language preferences when available.
 
 ## Development Environment
 

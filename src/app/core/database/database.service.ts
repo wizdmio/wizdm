@@ -6,11 +6,23 @@ import { AngularFirestore,
 import { Observable } from 'rxjs';
 import { map, tap, take, switchMap } from 'rxjs/operators';
 
-import * as firebase from 'firebase/app';
+import * as firebase from 'firebase';
 
 export type dbCollection<T> = string | AngularFirestoreCollection<T>;
 export type dbDocument<T>   = string | AngularFirestoreDocument<T>;
-export type QueryFn = QueryFn;
+
+// Tweak the QueryFn to better support filter chaining like:
+/*
+targetObservable = combineLatest( filter1, filter2 ).pipe(
+  switchMap(([filter1, filter2]) =>
+    return cols$<...>( ref => {
+      if (filter1) { ref = ref.where('field1', '==', filter1); }
+      if (filter2) { ref = ref.where('field2', '==', filter2); }
+      return ref;
+    })
+  )
+);*/
+export type QueryFn = (ref: firebase.firestore.CollectionReference | firebase.firestore.Query) => firebase.firestore.Query;
 
 @Injectable({
   providedIn: 'root'
@@ -98,8 +110,7 @@ export class DatabaseService {
     const timestamp = this.timestamp;
     return this.doc(ref).set({
       ...data,
-      updated: timestamp,
-      created: timestamp
+      updated: timestamp
     }, { merge: true } );
   }
 

@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { NavComponent } from 'app/navigator/navigator.component';
-import { HomeComponent } from 'app/pages/home/home.component';
+import { NavComponent } from './navigator/navigator.component';
+import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
 import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
-import { LoginComponent } from 'app/pages/login/login.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ApplyComponent } from 'app/pages/apply/apply.component';
+import { LoginComponent } from './pages/login/login.component';
+//import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { ApplyComponent } from './pages/apply/apply.component';
 import { BrowserComponent } from './pages/browser/browser.component';
 import { ProjectComponent } from './pages/project/project.component';
-import { NotFoundComponent } from 'app/pages/not-found/not-found.component';
-import { HandlerComponent } from 'app/pages/handler/handler.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { HandlerComponent } from './pages/handler/handler.component';
 
-import { ResolverService, AuthGuardService, PageGuardService } from 'app/core';
+import { ResolverService, AuthGuardService, PageGuardService } from './core';
 
 // Define navigation routes
 const routes: Routes = [
@@ -50,9 +51,9 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         
         children: [
-          { path: 'dashboard', component: DashboardComponent },
+          { path: 'profile', component: UserProfileComponent, canDeactivate: [PageGuardService] },
           { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
-          { path: 'projects', component: BrowserComponent },
+          { path: 'projects', component: BrowserComponent, canDeactivate: [PageGuardService] },
           { path: 'projects/:id', component: ProjectComponent }
         ]
       },

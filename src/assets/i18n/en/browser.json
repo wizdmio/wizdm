@@ -1,3 +1,10 @@
 {
-  "title": "Projects"
+  "title": "Explore projects",
+  "description": "Here's the list of projects the community is working on",
+  
+  "filters": {
+    "active": "All active",
+    "pending": "Just submitted",
+    "personal": "My projects"
+  }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, AuthService } from '../../core';
 import { toolbarAnimations } from './toolbar-animations';
 
 @Component({
@@ -16,9 +16,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input()  toggler = false;
   @Input()  divider = false;
-  @Input()  signedIn = false;
+  //@Input()  signedIn = false;
 
-  private menu: any = null;
+  private msgs: any = null;
   private sub: Subscription;
 
   constructor(private content: ContentService,
@@ -28,7 +28,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
       // Gets the localized content
-      this.menu = this.content.select("navigator.menu");
+      this.msgs = this.content.select("navigator");
     
       // Listen for NavigationEnd events to close the menu
       this.sub = this.router
@@ -46,6 +46,20 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       if(this.sub) {
         this.sub.unsubscribe();
       }
+    }
+
+    get signedIn(): boolean {
+      return this.auth.authenticated;
+    }
+
+    get userImage(): string {
+
+      if(!this.auth.userProfile) {
+        return this.msgs.user.avatar; 
+      }
+
+      return this.auth.userProfile.img || 
+             this.msgs.user.avatar;
     }
     
     private toggle() {

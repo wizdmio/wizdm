@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, AuthService } from '../../core';
 import { Subscription } from 'rxjs';
 
 @Component({

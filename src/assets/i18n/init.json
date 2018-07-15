@@ -21,7 +21,7 @@
   "modules" : {
     "navigator": "navigator.json",
     "login": "login.json",
-    "dashboard": "dashboard.json",
+    "profile": "profile.json",
     "browser": "browser.json",
     "apply": "apply.json",
     "about": "about.json",

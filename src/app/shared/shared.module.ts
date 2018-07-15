@@ -19,12 +19,16 @@ import {
   MatToolbarModule,
   MatSidenavModule,
   MatSelectModule,
-  MatDividerModule
+  MatDividerModule,
+  MatTabsModule,
+  MatDatepickerModule,
+  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material';
+
+import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 
 import { IconComponent } from './icon/icon.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
-import { ListItemComponent } from './list-item/list-item.component';
 import { PopupComponent } from './popup/popup.component';
 import { PopupService } from './popup/popup.service';
 
@@ -49,13 +53,14 @@ import { PopupService } from './popup/popup.service';
     MatToolbarModule,
     MatSidenavModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTabsModule,
+    MatDatepickerModule
   ],
   
   declarations: [
     IconComponent,
     DisclaimerComponent,
-    ListItemComponent,
     PopupComponent
   ],
 
@@ -77,14 +82,17 @@ import { PopupService } from './popup/popup.service';
     MatSidenavModule,
     MatSelectModule,
     MatDividerModule,
+    MatTabsModule,
+    MatDatepickerModule,
 //------------------------    
     IconComponent,
     DisclaimerComponent,
-    ListItemComponent,
     PopupComponent
   ],
 
   providers: [
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     PopupService
   ],
 

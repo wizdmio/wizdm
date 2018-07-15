@@ -14,14 +14,14 @@
   flex-direction: column;
   box-sizing: border-box;
 }
-
+/*
 mat-sidenav {
   a:last-child {
     background-color: mat-color($wm-primary, A400);
     color: mat-contrast($wm-primary, A400);
   }
 }
-
+*/
 mat-sidenav-content {
   overflow: auto;
 }

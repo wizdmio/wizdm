@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContentService } from 'app/core';
+import { ContentService } from '../../core';
 
 import { $defaultMsgs } from './not-found-defaults';
 
