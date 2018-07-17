@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { ContentService, AuthService } from '../../core';
 import { $loginAnimations } from './login-animations';
 import { Subscription } from 'rxjs';
+import { take, tap } from '../../../../node_modules/rxjs/operators';
 
 type pageTypes = 'sign-in' | 'register' | 'reset' | 'change-password' | 'change-email' | 'delete';
 
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit, OnDestroy  {
   private progress = false;
   private msgs = null;
   private hide = true;
+
+  private action: 'register'|'login'|'upgrade'|'delete';
 
   private form: FormGroup;
   private name: FormControl;
@@ -82,18 +85,18 @@ export class LoginComponent implements OnInit, OnDestroy  {
       }
 
     });
-
+/*
     // Monitors the user signing-in and jumps to the projects browser on success
-    // This also works to prevent opening the login page when already logged-in
     this.subAuth = this.auth.userData$.subscribe( user => {
+
+      this.progress = false;
 
       // Jumps to the projects browser on successful login
       if(user) {
         console.log('logged in successfully as: ' + user.email);
 
         // Navigate to the requested page only if coming from a login procedure
-        if(this.progress) {
-          this.progress = false;
+        if(this.action === 'login') {
 
           // Checks for user preferrend language
           let userLang = user.lang || 'en';
@@ -102,12 +105,44 @@ export class LoginComponent implements OnInit, OnDestroy  {
           this.content.switch(userLang, 'projects');
         }
       }
-    });
+    });*/
    }
 
   ngOnDestroy() {
     this.subNav.unsubscribe();
-    this.subAuth.unsubscribe();
+    //this.subAuth.unsubscribe();
+  }
+
+  // Routing helper to easily jump on a specified page
+  private jump(to: string, overwrite = false) {
+    this.router.navigate(['..',to], { 
+      relativeTo: this.route,
+      replaceUrl: overwrite
+    });
+  }
+
+  // Loggin-in helper to navigate to the project page after successfully signing-in by 
+  // applying the user preferred language
+  private loggedIn() {
+
+    this.auth.userData$.pipe(
+      take(1),
+      tap( user => {
+
+        this.progress = false;    
+    
+        // Jumps to the projects browser on successful login
+        if(user) {
+          console.log('logged in successfully as: ' + user.email);
+    
+          // Checks for user preferrend language
+          let userLang = user.lang || 'en';
+  
+          // Jump to the projects browser switching to the user language if needed
+          this.content.switch(userLang, 'projects');
+        }
+      })
+    ).subscribe();
   }
 
   // This function switches among the form controls configurations dynamically 
@@ -132,7 +167,6 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
       default:
       case 'sign-in':
-      case 'delete':
       this.form.addControl('email', this.email);
       this.form.addControl('password', this.password);      
       break;
@@ -142,29 +176,26 @@ export class LoginComponent implements OnInit, OnDestroy  {
       break;
 
       case 'change-password':
-      this.form.addControl('email', this.email);
       this.form.addControl('password', this.password);
       this.form.addControl('newPassword', this.newPassword);
       break;
 
       case 'change-email':
-      this.form.addControl('email', this.email);
       this.form.addControl('password', this.password);
       this.form.addControl('newEmail', this.newEmail);
+      break;
+
+      case 'delete':
+      this.form.addControl('password', this.password);      
       break;
     }
   }
 
-  private get pageTitle(): string {
+  private get pageData() {
 
+    // Returns the page related data
     let key = this.page.camelize();
-    return this.msgs.pages[key].title;
-  }
-
-  private get buttonCaption(): string {
-    
-    let key = this.page.camelize();
-    return this.msgs.pages[key].caption; 
+    return this.msgs.pages[key];
   }
 
   private errorMessage(error: string): string {
@@ -193,26 +224,32 @@ export class LoginComponent implements OnInit, OnDestroy  {
       break;
 
       case 'reset':
-      //this.resetPassword( this.email.value );
+      this.resetPassword( this.email.value );
       break;
 
       case 'change-password':
+      this.updatePassword( this.password.value,
+                           this.newPassword.value );
       break;
 
       case 'change-email':
+      this.updateEmail( this.password.value,
+                        this.newEmail.value );
       break;
 
       case 'delete':
+      this.deleteAccount( this.password.value );
       break;
     }
   }
 
   private signInWith(provider: string) { 
 
-    this.progress = true;
+    this.progress = true;;
 
     // Signing-in with a provider using the current language    
     this.auth.signInWith( provider, this.content.language )
+      .then( () => this.loggedIn() )
       .catch( error => {
         // Keep the rror code on failure
         this.error = error.code;
@@ -226,6 +263,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     // Sign-in using email/password
     this.auth.signIn(email, password)
+      .then( () => this.loggedIn() )
       .catch( error => {
       // Keep the rror code on failure
       this.error = error.code;
@@ -239,6 +277,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     // Signing-in with a email/password using the current language
     this.auth.registerNew(email, password, name, this.content.language )
+      .then( () => this.jump('profile') )
       .catch( error => {
         // Keep the rror code on failure
         this.error = error.code;
@@ -258,6 +297,46 @@ export class LoginComponent implements OnInit, OnDestroy  {
       })
   }
 
+  private updateEmail(password: string, newEmail: string) {
+
+    this.progress = true;
+    this.action = 'upgrade';
+
+    this.auth.updateEmail(password, newEmail)
+      .then( () => this.jump('profile') )
+      .catch( error => {
+        // Keep the rror code on failure
+        this.error = error.code;
+        this.progress = false;
+      })
+  }
+
+  private updatePassword(password: string, newPassword: string) {
+
+    this.progress = true;
+
+    this.auth.updatePassword(password, newPassword)
+      .then( () => this.jump('profile') )
+      .catch( error => {
+        // Keep the rror code on failure
+        this.error = error.code;
+        this.progress = false;
+      })
+  }
+
+  private deleteAccount(password: string) {
+
+    this.progress = true;
+  
+    this.auth.deleteUser(password)
+      .then( () => this.jump('home') )
+      .catch( error => {
+        // Keep the rror code on failure
+        this.error = error.code;
+        this.progress = false;
+      })
+  }
+
   private signOut(){
     
     // Sign-out...
@@ -265,10 +344,6 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
-    this.router.navigate(['..','home'], { 
-        relativeTo: this.route,
-        replaceUrl: true
-      }
-    );
+    this.jump('home', true);
   }
 }  

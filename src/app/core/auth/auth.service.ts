@@ -103,6 +103,42 @@ export class AuthService {
     });
   }
 
+  public updateEmail(password: string, newEmail: string): Promise<void> {
+    
+    let email = this.authState.email;
+
+    console.log("Updating user email for: ", email);
+
+    // Gets fresh credentials for the current user
+    let credential = auth.EmailAuthProvider.credential(email, password);
+    
+    // Re-authenticate the user with the fresh credentials
+    return this.authState.reauthenticateWithCredential(credential)
+      .then( () => {
+
+        // Update the email
+        return this.authState.updateEmail(newEmail);
+      });
+  }
+
+  public updatePassword(password: string, newPassword: string): Promise<void> {
+    
+    let email = this.authState.email;
+
+    console.log("Updating user password for: ", email);
+
+    // Gets fresh credentials for the current user
+    let credential = auth.EmailAuthProvider.credential(email, password);
+    
+    // Re-authenticate the user with the fresh credentials
+    return this.authState.reauthenticateWithCredential(credential)
+      .then( () => {
+
+        // Update the password
+        return this.authState.updatePassword(newPassword);
+      });
+  }
+
   public signIn(email: string, password: string): Promise<any>  {
     console.log("Signing in as: " + email);
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
@@ -169,12 +205,24 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  public deleteUser(): Promise<void> {
+  public deleteUser(password: string): Promise<void> {
+
+    let email = this.authState.email;
     
-    console.log("Deleting the user...");
-    // Deletes the user custom data...
-    return this.db.delete<UserData>(`users/${this.userId}`)
-      // Then deletes the account and sign-out
-      .then( ()=> this.authState.delete() );
+    console.log("Deleting the user ", email);
+
+    // Gets fresh credentials for the current user
+    let credential = auth.EmailAuthProvider.credential(email, password);
+    
+    // Re-authenticate the user with the fresh credentials
+    return this.authState.reauthenticateWithCredential(credential)
+      .then( () => {
+
+        // Deletes the user custom data...
+        return this.db.delete<UserData>(`users/${this.userId}`)
+          
+          // Then deletes the account and sign-out
+          .then( () => this.authState.delete() );
+      });
   }
 }

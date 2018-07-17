@@ -14,15 +14,18 @@
     },
     "changePassword": {
       "title": "Change password",
-      "caption": "update the password"
+      "caption": "update the password",
+      "message": "Please confirm by re-authenticating"
     },
     "changeEmail": {
       "title": "Change email",
-      "caption": "update the email" 
+      "caption": "update the email",
+      "message": "Please confirm by re-authenticating"
     },
     "delete": {
       "title": "Delete account",
-      "caption": "Confirm to delete"
+      "caption": "Confirm to delete",
+      "message": "Please confirm by re-authenticating"
     }
   },
 

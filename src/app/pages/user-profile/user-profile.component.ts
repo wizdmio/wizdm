@@ -106,8 +106,8 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
 
     let success = true;
 
+    // Update each profile item in edit mode
     this.profileItems.forEach( item => {
-
       if(item.edit) {
         success = item.updateControl() && success;
       }

@@ -1,10 +1,15 @@
 
-<h1 class="mat-title" [@vanish]="page">{{ pageTitle }}</h1>
+<h1 class="mat-title" [@vanish]="page">{{ pageData.title }}</h1>
+
+<!-- INFO MESSAGE -->
+<p *ngIf="!error && pageData.message" @inflate>
+  {{pageData.message}}
+</p>
 
 <!-- ERROR MESSAGE -->
-<mat-error *ngIf="error" @inflate>
+<p class="mat-error" *ngIf="error" @inflate>
   {{ errorMessage(error) }}
-</mat-error>
+</p>
 
 <form [formGroup]="form" fxLayout="column" 
                          fxLayoutAlign="space-around stretch" 
@@ -70,7 +75,7 @@
 
   <!-- ACTION BUTTON -->
   <button mat-stroked-button color="primary" type="submit" [disabled]="!form.valid" class="btn">
-    {{ buttonCaption }}
+    {{ pageData.caption }}
   </button>
 
   <mat-progress-bar *ngIf="progress" mode="indeterminate" @inflate></mat-progress-bar>
