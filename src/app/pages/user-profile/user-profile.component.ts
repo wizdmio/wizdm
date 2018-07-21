@@ -40,43 +40,54 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
   private profileEditable(key: string) {
     
     // Hardcoded editable flag to prevent unwanted db modifications
-    return key === 'name' ||
-           key === 'email' ||
-           key === 'phone' ||
-           key === 'birth' ||
-           key === 'gender' ||
-           key === 'motto' ||
-           key === 'lang';
+    return key === 'profile:name' ||
+           key === 'profile:email' ||
+           key === 'profile:phone' ||
+           key === 'profile:birth' ||
+           key === 'profile:gender' ||
+           key === 'profile:motto' ||
+           key === 'profile:lang';
   }
 
   private profileValue(key: string): string {
 
-    // Turns the timestamp into moment when needed
-    if(key === 'created' || key === 'updated') {
-      let stamp = this.auth.userProfile[key];
+    let keys = key.split(':');
+
+    // Intercepts timestapms requests
+    if(key === 'profile:created') {
+      let stamp = this.auth.userProfile[ keys[1] ];
       return stamp ? moment(stamp.toDate()).toString() : '';
     }
 
-    // Intercepts the requests of user account data
-    if(key === 'provider' || key === 'accountEmail') {
-
-      let user = this.auth.authState;
-      return user ? key === 'provider' ? user.providerId : user.email : '';
-    }
-
-    // Returns the profile value otherwise
-    return this.auth.userProfile ? this.auth.userProfile[key] : '';    
+    // Select the source of values based on the first half of the key
+    let source = keys[0] === 'profile' ? this.auth.userProfile :
+                 keys[0] === 'user' ? this.auth.userAuth :
+                 {};
+ 
+    // Returns tne value based on the second half of the key
+    return source[ keys[1] ];
   }
 
   private profileOptions(key: string) {
 
-    const options = { gender: this.msgs.genders, lang: this.langOptions };
-    return options[key];
+    switch(key) {
+
+      case 'profile:gender':
+      return this.msgs.genders;
+
+      case 'profile:lang':
+      return this.langOptions;
+
+      case 'user:emailVerified':
+      return this.msgs.identity;
+    }
+
+    return null;
   }
 
   private profileValidators(key: string): UserItemValidators {
 
-    return key == 'email' ?  {
+    return key == 'profile:email' ?  {
 
       validators: [ Validators.required, Validators.email ],
       errors: this.msgs.errors
@@ -86,14 +97,19 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
 
   private updateUserProfile(key: string, value: any) {
   
-    // Update the value otherwhise
-    this.auth.updateUserProfile({ [key]: value });
+    let keys = key.split(':');  
 
-    // Navigate to the new language
-    if(key === 'lang') {
+    if(keys[0] === 'profile') {
 
-      // Switch to the selected language
-      this.content.switch(value);
+      // Update the value otherwhise
+      this.auth.updateUserProfile({ [ keys[1] ]: value });
+
+      // Navigate to the new language
+      if(key === 'profile:lang') {
+
+        // Switch to the selected language
+        this.content.switch(value);
+      }
     }
   }
 
@@ -133,82 +149,47 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
 
   private action(code: string) {
 
-    switch(code) {
+    // Prepare the right popup according to the action code
+    let popup = this.msgs.popups[code];
 
-      case 'changeEmail':
-      this.changeUserEmail();
-      break;
-      
-      case 'changePassword':
-      this.changeUserPassword();
-      break;
-      
-      case 'deleteAccount':
-      this.deleteUserAccount();
-      break;
+    // Ask for confirmation prior to initiate the requested action
+    ( popup ? this.popup.popupDialog(popup) : Promise.resolve<boolean>(true) )
+      .then( proceed => {
+
+        // If we can proceed, navigates to the login page applying the requested action code
+        if(proceed) {
+          this.router.navigate(['..','login'], {
+            relativeTo: this.route, 
+            queryParams: { 
+              mode: code 
+            } 
+          });
+        }
+    });
+  }
+
+  private disabled(code: string): boolean {
+
+    // Disable the emailVerify action in case the account email has been verified already
+    if(code === 'emailVerify') {
+
+      let user = this.auth.userAuth;
+      return user ? user.emailVerified : false;
     }
+
+    return false;
   }
 
   public canDeactivate() {
 
+    let popup = this.msgs.popups.canLeave;
+
     // Ask the user to proceed in case there are unsaved changes
-    if(this.itemChanges) { 
-      return this.popup.popupDialog(this.msgs.canLeave);
+    if(popup && this.itemChanges) { 
+      return this.popup.popupDialog(popup);
     }
 
     // Enable leaving otherwise
     return true;
-  }
-
-
-  private changeUserEmail() {
-    
-    // Ask for confirmation prior to initiate the email change procedure
-    this.popup.popupDialog(this.msgs.canChange)
-      .then( proceed => {
-
-        if(proceed) {
-          this.router.navigate(['..','login'], {
-            relativeTo: this.route, 
-            queryParams: { 
-              mode: 'change-email' 
-            } 
-          });
-        }
-    });
-  }
-
-  private changeUserPassword() {
-    
-    // Ask for confirmation prior to initiate the reset password procedure
-    this.popup.popupDialog(this.msgs.canReset)
-      .then( proceed => {
-
-        if(proceed) {
-          this.router.navigate(['..','login'], {
-            relativeTo: this.route, 
-            queryParams: { 
-              mode: 'change-password' 
-            } 
-          });
-        }  
-    });
-  }
-
-  private deleteUserAccount() {
-    
-    // Ask for confirmation prior to delete the user account and data
-    this.popup.popupDialog(this.msgs.canDelete)
-      .then( proceed => {
-
-        if(proceed) {
-          this.router.navigate(['..','login'], {
-            relativeTo: this.route, 
-            queryParams: { 
-              mode: 'delete' 
-            } 
-          });  
-        }
-    });
   }
 }

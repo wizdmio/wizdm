@@ -1,21 +1,37 @@
 {
   "pages": {
-    "signIn": {
-      "title": "Sign-in",
-      "caption": "Sign-in with my email"
-    },
     "register": {
       "title": "Register",
       "caption": "Register with my email" 
     },
-    "reset": {
+    "signIn": {
+      "title": "Sign-in",
+      "caption": "Sign-in with my email"
+    },
+    "forgotPassword": {
       "title": "Reset password",
       "caption": "Reset the password" 
+    },
+    "resetPassword": {
+      "title": "New password",
+      "caption": "Change the password" 
     },
     "changePassword": {
       "title": "Change password",
       "caption": "update the password",
       "message": "Please confirm by re-authenticating"
+    },
+    "emailVerify": {
+      "title": "Email verification",
+      "message": "An email has been sent to your address..."
+    },
+    "verifyEmail": {
+      "title": "Email verification",
+      "message": "Thank you for verifying your email. You might need to sign-in again before seeing the effects"
+    },
+    "recoverEmail": {
+      "title": "Email recovery",
+      "message": "Your previous email has been restored. We recommend changing your password the soonest"
     },
     "changeEmail": {
       "title": "Change email",
@@ -49,7 +65,8 @@
       "emailAlreadyInUse": "This email is already registered",
       "invalidEmail": "This is not a valid email",
       "weakPassword": "This password looks too weak",
-      "networkRequestFailed": "There's some trouble with the network"
+      "networkRequestFailed": "There's some trouble with the network",
+      "invalidActionCode": "The action code provided is no longer valid"
     }
   },
 

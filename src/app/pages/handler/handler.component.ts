@@ -1,37 +1,33 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-handler',
-  templateUrl: './handler.component.html',
-  styleUrls: ['./handler.component.scss']
+  template: '',
+  styles: []
 })
-export class HandlerComponent implements OnInit, OnDestroy {
-
-  private subNav: Subscription;
+export class HandlerComponent implements OnInit {
 
   constructor(private router : Router, 
               private route : ActivatedRoute) { }
 
   ngOnInit() {
 
-    // Subscribe to the active route to check if we are signin-in or out
-    this.subNav = this.route.queryParamMap.subscribe( (params: ParamMap ) => {
+    // Intercept the firebase handler parameters
+    this.route.queryParamMap.subscribe( (params: ParamMap ) => {
 
       let mode = params.get('mode');
       let code = params.get('oobCode');
+      let api  = params.get('apiKey');
       let lang = params.get('lang') || 'en';
+      let url  = params.get('continueUrl');
 
-        //...and navigate to the login page
+        //...and navigate to the login page with the requested language
         this.router.navigate([lang,'login'], { 
-          queryParams: { mode, code } //, lang }
+          queryParams: { mode, code },
+          replaceUrl: true
         });
       }
     );
-  }
-
-  ngOnDestroy(){
-    this.subNav.unsubscribe();
   }
 }

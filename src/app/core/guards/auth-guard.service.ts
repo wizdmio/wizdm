@@ -25,7 +25,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
 
     console.log('AuthGuard#canActivate called');
 
-    return this.auth.authState$.pipe( 
+    return this.auth.user$.pipe( 
       map( user => user != null),
       take(1),
       tap( status => {

@@ -113,13 +113,15 @@ export class UserProfileItemComponent implements OnInit, OnDestroy {
   private get matchedOption() : UserItemOption {
 
     const value = this.control.value || this.value;
+    let option = {} as UserItemOption;
 
-    if(value && this.hasOptions) {
-      return (<UserItemOption[]>this.options)
+    // This verbose test is to accept 'false' as a valid value
+    if(value !== null && typeof(value) !== 'undefined' && this.hasOptions) {
+      option = (<UserItemOption[]>this.options)
         .find( opt => opt.value == value);
     }
 
-    return {} as UserItemOption;
+    return option;
   }
 
   private get displayValue(): string {

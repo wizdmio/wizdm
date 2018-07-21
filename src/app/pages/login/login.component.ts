@@ -1,12 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { ContentService, AuthService } from '../../core';
 import { $loginAnimations } from './login-animations';
-import { Subscription } from 'rxjs';
-import { take, tap } from '../../../../node_modules/rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 
-type pageTypes = 'sign-in' | 'register' | 'reset' | 'change-password' | 'change-email' | 'delete';
+type pageTypes = 'register' | 
+                 'signIn' | 
+                 'forgotPassword' | 
+                 'resetPassword' | 
+                 'changePassword' | 
+                 'emailVerify' | 
+                 'verifyEmail' | 
+                 'recoverEmail' | 
+                 'changeEmail' | 
+                 'delete';
 
 @Component({
   selector : 'wm-login',
@@ -14,15 +22,14 @@ type pageTypes = 'sign-in' | 'register' | 'reset' | 'change-password' | 'change-
   styleUrls : ['./login.component.scss'],
   animations: $loginAnimations
 })
-export class LoginComponent implements OnInit, OnDestroy  {
+export class LoginComponent implements OnInit  {
 
   private page: pageTypes;
   private error: string = null;
+  private code: string;
   private progress = false;
   private msgs = null;
   private hide = true;
-
-  private action: 'register'|'login'|'upgrade'|'delete';
 
   private form: FormGroup;
   private name: FormControl;
@@ -30,13 +37,11 @@ export class LoginComponent implements OnInit, OnDestroy  {
   private password: FormControl;
   private newEmail: FormControl;
   private newPassword: FormControl;
-  private subNav: Subscription;
-  private subAuth: Subscription;
   
-  constructor(private content: ContentService,
-              private router : Router, 
-              private route : ActivatedRoute,
-              private auth: AuthService) {
+  constructor(private content : ContentService,
+              private router  : Router, 
+              private route   : ActivatedRoute,
+              private auth    : AuthService) {
 
     // Creates the loging form controls
     this.name = new FormControl(null, Validators.required);
@@ -47,9 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy  {
     
     // Group the controls
     this.form = new FormGroup({});
-
-    // Makes sure to start from the sign-in page
-    this.switchPage(this.page = 'sign-in');
   }
 
   ngOnInit() {
@@ -58,66 +60,52 @@ export class LoginComponent implements OnInit, OnDestroy  {
     this.msgs = this.content.select("login");
 
     // Discrimnate among the login option using the queryParameters
-    this.subNav = this.route.queryParamMap.subscribe( (params: ParamMap) => {
+    this.route.queryParamMap.subscribe( (params: ParamMap) => {
 
-      let mode = params.get('mode') || 'login';
+      let  mode = params.get('mode') || 'signIn';
+      this.code = params.get('code');
 
-      console.log('login mode: ' + mode);
+      console.log('login mode: ', mode);
 
-      // If we are coming here 'cause of signout then:
-      if(mode === 'logout') {
+      switch(mode) {
+
+        case 'signOut':
         this.signOut();
-      }
+        return;
 
-      // This option turns the page into the Password change
-      if(mode === 'change-password') {
-        this.switchPage('change-password');
-      }
+        case 'emailVerify': // Sends and email to verify the user identity
+        
+        this.auth.sendEmailVerification()
+          .catch( error => this.showError(error.code) );
+        
+        break;
 
-      // This option turns the page into the Email change
-      if(mode === 'change-email') {
-        this.switchPage('change-email');
-      }
+        // Apply the action code in case of email revert or verification
+        case 'verifyEmail':
+        case 'recoverEmail':
 
-      // This option ask for re-authentication prior to delete the user profile and data
-      if(mode === 'delete') {
-        this.switchPage('delete');
-      }
-
-    });
-/*
-    // Monitors the user signing-in and jumps to the projects browser on success
-    this.subAuth = this.auth.userData$.subscribe( user => {
-
-      this.progress = false;
-
-      // Jumps to the projects browser on successful login
-      if(user) {
-        console.log('logged in successfully as: ' + user.email);
-
-        // Navigate to the requested page only if coming from a login procedure
-        if(this.action === 'login') {
-
-          // Checks for user preferrend language
-          let userLang = user.lang || 'en';
-
-          // Jump to the projects browser switching to the user language if needed
-          this.content.switch(userLang, 'projects');
+        if(this.code) {
+          this.auth.applyActionCode( this.code )
+            .catch( error => this.showError(error.code) );
         }
+        break;
+
+        case 'resetPassword':
+        // Just goes trough switching to the resetPassword page with the received action code
+        break;
       }
-    });*/
+
+      // Switches to the relevant page
+      this.switchPage(mode as pageTypes);
+    });
    }
 
-  ngOnDestroy() {
-    this.subNav.unsubscribe();
-    //this.subAuth.unsubscribe();
-  }
-
   // Routing helper to easily jump on a specified page
-  private jump(to: string, overwrite = false) {
+  private jump(to: string, overwrite = false, params?: Params) {
     this.router.navigate(['..',to], { 
       relativeTo: this.route,
-      replaceUrl: overwrite
+      replaceUrl: overwrite,
+      queryParams: params
     });
   }
 
@@ -149,7 +137,8 @@ export class LoginComponent implements OnInit, OnDestroy  {
   // to support 'morphing' across the different pages
   private switchPage(page: pageTypes) {
 
-    this.progress = false;
+    // Skips when not needed
+    if(page === this.page) { return; }
 
     // Removes all the controls from the form group
     Object.keys(this.form.controls).forEach( control => {
@@ -166,21 +155,31 @@ export class LoginComponent implements OnInit, OnDestroy  {
       break;
 
       default:
-      case 'sign-in':
+      case 'signIn':
       this.form.addControl('email', this.email);
       this.form.addControl('password', this.password);      
       break;
 
-      case 'reset':
+      case 'forgotPassword':
       this.form.addControl('email', this.email);
       break;
 
-      case 'change-password':
+      case 'resetPassword':
+      this.form.addControl('newPassword', this.newPassword);
+      break;
+
+      case 'changePassword':
       this.form.addControl('password', this.password);
       this.form.addControl('newPassword', this.newPassword);
       break;
 
-      case 'change-email':
+      case 'emailVerify':
+      case 'verifyEmail':
+      case 'recoverEmail':
+      // Formless page
+      break;
+
+      case 'changeEmail':
       this.form.addControl('password', this.password);
       this.form.addControl('newEmail', this.newEmail);
       break;
@@ -192,30 +191,27 @@ export class LoginComponent implements OnInit, OnDestroy  {
   }
 
   private get pageData() {
-
-    // Returns the page related data
-    let key = this.page.camelize();
-    return this.msgs.pages[key];
+    return this.msgs.pages[this.page];
   }
 
-  private errorMessage(error: string): string {
+  private showError(error: string) {
 
-    // Turns the message code into camelCase
+    this.progress = false;
+
+    // Turns the error code into camelCase
     let key = error.camelize().replace('/','.');
 
     // Look up the available error messages or return the error code if not found
-    return this.content.select("login.errors." + key, error);
+    this.error = this.content.select("login.errors." + key, error);
+    
+    // Makes sure to turn off the error message in 5s
+    setTimeout(() => this.error = null, 5000);
   }
 
-  private signInOrRegister() {
+  // Execute the form requested action
+  private loginAction() {
     
     switch(this.page) {
-
-      default:
-      case 'sign-in':
-      this.signIn( this.email.value, 
-                   this.password.value );
-      break;
 
       case 'register':
       this.registerNew( this.email.value, 
@@ -223,16 +219,27 @@ export class LoginComponent implements OnInit, OnDestroy  {
                         this.name.value );
       break;
 
-      case 'reset':
-      this.resetPassword( this.email.value );
+      default:
+      case 'signIn':
+      this.signIn( this.email.value, 
+                   this.password.value );
       break;
 
-      case 'change-password':
+      case 'forgotPassword':
+      this.forgotPassword( this.email.value );
+      break;
+
+      case 'resetPassword':
+      this.resetPassword( this.code, 
+                          this.newPassword.value );
+      break;
+
+      case 'changePassword':
       this.updatePassword( this.password.value,
                            this.newPassword.value );
       break;
 
-      case 'change-email':
+      case 'changeEmail':
       this.updateEmail( this.password.value,
                         this.newEmail.value );
       break;
@@ -247,81 +254,71 @@ export class LoginComponent implements OnInit, OnDestroy  {
 
     this.progress = true;;
 
-    // Signing-in with a provider using the current language    
+    // Signing-in with a provider using the current language before jumping to the projects page by applying the user preferrend language (if any)
     this.auth.signInWith( provider, this.content.language )
       .then( () => this.loggedIn() )
-      .catch( error => {
-        // Keep the rror code on failure
-        this.error = error.code;
-        this.progress = false;
-      })
+      .catch( error => this.showError(error.code) );
   }
 
   private signIn(email: string, password: string) {
     
     this.progress = true;
 
-    // Sign-in using email/password
+    // SignIn using email/password before jumping to the projects page by applying the user preferrend language
     this.auth.signIn(email, password)
       .then( () => this.loggedIn() )
-      .catch( error => {
-      // Keep the rror code on failure
-      this.error = error.code;
-      this.progress = false;
-    });
+      .catch( error => this.showError(error.code) );
   }
 
   private registerNew(email: string, password: string,name: string) {
 
     this.progress = true;
 
-    // Signing-in with a email/password using the current language
+    // Signing-in with a email/password using the current language than send a verification email befor jumping to the profile page
     this.auth.registerNew(email, password, name, this.content.language )
+      .then( () => this.auth.sendEmailVerification() )
       .then( () => this.jump('profile') )
-      .catch( error => {
-        // Keep the rror code on failure
-        this.error = error.code;
-        this.progress = false;
-      });
+      .catch( error => this.showError(error.code) );
   }
 
-  private resetPassword(email: string) {
+  private forgotPassword(email: string) {
     
     this.progress = true;
 
-    this.auth.resetPassword(email)
-      .catch( error => {
-        // Keep the rror code on failure
-        this.error = error.code;
-        this.progress = false;
-      })
+    // Send an action code link to the registerred email to reset a forgotten password
+    this.auth.forgotPassword(email, this.content.language )
+      .catch( error => this.showError(error.code) );
+  }
+
+  private resetPassword(code: string, newPassword: string) {
+
+    this.progress = true;
+
+    // Resets the forgotten password by applying the action code received than jumps to the profile page
+    this.auth.resetPassword(code, newPassword)
+      .then( () => this.jump('profile') )
+      .catch( error => this.showError(error.code) );
   }
 
   private updateEmail(password: string, newEmail: string) {
 
     this.progress = true;
-    this.action = 'upgrade';
 
+    // Update the account email by re-authenticating than send a verification request and jumps to the profile page
     this.auth.updateEmail(password, newEmail)
+      .then( () => this.auth.sendEmailVerification() )
       .then( () => this.jump('profile') )
-      .catch( error => {
-        // Keep the rror code on failure
-        this.error = error.code;
-        this.progress = false;
-      })
+      .catch( error => this.showError(error.code) );
   }
 
   private updatePassword(password: string, newPassword: string) {
 
     this.progress = true;
 
+    // Updte the account password by re-authenticating than jumps to the profile page
     this.auth.updatePassword(password, newPassword)
       .then( () => this.jump('profile') )
-      .catch( error => {
-        // Keep the rror code on failure
-        this.error = error.code;
-        this.progress = false;
-      })
+      .catch( error => this.showError(error.code) );
   }
 
   private deleteAccount(password: string) {
@@ -330,11 +327,7 @@ export class LoginComponent implements OnInit, OnDestroy  {
   
     this.auth.deleteUser(password)
       .then( () => this.jump('home') )
-      .catch( error => {
-        // Keep the rror code on failure
-        this.error = error.code;
-        this.progress = false;
-      })
+      .catch( error => this.showError(error.code) );
   }
 
   private signOut(){

@@ -12,8 +12,13 @@
   margin: 0 $wm-content-margin;
 }
 
-form {
-  width: 300px;
+.panel {
+  width: $wm-login-width;
+  text-align: center;
+
+  & > form {
+    width: $wm-login-width;
+  }
 }
 
 .bit-of-space { 
