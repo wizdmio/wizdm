@@ -1,27 +1,45 @@
-
-<h1>{{msgs.title}}</h1>
-<p>{{msgs.description}}</p>
+<header fxLayout="column">
+  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+  <p fxHide.lt-sm>{{ msgs.description }}</p>
+</header> 
 
 <mat-vertical-stepper linear>
 
-  <mat-step [stepControl]="nameForm">
+  <mat-step [stepControl]="headerForm">
 
     <!-- NAME step: here we create a new project -->
-    <form [formGroup]="nameForm" (ngSubmit)="draftProject()">
+    <form [formGroup]="headerForm" (ngSubmit)="draftApplication()">
 
-      <ng-template matStepLabel>{{msgs.appName.title}}</ng-template>
+      <ng-template matStepLabel>{{msgs.header.title}}</ng-template>
       
-      <p class="mat-small">{{msgs.appName.description}}</p>
+      <p class="mat-small">{{msgs.header.description}}</p>
 
+      <!-- NAME INPUT -->
       <mat-form-field appearance="legacy" fxFill>
 
-        <mat-label>{{msgs.appName.label}}</mat-label>
-        
+        <mat-label>{{msgs.header.name.label}}</mat-label>
         <input matInput formControlName="name">
         
-        <mat-hint>{{msgs.appName.hint}}</mat-hint>
-        <mat-error *ngIf="nameForm.controls.name.errors" >
-          {{ errorMessage(nameForm.controls.name.errors, msgs.appName.errors) }}
+        <mat-hint>{{msgs.header.name.hint}}</mat-hint>
+        <mat-error *ngIf="headerForm.controls.name.errors" >
+          {{ errorMessage(headerForm.controls.name.errors, msgs.header.name.errors) }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="bit-of-space"></div>
+
+      <!-- ELEVETOR PITCH TEXT -->
+      <mat-form-field appearance="legacy" fxFill>
+
+        <mat-label>{{msgs.header.pitch.label}}</mat-label>
+        <textarea matInput formControlName="pitch" [rows]="msgs.header.pitch.rows || 3" 
+                                                   [maxlength]="msgs.header.pitch.max || 180">
+        </textarea>
+        
+        <mat-hint>{{msgs.header.pitch?.hint}}</mat-hint>
+        <mat-error *ngIf="headerForm.controls.pitch.errors" >
+          {{ errorMessage(headerForm.controls.pitch.errors, msgs.header.pitch.errors) }}
         </mat-error>
       </mat-form-field>
 
@@ -85,6 +103,7 @@
     </form>
   </mat-step>
 
+  <!-- SUBMIT w/ DISCLAIMER -->
   <mat-step>
     <ng-template matStepLabel>{{msgs.appSubmit.title}}</ng-template>
     

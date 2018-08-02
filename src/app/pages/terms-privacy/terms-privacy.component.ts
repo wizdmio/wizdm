@@ -9,7 +9,7 @@ import { ContentService } from '../../core';
 export class TermsPrivacyComponent implements OnInit {
 
   @Input() full = false; // Force the content to fit the full screen
-  private msgs = null;
+  public msgs = null;
   
   constructor(private content: ContentService) {}
 

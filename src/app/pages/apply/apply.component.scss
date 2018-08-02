@@ -7,9 +7,13 @@
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
-
-  padding: $wm-content-padding 0;
-  margin: 0 $wm-content-margin;
+  
+  padding-top: $wm-content-padding;
+  
+  & > header {
+    margin: 0 $wm-content-margin;
+    text-align: center;  
+  }
 }
 
 .bit-of-space {

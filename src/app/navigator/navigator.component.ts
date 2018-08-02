@@ -14,8 +14,8 @@ export class NavComponent implements OnInit {
 
   @ViewChild('content', { read: ElementRef })
   private ctRef: ElementRef;
-  private msgs: any = null;
-  private divider: boolean = false;
+  public msgs: any = null;
+  public divider: boolean = false;
   
   constructor(private content: ContentService, 
               private auth: AuthService,
@@ -37,12 +37,12 @@ export class NavComponent implements OnInit {
     }
   }
 
-  get signedIn(): boolean {
+  public get signedIn(): boolean {
     return this.auth.authenticated;
   }
 
   //@HostListener('window:scroll', ['$event']) 
-  private onScroll(event: Event) : void {
+  public onScroll(event: Event) : void {
     
     let ofs = this.ctRef.nativeElement.scrollTop || 0;
 

@@ -18,7 +18,7 @@ export interface LanguageData {
 export class FooterComponent implements OnInit {
   
   private _options: LanguageOption[];
-  private msgs;
+  public msgs;
 
   constructor(private content: ContentService,
               private auth: AuthService,) {}
@@ -32,11 +32,11 @@ export class FooterComponent implements OnInit {
     this._options = this.content.languageOptions;
   }
 
-  get signedIn(): boolean {
+  public get signedIn(): boolean {
     return this.auth.authenticated;
   }
 
-  private get options(): LanguageOption[] {
+  public get options(): LanguageOption[] {
     
     // WARNING: we buffers languageOptions into a local variable to prevent
     // the *ngFor on mat-select to run over an infinite loop due to an issue
@@ -45,11 +45,11 @@ export class FooterComponent implements OnInit {
     return this._options;
   }
 
-  private get language(): string {
+  public get language(): string {
     return this.content.language;
   }
 
-  changeLanguage(lang: string) {
+  public changeLanguage(lang: string) {
 
     // Switch to the selected language
     this.content.switch(lang);

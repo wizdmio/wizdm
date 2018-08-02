@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrowserComponent } from './browser.component';
+import { MarkdownComponent } from './markdown.component';
 
-describe('BrowserComponent', () => {
-  let component: BrowserComponent;
-  let fixture: ComponentFixture<BrowserComponent>;
+describe('MarkdownComponent', () => {
+  let component: MarkdownComponent;
+  let fixture: ComponentFixture<MarkdownComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BrowserComponent ]
+      declarations: [ MarkdownComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BrowserComponent);
+    fixture = TestBed.createComponent(MarkdownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

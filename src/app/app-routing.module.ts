@@ -6,11 +6,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
 import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
 import { LoginComponent } from './pages/login/login.component';
-//import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { ApplyComponent } from './pages/apply/apply.component';
-import { BrowserComponent } from './pages/browser/browser.component';
-import { ProjectComponent } from './pages/project/project.component';
+import { ProjectBrowserComponent } from './pages/project-browser/project-browser.component';
+import { ProjectComponent } from './pages/project-browser/project/project.component';
+import { PeopleBrowserComponent } from './pages/people-browser/people-browser.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HandlerComponent } from './pages/handler/handler.component';
 
@@ -31,8 +31,7 @@ const routes: Routes = [
   // Load the navigation with the selected language
   { path: ':lang', component: NavComponent,
     
-    // Uses the content manager resolver to pre-fetch language data
-    // to be used by the children pages
+    // Uses the content manager resolver to pre-fetch language data to be used by the children pages
     resolve: { lang: ResolverService },
 
     // Localized pages
@@ -53,8 +52,9 @@ const routes: Routes = [
         children: [
           { path: 'profile', component: UserProfileComponent, canDeactivate: [PageGuardService] },
           { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
-          { path: 'projects', component: BrowserComponent, canDeactivate: [PageGuardService] },
-          { path: 'projects/:id', component: ProjectComponent }
+          { path: 'projects', component: ProjectBrowserComponent, canDeactivate: [PageGuardService] },
+          { path: 'projects/:id', component: ProjectComponent, canDeactivate: [PageGuardService] },
+          { path: 'people', component: PeopleBrowserComponent, canDeactivate: [PageGuardService] }
         ]
       },
     

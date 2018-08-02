@@ -1,6 +1,6 @@
 {
-    "logo": "wizdm",
-    "title": "wizdm - Compassionate development",
+    "logo": "Wizdm",
+    "title": "Wizdm - Compassionate development",
     "description": "A community of app givers",
 
     "menu": {
@@ -13,13 +13,9 @@
         "private": [
             { "label": "Home", "link": "home" },
             { "label": "Projects", "link": "projects" },
+            { "label": "People", "link": "people" },
             { "label": "About", "link": "about" }
         ]
-    },
-
-    "user": {
-        "avatar": "assets/img/avatar.svg",
-        "link": "profile"
     },
 
     "footer": {

@@ -1,0 +1,54 @@
+<header fxLayout="column">
+  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+  <p fxHide.lt-sm [@fade]="activeTab">{{ tabDescription || msgs.description }}</p>
+</header>  
+
+<mat-tab-group dynamicHeight [selectedIndex]="activeTab" (selectedIndexChange)="loadProjects(activeTab = $event)">
+
+  <mat-tab *ngFor="let tab of msgs.tabs" [label]="tab.label">
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <ng-container *ngIf="!loading">
+
+      <div *ngIf="tab.actions" fxLayoutAlign="end center">
+
+        <ng-container *ngFor="let action of tab.actions">
+
+          <!-- ACTION LINK (DESKTOP) -->
+          <a mat-button color="primary" fxHide.lt-sm [routerLink]="action.link">
+            {{action.label}}
+          </a>
+
+          <!-- ACTION LINK (MOBILE) -->
+          <a *ngIf="action.icon" mat-icon-button color="primary" fxHide fxShow.lt-sm [routerLink]="action.link">
+            <wm-icon [icon]="action.icon"></wm-icon>
+          </a>
+        </ng-container>
+
+      </div>
+
+      <mat-grid-list rowHeight="1:1" [cols]="cols" gutterSize="10px">
+        
+        <mat-grid-tile *ngFor="let project of projects">
+
+          <wm-project-browser-item [project]="project" fxFill></wm-project-browser-item>
+          
+        </mat-grid-tile>
+
+      </mat-grid-list>
+
+      <!--div fxLayout="row wrap" fxLayoutAlign="center start" fxLayoutGap="10px">
+          <wm-project *ngFor="let project of projects" 
+                      fxFlex="0 0 auto"
+                      [project]="project">
+          </wm-project>
+      </div-->
+
+
+    </ng-container>
+
+  </mat-tab>
+
+</mat-tab-group>

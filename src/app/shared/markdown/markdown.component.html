@@ -1,0 +1,130 @@
+
+<!-- ROOT NODE ENTRY POINT -->
+<ng-container *ngTemplateOutlet="treeNode; context: root"></ng-container>
+
+<!-- RECURSIVE TREE NODE TEMPLATE -->
+<ng-template let-children="children" #treeNode>
+
+  <ng-container *ngFor="let child of children">
+
+    <ng-container [ngSwitch]="child.type">
+
+      <ng-container *ngSwitchCase="'paragraph'">
+        <p><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></p>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'blockquote'">
+        <blockquote><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></blockquote>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'heading'">
+        <h1 *ngIf="child.depth === 1"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></h1>
+        <h2 *ngIf="child.depth === 2"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></h2>
+        <h3 *ngIf="child.depth === 3"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></h3>
+        <h4 *ngIf="child.depth === 4"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></h4>
+        <h5 *ngIf="child.depth === 5"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></h5>
+        <h6 *ngIf="child.depth === 6"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></h6>
+      </ng-container>
+
+      <!-- CODE todo: child.lang / child.info -->
+      <ng-container *ngSwitchCase="'code'">
+        <pre><code>{{child.value}}</code></pre>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'inlineCode'">
+        <code>{{child.value}}</code>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'html'">
+        <html>{{child.value}}</html>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'list'">
+        <ol *ngIf="child.ordered" [start]="child.start"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></ol>
+        <ul *ngIf="!child.ordered"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></ul>
+      </ng-container>
+
+      <!-- LIST-ITEM todo: child.checked = true | false | null -->
+      <ng-container *ngSwitchCase="'listItem'">
+        <li><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></li>
+      </ng-container>
+
+      <!-- TABLE todo: child.align = left | right | center | null -->
+      <ng-container *ngSwitchCase="'table'">
+        <table><tbody><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></tbody></table>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'tableRow'">
+        <tr><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></tr>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'tableCell'">
+        <td><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></td>
+      </ng-container>
+
+      <hr *ngSwitchCase="'thematicBreak'">
+
+      <br *ngSwitchCase="'break'">
+        
+      <ng-container *ngSwitchCase="'emphasis'">
+        <em><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></em>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'strong'">
+        <strong><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></strong>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'delete'">
+        <del><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></del>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'link'">
+        <a [routerLink]="child.url"><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></a>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'image'">
+        <img [src]="child.url" [title]="child.title" [alt]="child.alt">
+      </ng-container>
+
+      <!-- Footnote -->
+      <!--ng-container *ngSwitchCase="'footnote'">
+        <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+      </ng-container-->
+
+      <!-- Link Reference todo: child.identifier -->
+      <!--ng-container *ngSwitchCase="'linkReference'">
+        <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+      </ng-container-->
+
+      <!-- Image Reference todo: child.identifier -->
+      <!--ng-container *ngSwitchCase="'imageReference'">
+        <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+      </ng-container-->
+
+      <!-- Definition todo: child.identifier, title, url -->
+      <!--ng-container *ngSwitchCase="'definition'">
+        <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+      </ng-container-->
+
+       <!-- Footnote Definition todo: child.identifier -->
+      <!--ng-container *ngSwitchCase="'footnoteDefinition'">
+        <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+      </ng-container-->
+
+      <ng-container *ngSwitchCase="'text'">{{child.value}}</ng-container>
+
+      <!-- remark sub super plugin -->
+
+      <ng-container *ngSwitchCase="'sub'">
+        <sub><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></sub>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'sup'">
+        <sup><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></sup>
+      </ng-container>
+ 
+    </ng-container>
+
+  </ng-container>
+
+</ng-template>

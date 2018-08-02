@@ -2,14 +2,20 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'wm-icon',
-  templateUrl: './icon.component.html',
-  styleUrls: ['./icon.component.scss']
+  template: '<mat-icon [color]="color"\
+                       [inline]="inline"\
+                       [fontSet]="fontSet"\
+                       [fontIcon]="fontIcon">\
+            {{matIcon}}\
+            </mat-icon>',
+  styleUrls: ['./icon.component.scss'],
+  
 })
 export class IconComponent implements OnInit {
 
-  private fontSet: string  = undefined;
-  private fontIcon: string = undefined;
-  private matIcon = "code";
+  public fontSet: string  = undefined;
+  public fontIcon: string = undefined;
+  public matIcon = "code";
 
   constructor() { }
 
@@ -23,9 +29,9 @@ export class IconComponent implements OnInit {
    
     let segments = descriptor.split(':');
     
-    if(segments.length >1) {
+    if(segments.length > 1) {
       
-      this.matIcon  = "";
+      this.matIcon  = undefined;
       this.fontSet  = segments[0];
       this.fontIcon = segments[1];
     }

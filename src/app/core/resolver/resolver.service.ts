@@ -8,6 +8,7 @@ import { AuthService } from '../auth/auth.service';
 import { ContentService } from '../content/content-manager.service';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
+import { WindowRef } from '../window/window.service';
 
 import * as moment from 'moment';
 
@@ -18,9 +19,10 @@ declare const window: Window;
 @Injectable()
 export class ResolverService implements Resolve<any> {
 
-  constructor(private content: ContentService,
-              private auth: AuthService, 
-              private router: Router) { }
+  constructor(private content : ContentService,
+              private auth    : AuthService, 
+              private router  : Router,
+              private window  : WindowRef) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any {
 
@@ -61,14 +63,18 @@ export class ResolverService implements Resolve<any> {
 
   public detectLanguage() : string {
       
-    if(typeof window === 'undefined' || typeof window.navigator === 'undefined') { 
-      return undefined;
+    let navigator = this.window.navigator;
+    
+    // Shorts circuit to 'en' if the navigator object is not available
+    if(typeof navigator === 'undefined') {
+      return 'en';
     }
+
     // Detects the preferred language according to the browser, whenever possible
-    let code: string = (window.navigator.languages ? window.navigator.languages[0] : null) || 
-                        window.navigator.language || 
-                        window.navigator.browserLanguage || 
-                        window.navigator.userLanguage;
+    let code: string = (navigator.languages ? navigator.languages[0] : null) || 
+                        navigator.language || 
+                        navigator.browserLanguage || 
+                        navigator.userLanguage;
 
     // Returns the relevant part of the language code (ex: 'en-US' -> 'en')
     return code.split('-')[0];

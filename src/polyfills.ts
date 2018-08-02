@@ -72,8 +72,8 @@ import 'core-js/es7/reflect';
  */
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
-
-
 /***************************************************************************************************
- * APPLICATION IMPORTS
+ * CUSTOM NODE SHIMS - since Angular is dropping node shims from version 6
  */
+
+ import './node-shims';

@@ -24,19 +24,20 @@ type pageTypes = 'register' |
 })
 export class LoginComponent implements OnInit  {
 
-  private page: pageTypes;
-  private error: string = null;
-  private code: string;
-  private progress = false;
-  private msgs = null;
-  private hide = true;
+  public page: pageTypes;
+  public error: string = null;
+  public progress = false;
+  public msgs = null;
+  public hide = true;
 
-  private form: FormGroup;
-  private name: FormControl;
-  private email: FormControl;
-  private password: FormControl;
-  private newEmail: FormControl;
-  private newPassword: FormControl;
+  private code: string;
+
+  public form: FormGroup;
+  public name: FormControl;
+  public email: FormControl;
+  public password: FormControl;
+  public newEmail: FormControl;
+  public newPassword: FormControl;
   
   constructor(private content : ContentService,
               private router  : Router, 
@@ -190,7 +191,7 @@ export class LoginComponent implements OnInit  {
     }
   }
 
-  private get pageData() {
+  public get pageData() {
     return this.msgs.pages[this.page];
   }
 
@@ -209,7 +210,7 @@ export class LoginComponent implements OnInit  {
   }
 
   // Execute the form requested action
-  private loginAction() {
+  public loginAction() {
     
     switch(this.page) {
 
@@ -250,7 +251,7 @@ export class LoginComponent implements OnInit  {
     }
   }
 
-  private signInWith(provider: string) { 
+  public signInWith(provider: string) { 
 
     this.progress = true;;
 

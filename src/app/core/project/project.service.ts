@@ -1,12 +1,38 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
-import { DatabaseService, dbDocument, QueryFn } from '../database/database.service';
+import { DatabaseService, dbDocument, QueryFn, Timestamp } from '../database/database.service';
 import { wmProject, wmApplication, wmDevelopment } from './data-model';
 export { wmProject, wmApplication, wmDevelopment } from './data-model';
 
 import { Observable, of } from 'rxjs';
 import { filter, map, tap, take, debounceTime } from 'rxjs/operators';
+/*
+import * as moment from 'moment';
 
+export class WMProject {
+  
+  constructor(public data: wmProject, private factory: ProjectService) { }
+
+  // Internal timestamp conversion helpers
+  private tsToNumber(ts: Timestamp) { return ts ? ts.toMillis() : 0;}
+  private tsToDate(ts: Timestamp) { return ts ? ts.toDate() : new Date(null);}
+  private tsToMoment(ts: Timestamp): moment.Moment { return ts ? moment( ts.toDate() ) : moment();}
+
+  // Ownership helper
+  get isMine(): boolean { return this.data.owner === this.factory.userId;}
+
+  // Timestamp helpers
+  get created()   : Date { return this.tsToDate(this.data.created);}
+  get createdN()  : number { return this.tsToNumber(this.data.created);}
+  get createdM()  : moment.Moment { return this.tsToMoment(this.data.created);}
+  get modified()  : Date { return this.tsToDate(this.data.updated);}
+  get modifiedN() : number { return this.tsToNumber(this.data.updated);}
+  get modifiedM() : moment.Moment { return this.tsToMoment(this.data.updated);}
+
+  // Project management functions
+  public delete() : Promise<void> { return this.factory.deleteProject(this.data.id);}
+}
+*/
 @Injectable({
   providedIn: 'root'
 })
@@ -19,27 +45,29 @@ export class ProjectService {
               private db:   DatabaseService) {
   }
 
-  get owner() {
-    return this.auth.userId;
+  public get userId(): string { return this.auth.userId;}
+
+  public isProjectMine(project: wmProject) : boolean {
+    return project.owner === this.userId;
   }
 
   public listProjects(queryFn? : QueryFn): Observable<wmProject[]> {
-    return this.db.colWithIds$<wmProject>('/projects', queryFn);
+    return this.db.colWithIds$<wmProject>('/projects', queryFn);/*.pipe( 
+      map( a => a.map( w => new WMProject(w, this) ))
+    );*/
   }
 
-  public listOwnProjects(): Observable<wmProject[]> {
-    return this.db.colWithIds$<wmProject>('/projects', ref => 
-      ref.where('owner', '==', this.owner));
+  public listOwnProjects(queryFn? : QueryFn): Observable<wmProject[]> {
+    return this.listProjects( ref => 
+      queryFn ? queryFn( ref.where('owner', '==', this.userId) ): 
+                         ref.where('owner', '==', this.userId) );
   }
 
   public doesProjectExists(name: string): Promise<boolean> {
     
-    // Query the projects collection searching for a matching name
-    // excluding the currentId to avoid false positive
+    // Query the projects collection searching for a matching lowerCaseName
     return this.db.col$<wmProject>('projects', ref => {
         return ref.where('lowerCaseName', '==', name.toLowerCase());
-                  //.where(this.db.sentinelId, '<', this.currentId)
-                  //.where(this.db.sentinelId, '>', this.currentId);
       } 
     ).pipe(
       debounceTime(500),
@@ -48,45 +76,65 @@ export class ProjectService {
     ).toPromise();
   }
 
-  public addProject(data: wmProject): Promise<boolean> {
+  // Helper to formst the data payload
+  private formatData(data: any): any {
 
-    const owner = this.auth.userId;
-    
-    // Creates a lower case version of the name for searching purposes
+    // Trims the name and creates a lower case version of it for searching purposes 
     if(data.name) {
+      data.name = data.name.trim();
       data['lowerCaseName'] = data.name.toLowerCase();
     }
 
-    return this.db.add<wmProject>('/projects', { ...data, owner })
+    // Makes sure data payload always specifies the owner
+    return { ...data, owner: this.userId };
+  }
+
+  private markProjectBody(data: wmApplication): string {
+    return "";
+  }
+
+  public createProject(data: wmApplication): Promise<void> {
+
+    let prj: wmProject = {
+
+      name  : data.name,
+      pitch : data.pitch,
+      body  : this.markProjectBody(data)
+
+    };
+    
+    // TODO: Implements the project creation from an application
+    return this.addProject(prj);
+  }
+
+  public addProject(data: wmProject): Promise<void> {
+
+    // Adds a new project
+    return this.db.add<wmProject>('/projects', this.formatData(data) )
       .then( ref => {
         this.currentId = (ref ? (ref.ref ? ref.ref.id : null) : null);
-        return (this.currentRef = ref) != null;
+        this.currentRef = ref;
       });
   }
 
   public updateProject(data: wmProject): Promise<void> {
 
-    // Makes sure to keep a lower case version of the name for searching purposes
-    if(data.name) {
-      data['lowerCaseName'] = data.name.toLowerCase();
+    // Updates the existing project
+    if(this.currentRef !== null) {
+      return this.db.merge<wmProject>(this.currentRef, this.formatData(data) );
     }
 
-    if(this.currentRef === null) {
-      return Promise.reject('ref == null');
-    }
-
-    return this.db.merge<wmProject>(this.currentRef, data);
+    return Promise.reject('ref == null');
   }
 
-  public updateApplication(data: wmApplication): Promise<void> {
-    return this.updateProject({ application: {...data} } as wmProject);
-  }
+  public queryProject(id?: string): Observable<wmProject> {
 
-  public queryProject(ref?: string): Observable<wmProject> {
+    if(id || this.currentId) {
 
-    if(ref || this.currentId) {
+      let ref = `/projects/${id || this.currentId}`;
 
-      return this.db.docWithId$<wmProject>(ref = `/projects/${ref || this.currentId}`).pipe(
+      // Query for the project coming with the requested id
+      return this.db.docWithId$<wmProject>(ref).pipe(
         tap( doc => {
           this.currentId = doc.id;
           this.currentRef = ref;
@@ -97,13 +145,14 @@ export class ProjectService {
     return of(null);
   }
 
-  public deleteProject(): Promise<void> {
+  public deleteProject(id?: string): Promise<void> {
     
-    if(this.currentRef === null) {
-      return Promise.reject('ref == null');
+    if(!id && !this.currentId) {
+      return Promise.reject('null id or reference');
     }
 
-    return this.db.delete(this.currentRef)
-      .then( () => this.currentId = null);
+    // Deletes the project coming with the requested id
+    return this.db.delete(`/projects/${id || this.currentId}`)
+      .then( () => { this.currentId = null; this.currentRef = null; });
   }
 }

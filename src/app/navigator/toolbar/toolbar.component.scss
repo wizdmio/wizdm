@@ -1,5 +1,7 @@
 @import 'src/theme';
 
+$wm-avatar-size: 36px;
+
 .link-active {
   text-decoration: underline;
 }
@@ -8,18 +10,17 @@ a {
   font-size: mat-font-size($wm-typography, subheading-1);
   margin: 0 2px;
 }
-/*
-a:last-child {
-  background-color: mat-color($wm-primary, A400);
-  color: mat-contrast($wm-primary, A400);
-}
-*/
+
 .highlight {
   background-color: mat-color($wm-primary, A400);
   color: mat-contrast($wm-primary, A400);
 }
 
 .avatar {
-  width: 36px;
+  width: $wm-avatar-size;
+  height: $wm-avatar-size;
+  
   border-radius: 50%;
+
+  fill: mat-color($wm-primary);
 }

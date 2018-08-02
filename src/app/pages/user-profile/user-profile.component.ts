@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from 'app/core';
-import { PopupService } from 'app/shared';
+import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from '../../core';
+import { PopupService } from '../../shared';
 import { UserProfileItemComponent, UserItemValidators } from './user-profile-item/user-profile-item.component';
 
 import * as moment from 'moment';
@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     this.langOptions = this.content.languageOptions;
   }
 
-  private profileEditable(key: string) {
+  public profileEditable(key: string) {
     
     // Hardcoded editable flag to prevent unwanted db modifications
     return key === 'profile:name' ||
@@ -49,7 +49,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
            key === 'profile:lang';
   }
 
-  private profileValue(key: string): string {
+  public profileValue(key: string): string {
 
     let keys = key.split(':');
 
@@ -68,7 +68,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     return source[ keys[1] ];
   }
 
-  private profileOptions(key: string) {
+  public profileOptions(key: string) {
 
     switch(key) {
 
@@ -85,7 +85,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     return null;
   }
 
-  private profileValidators(key: string): UserItemValidators {
+  public profileValidators(key: string): UserItemValidators {
 
     return key == 'profile:email' ?  {
 
@@ -95,7 +95,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     } : null;
   }
 
-  private updateUserProfile(key: string, value: any) {
+  public updateUserProfile(key: string, value: any) {
   
     let keys = key.split(':');  
 
@@ -113,12 +113,12 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     }
   }
 
-  // Checks if some of the profile items is i edit mode
-  private get itemChanges() {
+  // Checks if some of the profile items is in edit mode
+  public get itemChanges() {
     return this.profileItems && this.profileItems.some( item => item.edit );
   }
 
-  private applyAllItemChanges(): boolean {
+  public applyAllItemChanges(): boolean {
 
     let success = true;
 
@@ -132,7 +132,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     return success;
   }
 
-  private panelClose(index: number) {
+  public panelClose(index: number) {
 
     // Applies all the changes...
     if(!this.applyAllItemChanges()) {
@@ -147,7 +147,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     }
   }
 
-  private action(code: string) {
+  public action(code: string) {
 
     // Prepare the right popup according to the action code
     let popup = this.msgs.popups[code];
@@ -168,7 +168,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     });
   }
 
-  private disabled(code: string): boolean {
+  public disabled(code: string): boolean {
 
     // Disable the emailVerify action in case the account email has been verified already
     if(code === 'emailVerify') {

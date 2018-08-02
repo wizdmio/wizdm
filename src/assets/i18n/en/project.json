@@ -1,0 +1,8 @@
+{
+  "canDelete": {
+    "title": "Deleting project",
+    "message": "WARNING, by proceeding you'll permanently delete this project.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
+  }
+}

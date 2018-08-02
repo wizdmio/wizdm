@@ -23,6 +23,8 @@
     "login": "login.json",
     "profile": "profile.json",
     "browser": "browser.json",
+    "project": "project.json",
+    "people": "people.json",
     "apply": "apply.json",
     "about": "about.json",
     "shortTerms": "terms-short.json",

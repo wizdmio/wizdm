@@ -1,10 +1,25 @@
 {
   "title": "Explore projects",
-  "description": "Here's the list of projects the community is working on",
+  "description": "Here's where you can browse the community' projects",
   
-  "filters": {
-    "active": "All active",
-    "pending": "Just submitted",
-    "personal": "My projects"
-  }
+  "tabs": [
+    {
+      "label": "My projects",
+      "source": "personal",
+      "description": "Here's the list of your projects",
+      "actions": [
+        { "label": "Apply for a new project", "icon": "add", "link": "../apply" }
+      ]
+    },
+    {
+      "label": "Just submitted",
+      "source": "pending",
+      "description": "Here's the list of the recently submitted projects"
+    },
+    {
+      "label": "All active",
+      "source": "active",
+      "description": "Here's the list of all active projects the community is working on"
+    }
+  ]
 }

@@ -3,16 +3,28 @@
   "title": "New application",
   "description": "Follow the next simple steps to apply for a new project",
 
-  "appName": {
-    
+  "header": {
     "title": "Name your application",
     "description": "Do you already have a name you'd like to call your app with?",
-    "label": "App name", 
-    "hint": "This name will be used to save your application and can be changed any time",
-    "errors": {
-      "required": "Application name is mandatory to proceed, please specify it",
-      "alreadyExist": "Apologize, this name already exists",
-      "somethingWrong": "Something went wrong, try again later"
+    
+    "name": {
+      "label": "Application name", 
+      "hint": "This name will be used to save your application and can be changed any time",
+      "errors": {
+        "required": "Application name is mandatory to proceed, please specify it",
+        "alreadyExist": "Apologize, this name already exists",
+        "somethingWrong": "Something went wrong, try again later"
+      }
+    },
+    "pitch": {
+      "label": "Elevator pitch", 
+      "hint": "Try to describe your idea in a simple compelling sentence",
+      "rows": 3,
+      "max": 180,
+      "errors": {
+        "required": "This is a key field, please do your best here",
+        "maxLength": "You're exceeding the maximum length"
+      }
     }
   },
 
@@ -112,7 +124,7 @@
 
   "canLeave": {
     "title": "Unsaved changes",
-    "message": "Are you leaving? The draft of this application will be listed among your pending projects for you to be reviewed later.",
+    "message": "Are you leaving? The draft of this application will be saved till the next time you'll apply.",
     "cancel": "Cancel",
     "ok": "Proceed"
   },

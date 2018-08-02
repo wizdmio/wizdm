@@ -7,14 +7,12 @@
   box-sizing: border-box;
 
   padding-top: $wm-content-padding;
-  margin: 0 $wm-content-margin;
+  
+  & > header {
+    margin: 0 $wm-content-margin;
+  }
 }
 
 mat-grid-list {
   margin: 32px;
-}
-
-mat-grid-tile {
-  border: 1px solid map-get($wm-theme-foreground, divider);
-  border-radius: 5px;
 }

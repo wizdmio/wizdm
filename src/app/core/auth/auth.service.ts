@@ -103,7 +103,7 @@ export class AuthService implements OnDestroy {
     return this.db.upsert<UserData>(`users/${user.uid}`, data);
   }
 
-  public updateUserProfile(data: UserData) : Promise<void> {
+  public updateUserProfile(data: UserData | any) : Promise<void> {
     return this.db.merge<UserData>(`users/${this.userId}`, data);
   }
 

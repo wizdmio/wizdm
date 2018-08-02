@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ContentService, AuthService } from '../../core';
 import { toolbarAnimations } from './toolbar-animations';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-toolbar',
@@ -16,9 +16,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input()  toggler = false;
   @Input()  divider = false;
-  //@Input()  signedIn = false;
 
-  private msgs: any = null;
+  public msgs: any = null;
   private sub: Subscription;
 
   constructor(private content: ContentService,
@@ -31,38 +30,31 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.msgs = this.content.select("navigator");
     
       // Listen for NavigationEnd events to close the menu
-      this.sub = this.router
-      .events.pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe( (value: NavigationEnd) => {
+      this.sub = this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+        .subscribe( (value: NavigationEnd) => {
 
-        // Closes the sidenav drawer after navigation
-        if(this.toggler) {
-          this.toggle();
-        }
-      });
+          // Closes the sidenav drawer after navigation
+          if(this.toggler) {
+            this.toggle();
+          }
+        });
     }
 
     ngOnDestroy() {
-      if(this.sub) {
-        this.sub.unsubscribe();
-      }
+      this.sub.unsubscribe();
     }
 
-    get signedIn(): boolean {
+    public get signedIn(): boolean {
       return this.auth.authenticated;
     }
 
-    get userImage(): string {
+    public get userImage(): string {
 
-      if(!this.auth.userProfile) {
-        return this.msgs.user.avatar; 
-      }
-
-      return this.auth.userProfile.img || 
-             this.msgs.user.avatar;
+      return this.auth.userProfile ? 
+        this.auth.userProfile.img : null; 
     }
     
-    private toggle() {
+    public toggle() {
       this.togglerChange.emit(this.toggler = !this.toggler);
     }
 }

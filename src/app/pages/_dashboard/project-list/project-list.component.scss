@@ -1,7 +1,0 @@
-@import "src/variables";
-@import "src/theme";
-
-mat-grid-tile {
-  border: 1px solid map-get($wm-theme-foreground, divider);
-  border-radius: 5px;
-}

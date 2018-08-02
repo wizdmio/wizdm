@@ -7,7 +7,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class DisclaimerComponent {
 
-  private segments: any[];
+  public segments: any[];
 
   constructor() { }
   

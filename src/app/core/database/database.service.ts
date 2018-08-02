@@ -23,6 +23,7 @@ targetObservable = combineLatest( filter1, filter2 ).pipe(
   )
 );*/
 export type QueryFn = (ref: firebase.firestore.CollectionReference | firebase.firestore.Query) => firebase.firestore.Query;
+export type Timestamp = firebase.firestore.Timestamp;
 
 @Injectable({
   providedIn: 'root'

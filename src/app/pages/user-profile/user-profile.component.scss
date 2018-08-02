@@ -7,18 +7,16 @@
   box-sizing: border-box;
 
   padding: $wm-content-padding 0;
-  margin: 0 $wm-content-margin;
+
+  & > header {
+    margin: 0 $wm-content-margin;
+  }
+
+  & > mat-accordion {
+    padding: 2vh 5vw;
+  }
 }
 
 mat-list {
   overflow: hidden;
-}
-
-.highlight {
-  background-color: mat-color($wm-primary, A400);
-  color: mat-contrast($wm-primary, A400);
-
-  &[disabled] {
-    background-color: transparent;
-  }
 }

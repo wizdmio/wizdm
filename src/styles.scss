@@ -7,11 +7,11 @@ $material-icons-font-path: '~material-icons/iconfont/';
 //@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 // Host fontawesome free icons
-$fa-font-path: "~@fortawesome/fontawesome-free-webfonts/webfonts";
-@import "~@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free-webfonts/scss/fa-regular";
-@import "~@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
-@import "~@fortawesome/fontawesome-free-webfonts/scss/fa-brands";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
 
 // Load the main Ubuntu google font from the web
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');

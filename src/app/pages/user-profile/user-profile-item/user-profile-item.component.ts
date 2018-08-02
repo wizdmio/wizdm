@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { DateAdapter } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { ContentService } from 'app/core';
+import { ContentService } from '../../../core';
 import { $itemAnimations } from './user-profile-item-animations';
 
 import * as moment from 'moment';
@@ -39,10 +39,9 @@ export class UserProfileItemComponent implements OnInit, OnDestroy {
   private control: FormControl;
   private errors: any = {};
 
-  public edit = false;// Switch between view/edit mode
-
   private subMedia: Subscription;
-  private mobile = false;
+  public  mobile = false;
+  public edit = false;// Switch between view/edit mode
 
   constructor(private content : ContentService,
               private media   : ObservableMedia,
@@ -92,7 +91,7 @@ export class UserProfileItemComponent implements OnInit, OnDestroy {
     this.subMedia.unsubscribe();
   }
 
-  private get errorMessage() {
+  public get errorMessage() {
     
     // Evaluates the validation reported errors
     let errors = Object.keys(this.control.errors);
@@ -124,7 +123,7 @@ export class UserProfileItemComponent implements OnInit, OnDestroy {
     return option;
   }
 
-  private get displayValue(): string {
+  public get displayValue(): string {
 
     if(this.type === 'date') {
       return this.value ? moment(this.value).format('ll') : '';
@@ -133,7 +132,7 @@ export class UserProfileItemComponent implements OnInit, OnDestroy {
     return this.matchedOption.label || this.value;
   }
 
-  private get displayIcon(): string {
+  public get displayIcon(): string {
     return this.matchedOption.icon || this.icon;
   }
 
@@ -144,7 +143,7 @@ export class UserProfileItemComponent implements OnInit, OnDestroy {
     this.control.reset();
   }
 
-  private editMode() {
+  public editMode() {
 
     // Makes sure to properly convert the value into a moment object whenever it's undefined or null
     let value = this.type === 'date' ? this.value ? moment(this.value) : moment() : this.value;

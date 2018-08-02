@@ -70,7 +70,7 @@
       "ok": "Proceed"
     },
 
-    "deleteAccount": {
+    "delete": {
       "title": "Deleting account",
       "message": "WARNING, by proceeding you'll permanently delete your account and all the related data. You'll be asked to confirm your identity by re-authenticating.",
       "cancel": "Cancel",

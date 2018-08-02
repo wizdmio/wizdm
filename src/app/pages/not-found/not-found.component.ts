@@ -11,9 +11,9 @@ import { $defaultMsgs } from './not-found-defaults';
 })
 export class NotFoundComponent implements OnInit, OnDestroy {
 
-  private countdown: number = 5;
   private timeout = null; 
-  private msgs: any;
+  public msgs: any;
+  public countdown = 5;
 
   constructor(private content: ContentService,
               private router: Router) { }

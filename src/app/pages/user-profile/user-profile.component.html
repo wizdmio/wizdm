@@ -1,5 +1,8 @@
-<h1>{{msgs.title}}</h1>
-<p>{{msgs.description}}</p>
+<header fxLayout="column">
+  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+  <p fxHide.lt-sm>{{ msgs.description }}</p>
+</header>
 
 <mat-accordion>
 

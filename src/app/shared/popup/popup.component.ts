@@ -16,7 +16,7 @@ export interface PopupData {
 export class PopupComponent implements OnInit {
 
   constructor(private ref: MatDialogRef<PopupComponent>, 
-              @Inject(MAT_DIALOG_DATA) private data: PopupData ) { }
+              @Inject(MAT_DIALOG_DATA) public data: PopupData ) { }
 
 
   ngOnInit() {

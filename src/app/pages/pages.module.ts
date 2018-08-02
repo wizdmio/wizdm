@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-
 //--------
 import { SharedModule } from '../shared/shared.module';
 import { HandlerComponent } from './handler/handler.component';
@@ -11,14 +10,13 @@ import { AboutComponent } from './about/about.component';
 import { TermsPrivacyComponent } from './terms-privacy/terms-privacy.component';
 import { TermsPrivacyPopupComponent } from './terms-privacy/terms-privacy-popup.component';
 import { LoginComponent } from './login/login.component';
-//import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserProfileItemComponent } from './user-profile/user-profile-item/user-profile-item.component';
-//import { ProjectListComponent } from './dashboard/project-list/project-list.component';
-//import { ProjectTileComponent } from './dashboard/project-list/project-tile/project-tile.component';
 import { ApplyComponent } from './apply/apply.component';
-import { BrowserComponent } from './browser/browser.component';
-import { ProjectComponent } from './project/project.component';
+import { ProjectBrowserComponent } from './project-browser/project-browser.component';
+import { ProjectBrowserItemComponent } from './project-browser/project-browser-item/project-browser-item.component';
+import { ProjectComponent } from './project-browser/project/project.component';
+import { PeopleBrowserComponent } from './people-browser/people-browser.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -36,14 +34,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
     TermsPrivacyComponent,
     TermsPrivacyPopupComponent,
     LoginComponent,
-    //DashboardComponent,
     UserProfileComponent,
     UserProfileItemComponent,
-    //ProjectListComponent,
-    //ProjectTileComponent,
     ApplyComponent,
-    BrowserComponent,
+    ProjectBrowserComponent,
+    ProjectBrowserItemComponent,
     ProjectComponent,
+    PeopleBrowserComponent,
     NotFoundComponent
   ],
 

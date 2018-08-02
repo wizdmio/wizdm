@@ -1,5 +1,5 @@
 
-export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft';
+export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed';
 
 export interface wmProjectLog {
 
@@ -11,17 +11,15 @@ export interface wmProjectLog {
 
 export interface wmApplication {
 
-  description?   : string,
-  revenues?      : string,
-  context?       : {
-    players?     : string,
-    differences? : string
-  },
-  market         : {
-    users?       : string,
-    target?      : string
-  },
-  comments?      : string
+  name?          : string, // Application name
+  pitch?         : string, // Elevator pitch
+  description?   : string, // Background description
+  revenues?      : string, // Revenue streams
+  players?       : string, // Other similar players
+  differences?   : string, // Uniquenesses
+  users?         : string, // Target users
+  target?        : string, // Target market (geo, ...)
+  comments?      : string  // Aditional comments
 }
 
 export interface wmDevelopment {
@@ -35,12 +33,18 @@ export interface wmProject {
   
   id?          : string,
   name         : string,
-  application? : wmApplication,
-  development? : wmDevelopment,
+  pitch?       : string,
+
+  body?        : string, // markdown formatted description
+
+  //development? : wmDevelopment,
+  
   owner?       : string,
   team?        : string[],
+  
   status?      : wmProjectStatus,
   history?     : wmProjectLog[],
+  
   created?     : any,
   updated?     : any
 }

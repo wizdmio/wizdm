@@ -9,7 +9,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 export class HandlerComponent implements OnInit {
 
   constructor(private router : Router, 
-              private route : ActivatedRoute) { }
+              private route  : ActivatedRoute) { }
 
   ngOnInit() {
 
