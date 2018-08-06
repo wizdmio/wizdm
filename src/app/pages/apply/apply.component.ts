@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
 import { ContentService, CanPageDeactivate, AuthService, ProjectService } from 'app/core';
-import { PopupComponent } from 'app/shared';
+import { PopupService } from 'app/shared';
+import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
+import { $animations } from './apply.animations';
 
 @Component({
   selector: 'wm-apply',
   templateUrl: './apply.component.html',
-  styleUrls: ['./apply.component.scss']
+  styleUrls: ['./apply.component.scss'],
+  animations: $animations
 })
 export class ApplyComponent implements OnInit, CanPageDeactivate {
 
   public headerForm: FormGroup;
   public stepForms : FormGroup[] = [];
+  public welcomeBack = false;
   public progress = false;
   public msgs;
 
@@ -24,20 +27,27 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
               private content : ContentService,
               private auth    : AuthService,
               private project : ProjectService,
-              private dialog  :  MatDialog) { }
+              private toolbar : ToolbarService,
+              private dialog  : PopupService) { }
 
   ngOnInit() {
 
     // Gets the localized user messages from content manager
     this.msgs = this.content.select('apply');
 
+    // Checks if the application was previously saved
+    this.welcomeBack = this.application !== null;
+
     // Build the stepper forms initializing the field values with the last application eventually saved
     this.buildForm(this.application || {});
+
+    this.toolbar.activateActions(this.msgs.actions)
+      .subscribe( code => this.disclaimerAction(code) );
   }
 
   // Helpers to deal with the temporary application 
   private get application() {
-    return this.auth.userProfile['lastApplication'];
+    return this.auth.userProfile['lastApplication'] || null;
   }
 
   private resetApplication(): Promise<void> { 
@@ -48,6 +58,19 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
     return this.auth.updateUserProfile( { lastApplication: value })
       .then(() => console.log("application updated") )
       .catch(error => console.log("something wrong: " + error.code) );
+  }
+
+  public clearApplication() {
+
+    // Clear the welcomeBack flag
+    this.welcomeBack = false;
+
+    // Resets the forms
+    this.headerForm.reset();
+    this.stepForms.forEach( step => step.reset() ); 
+
+    // Resets the previously saved application data
+    return this.resetApplication();
   }
 
   public errorMessage(controlErrors: any, errorMessages: any): string {
@@ -166,19 +189,33 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
       });
   }
 
-  public popupTerms() {
+  public disclaimerAction(action: string) {
 
-    // Pops up the terms-privacy conditions without leaving the page
-    this.dialog.open(TermsPrivacyPopupComponent);
+    switch(action) {
+
+      // Pops up the terms-privacy conditions without leaving the page
+      case 'terms':
+      
+      this.dialog.open(TermsPrivacyPopupComponent);
+      break;
+
+      // Clears the forrm and the previously saved application to start from 
+      case 'clear':
+      
+      this.dialog.confirmPopup(this.msgs.canClear)
+        .subscribe( () => this.clearApplication() );
+      break;
+
+      default:
+      console.error('Unexpected action code', action);
+      break;
+    }
   }
 
   public canDeactivate() {
 
     // Enable deactivation (leaving the page) in case no appliaction has been created yet or the user agrees when asked (popup)
-    return !this.application || this.dialog.open(PopupComponent, { 
-        data: this.msgs.canLeave,
-        maxWidth: 500,
-      }).afterClosed();
+    return !this.application || this.dialog.popupDialog(this.msgs.canLeave);
   }
 }
 

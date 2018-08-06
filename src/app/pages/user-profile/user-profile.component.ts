@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from '../../core';
-import { PopupService } from '../../shared';
+import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from 'app/core';
+import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
+import { PopupService } from 'app/shared';
 import { UserProfileItemComponent, UserItemValidators } from './user-profile-item/user-profile-item.component';
 
 import * as moment from 'moment';
@@ -23,6 +24,7 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
 
   constructor(private content : ContentService,
               private auth    : AuthService,
+              private toolbar : ToolbarService,
               private popup   : PopupService,
               private router  : Router,
               private route   : ActivatedRoute) { }
@@ -35,6 +37,8 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     // the *ngFor on mat-select to run over an infinite loop due to an issue
     // it seems they still can't fix
     this.langOptions = this.content.languageOptions;
+
+    this.toolbar.activateActions(this.msgs.actions);
   }
 
   public profileEditable(key: string) {
@@ -153,18 +157,16 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     let popup = this.msgs.popups[code];
 
     // Ask for confirmation prior to initiate the requested action
-    ( popup ? this.popup.popupDialog(popup) : Promise.resolve<boolean>(true) )
-      .then( proceed => {
+    // Note: the function resolves to of(true) in case popup is null
+    this.popup.confirmPopup(popup).subscribe( () => {
 
         // If we can proceed, navigates to the login page applying the requested action code
-        if(proceed) {
-          this.router.navigate(['..','login'], {
-            relativeTo: this.route, 
-            queryParams: { 
-              mode: code 
-            } 
-          });
-        }
+        this.router.navigate(['..','login'], {
+          relativeTo: this.route, 
+          queryParams: { 
+            mode: code 
+          } 
+        });
     });
   }
 

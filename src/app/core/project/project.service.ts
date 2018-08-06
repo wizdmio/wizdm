@@ -89,7 +89,7 @@ export class ProjectService {
     return { ...data, owner: this.userId };
   }
 
-  private markProjectBody(data: wmApplication): string {
+  private markDocument(data: wmApplication): string {
     return "";
   }
 
@@ -97,9 +97,9 @@ export class ProjectService {
 
     let prj: wmProject = {
 
-      name  : data.name,
-      pitch : data.pitch,
-      body  : this.markProjectBody(data)
+      name     : data.name,
+      pitch    : data.pitch,
+      document : this.markDocument(data)
 
     };
     

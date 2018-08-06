@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { ContentService, ProjectService, wmProject, Timestamp } from '../../core';
+import { ContentService, ProjectService, wmProject, Timestamp } from 'app/core';
+import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
 import { $animations } from './project-browser.animations';
@@ -26,6 +27,7 @@ export class ProjectBrowserComponent implements OnInit, AfterContentInit, OnDest
   //private filters$ = new BehaviorSubject<QueryFn>(undefined);
   
   constructor(private content: ContentService,
+              private toolbar : ToolbarService,
               private database: ProjectService,
               private media: ObservableMedia) {}
 
@@ -33,6 +35,9 @@ export class ProjectBrowserComponent implements OnInit, AfterContentInit, OnDest
 
     // Gets the localized content
     this.msgs = this.content.select('browser');
+
+    // Enables the toolbar actions
+    this.toolbar.activateActions(this.msgs.actions);
 
     this.loadMyProject();
   }

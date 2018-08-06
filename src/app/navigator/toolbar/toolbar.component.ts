@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { ContentService, AuthService } from '../../core';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { ContentService, AuthService } from 'app/core';
+import { ToolbarService } from './toolbar.service';
 import { toolbarAnimations } from './toolbar-animations';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-toolbar',
@@ -16,13 +15,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input()  toggler = false;
   @Input()  divider = false;
-
+  
   public msgs: any = null;
-  private sub: Subscription;
 
-  constructor(private content: ContentService,
-              private auth: AuthService,
-              private router: Router) { }
+  constructor(private content : ContentService,
+              private toolbar : ToolbarService,
+              private auth    : AuthService,
+              private router  : Router) { }
 
     ngOnInit() {
 
@@ -30,18 +29,28 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.msgs = this.content.select("navigator");
     
       // Listen for NavigationEnd events to close the menu
-      this.sub = this.router.events.pipe(filter(e => e instanceof NavigationEnd))
-        .subscribe( (value: NavigationEnd) => {
+      this.router.events.subscribe( e => {
 
-          // Closes the sidenav drawer after navigation
-          if(this.toggler) {
-            this.toggle();
-          }
-        });
+        // Clears the action buttons when navigating to a new page
+        if(e instanceof NavigationStart) { 
+          this.toolbar.clearActions();
+        }
+
+        // Closes the sidenav drawer after navigation
+        if(e instanceof NavigationEnd && this.toggler) { 
+          this.toggle();
+        }
+      });
     }
 
-    ngOnDestroy() {
-      this.sub.unsubscribe();
+    ngOnDestroy() {}
+
+    public get actionButtons() {
+      return this.toolbar.buttons;
+    }
+
+    public performAction(code: string) {
+      this.toolbar.performAction(code);
     }
 
     public get signedIn(): boolean {

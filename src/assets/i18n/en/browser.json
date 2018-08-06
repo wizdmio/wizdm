@@ -1,15 +1,17 @@
 {
   "title": "Explore projects",
   "description": "Here's where you can browse the community' projects",
+
+  "actions": [
+    { "caption": "DEBUG", "icon": "bug_report", "link": "./projects/1" },
+    { "caption": "Apply for a new project", "icon": "add", "link": "./apply" }
+  ],
   
   "tabs": [
     {
       "label": "My projects",
       "source": "personal",
-      "description": "Here's the list of your projects",
-      "actions": [
-        { "label": "Apply for a new project", "icon": "add", "link": "../apply" }
-      ]
+      "description": "Here's the list of your projects"
     },
     {
       "label": "Just submitted",

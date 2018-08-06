@@ -1,59 +1,105 @@
-<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+<mat-toolbar>
 
-  <wm-logo></wm-logo>
- 
-  <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
-    
-    <!-- PRIVATE MENU -->
-    <ng-container *ngIf="signedIn; else public">
-      <a mat-button *ngFor="let item of msgs.menu.private" 
-                     routerLinkActive="link-active" 
-                    [routerLink]="item.link"
-                    [queryParams]="item.params"
-                    [ngClass]="{'highlight': item.highlight}">
-        {{item.label}}
-      </a>
+  <!-- NAVIGATION TOOLBAR -->
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+
+    <wm-logo></wm-logo>
+  
+    <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
+      
+      <!-- PRIVATE MENU -->
+      <ng-container *ngIf="signedIn; else public">
+        <a mat-button *ngFor="let item of msgs.menu.private" 
+                      routerLinkActive="link-active" 
+                      [routerLink]="item.link"
+                      [queryParams]="item.params"
+                      [ngClass]="{'highlight': item.highlight}">
+          {{item.label}}
+        </a>
+
+        <!-- USER PROFILE BUTTON -->
+        <button mat-icon-button routerLink="profile">
+          <img *ngIf="userImage" class="avatar" [src]="userImage" />
+          <svg *ngIf="!userImage" class="avatar"> 
+            <use xlink:href="#avatar"></use>
+          </svg>
+        </button>
+      </ng-container>
+
+      <!-- PUBLIC MENU -->
+      <ng-template #public>
+        <a mat-button *ngFor="let item of msgs.menu.public" 
+                      routerLinkActive="link-active" 
+                      [routerLink]="item.link"
+                      [queryParams]="item.params"
+                      [ngClass]="{'highlight': item.highlight}">
+          {{item.label}}
+        </a>
+      </ng-template>
+
+    </section>
+        
+    <section fxLayout="row" fxLayoutAlign="end center" fxHide="true" fxShow.lt-sm="true">
 
       <!-- USER PROFILE BUTTON -->
-      <button mat-icon-button routerLink="profile">
+      <button mat-icon-button routerLink="profile" *ngIf="signedIn">
         <img *ngIf="userImage" class="avatar" [src]="userImage" />
         <svg *ngIf="!userImage" class="avatar"> 
           <use xlink:href="#avatar"></use>
         </svg>
       </button>
+
+      <!-- MENU TOGGLER -->
+      <button mat-icon-button (click)="toggle()">
+        <wm-toggler [status]="toggler">
+        </wm-toggler>
+      </button>
+  </section>
+
+</mat-toolbar-row>
+
+<!-- PAGE ACTION BAR -->
+<mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" *ngIf="actionButtons?.length">
+
+  <!-- ACTION BUTTONS or LINKS -->
+<ng-container *ngFor="let button of actionButtons">
+
+    <!-- ACTION BUTTON -->
+    <ng-container *ngIf="button.action">
+      
+      <!-- TEXT BUTTON (DESKTOP) -->
+      <button mat-button color="primary" [fxHide.lt-sm]="button.icon" (click)="performAction(button.action)">
+        {{button.caption}}
+      </button>
+
+      <!-- ICON BUTTON (MOBILE) -->
+      <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button.icon" (click)="performAction(button.action)">
+        <wm-icon [icon]="button.icon"></wm-icon>
+      </button>
+
     </ng-container>
 
-    <!-- PUBLIC MENU -->
-    <ng-template #public>
-      <a mat-button *ngFor="let item of msgs.menu.public" 
-                     routerLinkActive="link-active" 
-                    [routerLink]="item.link"
-                    [queryParams]="item.params"
-                    [ngClass]="{'highlight': item.highlight}">
-        {{item.label}}
-      </a>
-    </ng-template>
-
-  </section>
+    <!-- ACTION LINK -->
+    <ng-container *ngIf="button.link">
       
-  <section fxLayout="row" fxLayoutAlign="end center" fxHide="true" fxShow.lt-sm="true">
+      <!-- TEXT LINK (DESKTOP) -->
+      <a mat-button color="primary" [fxHide.lt-sm]="button.icon" [routerLink]="button.link" [queryParams]="button.params">
+        {{button.caption}}
+      </a>
 
-    <!-- USER PROFILE BUTTON -->
-    <button mat-icon-button routerLink="profile" *ngIf="signedIn">
-      <img *ngIf="userImage" class="avatar" [src]="userImage" />
-      <svg *ngIf="!userImage" class="avatar"> 
-        <use xlink:href="#avatar"></use>
-      </svg>
-    </button>
+      <!-- ICON LINK (MOBILE) -->
+      <a mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button.icon" [routerLink]="button.link" [queryParams]="button.params">
+        <wm-icon [icon]="button.icon"></wm-icon>
+      </a>
 
-    <!-- MENU TOGGLER -->
-    <button mat-icon-button (click)="toggle()">
-      <wm-toggler [status]="toggler">
-      </wm-toggler>
-    </button>
-</section>
+    </ng-container>
+
+  </ng-container>
+
+</mat-toolbar-row>
 
 </mat-toolbar>
+
 <mat-divider [@divider]="divider"></mat-divider>
 
 <!-- AVATAR TO REPLACE USER IMAGE WHEN UNAVAILABLE -->

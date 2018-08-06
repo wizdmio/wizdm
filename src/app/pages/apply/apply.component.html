@@ -1,7 +1,16 @@
 <header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
-  <p fxHide.lt-sm>{{ msgs.description }}</p>
+  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
+  <div fxHide.lt-sm>
+  <p *ngIf="welcomeBack" @fadeIn>{{msgs?.welcomeBack}}</p>
+  <p *ngIf="!welcomeBack" @fadeIn>{{msgs?.description}}</p>
+  <p *ngIf="application" @fadeIn>
+    <wm-disclaimer [source]="msgs?.clearForm" 
+                   (action)="disclaimerAction($event)"
+                   actionClass="mat-link">
+    </wm-disclaimer>
+  </p>
+</div>
 </header> 
 
 <mat-vertical-stepper linear>
@@ -112,14 +121,14 @@
         <p>{{msgs.appSubmit.description}}</p>
         <p class="mat-small">
           <wm-disclaimer [source]="msgs.appSubmit.disclaimer"
-                         (action)="popupTerms()"
+                         (action)="disclaimerAction($event)"
                           actionClass="mat-link">
           </wm-disclaimer>
         </p>
         <div fxLayout="row" fxLayoutAlign="center center" fxFill>
           <mat-checkbox labelPosition="before" color="primary" #agree>
             <wm-disclaimer [source]="msgs.appSubmit.agree"
-                           (action)="popupTerms()"
+                           (action)="disclaimerAction($event)"
                             actionClass="mat-link">
             </wm-disclaimer>
           </mat-checkbox>

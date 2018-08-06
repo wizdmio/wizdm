@@ -1,7 +1,7 @@
 <wm-toolbar fxFlex="0 0 auto"
             [toggler]="snav.opened" 
             (togglerChange)="snav.toggle()"
-            [divider]="divider && !snav.opened">
+            [divider]="divider && !snav.opened" #toolbar>
 </wm-toolbar>
 
 <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column">

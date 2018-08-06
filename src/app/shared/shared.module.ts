@@ -38,6 +38,8 @@ import { PopupComponent } from './popup/popup.component';
 import { PopupService } from './popup/popup.service';
 import { MarkdownComponent } from './markdown/markdown.component';
 import { RemarkService } from './markdown/remark.service';
+import { CodeHighlightComponent } from './markdown/code-highlight/code-highlight.component';
+import { PrismService } from './markdown/code-highlight/prism.service';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -74,7 +76,8 @@ const sharedModules = [
     IconComponent,
     DisclaimerComponent,
     PopupComponent,
-    MarkdownComponent
+    MarkdownComponent,
+    CodeHighlightComponent
   ],
 
   exports: [
@@ -90,7 +93,8 @@ const sharedModules = [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     PopupService,
-    RemarkService
+    RemarkService,
+    PrismService
   ],
 
   entryComponents: [

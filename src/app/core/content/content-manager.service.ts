@@ -4,25 +4,45 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, forkJoin, throwError } from 'rxjs';
 import { zip, map, tap, filter, take, switchMap, catchError } from 'rxjs/operators';
 
+/** LanguageData  describes the language content 
+ * @param label text label suitable for UI (menues, dropdown, ...)
+ * @param path the path from where to load the language module files
+ * @param image (optional) an image to represent the language (like a country flag or so)
+ * @param default (optional) when true defines this as the default language
+*/
 export interface LanguageData {
-  
   label: string,
   path: string,
   image?: string,
   default?: boolean
 };
 
+/** Content languages */
 export type Languages = { [key: string]: LanguageData };
+
+/** Content modules */
 export type Modules = { [key: string]: string };
 
+/** Content configuration 
+ * @param languages an array of key/LanguageData pairs listing all the available languages and contents
+ * @param modules assn array of key/string pairs listing the module JSON files to load
+*/
 export interface ContentConfig {
 
-  languages : Languages ;
+  languages : Languages;
   modules   : Modules;
 };
 
 export type LanguageOption = { value: string, label: string };
 
+/** ContentEvent describes the ContentService event 
+ * @param reason type of event among 
+ *  'loading', loading the requetsed language files, data is null.
+ *  'load' language has loaded, content is in data.
+ *  'error' some error occurred, error details are in data.
+ *  'complete' loading completed, data is null.
+ * @param data (optional) event relatd content
+*/
 export interface ContentEvent {
 
   reason: 'loading' | 'load' | 'error' | 'complete';
@@ -30,14 +50,12 @@ export interface ContentEvent {
 };
 
 @Injectable()
+/** ContentService dynamically load the application content via Http. Suitable for multi language and variable content support */
 export class ContentService {
 
-  // Events handler notifying subscribers of:
-  // reason = 'loading', loading the requetsed language files, data is null
-  // resaon = 'load' language has loaded, content is in data
-  // reason = 'error' some error occurred, error details are in data
-  // reason = 'complete' loading completed, data is null
-  //
+  /** Events handler notifying subscribers of several events
+   * @see ContentEvent
+  */
   public events = new EventEmitter<ContentEvent>();
   public emit(ev: ContentEvent) { this.events.emit(ev);}
 
@@ -49,54 +67,54 @@ export class ContentService {
   constructor(private http   : HttpClient,
               private router : Router) {}
 
-  // Returns the full list of languages
+  /** Returns the full list of supported languages */
   public get languages(): Languages {
     return this.config ? this.config.languages : {}; }
 
-  // Resturns the current language as a two letter code
+  /** Resturns the current language as a two letter code such 'en' for English */
   public get language(): string {
     return this.lang; }
 
-  // Resturns the current language as a label
+  /** Resturns the current language as a label suitable to be used in dropdowns and menues */
   public get languageLabel(): string {
     return this.languages[this.lang].label; 
   }
 
-  // Resturns the current language modules' path
+  /** Resturns the current language modules' path */
   private get languagePath(): string {
     return this.languages[this.lang].path; 
   }
 
-  // Resturns the current language image
+  /** Resturns the current language image */
   public get languageImage(): string {
     return this.languages[this.lang].image; 
   }
 
-  // Returns an array of supported language codes
+  /** Returns an array of supported language codes */
   public get supportedLanguages(): string[] {
     return Object.keys(this.languages);
   }
 
-  // Returns the default language, if specified
+  /** Returns the default language, if specified */
   public get defaultLanguage(): string {
     return this.supportedLanguages.find( key => {
       return this.languages[key].default;
     });
   }
 
-  // Returns the default language modules' path
+  /** Returns the default language modules' path */
   private get defaultPath(): string {
     return this.languages[this.defaultLanguage].path;
   }
 
-  // Returns an array of supported language codes
+  /** Returns an array of supported language codes */
   public get supportedLanguageLabels(): string[] {
     return this.supportedLanguages.map( key => {
       return this.languages[key].label;
     });
   }
 
-  // Returns an array of language options (pairs of code/labels)
+  /** Returns an array of language options (pairs of code/labels) */
   public get languageOptions(): LanguageOption[] {
     return this.supportedLanguages.map( value => {
       const label = this.languages[value].label;
@@ -104,19 +122,28 @@ export class ContentService {
     });
   }
 
-  // Checks if the requested language is supported
+  /** Checks if the requested language is supported 
+   * @param lang two digit language code (es: 'en')
+  */
   public isLanguageSupported(lang: string): boolean {
     return this.supportedLanguages.some( key => key == lang );
   }
 
-  // Return the language two letter code corresponding to the given label
+  /** Return the language two letter code corresponding to the given label 
+   * @param label text label associated to an available language
+   * @returns a two digit language code associated with the given label or null
+  */
   public matchLanguageLabel(label: string): string {
     return this.supportedLanguages.find( key => {
       return this.languages[key].label == label;
     });
   }
 
-   // Loads the language configuration via http
+  /** 
+   * @private Loads the language configuration via http 
+   * @returns and Observable of the configuration
+   * @see ContentConfig
+  */
   private init(): Observable<ContentConfig> {
 
     // Short-circuit if already loaded
@@ -235,7 +262,11 @@ export class ContentService {
     ); 
   }
 
-  // Selects the requested portion of content data from the database
+  /** Selects the requested portion of content data from the database 
+   * @param select a string delimiter to select the requested portion of the content
+   * @param default (optional) an optional object to be returned in the eventuality the required content is not present
+   * @example let content = this.contentService.select('navigator.toolbar');
+  */
   public select(select: string, defaults?: any): any {
 
     if(!this.data) {
@@ -251,6 +282,11 @@ export class ContentService {
     }, this.data);
   }
 
+  /**
+   * Helper function to force reloading the content while navigating to the new language
+   * @param lang the new language code to switch to
+   * @param url the optional relative url to navigate to. The function navigates tothe current position if not specified.
+   */
   public switch(lang: string, url?: string) {
 
     // Checks if a language change is requested
@@ -266,7 +302,7 @@ export class ContentService {
         take(1) 
       ).subscribe( () => {
         
-        // Restore the original reausing strategy function
+        // Restore the original reausing strategy function after navigation completed
         this.router.routeReuseStrategy.shouldReuseRoute = strategy;
       });
     }

@@ -35,7 +35,7 @@ export interface wmProject {
   name         : string,
   pitch?       : string,
 
-  body?        : string, // markdown formatted description
+  document?    : string, // markdown formatted business plan description
 
   //development? : wmDevelopment,
   

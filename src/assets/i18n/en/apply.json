@@ -1,7 +1,12 @@
 {
-    
   "title": "New application",
-  "description": "Follow the next simple steps to apply for a new project",
+  "description": "Follow the next simple steps to apply for a new project.",
+  "welcomeBack": "Welcome back! The form below is already filled with the latest information you provided.",
+  "clearForm": "Eventually, you can <clear the form:[clear]> and restart if you prefer.",
+
+  "actions": [
+    { "caption": "Clear Application", "icon": "delete_forever", "action": "clear" }
+  ],
 
   "header": {
     "title": "Name your application",
@@ -118,8 +123,15 @@
   "appSubmit": {
     "title": "Ready to apply",
     "description": "You are all set!",
-    "disclaimer": "By subitting this new application I accept the <terms and privacy:[../terms]> conditions under which my application will be evaluated to become one of the active project within the wizdm.io community.",
-    "agree": "I do agree on the <terms:[../terms]>"
+    "disclaimer": "By subitting this new application I accept the <terms and privacy:[terms]> conditions under which my application will be evaluated to become one of the active project within the wizdm.io community.",
+    "agree": "I do agree on the <terms:[terms]>"
+  },
+
+  "canClear": {
+    "title": "Clear application",
+    "message": "Are you sure you want to clear the unsaved changes?",
+    "cancel": "Cancel",
+    "ok": "Proceed"
   },
 
   "canLeave": {

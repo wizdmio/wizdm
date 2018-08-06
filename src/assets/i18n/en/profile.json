@@ -2,6 +2,10 @@
   "title": "My profile",
   "description": "Here you'll find all the information about you",
 
+  "actions": [
+    { "caption": "Sign-out", "icon": "exit_to_app", "link": "./login", "params": { "mode": "signOut" }}
+  ],
+
   "panels": [
     {
       "title": "Personal information & preferences",

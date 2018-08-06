@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
-import { ContentService, AuthService } from '../../core';
+import { ContentService, AuthService } from 'app/core';
 import { $loginAnimations } from './login-animations';
 import { take, tap } from 'rxjs/operators';
 

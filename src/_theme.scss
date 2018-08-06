@@ -1,13 +1,5 @@
 @import '~@angular/material/theming';
 
-// Define a custom typography config that overrides the font-family as well as the
-// `headlines` and `body-1` levels.
-$wm-typography: mat-typography-config(
-  $font-family: 'Ubuntu, sans-serif',
-  $headline: mat-typography-level(32px, 48px, 700),
-  $body-1: mat-typography-level(16px, 24px, 500)
-);
-
 // Define the main theme palettes.
 $wm-primary: mat-palette($mat-blue);
 $wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
@@ -49,6 +41,14 @@ $wm-theme-foreground: (
   slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
 );
 
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$wm-typography: mat-typography-config(
+  $font-family: 'Ubuntu, sans-serif',
+  $headline: mat-typography-level(32px, 48px, 700),
+  $body-1: mat-typography-level(16px, 24px, 500)
+);
+
 @function wm-app-theme($primary, $accent, $warn) {
   @return (
     primary: $primary,
@@ -58,6 +58,11 @@ $wm-theme-foreground: (
     foreground: $wm-theme-foreground,
     background: $wm-theme-background,
   );
+}
+
+// Helper to dig into themes
+@function mat-theme-get($config, $level, $name) {
+  @return map-get(map-get($config, $level), $name);
 }
 
 // Create the customized theme
@@ -71,13 +76,27 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   text-decoration: underline;
 }
 
+// Initilize the global application theme
+@mixin wm-init-application-theme($typography, $theme) {
 
-/*
-@mixin wm-gradient($color-stops...) {
-  background: nth(nth($color-stops, 1), 1);
-  background: -webkit-linear-gradient(left, $color-stops); /// For Chrome 25 and Safari 6, iOS 6.1, Android 4.3
-  background:    -moz-linear-gradient(left, $color-stops); /// For Firefox (3.6 to 15)
-  background:      -o-linear-gradient(left, $color-stops); /// For old Opera (11.1 to 12.0)
-  background:         linear-gradient(to right, $color-stops); /// Standard syntax; must be last 
+  // Includes the core theme indepeneted material style
+  @include mat-core($typography);
+
+  // Include all the material theme styles
+  @include angular-material-theme($theme);
+ 
+  // Adds custom application specific style extensions
+  a {
+    &[mat-link] {
+      @extend .mat-link;
+    }
+  }
+
+  // Applies material typography rules globally
+  body {
+    @extend .mat-typography;
+
+    // Removes the margin
+    margin: 0;
+  }
 }
-*/

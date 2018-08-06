@@ -1,12 +1,98 @@
+@import 'src/variables';
+@import 'src/theme';
 
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 
+  //padding-top: $wm-content-padding * 2;
+  //padding-bottom: $wm-content-padding;
+  //margin: 0 $wm-content-margin;
+}
+
+// Blockquote style
+blockquote {
+  padding: 0 1em;
+  color: rgba(0,0,0,0.535);
+  border-left: 0.25em solid rgba(0,0,0,0.11);
+}
+
+// Page break
+hr {
+  width: 100%; 
+  @extend .mat-divider !optional;
+}
+
+// Link style
+a { @extend .mat-link !optional; }
+
+// Paragraph
+p {
+  // Default paragraph align is justified
+  text-align: justify;
+}
+
+// Inlide code
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+// Code blocks
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  word-break: break-all;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+
+  code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    background-color: inherit;
+    border-radius: 0;
+    white-space: pre-wrap;
+  }
+}
+
+// Block alignement
+span {
+
+  // Disables default paragraph justification whenever an alignement is specified
+  &[align] {
+    p { text-align: inherit; }
+  }
+
+  &[align="left"] {
+    text-align: left;
+    align-self: flex-start;
+  }
+
+  &[align="center"] {
+    text-align: center;
+    align-self: center;
+  }
+
+  &[align="right"] {
+    text-align: right;
+    align-self: flex-end;
+  }
+}
+
+// Table style and alignement
 table {
   border-spacing: 0;
   border-collapse: collapse;
   margin-bottom: 16px;
 
-  th,
-  td {
+  th, td {
     padding: 6px 13px;
     border: 1px solid #ddd;
 
@@ -28,12 +114,28 @@ table {
   }
 }
 
-blockquote {
-  padding: 0 1em;
-  color: rgba(0,0,0,0.535);
-  border-left: 0.25em solid rgba(0,0,0,0.11);
+// Table of content
+span[toc] {
+  font-size: inherit;
+  &[toc='1']{ font-size: 100%; }
+  &[toc='2']{ font-size: 90%; }
+  &[toc='3']{ font-size: 80%; }
+  &[toc='4']{ font-size: 70%; }
+  &[toc='5']{ font-size: 60%; }
+  &[toc='6']{ font-size: 50%; }
 }
 
+// Footnotes
+span[footnote] {
+
+  // Makes sure the content paragraph is displayed inline
+  p { display: inline; }
+
+  // Uses the same typoraphy of mat-caption and mat-small
+  @include mat-typography-level-to-styles($wm-typography, caption);
+}
+
+// Image style
 img {
   max-width: 128px;
 }

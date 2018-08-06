@@ -18,14 +18,11 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 @import 'variables';
 @import 'theme';
+
+// Initialze the global application theme, make sure to call this only once
+@include wm-init-application-theme($wm-typography, $wm-theme);
+
 @import 'preloader';
-
-// Include the common styles for Angular Material (make sure this is included only once)
-@include mat-core();
-
-// Apply custom theme styles and typography for core and each component used in your app.
-@include angular-material-typography($wm-typography);
-@include angular-material-theme($wm-theme);
 
 // Creates the .preloader spinner class applying the theme color
 @include preloader($wm-loader-size, 
@@ -33,11 +30,3 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
                    mat-color($wm-primary, A400), 
                    map-get($wm-theme-background, background ));
 
-body {
-
-  // Applies material typography rules globally
-  @extend .mat-typography;
- 
-  // Removes the margin
-  margin: 0;
-}

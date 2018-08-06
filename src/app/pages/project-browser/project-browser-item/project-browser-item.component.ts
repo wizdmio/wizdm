@@ -57,14 +57,10 @@ export class ProjectBrowserItemComponent implements OnInit {
 
   public deleteProject() {
 
-    this.popup.popupDialog(this.msgs.canDelete)
-      .then( proceed => {
-
-        if(proceed) {
-
-          let id = this.project.id;
-          this.database.deleteProject(id);
-        }
+    // Ask for confirmation prior to delete the project
+    this.popup.confirmPopup(this.msgs.canDelete)
+      .subscribe( () => {
+        this.database.deleteProject( this.project.id );
       });
   }
 }

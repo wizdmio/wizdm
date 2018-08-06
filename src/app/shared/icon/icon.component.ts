@@ -27,7 +27,7 @@ export class IconComponent implements OnInit {
 
   @Input('icon') set setIcon(descriptor: string) {
    
-    let segments = descriptor.split(':');
+    let segments = descriptor ? descriptor.split(':') : [];
     
     if(segments.length > 1) {
       

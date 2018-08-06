@@ -72,7 +72,7 @@ export class DatabaseService {
       map(doc => {
         const data = doc.payload.data();
         const id = doc.payload.id;
-        return { ...(data as any), id };
+        return ( (typeof data !== 'undefined') ? { ...(data as any), id } : undefined );
       })
     );
   }
@@ -83,7 +83,7 @@ export class DatabaseService {
         return actions.map(a => {
           const data = a.payload.doc.data();
           const id = a.payload.doc.id;
-            return { ...(data as any), id };
+          return ( (typeof data !== 'undefined') ? { ...(data as any), id } : undefined );
         });
       })
     );

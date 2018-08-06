@@ -1,59 +1,14 @@
 
-<wm-markdown [source]="text.value">
+
+<wm-markdown [data]="snapshot?.document" display="toc">
 </wm-markdown>
 
-<textarea #text>
+<mat-divider></mat-divider>
 
-  # Title w/ [link](./link)
-  Experimenting by using markdown
-  
-  | foo | bar |
-  | --- | --- |
-  | baz | qux |
-    
-  **This** is the way we provide *emphasis* - __eventually__
-  
-  > Identation
-  >> Multi level w/ [link](./target)
-  >>> Even three
-  
-  Inline `code` has `back-ticks around` it.
-  
-  ```javascript
-  var s = "JavaScript syntax highlighting";
-  alert(s);
-  ```
-  
-  (c) (C) (r) (R) (tm) (TM) (p) (P) +-
-  
-  ## Images
-  
-  ![Minion](https://octodex.github.com/images/minion.png)
-  ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
-  
-  [id]: https://octodex.github.com/images/dojocat.jpg  "The Dojocat"
-  
-  ### [Emojies](https://github.com/markdown-it/markdown-it-emoji)
-  
-  > Classic markup: :wink: :crush: :cry: :tear: :laughing: :yum:
-  >
-  > Shortcuts (emoticons): :-) :-( 8-) ;)
-  
-  ### [Subscript](https://github.com/markdown-it/markdown-it-sub) / [Superscript](https://github.com/markdown-it/markdown-it-sup)
-  
-  - 19^th^
-  - H~2~O
-  
-  Unordered lists are great:
-  
-  * This is the first item
-  * followed by the second
-  
-  Playing with numbered is fine as well:
-  
-  9. [x] Here the first
-  0. [ ] Guess what, followed by the second
-  
-  This is an [inline link](./profile)
-  
-  </textarea>
+<wm-markdown [data]="snapshot?.document">
+</wm-markdown>
+
+<mat-divider></mat-divider>
+
+<wm-markdown [data]="snapshot?.document" display="footnotes">
+</wm-markdown>
