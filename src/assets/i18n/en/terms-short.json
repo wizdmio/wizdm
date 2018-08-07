@@ -1,6 +1,11 @@
 {
   "title": "Terms & Privacy",
-  "disclaimer": "This page is a summary of the most important aspects of the terms of service of wizdm, but it does not replace the <full version:[full]>.",
+  "disclaimer": "This page is a summary of the most important aspects of the terms of service of wizdm, but it does not replace the <full version:[@../full]>.",
+  
+  "actions": [
+    { "caption": "Full version", "link": "terms/full" }
+  ],
+  
   "sections": [
     {
       "title": "The service",

@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { Router, NavigationStart, NavigationEnd, NavigationCancel, Scroll } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
 import { ContentService, AuthService } from 'app/core';
 import { ToolbarService } from './toolbar.service';
 import { toolbarAnimations } from './toolbar-animations';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-toolbar',
@@ -29,24 +31,23 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.msgs = this.content.select("navigator");
     
       // Listen for NavigationEnd events to close the menu
-      this.router.events.subscribe( e => {
-
-        // Clears the action buttons when navigating to a new page
-        if(e instanceof NavigationStart) { 
+      this.router.events.pipe( filter(e => e instanceof NavigationStart) )
+        .subscribe( () => {
+          // Clears the action buttons when navigating to a new page
           this.toolbar.clearActions();
-        }
-
-        // Closes the sidenav drawer after navigation
-        if(e instanceof NavigationEnd && this.toggler) { 
-          this.toggle();
-        }
-      });
+          // Closes the sidenav drawer after navigation, eventually
+          if(this.toggler) { this.toggle();}
+        });
     }
 
     ngOnDestroy() {}
 
     public get actionButtons() {
       return this.toolbar.buttons;
+    }
+
+    public get someAction() {
+      return this.actionButtons.length > 0;
     }
 
     public performAction(code: string) {

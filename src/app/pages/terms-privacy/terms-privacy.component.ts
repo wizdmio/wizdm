@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ContentService } from '../../core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ContentService } from 'app/core';
+import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
 
 @Component({
   selector: 'wm-terms-privacy',
@@ -11,17 +13,22 @@ export class TermsPrivacyComponent implements OnInit {
   @Input() full = false; // Force the content to fit the full screen
   public msgs = null;
   
-  constructor(private content: ContentService) {}
+  constructor(private content: ContentService, 
+              private toolbar: ToolbarService,
+              private router: Router,
+              private route: ActivatedRoute) {}
 
   ngOnInit() {
 
-    // Gets the localized content for the short version (default)
-    this.msgs = this.content.select('shortTerms');
-  }
+    this.route.paramMap.subscribe( param => { 
+      
+      let version = param.get('version') || 'short';
 
-  private goFull() {
+      // Gets the localized content for the requested version (short/full)
+      this.msgs = this.content.select(`${version}Terms`);
 
-    // Switch content to the full version
-    this.msgs = this.content.select('fullTerms');
+      // Activate the navigator action links
+      this.toolbar.activateActions(this.msgs.actions);
+    });
   }
 }

@@ -4,7 +4,7 @@ import { ContentService, AuthService, ProjectService, wmProject } from 'app/core
 import { switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-const $debug = "# Test with a [link](../../profile)\nFollowed by a simple paragraph _with_ **emphasis** and ~~corrections~~"
+const $debug = "# Test with a [link](../../profile)\nFollowed by a simple paragraph _with_ **emphasis** and ~~corrections~~ and a note[^note]\n\n [^note]: this is a note"
 
 @Component({
   selector: 'wm-project',
@@ -21,6 +21,8 @@ export class ProjectComponent implements OnInit {
 
   ngOnInit() {
 
+    this.snapshot = { document: $debug } as wmProject;
+/*
       this.route.paramMap.pipe(
         switchMap( param => {
 
@@ -40,7 +42,7 @@ export class ProjectComponent implements OnInit {
         this.snapshot = data || { document: $debug } as wmProject;
       
       } );
-  
+  */
   }
 
 }

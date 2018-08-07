@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
 
 export type toolbarAction = {
   caption: string,
@@ -13,35 +12,35 @@ export type toolbarAction = {
   providedIn: 'root'
 })
 export class ToolbarService {
-
+  
   private actionButtons: toolbarAction[] = [];
-  private actionsEvent: Subject<string> = new Subject();
-  private disposeActions$: Subject<void> = new Subject();
-
+  private actionsEvent: Subject<string>;
+  
   constructor() { }
 
   get buttons(): toolbarAction[] {
     return this.actionButtons;
   }
 
-  public activateActions(buttons: toolbarAction[]): Observable<string> {
+  public clearActions() {
 
-    if(this.actionButtons.length) {
-      this.clearActions();
+    if(this.actionsEvent) {
+      this.actionsEvent.complete();
     }
 
+    this.actionButtons = [];
+  }
+
+  public activateActions(buttons: toolbarAction[]): Observable<string> {
+
+    this.clearActions();
+    
     this.actionButtons.push(...buttons);
 
-    return this.actionsEvent.pipe( takeUntil(this.disposeActions$) );
+    return this.actionsEvent = new Subject();
   }
 
   public performAction(code: string) {
     this.actionsEvent.next(code);
-  }
-
-  public clearActions() {
-    this.actionButtons = [];
-    this.disposeActions$.next();
-    this.disposeActions$.complete();
   }
 }

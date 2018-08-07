@@ -1,7 +1,7 @@
 <mat-toolbar>
 
   <!-- NAVIGATION TOOLBAR -->
-  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center" [@shrink]="someAction">
 
     <wm-logo></wm-logo>
   
@@ -59,37 +59,37 @@
 </mat-toolbar-row>
 
 <!-- PAGE ACTION BAR -->
-<mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" *ngIf="actionButtons?.length">
+<mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" [@action]="someAction">
 
   <!-- ACTION BUTTONS or LINKS -->
 <ng-container *ngFor="let button of actionButtons">
 
     <!-- ACTION BUTTON -->
-    <ng-container *ngIf="button.action">
+    <ng-container *ngIf="button?.action">
       
       <!-- TEXT BUTTON (DESKTOP) -->
-      <button mat-button color="primary" [fxHide.lt-sm]="button.icon" (click)="performAction(button.action)">
+      <button mat-button color="primary" [fxHide.lt-sm]="button?.icon" (click)="performAction(button.action)">
         {{button.caption}}
       </button>
 
       <!-- ICON BUTTON (MOBILE) -->
-      <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button.icon" (click)="performAction(button.action)">
-        <wm-icon [icon]="button.icon"></wm-icon>
+      <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" (click)="performAction(button.action)">
+        <wm-icon [icon]="button?.icon"></wm-icon>
       </button>
 
     </ng-container>
 
     <!-- ACTION LINK -->
-    <ng-container *ngIf="button.link">
+    <ng-container *ngIf="button?.link">
       
       <!-- TEXT LINK (DESKTOP) -->
-      <a mat-button color="primary" [fxHide.lt-sm]="button.icon" [routerLink]="button.link" [queryParams]="button.params">
+      <a mat-button color="primary" [fxHide.lt-sm]="button?.icon" [routerLink]="button.link" [queryParams]="button?.params">
         {{button.caption}}
       </a>
 
       <!-- ICON LINK (MOBILE) -->
-      <a mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button.icon" [routerLink]="button.link" [queryParams]="button.params">
-        <wm-icon [icon]="button.icon"></wm-icon>
+      <a mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" [routerLink]="button.link" [queryParams]="button?.params">
+        <wm-icon [icon]="button?.icon"></wm-icon>
       </a>
 
     </ng-container>

@@ -1,224 +1,226 @@
 
+<ng-content></ng-content>
+
 <ng-container [ngSwitch]="display">
 
-    <!-- Renders the document body by default -->
-    <ng-container *ngSwitchDefault>
-      <ng-container *ngTemplateOutlet="treeNode; context: root"></ng-container>
-    </ng-container>
-  
-    <!-- Renders the table of contents -->
-    <ng-container *ngSwitchCase="'toc'">
-      <ng-container *ngTemplateOutlet="toc; context: root"></ng-container>
-    </ng-container>
-  
-    <!-- Renders the footnotes -->
-    <ng-container *ngSwitchCase="'footnotes'">
-      <ng-container *ngTemplateOutlet="footnotes; context: root"></ng-container>
-    </ng-container>
-  
+  <!-- Renders the document body by default -->
+  <ng-container *ngSwitchDefault>
+    <ng-container *ngTemplateOutlet="treeNode; context: root"></ng-container>
   </ng-container>
-  
-  <!-- Document body template -->
-  <ng-template let-children="children" #treeNode>
-  
-    <ng-container *ngFor="let child of children">
-  
-      <ng-container [ngSwitch]="child.type">
-  
-        <!-- Paragraph -->
-        <ng-container *ngSwitchCase="'paragraph'">
-          <p [attr.data-line]="child?.position?.start?.line">
-            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-          </p>
-        </ng-container>
-  
-        <!-- Blockquote -->
-        <ng-container *ngSwitchCase="'blockquote'">
-          <blockquote [attr.data-line]="child?.position?.start?.line">
-            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-          </blockquote>
-        </ng-container>
-  
-        <!-- Headings -->
-        <ng-container *ngSwitchCase="'heading'">
-          <ng-container [ngSwitch]="child?.depth">
-            <h1 *ngSwitchCase="1" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
-              <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-            </h1>
-            <h2 *ngSwitchCase="2" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
-              <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-            </h2>
-            <h3 *ngSwitchCase="3" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
-              <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-            </h3>
-            <h4 *ngSwitchCase="4" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
-              <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-            </h4>
-            <h5 *ngSwitchCase="5" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
-              <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-            </h5>
-            <h6 *ngSwitchCase="6" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
-              <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-            </h6>
-          </ng-container>
-        </ng-container>
-  
-        <!-- Code -->
-        <ng-container *ngSwitchCase="'code'">
-          <pre [attr.data-line]="child?.position?.start?.line">
-            <code [wm-highlight]="child?.value" [language]="child?.lang"></code>
-          </pre>
-        </ng-container>
-  
-        <!-- Inlide Code -->
-        <ng-container *ngSwitchCase="'inlineCode'">
-          <code>{{child.value}}</code>
-        </ng-container>
-  
-        <!-- HTML -->
-        <ng-container *ngSwitchCase="'html'">
-          <html>{{child.value}}</html>
-        </ng-container>
-  
-        <!-- List -->
-        <ng-container *ngSwitchCase="'list'">
-          <ol *ngIf="child.ordered" [start]="child.start" [attr.data-line]="child?.position?.start?.line">
-            <li *ngFor="let item of child.children">
-              {{assertNode(item, 'listItem')}}
-              <ng-container *ngTemplateOutlet="treeNode; context: item"></ng-container>
-            </li>
-          </ol>
-          <ul *ngIf="!child.ordered" [attr.data-line]="child?.position?.start?.line">
-            <li *ngFor="let item of child.children">
-              {{assertNode(item, 'listItem')}}
-              <ng-container *ngTemplateOutlet="treeNode; context: item"></ng-container>
-            </li>
-          </ul>
-        </ng-container>
-  
-        <!-- Table -->
-        <ng-container *ngSwitchCase="'table'">
-          <table [attr.data-line]="child?.position?.start?.line">
-            <tbody>
-              <tr *ngFor="let row of child?.children">
-                {{assertNode(row, 'tableRow')}}
-                <td *ngFor="let cell of row?.children; let i = index" [attr.align]="child?.align[i]">
-                  {{assertNode(cell, 'tableCell')}}
-                  <ng-container *ngTemplateOutlet="treeNode; context: cell"></ng-container>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </ng-container>
-  
-        <!-- Thematic Break -->
-        <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="child?.position?.start?.line">
-  
-        <!-- Line Break -->
-        <br *ngSwitchCase="'break'">
-        
-        <!-- Emphasis -->
-        <ng-container *ngSwitchCase="'emphasis'">
-          <em><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></em>
-        </ng-container>
-  
-        <!-- Strong -->
-        <ng-container *ngSwitchCase="'strong'">
-          <strong><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></strong>
-        </ng-container>
-  
-        <!-- Delete -->
-        <ng-container *ngSwitchCase="'delete'">
-          <del><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></del>
-        </ng-container>
-  
-        <!-- Link -->
-        <ng-container *ngSwitchCase="'link'">
-          <a [routerLink]="child.url">
-            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-          </a>
-        </ng-container>
-  
-        <!-- Image -->
-        <ng-container *ngSwitchCase="'image'">
-          <img [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="child?.position?.start?.line">
-        </ng-container>
-  
-        <!-- Footnote Reference -->
-        <ng-container *ngSwitchCase="'footnoteReference'">
-          <sup><a [href]="'#fn'+footnote(child.identifier)">[{{footnote(child.identifier)}}]</a></sup>
-        </ng-container>
-  
-        <!-- Footnote Definition -->
-        <ng-container *ngSwitchCase="'footnoteDefinition'">{{infoNode(child)}}</ng-container>
-  
-        <!-- Footnote -->
-        <ng-container *ngSwitchCase="'footnote'">{{infoNode(child)}}</ng-container>
-  
-        <!-- Link Reference  -->
-        <ng-container *ngSwitchCase="'linkReference'">{{infoNode(child)}}</ng-container>
-  
-        <!-- Image Reference -->
-        <ng-container *ngSwitchCase="'imageReference'">{{infoNode(child)}}</ng-container>
-  
-        <!-- Definition -->
-        <ng-container *ngSwitchCase="'definition'">{{infoNode(child)}}</ng-container>
-  
-        <!-- Text -->
-        <ng-container *ngSwitchCase="'text'">{{child?.value}}</ng-container>
-   
-        <!-- Align plugin -->
-        <ng-container *ngSwitchCase="'leftAligned'">
-          <span [attr.align]="'left'">
-            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-          </span>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'centerAligned'">
-          <span [attr.align]="'center'">
-            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-          </span>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'rightAligned'">
-          <span [attr.align]="'right'">
-            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-          </span>
-        </ng-container>
-  
-        <!-- Sub-script Super-script plugin -->
-        <ng-container *ngSwitchCase="'sub'">
-          <sub><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></sub>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'sup'">
-          <sup><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></sup>
-        </ng-container>
-  
-        <!-- Unkown node detection handler -->
-        <ng-container *ngSwitchDefault>{{unknownNode(child)}}</ng-container>
-  
+
+  <!-- Renders the table of contents -->
+  <ng-container *ngSwitchCase="'toc'">
+    <ng-container *ngTemplateOutlet="toc; context: root"></ng-container>
+  </ng-container>
+
+  <!-- Renders the footnotes -->
+  <ng-container *ngSwitchCase="'footnotes'">
+    <ng-container *ngTemplateOutlet="footnotes; context: root"></ng-container>
+  </ng-container>
+
+</ng-container>
+
+<!-- Document body template -->
+<ng-template let-children="children" #treeNode>
+
+  <ng-container *ngFor="let child of children">
+
+    <ng-container [ngSwitch]="child.type">
+
+      <!-- Paragraph -->
+      <ng-container *ngSwitchCase="'paragraph'">
+        <p [attr.data-line]="child?.position?.start?.line">
+          <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+        </p>
       </ng-container>
-  
+
+      <!-- Blockquote -->
+      <ng-container *ngSwitchCase="'blockquote'">
+        <blockquote [attr.data-line]="child?.position?.start?.line">
+          <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+        </blockquote>
+      </ng-container>
+
+      <!-- Headings -->
+      <ng-container *ngSwitchCase="'heading'">
+        <ng-container [ngSwitch]="child?.depth">
+          <h1 *ngSwitchCase="1" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
+            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+          </h1>
+          <h2 *ngSwitchCase="2" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
+            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+          </h2>
+          <h3 *ngSwitchCase="3" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
+            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+          </h3>
+          <h4 *ngSwitchCase="4" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
+            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+          </h4>
+          <h5 *ngSwitchCase="5" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
+            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+          </h5>
+          <h6 *ngSwitchCase="6" [attr.data-line]="child?.position?.start?.line" [id]="'h'+child?.position?.start?.line">
+            <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+          </h6>
+        </ng-container>
+      </ng-container>
+
+      <!-- Code -->
+      <ng-container *ngSwitchCase="'code'">
+        <pre [attr.data-line]="child?.position?.start?.line">
+          <code [wm-highlight]="child?.value" [language]="child?.lang"></code>
+        </pre>
+      </ng-container>
+
+      <!-- Inlide Code -->
+      <ng-container *ngSwitchCase="'inlineCode'">
+        <code>{{child.value}}</code>
+      </ng-container>
+
+      <!-- HTML -->
+      <ng-container *ngSwitchCase="'html'">
+        <html>{{child.value}}</html>
+      </ng-container>
+
+      <!-- List -->
+      <ng-container *ngSwitchCase="'list'">
+        <ol *ngIf="child.ordered" [start]="child.start" [attr.data-line]="child?.position?.start?.line">
+          <li *ngFor="let item of child.children">
+            {{assertNode(item, 'listItem')}}
+            <ng-container *ngTemplateOutlet="treeNode; context: item"></ng-container>
+          </li>
+        </ol>
+        <ul *ngIf="!child.ordered" [attr.data-line]="child?.position?.start?.line">
+          <li *ngFor="let item of child.children">
+            {{assertNode(item, 'listItem')}}
+            <ng-container *ngTemplateOutlet="treeNode; context: item"></ng-container>
+          </li>
+        </ul>
+      </ng-container>
+
+      <!-- Table -->
+      <ng-container *ngSwitchCase="'table'">
+        <table [attr.data-line]="child?.position?.start?.line">
+          <tbody>
+            <tr *ngFor="let row of child?.children">
+              {{assertNode(row, 'tableRow')}}
+              <td *ngFor="let cell of row?.children; let i = index" [attr.align]="child?.align[i]">
+                {{assertNode(cell, 'tableCell')}}
+                <ng-container *ngTemplateOutlet="treeNode; context: cell"></ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <!-- Thematic Break -->
+      <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="child?.position?.start?.line">
+
+      <!-- Line Break -->
+      <br *ngSwitchCase="'break'">
+      
+      <!-- Emphasis -->
+      <ng-container *ngSwitchCase="'emphasis'">
+        <em><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></em>
+      </ng-container>
+
+      <!-- Strong -->
+      <ng-container *ngSwitchCase="'strong'">
+        <strong><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></strong>
+      </ng-container>
+
+      <!-- Delete -->
+      <ng-container *ngSwitchCase="'delete'">
+        <del><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></del>
+      </ng-container>
+
+      <!-- Link -->
+      <ng-container *ngSwitchCase="'link'">
+        <a [routerLink]="child.url">
+          <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+        </a>
+      </ng-container>
+
+      <!-- Image -->
+      <ng-container *ngSwitchCase="'image'">
+        <img [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="child?.position?.start?.line">
+      </ng-container>
+
+      <!-- Footnote Reference -->
+      <ng-container *ngSwitchCase="'footnoteReference'">
+        <sup><a [href]="'#fn'+footnote(child.identifier)">[{{footnote(child.identifier)}}]</a></sup>
+      </ng-container>
+
+      <!-- Footnote Definition -->
+      <ng-container *ngSwitchCase="'footnoteDefinition'">{{infoNode(child)}}</ng-container>
+
+      <!-- Footnote -->
+      <ng-container *ngSwitchCase="'footnote'">{{infoNode(child)}}</ng-container>
+
+      <!-- Link Reference  -->
+      <ng-container *ngSwitchCase="'linkReference'">{{infoNode(child)}}</ng-container>
+
+      <!-- Image Reference -->
+      <ng-container *ngSwitchCase="'imageReference'">{{infoNode(child)}}</ng-container>
+
+      <!-- Definition -->
+      <ng-container *ngSwitchCase="'definition'">{{infoNode(child)}}</ng-container>
+
+      <!-- Text -->
+      <ng-container *ngSwitchCase="'text'">{{child?.value}}</ng-container>
+ 
+      <!-- Align plugin -->
+      <ng-container *ngSwitchCase="'leftAligned'">
+        <span [attr.align]="'left'">
+          <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+        </span>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'centerAligned'">
+        <span [attr.align]="'center'">
+          <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+        </span>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'rightAligned'">
+        <span [attr.align]="'right'">
+          <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+        </span>
+      </ng-container>
+
+      <!-- Sub-script Super-script plugin -->
+      <ng-container *ngSwitchCase="'sub'">
+        <sub><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></sub>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'sup'">
+        <sup><ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container></sup>
+      </ng-container>
+
+      <!-- Unkown node detection handler -->
+      <ng-container *ngSwitchDefault>{{unknownNode(child)}}</ng-container>
+
     </ng-container>
-  
-  </ng-template>
-  
-  <!-- Table of contents template -->
-  <ng-template let-children="children" #toc>
-    <a *ngFor="let child of filterNodes(children, 'heading')" [href]="'#h'+child?.position?.start?.line">
-      <span [attr.toc]="child?.depth">
-        {{ tocTabs(child?.depth) }}<ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
-      </span>
-    </a>    
-  </ng-template>
-  
-  <!-- Footnotes template -->
-  <ng-template let-children="children" #footnotes>
-    <span *ngFor="let child of filterNodes(children, 'footnoteDefinition')"
-          [attr.footnote]="footnote(child?.identifier)"
-          [id]="'#fn'+footnote(child?.identifier)">
-      {{footnote(child?.identifier)}} -&nbsp;
-      <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+
+  </ng-container>
+
+</ng-template>
+
+<!-- Table of contents template -->
+<ng-template let-children="children" #toc>
+  <a *ngFor="let child of filterNodes(children, 'heading')" routerLink='.' [fragment]="'h'+child?.position?.start?.line">
+    <span [attr.toc]="child?.depth">
+      {{ tocTabs(child?.depth) }}<ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
     </span>
-  </ng-template>
+  </a>    
+</ng-template>
+
+<!-- Footnotes template -->
+<ng-template let-children="children" #footnotes>
+  <span *ngFor="let child of filterNodes(children, 'footnoteDefinition')"
+        [attr.footnote]="footnote(child?.identifier)"
+        [id]="'#fn'+footnote(child?.identifier)">
+    {{footnote(child?.identifier)}} -&nbsp;
+    <ng-container *ngTemplateOutlet="treeNode; context: child"></ng-container>
+  </span>
+</ng-template>

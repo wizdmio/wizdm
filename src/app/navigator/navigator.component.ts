@@ -5,10 +5,7 @@ import { ContentService, AuthService } from '../core';
 @Component({
   selector: 'wm-navigator',
   templateUrl: './navigator.component.html',
-  styleUrls: ['./navigator.component.scss']/*,
-  host: {
-    '[style.top.px]' : 'top'
-  }*/
+  styleUrls: ['./navigator.component.scss']
 })
 export class NavComponent implements OnInit {
 

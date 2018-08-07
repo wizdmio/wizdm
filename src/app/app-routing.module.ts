@@ -41,8 +41,9 @@ const routes: Routes = [
 
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'terms', component: TermsPrivacyComponent },
       { path: 'login', component: LoginComponent },
+      { path: 'terms', redirectTo: 'terms/short', pathMatch: 'full' },
+      { path: 'terms/:version', component: TermsPrivacyComponent },
 
       // Guarded pages requiring authentication
       { path: '', 
