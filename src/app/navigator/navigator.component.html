@@ -1,7 +1,6 @@
 <wm-toolbar fxFlex="0 0 auto"
             [toggler]="snav.opened" 
-            (togglerChange)="snav.toggle()"
-            [divider]="divider && !snav.opened" #toolbar>
+            (togglerChange)="snav.toggle()" #toolbar>
 </wm-toolbar>
 
 <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column">
@@ -9,7 +8,7 @@
   <mat-sidenav mode="over" position="end" #snav>
 
     <ng-container *ngIf="signedIn; else public">
-      <mat-nav-list>
+      <mat-nav-list fxLayout="column" fxLayoutAlign="start center">
         <a mat-list-item *ngFor="let item of msgs.menu.private" 
                          [routerLink]="item.link"
                          [queryParams]="item.params">
@@ -19,7 +18,7 @@
     </ng-container>
     
     <ng-template #public>
-      <mat-nav-list>
+      <mat-nav-list fxLayout="column" fxLayoutAlign="start center">
         <a mat-list-item *ngFor="let item of msgs.menu.public" 
                          [routerLink]="item.link"
                          [queryParams]="item.params">
@@ -30,11 +29,11 @@
   
   </mat-sidenav>  
     
-  <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" (scroll)="onScroll($event)" #content>
-    <div fxFlex="1 1 auto">
-      <router-outlet></router-outlet>
-    </div>
+  <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" wm-scroll-view threshold="20" (scrolled)="toolbar.showDivider($event)"> 
+
+    <div fxFlex="1 1 auto"><router-outlet></router-outlet></div>
     <wm-footer fxFlex="0 0 auto"></wm-footer>
+
   </mat-sidenav-content>
 
 </mat-sidenav-container>

@@ -1,27 +1,40 @@
 import { Injectable, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { defineInjectable, inject} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-function _window() : any {
-   // return the global native browser window object
-   return window;
-}
-
-@Injectable()
+/* @Injectable(
+{ providedIn: 'root', useFactory: windowFactory, deps: [PLATFORM_ID, window]})*/
+/**
+ * Implements a simple service to inject the global window object accordin to angular DI model
+ */
 export class WindowRef {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  // Using de-sugared tree-shakable injection
+  // See #23917 - https://github.com/angular/angular/issues/23917
+  static ngInjectableDef = defineInjectable({ 
+    providedIn: 'root', 
+    factory: () => new WindowRef(inject<string>(PLATFORM_ID), window)
+  });
 
-  // Simple service to provide the global window object via DI
-  get nativeWindow(): any { 
-    //return isPlatformBrowser(this.platformId) ? window : new Object(); 
-    return _window();
+  constructor(private platformId: string, public nativeWindow: any) {}
+
+  private get isPlatformBrowser() {
+    return isPlatformBrowser(this.platformId);
   }
 
   get navigator(): any {
+    return this.isPlatformBrowser ? this.nativeWindow.navigator : {};
+  }
 
-    let window = this.nativeWindow;
+  public detectLanguage() : string {
 
-    return (typeof window === 'undefined' || typeof window.navigator === 'undefined') ?
-      undefined : window.navigator;
+    // Detects the preferred language according to the browser, whenever possible
+    return (this.navigator.languages ? this.navigator.languages[0] : null) || 
+            this.navigator.language || 
+            this.navigator.browserLanguage || 
+            this.navigator.userLanguage || 'en';
+
+    // Returns the relevant part of the language code (ex: 'en-US' -> 'en')
+    //return code.split('-')[0];
   }
 }

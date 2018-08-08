@@ -9,6 +9,7 @@ import { ToolbarService } from './toolbar/toolbar.service';
 import { LogoComponent } from './toolbar/logo/logo.component';
 import { TogglerComponent } from './toolbar/toggler/toggler.component';
 import { FooterComponent } from './footer/footer.component';
+import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { FooterComponent } from './footer/footer.component';
     ToolbarComponent,
     LogoComponent,
     TogglerComponent,
-    FooterComponent
+    FooterComponent,
+    ScrollViewDirective
   ],
   providers: [
     ToolbarService

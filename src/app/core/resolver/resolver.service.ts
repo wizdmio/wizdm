@@ -12,10 +12,6 @@ import { WindowRef } from '../window/window.service';
 
 import * as moment from 'moment';
 
-// Support for detectLanguage
-declare interface Window { navigator: any;}
-declare const window: Window;
-
 @Injectable()
 export class ResolverService implements Resolve<any> {
 
@@ -31,7 +27,7 @@ export class ResolverService implements Resolve<any> {
     // Detects the browser language on request and re-route to it
     if(lang === 'auto') {
       
-      lang = this.detectLanguage();
+      lang = this.window.detectLanguage().split('-')[0];
       console.log('Using browser language: ' + lang);
 
       this.router.navigate([lang || 'en']);
@@ -59,24 +55,5 @@ export class ResolverService implements Resolve<any> {
         return this.content.use(lang);
       })
     );
-  }
-
-  public detectLanguage() : string {
-      
-    let navigator = this.window.navigator;
-    
-    // Shorts circuit to 'en' if the navigator object is not available
-    if(typeof navigator === 'undefined') {
-      return 'en';
-    }
-
-    // Detects the preferred language according to the browser, whenever possible
-    let code: string = (navigator.languages ? navigator.languages[0] : null) || 
-                        navigator.language || 
-                        navigator.browserLanguage || 
-                        navigator.userLanguage;
-
-    // Returns the relevant part of the language code (ex: 'en-US' -> 'en')
-    return code.split('-')[0];
   }
 }

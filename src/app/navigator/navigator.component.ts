@@ -9,10 +9,10 @@ import { ContentService, AuthService } from '../core';
 })
 export class NavComponent implements OnInit {
 
-  @ViewChild('content', { read: ElementRef })
-  private ctRef: ElementRef;
+  //@ViewChild('content', { read: ElementRef })
+  //private ctRef: ElementRef;
   public msgs: any = null;
-  public divider: boolean = false;
+  //public divider: boolean = false;
   
   constructor(private content: ContentService, 
               private auth: AuthService,
@@ -37,7 +37,7 @@ export class NavComponent implements OnInit {
   public get signedIn(): boolean {
     return this.auth.authenticated;
   }
-
+/*
   //@HostListener('window:scroll', ['$event']) 
   public onScroll(event: Event) : void {
     
@@ -48,4 +48,5 @@ export class NavComponent implements OnInit {
 
     //console.log("scroll: " + ofs);
   }
+*/
 }

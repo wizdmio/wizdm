@@ -14,7 +14,6 @@ import { PagesModule } from './pages/pages.module';
 import { AppRoutingModule } from './app-routing.module';
 
 import { 
-  WindowRef,
   AuthService,
   ContentService, 
   ResolverService,
@@ -44,7 +43,6 @@ import { environment } from 'environments/environment';
   providers: [
     MatIconRegistry,
     //---
-    WindowRef,
     AuthService,
     ContentService,
     ResolverService,

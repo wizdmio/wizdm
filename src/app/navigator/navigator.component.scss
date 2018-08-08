@@ -14,19 +14,6 @@
   flex-direction: column;
   box-sizing: border-box;
 }
-/*
-mat-sidenav {
-  a:last-child {
-    background-color: mat-color($wm-primary, A400);
-    color: mat-contrast($wm-primary, A400);
-  }
-}
-*/
-mat-sidenav-content {
-  overflow: auto;
-}
 
-//router-outlet + * {
-//  padding-bottom: $wm-content-margin;
-//}
-
+mat-sidenav { min-width: 50%;}
+mat-sidenav-content { overflow: auto;}

@@ -39,7 +39,7 @@ export class CodeHighlightComponent implements OnInit, OnDestroy {
       .subscribe( source => {
         // Tokenize the source code using prism (wrapped into a service for DI)
         this.tokens = source ? this.prism.tokenize(source, this.language) : [];
-        //console.log(this.tokens);
+        console.log(this.tokens);
       });
   }
 

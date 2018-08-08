@@ -14,57 +14,64 @@ import { filter } from 'rxjs/operators';
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
+  constructor(private content : ContentService,
+    private toolbar : ToolbarService,
+    private auth    : AuthService,
+    private router  : Router) { }
+
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input()  toggler = false;
-  @Input()  divider = false;
+
+  public toggle() {
+    this.togglerChange.emit(this.toggler = !this.toggler);
+  }
+
+  @Output() dividerChange = new EventEmitter<boolean>();
+  @Input('divider') divider = false;
   
+  public showDivider(show: boolean) {
+    if(this.divider != show) {
+      this.dividerChange.emit(this.divider = show);
+    }
+  }
+
   public msgs: any = null;
 
-  constructor(private content : ContentService,
-              private toolbar : ToolbarService,
-              private auth    : AuthService,
-              private router  : Router) { }
+  ngOnInit() {
 
-    ngOnInit() {
+    // Gets the localized content
+    this.msgs = this.content.select("navigator");
+  
+    // Listen for NavigationEnd events to close the menu
+    this.router.events.pipe( filter(e => e instanceof NavigationStart) )
+      .subscribe( () => {
+        // Clears the action buttons when navigating to a new page
+        this.toolbar.clearActions();
+        // Closes the sidenav drawer after navigation, eventually
+        if(this.toggler) { this.toggle();}
+      });
+  }
 
-      // Gets the localized content
-      this.msgs = this.content.select("navigator");
-    
-      // Listen for NavigationEnd events to close the menu
-      this.router.events.pipe( filter(e => e instanceof NavigationStart) )
-        .subscribe( () => {
-          // Clears the action buttons when navigating to a new page
-          this.toolbar.clearActions();
-          // Closes the sidenav drawer after navigation, eventually
-          if(this.toggler) { this.toggle();}
-        });
-    }
+  ngOnDestroy() {}
 
-    ngOnDestroy() {}
+  public get actionButtons() {
+    return this.toolbar.buttons;
+  }
 
-    public get actionButtons() {
-      return this.toolbar.buttons;
-    }
+  public get someAction() {
+    return this.actionButtons.length > 0;
+  }
 
-    public get someAction() {
-      return this.actionButtons.length > 0;
-    }
+  public performAction(code: string) {
+    this.toolbar.performAction(code);
+  }
 
-    public performAction(code: string) {
-      this.toolbar.performAction(code);
-    }
+  public get signedIn(): boolean {
+    return this.auth.authenticated;
+  }
 
-    public get signedIn(): boolean {
-      return this.auth.authenticated;
-    }
-
-    public get userImage(): string {
-
-      return this.auth.userProfile ? 
-        this.auth.userProfile.img : null; 
-    }
-    
-    public toggle() {
-      this.togglerChange.emit(this.toggler = !this.toggler);
-    }
+  public get userImage(): string {
+    return this.auth.userProfile ? 
+      this.auth.userProfile.img : null; 
+  }
 }

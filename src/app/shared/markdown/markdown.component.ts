@@ -3,7 +3,7 @@ import { RemarkService } from './remark.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-export type displayType = 'document' | 'footnotes' | 'toc';
+export type displayType = 'document' | 'toc' | 'footnotes';
 
 @Component({
   selector: 'wm-markdown, [wm-markdown]',
@@ -39,7 +39,7 @@ export class MarkdownComponent implements OnInit, OnDestroy {
       .subscribe( data => {
         // Builds the syntax tree or source it from a source component
         this.root = data ? this.remark.parse(data) : {};
-        //console.log(`Markdown (display=${this.display}): `, this.root);
+        console.log(`Markdown (display=${this.display}): `, this.root);
       });
   }
 
@@ -66,18 +66,18 @@ export class MarkdownComponent implements OnInit, OnDestroy {
   public filterNodes(nodes: any[], type: string) {
     return nodes ? nodes.filter( value => value.type === type ) : undefined;
   }
-
+/*
   public assertNode(node: any, type: string) {
-    //if(node && node.type !== type) {
-    //  console.error(`Expected node of type ${type}`, node);
-    //}
+    if(node && node.type !== type) {
+      console.error(`Expected node of type ${type}`, node);
+    }
   }
 
   public infoNode(node: any) {
-    //console.log('This node type is intentionally not rendered', node);
+    console.log('This node type is intentionally not rendered', node);
   }
 
   public unknownNode(node: any) {
     console.error('Unkown node encounteered', node);
-  }
+  }*/
 }
