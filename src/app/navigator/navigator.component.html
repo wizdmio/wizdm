@@ -31,7 +31,10 @@
     
   <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" wm-scroll-view threshold="20" (scrolled)="toolbar.showDivider($event)"> 
 
-    <div fxFlex="1 1 auto"><router-outlet></router-outlet></div>
+    <div fxFlex="1 1 auto">
+      <router-outlet (activate)="snav.close()" (deactivate)="toolbar.clearActions()">
+      </router-outlet>
+    </div>
     <wm-footer fxFlex="0 0 auto"></wm-footer>
 
   </mat-sidenav-content>

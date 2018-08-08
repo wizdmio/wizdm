@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { ContentService, AuthService } from '../core';
 
@@ -9,10 +9,7 @@ import { ContentService, AuthService } from '../core';
 })
 export class NavComponent implements OnInit {
 
-  //@ViewChild('content', { read: ElementRef })
-  //private ctRef: ElementRef;
   public msgs: any = null;
-  //public divider: boolean = false;
   
   constructor(private content: ContentService, 
               private auth: AuthService,
@@ -37,16 +34,4 @@ export class NavComponent implements OnInit {
   public get signedIn(): boolean {
     return this.auth.authenticated;
   }
-/*
-  //@HostListener('window:scroll', ['$event']) 
-  public onScroll(event: Event) : void {
-    
-    let ofs = this.ctRef.nativeElement.scrollTop || 0;
-
-    // Triggers the appeareance of the toolbar's divider on scroll
-    this.divider = ofs > 20;
-
-    //console.log("scroll: " + ofs);
-  }
-*/
 }

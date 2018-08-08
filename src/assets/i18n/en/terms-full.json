@@ -1,6 +1,6 @@
 {
   "title": "Terms & Privacy",
-  "disclaimer": "Theseare meant to be the full terms and conditions of wizdm...",
+  "disclaimer": "These are meant to be the full terms and conditions of wizdm... <short version:[short]>.",
 
   "actions": [
     { "caption": "Short version", "link": "terms/short" }

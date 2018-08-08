@@ -1,12 +1,14 @@
 
 <div fxLayout="row">
   
-  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!full"></div>
+  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!fullScreen"></div>
   
   <div fxFlex>
     <h1>{{msgs?.title}}</h1>
     <p>
-      <wm-disclaimer [source]="msgs.disclaimer">
+      <wm-disclaimer [source]="msgs.disclaimer" 
+                     (action)="switchVersion($event)"
+                     actionClass="mat-link">
       </wm-disclaimer>
     </p>
 
@@ -27,6 +29,6 @@
     </section>
   </div>
 
-  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!full"></div>
+  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!fullScreen"></div>
 
 </div>

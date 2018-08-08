@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ContentService } from 'app/core';
 import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
 
@@ -10,12 +10,12 @@ import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
 })
 export class TermsPrivacyComponent implements OnInit {
 
-  @Input() full = false; // Force the content to fit the full screen
+  @Input() fullScreen = false; // Force the content to fit the full screen
+  @Input() disableActions = false; // Prevent the activation of navigation actions
   public msgs = null;
   
   constructor(private content: ContentService, 
               private toolbar: ToolbarService,
-              private router: Router,
               private route: ActivatedRoute) {}
 
   ngOnInit() {
@@ -28,7 +28,14 @@ export class TermsPrivacyComponent implements OnInit {
       this.msgs = this.content.select(`${version}Terms`);
 
       // Activate the navigator action links
-      this.toolbar.activateActions(this.msgs.actions);
+      if(this.disableActions === false) {
+        this.toolbar.activateActions(this.msgs.actions);
+      }
     });
+  }
+
+  // Switch content version without navigation (suitable to support the popup version)
+  public switchVersion(version: string) {
+    this.msgs = this.content.select(`${version}Terms`);
   }
 }
