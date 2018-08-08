@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { ContentService, AuthService } from 'app/core';
 import { ToolbarService } from './toolbar.service';
 import { toolbarAnimations } from './toolbar-animations';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'wm-toolbar',
@@ -40,6 +41,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
+
+  public actionEnablers: any = {};
+
+  public isActionEnabled(code: string) {
+    return this.actionEnablers[code] || false;
+  }
 
   public get actionButtons() {
     return this.toolbar.buttons;

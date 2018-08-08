@@ -65,15 +65,19 @@
 <ng-container *ngFor="let button of actionButtons">
 
     <!-- ACTION BUTTON -->
-    <ng-container *ngIf="button?.action">
+    <ng-container *ngIf="button?.code">
       
       <!-- TEXT BUTTON (DESKTOP) -->
-      <button mat-button color="primary" [fxHide.lt-sm]="button?.icon" (click)="performAction(button.action)">
-        {{button.caption}}
+      <button mat-button color="primary" [fxHide.lt-sm]="button?.icon" 
+        (click)="performAction(button.code)"
+        [disabled]="button.enabler ? !(button.enabler | async) : false">
+        {{ button.caption }}
       </button>
 
       <!-- ICON BUTTON (MOBILE) -->
-      <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" (click)="performAction(button.action)">
+      <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" 
+        (click)="performAction(button.code)" 
+        [disabled]="button.enabler ? !(button.enabler | async) : false">
         <wm-icon [icon]="button?.icon"></wm-icon>
       </button>
 
@@ -84,7 +88,7 @@
       
       <!-- TEXT LINK (DESKTOP) -->
       <a mat-button color="primary" [fxHide.lt-sm]="button?.icon" [routerLink]="button.link" [queryParams]="button?.params">
-        {{button.caption}}
+        {{ button.caption }}
       </a>
 
       <!-- ICON LINK (MOBILE) -->

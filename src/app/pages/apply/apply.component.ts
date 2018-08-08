@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatStepper } from '@angular/material';
 import { ContentService, CanPageDeactivate, AuthService, ProjectService } from 'app/core';
 import { PopupService } from 'app/shared';
-import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
+import { ToolbarService, ActionEnabler } from 'app/navigator/toolbar/toolbar.service';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
 import { $animations } from './apply.animations';
 
@@ -30,6 +31,8 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
               private toolbar : ToolbarService,
               private dialog  : PopupService) { }
 
+  private enableClear$: ActionEnabler;
+
   ngOnInit() {
 
     // Gets the localized user messages from content manager
@@ -41,8 +44,13 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
     // Build the stepper forms initializing the field values with the last application eventually saved
     this.buildForm(this.application || {});
 
+    // Enable actions on the navigation bar
     this.toolbar.activateActions(this.msgs.actions)
       .subscribe( code => this.disclaimerAction(code) );
+
+    // Gets the action enabler for 'clear' action code
+    this.enableClear$ = this.toolbar.actionEnabler('clear');
+    this.enableClear$.enable(this.application !== null);
   }
 
   // Helpers to deal with the temporary application 
@@ -54,20 +62,27 @@ export class ApplyComponent implements OnInit, CanPageDeactivate {
     return this.saveApplication(null);
   }
 
+  // Updates the last saved application
   private saveApplication(value: any): Promise<void> {
     return this.auth.updateUserProfile( { lastApplication: value })
-      .then(() => console.log("application updated") )
+      // Enables/ Disables the 'clear' action button accordingly
+      .then(() => this.enableClear$.enable( value != null ) )
       .catch(error => console.log("something wrong: " + error.code) );
   }
+
+  @ViewChild('stepper') stepper: MatStepper;
 
   public clearApplication() {
 
     // Clear the welcomeBack flag
     this.welcomeBack = false;
 
-    // Resets the forms
-    this.headerForm.reset();
-    this.stepForms.forEach( step => step.reset() ); 
+    // Resets the stepper (and the forms)
+    this.stepper.reset();
+
+    // Resets the forms (resetted by the stepper)
+    //this.headerForm.reset();
+    //this.stepForms.forEach( step => step.reset() ); 
 
     // Resets the previously saved application data
     return this.resetApplication();

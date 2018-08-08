@@ -5,7 +5,7 @@
   "clearForm": "Eventually, you can <clear the form:[clear]> and restart if you prefer.",
 
   "actions": [
-    { "caption": "Clear Application", "icon": "delete_forever", "action": "clear" }
+    { "caption": "Clear Application", "icon": "delete_forever", "code": "clear" }
   ],
 
   "header": {
