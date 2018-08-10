@@ -4,10 +4,9 @@
 
     <wm-icon mat-list-icon *ngIf="icon" [icon]="displayIcon"></wm-icon>
     
-    <h3 mat-line>{{ label }}</h3>
-    
+    <p mat-line>{{ label }}</p>
     <p mat-line>{{ displayValue }}</p>
-  
+    
     <button *ngIf="editable" mat-icon-button (click)="editMode()">
       <mat-icon>navigate_next</mat-icon>
     </button>
@@ -19,7 +18,7 @@
   
     <wm-icon mat-list-icon *ngIf="icon" [icon]="displayIcon"></wm-icon>
     
-    <h3 mat-line></h3>
+    <p mat-line></p>
   
     <form mat-line [formGroup]="form" (ngSubmit)="updateControl()">
       <ng-container [ngSwitch]="type">

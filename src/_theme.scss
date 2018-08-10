@@ -1,5 +1,31 @@
 @import '~@angular/material/theming';
 
+// Define the main font family
+$wm-font-family: 'Ubuntu, sans-serif';
+
+// Custom typography config
+$wm-typography: (
+
+  // Angular Material standard values
+  display-4:     mat-typography-level(112px, 112px, 300, $wm-font-family),
+  display-3:     mat-typography-level(56px, 56px, 400, $wm-font-family),
+  display-2:     mat-typography-level(45px, 48px, 400, $wm-font-family),
+  display-1:     mat-typography-level(34px, 40px, 400, $wm-font-family),
+  headline:      mat-typography-level(32px, 48px, 700, $wm-font-family),
+  title:         mat-typography-level(24px, 32px, 600, $wm-font-family),
+  subheading-2:  mat-typography-level(20px, 28px, 600, $wm-font-family),
+  subheading-1:  mat-typography-level(18px, 24px, 600, $wm-font-family),
+  body-2:        mat-typography-level(18px, 24px, 500, $wm-font-family),
+  body-1:        mat-typography-level(16px, 24px, 500, $wm-font-family),
+  caption:       mat-typography-level(16px, 20px, 400, $wm-font-family),
+  button:        mat-typography-level(16px, 20px, 500, $wm-font-family),
+  input:         mat-typography-level(inherit, 1.125, 400, $wm-font-family),
+
+  // Application specific typography values
+  logo:          mat-typography-level(22px, 24px, 600, $wm-font-family),
+  social:        mat-typography-level(22px, 24px, 600, $wm-font-family),
+);
+
 // Define the main theme palettes.
 $wm-primary: mat-palette($mat-blue);
 $wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
@@ -7,6 +33,8 @@ $wm-warn:    mat-palette($mat-red);
 
 // Custom background palette
 $wm-theme-background: (
+
+  // Angular Material standard values
   status-bar: white,
   app-bar:    white,
   background: white, //map-get($mat-grey, 50),
@@ -21,10 +49,14 @@ $wm-theme-background: (
   disabled-button-toggle: map_get($mat-grey, 200),
   unselected-chip: map_get($mat-grey, 300),
   disabled-list-option: map_get($mat-grey, 200),
+
+  // Application specific background values
 );
 
 // Custom foreground palette
 $wm-theme-foreground: (
+
+  // Angular Material standard values
   base:              mat-color($wm-primary, 900),
   divider:           $dark-dividers,
   dividers:          $dark-dividers,
@@ -39,14 +71,8 @@ $wm-theme-foreground: (
   slider-min:        rgba(mat-color($wm-primary, 900), 0.87),
   slider-off:        rgba(mat-color($wm-primary, 900), 0.26),
   slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
-);
 
-// Define a custom typography config that overrides the font-family as well as the
-// `headlines` and `body-1` levels.
-$wm-typography: mat-typography-config(
-  $font-family: 'Ubuntu, sans-serif',
-  $headline: mat-typography-level(32px, 48px, 700),
-  $body-1: mat-typography-level(16px, 24px, 500)
+  // Application specific foreground values
 );
 
 @function wm-app-theme($primary, $accent, $warn) {

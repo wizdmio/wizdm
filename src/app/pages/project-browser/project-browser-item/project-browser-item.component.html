@@ -3,7 +3,7 @@
   <!-- TOP BAR -->
   <header fxLayout="row" fxLayoutAlign="space-between center">
     
-    <span class="status">{{project?.status}}</span>
+    <span class="status">{{ project?.status }}</span>
 
     <div class="owner-toolbar" fxLayout="row" fxLayoutAlign="center center" *ngIf="isMine">
   
@@ -27,17 +27,25 @@
 
   <!-- PROJECT DESCRIPTION -->
   <div fxLayout="row" fxLayoutAlign="space-between start">
-    <h3 class="name"><b>{{project?.name}}</b></h3>
+
+    <h3 class="name">
+      <a [routerLink]="['.', project?.id]">
+        <b>{{ project?.name }}</b>
+      </a>
+    </h3>
+    
     <img class="image" [src]="projectImage" />
-  </div>  
-  <p class="mat-small description">{{project?.application?.description}}</p>
+
+  </div>
+
+  <p class="mat-small description">{{ project?.pitch }}</p>
 
   <!-- TEAM COVERAGE -->
   <div fxLayout="column" fxLayoutAlign="center center" fxFill>
   
     <div class="team" fxLayout="row" fxLayoutAlign="space-between center" fxFill>
       <span class="mat-small">Team coverage</span>
-      <span class="mat-small">{{completion}}%</span>
+      <span class="mat-small">{{ completion }}%</span>
     </div>
   
     <div fxLayout="row wrap" fxLayoutAlign="center center" fxFill>

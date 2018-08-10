@@ -3,14 +3,27 @@ export {};
 declare global {
 
   interface String {
+  /**
+   * Trims spaces from both ends of a string
+   */
     trim(): string;
+
+  /**
+   * Turns an Hyphen delimited string into a CamelCase version of it
+   * @example "invalid-user".camelize();
+   * @returns "InvalidUser"
+   */
     camelize(): string;
+
+  /**
+   * Turns a CamelCase string into an Hyphen delimited version of it
+   * @example "wrongParrword".hyphenize();
+   * @returns "wrong-password"
+   */
     hyphenize(string): string;
   }
 }
 
-// Implements a set of string conversion functions between CamelCase and Hypen delimited notations
-//
 String.prototype.trim = function(this: string): string {
 	return this.replace(/^\s+|\s+$/g,'');
 };

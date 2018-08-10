@@ -8,6 +8,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { LogoComponent } from './toolbar/logo/logo.component';
 import { TogglerComponent } from './toolbar/toggler/toggler.component';
+import { SideMenuComponent } from './side-menu/side-menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
 
@@ -22,6 +23,7 @@ import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
     ToolbarComponent,
     LogoComponent,
     TogglerComponent,
+    SideMenuComponent,
     FooterComponent,
     ScrollViewDirective
   ],

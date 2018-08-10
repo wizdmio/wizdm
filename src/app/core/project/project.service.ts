@@ -89,24 +89,6 @@ export class ProjectService {
     return { ...data, owner: this.userId };
   }
 
-  private markDocument(data: wmApplication): string {
-    return "";
-  }
-
-  public createProject(data: wmApplication): Promise<void> {
-
-    let prj: wmProject = {
-
-      name     : data.name,
-      pitch    : data.pitch,
-      document : this.markDocument(data)
-
-    };
-    
-    // TODO: Implements the project creation from an application
-    return this.addProject(prj);
-  }
-
   public addProject(data: wmProject): Promise<void> {
 
     // Adds a new project

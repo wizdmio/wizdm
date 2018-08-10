@@ -21,8 +21,8 @@ export class ProjectComponent implements OnInit {
 
   ngOnInit() {
 
-    this.snapshot = { document: $debug } as wmProject;
-/*
+    //this.snapshot = { document: $debug } as wmProject;
+
       this.route.paramMap.pipe(
         switchMap( param => {
 
@@ -42,7 +42,6 @@ export class ProjectComponent implements OnInit {
         this.snapshot = data || { document: $debug } as wmProject;
       
       } );
-  */
   }
 
 }

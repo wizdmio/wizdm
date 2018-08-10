@@ -12,7 +12,6 @@ export class NavComponent implements OnInit {
   public msgs: any = null;
   
   constructor(private content: ContentService, 
-              private auth: AuthService,
               private title: Title,
               private meta: Meta) { }
 
@@ -29,9 +28,5 @@ export class NavComponent implements OnInit {
     if(this.msgs.description) {
       this.meta.updateTag({content: this.msgs.description}, "name='description'");
     }
-  }
-
-  public get signedIn(): boolean {
-    return this.auth.authenticated;
   }
 }

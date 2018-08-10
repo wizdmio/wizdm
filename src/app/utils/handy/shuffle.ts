@@ -3,13 +3,14 @@ export {};
 declare global {
 
     interface Array<T> {
+        /**
+         * Extends Array implementing the Fisher-Yates shuffle algorithm 
+         * (so basically shuffling the elements randomly)
+         */
         shuffle(): T[];
     }
 }
 
-
-
-// Extends array with the Fisher-Yates shuffle algorithm
 Array.prototype.shuffle = function<T>(this: T[]): T[] {
 
   let result = this;

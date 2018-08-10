@@ -3,19 +3,22 @@ export {};
 declare global {
 
     interface String {
+    /**
+     * Implements a simple printf like function with limited support according to the syntax:
+     *
+     * %[flags][width][.precision]type - where:
+     * 
+     * flags: can be: 0 to prepend zeroes instead of spaces when width is specified
+     * width: is the number of digits
+     * precision: is the number of digits after the decimal point
+     * type: can be: 'd' for integers, 'f' for fixed point numbers, 's' for strings
+     * @example "%% - %d - %2d - %02d - %0.2f - %s".printf( 3.1415, 3.1415, 3.1415, 3.1415, 3.1415 );
+     * @returns "% - 3 - <space>3 - 03 - 3.14 - '3.1415'"
+     */
         printf(...args: any[]): string;
     }
 }
 
-// Implements a simple printf like function with limited support according to the syntax:
-//
-// %[flags][width][.precision]type - where:
-// 
-// flags: can be: 0 to prepend zeroes instead of spaces when width is specified
-// width: is the number of digits
-// precision: is the number of digits after the decimal point
-// type: can be: 'd' for integers, 'f' for fixed point numbers, 's' for strings   
-//
 String.prototype.printf = function(this: string, ...args: any[]): string {
 
 let i = 0;

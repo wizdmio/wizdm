@@ -13,9 +13,9 @@ import { LoginComponent } from './login/login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserProfileItemComponent } from './user-profile/user-profile-item/user-profile-item.component';
 import { ApplyComponent } from './apply/apply.component';
+import { ProjectComponent } from './project/project.component';
 import { ProjectBrowserComponent } from './project-browser/project-browser.component';
 import { ProjectBrowserItemComponent } from './project-browser/project-browser-item/project-browser-item.component';
-import { ProjectComponent } from './project-browser/project/project.component';
 import { PeopleBrowserComponent } from './people-browser/people-browser.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 

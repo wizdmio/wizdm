@@ -270,12 +270,14 @@ export class ContentService {
   public select(select: string, defaults?: any): any {
 
     if(!this.data) {
-      return defaults;}
+      return defaults;
+    }
       
     return select.split(".").reduce( (value, token) => {
 
       if(typeof value[token] === "undefined") { 
-        return defaults;}
+        return defaults;
+      }
           
       return value[token];
       

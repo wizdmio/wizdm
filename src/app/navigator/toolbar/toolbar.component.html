@@ -70,14 +70,14 @@
       <!-- TEXT BUTTON (DESKTOP) -->
       <button mat-button color="primary" [fxHide.lt-sm]="button?.icon" 
         (click)="performAction(button.code)"
-        [disabled]="button.enabler ? !(button.enabler | async) : false">
+        [disabled]="!(!!button.enabler && (button.enabler | async))">
         {{ button.caption }}
       </button>
 
       <!-- ICON BUTTON (MOBILE) -->
       <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" 
         (click)="performAction(button.code)" 
-        [disabled]="button.enabler ? !(button.enabler | async) : false">
+        [disabled]="!(!!button.enabler && (button.enabler | async))">
         <wm-icon [icon]="button?.icon"></wm-icon>
       </button>
 

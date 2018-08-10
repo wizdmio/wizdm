@@ -24,6 +24,7 @@
     "profile": "profile.json",
     "browser": "browser.json",
     "project": "project.json",
+    "document": "document.json",
     "people": "people.json",
     "apply": "apply.json",
     "about": "about.json",

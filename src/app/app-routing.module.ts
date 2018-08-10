@@ -8,8 +8,8 @@ import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.compo
 import { LoginComponent } from './pages/login/login.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { ApplyComponent } from './pages/apply/apply.component';
+import { ProjectComponent } from './pages/project/project.component';
 import { ProjectBrowserComponent } from './pages/project-browser/project-browser.component';
-import { ProjectComponent } from './pages/project-browser/project/project.component';
 import { PeopleBrowserComponent } from './pages/people-browser/people-browser.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HandlerComponent } from './pages/handler/handler.component';

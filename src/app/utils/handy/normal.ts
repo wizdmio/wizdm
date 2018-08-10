@@ -3,11 +3,14 @@ export {};
 declare global {
 
   interface Math {
+  /**
+   * Extends Math with standard normal variate using Box-Muller transform.
+   * (so basically is a random generator with normal distribution)
+   */
     normal(): number;
   }
 }
 
-// Extends Math with standard normal variate using Box-Muller transform.
 Math.normal = function() {
 
   var u = 1 - Math.random(); // Subtraction to flip [0, 1) to (0, 1].

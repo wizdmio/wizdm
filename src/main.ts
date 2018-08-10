@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 // Import handy utils to extend global objects with useful functions
 import 'app/utils/handy/naming';
 import 'app/utils/handy/interpolate';
+import 'app/utils/handy/select'
 //import 'app/utils/handy/printf';
 //import 'app/utils/handy/normal';
 //import 'app/utils/handy/shuffle';

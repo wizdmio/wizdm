@@ -7,27 +7,9 @@
 
   <mat-sidenav mode="over" position="end" #snav>
 
-    <ng-container *ngIf="signedIn; else public">
-      <mat-nav-list fxLayout="column" fxLayoutAlign="start center">
-        <a mat-list-item *ngFor="let item of msgs.menu.private" 
-                         [routerLink]="item.link"
-                         [queryParams]="item.params">
-          {{item.label}}
-        </a>
-      </mat-nav-list>
-    </ng-container>
-    
-    <ng-template #public>
-      <mat-nav-list fxLayout="column" fxLayoutAlign="start center">
-        <a mat-list-item *ngFor="let item of msgs.menu.public" 
-                         [routerLink]="item.link"
-                         [queryParams]="item.params">
-          {{item.label}}
-        </a>
-      </mat-nav-list>
-    </ng-template>
+    <wm-side-menu></wm-side-menu>
   
-  </mat-sidenav>  
+  </mat-sidenav>
     
   <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" wm-scroll-view threshold="20" (scrolled)="toolbar.showDivider($event)"> 
 
@@ -36,7 +18,7 @@
       </router-outlet>
     </div>
     <wm-footer fxFlex="0 0 auto"></wm-footer>
-
+  
   </mat-sidenav-content>
 
 </mat-sidenav-container>
