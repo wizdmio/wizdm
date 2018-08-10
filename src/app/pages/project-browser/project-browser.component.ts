@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { ContentService, ProjectService, wmProject, Timestamp } from 'app/core';
-import { ToolbarService } from 'app/navigator/toolbar/toolbar.service';
+import { ToolbarService } from 'app/navigator';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
 import { $animations } from './project-browser.animations';

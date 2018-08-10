@@ -1,4 +1,18 @@
 {
+  "title": "",
+  "tableOfContents": "Table of contents",
+  "footnotes": "Footnotes",
+
+  "actions":{ 
+    "owner": [
+      { "caption": "Edit", "icon": "edit", "code": "edit" },
+      { "caption": "Delete", "icon": "delete", "code": "delete" }
+    ],
+    "guest": [
+      { "caption": "Contact {{ owner.name }}", "icon": "envelope", "code": "contact"}
+    ]
+  },
+
   "canDelete": {
     "title": "Deleting project",
     "message": "WARNING, by proceeding you'll permanently delete this project.",

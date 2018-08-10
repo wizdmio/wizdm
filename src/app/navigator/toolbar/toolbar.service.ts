@@ -47,7 +47,7 @@ export class ToolbarService implements OnDestroy {
 
     this.clearActions();
 
-    this.actionButtons.push(...buttons);
+    this.actionButtons.push(...buttons || []);
 
     this.dispose$ = new Subject<void>();
 

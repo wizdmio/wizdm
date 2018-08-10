@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
-import { ContentService, AuthService } from '../core';
+import { ContentService } from '../core';
 
 @Component({
   selector: 'wm-navigator',

@@ -5,8 +5,9 @@ import { auth, User } from 'firebase';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap, startWith, tap } from 'rxjs/operators';
 
-export interface UserData {
+export interface wmUser {
 
+  id?     : string,
   img?    : string,
   name?   : string,
   email?  : string,
@@ -23,17 +24,17 @@ export interface UserData {
 export class AuthService implements OnDestroy {
 
   private user: User = null;
-  private userData: UserData = null;
+  private userData: wmUser = null;
   private sub: Subscription;
 
   get user$(): Observable<User|null> {
     return this.af.user;
   }
 
-  get userData$(): Observable<UserData|null> {
+  get userData$(): Observable<wmUser|null> {
     return this.user$.pipe(
       switchMap( user => 
-        user ? this.db.doc<UserData>(`users/${user.uid}`).valueChanges() : of(null) 
+        user ? this.db.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null) 
       )
     );
   }
@@ -59,7 +60,7 @@ export class AuthService implements OnDestroy {
   }
 
   // Returns the user customized profile data object
-  get userProfile(): UserData {
+  get userProfile(): wmUser {
     return this.user !== null ? this.userData : {};
   }
   
@@ -74,7 +75,7 @@ export class AuthService implements OnDestroy {
         this.user = user;
         
         // Turns it into the user profile data observable
-        return user ? this.db.doc<UserData>(`users/${user.uid}`).valueChanges() : of(null);
+        return user ? this.db.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null);
       })
       // Save the profile in the local storage
       //tap(data => localStorage.setItem('user', JSON.stringify(data))),
@@ -100,11 +101,11 @@ export class AuthService implements OnDestroy {
       lang:  lang
     };
     
-    return this.db.upsert<UserData>(`users/${user.uid}`, data);
+    return this.db.upsert<wmUser>(`users/${user.uid}`, data);
   }
 
-  public updateUserProfile(data: UserData | any) : Promise<void> {
-    return this.db.merge<UserData>(`users/${this.userId}`, data);
+  public updateUserProfile(data: wmUser | any) : Promise<void> {
+    return this.db.merge<wmUser>(`users/${this.userId}`, data);
   }
 
   public registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
@@ -267,7 +268,7 @@ export class AuthService implements OnDestroy {
       .then( () => {
 
         // Deletes the user custom data...
-        return this.db.delete<UserData>(`users/${this.userId}`)
+        return this.db.delete<wmUser>(`users/${this.userId}`)
           
           // Then deletes the account and sign-out
           .then( () => this.user.delete() );

@@ -14,7 +14,7 @@
 }
 
 .table-of-contents {
-  border-left: 3px solid mat-color($wm-primary, 600);
+  border-left: 3px solid map-get($wm-theme-foreground, divider);
   margin: 10px 0 10px 10px;
   padding: 5px 0 10px 10px;
   box-sizing: border-box;

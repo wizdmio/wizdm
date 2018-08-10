@@ -4,8 +4,8 @@ import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
 import { ContentService, CanPageDeactivate, AuthService, ProjectService, wmApplication, wmProject } from 'app/core';
+import { ToolbarService, ActionEnabler } from 'app/navigator';
 import { PopupService } from 'app/shared';
-import { ToolbarService, ActionEnabler } from 'app/navigator/toolbar/toolbar.service';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
 import { $animations } from './apply.animations';
 import { Observable } from 'rxjs';

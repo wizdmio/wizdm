@@ -3,18 +3,18 @@
 
   <div fxFlex="1 1 auto" fxLayout="column">
     
-    <wm-markdown fxFlex="1 1 auto" [data]="snapshot?.document">
+    <wm-markdown fxFlex="1 1 auto" [data]="document">
     </wm-markdown>
 
-    <wm-markdown fxFlex="0 0 auto" display="footnotes" [data]="snapshot?.document">
-      <!--mat-divider></mat-divider>
-      <h4>Footnotes:</h4-->
+    <wm-markdown fxFlex="0 0 auto" display="footnotes" [data]="document">
+      <mat-divider></mat-divider>
+      <h4>{{ msgs.footnotes }}</h4>
     </wm-markdown>
   </div>
 
   <div fxFlex="0 0 auto">
-    <wm-markdown class="table-of-contents" display="toc" [data]="snapshot?.document">
-      <!--h3>Table of contents</h3-->
+    <wm-markdown class="table-of-contents" display="toc" [data]="document">
+      <h3>{{ msgs.tableOfContents }}</h3>
     </wm-markdown>
   </div>
 </div>

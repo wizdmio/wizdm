@@ -1,3 +1,4 @@
+import { wmUser } from '../auth/auth.service';
 
 export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed';
 
@@ -39,7 +40,7 @@ export interface wmProject {
 
   //development? : wmDevelopment,
   
-  owner?       : string,
+  owner?       : string | wmUser,
   team?        : string[],
   
   status?      : wmProjectStatus,

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { AuthService, wmUser } from '../auth/auth.service';
 import { DatabaseService, dbDocument, QueryFn, Timestamp } from '../database/database.service';
 import { wmProject, wmApplication, wmDevelopment } from './data-model';
 export { wmProject, wmApplication, wmDevelopment } from './data-model';
 
 import { Observable, of } from 'rxjs';
-import { filter, map, tap, take, debounceTime } from 'rxjs/operators';
+import { filter, map, tap, take, debounceTime, switchMap, mergeMap } from 'rxjs/operators';
 /*
 import * as moment from 'moment';
 
@@ -38,8 +38,7 @@ export class WMProject {
 })
 export class ProjectService {
 
-  private currentRef: dbDocument<wmProject> = null;
-  public  currentId:  string = null;
+  public currentId: string = null;
 
   constructor(private auth: AuthService,
               private db:   DatabaseService) {
@@ -48,7 +47,9 @@ export class ProjectService {
   public get userId(): string { return this.auth.userId;}
 
   public isProjectMine(project: wmProject) : boolean {
-    return project.owner === this.userId;
+    return typeof project.owner === 'string' ?
+      project.owner === this.userId :
+        project.owner.id === this.userId;
   }
 
   public listProjects(queryFn? : QueryFn): Observable<wmProject[]> {
@@ -93,34 +94,34 @@ export class ProjectService {
 
     // Adds a new project
     return this.db.add<wmProject>('/projects', this.formatData(data) )
-      .then( ref => {
-        this.currentId = (ref ? (ref.ref ? ref.ref.id : null) : null);
-        this.currentRef = ref;
-      });
+      // Updates the current id
+      .then( ref => { this.currentId = ref && ref.ref && ref.ref.id;});
   }
 
   public updateProject(data: wmProject): Promise<void> {
 
     // Updates the existing project
-    if(this.currentRef !== null) {
-      return this.db.merge<wmProject>(this.currentRef, this.formatData(data) );
-    }
-
-    return Promise.reject('ref == null');
+    return this.currentId !== null ? 
+      this.db.merge<wmProject>(`/projects/${this.currentId}`, this.formatData(data) ) :
+        Promise.reject("currentId is null or invalid");
   }
 
   public queryProject(id?: string): Observable<wmProject> {
 
     if(id || this.currentId) {
 
-      let ref = `/projects/${id || this.currentId}`;
-
       // Query for the project coming with the requested id
-      return this.db.docWithId$<wmProject>(ref).pipe(
-        tap( doc => {
-          this.currentId = doc.id;
-          this.currentRef = ref;
-        })
+      return this.db.docWithId$<wmProject>(`/projects/${id || this.currentId}`).pipe(
+
+        // Query for the project owner too
+        mergeMap( project => 
+          this.db.docWithId$<wmUser>(`/users/${project.owner}`).pipe( 
+            map( owner => { return { ...project, owner } as wmProject;})
+          )
+        ),
+
+        // Updates the current id
+        tap( project => { this.currentId = project.id;})
       );
     }
 
@@ -129,12 +130,10 @@ export class ProjectService {
 
   public deleteProject(id?: string): Promise<void> {
     
-    if(!id && !this.currentId) {
-      return Promise.reject('null id or reference');
-    }
-
     // Deletes the project coming with the requested id
-    return this.db.delete(`/projects/${id || this.currentId}`)
-      .then( () => { this.currentId = null; this.currentRef = null; });
+    return id || this.currentId ?
+      this.db.delete(`/projects/${id || this.currentId}`)
+        .then( () => { this.currentId = null; }) :
+          Promise.reject('both id and currentId as null or invalid');
   }
 }
