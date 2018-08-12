@@ -1,5 +1,8 @@
 @import '~@angular/material/theming';
 
+// Thes file is actually extending the standard Angular Material theme
+// with customized application specific colors ans typography styles
+
 // Define the main font family
 $wm-font-family: 'Ubuntu, sans-serif';
 
@@ -24,6 +27,8 @@ $wm-typography: (
   // Application specific typography values
   logo:          mat-typography-level(22px, 24px, 600, $wm-font-family),
   social:        mat-typography-level(22px, 24px, 600, $wm-font-family),
+  footnote:      mat-typography-level(16px, 20px, 400, $wm-font-family),
+  toc:           mat-typography-level(18px, 24px, 500, $wm-font-family),
 );
 
 // Define the main theme palettes.
@@ -35,22 +40,25 @@ $wm-warn:    mat-palette($mat-red);
 $wm-theme-background: (
 
   // Angular Material standard values
-  status-bar: white,
-  app-bar:    white,
-  background: white, //map-get($mat-grey, 50),
-  hover:      rgba(black, 0.04),
-  card:       white,
-  dialog:     white,
-  disabled-button: rgba(black, 0.12),
-  raised-button: white,
-  focused-button: $dark-focused,
-  selected-button: map_get($mat-grey, 300),
+  status-bar:             white,
+  app-bar:                white,
+  background:             white, //map-get($mat-grey, 50),
+  hover:                    rgba(black, 0.04),
+  card:                   white,
+  dialog:                 white,
+  disabled-button:          rgba(black, 0.12),
+  raised-button:          white,
+  focused-button:           $dark-focused,
+  selected-button:          map_get($mat-grey, 300),
   selected-disabled-button: map_get($mat-grey, 400),
-  disabled-button-toggle: map_get($mat-grey, 200),
-  unselected-chip: map_get($mat-grey, 300),
-  disabled-list-option: map_get($mat-grey, 200),
+  disabled-button-toggle:   map_get($mat-grey, 200),
+  unselected-chip:          map_get($mat-grey, 300),
+  disabled-list-option:     map_get($mat-grey, 200),
 
   // Application specific background values
+  inline-code:              mat-color($mat-grey, 200),
+  block-code:               mat-color($mat-grey, 400),
+  table-row:              rgba(0,0,0,0.03),
 );
 
 // Custom foreground palette
@@ -73,6 +81,11 @@ $wm-theme-foreground: (
   slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
 
   // Application specific foreground values
+  blockquote:        rgba(mat-color($mat-grey, 600), 0.87),
+  inline-code:       mat-color($mat-red, 800),
+  code:              rgba(black, 0.87),
+  table:             $dark-dividers,
+  toc-delimiter:     $dark-dividers,
 );
 
 @function wm-app-theme($primary, $accent, $warn) {
@@ -121,8 +134,5 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   // Applies material typography rules globally
   body {
     @extend .mat-typography;
-
-    // Removes the margin
-    margin: 0;
   }
 }

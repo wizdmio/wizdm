@@ -3,7 +3,7 @@
   "tableOfContents": "Table of contents",
   "footnotes": "Footnotes",
 
-  "actions":{ 
+  "actions": { 
     "owner": [
       { "caption": "Edit", "icon": "edit", "code": "edit" },
       { "caption": "Delete", "icon": "delete", "code": "delete" }
@@ -18,5 +18,11 @@
     "message": "WARNING, by proceeding you'll permanently delete this project.",
     "cancel": "Cancel",
     "ok": "Proceed"
+  },
+
+  "editBox": {
+    "actions": [ 
+      { "caption": "Done", "icon": "done", "code": "done" }
+    ]
   }
 }

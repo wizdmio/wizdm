@@ -1,4 +1,7 @@
 
+// Resets styles with Normalize.css for browser behaviour consistency
+@import '~normalize.css/normalize.css';
+
 // Host material icons
 $material-icons-font-path: '~material-icons/iconfont/';
 @import '~material-icons/iconfont/material-icons.scss';

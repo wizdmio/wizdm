@@ -33,6 +33,7 @@
     "hammerjs": "^2.0.8",
     "material-icons": "^0.2.3",
     "moment": "^2.22.2",
+    "normalize.css": "^8.0.0",
     "path": "^0.12.7",
     "prismjs": "^1.15.0",
     "remark-align": "^1.2.2",

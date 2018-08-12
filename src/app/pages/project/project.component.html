@@ -1,20 +1,35 @@
 
-<div fxLayout="row" fxLayoutAlign="space-between strech">
+<div fxLayout="row" fxLayoutAlign="space-between strech" #rendered>
 
-  <div fxFlex="1 1 auto" fxLayout="column">
+  <div fxFlex="1 1 auto">
+
+    <!--div [ngStyle]="{ 'overflow-y': 'scroll' }"-->
+
+      <!-- Renders the table of contents on top on small screens -->
+      <wm-markdown class="table-of-contents" display="toc" [data]="document" fxHide fxShow.lt-sm>
+        <h2>{{ msgs.tableOfContents }}</h2>
+      </wm-markdown>
+
+      <!-- Renders the documetn body -->
+      <wm-markdown [data]="document"></wm-markdown>
     
-    <wm-markdown fxFlex="1 1 auto" [data]="document">
-    </wm-markdown>
+      <!-- Renders the footnotes at the end -->
+      <wm-markdown display="footnotes" [data]="document">
+        <mat-divider></mat-divider>
+        <h4>{{ msgs.footnotes }}</h4>
+      </wm-markdown>
 
-    <wm-markdown fxFlex="0 0 auto" display="footnotes" [data]="document">
-      <mat-divider></mat-divider>
-      <h4>{{ msgs.footnotes }}</h4>
-    </wm-markdown>
-  </div>
+    </div>
+  <!--/div-->
 
-  <div fxFlex="0 0 auto">
-    <wm-markdown class="table-of-contents" display="toc" [data]="document">
+  <!-- Renders the table of contents by side on big screens -->
+  <div fxFlex="0 0 auto" fxHide.lt-sm>
+    <wm-markdown class="table-of-contents sticky" display="toc" [data]="document">
       <h3>{{ msgs.tableOfContents }}</h3>
     </wm-markdown>
   </div>
 </div>
+
+<!-- Displays the edit box overlay when in editMode -->
+<wm-edit-box [value]="document" (done)="editMode = false" *ngIf="editMode">
+</wm-edit-box>

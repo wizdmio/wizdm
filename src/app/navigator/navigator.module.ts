@@ -11,6 +11,7 @@ import { TogglerComponent } from './toolbar/toggler/toggler.component';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
+import { ScrollViewService } from './scroll-view/scroll-view.service';
 /*
 import { 
   NavComponent, 
@@ -39,7 +40,8 @@ import {
     ScrollViewDirective
   ],
   providers: [
-    ToolbarService
+    ToolbarService,
+    ScrollViewService
   ]
 })
 export class NavigatorModule { }

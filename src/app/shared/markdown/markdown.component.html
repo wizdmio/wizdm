@@ -227,11 +227,13 @@
 <!-- Table of contents template -->
 <ng-template let-children="children" #toc>
 
-  <a *ngFor="let child of filterNodes(children, 'heading')" routerLink='.' [fragment]="'h'+child?.position?.start?.line">
-    <span [attr.toc]="child?.depth">
-      {{ tocTabs(child?.depth) }}<ng-container *ngTemplateOutlet="plainText; context: child"></ng-container>
-    </span>
-  </a>
+  <span *ngFor="let child of filterNodes(children, 'heading')" 
+          routerLink='.' 
+        [fragment]="'h'+child?.position?.start?.line"
+        [attr.toc]="child?.depth">
+    <!--{{ tocTabs(child?.depth) }}-->
+    <ng-container *ngTemplateOutlet="plainText; context: child"></ng-container>
+  </span>
 
 </ng-template>
 

@@ -16,4 +16,9 @@
 }
 
 mat-sidenav { min-width: 50%;}
-//mat-sidenav-content { overflow: auto;}
+
+/* scroll bahavior enabled by wmViewScroll directive
+mat-sidenav-content { 
+  overflow: auto;
+  scroll-behavior: smooth;
+}*/

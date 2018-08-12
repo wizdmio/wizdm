@@ -18,6 +18,7 @@ import { ProjectBrowserComponent } from './project-browser/project-browser.compo
 import { ProjectBrowserItemComponent } from './project-browser/project-browser-item/project-browser-item.component';
 import { PeopleBrowserComponent } from './people-browser/people-browser.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { EditBoxComponent } from './project/edit-box/edit-box.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ProjectBrowserItemComponent,
     ProjectComponent,
     PeopleBrowserComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    EditBoxComponent
   ],
 
   providers: [

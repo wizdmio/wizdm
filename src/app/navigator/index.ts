@@ -7,4 +7,5 @@ export * from './toolbar/toggler/toggler.component';
 export * from './side-menu/side-menu.component';
 export * from './footer/footer.component';
 export * from './scroll-view/scroll-view.directive';
+export * from './scroll-view/scroll-view.service';
 
