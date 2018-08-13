@@ -11,7 +11,7 @@
     </wm-markdown>
 
     <!-- Renders the documetn body -->
-    <wm-markdown [data]="document"></wm-markdown>
+    <wm-markdown [data]="document" (rendered)="mdUpdated()"></wm-markdown>
   
     <!-- Renders the footnotes at the end -->
     <wm-markdown display="footnotes" [data]="document">
@@ -30,5 +30,8 @@
 </div>
 
 <!-- Displays the edit box overlay when in editMode -->
-<wm-crystal-edit [(value)]="document" [save]="saved" (done)="leaveEditMode()" *ngIf="editMode">
+<wm-crystal-edit [(value)]="document" 
+                 [save]="saved" 
+                 (scroll)="onEditScroll($event)"
+                 (done)="leaveEditMode()" *ngIf="editMode">
 </wm-crystal-edit>

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService, ProjectService, wmProject } from 'app/core';
-import { ToolbarService, ActionEnabler } from 'app/navigator';
+import { ToolbarService, ActionEnabler, ScrollViewService } from 'app/navigator';
 import { PopupService } from 'app/shared';
 import { Observable, Subject, of } from 'rxjs';
 import { switchMap, catchError, take, map, debounceTime, takeUntil } from 'rxjs/operators';
@@ -26,7 +26,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
               private database : ProjectService,
               private route    : ActivatedRoute,
               private toolbar  : ToolbarService,
-              private popup    : PopupService) { }
+              private popup    : PopupService,
+              private scroll   : ScrollViewService) { }
 
 
   private saveDocument$ = new Subject<string>();
@@ -124,4 +125,27 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
+  private lastLine = 0;
+
+  public onEditScroll(line: number) {
+  
+    // Keeps track of the last line the editor view has been scrolled to
+    this.lastLine = line;
+
+    // Scrolls the main view to the mardown attribute data-line selector
+    // This works based on the feature of wm-markdown component rendering
+    // the view with [data-line="number"] attributes tracking the source
+    // text line number for every top level element.
+    //
+    this.scroll.scrollTo(`[data-line="${line}"]`);
+  }
+
+  public mdUpdated() {
+
+    // When in editMode, makes sure the view is scrolled back to the last 
+    // source text known position every time the content changes
+    if(this.editMode) {
+      this.onEditScroll(this.lastLine);
+    }
+  }
 }

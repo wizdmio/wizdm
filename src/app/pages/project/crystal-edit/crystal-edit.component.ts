@@ -19,8 +19,8 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
 
   constructor(private content : ContentService,
               private toolbar : ToolbarService,
-              private builder : FormBuilder,
-              private scroll  : ScrollViewService) { 
+              private builder : FormBuilder/*,
+  private scroll  : ScrollViewService*/) { 
 
     // Build the edit form
     this.form = this.builder.group({ document: [''] });
@@ -43,8 +43,7 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
     this.detectUserInput();
 
     // Subscribes to the form control valueChange
-    this.form.controls.document
-      .valueChanges.subscribe( value => 
+    this.form.controls.document.valueChanges.subscribe( value => 
         this.value.emit(value) 
       );
   }
@@ -88,10 +87,10 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
   // Done event
   @Output() done = new EventEmitter<void>();
 
+  @Output() scroll = new EventEmitter<number>();
+
   @ViewChild('textarea', { read: ElementRef }) textarea: ElementRef;
-
   @HostBinding('@reveal') reveal = true;
-
   @Input() delay = 1000;
 
   private dispose$: Subject<void>;
@@ -111,7 +110,7 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
       fromEvent<Event>(e, 'scroll'),
       fromEvent<Event>(e, 'wheel')
 
-      // Uses a subject to disposes of this Observable on destroy
+    // Uses a subject to disposes of this Observable on destroy
     ).pipe( takeUntil(this.dispose$) ).subscribe( () => {
 
       // Makes sure the edit box is visible whenever the user is interacting
@@ -134,10 +133,10 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
         // Distincts for different falues only
         distinctUntilChanged()
       )
+       // Scrolls to the mardown attribute data-line selector
       .subscribe( value => 
-
-        // Scrolls to the mardown attribute data-line selector
-        this.scroll.scrollTo(`[data-line="${value}"]`)
+        //this.scroll.scrollTo(`[data-line="${value}"]`)
+        this.scroll.emit( value )
       );
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { RemarkService } from './remark.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class MarkdownComponent implements OnInit, OnDestroy {
   constructor(private remark: RemarkService) { }
 
   @Input() display: displayType = "document";
+  @Input() delay: 500;
   @Input('data') set parseData(data: string) {
 
     // Resets notes
@@ -31,15 +32,21 @@ export class MarkdownComponent implements OnInit, OnDestroy {
     // Pushes the new data in
     this.data$.next(data);
   }
+
+  @Output() rendered = new EventEmitter<void>();
   
   ngOnInit() { 
 
     // Perform the remark parsing asyncronously debouncing the iput to improve performance 
-    this.sub$ = this.data$.pipe( debounceTime(500) )
+    this.sub$ = this.data$.pipe( debounceTime( this.delay ) )
       .subscribe( data => {
         // Builds the syntax tree or source it from a source component
         this.root = data ? this.remark.parse(data) : {};
-        console.log(`Markdown (display=${this.display}): `, this.root);
+        //console.log(`Markdown (display=${this.display}): `, this.root);
+
+        // Notifies the completion of data parsing the next scheduler round
+        // when supposidely the view has been rendered already
+        setTimeout( () => this.rendered.emit() );
       });
   }
 

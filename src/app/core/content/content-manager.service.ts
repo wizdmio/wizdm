@@ -255,9 +255,9 @@ export class ContentService {
       }), 
       
       // Catch the loading completion and notifies the listeners
-      tap(data => { this.events.emit({reason: "load", data: data });},
-          error => { this.events.emit({reason: "error", data: error });},    
-          () => { this.events.emit({reason: "complete", data: this.lang });}
+      tap(data  => this.events.emit({reason: "load", data: data }),
+          error => this.events.emit({reason: "error", data: error }),    
+          ()    => this.events.emit({reason: "complete", data: this.lang })
       )
     ); 
   }
