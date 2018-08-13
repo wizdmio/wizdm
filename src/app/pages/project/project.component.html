@@ -1,26 +1,25 @@
 
-<div fxLayout="row" fxLayoutAlign="space-between strech" #rendered>
+<!--mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar-->
+
+<div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto">
 
-    <!--div [ngStyle]="{ 'overflow-y': 'scroll' }"-->
+    <!-- Renders the table of contents on top on small screens -->
+    <wm-markdown class="table-of-contents" display="toc" [data]="document" fxHide fxShow.lt-sm>
+      <h2>{{ msgs.tableOfContents }}</h2>
+    </wm-markdown>
 
-      <!-- Renders the table of contents on top on small screens -->
-      <wm-markdown class="table-of-contents" display="toc" [data]="document" fxHide fxShow.lt-sm>
-        <h2>{{ msgs.tableOfContents }}</h2>
-      </wm-markdown>
+    <!-- Renders the documetn body -->
+    <wm-markdown [data]="document"></wm-markdown>
+  
+    <!-- Renders the footnotes at the end -->
+    <wm-markdown display="footnotes" [data]="document">
+      <mat-divider></mat-divider>
+      <h4>{{ msgs.footnotes }}</h4>
+    </wm-markdown>
 
-      <!-- Renders the documetn body -->
-      <wm-markdown [data]="document"></wm-markdown>
-    
-      <!-- Renders the footnotes at the end -->
-      <wm-markdown display="footnotes" [data]="document">
-        <mat-divider></mat-divider>
-        <h4>{{ msgs.footnotes }}</h4>
-      </wm-markdown>
-
-    </div>
-  <!--/div-->
+  </div>
 
   <!-- Renders the table of contents by side on big screens -->
   <div fxFlex="0 0 auto" fxHide.lt-sm>
@@ -31,5 +30,5 @@
 </div>
 
 <!-- Displays the edit box overlay when in editMode -->
-<wm-edit-box [value]="document" (done)="editMode = false" *ngIf="editMode">
-</wm-edit-box>
+<wm-crystal-edit [(value)]="document" [save]="saved" (done)="leaveEditMode()" *ngIf="editMode">
+</wm-crystal-edit>

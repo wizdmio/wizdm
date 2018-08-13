@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from 'app/core';
-import { ToolbarService } from 'app/navigator';
-import { PopupService } from 'app/shared';
+import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from '../../core';
+import { ToolbarService } from '../../navigator';
+import { PopupService } from '../../shared';
 import { UserProfileItemComponent, UserItemValidators } from './user-profile-item/user-profile-item.component';
 
 import * as moment from 'moment';

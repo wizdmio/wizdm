@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentService } from 'app/core';
-import { ToolbarService } from 'app/navigator';
+import { ContentService } from '../../core';
+import { ToolbarService } from '../../navigator';
 
 @Component({
   selector: 'wm-terms-privacy',

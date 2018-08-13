@@ -59,6 +59,7 @@ $wm-theme-background: (
   inline-code:              mat-color($mat-grey, 200),
   block-code:               mat-color($mat-grey, 400),
   table-row:              rgba(0,0,0,0.03),
+  edit-box:                 rgba(mat-color($mat-blue, 900), 0.8),
 );
 
 // Custom foreground palette
@@ -86,6 +87,7 @@ $wm-theme-foreground: (
   code:              rgba(black, 0.87),
   table:             $dark-dividers,
   toc-delimiter:     $dark-dividers,
+  edit-box:          rgba(white, 0.8),
 );
 
 @function wm-app-theme($primary, $accent, $warn) {

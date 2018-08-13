@@ -20,7 +20,7 @@ export interface wmApplication {
   differences?   : string, // Uniquenesses
   users?         : string, // Target users
   target?        : string, // Target market (geo, ...)
-  comments?      : string  // Aditional comments
+  comments?      : string  // Additional comments
 }
 
 export interface wmDevelopment {
@@ -32,20 +32,19 @@ export interface wmDevelopment {
 
 export interface wmProject {
   
-  id?          : string,
   name         : string,
   pitch?       : string,
-
   document?    : string, // markdown formatted business plan description
 
   //development? : wmDevelopment,
   
   owner?       : string | wmUser,
-  team?        : string[],
+  team?        : string[] | wmUser[],
   
   status?      : wmProjectStatus,
   history?     : wmProjectLog[],
   
+  id?          : string,
   created?     : any,
   updated?     : any
 }

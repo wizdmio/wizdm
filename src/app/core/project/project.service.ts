@@ -68,7 +68,7 @@ export class ProjectService {
     
     // Query the projects collection searching for a matching lowerCaseName
     return this.db.col$<wmProject>('projects', ref => {
-        return ref.where('lowerCaseName', '==', name.toLowerCase());
+        return ref.where('lowerCaseName', '==', name.trim().toLowerCase());
       } 
     ).pipe(
       debounceTime(500),
@@ -77,7 +77,7 @@ export class ProjectService {
     ).toPromise();
   }
 
-  // Helper to formst the data payload
+  // Helper to format the data payload
   private formatData(data: any): any {
 
     // Trims the name and creates a lower case version of it for searching purposes 

@@ -9,6 +9,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
   MatIconModule,
+  MatMenuModule,
   MatCardModule,
   MatFormFieldModule,
   MatInputModule,
@@ -45,6 +46,7 @@ const sharedModules = [
   FlexLayoutModule,
   MatButtonModule,
   MatIconModule,
+  MatMenuModule,
   MatCardModule,
   MatFormFieldModule,
   MatInputModule,

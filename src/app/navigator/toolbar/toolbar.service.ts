@@ -3,11 +3,16 @@ import { Observable, Subject, BehaviorSubject, Observer, combineLatest } from 'r
 import { takeUntil, switchMap, map, zip } from 'rxjs/operators';
 
 export type toolbarAction = {
-  caption: string,
-  link?: string,
-  params?: any,
-  code?: string,
+  caption?: string,
+  icon?:    string,
+  
+  code?:    string,
   enabler?: Observable<boolean>
+  
+  link?:    string,
+  params?:  any,
+
+  menu?:    toolbarAction[]
 };
 
 /**

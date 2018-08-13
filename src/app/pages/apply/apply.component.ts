@@ -3,9 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
-import { ContentService, CanPageDeactivate, AuthService, ProjectService, wmApplication, wmProject } from 'app/core';
-import { ToolbarService, ActionEnabler } from 'app/navigator';
-import { PopupService } from 'app/shared';
+import { ContentService, CanPageDeactivate, AuthService, ProjectService, wmApplication, wmProject } from '../../core';
+import { ToolbarService, ActionEnabler } from '../../navigator';
+import { PopupService } from '../../shared';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
 import { $animations } from './apply.animations';
 import { Observable } from 'rxjs';
@@ -251,7 +251,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
         this.progress = false;
 
         // Clear the temp application
-        return Promise.resolve(); //this.resetApplication();
+        return this.resetApplication();
       })
       .then( () => { 
       

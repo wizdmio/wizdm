@@ -7,7 +7,6 @@ import { switchMap, startWith, tap } from 'rxjs/operators';
 
 export interface wmUser {
 
-  id?     : string,
   img?    : string,
   name?   : string,
   email?  : string,
@@ -15,7 +14,11 @@ export interface wmUser {
   birth?  : string,
   gender? : string,
   motto?  : string,
-  lang?   : string
+  lang?   : string,
+
+  id?     : string,
+  created? : any,
+  updated? : any
 }
 
 @Injectable({

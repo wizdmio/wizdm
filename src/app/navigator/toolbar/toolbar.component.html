@@ -54,55 +54,75 @@
         <wm-toggler [status]="toggler">
         </wm-toggler>
       </button>
-  </section>
+    </section>
 
-</mat-toolbar-row>
+  </mat-toolbar-row>
 
-<!-- PAGE ACTION BAR -->
-<mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" [@action]="someAction">
+  <!-- PAGE ACTION BAR -->
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" *ngIf="someAction" 
+    [@expand]="true" [@fadeInSequence]="actionButtons">
+    
+    <ng-container *ngTemplateOutlet="actionBar; context: { buttons: actionButtons }"></ng-container>
 
-  <!-- ACTION BUTTONS or LINKS -->
-  <ng-container *ngFor="let button of actionButtons">
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+<!-- Renders the action bar buttons -->
+<ng-template let-buttons="buttons" #actionBar>
+
+  <ng-container *ngFor="let button of buttons">
+
+    <!-- ACTION MENU -->
+    <ng-container *ngIf="button.menu">
+      <mat-menu overlapTrigger="false" #menu>
+        <ng-container *ngTemplateOutlet="actionBar; context: { buttons: button.menu }"></ng-container>
+      </mat-menu>
+      
+      <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" @fadeIn>
+        <wm-icon icon="more_vert"></wm-icon>
+      </button>
+    </ng-container>
 
     <!-- ACTION BUTTON -->
-    <ng-container *ngIf="button?.code">
+    <ng-container *ngIf="button.code">
       
       <!-- TEXT BUTTON (DESKTOP) -->
-      <button mat-button color="primary" [fxHide.lt-sm]="button?.icon" 
+      <button mat-button color="primary" [fxHide.lt-sm]="button.icon" [fxHide]="!button.caption"
         (click)="performAction(button.code)"
-        [disabled]="!!button.enabler ? !(button.enabler | async) : false">
+        [disabled]="!!button.enabler ? !(button.enabler | async) : false" @fadeIn>
         {{ button.caption }}
       </button>
 
       <!-- ICON BUTTON (MOBILE) -->
-      <button mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" 
+      <button mat-icon-button color="primary" [fxHide]="!!button.caption || !button.icon" [fxShow.lt-sm]="button.icon" 
         (click)="performAction(button.code)" 
-        [disabled]="!!button.enabler ? !(button.enabler | async) : false">
-        <wm-icon [icon]="button?.icon"></wm-icon>
+        [disabled]="!!button.enabler ? !(button.enabler | async) : false" @fadeIn>
+        <wm-icon [icon]="button.icon"></wm-icon>
       </button>
 
     </ng-container>
 
     <!-- ACTION LINK -->
-    <ng-container *ngIf="button?.link">
+    <ng-container *ngIf="button.link">
       
       <!-- TEXT LINK (DESKTOP) -->
-      <a mat-button color="primary" [fxHide.lt-sm]="button?.icon" [routerLink]="button.link" [queryParams]="button?.params">
+      <a mat-button color="primary" [fxHide.lt-sm]="!!button.icon" 
+        [routerLink]="button.link" [queryParams]="button?.params" @fadeIn>
         {{ button.caption }}
       </a>
 
       <!-- ICON LINK (MOBILE) -->
-      <a mat-icon-button color="primary" fxHide [fxShow.lt-sm]="button?.icon" [routerLink]="button.link" [queryParams]="button?.params">
-        <wm-icon [icon]="button?.icon"></wm-icon>
+      <a mat-icon-button color="primary" [fxHide]="!!button.caption || !button.icon" [fxShow.lt-sm]="!!button.icon" 
+        [routerLink]="button.link" [queryParams]="button.params" @fadeIn>
+        <wm-icon [icon]="button.icon"></wm-icon>
       </a>
 
     </ng-container>
 
   </ng-container>
 
-</mat-toolbar-row>
-
-</mat-toolbar>
+</ng-template>
 
 <mat-divider [@divider]="divider"></mat-divider>
 

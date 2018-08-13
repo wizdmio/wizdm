@@ -92,12 +92,11 @@ export class ScrollViewDirective implements OnDestroy {
     
     const element = this.element$.querySelector(selector);
     if(element) {
-      //let e = this.element$.getBoundingClientRect();
-      //let r = element.getBoundingClientRect();
+      let e = this.element$.getBoundingClientRect();
+      let r = element.getBoundingClientRect();
       //this.element$.scrollBy(r.left - e.left, r.top - e.top);
-      //this.element$.scrollTo(this.element$.scrollLeft + r.left - e.left,this.element$.scrollTop + r.top - e.top);
-      element.scrollIntoView();
-      //this.scrollTo(this.element$.scrollTop + r.top - e.top);
+      this.element$.scrollTo(this.element$.scrollLeft + r.left - e.left,this.element$.scrollTop + r.top - e.top);
+      // element.scrollIntoView();
     }
   }
 

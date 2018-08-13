@@ -28,31 +28,3 @@
   position: sticky;
   top: 0;
 }
-
-form {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 3;
-  box-sizing: border-box;
-  border: none;
-
-  background-color: rgba(0, 0, 0, 0.6);
-  color: rgba(255, 255, 255, 0.8);
-
-  textarea {
-    @include mat-typography-level-to-styles($wm-typography, body-2);
-
-    background-color: transparent;
-    color: inherit;
-
-    padding: 20px 50px;
-    box-sizing: border-box;
-    border: none;
-    resize: none;
-    //overflow: auto;
-    
-  }
-}

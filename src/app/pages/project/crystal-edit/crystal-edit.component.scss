@@ -1,9 +1,12 @@
 @import "src/variables";
 @import "src/theme";
 
+$wm-toolbar-end: 80px;
+$wm-line-height: 24px;
+
 form {
-  position: absolute;
-  top: 0;
+  position: fixed;
+  top: $wm-toolbar-end;
   left: 0;
   right: 0;
   bottom: 0;
@@ -11,11 +14,14 @@ form {
   box-sizing: border-box;
   border: none;
 
-  background-color: rgba(0, 0, 0, 0.6);
-  color: rgba(255, 255, 255, 0.8);
+  background-color: map-get($wm-theme-background, edit-box);
+  color: map-get($wm-theme-foreground, edit-box);
 
   textarea {
     @include mat-typography-level-to-styles($wm-typography, body-2);
+
+    // Makes sure about the line height to correcly compute the top visible line
+    line-height: $wm-line-height;
 
     background-color: transparent;
     color: inherit;
@@ -23,7 +29,8 @@ form {
     padding: 20px 50px;
     box-sizing: border-box;
     border: none;
+    outline: none;
     resize: none;
-    //overflow: auto;
+    overflow: auto;
   }
 }

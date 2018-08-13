@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentService, LanguageOption, AuthService } from 'app/core';
+import { ContentService, LanguageOption, AuthService } from '../../core';
 
 export interface LanguageData {
 

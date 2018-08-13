@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ContentService, AuthService } from 'app/core';
 import { ToolbarService } from './toolbar.service';
-import { toolbarAnimations } from './toolbar-animations';
+import { $animations } from './toolbar-animations';
 import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'wm-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
-  animations: toolbarAnimations
+  animations: $animations
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
@@ -42,10 +42,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {}
 
-  public actionEnablers: any = {};
+  public get signedIn(): boolean {
+    return this.auth.authenticated;
+  }
 
-  public isActionEnabled(code: string) {
-    return this.actionEnablers[code] || false;
+  public get userImage(): string {
+    return this.auth.userProfile ? 
+      this.auth.userProfile.img : null; 
   }
 
   public get actionButtons() {
@@ -62,14 +65,5 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   public clearActions() {
     this.toolbar.clearActions();
-  }
-
-  public get signedIn(): boolean {
-    return this.auth.authenticated;
-  }
-
-  public get userImage(): string {
-    return this.auth.userProfile ? 
-      this.auth.userProfile.img : null; 
   }
 }

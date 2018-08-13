@@ -6,7 +6,11 @@
   "actions": { 
     "owner": [
       { "caption": "Edit", "icon": "edit", "code": "edit" },
-      { "caption": "Delete", "icon": "delete", "code": "delete" }
+      { "menu": [
+          { "caption": "Export as PDF", "icon": "save_alt", "code": "export" },
+          { "caption": "Delete", "icon": "delete", "code": "delete" }
+        ]
+      }
     ],
     "guest": [
       { "caption": "Contact {{ owner.name }}", "icon": "envelope", "code": "contact"}
@@ -20,9 +24,14 @@
     "ok": "Proceed"
   },
 
-  "editBox": {
+  "crystalEdit": {
     "actions": [ 
-      { "caption": "Done", "icon": "done", "code": "done" }
+      { "caption": "Save", "icon": "save", "code": "save" },
+      { "caption": "Done", "icon": "done", "code": "done" },
+      { "menu": [
+        { "caption": "Help", "icon": "help", "code": "help" }
+        ]
+      }
     ]
   }
 }
