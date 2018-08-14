@@ -12,9 +12,15 @@ import { Observable, of } from 'rxjs';
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
+  public menu;
+
   constructor(private content : ContentService,
               private toolbar : ToolbarService,
-              private auth    : AuthService) { }
+              private auth    : AuthService) {
+
+    // Gets the localized content
+    this.menu = this.content.select("navigator.menu");
+  }
 
   @Output() togglerChange = new EventEmitter<boolean>();
   @Input()  toggler = false;
@@ -32,13 +38,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  public msgs: any = null;
-
-  ngOnInit() {
-
-    // Gets the localized content
-    this.msgs = this.content.select("navigator");
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {}
 

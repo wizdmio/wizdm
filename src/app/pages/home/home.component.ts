@@ -29,12 +29,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private subnav: Subscription;
 */
-  constructor(private content: ContentService/*, private nav: NavService*/) { }
+  constructor(private content: ContentService/*, private nav: NavService*/) { 
+    //this.contents = this.content.select("presentation");
+  }
 
   ngOnInit() {
     /*
-    this.contents = this.content.select("presentation");
-
     this.sections = Object.keys(this.contents);
     this.max = this.sections.length - 1;
 

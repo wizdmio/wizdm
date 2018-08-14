@@ -13,13 +13,14 @@ export class NavComponent implements OnInit {
   
   constructor(private content: ContentService, 
               private title: Title,
-              private meta: Meta) { }
+              private meta: Meta) {
+
+    // Gets the localized content
+    this.msgs = this.content.select("navigator"); 
+  }
 
   ngOnInit() { 
 
-    // Gets the localized content
-    this.msgs = this.content.select("navigator");
-   
     // Sets the app title when defined 
     if(this.msgs.title) {
       this.title.setTitle(this.msgs.title);}

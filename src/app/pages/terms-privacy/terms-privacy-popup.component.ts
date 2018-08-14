@@ -16,17 +16,17 @@ import { ContentService } from '../../core';
 })
 export class TermsPrivacyPopupComponent implements OnInit {
 
+  public buttons;
+
   // Wrappers to turn the Terms-Privicy page into a PopupDialog forcing it full screen for better readeability
   //
   constructor(private ref: MatDialogRef<TermsPrivacyPopupComponent>, 
               @Inject(MAT_DIALOG_DATA) private data: any,
-              private content: ContentService ) { }
-
-  public buttons: any = null;
-
-  ngOnInit() {
+              private content: ContentService ) { 
 
     // Gets localized button labels
     this.buttons = this.content.select('shortTerms.buttons');
   }
+
+  ngOnInit() { }
 }

@@ -32,12 +32,13 @@ export class ConsentComponent implements OnInit, AfterViewInit {
   private msgs;
 
   constructor(private content: ContentService,
-              private cookies: CookieService) { }
-
-  ngOnInit() {
+              private cookies: CookieService) {
 
     // Gets the localized user messages from content service
     this.msgs = this.content.select('navigator.consent');
+  }
+
+  ngOnInit() {
 
     // Check the cookie value of a previous consent agreement
     let value = this.cookies.get('cookieConsent');

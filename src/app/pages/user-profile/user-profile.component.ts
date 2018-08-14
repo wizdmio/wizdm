@@ -27,9 +27,8 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
               private toolbar : ToolbarService,
               private popup   : PopupService,
               private router  : Router,
-              private route   : ActivatedRoute) { }
+              private route   : ActivatedRoute) { 
 
-  ngOnInit() {
     // Gets the localized content
     this.msgs = this.content.select('profile');
 
@@ -37,7 +36,11 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     // the *ngFor on mat-select to run over an infinite loop due to an issue
     // it seems they still can't fix
     this.langOptions = this.content.languageOptions;
+  }
 
+  ngOnInit() {
+  
+    // Activates the toolbar actions
     this.toolbar.activateActions(this.msgs.actions);
   }
 

@@ -10,12 +10,12 @@ export class PeopleBrowserComponent implements OnInit {
 
   public msgs = null;
   
-  constructor(private content: ContentService) {}
-
-  ngOnInit() {
+  constructor(private content: ContentService) {
 
     // Gets the localized content
     this.msgs = this.content.select('people');
   }
+
+  ngOnInit() {}
 
 }

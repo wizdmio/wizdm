@@ -44,6 +44,9 @@ export class LoginComponent implements OnInit  {
               private route   : ActivatedRoute,
               private auth    : AuthService) {
 
+    // Gets the localized contents
+    this.msgs = this.content.select("login");
+
     // Creates the loging form controls
     this.name = new FormControl(null, Validators.required);
     this.email = new FormControl(null, [Validators.required, Validators.email]);
@@ -56,9 +59,6 @@ export class LoginComponent implements OnInit  {
   }
 
   ngOnInit() {
-
-    // Gets the localized contents
-    this.msgs = this.content.select("login");
 
     // Discrimnate among the login option using the queryParameters
     this.route.queryParamMap.subscribe( (params: ParamMap) => {

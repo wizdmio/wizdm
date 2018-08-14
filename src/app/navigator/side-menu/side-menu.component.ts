@@ -11,14 +11,13 @@ export class SideMenuComponent implements OnInit {
   public menu;
 
   constructor(private content: ContentService, 
-              private auth: AuthService,) { }
-
-  ngOnInit() {
+              private auth: AuthService) { 
 
     // Gets the localized menu content
     this.menu = this.content.select("navigator.menu");
-   
   }
+
+  ngOnInit() {}
 
   public get signedIn(): boolean {
     return this.auth.authenticated;

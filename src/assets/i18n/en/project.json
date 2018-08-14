@@ -17,6 +17,10 @@
     ]
   },
 
+  "header": {
+
+  },
+
   "canDelete": {
     "title": "Deleting project",
     "message": "WARNING, by proceeding you'll permanently delete this project.",

@@ -27,17 +27,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
               private route    : ActivatedRoute,
               private toolbar  : ToolbarService,
               private popup    : PopupService,
-              private scroll   : ScrollViewService) { }
+              private scroll   : ScrollViewService) { 
 
+    // Gets the localized content
+    this.msgs = this.content.select('project');
+  }
 
   private saveDocument$ = new Subject<string>();
   private dispose$ = new Subject<void>();
 
   ngOnInit() {
 
-    // Gets the localized content
-    this.msgs = this.content.select('project');
-    
     // Load the project once first...
     this.loadProject().pipe( take(1) ).subscribe( project => {
 

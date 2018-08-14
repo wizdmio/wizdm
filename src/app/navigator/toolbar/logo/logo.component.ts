@@ -13,11 +13,11 @@ export class LogoComponent implements OnInit {
   public loading = false;
   public logo: string;
   
-  constructor(private content: ContentService) { }
-
-  ngOnInit() {
+  constructor(private content: ContentService) {
     this.logo = this.content.select("navigator.logo") as string;
   }
+
+  ngOnInit() {}
 
   @HostBinding('@blink') blink = false;
   @HostListener('@blink.done') loop() {

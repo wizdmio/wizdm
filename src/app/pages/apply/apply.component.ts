@@ -34,14 +34,15 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
               private auth    : AuthService,
               private project : ProjectService,
               private toolbar : ToolbarService,
-              private dialog  : PopupService) { }
+              private dialog  : PopupService) { 
+
+    // Gets the localized user messages from content manager
+    this.msgs = this.content.select('apply');
+  }
 
   private enableClear$: ActionEnabler;
 
   ngOnInit() {
-
-    // Gets the localized user messages from content manager
-    this.msgs = this.content.select('apply');
 
     // Checks if the application was previously saved
     this.welcomeBack = this.application !== null;

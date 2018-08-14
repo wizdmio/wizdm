@@ -10,11 +10,10 @@ export class AboutComponent implements OnInit {
 
   private msgs = null;
   
-  constructor(private content: ContentService) {}
-
-  ngOnInit() {
-
+  constructor(private content: ContentService) {
     // Gets the localized content
     this.msgs = this.content.select('about');
   }
+
+  ngOnInit() {}
 }

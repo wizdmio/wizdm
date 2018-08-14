@@ -10,7 +10,7 @@
       
       <!-- PRIVATE MENU -->
       <ng-container *ngIf="signedIn; else public">
-        <a mat-button *ngFor="let item of msgs.menu.private" 
+        <a mat-button *ngFor="let item of menu.private" 
                       routerLinkActive="link-active" 
                       [routerLink]="item.link"
                       [queryParams]="item.params"
@@ -29,7 +29,7 @@
 
       <!-- PUBLIC MENU -->
       <ng-template #public>
-        <a mat-button *ngFor="let item of msgs.menu.public" 
+        <a mat-button *ngFor="let item of menu.public" 
                       routerLinkActive="link-active" 
                       [routerLink]="item.link"
                       [queryParams]="item.params"

@@ -21,16 +21,16 @@ export class FooterComponent implements OnInit {
   public msgs;
 
   constructor(private content: ContentService,
-              private auth: AuthService,) {}
-
-  ngOnInit() {
+              private auth: AuthService) {
 
     // Gets the localized user messages from content service
     this.msgs = this.content.select('navigator.footer');
-
+  
     // Local copy of the available language options to prevent the infinite loop bug to occur
     this._options = this.content.languageOptions;
   }
+
+  ngOnInit() { }
 
   public get signedIn(): boolean {
     return this.auth.authenticated;

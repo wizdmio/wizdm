@@ -1,6 +1,10 @@
 
 <!--mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar-->
 
+<!--wm-project-header [project]="project"></wm-project-header-->
+
+<mat-divider></mat-divider>
+
 <div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto">
@@ -28,7 +32,7 @@
   </div>
 </div>
 
-<!-- Displays the edit box overlay when in editMode -->
+<!-- Displays the crystal edit overlay when in editMode -->
 <wm-crystal-edit [(value)]="document" 
                  [save]="saved" 
                  (scroll)="onEditScroll($event)"

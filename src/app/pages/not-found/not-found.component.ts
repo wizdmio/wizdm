@@ -16,13 +16,15 @@ export class NotFoundComponent implements OnInit, OnDestroy {
   public countdown = 5;
 
   constructor(private content: ContentService,
-              private router: Router) { }
+              private router: Router) { 
 
-  ngOnInit() {
 
     // Gets the messages from the content manager or use defaults
     // in case we have been redirected after content loading failure
     this.msgs = this.content.select('notFound', $defaultMsgs);
+  }
+
+  ngOnInit() {
 
     // Counts down 5 secs before redirecting to Home
     this.timeout = setInterval(() => {

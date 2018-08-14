@@ -28,13 +28,13 @@ export class ProjectBrowserItemComponent implements OnInit {
 
   constructor(private content  : ContentService,
               private database : ProjectService,
-              private popup    : PopupService) { }
-
-  ngOnInit() {
-    
+              private popup    : PopupService) { 
+  
     // Gets the localized content
     this.msgs = this.content.select('project');
   }
+
+  ngOnInit() {}
 
   // Internal timestamp conversion helpers
   //private tsToNumber(ts: Timestamp) { return ts ? ts.toMillis() : 0;}

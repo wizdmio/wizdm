@@ -19,8 +19,10 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
 
   constructor(private content : ContentService,
               private toolbar : ToolbarService,
-              private builder : FormBuilder/*,
-  private scroll  : ScrollViewService*/) { 
+              private builder : FormBuilder) {
+
+    // Gets the localized content
+    this.msgs = this.content.select('project.crystalEdit');
 
     // Build the edit form
     this.form = this.builder.group({ document: [''] });
@@ -29,9 +31,6 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
   private save$: ActionEnabler;
 
   ngOnInit() {
-
-    // Gets the localized content
-    this.msgs = this.content.select('project.crystalEdit');
 
     // Enables the toolbar actions
     this.toolbar.activateActions(this.msgs.actions, true)

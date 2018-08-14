@@ -14,7 +14,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserProfileItemComponent } from './user-profile/user-profile-item/user-profile-item.component';
 import { ApplyComponent } from './apply/apply.component';
 import { ProjectComponent } from './project/project.component';
-import { CrystalEditComponent } from './project/crystal-edit/crystal-edit.component';
+import { HeaderComponent as ProjectHeader } from './project/header/header.component';
+import { CrystalEditComponent as ProjectEditor } from './project/crystal-edit/crystal-edit.component';
 import { ProjectBrowserComponent } from './project-browser/project-browser.component';
 import { ProjectBrowserItemComponent } from './project-browser/project-browser-item/project-browser-item.component';
 import { PeopleBrowserComponent } from './people-browser/people-browser.component';
@@ -41,7 +42,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ProjectBrowserComponent,
     ProjectBrowserItemComponent,
     ProjectComponent,
-    CrystalEditComponent,
+    ProjectHeader,
+    ProjectEditor,
     PeopleBrowserComponent,
     NotFoundComponent
   ],
