@@ -4,7 +4,7 @@ import { ContentService, ProjectService, wmProject } from 'app/core';
 import { ToolbarService, ActionEnabler, ScrollViewService } from 'app/navigator';
 import { PopupService } from 'app/shared';
 import { Observable, Subject, of } from 'rxjs';
-import { switchMap, catchError, take, map, debounceTime, takeUntil } from 'rxjs/operators';
+import { switchMap, catchError, take, map, filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { $animations } from './project.animations';
 
 const $debug = "# Test with a [link](../../profile)\nFollowed by a simple paragraph _with_ **emphasis** and ~~corrections~~ and a note[^note]\n\n [^note]: this is a note"
@@ -51,8 +51,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     // ...then keep the project in sync reloading changes
-    this.loadProject().subscribe( project => {
-      this.project = project || { document: $debug } as wmProject;
+    this.loadProject()
+      .pipe( filter( () => !this.editMode ) ) // Skips reloading while in editMode
+      .subscribe( project => {
+        this.project = project || { document: $debug } as wmProject;
     });
 
     // Save the modified project automatically

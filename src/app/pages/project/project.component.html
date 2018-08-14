@@ -14,8 +14,7 @@
     <wm-markdown [data]="document" (rendered)="mdUpdated()"></wm-markdown>
   
     <!-- Renders the footnotes at the end -->
-    <wm-markdown display="footnotes" [data]="document">
-      <mat-divider></mat-divider>
+    <wm-markdown class="footnotes" display="footnotes" [data]="document">
       <h4>{{ msgs.footnotes }}</h4>
     </wm-markdown>
 

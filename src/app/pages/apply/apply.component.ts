@@ -217,6 +217,8 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
         // Store a new project creating the content from the applicaton
         return this.project.addProject( {
 
+          status: 'draft',
+
           // Project name inherited from the applciation
           name: application.name,
           

@@ -5,7 +5,8 @@
 
     <wm-logo></wm-logo>
   
-    <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm="true">
+    <!-- DESKTOP VERSION -->
+    <section fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm>
       
       <!-- PRIVATE MENU -->
       <ng-container *ngIf="signedIn; else public">
@@ -38,8 +39,9 @@
       </ng-template>
 
     </section>
-        
-    <section fxLayout="row" fxLayoutAlign="end center" fxHide="true" fxShow.lt-sm="true">
+    
+    <!-- MOBILE VERSION -->
+    <section fxLayout="row" fxLayoutAlign="end center" fxHide fxShow.lt-sm>
 
       <!-- USER PROFILE BUTTON -->
       <button mat-icon-button routerLink="profile" *ngIf="signedIn">
@@ -59,24 +61,24 @@
   </mat-toolbar-row>
 
   <!-- PAGE ACTION BAR -->
-  <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" *ngIf="someAction" 
-    [@expand]="true" [@fadeInSequence]="actionButtons">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="end center" 
+    [@expand]="true" [@fadeInSequence]="actionButtons" *ngIf="someAction">
     
-    <ng-container *ngTemplateOutlet="actionBar; context: { buttons: actionButtons }"></ng-container>
+    <ng-container *ngTemplateOutlet="actionBar; context: { buttons: actionButtons, menu: false }"></ng-container>
 
   </mat-toolbar-row>
 
 </mat-toolbar>
 
 <!-- Renders the action bar buttons -->
-<ng-template let-buttons="buttons" #actionBar>
+<ng-template let-buttons="buttons" let-menuItem="menu" #actionBar>
 
   <ng-container *ngFor="let button of buttons">
 
     <!-- ACTION MENU -->
     <ng-container *ngIf="button.menu">
       <mat-menu overlapTrigger="false" #menu>
-        <ng-container *ngTemplateOutlet="actionBar; context: { buttons: button.menu }"></ng-container>
+        <ng-container *ngTemplateOutlet="actionBar; context: { buttons: button.menu, menu: true }"></ng-container>
       </mat-menu>
       
       <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" @fadeIn>
@@ -84,43 +86,11 @@
       </button>
     </ng-container>
 
-    <!-- ACTION BUTTON -->
-    <ng-container *ngIf="button.code">
-      
-      <!-- TEXT BUTTON (DESKTOP) -->
-      <button mat-button color="primary" [fxHide.lt-sm]="button.icon" [fxHide]="!button.caption"
-        (click)="performAction(button.code)"
-        [disabled]="!!button.enabler ? !(button.enabler | async) : false" @fadeIn>
-        {{ button.caption }}
-      </button>
+    <!-- ACTION BUTTON, LINK or MENU-ITEM-->
+    <wm-toolbar-action [menu]="menuItem" [action]="button" (activate)="performAction($event)">
+    </wm-toolbar-action>
 
-      <!-- ICON BUTTON (MOBILE) -->
-      <button mat-icon-button color="primary" [fxHide]="!!button.caption || !button.icon" [fxShow.lt-sm]="button.icon" 
-        (click)="performAction(button.code)" 
-        [disabled]="!!button.enabler ? !(button.enabler | async) : false" @fadeIn>
-        <wm-icon [icon]="button.icon"></wm-icon>
-      </button>
-
-    </ng-container>
-
-    <!-- ACTION LINK -->
-    <ng-container *ngIf="button.link">
-      
-      <!-- TEXT LINK (DESKTOP) -->
-      <a mat-button color="primary" [fxHide.lt-sm]="!!button.icon" 
-        [routerLink]="button.link" [queryParams]="button?.params" @fadeIn>
-        {{ button.caption }}
-      </a>
-
-      <!-- ICON LINK (MOBILE) -->
-      <a mat-icon-button color="primary" [fxHide]="!!button.caption || !button.icon" [fxShow.lt-sm]="!!button.icon" 
-        [routerLink]="button.link" [queryParams]="button.params" @fadeIn>
-        <wm-icon [icon]="button.icon"></wm-icon>
-      </a>
-
-    </ng-container>
-
-  </ng-container>
+  </ng-container> 
 
 </ng-template>
 

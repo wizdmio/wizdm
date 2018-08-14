@@ -1,0 +1,16 @@
+@import 'src/theme';
+
+.mat-menu-item {
+
+  // Resets the default menu typography to buttons
+  font: {
+    family: mat-font-family($wm-typography, button) !important;
+    size:   mat-font-size($wm-typography, button)   !important;
+    weight: mat-font-weight($wm-typography, button) !important;
+  }
+
+  wm-icon {
+    // Restores the same $mat-menu-icon-margin value
+    padding-right: 16px;
+  }
+}

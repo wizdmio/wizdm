@@ -3,7 +3,11 @@
   "description": "Here you'll find all the information about you",
 
   "actions": [
-    { "caption": "Sign-out", "icon": "exit_to_app", "link": "./login", "params": { "mode": "signOut" }}
+    { "caption": "Sign-out", "icon": "exit_to_app", "link": "./login", "params": { "mode": "signOut" }},
+    { "menu": [
+      { "caption": "Change email", "link": "./login", "params": { "mode": "changeEmail" }},
+      { "caption": "Change password", "link": "./login", "params": { "mode": "changePassword" }}
+    ]}
   ],
 
   "panels": [

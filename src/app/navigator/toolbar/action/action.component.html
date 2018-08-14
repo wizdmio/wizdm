@@ -1,0 +1,61 @@
+
+
+<!-- ACTION BUTTON -->
+<ng-container *ngIf="action.code && !menu">
+      
+  <!-- TEXT BUTTON (DESKTOP) -->
+  <button mat-button color="primary" [fxHide.lt-sm]="action.icon" [fxHide]="!action.caption"
+    (click)="activate.emit(action.code)"
+    [disabled]="!!action.enabler ? !(action.enabler | async) : false" @fadeIn>
+    {{ action.caption }}
+  </button>
+
+  <!-- ICON BUTTON (MOBILE) -->
+  <button mat-icon-button color="primary" [fxHide]="!!action.caption || !action.icon" [fxShow.lt-sm]="action.icon" 
+    (click)="activate.emit(action.code)" 
+    [disabled]="!!action.enabler ? !(action.enabler | async) : false" @fadeIn>
+    <wm-icon [icon]="action.icon"></wm-icon>
+  </button>
+
+</ng-container>
+
+<!-- ACTION LINK -->
+<ng-container *ngIf="action.link && !menu">
+  
+  <!-- TEXT LINK (DESKTOP) -->
+  <a mat-button color="primary" [fxHide.lt-sm]="!!action.icon" 
+    [routerLink]="action.link" [queryParams]="button?.params" @fadeIn>
+    {{ action.caption }}
+  </a>
+
+  <!-- ICON LINK (MOBILE) -->
+  <a mat-icon-button color="primary" [fxHide]="!!action.caption || !action.icon" [fxShow.lt-sm]="!!action.icon" 
+    [routerLink]="action.link" [queryParams]="action.params" @fadeIn>
+    <wm-icon [icon]="action.icon"></wm-icon>
+  </a>
+
+</ng-container>
+
+<!-- ACTION MENU-ITEM -->
+<ng-container *ngIf="menu">
+
+  <ng-container *ngIf="action.code">
+    <button mat-menu-item color="primary"
+      (click)="activate.emit(action.code)"
+      [disabled]="!!action.enabler ? !(action.enabler | async) : false">
+      <wm-icon *ngIf="action.icon" [icon]="action.icon"></wm-icon>
+      <span>{{ action.caption }}</span>
+    </button>
+  </ng-container> 
+  
+  <ng-container *ngIf="action.link">
+    <button mat-menu-item color="primary"
+      [routerLink]="action.link" 
+      [queryParams]="action.params">
+      <wm-icon *ngIf="action.icon" [icon]="action.icon"></wm-icon>
+      <span>{{ action.caption }}</span>
+    </button>
+  </ng-container>
+
+</ng-container> 
+  

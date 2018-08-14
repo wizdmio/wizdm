@@ -5,7 +5,7 @@
     
     <span class="status">{{ project?.status }}</span>
 
-    <div class="owner-toolbar" fxLayout="row" fxLayoutAlign="center center" *ngIf="isMine">
+    <!--div class="owner-toolbar" fxLayout="row" fxLayoutAlign="center center" *ngIf="isMine">
   
       <button mat-icon-button (click)="editProject()">
         <wm-icon icon="edit"></wm-icon>
@@ -15,9 +15,9 @@
         <wm-icon icon="delete"></wm-icon>
       </button>
   
-    </div>
+    </div-->
 
-    <button mat-icon-button (click)="toggleFavorite()" *ngIf="!isMine">
+    <button mat-icon-button (click)="toggleFavorite()">
       <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'"></wm-icon>
     </button>
   

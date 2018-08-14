@@ -1,6 +1,6 @@
 import { wmUser } from '../auth/auth.service';
 
-export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed';
+export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft' | 'deleted';
 
 export interface wmProjectLog {
 
