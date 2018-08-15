@@ -1,22 +1,37 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { DatabaseService } from '../database/database.service';
+import { DatabaseService, QueryFn } from '../database/database.service';
+import { StorageService, StorageTask } from '../storage/storage.service';
 import { auth, User } from 'firebase';
 import { Observable, of, Subscription } from 'rxjs';
-import { switchMap, startWith, tap } from 'rxjs/operators';
+import { switchMap, startWith, map, tap, filter, take } from 'rxjs/operators';
 
 export interface wmUser {
 
-  img?    : string,
-  name?   : string,
-  email?  : string,
-  phone?  : string,
-  birth?  : string,
-  gender? : string,
-  motto?  : string,
-  lang?   : string,
+  img?     : string,
+  name?    : string,
+  email?   : string,
+  phone?   : string,
+  birth?   : string,
+  gender?  : string,
+  motto?   : string,
+  lang?    : string,
 
-  id?     : string,
+  //uploads? : any, collection reference
+
+  id?      : string,
+  created? : any,
+  updated? : any
+}
+
+export interface wmUserFile {
+  name?:     string,
+  fullName?: string,
+  path?:     string,
+  size?:     number,
+  url?:      string,
+
+  id?      : string,
   created? : any,
   updated? : any
 }
@@ -26,9 +41,36 @@ export interface wmUser {
 })
 export class AuthService implements OnDestroy {
 
+  private userData: wmUser = {};
   private user: User = null;
-  private userData: wmUser = null;
   private sub: Subscription;
+
+  constructor(public  af: AngularFireAuth,
+              private db: DatabaseService,
+              private st: StorageService) {
+
+    // Subscribes to authStae observable keeping track of auth state changes
+    this.sub = this.user$.pipe( 
+      switchMap( user => {
+
+        // Keeps a snapshot pf user auth state
+        this.user = user;
+
+        // Turns it into the user profile data observable
+        return user ? this.db.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null);
+      })
+      // Save the profile in the local storage
+      //tap(data => localStorage.setItem('user', JSON.stringify(data))),
+      // Always start with the local stora copy of the profile to avoid flickering
+      //startWith(JSON.parse(localStorage.getItem('user'))) )
+
+    // Keeps a snapshot of user profile data
+    ).subscribe( data => this.userData = data || {});
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
 
   get user$(): Observable<User|null> {
     return this.af.user;
@@ -66,32 +108,6 @@ export class AuthService implements OnDestroy {
   get userProfile(): wmUser {
     return this.user !== null ? this.userData : {};
   }
-  
-  constructor(public  af: AngularFireAuth,
-              private db: DatabaseService) {
-
-    // Subscribes to authStae observable keeping track of auth state changes
-    this.sub = this.user$.pipe( 
-      switchMap( user => {
-        
-        // Keeps a snapshot pf user auth state
-        this.user = user;
-        
-        // Turns it into the user profile data observable
-        return user ? this.db.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null);
-      })
-      // Save the profile in the local storage
-      //tap(data => localStorage.setItem('user', JSON.stringify(data))),
-      // Always start with the local stora copy of the profile to avoid flickering
-      //startWith(JSON.parse(localStorage.getItem('user'))) )
-
-     // Keeps a snapshot of user profile data
-    ).subscribe( data => this.userData = data );
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
 
   private updateUserData(user: User, lang: string = undefined): Promise<void> {
 
@@ -110,6 +126,74 @@ export class AuthService implements OnDestroy {
   public updateUserProfile(data: wmUser | any) : Promise<void> {
     return this.db.merge<wmUser>(`users/${this.userId}`, data);
   }
+
+  public getUserUploads(queryFn?: QueryFn): Observable<any[]> {
+    return this.db.colWithIds$<any>(`users/${this.userId}/uploads`, queryFn);
+  }
+
+  public addUserUploads(data: wmUserFile): Promise<any> {
+    return this.db.add<any>(`users/${this.userId}/uploads`, data);
+  }
+
+  /**
+   * Uploads a file into the user's upload area
+   * @param file the file object to be uploaded and tracked into the user's uploads area
+   * @returns the task object to drive the upload process
+   */
+  public uploadUserFile(file: File): StorageTask {
+
+    // Coputes the storage path
+    const path = `${this.userId}/${new Date().getTime()}_${file.name}`;
+ 
+    // Create the upload task
+    let task = this.st.upload(path, file);
+
+    // Intercepts the upload completion and get the download url
+    task.snapshotChanges()
+      .pipe( filter( snap => snap.bytesTransferred === snap.totalBytes ), take(1) )
+      .subscribe( snap => snap.ref.getDownloadURL().then( url => {
+
+        // Saves the uploaded file information into the user uploads area
+        this.addUserUploads({ 
+          name: file.name,
+          fullName: snap.ref.name,
+          path,
+          size: snap.totalBytes,
+          url
+        });
+      }));
+
+    // Returns the task for user interaction
+    return task;
+  }
+
+  /**
+   * Simplified version of uploadUserFile() executing the upload once
+   * @param file file object to be uploaded
+   * @returns a promise resolving with the download url
+   */
+  public uploadUserFileOnce(file: File): Promise<string> {
+    return this.uploadUserFile(file)
+      .snapshotChanges()
+      //.pipe( filter( snap => snap.bytesTransferred === snap.totalBytes ) )
+      .toPromise()
+      .then( snap => snap.ref.getDownloadURL() );
+  }
+
+  /**
+   * Deletes a user uploaded file clearing up both the storage and the user's uploads area object
+   */
+  public deleteUserFile(id: string): Promise<void> {
+    
+    let ref = this.db.doc(`users/${this.userId}/uploads/${id}`);
+    return this.db.doc$<wmUserFile>(ref)
+      .pipe( 
+        take(1),
+        switchMap( file => this.st.ref(file.path).delete() ),
+        tap( () => ref.delete())
+      ).toPromise();
+  }
+  
 
   public registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
     

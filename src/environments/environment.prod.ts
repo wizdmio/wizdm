@@ -2,6 +2,8 @@
 export const environment = {
   production: true,
 
+  appname: 'wizdm',
+
   firebase: {
     apiKey: "AIzaSyBvMhg2V5BQUNba3XRfYu8-todWTFaKeFQ",
     authDomain: "wizdm-d3f02.firebaseapp.com",

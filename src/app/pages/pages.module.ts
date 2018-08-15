@@ -19,6 +19,7 @@ import { CrystalEditComponent as ProjectEditor } from './project/crystal-edit/cr
 import { ProjectBrowserComponent } from './project-browser/project-browser.component';
 import { ProjectBrowserItemComponent } from './project-browser/project-browser-item/project-browser-item.component';
 import { PeopleBrowserComponent } from './people-browser/people-browser.component';
+import { UploadComponent } from './upload/upload.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -45,6 +46,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ProjectHeader,
     ProjectEditor,
     PeopleBrowserComponent,
+    UploadComponent,
     NotFoundComponent
   ],
 

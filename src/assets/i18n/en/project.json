@@ -7,18 +7,26 @@
     "owner": [
       { "caption": "Edit", "icon": "edit", "code": "edit" },
       { "menu": [
+          { "caption": "Upload file", "icon": "cloud_upload", "link": "upload" },
           { "caption": "Export as PDF", "icon": "save_alt", "code": "export" },
           { "caption": "Delete", "icon": "delete", "code": "delete" }
         ]
       }
     ],
     "guest": [
-      { "caption": "Contact {{ owner.name }}", "icon": "envelope", "code": "contact"}
+      { "caption": "Contact the owner", "icon": "envelope", "code": "contact"}
     ]
   },
 
   "header": {
 
+  },
+
+  "canLeave": {
+    "title": "Unsaved changes",
+    "message": "Are you leaving? You may prefer to save the changes first.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
   },
 
   "canDelete": {

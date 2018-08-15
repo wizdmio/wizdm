@@ -4,7 +4,7 @@ import { AngularFirestore,
          AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
-import { map, tap, take, switchMap } from 'rxjs/operators';
+import { map, tap, take } from 'rxjs/operators';
 
 import * as firebase from 'firebase';
 

@@ -4,23 +4,11 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconRegistry } from '@angular/material';
 
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-
 import { AppComponent } from './app.component';
+import { CoreModule } from './core/core.module';
 import { NavigatorModule } from './navigator/navigator.module';
 import { PagesModule } from './pages/pages.module';
 import { AppRoutingModule } from './app-routing.module';
-
-import { 
-  AuthService,
-  ContentService, 
-  ResolverService,
-  PageGuardService
-} from './core';
-
-import { environment } from 'environments/environment';
 
 @NgModule({
   declarations: [
@@ -31,22 +19,13 @@ import { environment } from 'environments/environment';
     BrowserAnimationsModule,
     HttpClientModule,
 
-    AngularFireModule.initializeApp(environment.firebase, 'wizdm'),
-    //AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
-
+    CoreModule,
     NavigatorModule,
     PagesModule,
     AppRoutingModule
   ],
   providers: [
-    MatIconRegistry,
-    //---
-    AuthService,
-    ContentService,
-    ResolverService,
-    PageGuardService
+    MatIconRegistry
   ],
   bootstrap: [AppComponent]
 })

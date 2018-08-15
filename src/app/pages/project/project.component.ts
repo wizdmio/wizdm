@@ -150,4 +150,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.onEditScroll(this.lastLine);
     }
   }
+
+  public canDeactivate() {
+
+    // Ask user for deactivation (leaving the page) when in editMode
+    return !this.editMode || this.popup.popupDialog(this.msgs.canLeave);
+  }
 }

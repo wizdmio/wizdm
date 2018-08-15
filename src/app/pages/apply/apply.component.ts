@@ -34,7 +34,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
               private auth    : AuthService,
               private project : ProjectService,
               private toolbar : ToolbarService,
-              private dialog  : PopupService) { 
+              private popup   : PopupService) { 
 
     // Gets the localized user messages from content manager
     this.msgs = this.content.select('apply');
@@ -280,13 +280,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       // Pops up the terms-privacy conditions without leaving the page
       case 'terms':
       
-      this.dialog.open(TermsPrivacyPopupComponent);
+      this.popup.open(TermsPrivacyPopupComponent);
       break;
 
       // Clears the forrm and the previously saved application to start from 
       case 'clear':
       
-      this.dialog.confirmPopup(this.msgs.canClear)
+      this.popup.confirmPopup(this.msgs.canClear)
         .subscribe( () => this.clearApplication() );
       break;
 
@@ -299,7 +299,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   public canDeactivate() {
 
     // Enable deactivation (leaving the page) in case no appliaction has been created yet or the user agrees when asked (popup)
-    return !this.application || this.dialog.popupDialog(this.msgs.canLeave);
+    return !this.application || this.popup.popupDialog(this.msgs.canLeave);
   }
 }
 

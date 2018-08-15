@@ -1,11 +1,11 @@
 <header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
+  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
   <div fxHide.lt-sm>
-  <p *ngIf="welcomeBack" @fadeIn>{{msgs?.welcomeBack}}</p>
-  <p *ngIf="!welcomeBack" @fadeIn>{{msgs?.description}}</p>
+  <p *ngIf="welcomeBack" @fadeIn>{{msgs.welcomeBack}}</p>
+  <p *ngIf="!welcomeBack" @fadeIn>{{msgs.description}}</p>
   <p *ngIf="application" @fadeIn>
-    <wm-disclaimer [source]="msgs?.clearForm" 
+    <wm-disclaimer [source]="msgs.clearForm" 
                    (action)="disclaimerAction($event)"
                    actionClass="mat-link">
     </wm-disclaimer>

@@ -6,13 +6,14 @@ import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
 import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
 import { LoginComponent } from './pages/login/login.component';
+import { HandlerComponent } from './pages/handler/handler.component';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { ApplyComponent } from './pages/apply/apply.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { ProjectBrowserComponent } from './pages/project-browser/project-browser.component';
 import { PeopleBrowserComponent } from './pages/people-browser/people-browser.component';
+import { UploadComponent } from './pages/upload/upload.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { HandlerComponent } from './pages/handler/handler.component';
 
 import { ResolverService, AuthGuardService, PageGuardService } from './core';
 
@@ -52,10 +53,11 @@ const routes: Routes = [
         
         children: [
           { path: 'profile', component: UserProfileComponent, canDeactivate: [PageGuardService] },
+          { path: 'upload', component: UploadComponent }, //, canDeactivate: [PageGuardService] },
           { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
-          { path: 'projects', component: ProjectBrowserComponent, canDeactivate: [PageGuardService] },
+          { path: 'projects', component: ProjectBrowserComponent }, //canDeactivate: [PageGuardService] },
           { path: 'projects/:id', component: ProjectComponent, canDeactivate: [PageGuardService] },
-          { path: 'people', component: PeopleBrowserComponent, canDeactivate: [PageGuardService] }
+          { path: 'people', component: PeopleBrowserComponent }, // canDeactivate: [PageGuardService] }
         ]
       },
     

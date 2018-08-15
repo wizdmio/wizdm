@@ -1,0 +1,18 @@
+{
+  "title": "My uploads",
+  "description": "Here you'll find all the attachments you uploaded",
+
+  "actions": [
+    { "caption": "Delete", "icon": "delete", "code": "delete" },
+    { "caption": "Upload", "icon": "cloud_upload", "code": "upload" }
+  ],
+
+  "noFiles": "There's no files uploaded yet",
+
+  "canDelete": {
+    "title": "Deleting files",
+    "message": "WARNING, by proceeding you'll permanently delete the selected file(s).",
+    "cancel": "Cancel",
+    "ok": "Proceed"
+  }
+}

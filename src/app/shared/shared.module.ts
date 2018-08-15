@@ -41,6 +41,9 @@ import { MarkdownComponent } from './markdown/markdown.component';
 import { RemarkService } from './markdown/remark.service';
 import { CodeHighlightComponent } from './markdown/code-highlight/code-highlight.component';
 import { PrismService } from './markdown/code-highlight/prism.service';
+import { OpenFileComponent } from './file/open-file.component';
+import { DropZoneDirective } from './file/drop-zone.directive';
+import { FileSizePipe } from './file/file-size.pipe';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -79,7 +82,10 @@ const sharedModules = [
     DisclaimerComponent,
     PopupComponent,
     MarkdownComponent,
-    CodeHighlightComponent
+    CodeHighlightComponent,
+    OpenFileComponent,
+    DropZoneDirective,
+    FileSizePipe
   ],
 
   exports: [
@@ -88,7 +94,10 @@ const sharedModules = [
     IconComponent,
     DisclaimerComponent,
     PopupComponent,
-    MarkdownComponent
+    MarkdownComponent,
+    OpenFileComponent,
+    DropZoneDirective,
+    FileSizePipe
   ],
 
   providers: [

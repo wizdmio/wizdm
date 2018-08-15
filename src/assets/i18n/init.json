@@ -25,6 +25,7 @@
     "browser": "browser.json",
     "project": "project.json",
     "document": "document.json",
+    "upload": "upload.json",
     "people": "people.json",
     "apply": "apply.json",
     "about": "about.json",

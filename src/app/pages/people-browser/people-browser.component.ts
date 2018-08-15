@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentService } from '../../core';
+import { ContentService } from 'app/core';
 
 @Component({
   selector: 'wm-people-browser',
@@ -8,7 +8,7 @@ import { ContentService } from '../../core';
 })
 export class PeopleBrowserComponent implements OnInit {
 
-  public msgs = null;
+  public msgs;
   
   constructor(private content: ContentService) {
 
