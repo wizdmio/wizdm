@@ -13,6 +13,8 @@
     {
       "title": "Personal information & preferences",
       "icon": "account_box",
+      "userImage": true,
+      "expanded": true,
       "fields": [
         {"key": "profile:name", "label": "Name", "icon": "far:fa-user", "type": "input", "hint": "Your name goes here"},
         {"key": "profile:email", "label": "Email", "icon": "far:fa-envelope", "type": "input", "hint": "This is how you'll be contacted"},
@@ -22,8 +24,7 @@
         {"key": "profile:motto", "label": "About me", "icon": "far:fa-comment", "type": "input"},
         {"key": "profile:lang", "label": "Language", "icon": "fas:fa-language", "type": "select"}
       ],
-      "applyChanges": "Apply changes",
-      "expanded": true
+      "applyChanges": "Apply changes"
     },
     {
       "title": "Sign-in & security",

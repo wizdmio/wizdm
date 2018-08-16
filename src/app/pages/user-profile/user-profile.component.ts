@@ -44,6 +44,14 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     this.toolbar.activateActions(this.msgs.actions);
   }
 
+  public get userImage(): string {
+    return this.auth.userProfile ? this.auth.userProfile.img : null; 
+  }
+
+  public loadImage(files: FileList): void {
+    this.auth.uploadUserImage(files.item(0));
+  }
+
   public profileEditable(key: string) {
     
     // Hardcoded editable flag to prevent unwanted db modifications

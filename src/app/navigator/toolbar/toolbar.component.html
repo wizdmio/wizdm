@@ -20,10 +20,7 @@
 
         <!-- USER PROFILE BUTTON -->
         <button mat-icon-button routerLink="profile">
-          <img *ngIf="userImage" class="avatar" [src]="userImage" />
-          <svg *ngIf="!userImage" class="avatar"> 
-            <use xlink:href="#avatar"></use>
-          </svg>
+          <img *ngIf="userImage; else avatar" class="avatar" [src]="userImage" />
         </button>
       </ng-container>
 
@@ -45,10 +42,7 @@
 
       <!-- USER PROFILE BUTTON -->
       <button mat-icon-button routerLink="profile" *ngIf="signedIn">
-        <img *ngIf="userImage" class="avatar" [src]="userImage" />
-        <svg *ngIf="!userImage" class="avatar"> 
-          <use xlink:href="#avatar"></use>
-        </svg>
+        <img *ngIf="userImage; else avatar" class="avatar" [src]="userImage" />
       </button>
 
       <!-- MENU TOGGLER -->
@@ -97,8 +91,8 @@
 <mat-divider [@divider]="divider"></mat-divider>
 
 <!-- AVATAR TO REPLACE USER IMAGE WHEN UNAVAILABLE -->
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" display="none">
-  <symbol id="avatar" viewBox="0 0 24 24">
+<ng-template #avatar>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="avatar">
     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-  </symbol>
-</svg>
+  </svg>
+</ng-template>

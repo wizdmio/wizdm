@@ -24,12 +24,12 @@
 
   <!-- Uploading progress fake item(s) -->
   <ng-container *ngFor="let task of tasks">
-    <mat-list-item *ngIf="task.snapshot | async as snap">
+    <mat-list-item *ngIf="task.snapshot | async as snapshot">
       <svg matListAvatar class="upload"><use xlink:href="#upload"></use></svg>
-      <h4 matLine>{{ snap.fileName }}</h4>
+      <h4 matLine>{{ snapshot.fileName }}</h4>
       <p matLine>
         <mat-progress-bar [value]="task.progress | async"></mat-progress-bar>
-        <span>{{ snap.bytesTransferred | wmFileSize }} / {{ snap.totalBytes | wmFileSize }}</span>
+        <span>{{ snapshot.bytesTransferred | wmFileSize }} / {{ snapshot.totalBytes | wmFileSize }}</span>
       </p>
     </mat-list-item>
   </ng-container>

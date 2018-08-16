@@ -181,7 +181,33 @@ export class AuthService implements OnDestroy {
   }
 
   /**
-   * Deletes a user uploaded file clearing up both the storage and the user's uploads area object
+   * Loads a file into the user's storage to be used as image
+   * @param file file image to be uploaded and used as user image
+   * @returns a promise resolving after completion
+   */
+  public uploadUserImage(file: File): Promise<void> {
+    return this.uploadUserFileOnce(file)
+      .then( img => this.updateUserProfile({ img }) );
+  }
+
+  /**
+   * Checks when the user file refers to the user image and clears the url eventually
+   * @param user the user file object
+   * @returns the storage path related to the file
+   */
+  private clearWhenUserImage(user: wmUserFile): string {
+
+    // Resets the img url in user profile when deleting the releted image
+    if(user.url === this.userData.img) {
+      this.updateUserProfile({ img: null });
+    }
+
+    // Returns s=the storage' path for further processing
+    return user.path;
+  }
+
+  /**
+   * Deletes a user uploaded file clearing up both the storage and the user's uploads area
    */
   public deleteUserFile(id: string): Promise<void> {
     
@@ -189,11 +215,11 @@ export class AuthService implements OnDestroy {
     return this.db.doc$<wmUserFile>(ref)
       .pipe( 
         take(1),
-        switchMap( file => this.st.ref(file.path).delete() ),
-        tap( () => ref.delete())
+        map( file => this.clearWhenUserImage(file) ),
+        switchMap( path => this.st.ref(path).delete() ),
+        tap( () => ref.delete() )
       ).toPromise();
   }
-  
 
   public registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
     

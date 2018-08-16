@@ -1,6 +1,8 @@
 @import "src/variables";
 @import 'src/theme';
 
+$wm-user-size: 128px;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -15,6 +17,14 @@
   & > mat-accordion {
     padding: 2vh 5vw;
   }
+}
+
+.user {
+  
+  width: $wm-user-size;
+  height: $wm-user-size;
+  border-radius: 50%;
+  fill: mat-color($wm-primary);
 }
 
 mat-list {

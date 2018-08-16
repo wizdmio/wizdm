@@ -18,9 +18,20 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
+    <!-- USER IMAGE -->
+    <div *ngIf="panel.userImage">
+
+      <wm-open-file accept="image/*" (files)="loadImage($event)" #openFile>
+        <button mat-button (click)="openFile.show()">
+          <img *ngIf="userImage; else avatar" class="user" [src]="userImage"/>
+        </button>
+      </wm-open-file>
+      
+    </div>
+
+    <!-- PANEL ITEM LIST -->
     <mat-list>
 
-      <!-- PANEL ITEM LIST -->
       <wm-profile-item *ngFor="let field of panel.fields"
                        [name]="field.key"
                        [label]="field.label"
@@ -36,9 +47,9 @@
 
     </mat-list>
 
+    <!-- ACTION BUTTONS or LINKS -->
     <mat-action-row fxLayout="row" fxLayout.lt-sm="column" *ngIf="panel.buttons || panel.applyChanges">
 
-      <!-- ACTION BUTTONS or LINKS -->
       <ng-container *ngFor="let btn of panel.buttons">
 
         <button *ngIf="btn.action" 
@@ -63,3 +74,9 @@
   </mat-expansion-panel>
 </mat-accordion>
 
+<!-- AVATAR TO REPLACE USER IMAGE WHEN UNAVAILABLE -->
+<ng-template #avatar>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="user">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+  </svg>
+</ng-template>
