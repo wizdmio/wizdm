@@ -1,4 +1,5 @@
 import { wmUser } from '../auth/auth.service';
+import { Timestamp } from '../database/database.service';
 
 export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft' | 'deleted';
 
@@ -45,6 +46,6 @@ export interface wmProject {
   history?     : wmProjectLog[],
   
   id?          : string,
-  created?     : any,
-  updated?     : any
+  created?     : Timestamp,
+  updated?     : Timestamp
 }

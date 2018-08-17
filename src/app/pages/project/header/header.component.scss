@@ -1,0 +1,12 @@
+@import "src/variables";
+@import "src/theme";
+
+header {
+  padding-bottom: $wm-content-padding;
+  //margin: 0 $wm-content-margin;
+
+  wm-avatar {
+    margin-right: 10px;
+  }
+
+}

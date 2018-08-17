@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentService, ProjectService, wmProject } from 'app/core';
 import { ToolbarService, ActionEnabler, ScrollViewService } from 'app/navigator';
 import { PopupService } from 'app/shared';
-import { Observable, Subject, of } from 'rxjs';
-import { switchMap, catchError, take, map, filter, debounceTime, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, of, empty } from 'rxjs';
+import { switchMap, catchError, tap, take, map, filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { $animations } from './project.animations';
 
 const $debug = "# Test with a [link](../../profile)\nFollowed by a simple paragraph _with_ **emphasis** and ~~corrections~~ and a note[^note]\n\n [^note]: this is a note"
@@ -17,10 +17,11 @@ const $debug = "# Test with a [link](../../profile)\nFollowed by a simple paragr
 })
 export class ProjectComponent implements OnInit, OnDestroy {
 
-  public project: wmProject;
-  public editMode = false;
-  public saved = true;
-  public msgs;
+  public  project: wmProject;
+  private buffer: wmProject;
+  public  editMode = false;
+  public  saved = true;
+  public  msgs;
 
   constructor(private content  : ContentService,
               private database : ProjectService,
@@ -52,7 +53,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     // ...then keep the project in sync reloading changes
     this.loadProject()
-      .pipe( filter( () => !this.editMode ) ) // Skips reloading while in editMode
+      .pipe( 
+        tap( project => this.buffer = project ), // Buffers the project for changes during editing
+        filter( () => !this.editMode ) // Skips reloading while in editMode
+      ) 
       .subscribe( project => {
         this.project = project || { document: $debug } as wmProject;
     });
@@ -68,10 +72,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   public enterEditMode(): void {
+    // Turns edit mode on 
     this.editMode = true;
   }
 
   public leaveEditMode(): void {
+    // Updates the project with the latest buffered value
+    this.project = this.buffer;
+    // Turns editMode off
     this.editMode = false;
   }
 

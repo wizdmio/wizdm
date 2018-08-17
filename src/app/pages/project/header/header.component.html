@@ -1,6 +1,42 @@
-<header fxLayout="row" fxLayoutAlign="start center">
-  {{ project.name }}
-  {{ msgs.postedOn(project) }}
-  {{ msgs.postedBy }}
-  {{ project.owner.name }}
+
+<header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="project">
+  
+  <div fxLayout="row"><!-- Author on the left -->
+    
+    <wm-avatar [src]="project.owner?.img"></wm-avatar>
+    
+    <div fxLayout="column">
+      <span>{{ project.owner?.name || msgs.unnamed }}&nbsp;-&nbsp;{{ project.name }}</span>
+      <!--span class="mat-small">{{ msgs.createdOn }}&nbsp;{{ createdOn }}</span-->
+      <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
+    </div>
+
+  </div>
+
+  <div  fxLayout="row"><!-- Notifications on the right -->
+
+    <button mat-icon-button (click)="toggleNotifications(panel)">
+      <wm-icon [icon]="'notifications_none'" matBadge="3"></wm-icon>
+    </button>
+
+    <button mat-button (click)="toggleFavorite()">
+      <span class="mat-small">532</span>
+      <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'"></wm-icon>
+    </button>
+  </div>
+
 </header>
+
+<mat-expansion-panel #panel>
+  <mat-list>
+    <mat-list-item *ngFor="let message of messages; last as isLast">
+      <wm-avatar matListAvatar [src]=""></wm-avatar>
+      <h3 matLine>{{ message.from }}</h3>
+      <p matLine>
+        <strong>{{ message.subject }}</strong>
+        <span class="demo-2">&nbsp;-&nbsp;{{ message.content }}</span>
+      </p>
+      <mat-divider *ngIf="!isLast"></mat-divider>
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>

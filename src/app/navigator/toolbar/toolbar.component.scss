@@ -1,7 +1,5 @@
 @import 'src/theme';
 
-$wm-avatar-size: 36px;
-
 .link-active {
   text-decoration: underline;
 }
@@ -9,11 +7,4 @@ $wm-avatar-size: 36px;
 .highlight {
   background-color: mat-color($wm-primary, A400);
   color: mat-contrast($wm-primary, A400);
-}
-
-.avatar {
-  width: $wm-avatar-size;
-  height: $wm-avatar-size;
-  border-radius: 50%;
-  fill: mat-color($wm-primary);
 }

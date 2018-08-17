@@ -1,10 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { DatabaseService, Timestamp, QueryFn } from '../database/database.service';
+import { StorageService } from '../storage/storage.service';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { DatabaseService, QueryFn } from '../database/database.service';
-import { StorageService, StorageTask, StorageTaskSnapshot } from '../storage/storage.service';
 import { auth, User } from 'firebase';
-import { Observable, of, from, concat, merge, Subscription } from 'rxjs';
-import { switchMap, takeWhile, map, tap, filter, take } from 'rxjs/operators';
+import { Observable, of, merge, Subscription } from 'rxjs';
+import { switchMap, map, tap, filter, take } from 'rxjs/operators';
 
 export interface wmUser {
 
@@ -20,8 +20,8 @@ export interface wmUser {
   //uploads? : any, collection reference
 
   id?      : string,
-  created? : any,
-  updated? : any
+  created? : Timestamp,
+  updated? : Timestamp
 }
 
 export interface wmUserFile {
@@ -34,8 +34,8 @@ export interface wmUserFile {
   xfer?:     number, // bytes transferred during the upload
 
   id?      : string,
-  created? : any,
-  updated? : any
+  created? : Timestamp,
+  updated? : Timestamp
 }
 
 @Injectable({

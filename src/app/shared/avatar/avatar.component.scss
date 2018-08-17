@@ -1,0 +1,24 @@
+@import "src/variables";
+@import "src/theme";
+
+$wm-avatar-size: 40px !default;
+
+:host {
+  position: relative;
+  display: block;
+  width: $wm-avatar-size;
+  height: $wm-avatar-size;
+  line-height: $wm-avatar-size;
+}
+
+.avatar {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  
+  border: 2px solid white;
+  border-radius: 50%;
+  box-sizing: border-box;
+  
+  fill: mat-color($wm-primary);
+}

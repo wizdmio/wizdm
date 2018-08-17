@@ -10,7 +10,7 @@ import {
   MatButtonModule,
   MatIconModule,
   MatMenuModule,
-  MatCardModule,
+  MatBadgeModule,
   MatFormFieldModule,
   MatInputModule,
   MatStepperModule,
@@ -35,6 +35,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-mo
 
 // Application specific
 import { IconComponent } from './icon/icon.component';
+import { AvatarComponent } from './avatar/avatar.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { PopupComponent } from './popup/popup.component';
 import { PopupService } from './popup/popup.service';
@@ -51,7 +52,7 @@ const sharedModules = [
   MatButtonModule,
   MatIconModule,
   MatMenuModule,
-  MatCardModule,
+  MatBadgeModule,
   MatFormFieldModule,
   MatInputModule,
   MatStepperModule,
@@ -81,6 +82,7 @@ const sharedModules = [
   
   declarations: [
     IconComponent,
+    AvatarComponent,
     DisclaimerComponent,
     PopupComponent,
     MarkdownComponent,
@@ -94,6 +96,7 @@ const sharedModules = [
     ...sharedModules,
 //------------------------    
     IconComponent,
+    AvatarComponent,
     DisclaimerComponent,
     PopupComponent,
     MarkdownComponent,

@@ -19,7 +19,9 @@
   },
 
   "header": {
-
+    "unnamed": "Unnamed",
+    "createdOn": "First submitted on {{ created }}",
+    "modifiedOn": "Last modified on {{ modified }}"
   },
 
   "canLeave": {

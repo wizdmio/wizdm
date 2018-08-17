@@ -6,33 +6,7 @@ export { wmProject, wmApplication, wmDevelopment } from './data-model';
 
 import { Observable, of } from 'rxjs';
 import { filter, map, tap, take, debounceTime, switchMap, mergeMap } from 'rxjs/operators';
-/*
-import * as moment from 'moment';
 
-export class WMProject {
-  
-  constructor(public data: wmProject, private factory: ProjectService) { }
-
-  // Internal timestamp conversion helpers
-  private tsToNumber(ts: Timestamp) { return ts ? ts.toMillis() : 0;}
-  private tsToDate(ts: Timestamp) { return ts ? ts.toDate() : new Date(null);}
-  private tsToMoment(ts: Timestamp): moment.Moment { return ts ? moment( ts.toDate() ) : moment();}
-
-  // Ownership helper
-  get isMine(): boolean { return this.data.owner === this.factory.userId;}
-
-  // Timestamp helpers
-  get created()   : Date { return this.tsToDate(this.data.created);}
-  get createdN()  : number { return this.tsToNumber(this.data.created);}
-  get createdM()  : moment.Moment { return this.tsToMoment(this.data.created);}
-  get modified()  : Date { return this.tsToDate(this.data.updated);}
-  get modifiedN() : number { return this.tsToNumber(this.data.updated);}
-  get modifiedM() : moment.Moment { return this.tsToMoment(this.data.updated);}
-
-  // Project management functions
-  public delete() : Promise<void> { return this.factory.deleteProject(this.data.id);}
-}
-*/
 @Injectable({
   providedIn: 'root'
 })
@@ -53,9 +27,7 @@ export class ProjectService {
   }
 
   public listProjects(queryFn? : QueryFn): Observable<wmProject[]> {
-    return this.db.colWithIds$<wmProject>('/projects', queryFn);/*.pipe( 
-      map( a => a.map( w => new WMProject(w, this) ))
-    );*/
+    return this.db.colWithIds$<wmProject>('/projects', queryFn);
   }
 
   public listOwnProjects(queryFn? : QueryFn): Observable<wmProject[]> {
