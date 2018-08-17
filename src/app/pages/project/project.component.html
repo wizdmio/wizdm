@@ -1,12 +1,12 @@
 
 <!--mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar-->
 
+<wm-project-header [project]="project"></wm-project-header>  
+<mat-divider></mat-divider>
+
 <div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto">
-
-    <wm-project-header [project]="project"></wm-project-header>  
-    <mat-divider></mat-divider>
 
     <!-- Renders the table of contents on top on small screens -->
     <wm-markdown class="table-of-contents" display="toc" [data]="document" fxHide fxShow.lt-sm>

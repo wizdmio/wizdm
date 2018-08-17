@@ -7,15 +7,14 @@
     
     <div fxLayout="column">
       <span>{{ project.owner?.name || msgs.unnamed }}&nbsp;-&nbsp;{{ project.name }}</span>
-      <!--span class="mat-small">{{ msgs.createdOn }}&nbsp;{{ createdOn }}</span-->
       <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
     </div>
 
   </div>
 
-  <div  fxLayout="row"><!-- Notifications on the right -->
+  <div fxLayout="row"><!-- Notifications on the right -->
 
-    <button mat-icon-button (click)="toggleNotifications(panel)">
+    <button mat-icon-button (click)="panel.toggle()" *ngIf="isMine">
       <wm-icon [icon]="'notifications_none'" matBadge="3"></wm-icon>
     </button>
 
@@ -27,16 +26,13 @@
 
 </header>
 
+<!-- List of Notifications -->
 <mat-expansion-panel #panel>
-  <mat-list>
-    <mat-list-item *ngFor="let message of messages; last as isLast">
-      <wm-avatar matListAvatar [src]=""></wm-avatar>
-      <h3 matLine>{{ message.from }}</h3>
-      <p matLine>
-        <strong>{{ message.subject }}</strong>
-        <span class="demo-2">&nbsp;-&nbsp;{{ message.content }}</span>
-      </p>
+
+  <mat-list fxFlex="1 1 auto">
+    <wm-user-message [message]="message" *ngFor="let message of messages; last as isLast">
       <mat-divider *ngIf="!isLast"></mat-divider>
-    </mat-list-item>
+    </wm-user-message>
   </mat-list>
+
 </mat-expansion-panel>

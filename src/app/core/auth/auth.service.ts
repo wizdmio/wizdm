@@ -1,42 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { DatabaseService, Timestamp, QueryFn } from '../database/database.service';
+import { DatabaseService, QueryFn } from '../database/database.service';
 import { StorageService } from '../storage/storage.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth, User } from 'firebase';
+import { wmUser, wmUserFile } from '../data-model';
 import { Observable, of, merge, Subscription } from 'rxjs';
 import { switchMap, map, tap, filter, take } from 'rxjs/operators';
-
-export interface wmUser {
-
-  img?     : string,
-  name?    : string,
-  email?   : string,
-  phone?   : string,
-  birth?   : string,
-  gender?  : string,
-  motto?   : string,
-  lang?    : string,
-
-  //uploads? : any, collection reference
-
-  id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
-}
-
-export interface wmUserFile {
-  name?:     string,
-  fullName?: string,
-  path?:     string,
-  size?:     number,
-  url?:      string,
-
-  xfer?:     number, // bytes transferred during the upload
-
-  id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
-}
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,14 @@
+
+<mat-list-item *ngIf="!!message">
+
+  <wm-avatar mat-list-avatar [src]="message.from.img"></wm-avatar>
+  
+  <p fxLayout="row" fxLayoutAlign="space-between center" mat-line>
+    <span>{{ message.from.name }}</span>
+    <span class="mat-small">{{ formatDate(message.when) }}</span>
+  </p>
+  
+  <p mat-line><strong>{{ message.subject }}</strong>&nbsp;-&nbsp;{{ message.content }}</p>
+
+</mat-list-item>
+<ng-content></ng-content>

@@ -1,4 +1,4 @@
-
+export * from './data-model';
 export * from './window/window.service';
 export * from './resolver/resolver.service';
 export * from './content/content-manager.service';

@@ -8,6 +8,8 @@ $wm-avatar-size: 40px !default;
   display: block;
   width: $wm-avatar-size;
   height: $wm-avatar-size;
+  min-width: $wm-avatar-size;
+  min-height: $wm-avatar-size;
   line-height: $wm-avatar-size;
 }
 

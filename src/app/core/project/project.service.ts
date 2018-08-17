@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AuthService, wmUser } from '../auth/auth.service';
-import { DatabaseService, dbDocument, QueryFn, Timestamp } from '../database/database.service';
-import { wmProject, wmApplication, wmDevelopment } from './data-model';
-export { wmProject, wmApplication, wmDevelopment } from './data-model';
+import { AuthService } from '../auth/auth.service';
+import { DatabaseService, QueryFn } from '../database/database.service';
+import { wmUser, wmProject } from '../data-model';
 
 import { Observable, of } from 'rxjs';
 import { filter, map, tap, take, debounceTime, switchMap, mergeMap } from 'rxjs/operators';
