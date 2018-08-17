@@ -20,6 +20,8 @@ import { ProjectBrowserComponent } from './project-browser/project-browser.compo
 import { ProjectBrowserItemComponent } from './project-browser/project-browser-item/project-browser-item.component';
 import { PeopleBrowserComponent } from './people-browser/people-browser.component';
 import { UploadComponent } from './upload/upload.component';
+import { UploadsComponent } from './upload/uploads.component';
+import { UploadsService } from './upload/uploads.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -47,14 +49,17 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ProjectEditor,
     PeopleBrowserComponent,
     UploadComponent,
+    UploadsComponent,
     NotFoundComponent
   ],
 
   providers: [
+    UploadsService
   ],
 
-  entryComponents: [
-    TermsPrivacyPopupComponent // This component is declared here to propoerly work as a Dialog
+  entryComponents: [// These components are declared here to properly work as a Dialogs
+    UploadsComponent,
+    TermsPrivacyPopupComponent
   ]
 
 })

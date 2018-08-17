@@ -20,11 +20,17 @@ $wm-user-size: 128px;
 }
 
 .user {
+
+  padding: 0;
+  margin: 10px 0;
   
-  width: $wm-user-size;
-  height: $wm-user-size;
-  border-radius: 50%;
-  fill: mat-color($wm-primary);
+  img, svg {
+    width: $wm-user-size;
+    height: $wm-user-size;
+    border-radius: 50%;
+  }
+
+  svg { fill: mat-color($wm-primary); }
 }
 
 mat-list {

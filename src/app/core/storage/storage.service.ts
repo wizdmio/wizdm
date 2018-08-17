@@ -4,6 +4,7 @@ import { storage } from 'firebase';
 
 export type StorageRef = AngularFireStorageReference;
 export type StorageTask = AngularFireUploadTask;
+export type StorageTaskSnapshot = storage.UploadTaskSnapshot;
 export type UploadMetadata = storage.UploadMetadata;
 
 @Injectable({

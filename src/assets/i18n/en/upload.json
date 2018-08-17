@@ -1,18 +1,24 @@
 {
   "title": "My uploads",
-  "description": "Here you'll find all the attachments you uploaded",
+  "description": "Use Upload to load files into your private area",
 
   "actions": [
     { "caption": "Delete", "icon": "delete", "code": "delete" },
     { "caption": "Upload", "icon": "cloud_upload", "code": "upload" }
   ],
 
-  "noFiles": "There's no files uploaded yet",
-
   "canDelete": {
     "title": "Deleting files",
     "message": "WARNING, by proceeding you'll permanently delete the selected file(s).",
     "cancel": "Cancel",
     "ok": "Proceed"
+  },
+
+  "dialog": {
+    "title": "Choose an image",
+    "noFiles": "There's no files uploaded yet",
+    "cancel": "Cancel",
+    "select": "Select",
+    "browse": "Browse..."
   }
 }

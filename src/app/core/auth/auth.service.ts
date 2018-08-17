@@ -1,10 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { DatabaseService, QueryFn } from '../database/database.service';
-import { StorageService, StorageTask } from '../storage/storage.service';
+import { StorageService, StorageTask, StorageTaskSnapshot } from '../storage/storage.service';
 import { auth, User } from 'firebase';
-import { Observable, of, Subscription } from 'rxjs';
-import { switchMap, startWith, map, tap, filter, take } from 'rxjs/operators';
+import { Observable, of, from, concat, merge, Subscription } from 'rxjs';
+import { switchMap, takeWhile, map, tap, filter, take } from 'rxjs/operators';
 
 export interface wmUser {
 
@@ -30,6 +30,8 @@ export interface wmUserFile {
   path?:     string,
   size?:     number,
   url?:      string,
+
+  xfer?:     number, // bytes transferred during the upload
 
   id?      : string,
   created? : any,
@@ -132,39 +134,61 @@ export class AuthService implements OnDestroy {
   }
 
   public addUserUploads(data: wmUserFile): Promise<any> {
-    return this.db.add<any>(`users/${this.userId}/uploads`, data);
+    return this.db.add<wmUserFile>(`users/${this.userId}/uploads`, data);
   }
 
   /**
    * Uploads a file into the user's upload area
    * @param file the file object to be uploaded and tracked into the user's uploads area
-   * @returns the task object to drive the upload process
+   * @returns the StorageTaskSnapshot observable to track the process
    */
-  public uploadUserFile(file: File): StorageTask {
+  public uploadUserFile(file: File): Observable<wmUserFile> {
 
-    // Coputes the storage path
+    // Computes the storage path
     const path = `${this.userId}/${new Date().getTime()}_${file.name}`;
- 
-    // Create the upload task
+
+    // Creates the upload task
     let task = this.st.upload(path, file);
 
-    // Intercepts the upload completion and get the download url
-    task.snapshotChanges()
-      .pipe( filter( snap => snap.bytesTransferred === snap.totalBytes ), take(1) )
-      .subscribe( snap => snap.ref.getDownloadURL().then( url => {
+    // Merges two snapshotChanges observables
+    return merge(
 
-        // Saves the uploaded file information into the user uploads area
-        this.addUserUploads({ 
-          name: file.name,
-          fullName: snap.ref.name,
-          path,
-          size: snap.totalBytes,
-          url
-        });
-      }));
+      // During the transfer, maps the snapshot to a wmUserFile tracking the progress in xfer
+      // with a simple map, this allow for minimized latency and better progress preview
+      task.snapshotChanges().pipe( 
+        map( snap => { 
+          return { 
+            name: file.name,
+            fullName: snap.ref.name,
+            path,
+            size: snap.totalBytes,
+            xfer: snap.bytesTransferred
+          };
+       })
+      ),
 
-    // Returns the task for user interaction
-    return task;
+      // At completion, gets the download url, saves the file info into user's uploads area...
+      task.snapshotChanges().pipe( 
+        filter( snap => snap.bytesTransferred === snap.totalBytes ),
+        switchMap( snap => snap.ref.getDownloadURL().then( url => 
+
+          // Saves the uploaded file information into the user uploads area
+          this.addUserUploads({ 
+            name: file.name,
+            fullName: snap.ref.name,
+            path,
+            size: snap.totalBytes,
+            url
+          })
+        )),
+
+        //... and reloads the saved values from the database
+        switchMap( ref => ref.valueChanges() ),
+
+        // Makes sure it completes
+        take(1)
+      )
+    );
   }
 
   /**
@@ -172,12 +196,8 @@ export class AuthService implements OnDestroy {
    * @param file file object to be uploaded
    * @returns a promise resolving with the download url
    */
-  public uploadUserFileOnce(file: File): Promise<string> {
-    return this.uploadUserFile(file)
-      .snapshotChanges()
-      //.pipe( filter( snap => snap.bytesTransferred === snap.totalBytes ) )
-      .toPromise()
-      .then( snap => snap.ref.getDownloadURL() );
+  public uploadUserFileOnce(file: File): Promise<wmUserFile> {
+    return this.uploadUserFile(file).toPromise();
   }
 
   /**
@@ -187,7 +207,7 @@ export class AuthService implements OnDestroy {
    */
   public uploadUserImage(file: File): Promise<void> {
     return this.uploadUserFileOnce(file)
-      .then( img => this.updateUserProfile({ img }) );
+      .then( file => this.updateUserProfile({ img: file.url }) );
   }
 
   /**

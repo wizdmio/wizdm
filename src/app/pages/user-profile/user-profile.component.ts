@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from '../../core';
-import { ToolbarService } from '../../navigator';
-import { PopupService } from '../../shared';
+import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from 'app/core';
+import { ToolbarService } from 'app/navigator';
+import { UploadsService } from 'app/pages';
+import { PopupService } from 'app/shared';
 import { UserProfileItemComponent, UserItemValidators } from './user-profile-item/user-profile-item.component';
 
 import * as moment from 'moment';
@@ -27,7 +28,8 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
               private toolbar : ToolbarService,
               private popup   : PopupService,
               private router  : Router,
-              private route   : ActivatedRoute) { 
+              private route   : ActivatedRoute,
+              private uploads : UploadsService) { 
 
     // Gets the localized content
     this.msgs = this.content.select('profile');
@@ -48,8 +50,13 @@ export class UserProfileComponent implements OnInit, CanPageDeactivate  {
     return this.auth.userProfile ? this.auth.userProfile.img : null; 
   }
 
-  public loadImage(files: FileList): void {
-    this.auth.uploadUserImage(files.item(0));
+  public selectImage(): void {
+    
+    this.uploads.show().subscribe( file => {
+      if(file) {
+        this.auth.updateUserProfile({ img: file.url });
+      }
+    });
   }
 
   public profileEditable(key: string) {

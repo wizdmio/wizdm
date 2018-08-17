@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, AuthService, wmUserFile } from 'app/core';
 import { ToolbarService, ActionEnabler } from 'app/navigator';
 import { OpenFileComponent, PopupService } from 'app/shared';
 import { Observable } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
 
-interface task {
+interface UploadTask {
   
   id:       number;
   snapshot: Observable<any>;
-  progress: Observable<number>;
+  //progress: Observable<number>;
   done:     boolean;
 }
 
@@ -26,11 +26,7 @@ export class UploadComponent implements OnInit {
 
   private enableDelete$: ActionEnabler;
   public uploads: Observable<any[]>;
-  public tasks: task[] = [];
-
-  //public progress: Observable<number>;
-  //public snapshot: Observable<any>;
-  
+  public tasks: UploadTask[] = [];
   public msgs;
   
   constructor(private content : ContentService, 
@@ -46,8 +42,8 @@ export class UploadComponent implements OnInit {
 
     // Gets the user uploads observable
     this.uploads = this.auth.getUserUploads( ref => ref.orderBy('created') )
-      // Disposes completes upload tasks on list change
-      .pipe( tap( () => this.disposeTasks() ));
+      // Disposes completed upload tasks on list change
+      .pipe( tap( files => this.disposeTasks() ));
 
     // Activates the toolbar actions
     this.toolbar.activateActions(this.msgs.actions)
@@ -80,12 +76,12 @@ export class UploadComponent implements OnInit {
     }
   }
 
+  // Disposes all the tasks marked as done
   private disposeTasks(): void {
 
     this.tasks = this.tasks.filter( task => {
 
       if(task.done){
-        delete task.progress;
         delete task.snapshot;
         return false;
       }
@@ -93,12 +89,17 @@ export class UploadComponent implements OnInit {
     });
   }
 
+  // Marks a task as completed
   private completeTask(id: number): void {
-
-    let index = this.tasks.findIndex( value => value.id === id);
+    let index = this.tasks.findIndex( value => value.id === id );
     if( index >= 0 ) {
       this.tasks[index].done = true;
     }
+  }
+
+  // Helper to computes snapshot progression
+  public progress(s: wmUserFile): number {
+    return s.xfer / s.size * 100;
   }
  
   public upload(list: FileList, start: number = 0): void {
@@ -117,32 +118,52 @@ export class UploadComponent implements OnInit {
       this.upload(list, start + 1);
     }
 
-    // Create the upload task 
-    let task = this.auth.uploadUserFile(file);
+    // Gets the next task id
+    let id = this.tasks.length;
 
-    // Progress monitoring (subscription happens in the view)
-    let progress = task.percentageChanges();
+     // Snapshot (subscription happens in the view and triggers the transfer)
+    let snapshot = this.auth.uploadUserFile(file).pipe( 
+      tap( file => {
+        // Intercepts the upload completion and mark the task for disposal
+        if( file.xfer === file.size ) {
+          this.completeTask(id);
+        }
+      })
+    );
 
-    // Snapshot (subscription happens in the view) patched with the original file name
-    let snapshot = task.snapshotChanges().pipe( map( snap => { return { ...snap, fileName: file.name };}) );
+    // Pushes the task into the stack for upload execution
+    this.tasks.push({ snapshot, id, done: false });
+  }
 
-    // Pushes the task into the stack
-    let id = this.tasks.push({ progress, snapshot, id: this.tasks.length, done: false }) - 1;
+  // Files deletion list
+  private deletingFiles: wmUserFile[] = [];
 
-    // Intercepts the upload completion and mark the task for disposal
-    snapshot.pipe( filter( snap => snap.bytesTransferred === snap.totalBytes ), take(1) )
-      .subscribe( () => this.completeTask(id) );
+  // Helper to check if a file is in the deletion list
+  public isFileDeleting(file: wmUserFile): boolean {
+    return this.deletingFiles.findIndex( f => f.fullName === file.fullName) >=0;
+  }
+
+  // Helper to remove a file from the deletion list 
+  public fileDeleted(file: wmUserFile): void {
+    this.deletingFiles = this.deletingFiles.filter( f => f.fullName !== file.fullName );
   }
 
   private deleteSelection(): void {
 
     if(this.fileList && this.fileList.selectedOptions.hasValue()) {
 
-      // Gets the list of selected files
-      let list = this.fileList.selectedOptions.selected;
+      // Gets the list of selected files, the list will be used to mark the list item as disabled
+      // while deletion is in progress
+      this.deletingFiles = this.fileList.selectedOptions.selected
+        .map( option => option.value );
 
       // Deletes the selected files
-      list.forEach( file => this.auth.deleteUserFile(file.value.id) );
+      this.deletingFiles.forEach( file => {
+        
+        // Once deleted, removes the file from the deletion list 
+        this.auth.deleteUserFile(file.id)
+          .then( () => this.fileDeleted(file) );
+      });
 
       // Disables the delete action
       this.enableDelete$.enable(false);

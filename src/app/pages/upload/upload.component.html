@@ -1,7 +1,6 @@
 <header fxLayout="column">
   <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
   <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
-  <p fxHide.lt-sm>{{ msgs.description }}</p>
 </header>
 
 <mat-divider></mat-divider>
@@ -12,8 +11,11 @@
 <!-- File list -->
 <mat-selection-list *ngIf="uploads | async as files" (selectionChange)="selectionChange($event)">
 
-  <mat-list-option *ngFor="let file of files" [value]="file">
-    <!--mat-icon matListIcon>folder</mat-icon-->
+  <!-- No files message -->
+  <p *ngIf="!files.length && !tasks.length">{{ msgs.description }}</p>
+
+  <!-- Uploaded file items -->
+  <mat-list-option *ngFor="let file of files" [value]="file" [disabled]="isFileDeleting(file)">
     <img matListAvatar [src]="file.url">
     <h4 matLine>{{ file.name }}</h4>
     <p matLine>
@@ -28,8 +30,8 @@
       <svg matListAvatar class="upload"><use xlink:href="#upload"></use></svg>
       <h4 matLine>{{ snapshot.fileName }}</h4>
       <p matLine>
-        <mat-progress-bar [value]="task.progress | async"></mat-progress-bar>
-        <span>{{ snapshot.bytesTransferred | wmFileSize }} / {{ snapshot.totalBytes | wmFileSize }}</span>
+        <mat-progress-bar [value]="progress(snapshot)"></mat-progress-bar>
+        <span>{{ snapshot.xfer | wmFileSize }} / {{ snapshot.size | wmFileSize }}</span>
       </p>
     </mat-list-item>
   </ng-container>
@@ -42,3 +44,10 @@
     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
   </symbol>
 </svg>
+
+<!-- Cloud download image template for loading -->
+<!--ng-template #download>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="upload">
+    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+  </svg>
+</ng-template-->

@@ -1,0 +1,33 @@
+@import "src/variables";
+@import "src/theme";
+
+$miniature-size: 120px;
+$thumb-size:      60px;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.miniature {
+  width: $miniature-size;
+  height: $miniature-size;
+}
+
+.thumb { 
+  width:  $thumb-size;
+  height: $thumb-size;
+}
+
+mat-dialog-content button {
+
+  padding: 0;
+  margin: 1px;
+  box-sizing: border-box;
+
+  &[selected=true] { 
+    outline: 1px solid mat-color($wm-primary);
+    background-color: rgba(mat-color($wm-primary), 0.2);
+  }
+}

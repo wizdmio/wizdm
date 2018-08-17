@@ -1,4 +1,4 @@
-import { Injectable, ComponentRef, TemplateRef  } from '@angular/core';
+import { Injectable  } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { PopupComponent, PopupData } from './popup.component';
 export { PopupData } from './popup.component';
