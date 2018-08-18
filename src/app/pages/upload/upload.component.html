@@ -9,7 +9,7 @@
 <wm-open-file accept="image/*" (files)="upload($event)" multiple="true"></wm-open-file>
 
 <!-- File list -->
-<mat-selection-list *ngIf="uploads | async as files" (selectionChange)="selectionChange($event)">
+<mat-selection-list *ngIf="uploads$ | async as files" (selectionChange)="selectionChange($event)">
 
   <!-- No files message -->
   <p *ngIf="!files.length && !tasks.length">{{ msgs.description }}</p>

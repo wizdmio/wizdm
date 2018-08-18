@@ -4,15 +4,15 @@ import { ContentService, ProjectService, wmProject, Timestamp } from 'app/core';
 import { ToolbarService } from 'app/navigator';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
-import { $animations } from './project-browser.animations';
+import { $animations } from './browser.animations';
 
 @Component({
   selector: 'wm-project-browser',
-  templateUrl: './project-browser.component.html',
-  styleUrls: ['./project-browser.component.scss'],
+  templateUrl: './browser.component.html',
+  styleUrls: ['./browser.component.scss'],
   animations: $animations
 })
-export class ProjectBrowserComponent implements OnInit, AfterContentInit, OnDestroy {
+export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private colsBreakpoint = { xl: 5, lg: 4, md: 3, sm: 2, xs: 1 };
   private dispose$: Subject<void> = new Subject();

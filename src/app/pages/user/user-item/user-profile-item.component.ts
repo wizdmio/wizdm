@@ -4,7 +4,7 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { DateAdapter } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { ContentService } from '../../../core';
-import { $itemAnimations } from './user-profile-item-animations';
+import { $itemAnimations } from './user-item-animations';
 
 import * as moment from 'moment';
 
@@ -26,11 +26,11 @@ export interface UserItemValidators {
 
 @Component({
   selector: 'wm-profile-item',
-  templateUrl: './user-profile-item.component.html',
-  styleUrls: ['./user-profile-item.component.scss'],
+  templateUrl: './user-item.component.html',
+  styleUrls: ['./user-item.component.scss'],
   animations: $itemAnimations
 })
-export class UserProfileItemComponent implements OnInit, OnDestroy {
+export class UserItemComponent implements OnInit, OnDestroy {
 
   // This is a dummy animation to prevent @slideout kicking in during page rendering
   @HostBinding('@halt') halt = true;

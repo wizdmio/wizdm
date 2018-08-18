@@ -1,0 +1,7 @@
+@import 'src/variables';
+@import 'src/theme';
+
+.time {
+  color: rgba( mat-color($wm-primary), 0.6);
+  @include mat-typography-level-to-styles($wm-typography, caption);
+}

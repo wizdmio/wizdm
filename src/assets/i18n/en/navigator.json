@@ -13,6 +13,7 @@
         "private": [
             { "label": "Home", "link": "home" },
             { "label": "Projects", "link": "projects" },
+            { "label": "Messages", "link": "messages" },
             { "label": "People", "link": "people" },
             { "label": "About", "link": "about" }
         ]

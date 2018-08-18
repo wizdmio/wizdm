@@ -1,0 +1,19 @@
+<header fxLayout="column">
+  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+</header>
+
+<mat-divider></mat-divider>
+
+<!-- Message list -->
+<mat-selection-list *ngIf="messages$ | async as messages" (selectionChange)="selectionChange($event)">
+
+  <!-- No message's message -->
+  <p *ngIf="!messages.length">{{ msgs.noMessages }}</p>
+
+  <!-- Message items -->
+  <wm-user-message *ngFor="let msg of messages; last as isLast" mode="select" [message]="msg" [disabled]="isMsgDeleting(msg)">
+    <mat-divider *ngIf="!isLast"></mat-divider>
+  </wm-user-message>
+
+</mat-selection-list>

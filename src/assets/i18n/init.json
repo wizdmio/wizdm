@@ -26,6 +26,7 @@
     "project": "project.json",
     "document": "document.json",
     "upload": "upload.json",
+    "messages": "messages.json",
     "people": "people.json",
     "apply": "apply.json",
     "about": "about.json",

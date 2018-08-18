@@ -10,8 +10,12 @@ import * as moment from 'moment';
 })
 export class MessageComponent implements OnInit {
 
-  @Input() message: wmUserMessage;
+  @Input() mode: 'view' | 'select' = 'view';
 
+  @Input() disabled = false;
+
+  @Input() message: wmUserMessage;
+  
   constructor() {}
 
   ngOnInit() {}

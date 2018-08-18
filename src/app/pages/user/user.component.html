@@ -30,7 +30,7 @@
     <!-- PANEL ITEM LIST -->
     <mat-list>
 
-      <wm-profile-item *ngFor="let field of panel.fields"
+      <wm-user-item *ngFor="let field of panel.fields"
                        [name]="field.key"
                        [label]="field.label"
                        [icon]="field.icon"
@@ -41,7 +41,7 @@
                        [validators]="profileValidators(field.key)"
                        [editable]="profileEditable(field.key)"
                        (editDone)="updateUserProfile(field.key, $event)">
-      </wm-profile-item>
+      </wm-user-item>
 
     </mat-list>
 

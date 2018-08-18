@@ -6,18 +6,18 @@ import { ContentService, AuthService, LanguageOption, CanPageDeactivate } from '
 import { ToolbarService } from 'app/navigator';
 import { UploadsService } from 'app/pages';
 import { PopupService } from 'app/shared';
-import { UserProfileItemComponent, UserItemValidators } from './user-profile-item/user-profile-item.component';
+import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 
 import * as moment from 'moment';
 
 @Component({
   selector: 'wm-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss']
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
 })
-export class UserProfileComponent implements OnInit, CanPageDeactivate  {
+export class UserComponent implements OnInit, CanPageDeactivate  {
 
-  @ViewChildren(UserProfileItemComponent) profileItems: QueryList<UserProfileItemComponent>;
+  @ViewChildren(UserItemComponent) profileItems: QueryList<UserItemComponent>;
   @ViewChildren(MatExpansionPanel) profilePanels: QueryList<MatExpansionPanel>;
 
   private msgs = null;

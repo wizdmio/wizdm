@@ -1,0 +1,58 @@
+
+<mat-list-item *ngIf="!!message">
+  <!-- Sender image -->
+  <wm-avatar mat-list-avatar [src]="message.from.img"></wm-avatar>
+  
+  <!-- Sender name and time -->
+  <p fxLayout="row" fxLayoutAlign="space-between center" mat-line>
+    <span>{{ message.from.name }}</span>
+    <span class="time">{{ formatDate(message.when) }}</span>
+  </p>
+  
+  <!-- Msg subject and content -->
+  <p mat-line>
+    <strong>{{ message.subject }}</strong>
+    <span>&nbsp;-&nbsp;</span>
+    <span>{{ message.content }}</span>
+  </p>
+
+</mat-list-item>
+
+<ng-content></ng-content>
+
+<!--ng-container *ngIf="!!message">
+
+  <mat-list-item *ngIf="mode === 'view'">
+    <wm-avatar mat-list-avatar [src]="message.from.img"></wm-avatar>
+    
+    <p fxLayout="row" fxLayoutAlign="space-between center" mat-line>
+      <span>{{ message.from.name }}</span>
+      <span class="time">{{ formatDate(message.when) }}</span>
+    </p>
+    
+    <p mat-line>
+      <strong>{{ message.subject }}</strong>
+      <span>&nbsp;-&nbsp;</span>
+      <span>{{ message.content }}</span>
+    </p>
+
+  </mat-list-item>
+
+  <mat-list-option [disabled]="disabled" [value]="message" *ngIf="mode === 'select'">
+    <wm-avatar mat-list-avatar [src]="message.from.img"></wm-avatar>
+    
+    <p fxLayout="row" fxLayoutAlign="space-between center" mat-line>
+      <span>{{ message.from.name }}</span>
+      <span class="time">{{ formatDate(message.when) }}</span>
+    </p>
+    
+    <p mat-line>
+      <strong>{{ message.subject }}</strong>
+      <span>&nbsp;-&nbsp;</span>
+      <span>{{ message.content }}</span>
+    </p>
+  </mat-list-option>
+
+</ng-container>
+
+<ng-content></ng-content-->

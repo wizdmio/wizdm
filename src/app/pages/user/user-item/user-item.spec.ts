@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PeopleBrowserComponent } from './people-browser.component';
+import { UserItemComponent } from './user-item.component';
 
-describe('PeopleBrowserComponent', () => {
-  let component: PeopleBrowserComponent;
-  let fixture: ComponentFixture<PeopleBrowserComponent>;
+describe('UserItemComponent', () => {
+  let component: UserItemComponent;
+  let fixture: ComponentFixture<UserItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PeopleBrowserComponent ]
+      declarations: [ UserItemComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PeopleBrowserComponent);
+    fixture = TestBed.createComponent(UserItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

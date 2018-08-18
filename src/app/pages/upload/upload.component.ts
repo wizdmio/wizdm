@@ -7,11 +7,9 @@ import { Observable } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
 
 interface UploadTask {
-  
-  id:       number;
   snapshot: Observable<any>;
-  //progress: Observable<number>;
   done:     boolean;
+  id:       number;
 }
 
 @Component({
@@ -25,7 +23,7 @@ export class UploadComponent implements OnInit {
   @ViewChild(MatSelectionList) fileList: MatSelectionList;
 
   private enableDelete$: ActionEnabler;
-  public uploads: Observable<any[]>;
+  public uploads$: Observable<any[]>;
   public tasks: UploadTask[] = [];
   public msgs;
   
@@ -41,7 +39,7 @@ export class UploadComponent implements OnInit {
   ngOnInit() {
 
     // Gets the user uploads observable
-    this.uploads = this.auth.getUserUploads( ref => ref.orderBy('created') )
+    this.uploads$ = this.auth.getUserUploads( ref => ref.orderBy('created') )
       // Disposes completed upload tasks on list change
       .pipe( tap( files => this.disposeTasks() ));
 
