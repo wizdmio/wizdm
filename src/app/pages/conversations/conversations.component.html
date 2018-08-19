@@ -6,14 +6,14 @@
 <mat-divider></mat-divider>
 
 <!-- Message list -->
-<mat-selection-list *ngIf="messages$ | async as messages" (selectionChange)="selectionChange($event)">
+<mat-list *ngIf="messages$ | async as messages">
 
   <!-- No message's message -->
   <p *ngIf="!messages.length">{{ msgs.noMessages }}</p>
 
   <!-- Message items -->
-  <wm-user-message *ngFor="let msg of messages; last as isLast" mode="select" [message]="msg" [disabled]="isMsgDeleting(msg)">
+  <wm-conversation *ngFor="let msg of messages; last as isLast" [message]="msg">
     <mat-divider *ngIf="!isLast"></mat-divider>
-  </wm-user-message>
+  </wm-conversation>
 
-</mat-selection-list>
+</mat-list>

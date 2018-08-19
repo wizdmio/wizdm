@@ -32,6 +32,7 @@
     "about": "about.json",
     "shortTerms": "terms-short.json",
     "fullTerms": "terms-full.json",
-    "notFound": "notFound.json"
+    "notFound": "notFound.json",
+    "errors": "errors.json"
   }
 }

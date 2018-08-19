@@ -46,6 +46,7 @@ import { PrismService } from './markdown/code-highlight/prism.service';
 import { OpenFileComponent } from './file/open-file.component';
 import { DropZoneDirective } from './file/drop-zone.directive';
 import { FileSizePipe } from './file/file-size.pipe';
+import { ErrorsComponent } from './errors/errors.component';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -89,7 +90,8 @@ const sharedModules = [
     CodeHighlightComponent,
     OpenFileComponent,
     DropZoneDirective,
-    FileSizePipe
+    FileSizePipe,
+    ErrorsComponent
   ],
 
   exports: [
@@ -102,7 +104,8 @@ const sharedModules = [
     MarkdownComponent,
     OpenFileComponent,
     DropZoneDirective,
-    FileSizePipe
+    FileSizePipe,
+    ErrorsComponent
   ],
 
   providers: [

@@ -32,6 +32,4 @@ export class UploadsService {
   public chooseFile(config?: MatDialogConfig): Observable<wmUserFile> {
     return this.show(config).pipe( filter( file => file !== null) );
   }
-
-  public 
 }

@@ -356,6 +356,7 @@ export class AuthService implements OnDestroy {
     this.af.auth.signOut();
   }
 
+  // TODO: Deleting the uploads prior to delete the user
   public deleteUser(password: string): Promise<void> {
 
     let email = this.user.email;

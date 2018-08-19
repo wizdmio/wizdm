@@ -8,16 +8,14 @@
     {{ pageData.message }}
   </p>
 
-  <!-- ERROR MESSAGE -->
-  <p class="mat-error" *ngIf="error" @inflate>
-    {{ error }}
-  </p>
+  <!-- ERROR MESSAGE using global handler wmError -->
+  <p *ngIf="error" class="mat-error" [wmError]="error" (reset)="resetError()" @inflate></p>
 
   <form [formGroup]="form" fxLayout="column" 
                            fxLayoutAlign="space-around stretch" 
                            fxLayoutGap="10px" 
-                          (ngSubmit)="loginAction()"
-                          *ngIf="page !== 'emailVerify' && page !== 'verifyEmail' && page !== 'recoverEmail'">
+                           (ngSubmit)="loginAction()"
+                           *ngIf="page !== 'emailVerify' && page !== 'verifyEmail' && page !== 'recoverEmail'">
 
     <!-- NAME -->
     <mat-form-field appearance="legacy" *ngIf="form.contains('name')" @inflate>

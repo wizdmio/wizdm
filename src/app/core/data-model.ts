@@ -32,39 +32,70 @@ export interface wmUserFile {
   updated? : Timestamp
 }
 
-export interface wmUserMessage {
-  from?:      string | wmUser,
-  to?:        string | wmUser,
-  about?:     string | wmProject,
-  when?:      string,
-  subject?:   string,
-  content?:   string,
-  unread?:    boolean,
-
-  id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
-}
-
 export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft' | 'deleted';
 
 export interface wmProject {
   
   name         : string,
   pitch?       : string,
-  document?    : string, // markdown formatted business plan description
-
-  //development? : wmDevelopment,
-  
-  owner?       : string | wmUser,
-  team?        : string[] | wmUser[],
-  
   status?      : wmProjectStatus,
-  history?     : wmProjectLog[],
+  owner?       : string | wmUser,
+  document?    : string, // markdown formatted business plan description
+  
+  //team?        : string[] | wmUser[], collection of users
+  //development? : wmDevelopment,
   
   id?          : string,
   created?     : Timestamp,
   updated?     : Timestamp
+}
+/*
+export interface wmDocument {
+
+  name?        : string,
+  content?     : string, // markdown formatted business plan description
+  author?      : string | wmUser,
+
+  id?          : string,
+  created?     : Timestamp,
+  updated?     : Timestamp
+}
+*/
+
+export interface wmUserLink {
+  name? : string,
+  img?  : string,
+  id?   : string
+}
+
+export interface wmProjectLink {
+  name? : string,
+  img?  : string,
+  id?   : string
+}
+
+export interface wmConversation {
+  from?    : wmUserLink,
+  to?      : wmUserLink,
+  about?   : wmProjectLink,
+  last?    : wmMessage,
+  
+  //messages?: wmMessage[], collection reference
+
+  id?      : string,
+  created? : Timestamp,
+  updated? : Timestamp
+}
+
+export interface wmMessage {
+  from?    : string | wmUser,
+  to?      : string | wmUser,
+  content? : string,
+  unread?  : boolean,
+
+  id?      : string,
+  created? : Timestamp,
+  updated? : Timestamp
 }
 
 export interface wmApplication {

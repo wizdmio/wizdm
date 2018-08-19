@@ -1,0 +1,26 @@
+@import "src/variables";
+@import 'src/theme';
+
+$wm-img-size: 80px;
+/*
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  padding: $wm-content-padding 0;
+
+  & > header {
+    margin: 0 $wm-content-margin;
+  }
+
+  & > mat-accordion {
+    padding: 2vh 5vw;
+  }
+}
+*/
+wm-avatar {
+  width:  $wm-img-size;
+  height: $wm-img-size;
+  margin: 0 22px 22px 0;
+}

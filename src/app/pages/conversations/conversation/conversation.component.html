@@ -1,19 +1,21 @@
 
 <mat-list-item *ngIf="!!message">
-  <!-- Sender image -->
-  <wm-avatar mat-list-avatar [src]="message.from.img"></wm-avatar>
   
-  <!-- Sender name and time -->
+  <!-- Sender image with info -->
+  <wm-avatar mat-list-avatar [src]="message.from.img" wmUserInfo [user]="message.from">
+  </wm-avatar>
+  
+  <!-- Sender name and time of last message -->
   <p fxLayout="row" fxLayoutAlign="space-between center" mat-line>
     <span>{{ message.from.name }}</span>
-    <span class="time">{{ formatDate(message.when) }}</span>
+    <span class="time">{{ formatDate(message.last.created) }}</span>
   </p>
   
   <!-- Msg subject and content -->
   <p mat-line>
-    <strong>{{ message.subject }}</strong>
+    <strong>{{ message.about.name }}</strong>
     <span>&nbsp;-&nbsp;</span>
-    <span>{{ message.content }}</span>
+    <span>{{ message.last.content }}</span>
   </p>
 
 </mat-list-item>

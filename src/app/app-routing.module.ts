@@ -12,7 +12,7 @@ import { ApplyComponent } from './pages/apply/apply.component';
 import { ProjectComponent } from './pages/project/project.component';
 import { BrowserComponent } from './pages/browser/browser.component';
 import { UploadComponent } from './pages/upload/upload.component';
-import { MessagesComponent } from './pages/messages/messages.component';
+import { ConversationsComponent } from './pages/conversations/conversations.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 import { ResolverService, AuthGuardService, PageGuardService } from './core';
@@ -57,7 +57,8 @@ const routes: Routes = [
           { path: 'projects', component: BrowserComponent }, //canDeactivate: [PageGuardService] },
           { path: 'projects/:id', component: ProjectComponent, canDeactivate: [PageGuardService] },
           { path: 'upload', component: UploadComponent }, //, canDeactivate: [PageGuardService] },
-          { path: 'messages', component: MessagesComponent }, //, canDeactivate: [PageGuardService] }
+          { path: 'messages', component: ConversationsComponent }, //, canDeactivate: [PageGuardService] },
+          //{ path: 'messages/:id', component: ConversationsComponent }, //, canDeactivate: [PageGuardService] }
         ]
       },
     

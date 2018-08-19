@@ -12,6 +12,8 @@ import { TermsPrivacyPopupComponent } from './terms-privacy/terms-privacy-popup.
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './user/user.component';
 import { UserItemComponent } from './user/user-item/user-item.component';
+import { UserInfoComponent } from './user/user-info/user-info.component';
+import { UserInfoDirective } from './user/user-info/user-info.directive';
 import { ApplyComponent } from './apply/apply.component';
 import { ProjectComponent } from './project/project.component';
 import { HeaderComponent as ProjectHeader } from './project/header/header.component';
@@ -21,8 +23,8 @@ import { ProjectBrowserItemComponent } from './browser/project-browser-item/proj
 import { UploadComponent } from './upload/upload.component';
 import { UploadsComponent } from './upload/uploads.component';
 import { UploadsService } from './upload/uploads.service';
-import { MessagesComponent } from './messages/messages.component';
-import { MessageComponent } from './messages/message/message.component';
+import { ConversationsComponent } from './conversations/conversations.component';
+import { ConversationComponent } from './conversations/conversation/conversation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -42,6 +44,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     LoginComponent,
     UserComponent,
     UserItemComponent,
+    UserInfoComponent,
+    UserInfoDirective,
     ApplyComponent,
     BrowserComponent,
     ProjectBrowserItemComponent,
@@ -50,8 +54,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ProjectEditor,
     UploadComponent,
     UploadsComponent,
-    MessagesComponent,
-    MessageComponent,
+    ConversationsComponent,
+    ConversationComponent,
     NotFoundComponent
   ],
 
@@ -60,6 +64,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
   ],
 
   entryComponents: [// These components are declared here to properly work as a Dialogs
+    UserInfoComponent,
     UploadsComponent,
     TermsPrivacyPopupComponent
   ]

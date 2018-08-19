@@ -3,7 +3,8 @@
   
   <div fxLayout="row"><!-- Author on the left -->
     
-    <wm-avatar [src]="project.owner?.img"></wm-avatar>
+    <wm-avatar [src]="project.owner?.img" wmUserInfo [owner]="project">
+    </wm-avatar>
     
     <div fxLayout="column">
       <span>{{ project.owner?.name || msgs.unnamed }}&nbsp;-&nbsp;{{ project.name }}</span>
@@ -29,10 +30,10 @@
 <!-- List of Notifications -->
 <mat-expansion-panel #panel>
 
-  <mat-list fxFlex="1 1 auto">
-    <wm-user-message [message]="message" *ngFor="let message of messages; last as isLast">
+  <!--mat-list fxFlex="1 1 auto">
+    <wm-conversation [message]="message" *ngFor="let message of messages; last as isLast">
       <mat-divider *ngIf="!isLast"></mat-divider>
-    </wm-user-message>
-  </mat-list>
+    </wm-conversation>
+  </mat-list-->
 
 </mat-expansion-panel>

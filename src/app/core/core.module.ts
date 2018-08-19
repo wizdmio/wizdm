@@ -14,6 +14,7 @@ import { ResolverService } from './resolver/resolver.service';
 import { AuthGuardService } from './guards/auth-guard.service';
 import { PageGuardService } from './guards/page-guard.service';
 import { ProjectService } from './project/project.service';
+import { ChatService } from './chat/chat.service';
 
 import { environment } from 'environments/environment';
 
@@ -41,7 +42,8 @@ import { environment } from 'environments/environment';
     ResolverService,
     AuthGuardService,
     PageGuardService,
-    ProjectService
+    ProjectService,
+    ChatService
   ]
 })
 export class CoreModule { }

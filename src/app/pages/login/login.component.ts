@@ -194,7 +194,7 @@ export class LoginComponent implements OnInit  {
   public get pageData() {
     return this.msgs.pages[this.page];
   }
-
+/*
   private showError(error: string) {
 
     this.progress = false;
@@ -207,6 +207,15 @@ export class LoginComponent implements OnInit  {
     
     // Makes sure to turn off the error message in 5s
     setTimeout(() => this.error = null, 5000);
+  }
+*/
+  private showError(error: string): void {
+    this.progress = false;
+    this.error = error;
+  }
+
+  public resetError(): void {
+    this.error = null;
   }
 
   // Execute the form requested action

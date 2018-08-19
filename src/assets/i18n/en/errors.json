@@ -1,0 +1,12 @@
+
+{
+  "auth": {
+    "wrongPassword": "This password seems wrong",
+    "userNotFound": "This user doesn't exist",
+    "emailAlreadyInUse": "This email is already registered",
+    "invalidEmail": "This is not a valid email",
+    "weakPassword": "This password looks too weak",
+    "networkRequestFailed": "There's some trouble with the network",
+    "invalidActionCode": "The action code provided is no longer valid"
+  }
+}

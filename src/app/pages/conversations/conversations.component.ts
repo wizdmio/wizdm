@@ -1,34 +1,36 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ContentService, AuthService, wmUserMessage } from 'app/core';
+import { ContentService, AuthService, ChatService, wmConversation, wmMessage } from 'app/core';
 import { ToolbarService, ActionEnabler } from 'app/navigator';
 import { PopupService } from 'app/shared';
 import { Observable, of } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
 
+/*
 // DEBUG TEST
 const $messages = [
   { from: { name: "Lucio" }, subject: "Join wizdm.io team", content: "Hi, your project sounds amazing. I'd love being a part of it." },
   { from: { name: "Alena" }, subject: "Come to Veganizer.app", content: "Hello, I believe you may be interested in joining Veganizer.app." },
   { from: { name: "Ita"   }, subject: "Need advice", content: "Hi, I'm planning to submit a project myself, can you help?" }
 ];
-
+*/
 @Component({
-  selector: 'wm-messages',
-  templateUrl: './messages.component.html',
-  styleUrls: ['./messages.component.scss']
+  selector: 'wm-conversations',
+  templateUrl: './conversations.component.html',
+  styleUrls: ['./conversations.component.scss']
 })
-export class MessagesComponent implements OnInit {
+export class ConversationsComponent implements OnInit {
 
   @ViewChild(MatSelectionList) msgList: MatSelectionList;
 
-  private enableDelete$: ActionEnabler;
-  public messages$ = of($messages);
+  //private enableDelete$: ActionEnabler;
+  public messages$: Observable<wmConversation[]>;
   public msgs;
 
   constructor(private content : ContentService, 
               private toolbar : ToolbarService,
               private auth    : AuthService,
+              private chat    : ChatService,
               private popup   : PopupService) {
 
     // Gets the localized content
@@ -38,21 +40,21 @@ export class MessagesComponent implements OnInit {
   ngOnInit() {
 
     // Gets the user uploads observable
-    //this.messages$ = this.auth.getUserUploads( ref => ref.orderBy('created') );
+    this.messages$ = this.chat.queryMyConversations();
       
     // Activates the toolbar actions
-    this.toolbar.activateActions(this.msgs.actions)
-      .subscribe( code => this.executeAction(code) );
+    //this.toolbar.activateActions(this.msgs.actions)
+    //  .subscribe( code => this.executeAction(code) );
 
     // Gets the action enabler for 'delete' action code
-    this.enableDelete$ = this.toolbar.actionEnabler('delete');
-    this.enableDelete$.enable(false);
+    //this.enableDelete$ = this.toolbar.actionEnabler('delete');
+    //this.enableDelete$.enable(false);
   }
-
+/*
   public selectionChange(change: MatSelectionListChange): void {
 
     // Enables / disables the delete action upon list selection
-    this.enableDelete$.enable( change.source.selectedOptions.hasValue() );
+    //this.enableDelete$.enable( change.source.selectedOptions.hasValue() );
   }
 
   private executeAction(code: string): void {
@@ -68,16 +70,16 @@ export class MessagesComponent implements OnInit {
   }
 
   // Messages deletion list
-  private deletingMsgs: wmUserMessage[] = [];
+  private deletingMsgs: wmMessage[] = [];
 
 
   // Helper to check if a message is in the deletion list
-  public isMsgDeleting(msg: wmUserMessage): boolean {
+  public isMsgDeleting(msg: wmMessage): boolean {
     return this.deletingMsgs.findIndex( m => m.id === msg.id) >=0;
   }
 
   // Helper to remove a file from the deletion list 
-  public fileDeleted(msg: wmUserMessage): void {
+  public fileDeleted(msg: wmMessage): void {
     this.deletingMsgs = this.deletingMsgs.filter( m => m.id !== msg.id );
   }
 
@@ -99,8 +101,8 @@ export class MessagesComponent implements OnInit {
       });
 
       // Disables the delete action
-      this.enableDelete$.enable(false);
+      //this.enableDelete$.enable(false);
     }
   }
-
+*/
 }

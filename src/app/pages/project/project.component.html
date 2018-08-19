@@ -30,11 +30,12 @@
       <h3>{{ msgs.tableOfContents }}</h3>
     </wm-markdown>
   </div>
-</div>
 
-<!-- Displays the crystal edit overlay when in editMode -->
-<wm-crystal-edit [(value)]="document" 
-                 [save]="saved" 
-                 (scroll)="onEditScroll($event)"
-                 (done)="leaveEditMode()" *ngIf="editMode">
-</wm-crystal-edit>
+  <!-- Displays the crystal edit overlay when in editMode -->
+  <wm-crystal-edit [(value)]="document" 
+    [save]="saved" 
+    (scroll)="onEditScroll($event)"
+    (done)="leaveEditMode()" *ngIf="editMode">
+  </wm-crystal-edit>
+  
+</div>

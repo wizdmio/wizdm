@@ -91,5 +91,14 @@
       "cancel": "Cancel",
       "ok": "Ok"
     }
+  },
+
+  "info": {
+    "title": "About me",
+    "close": "Close",
+    "icons": {
+      "email": "far:fa-envelope",
+      "phone": "fas:fa-phone"
+    }
   }
 }
