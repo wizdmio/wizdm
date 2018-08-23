@@ -5,7 +5,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
-
+/*
 import { AuthService } from './auth/auth.service';
 import { DatabaseService } from './database/database.service';
 import { StorageService } from './storage/storage.service';
@@ -16,7 +16,7 @@ import { AuthGuardService } from './guards/auth-guard.service';
 import { PageGuardService } from './guards/page-guard.service';
 import { ProjectService } from './project/project.service';
 import { ChatService } from './chat/chat.service';
-
+*/
 import { environment } from 'environments/environment';
 
 @NgModule({

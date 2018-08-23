@@ -38,16 +38,17 @@ import { IconComponent } from './icon/icon.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { PopupComponent } from './popup/popup.component';
-import { PopupService } from './popup/popup.service';
+//import { PopupService } from './popup/popup.service';
 import { MarkdownComponent } from './markdown/markdown.component';
-import { RemarkService } from './markdown/remark.service';
+//import { RemarkService } from './markdown/remark.service';
 import { CodeHighlightComponent } from './markdown/code-highlight/code-highlight.component';
-import { PrismService } from './markdown/code-highlight/prism.service';
+//import { PrismService } from './markdown/code-highlight/prism.service';
 import { OpenFileComponent } from './file/open-file.component';
 import { DropZoneDirective } from './file/drop-zone.directive';
 import { FileSizePipe } from './file/file-size.pipe';
 import { UploadsComponent } from '../shared/uploads/uploads.component';
 import { ErrorsComponent } from './errors/errors.component';
+import { ColorsComponent } from './colors/colors.component';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -93,7 +94,8 @@ const sharedModules = [
     DropZoneDirective,
     FileSizePipe,
     UploadsComponent,
-    ErrorsComponent
+    ErrorsComponent,
+    ColorsComponent
   ],
 
   exports: [
@@ -108,7 +110,8 @@ const sharedModules = [
     DropZoneDirective,
     FileSizePipe,
     UploadsComponent,
-    ErrorsComponent
+    ErrorsComponent,
+    ColorsComponent
   ],
 
   providers: [

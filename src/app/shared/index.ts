@@ -5,3 +5,5 @@ export * from './popup/popup.service';
 export * from './file/open-file.component';
 export * from './file/drop-zone.directive';
 export * from './file/file-size.pipe';
+export * from './uploads/uploads.component';
+export * from './colors/colors.component';

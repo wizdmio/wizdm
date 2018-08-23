@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { Injectable, Inject } from '@angular/core';
 import { DatabaseService, QueryFn } from '../database/database.service';
-import { wmUser, wmProject, wmConversation, wmMessage } from '../core-data';
+import { USER_PROFILE, wmUser, wmProject, wmConversation, wmMessage } from '../core-data';
 
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
@@ -11,25 +10,24 @@ import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
 })
 export class ChatService {
 
-  constructor(private auth: AuthService,
-              private db:   DatabaseService) {
-  }
-
-  private get userId(): string {
-    return this.auth.userId;
+  constructor(@Inject(USER_PROFILE) 
+              private profile  : wmUser,
+              private database : DatabaseService) {
   }
 
   private get fromMe(): QueryFn {
-    return <QueryFn>(ref => ref.where('from.id','==', this.userId));
+    return <QueryFn>(ref => ref.where('from','==', this.profile.id));
   }
 
   private get toMe(): QueryFn {
-    return <QueryFn>(ref => ref.where('to.id','==', this.userId));
+    return <QueryFn>(ref => ref.where('to','==', this.profile.id));
   }
 
   private get lastMsg(): QueryFn {
     return <QueryFn>(ref => ref.orderBy('created', 'desc').limit(1));
   }
+
+  //public queryMessages(ref: string)
 
   /**
    * Queries for conversations document filling up the last message from the sub-collection of messages
@@ -37,10 +35,10 @@ export class ChatService {
    */
   public queryConversations(qf?: QueryFn): Observable<wmConversation[]> {
     
-    return this.db.colWithIds$<wmConversation>(`conversations`, qf)
+    return this.database.colWithIds$<wmConversation>(`conversations`, qf)
       .pipe( mergeMap( convs => 
         forkJoin( convs.map( conv => 
-          this.db.colWithIds$<wmMessage>(`conversations/${conv.id}/messages`, this.lastMsg)
+          this.database.colWithIds$<wmMessage>(`conversations/${conv.id}/messages`, this.lastMsg)
             .pipe( map(msgs => { return { ...conv, last: msgs[0]};}) )
         ))
       ));      

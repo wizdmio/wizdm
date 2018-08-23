@@ -28,5 +28,11 @@
             { "icon": "fab:fa-slack", "link": "https://slack.com" },
             { "icon": "fab:fa-github", "link": "https://github.com" }
         ]
+    },
+
+    "consent": {
+        "title": "Cookie and Privacy Policy",
+        "description": "Wizdm uses cookies to improve your user experience. To continue, please accept our cookie use and privacy policy.",
+        "accept": "Accept"
     }
 }

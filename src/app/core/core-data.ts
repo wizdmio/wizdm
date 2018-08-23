@@ -60,39 +60,6 @@ export interface wmProject {
   updated?     : Timestamp
 }
 
-export interface wmLink {
-  name? : string,
-  img?  : string,
-  id?   : string
-}
-
-export type wmUserLink = wmLink;
-export type wmProjectLink = wmLink;
-
-export interface wmConversation {
-  from?    : wmUserLink,
-  to?      : wmUserLink,
-  about?   : wmProjectLink,
-  last?    : wmMessage,
-  
-  //messages?: wmMessage[], collection reference
-
-  id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
-}
-
-export interface wmMessage {
-  from?    : wmUserLink,
-  to?      : wmUserLink,
-  content? : string,
-  unread?  : boolean,
-
-  id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
-}
-
 export interface wmApplication {
 
   name?          : string, // Application name
@@ -104,6 +71,38 @@ export interface wmApplication {
   users?         : string, // Target users
   target?        : string, // Target market (geo, ...)
   comments?      : string  // Additional comments
+}
+
+export interface wmLink {
+  name? : string,
+  img?  : string,
+  id?   : string
+}
+
+export type wmUserLink = wmLink;
+export type wmProjectLink = wmLink;
+
+export interface wmConversation {
+  from?    : string | wmUser,
+  to?      : string | wmUser,
+  about?   : wmProjectLink,
+  last?    : wmMessage,
+  
+  //messages?: wmMessage[], collection reference
+
+  id?      : string,
+  created? : Timestamp,
+  updated? : Timestamp
+}
+
+export interface wmMessage {
+  sender?  : string | wmUser,
+  content? : string,
+  unread?  : boolean,
+
+  id?      : string,
+  created? : Timestamp,
+  updated? : Timestamp
 }
 
 export interface wmDevelopment {

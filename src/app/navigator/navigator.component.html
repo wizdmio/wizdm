@@ -1,3 +1,5 @@
+
+<!-- Navigation toolbar & Action bar -->
 <wm-toolbar fxFlex="0 0 auto"
             [toggler]="snav.opened" 
             (togglerChange)="snav.toggle()" #toolbar>
@@ -7,10 +9,12 @@
 
   <mat-sidenav mode="over" position="end" #snav>
 
+    <!-- Side Menu for Mobile version -->
     <wm-side-menu></wm-side-menu>
   
   </mat-sidenav>
     
+  <!-- Navigation View -->
   <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" (scrolled)="toolbar.showDivider($event)"> 
 
     <div fxFlex="1 1 auto">
@@ -22,3 +26,7 @@
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+
+<!--wm-consent [ask]="askConsent" (granted)="consentGranted()" #consent>
+</wm-consent-->
+  
