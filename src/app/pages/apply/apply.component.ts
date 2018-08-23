@@ -201,7 +201,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   }
 
   // Creates a project instance starting from the given application
-  private createProject(application: wmApplication): Promise<void> {
+  private createProject(application: wmApplication): Promise<string> {
 
     // Gets the document localized contents
     let doc = this.content.select('document');
@@ -236,7 +236,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
         } as wmProject );
 
-      })).toPromise() : Promise.reject('document.json seems corrputed or missing');
+      })).toPromise() : Promise.reject('project/missingTemplate');
   }
 
   public submitProject() {
@@ -248,9 +248,9 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
     // Create a new project from the temporary application
     this.createProject( this.application )
-      .then(() => {
+      .then( id => {
         
-        console.log("project submitted");
+        console.log("project submitted: ", id);
         this.progress = false;
 
         // Clear the temp application

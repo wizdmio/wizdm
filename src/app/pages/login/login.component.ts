@@ -114,7 +114,7 @@ export class LoginComponent implements OnInit  {
   // applying the user preferred language
   private loggedIn() {
 
-    this.auth.userData$.pipe(
+    this.auth.profile$.pipe(
       take(1),
       tap( user => {
 
@@ -194,24 +194,14 @@ export class LoginComponent implements OnInit  {
   public get pageData() {
     return this.msgs.pages[this.page];
   }
-/*
-  private showError(error: string) {
 
-    this.progress = false;
-
-    // Turns the error code into camelCase
-    let key = error.camelize().replace('/','.');
-
-    // Look up the available error messages or return the error code if not found
-    this.error = this.content.select("login.errors." + key, error);
-    
-    // Makes sure to turn off the error message in 5s
-    setTimeout(() => this.error = null, 5000);
-  }
-*/
+  /**
+   * Shows the error message relying on the global wmError handler
+   * @param error code of the error
+   */
   private showError(error: string): void {
-    this.progress = false;
     this.error = error;
+    this.progress = false;
   }
 
   public resetError(): void {

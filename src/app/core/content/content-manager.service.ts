@@ -49,7 +49,9 @@ export interface ContentEvent {
   data?: any;
 };
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 /** ContentService dynamically load the application content via Http. Suitable for multi language and variable content support */
 export class ContentService {
 

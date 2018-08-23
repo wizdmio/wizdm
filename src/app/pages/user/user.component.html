@@ -20,7 +20,10 @@
 
     <!-- USER IMAGE -->
     <div fxLayout="column" fxLayoutAlign="center center" *ngIf="panel.userImage">
-      <button mat-button class="user" (click)="selectImage()">
+
+      <wm-uploads (file)="selectImage($event)" #uploads></wm-uploads>
+
+      <button mat-button class="user" (click)="uploads.chooseFile()">
         <wm-avatar [src]="userImage"></wm-avatar>
       </button>
     </div>

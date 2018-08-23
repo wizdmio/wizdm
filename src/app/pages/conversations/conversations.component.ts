@@ -6,14 +6,14 @@ import { PopupService } from 'app/shared';
 import { Observable, of } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
 
-/*
+
 // DEBUG TEST
-const $messages = [
-  { from: { name: "Lucio" }, subject: "Join wizdm.io team", content: "Hi, your project sounds amazing. I'd love being a part of it." },
-  { from: { name: "Alena" }, subject: "Come to Veganizer.app", content: "Hello, I believe you may be interested in joining Veganizer.app." },
-  { from: { name: "Ita"   }, subject: "Need advice", content: "Hi, I'm planning to submit a project myself, can you help?" }
+const $messages: wmConversation[] = [
+  { from: { name: "Lucio" }, about: { name: "winzdm.io" }, last: { content: "Hi, your project sounds amazing. I'd love being a part of it.", unread: true } },
+  { from: { name: "Alena" }, about: { name: "Veganizer.app" }, last: { content: "Hello, I believe you may be interested in joining Veganizer.app.", unread: true } },
+  { from: { name: "Ita"   }, about: { name: "wizdm.io" }, last: { content: "Hi, I'm planning to submit a project myself, can you help?", unread: true } }
 ];
-*/
+
 @Component({
   selector: 'wm-conversations',
   templateUrl: './conversations.component.html',
@@ -40,7 +40,8 @@ export class ConversationsComponent implements OnInit {
   ngOnInit() {
 
     // Gets the user uploads observable
-    this.messages$ = this.chat.queryMyConversations();
+    //this.messages$ = this.chat.queryMyConversations();
+    this.messages$ = of($messages);// DEBUG
       
     // Activates the toolbar actions
     //this.toolbar.activateActions(this.msgs.actions)

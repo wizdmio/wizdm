@@ -19,9 +19,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
               private router: Router) {}
 
   // To be used for router guarding 
-  canActivate( route: ActivatedRouteSnapshot, 
-               state: RouterStateSnapshot
-             ) : Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
     console.log('AuthGuard#canActivate called');
 
@@ -47,10 +45,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
     );
   }
 
-  canActivateChild( route: ActivatedRouteSnapshot,
-                    state: RouterStateSnapshot 
-                  ): Observable<boolean> {
-
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.canActivate(route, state);
   }
 }

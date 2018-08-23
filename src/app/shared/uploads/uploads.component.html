@@ -1,0 +1,40 @@
+
+<ng-template #dialog><!-- This template will be used for the dialog window only -->
+
+  <h2 mat-dialog-title>{{ msgs.title }}</h2>
+
+  <mat-dialog-content>
+
+    <div fxFlex="1 1 auto" fxLayout="row wrap" *ngIf="uploads | async as files">
+
+      <!-- No files message -->
+      <p *ngIf="!files.length">{{ msgs.noFiles }}</p>
+
+      <!-- List of uploaded items -->
+      <button mat-button *ngFor="let file of files" (click)="select(file)" [attr.selected]="file.id === selectedFile?.id">
+        <span class="miniature" fxLayout="column" fxLayoutAlign="center center">
+          <img class="thumb" [src]=file.url/>
+          <span class="mat-small">{{ file.name }}</span>
+        </span>
+      </button>
+
+      <span class="miniature" fxLayout="column" fxLayoutAlign="center center" *ngIf="loading">
+        <mat-spinner diameter="60" strokeWidth="2"></mat-spinner>
+        <span class="mat-small">{{ loading }}</span>
+      </span>
+
+    </div>
+      
+  </mat-dialog-content>
+
+  <!-- Hidden open file component -->
+  <wm-open-file accept="image/*" (files)="upload($event)" #openFile></wm-open-file>
+
+  <!-- Buttons -->
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ msgs.cancel }}</button>
+    <button mat-button [mat-dialog-close]="selectedFile">{{ msgs.select }}</button>
+    <button mat-button type="button" (click)="openFile.show()" cdkFocusInitial>{{ msgs.browse }}</button>
+  </mat-dialog-actions>
+  
+</ng-template>

@@ -21,8 +21,6 @@ import { CrystalEditComponent as ProjectEditor } from './project/crystal-edit/cr
 import { BrowserComponent } from './browser/browser.component';
 import { ProjectBrowserItemComponent } from './browser/project-browser-item/project-browser-item.component';
 import { UploadComponent } from './upload/upload.component';
-import { UploadsComponent } from './upload/uploads.component';
-import { UploadsService } from './upload/uploads.service';
 import { ConversationsComponent } from './conversations/conversations.component';
 import { ConversationComponent } from './conversations/conversation/conversation.component';
 import { NotFoundComponent } from './not-found/not-found.component';
@@ -53,19 +51,15 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ProjectHeader,
     ProjectEditor,
     UploadComponent,
-    UploadsComponent,
     ConversationsComponent,
     ConversationComponent,
     NotFoundComponent
   ],
 
-  providers: [
-    UploadsService
-  ],
+  providers: [],
 
   entryComponents: [// These components are declared here to properly work as a Dialogs
     UserInfoComponent,
-    UploadsComponent,
     TermsPrivacyPopupComponent
   ]
 

@@ -1,4 +1,14 @@
+import { InjectionToken } from '@angular/core';
 import { Timestamp } from './database/database.service';
+
+/**
+ * USER_PROFILE token. Keeps a sharable snapshot of the current user profile
+ * @example constructor( @Inject(USER_PROFILE) private profile: wmUser )
+ */
+export const USER_PROFILE = new InjectionToken<wmUser>('wmUserProfile', {
+  providedIn: 'root',
+  factory: () => new Object({}) as wmUser
+});
 
 export interface wmUser {
 
@@ -49,30 +59,15 @@ export interface wmProject {
   created?     : Timestamp,
   updated?     : Timestamp
 }
-/*
-export interface wmDocument {
 
-  name?        : string,
-  content?     : string, // markdown formatted business plan description
-  author?      : string | wmUser,
-
-  id?          : string,
-  created?     : Timestamp,
-  updated?     : Timestamp
-}
-*/
-
-export interface wmUserLink {
+export interface wmLink {
   name? : string,
   img?  : string,
   id?   : string
 }
 
-export interface wmProjectLink {
-  name? : string,
-  img?  : string,
-  id?   : string
-}
+export type wmUserLink = wmLink;
+export type wmProjectLink = wmLink;
 
 export interface wmConversation {
   from?    : wmUserLink,
@@ -88,8 +83,8 @@ export interface wmConversation {
 }
 
 export interface wmMessage {
-  from?    : string | wmUser,
-  to?      : string | wmUser,
+  from?    : wmUserLink,
+  to?      : wmUserLink,
   content? : string,
   unread?  : boolean,
 
@@ -125,3 +120,16 @@ export interface wmProjectLog {
   user   : string,
   time   : any
 }
+
+/*
+export interface wmDocument {
+
+  name?        : string,
+  content?     : string, // markdown formatted business plan description
+  author?      : string | wmUser,
+
+  id?          : string,
+  created?     : Timestamp,
+  updated?     : Timestamp
+}
+*/

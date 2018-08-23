@@ -1,5 +1,11 @@
 
-<img class="avatar" [src]="src" [alt]="alt" *ngIf="!!src; else avatar"/>
+<img class="avatar" 
+      [src]="src" 
+      [alt]="alt"
+      (load)="load = true"
+      (error)="error = true"
+      *ngIf="!!src && !error; else avatar"
+      [@fadeIn]="load" />
 
 <!-- Avatar to replace missing image -->
 <ng-template #avatar>

@@ -1,23 +1,20 @@
-import { Injectable } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { Injectable, Inject } from '@angular/core';
 import { DatabaseService, QueryFn } from '../database/database.service';
-import { wmUser, wmProject } from '../data-model';
-
+import { USER_PROFILE, wmUser, wmProject } from '../core-data';
 import { Observable, of } from 'rxjs';
-import { filter, map, tap, take, debounceTime, switchMap, mergeMap } from 'rxjs/operators';
+import { map, take, debounceTime, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
-  public currentId: string = null;
-
-  constructor(private auth: AuthService,
-              private db:   DatabaseService) {
+  constructor(@Inject(USER_PROFILE) 
+              private profile  : wmUser,
+              private database : DatabaseService) {
   }
 
-  public get userId(): string { return this.auth.userId;}
+  public get userId(): string { return this.profile.id; }
 
   public isProjectMine(project: wmProject) : boolean {
     return typeof project.owner === 'string' ?
@@ -26,7 +23,7 @@ export class ProjectService {
   }
 
   public listProjects(queryFn? : QueryFn): Observable<wmProject[]> {
-    return this.db.colWithIds$<wmProject>('/projects', queryFn);
+    return this.database.colWithIds$<wmProject>('/projects', queryFn);
   }
 
   public listOwnProjects(queryFn? : QueryFn): Observable<wmProject[]> {
@@ -38,7 +35,7 @@ export class ProjectService {
   public doesProjectExists(name: string): Promise<boolean> {
     
     // Query the projects collection searching for a matching lowerCaseName
-    return this.db.col$<wmProject>('projects', ref => {
+    return this.database.col$<wmProject>('projects', ref => {
         return ref.where('lowerCaseName', '==', name.trim().toLowerCase());
       } 
     ).pipe(
@@ -48,8 +45,8 @@ export class ProjectService {
     ).toPromise();
   }
 
-  // Helper to format the data payload
-  private formatData(data: any): any {
+  // Helper to snitize the Project's data payload
+  private sanitizeData(data: any): any {
 
     // Trims the name and creates a lower case version of it for searching purposes 
     if(data.name) {
@@ -57,54 +54,46 @@ export class ProjectService {
       data['lowerCaseName'] = data.name.toLowerCase();
     }
 
-    // Makes sure data payload always specifies the owner
+    // Makes sure data payload always specifies the owner as a string
+    // Note that queryProject fills the owner field with the wmUser
+    // object, so, this ensure eventual updates do not corrupt the db
     return { ...data, owner: this.userId };
   }
 
-  public addProject(data: wmProject): Promise<void> {
+  public addProject(data: wmProject): Promise<string> {
 
-    // Adds a new project
-    return this.db.add<wmProject>('/projects', this.formatData(data) )
-      // Updates the current id
-      .then( ref => { this.currentId = ref && ref.ref && ref.ref.id;});
+    // Adds a new project returning the corresponding id 
+    return this.database.add<wmProject>('/projects', this.sanitizeData(data) );
   }
 
   public updateProject(data: wmProject): Promise<void> {
 
     // Updates the existing project
-    return this.currentId !== null ? 
-      this.db.merge<wmProject>(`/projects/${this.currentId}`, this.formatData(data) ) :
-        Promise.reject("currentId is null or invalid");
+    return data.id ? 
+      this.database.merge<wmProject>(`/projects/${data.id}`, this.sanitizeData(data) ) :
+        Promise.reject('project/invalidId');
   }
 
-  public queryProject(id?: string): Observable<wmProject> {
+  public queryProject(id: string): Observable<wmProject> {
 
-    if(id || this.currentId) {
+    // Query for the project coming with the requested id
+    return id ? this.database.docWithId$<wmProject>(`/projects/${id}`).pipe(
 
-      // Query for the project coming with the requested id
-      return this.db.docWithId$<wmProject>(`/projects/${id || this.currentId}`).pipe(
-
-        // Query for the project owner too
-        mergeMap( project => 
-          this.db.docWithId$<wmUser>(`/users/${project.owner}`).pipe( 
-            map( owner => { return { ...project, owner } as wmProject;})
-          )
-        ),
-
-        // Updates the current id
-        tap( project => { this.currentId = project.id;})
-      );
-    }
-
-    return of(null);
+      // Query for the project owner too
+      mergeMap( project => 
+        this.database.docWithId$<wmUser>(`/users/${project.owner}`).pipe( 
+          map( owner => { return { ...project, owner } as wmProject;})
+        )
+      )
+    ) : of(null);
   }
 
-  public deleteProject(id?: string): Promise<void> {
+  public deleteProject(ref: string | wmProject): Promise<void> {
+
+    let id = typeof ref === 'string' ? ref : ref.id;
     
     // Deletes the project coming with the requested id
-    return id || this.currentId ?
-      this.db.delete(`/projects/${id || this.currentId}`)
-        .then( () => { this.currentId = null; }) :
-          Promise.reject('both id and currentId as null or invalid');
+    return id ? this.database.delete(`/projects/${id}`) :
+      Promise.reject('project/invalidId');
   }
 }

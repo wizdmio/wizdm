@@ -7,6 +7,13 @@
     "invalidEmail": "This is not a valid email",
     "weakPassword": "This password looks too weak",
     "networkRequestFailed": "There's some trouble with the network",
-    "invalidActionCode": "The action code provided is no longer valid"
+    "invalidActionCode": "The action code provided is no longer valid",
+    "unsupportedProvider": "The requestes provider is not supported"
+  },
+
+  "project": {
+    "invalidId": "The provided project ID is null or invalid",
+    "missingTemplate": "The document template seems missing or corrupted"
   }
+
 }

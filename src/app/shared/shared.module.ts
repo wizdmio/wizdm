@@ -46,6 +46,7 @@ import { PrismService } from './markdown/code-highlight/prism.service';
 import { OpenFileComponent } from './file/open-file.component';
 import { DropZoneDirective } from './file/drop-zone.directive';
 import { FileSizePipe } from './file/file-size.pipe';
+import { UploadsComponent } from '../shared/uploads/uploads.component';
 import { ErrorsComponent } from './errors/errors.component';
 
 const sharedModules = [
@@ -91,6 +92,7 @@ const sharedModules = [
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,
+    UploadsComponent,
     ErrorsComponent
   ],
 
@@ -105,15 +107,16 @@ const sharedModules = [
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,
+    UploadsComponent,
     ErrorsComponent
   ],
 
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-    PopupService,
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }/*,
+    PopupService, Tree-shakable providers
     RemarkService,
-    PrismService
+    PrismService*/
   ],
 
   entryComponents: [

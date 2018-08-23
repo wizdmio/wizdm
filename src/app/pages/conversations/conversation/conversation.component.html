@@ -2,7 +2,7 @@
 <mat-list-item *ngIf="!!message">
   
   <!-- Sender image with info -->
-  <wm-avatar mat-list-avatar [src]="message.from.img" wmUserInfo [user]="message.from">
+  <wm-avatar mat-list-avatar [src]="message.from.img" [wmUserInfo]="message.from.id">
   </wm-avatar>
   
   <!-- Sender name and time of last message -->

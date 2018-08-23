@@ -41,9 +41,9 @@ import {
     FooterComponent,
     ScrollViewDirective
   ],
-  providers: [
+  providers: [/* Using tree-shakable providers
     ToolbarService,
-    ScrollViewService
+    ScrollViewService*/
   ]
 })
 export class NavigatorModule { }

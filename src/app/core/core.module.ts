@@ -9,6 +9,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AuthService } from './auth/auth.service';
 import { DatabaseService } from './database/database.service';
 import { StorageService } from './storage/storage.service';
+import { UploaderService } from './uploader/uploader.service';
 import { ContentService } from './content/content-manager.service'; 
 import { ResolverService } from './resolver/resolver.service';
 import { AuthGuardService } from './guards/auth-guard.service';
@@ -34,16 +35,17 @@ import { environment } from 'environments/environment';
   exports: [
   ],
 
-  providers: [
+  providers: [/* Using tree-shakable providers
     AuthService,
     DatabaseService,
     StorageService,
+    UploaderService,
     ContentService,
     ResolverService,
     AuthGuardService,
     PageGuardService,
     ProjectService,
-    ChatService
+    ChatService*/
   ]
 })
 export class CoreModule { }

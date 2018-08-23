@@ -3,8 +3,8 @@ import { AngularFirestore,
          AngularFirestoreCollection, QueryFn,
          AngularFirestoreDocument
 } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
-import { map, tap, take } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { map, tap, take, mergeMap, flatMap, takeWhile } from 'rxjs/operators';
 
 import * as firebase from 'firebase';
 
@@ -30,35 +30,35 @@ export type Timestamp = firebase.firestore.Timestamp;
 })
 export class DatabaseService {
 
-  get timestamp() {
+  public get timestamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
   }
 
-  get sentinelId() {
+  public get sentinelId() {
     return firebase.firestore.FieldPath.documentId();
   }
 
-  geopoint(lat: number, lng: number) {
+  public geopoint(lat: number, lng: number) {
     return new firebase.firestore.GeoPoint(lat, lng);
   }
 
   constructor(public afs: AngularFirestore) { }
 
-  col<T>(ref: dbCollection<T>, queryFn?: QueryFn): AngularFirestoreCollection<T> {
+  public col<T>(ref: dbCollection<T>, queryFn?: QueryFn): AngularFirestoreCollection<T> {
     return typeof ref === 'string' ? this.afs.collection<T>(ref, queryFn) : ref;
   }
 
-  doc<T>(ref: dbDocument<T>): AngularFirestoreDocument<T> {
+  public doc<T>(ref: dbDocument<T>): AngularFirestoreDocument<T> {
     return typeof ref === 'string' ? this.afs.doc<T>(ref) : ref;
   }
 
-  doc$<T>(ref: dbDocument<T>): Observable<T> {
+  public doc$<T>(ref: dbDocument<T>): Observable<T> {
     return this.doc(ref).snapshotChanges().pipe(
       map(doc => doc.payload.data() as T)
     );
   }
 
-  col$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+  public col$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(docs => {
         return docs.map(a => a.payload.doc.data()) as T[]
@@ -67,7 +67,7 @@ export class DatabaseService {
   }
 
   /// with Ids
-  docWithId$<T>(ref: dbDocument<T>): Observable<T> {
+  public docWithId$<T>(ref: dbDocument<T>): Observable<T> {
     return this.doc(ref).snapshotChanges().pipe(
       map(doc => {
         const data = doc.payload.data();
@@ -77,7 +77,7 @@ export class DatabaseService {
     );
   }
 
-  colWithIds$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+  public colWithIds$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -89,16 +89,16 @@ export class DatabaseService {
     );
   }
 
-  add<T>(ref: dbCollection<T>, data) {
+  public add<T>(ref: dbCollection<T>, data): Promise<string> {
     const timestamp = this.timestamp;
     return this.col(ref).add({
       ...data,
       updated: timestamp,
       created: timestamp
-    }).then( ref => this.afs.doc<T>(ref));
+    }).then( ref => ref.id );
   }
 
-  set<T>(ref: dbDocument<T>, data: any) {
+  public set<T>(ref: dbDocument<T>, data: any): Promise<void> {
     const timestamp = this.timestamp;
     return this.doc(ref).set({
       ...data,
@@ -107,7 +107,7 @@ export class DatabaseService {
     });
   }
 
-  merge<T>(ref: dbDocument<T>, data: any) {
+  public merge<T>(ref: dbDocument<T>, data: any): Promise<void> {
     const timestamp = this.timestamp;
     return this.doc(ref).set({
       ...data,
@@ -115,19 +115,19 @@ export class DatabaseService {
     }, { merge: true } );
   }
 
-  update<T>(ref: dbDocument<T>, data: any) {
+  public update<T>(ref: dbDocument<T>, data: any): Promise<void> {
     return this.doc(ref).update({
       ...data,
       updated: this.timestamp
     });
   }
 
-  delete<T>(ref: dbDocument<T>) {
+  public delete<T>(ref: dbDocument<T>): Promise<void> {
     return this.doc(ref).delete();
   }
 
   /// If doc exists update, otherwise set
-  upsert<T>(ref: dbDocument<T>, data: any) {
+  public upsert<T>(ref: dbDocument<T>, data: any): Promise<void> {
     const doc = this.doc(ref).snapshotChanges().pipe(
       take(1)
     ).toPromise();
@@ -138,12 +138,12 @@ export class DatabaseService {
   }
 
   /// create a reference between two documents
-  connect(host: dbDocument<any>, key: string, doc: dbDocument<any>) {
+  public connect(host: dbDocument<any>, key: string, doc: dbDocument<any>): Promise<void> {
     return this.doc(host).update({ [key]: this.doc(doc).ref });
   }
 
   /// returns a documents references mapped to AngularFirestoreDocument
-  docWithRefs$<T>(ref: dbDocument<T>) {
+  public docWithRefs$<T>(ref: dbDocument<T>): Observable<T> {
     return this.doc$(ref).pipe(
       map(doc => {
         for (const k of Object.keys(doc)) {
@@ -156,7 +156,45 @@ export class DatabaseService {
     );
   }
 
-  inspectDoc(ref: dbDocument<any>): void {
+  public deleteCollection<T>(ref: dbCollection<T>, batchSize: number = 5): Promise<void> {
+
+    // Starts by deleting a first batch of documents
+    return this.deleteBatch(ref, batchSize)
+      .pipe( 
+
+        // While there are still documents to delete
+        takeWhile( val => val >= batchSize ),
+
+        // Recurs to delete the next batche otherwise
+        flatMap(() => this.deleteBatch(ref, batchSize) )
+
+        // Turns the result into a promise
+      ).toPromise().then( () => {} );
+  }
+
+  // Detetes documents as batched transaction
+  private deleteBatch<T>(ref: dbCollection<T>, batchSize: number): Observable<number> {
+
+    // Makes sure to limit the request up to bachSize documents
+    return this.col<T>(ref, ref => ref.limit(batchSize))
+      .snapshotChanges().pipe(
+        take(1),
+        mergeMap(snapshot => {
+
+          // Delete documents in a batch
+          const batch = this.afs.firestore.batch();
+          snapshot.forEach(doc => {
+            batch.delete(doc.payload.doc.ref);
+          });
+
+          // Commits the batch write and returns the snapshot length
+          return from( batch.commit() )
+            .pipe( map(() => snapshot.length) );
+        })
+      )
+  }
+
+  public inspectDoc(ref: dbDocument<any>): void {
     const tick = new Date().getTime();
     this.doc(ref).snapshotChanges().pipe(
       take(1),
@@ -167,7 +205,7 @@ export class DatabaseService {
     ).subscribe();
   }
 
-  inspectCol(ref: dbCollection<any>): void {
+  public inspectCol(ref: dbCollection<any>): void {
     const tick = new Date().getTime();
     this.col(ref).snapshotChanges().pipe(
       take(1),
@@ -177,21 +215,4 @@ export class DatabaseService {
       })
     ).subscribe();
   }
-/*
-  atomic() {
-    const batch = firebase.firestore().batch()
-    /// add your operations here
-
-    const itemDoc = firebase.firestore().doc('items/myCoolItem');
-    const userDoc = firebase.firestore().doc('users/userId');
-
-    const currentTime = this.timestamp
-
-    batch.update(itemDoc, { timestamp: currentTime });
-    batch.update(userDoc, { timestamp: currentTime });
-
-    /// commit operations
-    return batch.commit()
-  }
-*/
 }

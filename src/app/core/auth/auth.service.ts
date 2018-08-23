@@ -1,34 +1,35 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, Inject, OnDestroy } from '@angular/core';
 import { DatabaseService, QueryFn } from '../database/database.service';
-import { StorageService } from '../storage/storage.service';
+import { UploaderService } from '../uploader/uploader.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth, User } from 'firebase';
-import { wmUser, wmUserFile } from '../data-model';
-import { Observable, of, merge, Subscription } from 'rxjs';
-import { switchMap, map, tap, filter, take } from 'rxjs/operators';
-
+import { USER_PROFILE, wmUser } from '../core-data';
+import { Observable, of, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService implements OnDestroy {
 
-  private userData: wmUser = {};
   private user: User = null;
   private sub: Subscription;
 
-  constructor(public  af: AngularFireAuth,
-              private db: DatabaseService,
-              private st: StorageService) {
+  constructor(@Inject(USER_PROFILE) 
+              private profile  : wmUser,
+              public  afire2   : AngularFireAuth,
+              private database : DatabaseService,
+              private uploader : UploaderService) {
 
     // Subscribes to authStae observable keeping track of auth state changes
     this.sub = this.user$.pipe( 
       switchMap( user => {
 
-        // Keeps a snapshot pf user auth state
+        // Keeps a snapshot of user auth state
         this.user = user;
 
         // Turns it into the user profile data observable
-        return user ? this.db.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null);
+        return user ? this.database.docWithId$<wmUser>(`users/${user.uid}`) : of(null);
       })
       // Save the profile in the local storage
       //tap(data => localStorage.setItem('user', JSON.stringify(data))),
@@ -36,7 +37,7 @@ export class AuthService implements OnDestroy {
       //startWith(JSON.parse(localStorage.getItem('user'))) )
 
     // Keeps a snapshot of user profile data
-    ).subscribe( data => this.userData = data || {});
+    ).subscribe( data => { Object.assign(this.profile, data || { id: this.user.uid } ); });
   }
 
   ngOnDestroy() {
@@ -44,20 +45,20 @@ export class AuthService implements OnDestroy {
   }
 
   get user$(): Observable<User|null> {
-    return this.af.user;
+    return this.afire2.user;
   }
 
-  get userData$(): Observable<wmUser|null> {
+  get profile$(): Observable<wmUser|null> {
     return this.user$.pipe(
       switchMap( user => 
-        user ? this.db.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null) 
+        user ? this.database.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null) 
       )
     );
   }
 
   // Returns true if user is logged in and profile data are available
   get authenticated(): boolean {
-    return this.user !== null && this.userData !== null;
+    return this.user !== null && this.profile !== null;
   }
 
   // User id helper
@@ -77,137 +78,30 @@ export class AuthService implements OnDestroy {
 
   // Returns the user customized profile data object
   get userProfile(): wmUser {
-    return this.user !== null ? this.userData : {};
+    return this.user !== null ? this.profile : {};
   }
 
   private updateUserData(user: User, lang: string = undefined): Promise<void> {
 
     // Update user profile data with User Auth and custom data
     let data = {  
-      name:  user.displayName,
-      email: user.email,
-      phone: user.phoneNumber,
-      img:   user.photoURL,
-      lang:  lang
+      name  : user.displayName,
+      email : user.email,
+      phone : user.phoneNumber,
+      img   : user.photoURL,
+      lang  : lang
     };
     
-    return this.db.upsert<wmUser>(`users/${user.uid}`, data);
+    return this.database.upsert<wmUser>(`users/${user.uid}`, data);
   }
 
   public updateUserProfile(data: wmUser | any) : Promise<void> {
-    return this.db.merge<wmUser>(`users/${this.userId}`, data);
+    return this.database.merge<wmUser>(`users/${this.userId}`, data);
   }
 
-  public getUserUploads(queryFn?: QueryFn): Observable<any[]> {
-    return this.db.colWithIds$<any>(`users/${this.userId}/uploads`, queryFn);
-  }
-
-  public addUserUploads(data: wmUserFile): Promise<any> {
-    return this.db.add<wmUserFile>(`users/${this.userId}/uploads`, data);
-  }
-
-  /**
-   * Uploads a file into the user's upload area
-   * @param file the file object to be uploaded and tracked into the user's uploads area
-   * @returns the StorageTaskSnapshot observable to track the process
-   */
-  public uploadUserFile(file: File): Observable<wmUserFile> {
-
-    // Computes the storage path
-    const path = `${this.userId}/${new Date().getTime()}_${file.name}`;
-
-    // Creates the upload task
-    let task = this.st.upload(path, file);
-
-    // Merges two snapshotChanges observables
-    return merge(
-
-      // During the transfer, maps the snapshot to a wmUserFile tracking the progress in xfer
-      // with a simple map, this allow for minimized latency and better progress preview
-      task.snapshotChanges().pipe( 
-        map( snap => { 
-          return { 
-            name: file.name,
-            fullName: snap.ref.name,
-            path,
-            size: snap.totalBytes,
-            xfer: snap.bytesTransferred
-          };
-       })
-      ),
-
-      // At completion, gets the download url, saves the file info into user's uploads area...
-      task.snapshotChanges().pipe( 
-        filter( snap => snap.bytesTransferred === snap.totalBytes ),
-        switchMap( snap => snap.ref.getDownloadURL().then( url => 
-
-          // Saves the uploaded file information into the user uploads area
-          this.addUserUploads({ 
-            name: file.name,
-            fullName: snap.ref.name,
-            path,
-            size: snap.totalBytes,
-            url
-          })
-        )),
-
-        //... and reloads the saved values from the database
-        switchMap( ref => ref.valueChanges() ),
-
-        // Makes sure it completes
-        take(1)
-      )
-    );
-  }
-
-  /**
-   * Simplified version of uploadUserFile() executing the upload once
-   * @param file file object to be uploaded
-   * @returns a promise resolving with the download url
-   */
-  public uploadUserFileOnce(file: File): Promise<wmUserFile> {
-    return this.uploadUserFile(file).toPromise();
-  }
-
-  /**
-   * Loads a file into the user's storage to be used as image
-   * @param file file image to be uploaded and used as user image
-   * @returns a promise resolving after completion
-   */
-  public uploadUserImage(file: File): Promise<void> {
-    return this.uploadUserFileOnce(file)
+  public loadUserImage(file: File): Promise<void> {
+    return this.uploader.uploadUserFileOnce(file)
       .then( file => this.updateUserProfile({ img: file.url }) );
-  }
-
-  /**
-   * Checks when the user file refers to the user image and clears the url eventually
-   * @param user the user file object
-   * @returns the storage path related to the file
-   */
-  private clearWhenUserImage(user: wmUserFile): string {
-
-    // Resets the img url in user profile when deleting the releted image
-    if(user.url === this.userData.img) {
-      this.updateUserProfile({ img: null });
-    }
-
-    // Returns s=the storage' path for further processing
-    return user.path;
-  }
-
-  /**
-   * Deletes a user uploaded file clearing up both the storage and the user's uploads area
-   */
-  public deleteUserFile(id: string): Promise<void> {
-    
-    let ref = this.db.doc(`users/${this.userId}/uploads/${id}`);
-    return this.db.doc$<wmUserFile>(ref)
-      .pipe( 
-        take(1),
-        map( file => this.clearWhenUserImage(file) ),
-        switchMap( path => this.st.ref(path).delete() ),
-        tap( () => ref.delete() )
-      ).toPromise();
   }
 
   public registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
@@ -215,7 +109,7 @@ export class AuthService implements OnDestroy {
     console.log("Registering a new user: " + email);
 
     // Create a new user with email and password
-    return this.af.auth.createUserWithEmailAndPassword(email, password)
+    return this.afire2.auth.createUserWithEmailAndPassword(email, password)
       .then( credential => {
 
         // Update user profile data with User Auth and custom data
@@ -227,7 +121,7 @@ export class AuthService implements OnDestroy {
   private applyUserLanguage(lang?: string): boolean {
     
     if(lang || this.authenticated) {
-      this.af.auth.languageCode = lang || this.userData.lang;
+      this.afire2.auth.languageCode = lang || this.profile.lang;
       return true;
     }
     return false;
@@ -249,7 +143,7 @@ export class AuthService implements OnDestroy {
     console.log("Applying action with code: " + code);
     
     // Applies the received action code
-    return this.af.auth.applyActionCode(code);
+    return this.afire2.auth.applyActionCode(code);
   }
 
   public updateEmail(password: string, newEmail: string): Promise<void> {
@@ -290,7 +184,7 @@ export class AuthService implements OnDestroy {
 
   public signIn(email: string, password: string): Promise<any>  {
     console.log("Signing in as: " + email);
-    return this.af.auth.signInWithEmailAndPassword(email, password);
+    return this.afire2.auth.signInWithEmailAndPassword(email, password);
   }
 
   public forgotPassword(email: string, lang?: string, url?: string): Promise<void> {
@@ -299,7 +193,7 @@ export class AuthService implements OnDestroy {
 
     // Applies the requested language and send a password reset email
     return this.applyUserLanguage(lang || 'en') ? 
-      this.af.auth.sendPasswordResetEmail(email, url ? { url } : undefined ) : Promise.resolve();
+      this.afire2.auth.sendPasswordResetEmail(email, url ? { url } : undefined ) : Promise.resolve();
   }
 
   public resetPassword(code: string, newPassword: string): Promise<void> {
@@ -307,7 +201,7 @@ export class AuthService implements OnDestroy {
     console.log("Confirming the password with code: " + code);
     
     // Resets to a new password applying the received activation code
-    return this.af.auth.confirmPasswordReset(code, newPassword);
+    return this.afire2.auth.confirmPasswordReset(code, newPassword);
   }
 
   public signInWith(provider: string, lang?: string): Promise<void> {
@@ -338,13 +232,10 @@ export class AuthService implements OnDestroy {
     }
 
    if(authProvider === null) {
-      return Promise.reject({
-        code: 'auth/unsupported',
-        message: 'Unsupported provider'
-      });
+      return Promise.reject('auth/unsupportedProvider');
     }
 
-    return this.af.auth.signInWithPopup(authProvider)
+    return this.afire2.auth.signInWithPopup(authProvider)
       .then( credential => {
         // Update user profile data with User Auth and custom data
         return this.updateUserData(credential.user, lang);
@@ -353,10 +244,9 @@ export class AuthService implements OnDestroy {
 
   public signOut(): void {
     console.log("Signing-out");
-    this.af.auth.signOut();
+    this.afire2.auth.signOut();
   }
 
-  // TODO: Deleting the uploads prior to delete the user
   public deleteUser(password: string): Promise<void> {
 
     let email = this.user.email;
@@ -370,10 +260,13 @@ export class AuthService implements OnDestroy {
     return this.user.reauthenticateWithCredential(credential)
       .then( () => {
 
-        // Deletes the user custom data...
-        return this.db.delete<wmUser>(`users/${this.userId}`)
+        // Deletes the user's uploaded files first
+        return this.uploader.deleteAllUserFiles()
+
+          // Deletes the user profile data next
+          .then( () => this.database.delete<wmUser>(`users/${this.userId}`) )
           
-          // Then deletes the account and sign-out
+          // Finally deletes the account and sign-out
           .then( () => this.user.delete() );
       });
   }

@@ -12,7 +12,9 @@ import { WindowRef } from '../window/window.service';
 
 import * as moment from 'moment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ResolverService implements Resolve<any> {
 
   constructor(private content : ContentService,
@@ -35,7 +37,7 @@ export class ResolverService implements Resolve<any> {
     }
 
     // Waits to check for authentication prior to load the content to avoid flickering at startup
-    return this.auth.userData$.pipe(
+    return this.auth.profile$.pipe(
       take(1),
       switchMap( profile => {
 

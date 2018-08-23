@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 
 @Component({
   selector: 'wm-open-file, [wm-open-file]',
-  template: '<input fxHide type="file" [accept]="accept" [multiple]="!!multiple"\
+  template: '<input [style.display]="\'none\'" type="file" [accept]="accept" [multiple]="!!multiple"\
             (change)="files.emit($event.target.files)" #input />\
              <ng-content></ng-content>',
   styles: []

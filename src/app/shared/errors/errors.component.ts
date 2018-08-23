@@ -3,8 +3,6 @@ import { ContentService } from 'app/core';
 
 @Component({
   selector: '[wmError]',
-  //templateUrl: './errors.component.html',
-  //styleUrls: ['./errors.component.scss']
   template: '<span>{{ error }}</span>',
   styles: ['']
 })
@@ -30,7 +28,11 @@ export class ErrorsComponent {
 
   @Input() timeout = 5000;
 
-  @Input('wmError') set showError(code: string) {
+  @Input('wmError') set showError(error: string | any) {
+
+    // Tries to decode the error object getting the code property, when defined, or
+    // assumes the code itself is a string
+    let code: string = error.code || error;
 
     // Turns the error code into camelCase
     let key = code.camelize().replace('/','.');

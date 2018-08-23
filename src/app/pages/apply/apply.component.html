@@ -2,15 +2,15 @@
   <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
   <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
   <div fxHide.lt-sm>
-  <p *ngIf="welcomeBack" @fadeIn>{{msgs.welcomeBack}}</p>
-  <p *ngIf="!welcomeBack" @fadeIn>{{msgs.description}}</p>
-  <p *ngIf="application" @fadeIn>
-    <wm-disclaimer [source]="msgs.clearForm" 
-                   (action)="disclaimerAction($event)"
-                   actionClass="mat-link">
-    </wm-disclaimer>
-  </p>
-</div>
+    <p *ngIf="welcomeBack" @fadeIn>{{msgs.welcomeBack}}</p>
+    <p *ngIf="!welcomeBack" @fadeIn>{{msgs.description}}</p>
+    <p *ngIf="application" @fadeIn>
+      <wm-disclaimer [source]="msgs.clearForm" 
+                     (action)="disclaimerAction($event)"
+                     actionClass="mat-link">
+      </wm-disclaimer>
+    </p>
+  </div>
 </header> 
 
 <mat-vertical-stepper [selectedIndex]="stepIndex" linear #stepper>
