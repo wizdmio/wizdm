@@ -16,15 +16,15 @@ export class ChatService {
   }
 
   private get fromMe(): QueryFn {
-    return <QueryFn>(ref => ref.where('from','==', this.profile.id));
+    return ref => ref.where('from','==', this.profile.id);
   }
 
   private get toMe(): QueryFn {
-    return <QueryFn>(ref => ref.where('to','==', this.profile.id));
+    return ref => ref.where('to','==', this.profile.id);
   }
 
   private get lastMsg(): QueryFn {
-    return <QueryFn>(ref => ref.orderBy('created', 'desc').limit(1));
+    return ref => ref.orderBy('created', 'desc').limit(1);
   }
 
   //public queryMessages(ref: string)

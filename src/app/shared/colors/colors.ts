@@ -1,9 +1,4 @@
-
-export interface wmColor {
-  key     : string,
-  value   : string,
-  contrast: string
-}
+import { wmColor } from 'app/core';
 
 export const $colors: wmColor[] = [
   { key: 'red'         , value: '#f44336', contrast: 'white' },

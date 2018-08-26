@@ -22,5 +22,16 @@ $wm-avatar-size: 40px !default;
   border-radius: 50%;
   box-sizing: border-box;
   
+  // Sets opacity of both background and foreground, so, the latter 
+  // will results being the sum of both
+  #background, #foreground { 
+    opacity: 0.25; 
+  }
+  
+  // Both background and foreground are semi-transparent
+  // due to the previous opacity rules
   fill: mat-color($wm-primary);
+
+  // Underlying background is white
+  background-color: white;
 }

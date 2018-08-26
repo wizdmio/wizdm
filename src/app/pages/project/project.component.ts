@@ -1,13 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentService, ProjectService, wmProject } from 'app/core';
 import { ToolbarService, ActionEnabler, ScrollViewService } from 'app/navigator';
-import { PopupService } from 'app/shared';
+import { PopupService, UploadsComponent } from 'app/shared';
 import { Observable, Subject, of, empty } from 'rxjs';
 import { switchMap, catchError, tap, take, map, filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { $animations } from './project.animations';
-
-const $debug = "# Test with a [link](../../profile)\nFollowed by a simple paragraph _with_ **emphasis** and ~~corrections~~ and a note[^note]\n\n [^note]: this is a note"
 
 @Component({
   selector: 'wm-project',
@@ -58,7 +56,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         filter( () => !this.editMode ) // Skips reloading while in editMode
       ) 
       .subscribe( project => {
-        this.project = project || { document: $debug } as wmProject;
+        this.project = project || {} as wmProject;
     });
 
     // Save the modified project automatically
@@ -69,6 +67,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.dispose$.next();
     this.dispose$.complete();
+  }
+
+  public get isMine(): boolean {
+    return this.database.isProjectMine(this.project);
   }
 
   public enterEditMode(): void {
@@ -103,7 +105,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.database.queryProject( param.get('id') )
       ),
       catchError( error => 
-        of({ document: $debug } as wmProject) 
+        of({ } as wmProject) 
       ));
   }
 
@@ -115,6 +117,31 @@ export class ProjectComponent implements OnInit, OnDestroy {
     );
   }
 
+  @ViewChild('uploads') uploads: UploadsComponent;
+
+  private changeCover() {
+
+    this.uploads.chooseFile(this.project.cover)
+      .then( file => {
+        if(!!file) {
+          // Updates the project with the new cover
+          this.database.updateProject({ 
+            id: this.project.id,
+            cover: file.url || null
+          } as wmProject );
+        }
+      });
+  }
+
+  private deleteProject(): void {
+    // Ask for confirmation prior to delete the project
+    this.popup.confirmPopup(this.msgs.canDelete)
+      .subscribe( () => {
+        // Deletes the project
+        this.database.deleteProject( this.project.id );
+      });
+  }
+
   private doAction(code: string){
 
     switch(code) {
@@ -123,14 +150,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.enterEditMode();
       break;
 
+      case 'cover':
+      this.changeCover();
+      break;
+
       case 'delete':
-
-      // Ask for confirmation prior to delete the project
-      this.popup.confirmPopup(this.msgs.canDelete)
-        .subscribe( () => {
-          this.database.deleteProject( this.project.id );
-        });
-
+      this.deleteProject();
       break;
     }
   }

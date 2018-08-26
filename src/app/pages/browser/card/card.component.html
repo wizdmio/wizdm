@@ -1,0 +1,37 @@
+<!-- Headibng banner -->
+<div class="banner">
+  <img *ngIf="project.cover" 
+       [src]="project.cover" 
+       (error)="project.cover = null" />
+
+  <!-- Cover picture loader -->
+  <wm-uploads (file)="selectCover($event)" #uploads *ngIf="tools">
+    <button mat-icon-button (click)="uploads.chooseFile(project.cover)">
+      <mat-icon>insert_photo</mat-icon>
+    </button>
+  </wm-uploads>
+</div>
+
+<!-- Card content --> 
+<div class="content">
+  
+  <div class="overlap">
+    <wm-avatar [src]="project.owner?.img" [color]="bkcolor" wmUserInfo [owner]="project">
+    </wm-avatar>
+  </div>
+
+  <div class="title" [routerLink]="[ '.', project.id ]">
+    {{ project.name }}
+  </div>
+  
+  <div class="author">{{ project.owner?.name }}</div>
+  <p>{{ project.pitch }}</p>
+
+  <!-- Theme color picker -->
+  <wm-color-picker (pick)="setColor($event)" class="color" *ngIf="tools">
+    <button mat-icon-button>
+      <mat-icon>brush</mat-icon>
+    </button>
+  </wm-color-picker>
+</div>
+  

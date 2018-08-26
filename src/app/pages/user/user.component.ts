@@ -49,9 +49,8 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   }
 
   public selectImage(file: wmUserFile): void {
-    if(file) {
-      this.auth.updateUserProfile({ img: file.url || null });  
-    }
+    // Updates the user image
+    this.auth.updateUserProfile({ img: file.url || null });  
   }
 
   public profileEditable(key: string) {

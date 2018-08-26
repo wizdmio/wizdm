@@ -49,6 +49,8 @@ import { FileSizePipe } from './file/file-size.pipe';
 import { UploadsComponent } from '../shared/uploads/uploads.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { ColorsComponent } from './colors/colors.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+import { UserInfoDirective } from './user-info/user-info.directive';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -95,7 +97,9 @@ const sharedModules = [
     FileSizePipe,
     UploadsComponent,
     ErrorsComponent,
-    ColorsComponent
+    ColorsComponent,
+    UserInfoComponent,
+    UserInfoDirective
   ],
 
   exports: [
@@ -111,7 +115,9 @@ const sharedModules = [
     FileSizePipe,
     UploadsComponent,
     ErrorsComponent,
-    ColorsComponent
+    ColorsComponent,
+    UserInfoComponent,
+    UserInfoDirective
   ],
 
   providers: [
@@ -122,8 +128,9 @@ const sharedModules = [
     PrismService*/
   ],
 
-  entryComponents: [
-    PopupComponent // Don't forget to declare dialogs here
+  entryComponents: [// Don't forget to declare dialogs here
+    PopupComponent,
+    UserInfoComponent
   ]
 })
 export class SharedModule { }

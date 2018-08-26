@@ -43,7 +43,7 @@ export class PopupService {
   */
   public popupDialog(data: PopupData, maxWidth?: number): Observable<boolean> {
     return data ? this.open(PopupComponent, { data, maxWidth } )
-      .afterClosed().pipe( take(1) ) : of(true);
+      .afterClosed() : of(true);
   }
 
   /** 

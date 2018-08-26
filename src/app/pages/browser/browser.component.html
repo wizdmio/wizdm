@@ -2,35 +2,30 @@
   <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
   <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
   <p fxHide.lt-sm [@fade]="activeTab">{{ tabDescription || msgs.description }}</p>
-</header>  
+</header>
 
-<mat-tab-group dynamicHeight [selectedIndex]="activeTab" (selectedIndexChange)="loadProjects(activeTab = $event)">
+<mat-tab-group dynamicHeight [(selectedIndex)]="activeTab">
 
   <mat-tab *ngFor="let tab of msgs.tabs" [label]="tab.label">
 
-    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    <ng-template matTabContent>
 
-    <ng-container *ngIf="!loading">
+      <!--mat-progress-bar mode="indeterminate"></mat-progress-bar-->
 
-      <mat-grid-list rowHeight="1:1" [cols]="cols" gutterSize="10px">
-        
+      <mat-grid-list rowHeight="260px" [cols]="cols" gutterSize="10px" *ngIf="projects$ | async as projects">    
+      
         <mat-grid-tile *ngFor="let project of projects">
 
-          <wm-project-browser-item [project]="project" fxFill></wm-project-browser-item>
-          
+          <wm-project-card [project]="project"
+                             [tools]="enableTools(project)"
+                            (update)="updateProject($event)">
+          </wm-project-card>          
+
         </mat-grid-tile>
 
       </mat-grid-list>
 
-      <!--div fxLayout="row wrap" fxLayoutAlign="center start" fxLayoutGap="10px">
-          <wm-project *ngFor="let project of projects" 
-                      fxFlex="0 0 auto"
-                      [project]="project">
-          </wm-project>
-      </div-->
-
-
-    </ng-container>
+    </ng-template>
 
   </mat-tab>
 

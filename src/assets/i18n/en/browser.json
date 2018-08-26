@@ -3,7 +3,6 @@
   "description": "Here's where you can browse the community' projects",
 
   "actions": [
-    { "caption": "DEBUG", "icon": "bug_report", "link": "./projects/1" },
     { "caption": "Apply for a new project", "icon": "add", "link": "./apply" }
   ],
   
@@ -14,12 +13,12 @@
       "description": "Here's the list of your projects"
     },
     {
-      "label": "Just submitted",
+      "label": "New",
       "source": "pending",
       "description": "Here's the list of the recently submitted projects"
     },
     {
-      "label": "All active",
+      "label": "All",
       "source": "active",
       "description": "Here's the list of all active projects the community is working on"
     }

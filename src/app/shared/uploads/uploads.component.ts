@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ContentService, UploaderService, wmUserFile } from 'app/core';
-import { Observable } from 'rxjs';
-import { filter, take, map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, take, map, tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-uploads',
@@ -22,6 +22,9 @@ export class UploadsComponent implements OnInit {
     // Gets the localized content
     this.msgs = this.content.select('upload.dialog');
   }
+
+  // Displays the selection 'none' option
+  @Input() none: boolean = true;
 
   ngOnInit() {
 
@@ -64,12 +67,27 @@ export class UploadsComponent implements OnInit {
 
   /**
    * Displays the dialog to select the file among the uploads
-   * @returns a Promise resolving to the selcted file only
+   * @param an optional url of the currently selected file, if any 
+   * @returns a Promise resolving to the selcted file
    */
-  public chooseFile(): Promise<wmUserFile> {
-    return this.dialog.open(this.template, this.config)
-      .afterClosed()
-      .pipe( tap( file => { this.file.emit(file); }))
-      .toPromise()
+  public chooseFile(url?: string): Promise<wmUserFile> {
+
+    // Starts by getting the already selected file if the url is specified
+    return ( url ? this.uploader.queryUserFileByUrl(url).pipe( take(1) ) : of<wmUserFile>({}) )
+      .pipe(
+        switchMap( file => {
+          // Keeps the previous selection
+          this.selectedFile = file;
+          // Shows the dialog for the user to select
+          return this.dialog.open(this.template, this.config)
+            // Returns an obbservable making sure it completes
+            .afterClosed();
+        }),
+        // Filters unefined values (such as user pressing cancel)
+        filter( file => typeof file !== 'undefined' && file !== null),
+        // Emits the selection event
+        tap( file => { this.file.emit(file); })
+        
+      ).toPromise();
   }
 }

@@ -1,39 +1,37 @@
 
-<header fxLayout="row" fxLayoutAlign="space-between center" *ngIf="project">
-  
-  <div fxLayout="row"><!-- Author on the left -->
+<!-- Project name on the cover (only if cover image is defined) -->
+<div fxLayout="column" fxLayoutAlign="center center" class="content" *ngIf="project?.cover">
+  <h1>{{ project.name }}</h1>
+</div>
+
+<!-- Wait fot the project before displaing the content -->
+<div fxLayout="column" fxLayoutAlign="end center" class="content" *ngIf="project">
+
+  <!-- bottom bar -->
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="wide">
     
-    <wm-avatar [src]="project.owner?.img" wmUserInfo [owner]="project">
-    </wm-avatar>
-    
-    <div fxLayout="column">
-      <span>{{ project.owner?.name || msgs.unnamed }}&nbsp;-&nbsp;{{ project.name }}</span>
-      <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
+    <!-- Author on the left -->
+    <div fxLayout="row" fxLayoutAlign="start center">
+      
+      <wm-avatar [src]="project.owner?.img" wmUserInfo [owner]="project">
+      </wm-avatar>
+      
+      <div fxLayout="column">
+        <span>{{ project.owner?.name || msgs.unnamed }}
+          <!-- Project name to be shown in case the image cover is not defined -->
+          <ng-container *ngIf="!project.cover">&nbsp;-&nbsp;{{ project.name }}</ng-container>
+        </span>
+        <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
+      </div>
+
     </div>
 
-  </div>
-
-  <div fxLayout="row"><!-- Notifications on the right -->
-
-    <button mat-icon-button (click)="panel.toggle()" *ngIf="isMine">
-      <wm-icon [icon]="'notifications_none'" matBadge="3"></wm-icon>
-    </button>
-
+    <!-- Likes on the right -->
     <button mat-button (click)="toggleFavorite()">
       <span class="mat-small">532</span>
       <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'"></wm-icon>
     </button>
+    
   </div>
 
-</header>
-
-<!-- List of Notifications -->
-<mat-expansion-panel #panel>
-
-  <!--mat-list fxFlex="1 1 auto">
-    <wm-conversation [message]="message" *ngFor="let message of messages; last as isLast">
-      <mat-divider *ngIf="!isLast"></mat-divider>
-    </wm-conversation>
-  </mat-list-->
-
-</mat-expansion-panel>
+</div>

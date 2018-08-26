@@ -14,15 +14,18 @@ import { $animations } from './browser.animations';
 })
 export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
-  private colsBreakpoint = { xl: 5, lg: 4, md: 3, sm: 2, xs: 1 };
+  private colsBreakpoint = { xl: 8, lg: 6, md: 4, sm: 2, xs: 1 };
   private dispose$: Subject<void> = new Subject();
 
   public msgs = null;
   public cols = 1;
 
-  public projects: wmProject[] = [];
   public activeTab = 0;
-  public loading = false;
+  //public loading = false;
+
+  private allProjects$: Observable<wmProject[]>;
+  private newProjects$: Observable<wmProject[]>;
+  private myProjects$: Observable<wmProject[]>;
 
   //private filters$ = new BehaviorSubject<QueryFn>(undefined);
   
@@ -39,7 +42,11 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
     // Enables the toolbar actions
     this.toolbar.activateActions(this.msgs.actions);
 
-    this.loadMyProject();
+    this.allProjects$ = this.database.queryProjects()
+      .pipe( takeUntil( this.dispose$ ));
+
+    this.myProjects$ = this.database.queryOwnProjects()
+      .pipe( takeUntil( this.dispose$ ));
   }
 
   ngAfterContentInit() {
@@ -63,32 +70,43 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.msgs.tabs[this.activeTab].description;
   }
 
-  private loadProjects(tab: number) {
+  public get projects$(): Observable<wmProject[]> {
 
-    let source = this.msgs.tabs[tab].source;
+    // Returns the relevant observable according to the selected tab
+    switch( this.msgs.tabs[this.activeTab].source ){
 
-    switch(source) {
-
-      default:
       case 'personal':
-      this.loadMyProject();
-      break;
+      return this.myProjects$;
 
       case 'pending':
-      //this.loadPendingProject();
+      //return this.newProjects$;
       break;
 
       case 'active':
-      this.loadActiveProject();
-      break;
+      return this.allProjects$;
+
+      default:
     }
+
+    return of([]);
   }
 
+  // Enables the theme tools on the card whenever the project belongs to me 
+  public enableTools(project: wmProject): boolean {
+    return this.database.isProjectMine(project);
+  }
+
+  // Updates the project theme
+  public updateProject(data: wmProject): void {
+    this.database.updateProject(data);
+  }
+
+/*
   private loadMyProject() {
 
     this.loading = true;
 
-    this.database.listOwnProjects()// ref => ref.orderBy('created', 'asc'))
+    this.database.queryOwnProjects()// ref => ref.orderBy('created', 'asc'))
       .pipe( 
         takeUntil( this.dispose$ ), 
         catchError( () => [] ) 
@@ -113,7 +131,7 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
     this.loading = true;
 
-    this.database.listProjects(ref => ref.where('status', '>', 'draft')
+    this.database.queryProjects(ref => ref.where('status', '>', 'draft')
                                          .where('status', '<', 'draft'))
       .pipe( 
         takeUntil( this.dispose$ ), 

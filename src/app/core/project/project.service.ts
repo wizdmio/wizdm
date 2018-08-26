@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
 import { DatabaseService, QueryFn } from '../database/database.service';
 import { USER_PROFILE, wmUser, wmProject } from '../core-data';
-import { Observable, of } from 'rxjs';
-import { map, take, debounceTime, mergeMap } from 'rxjs/operators';
+import { Observable, of, forkJoin } from 'rxjs';
+import { map, take, debounceTime, switchMap, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +18,8 @@ export class ProjectService {
 
   public isProjectMine(project: wmProject) : boolean {
     return typeof project.owner === 'string' ?
-      project.owner === this.userId :
-        project.owner.id === this.userId;
-  }
-
-  public listProjects(queryFn? : QueryFn): Observable<wmProject[]> {
-    return this.database.colWithIds$<wmProject>('/projects', queryFn);
-  }
-
-  public listOwnProjects(queryFn? : QueryFn): Observable<wmProject[]> {
-    return this.listProjects( ref => 
-      queryFn ? queryFn( ref.where('owner', '==', this.userId) ): 
-                         ref.where('owner', '==', this.userId) );
+      project.owner === this.profile.id :
+        project.owner.id === this.profile.id;
   }
 
   public doesProjectExists(name: string): Promise<boolean> {
@@ -61,13 +51,11 @@ export class ProjectService {
   }
 
   public addProject(data: wmProject): Promise<string> {
-
     // Adds a new project returning the corresponding id 
     return this.database.add<wmProject>('/projects', this.sanitizeData(data) );
   }
 
   public updateProject(data: wmProject): Promise<void> {
-
     // Updates the existing project
     return data.id ? 
       this.database.merge<wmProject>(`/projects/${data.id}`, this.sanitizeData(data) ) :
@@ -75,17 +63,41 @@ export class ProjectService {
   }
 
   public queryProject(id: string): Observable<wmProject> {
-
     // Query for the project coming with the requested id
-    return id ? this.database.docWithId$<wmProject>(`/projects/${id}`).pipe(
-
+    return id ? this.database.docWithId$<wmProject>(`/projects/${id}`)
       // Query for the project owner too
-      mergeMap( project => 
+      .pipe( switchMap( project => 
         this.database.docWithId$<wmUser>(`/users/${project.owner}`).pipe( 
+          // Inner map to merge the owner into the project
           map( owner => { return { ...project, owner } as wmProject;})
         )
       )
     ) : of(null);
+  }
+
+  public queryProjects(queryFn? : QueryFn): Observable<wmProject[]> {
+    // Query for a collection of projects
+    return this.database.colWithIds$<wmProject>('/projects', queryFn)
+      // Query for the projects' owners too
+      .pipe( mergeMap( projects => 
+        // Runs the owner's requests in parallel
+        forkJoin( projects.map( project => 
+          this.database.docWithId$<wmUser>(`/users/${project.owner}`).pipe(
+            // Inner map to merge the owner into the project
+            map( owner => { return { ...project, owner } as wmProject; }), 
+            take(1) // Gets a single snapshot of the user
+          )
+        ))
+      ));
+  }
+
+  private myOwmProjects(qf?: QueryFn): QueryFn {
+    return ref => ( qf ? qf( ref.where('owner', '==', this.profile.id) ) 
+      : ref.where('owner', '==', this.profile.id) );
+  }
+
+  public queryOwnProjects(qf? : QueryFn): Observable<wmProject[]> {
+    return this.queryProjects( this.myOwmProjects(qf) );
   }
 
   public deleteProject(ref: string | wmProject): Promise<void> {

@@ -9,6 +9,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { LogoComponent as ToolbarLogo } from './toolbar/logo/logo.component';
 import { TogglerComponent as ToolbarToggler } from './toolbar/toggler/toggler.component';
 import { ActionComponent as ToolbarAction } from './toolbar/action/action.component';
+//import { NotifierComponent as ToolbarNotifications } from './toolbar/notifier/notifier.component';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
@@ -38,6 +39,7 @@ import {
     ToolbarLogo,
     ToolbarToggler,
     ToolbarAction,
+    //ToolbarNotifications,
     SideMenuComponent,
     FooterComponent,
     ScrollViewDirective,

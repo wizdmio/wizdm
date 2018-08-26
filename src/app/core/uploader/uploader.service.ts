@@ -27,12 +27,21 @@ export class UploaderService {
     return this.database.docWithId$<wmUserFile>(`${this.uploadRef}/${id}`);
   }
 
+  /**
+   *  Searches for the user file coming with the specified url
+   * @param url the url of the file to be searched for
+   */
+  public queryUserFileByUrl(url: string): Observable<wmUserFile> {
+    return this.queryUserUploads( ref => ref.where('url', '==', url) )
+      .pipe( map( files => files[0] ) )
+  }
+
   public addUserUploads(data: wmUserFile): Promise<string> {
     return this.database.add<wmUserFile>(this.uploadRef, data);
   }
 
   private unique(name: string): string {
-    return `new Date().getTime()}_${name}`;
+    return `${new Date().getTime()}_${name}`;
   }
 
   /**

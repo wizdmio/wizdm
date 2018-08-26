@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-
-import { $colors, wmColor } from './colors';
+import { wmColor } from 'app/core';
+import { $colors } from './colors';
 
 @Component({
   selector: 'wm-color-picker',

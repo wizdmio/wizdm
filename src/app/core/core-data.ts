@@ -28,6 +28,12 @@ export interface wmUser {
   updated? : Timestamp
 }
 
+export interface wmColor {
+  key     : string,
+  value   : string,
+  contrast: string
+}
+
 export interface wmUserFile {
   name?:     string,
   fullName?: string,
@@ -50,11 +56,13 @@ export interface wmProject {
   pitch?       : string,
   status?      : wmProjectStatus,
   owner?       : string | wmUser,
+  cover?       : string,
+  color?       : wmColor,
   document?    : string, // markdown formatted business plan description
   
   //team?        : string[] | wmUser[], collection of users
   //development? : wmDevelopment,
-  
+
   id?          : string,
   created?     : Timestamp,
   updated?     : Timestamp

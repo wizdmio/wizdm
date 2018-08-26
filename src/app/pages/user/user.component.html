@@ -21,11 +21,15 @@
     <!-- USER IMAGE -->
     <div fxLayout="column" fxLayoutAlign="center center" *ngIf="panel.userImage">
 
-      <wm-uploads (file)="selectImage($event)" #uploads></wm-uploads>
+      <!-- Select the image among the uploads -->
+      <wm-uploads (file)="selectImage($event)" #uploads>
+        <!-- Open the selection on click -->
+        <button mat-button class="user" (click)="uploads.chooseFile(userImage)">
+          <!-- Displays the image as an Avatar -->
+          <wm-avatar [src]="userImage"></wm-avatar>
+        </button>
+      </wm-uploads>
 
-      <button mat-button class="user" (click)="uploads.chooseFile()">
-        <wm-avatar [src]="userImage"></wm-avatar>
-      </button>
     </div>
 
     <mat-divider></mat-divider>

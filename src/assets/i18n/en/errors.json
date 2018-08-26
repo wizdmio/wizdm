@@ -11,6 +11,14 @@
     "unsupportedProvider": "The requestes provider is not supported"
   },
 
+  "firestore": {
+
+  },
+
+  "storage": {
+    "unhautorized": "You're not authorized to access this storage area"
+  },
+
   "project": {
     "invalidId": "The provided project ID is null or invalid",
     "missingTemplate": "The document template seems missing or corrupted"

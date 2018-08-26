@@ -1,9 +1,14 @@
 
 <!--mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar-->
 
+<!-- Project header -->
 <wm-project-header [project]="project"></wm-project-header>  
 <mat-divider></mat-divider>
 
+<!-- Hidden cover picture loader -->
+<wm-uploads #uploads></wm-uploads>
+
+<!-- Document body -->
 <div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto">

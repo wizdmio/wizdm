@@ -10,10 +10,12 @@ import { $animations } from './avatar.animations';
 export class AvatarComponent {
 
   public load = false;
-  public error = false;
 
   constructor() { }
 
   @Input() src: string;
   @Input() alt: string;
+
+  // Avatar color customization
+  @Input() color: string;
 }
