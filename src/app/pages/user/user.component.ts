@@ -72,7 +72,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
     // Intercepts timestapms requests
     if(key === 'profile:created') {
       let stamp = this.auth.userProfile[ keys[1] ];
-      return stamp ? moment(stamp.toDate()).toString() : '';
+      return stamp ? moment(stamp.toMillis()).toString() : '';
     }
 
     // Select the source of values based on the first half of the key

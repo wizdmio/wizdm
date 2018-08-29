@@ -1,5 +1,9 @@
+@import 'app/core/styles/colors';
 
 $wm-color-size: 40px;
+
+// Include the theme color styles
+@include wm-theme-colors();
 
 .grid {
  

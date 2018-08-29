@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
 import { ContentService, ProjectService, wmProject } from 'app/core';
-import { Observable } from 'rxjs';
+//import { Observable } from 'rxjs';
 import { $animations } from './header-animations';
 
 import * as moment from 'moment';
@@ -38,32 +38,12 @@ export class HeaderComponent implements OnInit {
     return !!this.project && !!this.project.cover;
   }
 
-  public createdOn(project: wmProject): string {
-    return project && project.created ?
-      moment(project.created.toDate()).format('lll') :
-      '';
-  }
-
   public modifiedOn(project: wmProject): string {
     return project && project.updated ?
-      moment(project.updated.toDate()).format('lll') :
+      moment((project.updated || project.created).toMillis()).format('lll') :
       '';
   }
-/*
-  public messages = [
-    { from: { name: "Lucio" }, subject: "Join wizdm.io team", content: "Hi, your project sounds amazing. I'd love being a part of it." },
-    { from: { name: "Alena" }, subject: "Come to Veganizer.app", content: "Hello, I believe you may be interested in joining Veganizer.app." },
-    { from: { name: "Ita"   }, subject: "Need advice", content: "Hi, I'm planning to sunmit a project myself, can you help?" }
-    
-  ];
 
-  public toggleNotifications(panel: MatExpansionPanel): void {
-
-    this.notifications != this.notifications;
-    panel.toggle();
-
-  }
-*/
   public toggleFavorite(): void {
     this.favorite != this.favorite;
   }

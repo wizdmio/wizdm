@@ -14,9 +14,11 @@ import { ScrollViewService } from './scroll-view.service';
  */
 export class ScrollViewDirective implements OnDestroy {
 
+  private element$: HTMLElement;
   private sub$: Subscription;
-  private element$: Element;
   private anchor: string;
+
+  @Output() scrollPosition = new EventEmitter<'top' | 'bottom'>();  
 
   constructor(private scroll  : ScrollViewService,
               private element : ElementRef,
@@ -44,6 +46,9 @@ export class ScrollViewDirective implements OnDestroy {
     this.scroll.scrollTo$.subscribe( element => {
       this.toElement(element);
     });
+
+    // Assign the scroll position event to be schered across components
+    this.scroll.scrollPosition = this.scrollPosition;
   }
 
   ngOnDestroy() { this.sub$.unsubscribe();}
@@ -111,12 +116,29 @@ export class ScrollViewDirective implements OnDestroy {
 
   @HostListener('scroll', ['$event']) onScroll(event: Event) {
 
-    // Detects if the element has been scrolled more than 'threshold' value
-    let scrolled = (this.element$.scrollTop || 0) > this.treshold;
+    try {
 
-    // Emits the scrolled status on changes
-    if(this.scrolled != scrolled) {
-      this.scrolledChange.emit(this.scrolled = scrolled);
-    }
+      const top = this.element$.scrollTop;
+      const height = this.element$.scrollHeight;
+      const offset = this.element$.offsetHeight;
+
+      if(top === 0) {
+        this.scrollPosition.emit('top')
+      }
+
+      if(top > height - offset - 1) {
+        this.scrollPosition.emit('bottom')
+      }
+
+      // Detects if the element has been scrolled more than 'threshold' value
+      const scrolled = (top || 0) > this.treshold;
+
+      // Emits the scrolled status on changes
+      if(this.scrolled != scrolled) {
+        this.scrolledChange.emit(this.scrolled = scrolled);
+      }
+
+      // Ignores errors
+    } catch(err) {}
   }
 }

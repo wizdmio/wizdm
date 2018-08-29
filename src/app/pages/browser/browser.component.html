@@ -10,8 +10,6 @@
 
     <ng-template matTabContent>
 
-      <!--mat-progress-bar mode="indeterminate"></mat-progress-bar-->
-
       <mat-grid-list rowHeight="260px" [cols]="cols" gutterSize="10px" *ngIf="projects$ | async as projects">    
       
         <mat-grid-tile *ngFor="let project of projects">
@@ -21,6 +19,13 @@
                             (update)="updateProject($event)">
           </wm-project-card>          
 
+        </mat-grid-tile>
+
+        <!-- Loading spinner -->
+        <mat-grid-tile *ngIf="loading$ | async">
+          <div fxLayout="column" fxLayoutAlign="center center" class="spinner">
+            <mat-spinner diameter="60" strokeWidth="2"></mat-spinner>
+          </div>
         </mat-grid-tile>
 
       </mat-grid-list>

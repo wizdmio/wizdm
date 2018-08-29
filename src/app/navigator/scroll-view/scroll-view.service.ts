@@ -15,6 +15,8 @@ export class ScrollViewService implements OnDestroy {
   public enable$ = new BehaviorSubject<boolean>(this.enabled);
   public scrollTo$ = new EventEmitter<string>();
 
+  public scrollPosition: EventEmitter<'top' | 'bottom'>;
+
   constructor() { }
 
   ngOnDestroy() { this.enable$.complete();}

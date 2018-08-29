@@ -3,7 +3,7 @@ import { DatabaseService, QueryFn } from '../database/database.service';
 import { UploaderService } from '../uploader/uploader.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth, User } from 'firebase';
-import { USER_PROFILE, wmUser } from '../core-data';
+import { USER_PROFILE, wmUser } from '../interfaces';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
  
@@ -29,7 +29,7 @@ export class AuthService implements OnDestroy {
         this.user = user;
 
         // Turns it into the user profile data observable
-        return user ? this.database.docWithId$<wmUser>(`users/${user.uid}`) : of(null);
+        return user ? this.database.document$<wmUser>(`users/${user.uid}`) : of(null);
       })
       // Save the profile in the local storage
       //tap(data => localStorage.setItem('user', JSON.stringify(data))),

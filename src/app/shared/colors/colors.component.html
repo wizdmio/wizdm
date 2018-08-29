@@ -6,8 +6,8 @@
 <mat-menu #menuColors>
   <div fxLayout="row wrap" class="grid">
     <button mat-button 
-      (click)="pick.emit(color)"
-      [ngStyle]="{ 'background-color': color.value, 'color': color.contrast }"
+      (click)="pick.emit(colorMap[color])"
+      [wmThemeColor]="colorMap[color]"
       *ngFor="let color of colors">
     </button>
   </div>

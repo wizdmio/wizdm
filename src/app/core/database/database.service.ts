@@ -5,6 +5,7 @@ import { AngularFirestore,
 } from 'angularfire2/firestore';
 import { Observable, from } from 'rxjs';
 import { map, tap, take, mergeMap, flatMap, takeWhile } from 'rxjs/operators';
+import { PagedCollection, PageConfig } from './database-page.class';
 
 import * as firebase from 'firebase';
 
@@ -59,6 +60,7 @@ export class DatabaseService {
   }
 
   public col$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+    
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(docs => {
         return docs.map(a => a.payload.doc.data()) as T[]
@@ -66,8 +68,12 @@ export class DatabaseService {
     );
   }
 
-  /// with Ids
-  public docWithId$<T>(ref: dbDocument<T>): Observable<T> {
+  /**
+   * Retrives a document from the database
+   * @param ref path or reference to the document
+   * @returns an observable of the document value
+   */
+  public document$<T>(ref: dbDocument<T>): Observable<T> {
     return this.doc(ref).snapshotChanges().pipe(
       map(doc => {
         const data = doc.payload.data();
@@ -77,7 +83,14 @@ export class DatabaseService {
     );
   }
 
-  public colWithIds$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+  /**
+   * Retrives a collection of documents
+   * @param ref path or reference to the collection
+   * @param queryFn optional query function to filter the returned values
+   * @returns an observable of document values array
+   */
+  public collection$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -89,24 +102,62 @@ export class DatabaseService {
     );
   }
 
-  public add<T>(ref: dbCollection<T>, data): Promise<string> {
+  /**
+   * Retrives a collection of document snapshots. An internal representarion 
+   * suitable for comlpex data management such as pagination
+   * @param ref path or reference to the collection
+   * @param queryFn optional query function to filter the returned values
+   * @returns an observable of document snapshots array
+   */
+  public snapshots$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<any[]> {
+    return this.col(ref, queryFn).snapshotChanges()
+      .pipe( map( actions => 
+        actions.map(a => a.payload.doc ) 
+      ));
+  }
+
+  /**
+   * Retrives a collection of document paginating the result to support infinite scrolling
+   * @param ref path or reference to the collection
+   * @param opts optional page configuration
+   * @returns a class implementing the paged collection to retrive data in pages
+   */
+  public pagedCollection$<T>(ref: dbCollection<T>, opts?: PageConfig): PagedCollection<T> {
+    return new PagedCollection(this, ref, opts);
+  }
+
+  /**
+   * Add a document to the specified collection
+   * @param ref path or reference to the target collection
+   * @param data content
+   * @returns the string containing the new document id
+   */
+  public add<T>(ref: dbCollection<T>, data: any): Promise<string> {
     const timestamp = this.timestamp;
     return this.col(ref).add({
       ...data,
-      updated: timestamp,
       created: timestamp
     }).then( ref => ref.id );
   }
 
+  /**
+   * Sets the document content overriding any previous value
+   * @param ref path or reference to the requested document
+   * @param data data content
+   */
   public set<T>(ref: dbDocument<T>, data: any): Promise<void> {
     const timestamp = this.timestamp;
     return this.doc(ref).set({
       ...data,
-      updated: timestamp,
       created: timestamp
     });
   }
 
+  /**
+   * Sets the document content merging data with any previous value
+   * @param ref path or reference to the requested document
+   * @param data data content
+   */
   public merge<T>(ref: dbDocument<T>, data: any): Promise<void> {
     const timestamp = this.timestamp;
     return this.doc(ref).set({
@@ -115,6 +166,11 @@ export class DatabaseService {
     }, { merge: true } );
   }
 
+  /**
+   * Update the document content combining data with any previous value (nested values will be overridden)
+   * @param ref path or reference to the requested document
+   * @param data data content
+   */
   public update<T>(ref: dbDocument<T>, data: any): Promise<void> {
     return this.doc(ref).update({
       ...data,
@@ -122,11 +178,19 @@ export class DatabaseService {
     });
   }
 
+  /**
+   * Deletes a document
+   * @param ref path or reference to the requested document
+   */
   public delete<T>(ref: dbDocument<T>): Promise<void> {
     return this.doc(ref).delete();
   }
 
-  /// If doc exists update, otherwise set
+  /**
+   * Update the document content when existing or create a new document otherwise 
+   * @param ref path or reference to the requested document
+   * @param data data content
+   */
   public upsert<T>(ref: dbDocument<T>, data: any): Promise<void> {
     const doc = this.doc(ref).snapshotChanges().pipe(
       take(1)
@@ -137,25 +201,11 @@ export class DatabaseService {
     })
   }
 
-  /// create a reference between two documents
-  public connect(host: dbDocument<any>, key: string, doc: dbDocument<any>): Promise<void> {
-    return this.doc(host).update({ [key]: this.doc(doc).ref });
-  }
-
-  /// returns a documents references mapped to AngularFirestoreDocument
-  public docWithRefs$<T>(ref: dbDocument<T>): Observable<T> {
-    return this.doc$(ref).pipe(
-      map(doc => {
-        for (const k of Object.keys(doc)) {
-          if (doc[k] instanceof firebase.firestore.DocumentReference) {
-            doc[k] = this.doc(doc[k].path);
-          }
-        }
-        return doc;
-      })
-    );
-  }
-
+  /**
+   * Deletes a full collection
+   * @param ref path or reference to the target collection
+   * @param batchSize optional size of the atomic batch used to speedup deletion
+   */
   public deleteCollection<T>(ref: dbCollection<T>, batchSize: number = 5): Promise<void> {
 
     // Starts by deleting a first batch of documents
@@ -193,6 +243,27 @@ export class DatabaseService {
         })
       )
   }
+}
+
+/*
+  /// create a reference between two documents
+  public connect(host: dbDocument<any>, key: string, doc: dbDocument<any>): Promise<void> {
+    return this.doc(host).update({ [key]: this.doc(doc).ref });
+  }
+
+  /// returns a documents references mapped to AngularFirestoreDocument
+  public docWithRefs$<T>(ref: dbDocument<T>): Observable<T> {
+    return this.doc$(ref).pipe(
+      map(doc => {
+        for (const k of Object.keys(doc)) {
+          if (doc[k] instanceof firebase.firestore.DocumentReference) {
+            doc[k] = this.doc(doc[k].path);
+          }
+        }
+        return doc;
+      })
+    );
+  }
 
   public inspectDoc(ref: dbDocument<any>): void {
     const tick = new Date().getTime();
@@ -215,4 +286,4 @@ export class DatabaseService {
       })
     ).subscribe();
   }
-}
+*/

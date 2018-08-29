@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { USER_PROFILE, wmUser, wmUserFile } from '../core-data';
+import { USER_PROFILE, wmUser, wmUserFile } from '../interfaces';
 import { DatabaseService, QueryFn } from '../database/database.service';
 import { StorageService } from '../storage/storage.service';
 import { Observable, merge } from 'rxjs';
@@ -20,11 +20,11 @@ export class UploaderService {
   }
 
   public queryUserUploads(queryFn?: QueryFn): Observable<wmUserFile[]> {
-    return this.database.colWithIds$<wmUserFile>(this.uploadRef, queryFn);
+    return this.database.collection$<wmUserFile>(this.uploadRef, queryFn);
   }
 
   public queryUserFile(id: string): Observable<wmUserFile> {
-    return this.database.docWithId$<wmUserFile>(`${this.uploadRef}/${id}`);
+    return this.database.document$<wmUserFile>(`${this.uploadRef}/${id}`);
   }
 
   /**

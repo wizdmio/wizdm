@@ -1,12 +1,12 @@
-<!-- Headibng banner -->
-<div class="banner">
+<!-- Headibng cover -->
+<div class="cover" [wmThemeColor]="color">
   <img *ngIf="project.cover" 
        [src]="project.cover" 
        (error)="project.cover = null" />
 
   <!-- Cover picture loader -->
   <wm-uploads (file)="selectCover($event)" #uploads *ngIf="tools">
-    <button mat-icon-button (click)="uploads.chooseFile(project.cover)">
+    <button mat-icon-button (click)="uploads.chooseFile(project.cover)" class="tools">
       <mat-icon>insert_photo</mat-icon>
     </button>
   </wm-uploads>
@@ -16,7 +16,7 @@
 <div class="content">
   
   <div class="overlap">
-    <wm-avatar [src]="project.owner?.img" [color]="bkcolor" wmUserInfo [owner]="project">
+    <wm-avatar [src]="project.owner?.img" [color]="avatarColor" wmUserInfo [owner]="project">
     </wm-avatar>
   </div>
 
@@ -29,7 +29,7 @@
 
   <!-- Theme color picker -->
   <wm-color-picker (pick)="setColor($event)" class="color" *ngIf="tools">
-    <button mat-icon-button>
+    <button mat-icon-button class="tools">
       <mat-icon>brush</mat-icon>
     </button>
   </wm-color-picker>

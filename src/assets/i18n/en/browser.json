@@ -8,19 +8,14 @@
   
   "tabs": [
     {
+      "label": "All",
+      "source": "all",
+      "description": "Here's the list of all active projects the community is working on"
+    },
+    {
       "label": "My projects",
       "source": "personal",
       "description": "Here's the list of your projects"
-    },
-    {
-      "label": "New",
-      "source": "pending",
-      "description": "Here's the list of the recently submitted projects"
-    },
-    {
-      "label": "All",
-      "source": "active",
-      "description": "Here's the list of all active projects the community is working on"
     }
   ]
 }

@@ -5,9 +5,9 @@ $wm-pcard-width    : 210px !default;
 $wm-pcard-height   : 260px !default; 
 $wm-avatar-size    : 48px !default;
 $wm-border-radius  : 5px !default;
-$wm-banner-height  : 46%;
+$wm-cover-height   : 46%;
 $wm-content-pad    : 14px !default;
-$wm-content-height : calc(100% - #{$wm-banner-height} - #{$wm-content-pad});
+$wm-content-height : calc(100% - #{$wm-cover-height} - #{$wm-content-pad});
 
 :host {
   display: block;
@@ -19,18 +19,27 @@ $wm-content-height : calc(100% - #{$wm-banner-height} - #{$wm-content-pad});
   border-radius: $wm-border-radius;
 
   @include mat-elevation(2);
+
+  color: white;
+  .tools { opacity: 0.5; }
+
+  &[wm-theme-contrast="dark"] { 
+    color: black; 
+    .tools { opacity: 0.25; }
+  }
 }
 
-.banner {
+.cover {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: $wm-banner-height;
+  height: $wm-cover-height;
 
   border-top-left-radius: $wm-border-radius;
   border-top-right-radius: $wm-border-radius;
 
-  background-color: rgba(white, 0.5);
+  &[wm-theme-contrast="light"] { background-color: rgba(white, 0.5);}
+  &[wm-theme-contrast="dark"] { background-color: rgba(black, 0.1);}
 
   img {
     position: absolute;

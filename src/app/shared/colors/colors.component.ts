@@ -1,6 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { wmColor } from 'app/core';
-import { $colors } from './colors';
+import { Component, Output, EventEmitter, Inject } from '@angular/core';
+import { wmColor, wmcolor, wmColorMap, COLOR_MAP } from 'app/core';
 
 @Component({
   selector: 'wm-color-picker',
@@ -9,9 +8,13 @@ import { $colors } from './colors';
 })
 export class ColorsComponent {
 
-  colors: wmColor[] = $colors;
+  colors: wmcolor[];
 
-  constructor() { }
+  constructor(@Inject(COLOR_MAP) public colorMap: wmColorMap) { 
+
+    this.colors = <wmcolor[]>Object.keys(colorMap)
+      .filter( col => col !== 'black' && col !== 'white');
+  }
 
   @Output() pick = new EventEmitter<wmColor>();
 }

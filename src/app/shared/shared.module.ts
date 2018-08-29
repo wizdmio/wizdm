@@ -49,6 +49,7 @@ import { FileSizePipe } from './file/file-size.pipe';
 import { UploadsComponent } from '../shared/uploads/uploads.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { ColorsComponent } from './colors/colors.component';
+import { ColorsDirective } from './colors/colors.directive';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserInfoDirective } from './user-info/user-info.directive';
 
@@ -98,6 +99,7 @@ const sharedModules = [
     UploadsComponent,
     ErrorsComponent,
     ColorsComponent,
+    ColorsDirective,
     UserInfoComponent,
     UserInfoDirective
   ],
@@ -116,6 +118,7 @@ const sharedModules = [
     UploadsComponent,
     ErrorsComponent,
     ColorsComponent,
+    ColorsDirective,
     UserInfoComponent,
     UserInfoDirective
   ],
