@@ -3,8 +3,8 @@ $wm-colors: ('red', light, $mat-red), ('pink', light, $mat-pink), ('purple', lig
 
 @mixin wm-theme-color($color, $back, $text) {
   .wm-theme-#{$color} {
-    background-color: $back !important;
-    color: $text !important;
+    background-color: $back;
+    color: $text;
   }
   
   *[wm-theme-color="#{$color}"] {

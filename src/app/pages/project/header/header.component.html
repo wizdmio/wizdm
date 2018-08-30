@@ -12,8 +12,10 @@
     
     <!-- Author on the left -->
     <div fxLayout="row" fxLayoutAlign="start center">
+
+      <wm-user-info [owner]="project" #userInfo></wm-user-info>
       
-      <wm-avatar [src]="owner.img" wmUserInfo [owner]="project">
+      <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo">
       </wm-avatar>
       
       <div fxLayout="column">

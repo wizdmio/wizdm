@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ContentService, DatabaseService, wmUser, wmProject } from 'app/core';
+import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { ContentService, DatabaseService, wmUser, wmProject, wmcolor, wmColor, wmColorMap, COLOR_MAP } from 'app/core';
 import { Observable, of } from 'rxjs';
-import { filter, take, map, tap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 export interface UserInfoData {
   userId?: string,
@@ -17,10 +17,19 @@ export interface UserInfoData {
 })
 export class UserInfoComponent implements OnInit {
 
-  public user$: Observable<wmUser>;
-  public msgs;
+  @ViewChild('template') template: TemplateRef<UserInfoComponent>;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: UserInfoData,
+  private config: MatDialogConfig = { 
+    panelClass:  'mat-dialog-reset'
+    //disableClose: true,
+    //data: this
+  };
+
+  public msgs;  
+
+  constructor(@Inject(COLOR_MAP) 
+              private colorMap: wmColorMap, 
+              private dialog: MatDialog,
               private content: ContentService,
               private database: DatabaseService) {
 
@@ -34,22 +43,45 @@ export class UserInfoComponent implements OnInit {
       .pipe( take(1) ) : of<wmUser>({});
   }
 
-  ngOnInit() {
+  ngOnInit() {}
 
-    // When project is specified...
-    if( this.data.project ) {
+  public user: wmUser;
 
-      // Uses the owner information when available or load it from the database
-      this.user$ = typeof this.data.project.owner === 'string' ?
-        this.user$ = this.loadUser(this.data.project.owner) :
-          of(this.data.project.owner);
-    }
-    // Otherwise...
-    else {
+  // Accepts user info in various forms
+  @Input('userId') set userId(id: string) { // As a user id
+    this.loadUser(id)
+      .subscribe( user => this.user = user );
+  }   
+  
+  @Input('user') set setUser(user: wmUser) { // as a user object
+    this.user = user;
+  }
 
-      // Uses the user information already available or load it from the database
-      this.user$ = this.data.user ? of(this.data.user) : 
-        this.loadUser(this.data.userId);
-    }
+  @Input('owner') set setOwner(project: wmProject) { // as a project's owner
+    this.loadUser(project.owner)
+      .subscribe( user => this.user = user );
+  }
+
+  // Enable
+  //@Input() tools: boolean = false;
+
+  public show(): Promise<void> {
+    return this.dialog.open(this.template, this.config)
+      .afterClosed()
+      .toPromise();
+  }
+
+  public get themeColor(): wmColor {
+    return this.colorMap[this.user.color || 'none'];
+  }
+
+  // Computes the color of the avatar based on the background
+  public get avatarColor(): string {
+    let color = this.user.color || 'none';
+    return this.colorMap[ color !== 'none' ? color : 'grey'].value;
+  }
+
+  public setColor(color: wmColor) {
+    this.user.color = color.color;
   }
 }

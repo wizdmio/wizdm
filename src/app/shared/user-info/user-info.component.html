@@ -1,4 +1,64 @@
-<h2 mat-dialog-title>{{ msgs.title }}</h2>
+<ng-content></ng-content>
+
+<ng-template #template>
+  <mat-dialog-content *ngIf="user" [wmThemeColor]="themeColor">
+
+    <!-- Cover -->
+    <div class="cover">
+      <!-- Cover picture -->
+      <img *ngIf="user.cover" [src]="user.cover" (error)="user.cover = null" />
+
+      <!-- Options menu -->
+      <button mat-icon-button class="menu" [matMenuTriggerFor]="options">
+        <mat-icon class="shade">more_horiz</mat-icon>
+      </button>
+    </div>
+
+    <!-- Content --> 
+    <div fxLayout="column" fxLayoutAlign="start center" class="content">
+      <!-- User picture -->
+      <div class="overlap">
+        <wm-avatar [src]="user.img" [color]="avatarColor"></wm-avatar>
+      </div>
+      <!-- User info -->
+      <div class="name">{{ user.name }}</div>
+      <div class="motto">{{ user.motto }}</div>
+
+      <!-- Buttons -->
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <button mat-button>
+          <mat-icon class="shade">email</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon class="shade">list</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon class="shade">favorite</mat-icon>
+        </button>
+      </div>      
+    </div>
+
+    <!--mat-divider></mat-divider-->
+
+    <!-- Options menu-->
+    <mat-menu #options>
+      <button mat-menu-item>
+        <mat-icon>photo</mat-icon>
+        <span>Cover picture</span>
+      </button>
+      <button mat-menu-item [matMenuTriggerFor]="picker.menu">
+        <mat-icon>brush</mat-icon>
+        <span>Theme color</span>
+      </button>
+    </mat-menu>
+
+    <wm-color-picker [color]="user.color || 'none'" (pick)="setColor($event)" #picker>
+    </wm-color-picker>  
+
+ </mat-dialog-content>
+</ng-template>
+
+<!--h2 mat-dialog-title>{{ msgs.title }}</h2>
 
 <mat-dialog-content *ngIf="user$ | async as user">
 
@@ -32,7 +92,6 @@
     
 </mat-dialog-content>
 
-<!-- Buttons -->
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close cdkFocusInitial>{{ msgs.close }}</button>
-</mat-dialog-actions>
+</mat-dialog-actions-->

@@ -16,7 +16,8 @@
 <div class="content" *ngIf="owner$ | async as owner">
   
   <div class="overlap">
-    <wm-avatar [src]="owner.img" [color]="avatarColor" wmUserInfo [owner]="project">
+    <wm-user-info [owner]="project" #userInfo></wm-user-info>
+    <wm-avatar [src]="owner.img" [color]="avatarColor" [wmUserInfoTrigger]="userInfo">
     </wm-avatar>
   </div>
 
@@ -28,7 +29,7 @@
   <p>{{ project.pitch }}</p>
 
   <!-- Theme color picker -->
-  <wm-color-picker (pick)="setColor($event)" class="color" *ngIf="tools">
+  <wm-color-picker [color]="project.color" (pick)="setColor($event)" class="color" *ngIf="tools">
     <button mat-icon-button class="tools">
       <mat-icon>brush</mat-icon>
     </button>

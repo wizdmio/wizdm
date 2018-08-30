@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Inject, ViewChild } from '@angular/core';
 import { wmColor, wmcolor, wmColorMap, COLOR_MAP } from 'app/core';
 
 @Component({
@@ -17,4 +17,10 @@ export class ColorsComponent {
   }
 
   @Output() pick = new EventEmitter<wmColor>();
+
+  // Current color to display the previous selection
+  @Input() color: wmcolor;
+
+  // Export the menu property to be used as a sub-menu item when needed
+  @ViewChild('menuColors') menu;
 }

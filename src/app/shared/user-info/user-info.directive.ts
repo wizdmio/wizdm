@@ -1,41 +1,23 @@
-import { Directive, Input, HostListener, HostBinding } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
-import { UserInfoComponent, UserInfoData } from './user-info.component';
-import { wmUser, wmProject } from 'app/core';
+import { Directive, Input, HostBinding, HostListener } from '@angular/core';
+import { UserInfoComponent } from './user-info.component';
 
 @Directive({
-  selector: '[wmUserInfo]'
+  selector: '[wmUserInfoTrigger]'
 })
 export class UserInfoDirective {
 
-  // Accepts user info in various forms
-  @Input('wmUserInfo') userId: string;// As a user id
-  @Input() user: wmUser;              // as a user object
-  @Input() owner: wmProject;          // as a project's owner
+  @Input('wmUserInfoTrigger') info: UserInfoComponent;
 
   // Applies the 'cursor: pointer' style to the host component
   @HostBinding('style.cursor') cursor = 'pointer';
 
   // Shows the user info popup dialog on click
-  @HostListener('click') onclick() {
-    this.show(this.userId);
+  @HostListener('click') onClick() {
+
+    if(this.info) {
+      this.info.show();
+    }
   }
 
-  constructor(private dialog: MatDialog) {}
-
-  /**
-   * Displays the dialog for file selection 
-   * @param config MatDialog configuration
-   * @returns an Observavble resolving to the selcted file or null if cancelled
-   */
-  public show(userId: string, config? /*: MatDialogConfig = { width: '50vw' }*/) {
-
-    let data: UserInfoData = {
-      userId,
-      project: this.owner,
-      user   : this.user
-    };
-
-    return this.dialog.open(UserInfoComponent, { ...config, data });
-  }
+  constructor() { }
 }

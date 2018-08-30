@@ -20,5 +20,8 @@ $wm-color-size: 40px;
     min-width: 0;
     flex-shrink: 0;
     border-radius: 0;
+
+    &[wm-theme-contrast="light"] { mat-icon { opacity: 0.5; } }
+    &[wm-theme-contrast="dark"] { mat-icon { opacity: 0.25; } }
   }
 }

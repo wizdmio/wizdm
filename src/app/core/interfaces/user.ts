@@ -20,6 +20,8 @@ export interface wmUser {
   gender?  : string,
   motto?   : string,
   lang?    : string,
+  color?   : string,
+  cover?   : string,
 
   //uploads? : any, collection reference
 
