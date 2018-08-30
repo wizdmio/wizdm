@@ -9,12 +9,10 @@ import { CoreModule } from './core/core.module';
 import { NavigatorModule } from './navigator/navigator.module';
 import { PagesModule } from './pages/pages.module';
 import { AppRoutingModule } from './app-routing.module';
-import { ColorsDirective } from './shared/colors/colors.directive';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ColorsDirective
+    AppComponent
   ],
   imports: [
     BrowserModule,

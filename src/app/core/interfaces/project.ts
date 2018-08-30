@@ -8,7 +8,7 @@ export interface wmProject {
   name         : string,
   pitch?       : string,
   status?      : wmProjectStatus,
-  owner?       : string | wmUser,
+  owner?       : string,// | wmUser,
   cover?       : string,
   color?       : string,
   document?    : string, // markdown formatted business plan description

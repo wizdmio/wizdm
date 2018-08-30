@@ -37,8 +37,9 @@ export class ProjectService {
       this._loading$.asObservable()
     );
 
-    // Created the projects as a paged observable including owners
-    this.projects$ = this._projects$.data$
+    // Created the projects as a paged observable resolving owners
+    this.projects$ = this._projects$.data$;
+/*
       .pipe( 
         // Query for the projects' owners  
         mergeMap( projects => 
@@ -54,6 +55,7 @@ export class ProjectService {
         // Resets the loading status when completed
         tap( () => this._loading$.next(false) )
       );
+*/
   }
 
   // Pagination support
@@ -68,9 +70,18 @@ export class ProjectService {
    * @param project the project to verify
    */
   public isProjectMine(project: wmProject) : boolean {
+    return project.owner === this.profile.id;
+/*
     return typeof project.owner === 'string' ?
       project.owner === this.profile.id :
         project.owner.id === this.profile.id;
+*/
+  }
+
+  public resolveOwner(project: wmProject): Observable<wmUser> {
+    return project 
+      ? this.database.document$<wmUser>(`/users/${project.owner}`)
+        : of({});
   }
 
   /**
@@ -120,6 +131,8 @@ export class ProjectService {
   public queryProject(id: string): Observable<wmProject> {
     // Query for the project coming with the requested id
     return id ? this.database.document$<wmProject>(`/projects/${id}`)
+      //.pipe( map( project => this.resolveOwner(project) ))
+  /*
       // Query for the project owner too
       .pipe( switchMap( project => 
         this.database.document$<wmUser>(`/users/${project.owner}`).pipe( 
@@ -127,7 +140,7 @@ export class ProjectService {
           map( owner => { return { ...project, owner } as wmProject;})
         )
       )
-    ) : of(null);
+    )*/ : of(null);
   }
 
   private get myOwmProjects(): QueryFn {
@@ -141,13 +154,20 @@ export class ProjectService {
 
     // Query for all the project with the owner corresponding to the current user
     return this.database.collection$<wmProject>('/projects', this.myOwmProjects )
-      .pipe(
+      .pipe(/*
+        map( projects => 
+          projects.map( project => 
+            this.resolveOwner(project) 
+          )
+        ),*/
+/*
         // Fill-up the oner with the current user profile
         map( projects => 
           projects.map( project => { 
             return { ...project, owner: this.profile }; 
           }) 
         ), 
+*/
         // Resets the loading status
         tap( () => this._loading$.next(false) ) 
       );

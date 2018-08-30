@@ -13,10 +13,10 @@
 </div>
 
 <!-- Card content --> 
-<div class="content">
+<div class="content" *ngIf="owner$ | async as owner">
   
   <div class="overlap">
-    <wm-avatar [src]="project.owner?.img" [color]="avatarColor" wmUserInfo [owner]="project">
+    <wm-avatar [src]="owner.img" [color]="avatarColor" wmUserInfo [owner]="project">
     </wm-avatar>
   </div>
 
@@ -24,7 +24,7 @@
     {{ project.name }}
   </div>
   
-  <div class="author">{{ project.owner?.name }}</div>
+  <div class="author">{{ owner.name }}</div>
   <p>{{ project.pitch }}</p>
 
   <!-- Theme color picker -->

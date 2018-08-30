@@ -1,18 +1,29 @@
-import { Component, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
-import { wmProject, wmColor, wmUserFile, wmColorMap, COLOR_MAP  } from 'app/core';
+import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { ProjectService, wmProject, wmUser, wmColor, wmUserFile, wmColorMap, COLOR_MAP  } from 'app/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-project-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent {
+export class CardComponent implements OnInit {
 
-  @Input() project: wmProject;
+  constructor(@Inject(COLOR_MAP) 
+              private colorMap: wmColorMap,
+              private database: ProjectService) { }
+
+  ngOnInit() {}
 
   @Input() tools: boolean = false;
 
-  constructor(@Inject(COLOR_MAP) private colorMap: wmColorMap) { }
+  public project: wmProject;
+  public owner$: Observable<wmUser>;
+  
+  @Input('project') set setProject(project: wmProject) {
+    this.owner$  = this.database.resolveOwner(project);
+    this.project = project || {} as wmProject;
+  }
 
   // Accepts the color as an input
   private get color(): wmColor { 
@@ -28,7 +39,7 @@ export class CardComponent {
 
   // Applies the color value to the background style on the element directly
   @HostBinding('style.background-color') get background() { 
-    return this.color;
+    return this.color.value;
   }
 
   // Applies the color contrast attribute for the text (same as wmThemeColor directive)
@@ -40,13 +51,13 @@ export class CardComponent {
 
   public setColor(color: wmColor) {
 
-    //this.project.color = color;
+    this.project.color = color.color;
     this.update.emit({ id: this.project.id, color: color.color } as wmProject);
   }
 
   public selectCover(file: wmUserFile): void {
 
-    //this.project.cover = file.url || null;
+    this.project.cover = file.url || null;
     this.update.emit({ id: this.project.id, cover: file.url || null } as wmProject);
   }
 }

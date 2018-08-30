@@ -5,7 +5,7 @@
 </div>
 
 <!-- Wait fot the project before displaing the content -->
-<div fxLayout="column" fxLayoutAlign="end center" class="content" *ngIf="project">
+<div fxLayout="column" fxLayoutAlign="end center" class="content" *ngIf="owner$ | async as owner">
 
   <!-- bottom bar -->
   <div fxLayout="row" fxLayoutAlign="space-between center" class="wide">
@@ -13,11 +13,11 @@
     <!-- Author on the left -->
     <div fxLayout="row" fxLayoutAlign="start center">
       
-      <wm-avatar [src]="project.owner?.img" wmUserInfo [owner]="project">
+      <wm-avatar [src]="owner.img" wmUserInfo [owner]="project">
       </wm-avatar>
       
       <div fxLayout="column">
-        <span>{{ project.owner?.name || msgs.unnamed }}
+        <span>{{ owner.name || msgs.unnamed }}
           <!-- Project name to be shown in case the image cover is not defined -->
           <ng-container *ngIf="!project.cover">&nbsp;-&nbsp;{{ project.name }}</ng-container>
         </span>

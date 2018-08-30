@@ -3,7 +3,7 @@ import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { ContentService, ProjectService, wmProject, Timestamp } from 'app/core';
 import { ToolbarService, ScrollViewService } from 'app/navigator';
 import { Observable, Subject, of } from 'rxjs';
-import { filter, takeUntil, catchError } from 'rxjs/operators';
+import { map, filter, take, takeUntil, catchError } from 'rxjs/operators';
 import { $animations } from './browser.animations';
 
 @Component({
@@ -43,12 +43,13 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
     this.toolbar.activateActions(this.msgs.actions);
 
     // Creates the observable listing all projects (using pagination)
+    // resolving all owners
     this.allProjects$ = this.database.projects$
       .pipe( takeUntil( this.dispose$ ));
 
     // Creates the observable listing current user' projects
     this.myProjects$ = this.database.queryOwnProjects()
-      .pipe( takeUntil( this.dispose$ ));
+      .pipe( takeUntil( this.dispose$ ) );
 
     // Subscribes to the scrollPosition event to implement project pagination
     this.scroll.scrollPosition

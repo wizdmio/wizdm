@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
-import { ContentService, ProjectService, wmProject } from 'app/core';
-//import { Observable } from 'rxjs';
+import { ContentService, ProjectService, wmProject, wmUser } from 'app/core';
+import { Observable } from 'rxjs';
 import { $animations } from './header-animations';
 
 import * as moment from 'moment';
@@ -26,7 +26,13 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {}
 
-  @Input() project: wmProject;
+  public project: wmProject;
+  public owner$: Observable<wmUser>;
+  
+  @Input('project') set setProject(project: wmProject) {
+    this.owner$  = this.database.resolveOwner(project);
+    this.project = project || {} as wmProject;
+  }
 
   public get isMine() { return this.database.isProjectMine(this.project); }
 
