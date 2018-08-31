@@ -2,17 +2,23 @@ import { DatabaseService, QueryFn, dbCollection } from './database.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, scan, take, tap } from 'rxjs/operators';
 
-export interface PageConfig {
+export type PagePostProcessOp<T> = () => (data: Observable<T[]>) => Observable<T[]>;
+
+export interface PageConfig<T> {
   field?   : string,  // Sorting field
   limit?   : number,  // limit per query
   reverse? : boolean, // reverse order
-  prepend? : boolean  // prepend to source
+  prepend? : boolean,  // prepend to source
+
+  // Optional post processing operator to customize the paged item content
+  // before appending them to the the final data array
+  postProcess? : PagePostProcessOp<T>
 }
 
 export class PagedCollection<T> {  
 
   // Configuration options
-  private query: PageConfig;
+  private query: PageConfig<T>;
 
   // Observable for data consumpion
   private _data$ = new BehaviorSubject<any[]>([]);
@@ -27,14 +33,24 @@ export class PagedCollection<T> {
   public done$: Observable<boolean> = this._done$.asObservable();
 
   // Creates the pagination object
-  constructor(private db: DatabaseService, private ref: dbCollection<T>, private opts?: PageConfig) { 
+  constructor(private db: DatabaseService, private ref: dbCollection<T>, private opts?: PageConfig<T>) { 
 
     // Initzialize the page configuration
     this.query = {
+      // Sort on creation date
       field: 'created',
+
+      // Limit items to 2
       limit: 2,
+
+      // Prepend items straight to the output array
       reverse: false,
       prepend: false,
+
+      // Do nothing while post processing by default
+      postProcess: () => (nothing: Observable<T[]>) => nothing,
+
+      // Overwrite with user custom options if any
       ...opts
     };
 
@@ -48,6 +64,10 @@ export class PagedCollection<T> {
       })),
       // Reverse the array when prepending
       map( values => this.query.prepend ? values.reverse() : values ),
+
+      // Perform post processing before appending to the final array
+      this.query.postProcess(),
+
       // Accumulates the resulting array
       scan( (acc, val) => 
         this.query.prepend ? val.concat(acc) : acc.concat(val)

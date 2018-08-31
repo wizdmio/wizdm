@@ -13,12 +13,11 @@
 </div>
 
 <!-- Card content --> 
-<div class="content" *ngIf="owner$ | async as owner">
+<div class="content" *ngIf="project.owner$ | async as owner">
   
   <div class="overlap">
+    <wm-avatar [src]="owner.img" [color]="avatarColor" [wmUserInfoTrigger]="userInfo"></wm-avatar>
     <wm-user-info [owner]="project" #userInfo></wm-user-info>
-    <wm-avatar [src]="owner.img" [color]="avatarColor" [wmUserInfoTrigger]="userInfo">
-    </wm-avatar>
   </div>
 
   <div class="title" [routerLink]="[ '.', project.id ]">

@@ -1,7 +1,7 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { wmUser, wmProject, wmConversation, wmMessage } from '../interfaces';
 import { DatabaseService, QueryFn } from '../database/database.service';
-import { USER_PROFILE, wmUser, wmProject, wmConversation, wmMessage } from '../interfaces';
-
+import { UserProfile } from '../user/user-profile.service';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
 
@@ -10,8 +10,7 @@ import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
 })
 export class ChatService {
 
-  constructor(@Inject(USER_PROFILE) 
-              private profile  : wmUser,
+  constructor(private profile  : UserProfile,
               private database : DatabaseService) {
   }
 

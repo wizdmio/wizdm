@@ -26,13 +26,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {}
 
-  public project: wmProject;
-  public owner$: Observable<wmUser>;
-  
-  @Input('project') set setProject(project: wmProject) {
-    this.owner$  = this.database.resolveOwner(project);
-    this.project = project || {} as wmProject;
-  }
+  @Input('project') project: wmProject;
 
   public get isMine() { return this.database.isProjectMine(this.project); }
 

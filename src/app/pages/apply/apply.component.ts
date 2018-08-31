@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
-import { ContentService, CanPageDeactivate, AuthService, ProjectService, wmApplication, wmProject } from '../../core';
+import { ContentService, CanPageDeactivate, UserProfile, ProjectService, wmApplication, wmProject } from '../../core';
 import { ToolbarService, ActionEnabler } from '../../navigator';
 import { PopupService } from '../../shared';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
@@ -31,7 +31,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
               private route   : ActivatedRoute,
               private http    : HttpClient,
               private content : ContentService,
-              private auth    : AuthService,
+              private user    : UserProfile,
               private project : ProjectService,
               private toolbar : ToolbarService,
               private popup   : PopupService) { 
@@ -68,7 +68,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   // Helpers to deal with the temporary application 
   private get application(): wmApplication {
-    return this.auth.userProfile['lastApplication'] || null;
+    return this.user.lastApplication || null;
   }
 
   private resetApplication(): Promise<void> { 
@@ -77,7 +77,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   // Updates the last saved application
   private saveApplication(value: any): Promise<void> {
-    return this.auth.updateUserProfile( { lastApplication: value })
+    return this.user.update( { lastApplication: value })
       // Enables/ Disables the 'clear' action button accordingly
       .then(() => this.enableClear$.enable( value != null ) )
       .catch(error => console.log("something wrong: " + error.code) );

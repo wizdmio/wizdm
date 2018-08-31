@@ -1,9 +1,8 @@
-import { Injectable, Inject, OnDestroy } from '@angular/core';
-import { DatabaseService, QueryFn } from '../database/database.service';
-import { UploaderService } from '../uploader/uploader.service';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth, User } from 'firebase';
-import { USER_PROFILE, wmUser } from '../interfaces';
+import { wmUser } from '../interfaces';
+import { UserProfile } from '../user/user-profile.service';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
  
@@ -12,53 +11,35 @@ import { switchMap } from 'rxjs/operators';
 })
 export class AuthService implements OnDestroy {
 
-  private user: User = null;
+  get user$(): Observable<User|null> {
+    return this.afire2.user;
+  }
+
+  public user: User = null;
   private sub: Subscription;
 
-  constructor(@Inject(USER_PROFILE) 
-              private profile  : wmUser,
-              public  afire2   : AngularFireAuth,
-              private database : DatabaseService,
-              private uploader : UploaderService) {
+  constructor(private afire2   : AngularFireAuth,
+              public  profile  : UserProfile) {
 
-    // Subscribes to authStae observable keeping track of auth state changes
-    this.sub = this.user$.pipe( 
-      switchMap( user => {
-
-        // Keeps a snapshot of user auth state
-        this.user = user;
-
-        // Turns it into the user profile data observable
-        return user ? this.database.document$<wmUser>(`users/${user.uid}`) : of(null);
-      })
-      // Save the profile in the local storage
-      //tap(data => localStorage.setItem('user', JSON.stringify(data))),
-      // Always start with the local stora copy of the profile to avoid flickering
-      //startWith(JSON.parse(localStorage.getItem('user'))) )
-
-    // Keeps a snapshot of user profile data
-    ).subscribe( data => { Object.assign(this.profile, data || { id: this.user.uid } ); });
+    // Initialize the user profile with the authenticated user token
+    this.sub = this.user$.subscribe( user => { 
+      this.profile.init(this.user = user);
+    });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
-  get user$(): Observable<User|null> {
-    return this.afire2.user;
-  }
-
   get profile$(): Observable<wmUser|null> {
     return this.user$.pipe(
-      switchMap( user => 
-        user ? this.database.doc<wmUser>(`users/${user.uid}`).valueChanges() : of(null) 
-      )
+      switchMap(user => this.profile.asObservable(user.uid))
     );
   }
 
   // Returns true if user is logged in and profile data are available
   get authenticated(): boolean {
-    return this.user !== null && this.profile !== null;
+    return this.profile.authenticated;
   }
 
   // User id helper
@@ -67,44 +48,15 @@ export class AuthService implements OnDestroy {
   }
 
   // Email verified helper
-  get emailVarified(): boolean {
+  get emailVerified(): boolean {
     return this.user !== null ? this.user.emailVerified : false;
   }
 
-  // Returns the user authentication object
-  get userAuth(): User {
-    return this.user !== null ? this.user : {} as User;
+  private createUserProfile(user: User, lang?: string): Promise<void> {
+    return this.profile.create(user, lang);
   }
 
-  // Returns the user customized profile data object
-  get userProfile(): wmUser {
-    return this.user !== null ? this.profile : {};
-  }
-
-  private updateUserData(user: User, lang: string = undefined): Promise<void> {
-
-    // Update user profile data with User Auth and custom data
-    let data = {  
-      name  : user.displayName,
-      email : user.email,
-      phone : user.phoneNumber,
-      img   : user.photoURL,
-      lang  : lang
-    };
-    
-    return this.database.upsert<wmUser>(`users/${user.uid}`, data);
-  }
-
-  public updateUserProfile(data: wmUser | any) : Promise<void> {
-    return this.database.merge<wmUser>(`users/${this.userId}`, data);
-  }
-
-  public loadUserImage(file: File): Promise<void> {
-    return this.uploader.uploadUserFileOnce(file)
-      .then( file => this.updateUserProfile({ img: file.url }) );
-  }
-
-  public registerNew(email: string, password: string, name: string = "", lang: string = undefined): Promise<void> {
+  public registerNew(email: string, password: string, name: string = "", lang?: string): Promise<void> {
     
     console.log("Registering a new user: " + email);
 
@@ -113,7 +65,7 @@ export class AuthService implements OnDestroy {
       .then( credential => {
 
         // Update user profile data with User Auth and custom data
-        return this.updateUserData({...credential.user, displayName: name}, lang);
+        return this.createUserProfile({...credential.user, displayName: name}, lang);
     });
   }
 
@@ -132,10 +84,10 @@ export class AuthService implements OnDestroy {
     console.log("Send email veriication");
 
     // Makes sure to apply the user local language
-    return this.applyUserLanguage() ? 
-
+    return this.applyUserLanguage()
       // Sends email verification
-      this.user.sendEmailVerification( url ? { url } : undefined ) : Promise.resolve();
+      ? this.user.sendEmailVerification( url ? { url } : undefined ) 
+        : Promise.resolve();
   }
 
   public applyActionCode(code: string): Promise<void> {
@@ -238,7 +190,7 @@ export class AuthService implements OnDestroy {
     return this.afire2.auth.signInWithPopup(authProvider)
       .then( credential => {
         // Update user profile data with User Auth and custom data
-        return this.updateUserData(credential.user, lang);
+        return this.createUserProfile(credential.user, lang);
       }); 
   }
 
@@ -258,14 +210,9 @@ export class AuthService implements OnDestroy {
     
     // Re-authenticate the user with the fresh credentials
     return this.user.reauthenticateWithCredential(credential)
-      .then( () => {
-
-        // Deletes the user's uploaded files first
-        return this.uploader.deleteAllUserFiles()
-
-          // Deletes the user profile data next
-          .then( () => this.database.delete<wmUser>(`users/${this.userId}`) )
-          
+      .then( () => {          
+        // Delete the user profile first
+        return this.profile.delete()
           // Finally deletes the account and sign-out
           .then( () => this.user.delete() );
       });

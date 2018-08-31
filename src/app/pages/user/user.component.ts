@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentService, AuthService, LanguageOption, CanPageDeactivate, wmUserFile } from 'app/core';
+import { ContentService, UserProfile, LanguageOption, CanPageDeactivate, wmFile } from 'app/core';
 import { ToolbarService } from 'app/navigator';
 import { PopupService } from 'app/shared';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
@@ -23,7 +23,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   private langOptions: LanguageOption[]; 
 
   constructor(private content : ContentService,
-              private auth    : AuthService,
+              private profile : UserProfile,
               private toolbar : ToolbarService,
               private popup   : PopupService,
               private router  : Router,
@@ -45,12 +45,12 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   }
 
   public get userImage(): string {
-    return this.auth.userProfile ? this.auth.userProfile.img : null; 
+    return this.profile.img;
   }
 
-  public selectImage(file: wmUserFile): void {
+  public selectImage(file: wmFile): void {
     // Updates the user image
-    this.auth.updateUserProfile({ img: file.url || null });  
+    this.profile.update({ img: file.url || null });  
   }
 
   public profileEditable(key: string) {
@@ -71,13 +71,13 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
 
     // Intercepts timestapms requests
     if(key === 'profile:created') {
-      let stamp = this.auth.userProfile[ keys[1] ];
+      let stamp = this.profile[ keys[1] ];
       return stamp ? moment(stamp.toMillis()).toString() : '';
     }
 
     // Select the source of values based on the first half of the key
-    let source = keys[0] === 'profile' ? this.auth.userProfile :
-                 keys[0] === 'user' ? this.auth.userAuth :
+    let source = keys[0] === 'profile' ? this.profile :
+                 keys[0] === 'user' ? this.profile.user :
                  {};
  
     // Returns tne value based on the second half of the key
@@ -118,7 +118,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
     if(keys[0] === 'profile') {
 
       // Update the value otherwhise
-      this.auth.updateUserProfile({ [ keys[1] ]: value });
+      this.profile.update({ [ keys[1] ]: value });
 
       // Navigate to the new language
       if(key === 'profile:lang') {
@@ -185,13 +185,9 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   public disabled(code: string): boolean {
 
     // Disable the emailVerify action in case the account email has been verified already
-    if(code === 'emailVerify') {
-
-      let user = this.auth.userAuth;
-      return user ? user.emailVerified : false;
-    }
-
-    return false;
+    return (code === 'emailVerify') 
+      ? this.profile.emailVerified
+        : false;
   }
 
   public canDeactivate() {

@@ -6,6 +6,7 @@ import { AngularFirestore,
 import { Observable, from } from 'rxjs';
 import { map, tap, take, mergeMap, flatMap, takeWhile } from 'rxjs/operators';
 import { PagedCollection, PageConfig } from './database-page.class';
+import { DistributedCounter,dbCounter } from './database-counter.class';
 
 import * as firebase from 'firebase';
 
@@ -122,8 +123,18 @@ export class DatabaseService {
    * @param opts optional page configuration
    * @returns a class implementing the paged collection to retrive data in pages
    */
-  public pagedCollection$<T>(ref: dbCollection<T>, opts?: PageConfig): PagedCollection<T> {
+  public pagedCollection$<T>(ref: dbCollection<T>, opts?: PageConfig<T>): PagedCollection<T> {
     return new PagedCollection(this, ref, opts);
+  }
+
+  /**
+   * Creates a new, or retrives and existing, distributed counter
+   * @param ref path or collection reference to the distributed counter location
+   * @param shards number of shards to share the counting with
+   * @returns an object of type DistributedCounter
+   */
+  public distributedCounter(ref: dbCounter, shards: number = 3): DistributedCounter {
+    return new DistributedCounter(this, ref, shards);
   }
 
   /**

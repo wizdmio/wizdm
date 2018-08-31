@@ -1,9 +1,11 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { wmUser, wmProject } from '../interfaces';
 import { DatabaseService, QueryFn } from '../database/database.service';
+import { UserProfile } from '../user/user-profile.service';
 import { PagedCollection } from '../database/database-page.class';
-import { USER_PROFILE, wmUser, wmProject } from '../interfaces';
-import { Observable, BehaviorSubject, of, merge, forkJoin } from 'rxjs';
-import { tap, map, take, filter, debounceTime, switchMap, mergeMap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, merge } from 'rxjs';
+import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
+import { Project } from './project.class';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +24,14 @@ export class ProjectService {
   // Public loading observable to display loading status
   public loading$: Observable<boolean>;
 
-  constructor(@Inject(USER_PROFILE) 
-              private profile  : wmUser,
+  constructor(private profile  : UserProfile,
               private database : DatabaseService) {
 
     // Initialize the private paged collection for internal use
-    this._projects$ = this.database.pagedCollection$('projects');
+    this._projects$ = this.database.pagedCollection$('projects', { 
+      // Pass along the postProcess operator to resolve owners while paging projects
+      postProcess: this.resolveOwners.bind(this)
+    });
 
     // Combines the pagination loading status with the local one
     this.loading$ = merge(
@@ -39,23 +43,6 @@ export class ProjectService {
 
     // Created the projects as a paged observable resolving owners
     this.projects$ = this._projects$.data$;
-/*
-      .pipe( 
-        // Query for the projects' owners  
-        mergeMap( projects => 
-          // Runs the owner's requests in parallel
-          forkJoin( projects.map( project => 
-            this.database.document$<wmUser>(`/users/${project.owner}`).pipe(
-              // Inner map to merge the owner into the project
-              map( owner => { return { ...project, owner } as wmProject; }), 
-              take(1) // Gets a single snapshot of the user
-            )
-          ))
-        ),
-        // Resets the loading status when completed
-        tap( () => this._loading$.next(false) )
-      );
-*/
   }
 
   // Pagination support
@@ -71,17 +58,6 @@ export class ProjectService {
    */
   public isProjectMine(project: wmProject) : boolean {
     return project.owner === this.profile.id;
-/*
-    return typeof project.owner === 'string' ?
-      project.owner === this.profile.id :
-        project.owner.id === this.profile.id;
-*/
-  }
-
-  public resolveOwner(project: wmProject): Observable<wmUser> {
-    return project 
-      ? this.database.document$<wmUser>(`/users/${project.owner}`)
-        : of({});
   }
 
   /**
@@ -116,58 +92,60 @@ export class ProjectService {
     return { ...data, owner: this.userId };
   }
 
+  // Adds a new project returning the corresponding id 
   public addProject(data: wmProject): Promise<string> {
-    // Adds a new project returning the corresponding id 
     return this.database.add<wmProject>('/projects', this.sanitizeData(data) );
   }
 
+  // Updates the existing project
   public updateProject(data: wmProject): Promise<void> {
-    // Updates the existing project
     return data.id ? 
       this.database.merge<wmProject>(`/projects/${data.id}`, this.sanitizeData(data) ) :
         Promise.reject('project/invalidId');
   }
 
-  public queryProject(id: string): Observable<wmProject> {
-    // Query for the project coming with the requested id
-    return id ? this.database.document$<wmProject>(`/projects/${id}`)
-      //.pipe( map( project => this.resolveOwner(project) ))
-  /*
-      // Query for the project owner too
-      .pipe( switchMap( project => 
-        this.database.document$<wmUser>(`/users/${project.owner}`).pipe( 
-          // Inner map to merge the owner into the project
-          map( owner => { return { ...project, owner } as wmProject;})
-        )
-      )
-    )*/ : of(null);
+  // Load the owner corresponding to the specified project
+  public loadOwner(project: wmProject): Observable<wmUser> {
+    return !this.isProjectMine(project) 
+      ? this.database.document$<wmUser>(`/users/${project.owner}`)
+        .pipe( take(1) )
+          : of(this.profile);
   }
 
+  // Quesy for a single specific project
+  public queryProject(ref: string | wmProject): Observable<Project> {
+
+    let id = typeof ref === 'string' ? ref : ref.id;
+
+    // Query for the project coming with the requested id
+    return id ? this.database.document$<wmProject>(`/projects/${id}`)
+      // Turns it into a Project object extending wmProject
+      .pipe( map( project => new Project(this, project) ))
+        : of(null);
+  }
+
+  // rxjs operator to resolve owners on a Observable<wmProject[]> stream
+  private resolveOwners(): (input: Observable<wmProject[]>) => Observable<Project[]> {
+    return map( projects => projects.map( project => new Project(this, project) ));
+  }
+
+  // Query function to filter my own projects only
   private get myOwmProjects(): QueryFn {
     return ref => ref.where('owner', '==', this.profile.id);
   }
 
-  public queryOwnProjects(): Observable<wmProject[]> {
+  public queryOwnProjects(): Observable<Project[]> {
     
     // Sets the loading status
     this._loading$.next(true);
 
     // Query for all the project with the owner corresponding to the current user
     return this.database.collection$<wmProject>('/projects', this.myOwmProjects )
-      .pipe(/*
-        map( projects => 
-          projects.map( project => 
-            this.resolveOwner(project) 
-          )
-        ),*/
-/*
-        // Fill-up the oner with the current user profile
-        map( projects => 
-          projects.map( project => { 
-            return { ...project, owner: this.profile }; 
-          }) 
-        ), 
-*/
+      .pipe( 
+        
+        // Resolve the project owners
+        this.resolveOwners(), 
+        
         // Resets the loading status
         tap( () => this._loading$.next(false) ) 
       );

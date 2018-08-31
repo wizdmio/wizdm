@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
-import { ProjectService, wmProject, wmUser, wmColor, wmUserFile, wmColorMap, COLOR_MAP  } from 'app/core';
+import { wmProject, wmColor, wmFile, wmColorMap, COLOR_MAP  } from 'app/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,20 +10,13 @@ import { Observable } from 'rxjs';
 export class CardComponent implements OnInit {
 
   constructor(@Inject(COLOR_MAP) 
-              private colorMap: wmColorMap,
-              private database: ProjectService) { }
+              private colorMap: wmColorMap) { }
 
   ngOnInit() {}
 
   @Input() tools: boolean = false;
 
-  public project: wmProject;
-  public owner$: Observable<wmUser>;
-  
-  @Input('project') set setProject(project: wmProject) {
-    this.owner$  = this.database.resolveOwner(project);
-    this.project = project || {} as wmProject;
-  }
+  @Input() project: wmProject;
 
   // Accepts the color as an input
   private get color(): wmColor { 
@@ -55,7 +48,7 @@ export class CardComponent implements OnInit {
     this.update.emit({ id: this.project.id, color: color.color } as wmProject);
   }
 
-  public selectCover(file: wmUserFile): void {
+  public selectCover(file: wmFile): void {
 
     this.project.cover = file.url || null;
     this.update.emit({ id: this.project.id, cover: file.url || null } as wmProject);

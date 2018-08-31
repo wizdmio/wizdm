@@ -20,7 +20,8 @@ export class UserInfoComponent implements OnInit {
   @ViewChild('template') template: TemplateRef<UserInfoComponent>;
 
   private config: MatDialogConfig = { 
-    panelClass:  'mat-dialog-reset'
+    panelClass:  'mat-dialog-reset',
+    autoFocus: false
     //disableClose: true,
     //data: this
   };

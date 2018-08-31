@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ContentService, AuthService, UploaderService, wmUserFile } from 'app/core';
+import { ContentService, UserProfile, wmFile } from 'app/core';
 import { ToolbarService, ActionEnabler } from 'app/navigator';
 import { OpenFileComponent, PopupService } from 'app/shared';
 import { Observable } from 'rxjs';
@@ -29,8 +29,7 @@ export class UploadComponent implements OnInit {
   
   constructor(private content  : ContentService, 
               private toolbar  : ToolbarService,
-              private auth     : AuthService,
-              private uploader : UploaderService,
+              private user     : UserProfile,
               private popup    : PopupService) {
 
     // Gets the localized content
@@ -40,7 +39,7 @@ export class UploadComponent implements OnInit {
   ngOnInit() {
 
     // Gets the user uploads observable
-    this.uploads$ = this.uploader.queryUserUploads( ref => ref.orderBy('created') )
+    this.uploads$ = this.user.queryUploads( ref => ref.orderBy('created') )
       // Disposes completed upload tasks on list change
       .pipe( tap( files => this.disposeTasks() ));
 
@@ -97,7 +96,7 @@ export class UploadComponent implements OnInit {
   }
 
   // Helper to computes snapshot progression
-  public progress(s: wmUserFile): number {
+  public progress(s: wmFile): number {
     return s.xfer / s.size * 100;
   }
  
@@ -121,7 +120,7 @@ export class UploadComponent implements OnInit {
     let id = this.tasks.length;
 
      // Snapshot (subscription happens in the view and triggers the transfer)
-    let snapshot = this.uploader.uploadUserFile(file).pipe( 
+    let snapshot = this.user.uploadFile(file).pipe( 
       tap( file => {
         // Intercepts the upload completion and mark the task for disposal
         if( file.xfer === file.size ) {
@@ -135,23 +134,23 @@ export class UploadComponent implements OnInit {
   }
 
   // Files deletion list
-  private deletingFiles: wmUserFile[] = [];
+  private deletingFiles: wmFile[] = [];
 
   // Helper to check if a file is in the deletion list
-  public isFileDeleting(file: wmUserFile): boolean {
+  public isFileDeleting(file: wmFile): boolean {
     return this.deletingFiles.findIndex( f => f.fullName === file.fullName) >=0;
   }
 
   // Helper to remove a file from the deletion list 
-  public fileDeleted(file: wmUserFile): void {
+  public fileDeleted(file: wmFile): void {
     this.deletingFiles = this.deletingFiles.filter( f => f.fullName !== file.fullName );
   }
 
-  private clearWhenUserImage(user: wmUserFile): void {
+  private clearWhenUserImage(user: wmFile): void {
 
     // Resets the img url in user profile when deleting the releted image
-    if(user.url === this.auth.userProfile.img) {
-      this.auth.updateUserProfile({ img: null });
+    if(user.url === this.user.img) {
+      this.user.update({ img: null });
     }
   }
 
@@ -171,7 +170,7 @@ export class UploadComponent implements OnInit {
         this.clearWhenUserImage(file);
         
         // Once deleted, removes the file from the deletion list 
-        this.uploader.deleteUserFile(file.id)
+        this.user.deleteFile(file.id)
           .then( () => this.fileDeleted(file) );
       });
 

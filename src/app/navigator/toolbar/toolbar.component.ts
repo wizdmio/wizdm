@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, UserProfile } from 'app/core';
 import { ToolbarService } from './toolbar.service';
 import { $animations } from './toolbar-animations';
 import { Observable, of } from 'rxjs';
@@ -16,7 +16,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   constructor(private content : ContentService,
               private toolbar : ToolbarService,
-              private auth    : AuthService) {
+              //private auth    : AuthService) {
+              private user    : UserProfile) {
 
     // Gets the localized content
     this.menu = this.content.select("navigator.menu");
@@ -43,12 +44,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   public get signedIn(): boolean {
-    return this.auth.authenticated;
+    return this.user.authenticated;
   }
 
   public get userImage(): string {
-    return this.auth.userProfile ? 
-      this.auth.userProfile.img : null; 
+    return this.user.img; 
   }
 
   public get actionButtons() {

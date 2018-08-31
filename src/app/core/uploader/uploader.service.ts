@@ -1,43 +1,40 @@
-import { Injectable, Inject } from '@angular/core';
-import { USER_PROFILE, wmUser, wmUserFile } from '../interfaces';
-import { DatabaseService, QueryFn } from '../database/database.service';
+import { Injectable } from '@angular/core';
+import { wmFile } from '../interfaces';
+import { dbDocument, dbCollection, DatabaseService, QueryFn } from '../database/database.service';
 import { StorageService } from '../storage/storage.service';
 import { Observable, merge } from 'rxjs';
 import { switchMap, map, tap, filter, take } from 'rxjs/operators';
+
+export type filePath = dbCollection<wmFile>;
+export type fileRef = dbDocument<wmFile>;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploaderService {
 
-  constructor(@Inject(USER_PROFILE) 
-              private profile  : wmUser,
-              private database : DatabaseService,
+  constructor(private database : DatabaseService,
               private storage  : StorageService) { }
 
-  private get uploadRef(): string {
-    return `users/${this.profile.id}/uploads`;
+  public queryUploads(path: filePath, queryFn?: QueryFn): Observable<wmFile[]> {
+    return this.database.collection$<wmFile>(path, queryFn);
   }
 
-  public queryUserUploads(queryFn?: QueryFn): Observable<wmUserFile[]> {
-    return this.database.collection$<wmUserFile>(this.uploadRef, queryFn);
-  }
-
-  public queryUserFile(id: string): Observable<wmUserFile> {
-    return this.database.document$<wmUserFile>(`${this.uploadRef}/${id}`);
+  public queryFile(ref: fileRef): Observable<wmFile> {
+    return this.database.document$<wmFile>(ref);
   }
 
   /**
    *  Searches for the user file coming with the specified url
    * @param url the url of the file to be searched for
    */
-  public queryUserFileByUrl(url: string): Observable<wmUserFile> {
-    return this.queryUserUploads( ref => ref.where('url', '==', url) )
+  public queryFileByUrl(path: filePath, url: string): Observable<wmFile> {
+    return this.queryUploads(path, ref => ref.where('url', '==', url) )
       .pipe( map( files => files[0] ) )
   }
 
-  public addUserUploads(data: wmUserFile): Promise<string> {
-    return this.database.add<wmUserFile>(this.uploadRef, data);
+  public add(path: filePath, data: wmFile): Promise<string> {
+    return this.database.add<wmFile>(path, data);
   }
 
   private unique(name: string): string {
@@ -49,25 +46,25 @@ export class UploaderService {
    * @param file the file object to be uploaded and tracked into the user's uploads area
    * @returns the StorageTaskSnapshot observable to track the process
    */
-  public uploadUserFile(file: File): Observable<wmUserFile> {
+  public uploadFile(path: filePath, folder: string, file: File): Observable<wmFile> {
 
     // Computes the storage path
-    const path = `${this.profile.id}/${this.unique(file.name)}`;
+    const storePath = `${folder}/${this.unique(file.name)}`;
 
     // Creates the upload task
-    let task = this.storage.upload(path, file);
+    let task = this.storage.upload(storePath, file);
 
     // Merges two snapshotChanges observables
     return merge(
 
-      // During the transfer, maps the snapshot to a wmUserFile tracking the progress in xfer
+      // During the transfer, maps the snapshot to a wmFile tracking the progress in xfer
       // with a simple map, this allow for minimized latency and better progress preview
       task.snapshotChanges().pipe( 
         map( snap => { 
           return { 
             name: file.name,
             fullName: snap.ref.name,
-            path,
+            path: storePath,
             size: snap.totalBytes,
             xfer: snap.bytesTransferred
           };
@@ -80,10 +77,10 @@ export class UploaderService {
         switchMap( snap => {
 
           // Compile the file content
-          const result: wmUserFile = {
+          const result: wmFile = {
             name: file.name,
             fullName: snap.ref.name,
-            path,
+            path: storePath,
             size: snap.totalBytes,
           };
           
@@ -91,7 +88,7 @@ export class UploaderService {
           return snap.ref.getDownloadURL()
             // Saves the uploaded file information into the user uploads area
             .then( url => 
-              this.addUserUploads({ ...result, url })
+              this.add(path, { ...result, url })
                 // Returns a copy of the saved data including the id
                 .then( id => { return { ...result, url, id}; })
             );
@@ -112,17 +109,17 @@ export class UploaderService {
    * @param file file object to be uploaded
    * @returns a promise resolving with the download url
    */
-  public uploadUserFileOnce(file: File): Promise<wmUserFile> {
-    return this.uploadUserFile(file).toPromise();
+  public uploadFileOnce(path: filePath, folder: string, file: File): Promise<wmFile> {
+    return this.uploadFile(path, folder, file).toPromise();
   }
 
   /**
    * Deletes a user uploaded file clearing up both the storage and the user's uploads area
    */
-  public deleteUserFile(id: string): Promise<void> {
+  public deleteFile(file: fileRef): Promise<void> {
     
-    let ref = this.database.doc(`${this.uploadRef}/${id}`);
-    return this.database.doc$<wmUserFile>(ref)
+    let ref = this.database.doc(file);
+    return this.database.doc$<wmFile>(ref)
       .pipe( 
         take(1),
         switchMap( file => this.storage.ref(file.path).delete() ),
@@ -130,11 +127,11 @@ export class UploaderService {
       ).toPromise();
   }
 
-  public deleteAllUserFiles(): Promise<void> {
+  public deleteAllFiles(path: filePath, folder: string): Promise<void> {
     
     // Deletes the user's storage folder first
-    return this.storage.ref(`${this.profile.id}`).delete().toPromise()
+    return this.storage.ref(folder).delete().toPromise()
       // Deletes the user uploads collection
-      .then( () => this.database.deleteCollection(this.uploadRef) );
+      .then( () => this.database.deleteCollection(path) );
   }
 }

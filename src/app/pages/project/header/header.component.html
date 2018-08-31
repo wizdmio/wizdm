@@ -5,18 +5,16 @@
 </div>
 
 <!-- Wait fot the project before displaing the content -->
-<div fxLayout="column" fxLayoutAlign="end center" class="content" *ngIf="owner$ | async as owner">
+<div fxLayout="column" fxLayoutAlign="end center" class="content" *ngIf="project?.owner$ | async as owner">
 
   <!-- bottom bar -->
   <div fxLayout="row" fxLayoutAlign="space-between center" class="wide">
     
     <!-- Author on the left -->
     <div fxLayout="row" fxLayoutAlign="start center">
-
+      <!-- User picture with info -->
+      <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo"></wm-avatar>
       <wm-user-info [owner]="project" #userInfo></wm-user-info>
-      
-      <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo">
-      </wm-avatar>
       
       <div fxLayout="column">
         <span>{{ owner.name || msgs.unnamed }}
