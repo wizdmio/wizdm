@@ -1,13 +1,7 @@
-import { Injectable } from '@angular/core';
 import { dbDocument, dbCollection , DatabaseService } from './database.service';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { take, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { take, map, switchMap } from 'rxjs/operators';
 
-/*
-public distributedCounter<T>(ref: dbCounter shards: number = 3): DistributedCounter {
-  return new DistributedCounter(this, ref, shards);
-}
-*/
 export interface CounterShard {
   count : number,
   id?   : string
@@ -35,51 +29,53 @@ export class DistributedCounter {
   private accumulate(): Observable<number>{
     return this.query()
       .pipe( map( counters => {
-        return !!counters ? counters.reduce( (sum, count) => 
-          sum + count.count, 0
+        return !!counters ? counters.reduce( (sum, shard) => 
+          sum + shard.count, 0
         ) : 0;
       }));
   }
 
-  private create(start = 1) {
-    // TODO: create counter shards in a batch
-/*
-    // DEBUG VERSION
-    this.db.debug.next([
-      { id: '1', count: start },
-      { id: '2', count: 0 },
-      { id: '3', count: 0 }
-    ]);
-*/
+  private create(start = 1): Promise<void> {
+    
+    const batch = this.db.batch();
+    const ref = this.db.col(this.ref).ref;
+
+    for(let i = 0; i < this.shards; i++) {
+      const value = i === 0 ? start : 0;
+      batch.set(ref.doc(i.toString()), { count: value });
+    }
+
+    return batch.commit();
   }
 
-  private updateShard(ref: dbDocument<CounterShard>, increment: number) {
-    // TODO: update shard in a transaction
-/*
-    // DEBUG VERSION
-    let shards = this.db.debug.value;
-    let index = shards.findIndex( shard => shard.id === ref);
-    shards[index].count += increment;
-    this.db.debug.next(shards);
+  private updateShard(shard: string, increment: number): Promise<void> {
+    
+    const col = this.db.col(this.ref).ref;
+    const ref = col.doc(shard);
 
-    console.log(this.db.debug.value);
-*/
+    return this.db.transaction( t => {
+      return t.get(ref)
+        .then( doc => {
+          const count = doc.data().count + increment;
+          t.update(ref, { count });
+        });
+    })
   }
 
-  public update(increment: number) {
-
+  public update(increment: number): Promise<void> {
     // Loads the counter' shards
-    this.load().subscribe( counter => {
+    return this.load().pipe( 
+      switchMap( counter => {
       // Check for counter existance
       if(counter && counter.length > 0) {
         // Select a single shard randomly
-        let rndShard = Math.floor(Math.random() * counter.length);
+        let rnd = Math.floor(Math.random() * counter.length);
         // Updates the shard
-        this.updateShard(counter[rndShard].id, increment)
+        return this.updateShard(rnd.toString(), increment);
       }
       // Or create the counter if needed
-      else { this.create(1); }
-    });
+      return this.create(1);
+    })).toPromise();
   }
 }
 

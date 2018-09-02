@@ -1,4 +1,4 @@
-import { Timestamp } from '../database/database.service';
+import { dbTimestamp } from '../database/database.service';
 
 export interface wmFile {
   name?:     string,
@@ -10,6 +10,6 @@ export interface wmFile {
   xfer?:     number, // bytes transferred during the upload
 
   id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
+  created? : dbTimestamp,
+  updated? : dbTimestamp
 }

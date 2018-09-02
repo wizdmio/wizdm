@@ -27,11 +27,9 @@
     </div>
 
     <!-- Likes on the right -->
-    <button mat-button (click)="toggleFavorite()">
-      <span class="mat-small">532</span>
-      <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'"></wm-icon>
-    </button>
-    
+    <wm-likes [readonly]="project.isMine"
+              [counter]="project.likes.counter$ | async"
+              (changeFavorite)="project.likes.update($event ? 1 : -1)"></wm-likes>
   </div>
 
 </div>

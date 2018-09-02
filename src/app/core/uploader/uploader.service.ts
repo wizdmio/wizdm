@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { wmFile } from '../interfaces';
-import { dbDocument, dbCollection, DatabaseService, QueryFn } from '../database/database.service';
+import { dbDocument, dbCollection, DatabaseService, dbQueryFn } from '../database/database.service';
 import { StorageService } from '../storage/storage.service';
 import { Observable, merge } from 'rxjs';
 import { switchMap, map, tap, filter, take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class UploaderService {
   constructor(private database : DatabaseService,
               private storage  : StorageService) { }
 
-  public queryUploads(path: filePath, queryFn?: QueryFn): Observable<wmFile[]> {
+  public queryUploads(path: filePath, queryFn?: dbQueryFn): Observable<wmFile[]> {
     return this.database.collection$<wmFile>(path, queryFn);
   }
 

@@ -1,0 +1,17 @@
+
+$wm-fake-min-width   : 88px !default;
+$wm-fake-line-height : 36px !default;
+$wm-fake-padding     : 16px !default;
+
+.fake-button {
+  display: inline-block;
+  position: relative;
+  padding: 0 $wm-fake-padding;
+  min-width: $wm-fake-min-width;
+  line-height: $wm-fake-line-height;
+  box-sizing: border-box;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
+  & > * { vertical-align: middle;}
+}

@@ -9,12 +9,12 @@
   "tabs": [
     {
       "label": "All",
-      "source": "all",
+      "value": "all",
       "description": "Here's the list of all active projects the community is working on"
     },
     {
       "label": "My projects",
-      "source": "personal",
+      "value": "mine",
       "description": "Here's the list of your projects"
     }
   ]

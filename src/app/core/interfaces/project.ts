@@ -1,4 +1,4 @@
-import { Timestamp } from '../database/database.service';
+import { dbTimestamp } from '../database/database.service';
 import { wmUser } from './user';
 
 export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft' | 'deleted';
@@ -17,8 +17,8 @@ export interface wmProject {
   //development? : wmDevelopment,
 
   id?          : string,
-  created?     : Timestamp,
-  updated?     : Timestamp
+  created?     : dbTimestamp,
+  updated?     : dbTimestamp
 }
 
 export interface wmApplication {
@@ -57,7 +57,7 @@ export interface wmDocument {
   author?      : string | wmUser,
 
   id?          : string,
-  created?     : Timestamp,
-  updated?     : Timestamp
+  created?     : dbTimestamp,
+  updated?     : dbTimestamp
 }
 */

@@ -5,12 +5,8 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-
   padding-top: $wm-content-padding;
-  
-  & > header {
-    margin: 0 $wm-content-margin;
-  }
+  margin: 0 $wm-content-margin;
 }
 
 mat-grid-list {

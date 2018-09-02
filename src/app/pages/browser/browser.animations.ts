@@ -1,6 +1,6 @@
-import { trigger, animate, style, transition } from '@angular/animations';
+import { trigger, state, animate, style, transition, query, stagger, animateChild } from '@angular/animations';
 
-let $timing = '1s cubic-bezier(0.5,0.5,0.5,1.0)';
+const $timing = '450ms cubic-bezier(.8, -0.6, 0.2, 1.5)';
 
 export let $animations = [
 
@@ -10,4 +10,26 @@ export let $animations = [
       animate($timing, style('*'))  
     ])
   ]),
-];
+
+  trigger('list', [
+    transition(':enter, true => false', [
+      query('@card', stagger(100, animateChild()), { optional: true })
+    ]),
+  ]),
+
+  trigger('card', [
+    transition(':enter', [
+      style({ transform: 'scale(0.5)', opacity: 0 }),
+      animate($timing, 
+        style({ transform: 'scale(1)', opacity: 1 }))
+    ])/*,
+
+    transition(':leave', [
+      style({ transform: 'scale(1)', opacity: 1 }),
+      animate($timing, 
+      style({ 
+        transform: 'scale(0.5)', opacity: 0
+      })) 
+    ])*/
+  ])
+]

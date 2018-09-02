@@ -1,7 +1,7 @@
 import { wmUser, wmProject, wmProjectStatus } from '../interfaces';
-import { dbDocument, Timestamp } from '../database/database.service';
+import { dbTimestamp, DistributedCounter } from '../database/database.service';
 import { ProjectService } from './project.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 export class Project implements wmProject {
 
@@ -14,20 +14,26 @@ export class Project implements wmProject {
   public cover     : string;
   public color     : string;
   public document  : string; // markdown formatted business plan description
-  public created   : Timestamp;
-  public updated   : Timestamp;
+  public created   : dbTimestamp;
+  public updated   : dbTimestamp;
 
   // Extends wmProject
   public owner$ : Observable<wmUser>;
+  public likes  : DistributedCounter;
   
   constructor(private db: ProjectService, source: wmProject) {
-    
+  
+    // Copies the wmProject properties first
     Object.assign(this, source);
 
-    this.owner$ = db.loadOwner(source);
+    // Load the owner info as an observable
+    this.owner$ = this.db.loadOwner(source);
+
+    // Creates/connects to the share
+    this.likes = this.db.likesCounter(source);
   }
 
-  public isMine(): boolean {
+  public get isMine(): boolean {
     return this.db.isProjectMine(this);
   }
 

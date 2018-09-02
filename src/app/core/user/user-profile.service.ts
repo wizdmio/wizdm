@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from 'firebase';
 import { wmUser, wmFile } from '../interfaces';
-import { DatabaseService, QueryFn, Timestamp } from '../database/database.service';
+import { DatabaseService, dbQueryFn, dbTimestamp } from '../database/database.service';
 import { UploaderService } from '../uploader/uploader.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -26,8 +26,8 @@ export class UserProfile implements wmUser {
   public lang    : string;
   public color   : string;
   public cover   : string;
-  public created : Timestamp;
-  public updated : Timestamp;
+  public created : dbTimestamp;
+  public updated : dbTimestamp;
 
   public lastApplication: any;
 
@@ -35,17 +35,21 @@ export class UserProfile implements wmUser {
 
   constructor(private db: DatabaseService, private up: UploaderService) {}
 
-  public asObservable(uid?: string): Observable<wmUser> {
-    return this.db.document$<wmUser>(`users/${uid || this.id}`);
+  public asObservable(user: User): Observable<wmUser> {
+    return user ? 
+      this.db.document$<wmUser>(`users/${user.uid}`)
+        : of(null);
   }
 
   public init(user: User): Promise<wmUser> {
     
+    this.reset();
+
     // Keeps a copy of the authentication token
     this.user = user;
 
     // Load the user profile
-    return this.asObservable(user.uid)
+    return this.asObservable(user)
       .pipe( tap( user => Object.assign(this, user) ) )
         .toPromise();
   }
@@ -58,6 +62,23 @@ export class UserProfile implements wmUser {
   // Email verified helper
   get emailVerified(): boolean {
     return !!this.user && this.user.emailVerified;
+  }
+
+  private reset() {
+    this.id      = undefined;
+    this.img     = undefined;
+    this.name    = undefined;
+    this.email   = undefined;
+    this.phone   = undefined;
+    this.birth   = undefined;
+    this.gender  = undefined;
+    this.motto   = undefined;
+    this.lang    = undefined;
+    this.color   = undefined;
+    this.cover   = undefined;
+    this.created = undefined;
+    this.updated = undefined;
+    this.lastApplication= undefined;
   }
 
   public create(user: User, lang?: string) {
@@ -92,7 +113,7 @@ export class UserProfile implements wmUser {
       .then( file => this.update({ img: file.url }) );
   }
 
-  public queryUploads(queryFn?: QueryFn): Observable<wmFile[]> {
+  public queryUploads(queryFn?: dbQueryFn): Observable<wmFile[]> {
     return this.db.collection$<wmFile>(`users/${this.id}/uploads`, queryFn);
     //return this.up.queryUploads(`users/${this.id}/uploads`, queryFn);
   }

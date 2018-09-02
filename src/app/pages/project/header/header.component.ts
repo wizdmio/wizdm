@@ -28,8 +28,6 @@ export class HeaderComponent implements OnInit {
 
   @Input('project') project: wmProject;
 
-  public get isMine() { return this.database.isProjectMine(this.project); }
-
   @HostBinding('style.background-image') get urlCoverImage(): string{
     return !!this.project && !!this.project.cover ? `url(${this.project.cover})` : '';
   }
@@ -39,9 +37,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public modifiedOn(project: wmProject): string {
-    return project && project.updated ?
-      moment((project.updated || project.created).toMillis()).format('lll') :
-      '';
+    return moment((project.updated || project.created).toMillis()).format('lll');
   }
 
   public toggleFavorite(): void {

@@ -1,4 +1,4 @@
-import { Timestamp } from '../database/database.service';
+import { dbTimestamp } from '../database/database.service';
 //import { wmUser } from './user';
 
 export interface wmProjectLink {
@@ -16,8 +16,8 @@ export interface wmConversation {
   //messages?: wmMessage[], collection reference
 
   id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
+  created? : dbTimestamp,
+  updated? : dbTimestamp
 }
 
 export interface wmMessage {
@@ -26,6 +26,6 @@ export interface wmMessage {
   unread?  : boolean,
 
   id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
+  created? : dbTimestamp,
+  updated? : dbTimestamp
 }

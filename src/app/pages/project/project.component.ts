@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentService, ProjectService, wmProject } from 'app/core';
+import { ContentService, ProjectService, Project, wmProject } from 'app/core';
 import { ToolbarService, ActionEnabler, ScrollViewService } from 'app/navigator';
 import { PopupService, UploadsComponent } from 'app/shared';
 import { Observable, Subject, of, empty } from 'rxjs';
@@ -41,7 +41,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.loadProject().pipe( take(1) ).subscribe( project => {
 
       // Customizes the action menu according to the project ownership
-      let type = this.database.isProjectMine(project) ? 'owner' : 'guest';
+      let type = project.isMine ? 'owner' : 'guest';
 
       // Enable actions on the navigation bar depending on the 
       // type of user (owner or guest)
@@ -69,10 +69,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.dispose$.complete();
   }
 
-  public get isMine(): boolean {
-    return this.database.isProjectMine(this.project);
-  }
-
   public enterEditMode(): void {
     // Turns edit mode on 
     this.editMode = true;
@@ -97,15 +93,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.saved = false;
   }
 
-  private loadProject(): Observable<wmProject> {
+  private loadProject(): Observable<Project> {
 
     return this.route.paramMap.pipe(
       takeUntil( this.dispose$ ),
       switchMap( param => 
         this.database.queryProject( param.get('id') )
-      ),
-      catchError( error => 
-        of({ } as wmProject) 
       ));
   }
 

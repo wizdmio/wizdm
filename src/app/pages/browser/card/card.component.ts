@@ -1,5 +1,5 @@
 import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
-import { wmProject, wmColor, wmFile, wmColorMap, COLOR_MAP  } from 'app/core';
+import { Project, wmProject, wmColor, wmFile, wmColorMap, COLOR_MAP  } from 'app/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ export class CardComponent implements OnInit {
 
   @Input() tools: boolean = false;
 
-  @Input() project: wmProject;
+  @Input() project: Project;
 
   // Accepts the color as an input
   private get color(): wmColor { 
@@ -40,17 +40,23 @@ export class CardComponent implements OnInit {
     return this.color.contrast;
   } 
 
-  @Output() update = new EventEmitter<wmProject>();
+  //@Output() update = new EventEmitter<wmProject>();
 
   public setColor(color: wmColor) {
 
     this.project.color = color.color;
-    this.update.emit({ id: this.project.id, color: color.color } as wmProject);
+    this.project.update({ color: color.color } as wmProject);
+
+    //this.project.color = color.color;
+    //this.update.emit({ id: this.project.id, color: color.color } as wmProject);
   }
 
   public selectCover(file: wmFile): void {
 
     this.project.cover = file.url || null;
-    this.update.emit({ id: this.project.id, cover: file.url || null } as wmProject);
+    this.project.update({ id: this.project.id, cover: file.url || null } as wmProject);
+
+    //this.project.cover = file.url || null;
+    //this.update.emit({ id: this.project.id, cover: file.url || null } as wmProject);
   }
 }

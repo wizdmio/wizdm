@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { wmUser, wmProject, wmConversation, wmMessage } from '../interfaces';
-import { DatabaseService, QueryFn } from '../database/database.service';
+import { DatabaseService, dbQueryFn } from '../database/database.service';
 import { UserProfile } from '../user/user-profile.service';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
@@ -23,12 +23,12 @@ export class ChatService {
       .pipe( take(1) ) : of({});
   }
 
-  public retriveMessages(thread: wmConversation, qf?: QueryFn): Observable<wmMessage[]> {
+  public retriveMessages(thread: wmConversation, qf?: dbQueryFn): Observable<wmMessage[]> {
     return this.database.collection$<wmMessage>(`conversations/${thread.id}/messages`, qf)
       .pipe( take(1) );
   }
 
-  private get lastMsg(): QueryFn {
+  private get lastMsg(): dbQueryFn {
     return ref => ref.orderBy('created', 'desc').limit(1);
   }
 
@@ -36,7 +36,7 @@ export class ChatService {
    * Queries for conversations document filling up the last message from the sub-collection of messages
    * @param qf an optional query function
    */
-  public queryThreads(qf?: QueryFn): Observable<wmConversation[]> {
+  public queryThreads(qf?: dbQueryFn): Observable<wmConversation[]> {
     
     return this.database.collection$<wmConversation>(`conversations`, qf)
       .pipe( mergeMap( threads => 
@@ -51,7 +51,7 @@ export class ChatService {
     return a.created.toDate().valueOf() - b.created.toDate().valueOf();
   }
 
-  private get myThreads(): QueryFn {
+  private get myThreads(): dbQueryFn {
     return ref => ref.where(`recipient.${this.profile.id}`, '==', 'true');
   }
 

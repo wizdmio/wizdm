@@ -33,7 +33,7 @@ export class AuthService implements OnDestroy {
 
   get profile$(): Observable<wmUser|null> {
     return this.user$.pipe(
-      switchMap(user => this.profile.asObservable(user.uid))
+      switchMap(user => this.profile.asObservable(user))
     );
   }
 

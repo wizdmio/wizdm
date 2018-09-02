@@ -1,0 +1,12 @@
+
+<button mat-button (click)="toggle()" *ngIf="!readonly">
+  <span class="mat-small">{{ likes }}</span>
+  <wm-icon [icon]="icon" [@beat]="counter">
+  </wm-icon>
+</button>
+
+<div class="fake-button" *ngIf="readonly">
+  <span class="mat-small">{{ likes }}</span>
+  <wm-icon [icon]="icon" [@beat]="counter">
+  </wm-icon>
+</div>

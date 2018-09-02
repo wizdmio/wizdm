@@ -1,0 +1,10 @@
+
+<button mat-button *ngFor="let option of options; let i = index"
+  [class.selected]="i === active"
+  (click)="active = i">
+  {{ option.label }}
+</button>
+
+<div><wm-inkbar [position]="inkbar"></wm-inkbar></div>
+
+<ng-content></ng-content>

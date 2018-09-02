@@ -38,11 +38,8 @@ import { IconComponent } from './icon/icon.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { PopupComponent } from './popup/popup.component';
-//import { PopupService } from './popup/popup.service';
 import { MarkdownComponent } from './markdown/markdown.component';
-//import { RemarkService } from './markdown/remark.service';
 import { CodeHighlightComponent } from './markdown/code-highlight/code-highlight.component';
-//import { PrismService } from './markdown/code-highlight/prism.service';
 import { OpenFileComponent } from './file/open-file.component';
 import { DropZoneDirective } from './file/drop-zone.directive';
 import { FileSizePipe } from './file/file-size.pipe';
@@ -52,6 +49,9 @@ import { ColorsComponent } from './colors/colors.component';
 import { ColorsDirective } from './colors/colors.directive';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserInfoDirective } from './user-info/user-info.directive';
+import { LikesComponent } from './likes/likes.component';
+import { FilterComponent } from './filter/filter.component';
+import { InkbarComponent } from './filter/inkbar/inkbar.component';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -73,9 +73,9 @@ const sharedModules = [
   MatSidenavModule,
   MatSelectModule,
   MatDividerModule,
-  MatTabsModule,
-  MatTooltipModule,
-  MatDatepickerModule,
+  //MatTabsModule,
+  //MatTooltipModule,
+  MatDatepickerModule
 ];
 
 @NgModule({
@@ -101,7 +101,10 @@ const sharedModules = [
     ColorsComponent,
     ColorsDirective,
     UserInfoComponent,
-    UserInfoDirective
+    UserInfoDirective,
+    LikesComponent,
+    FilterComponent,
+    InkbarComponent
   ],
 
   exports: [
@@ -120,15 +123,15 @@ const sharedModules = [
     ColorsComponent,
     ColorsDirective,
     UserInfoComponent,
-    UserInfoDirective
+    UserInfoDirective,
+    LikesComponent,
+    FilterComponent,
+    InkbarComponent
   ],
 
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }/*,
-    PopupService, Tree-shakable providers
-    RemarkService,
-    PrismService*/
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
   ],
 
   entryComponents: [// Don't forget to declare dialogs here

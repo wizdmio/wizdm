@@ -1,4 +1,4 @@
-import { Timestamp } from '../database/database.service';
+import { dbTimestamp } from '../database/database.service';
 
 export interface wmUser {
 
@@ -18,6 +18,6 @@ export interface wmUser {
   //uploads? : any, collection reference
 
   id?      : string,
-  created? : Timestamp,
-  updated? : Timestamp
+  created? : dbTimestamp,
+  updated? : dbTimestamp
 }

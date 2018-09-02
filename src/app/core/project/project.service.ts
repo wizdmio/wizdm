@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { wmUser, wmProject } from '../interfaces';
-import { DatabaseService, QueryFn } from '../database/database.service';
+import { DatabaseService, dbQueryFn, PagedCollection, PageConfig, DistributedCounter } from '../database/database.service';
 import { UserProfile } from '../user/user-profile.service';
-import { PagedCollection } from '../database/database-page.class';
 import { Observable, BehaviorSubject, of, merge } from 'rxjs';
 import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
 import { Project } from './project.class';
@@ -13,42 +12,39 @@ import { Project } from './project.class';
 export class ProjectService {
 
   // The full collection of projects (paged)
-  private _projects$: PagedCollection<wmProject>;
+  //private _projects$: PagedCollection<Project>;
 
   // Public observable exposing the full list of projects
-  public projects$: Observable<wmProject[]>;
+  //public projects$: Observable<Project[]>;
 
   // Private loading subject
-  private _loading$ = new BehaviorSubject<boolean>(false);
+  //private _loading$ = new BehaviorSubject<boolean>(false);
 
   // Public loading observable to display loading status
-  public loading$: Observable<boolean>;
+  //public loading$: Observable<boolean>;
 
   constructor(private profile  : UserProfile,
               private database : DatabaseService) {
-
+/*
     // Initialize the private paged collection for internal use
-    this._projects$ = this.database.pagedCollection$('projects', { 
-      // Pass along the postProcess operator to resolve owners while paging projects
-      postProcess: this.resolveOwners.bind(this)
+    this._projects$ = this.database.pagedCollection<Project>('projects', { 
+      // Pass along the postProcess operator to map wmProjects into Projects[]
+      postProcess: this.wrapProjects.bind(this)
     });
 
-    // Combines the pagination loading status with the local one
-    this.loading$ = merge(
-      // Paged collection sets the loading (resets are filtered)
-      this._projects$.loading$.pipe( filter( value => value ) ),
-      // Project local subject resets the loading status
-      this._loading$.asObservable()
-    );
+    // Combines the pagination loading status with the local one to provide an unified
+    // interface to the caller
+    this.loading$ = merge( this._projects$.loading$, this._loading$.asObservable() );
 
-    // Created the projects as a paged observable resolving owners
+    // Exposes the paged data as the main list of projects
     this.projects$ = this._projects$.data$;
+  */
   }
-
+/*
   // Pagination support
   public more(): void { this._projects$.more();}
   public reset(): void { this._projects$.reset();}
-
+*/
   // Current user id
   public get userId(): string { return this.profile.id; }
 
@@ -112,6 +108,10 @@ export class ProjectService {
           : of(this.profile);
   }
 
+  public likesCounter(project: wmProject): DistributedCounter {
+    return this.database.distributedCounter(`/projects/${project.id}/likes`);
+  }
+
   // Quesy for a single specific project
   public queryProject(ref: string | wmProject): Observable<Project> {
 
@@ -124,30 +124,44 @@ export class ProjectService {
         : of(null);
   }
 
-  // rxjs operator to resolve owners on a Observable<wmProject[]> stream
-  private resolveOwners(): (input: Observable<wmProject[]>) => Observable<Project[]> {
-    return map( projects => projects.map( project => new Project(this, project) ));
+  // rxjs operator to map wmProject observables into Observable<Project[]> stream
+  private wrapProjects(): (input: Observable<wmProject[]>) => Observable<Project[]> {
+    return map( projects => {
+      return projects.map( project => {
+        return new Project(this, project);
+      }); 
+    });
+  }
+
+  public queryAllProjects(opts?: PageConfig<Project>): PagedCollection<Project> {
+
+    // Initialize the private paged collection for internal use
+    return this.database.pagedCollection<Project>('projects', {
+      ...opts, 
+      // Pass along the postProcess operator to map wmProjects into Projects[]
+      postProcess: this.wrapProjects.bind(this)
+    });
   }
 
   // Query function to filter my own projects only
-  private get myOwmProjects(): QueryFn {
+  private get myOwmProjects(): dbQueryFn {
     return ref => ref.where('owner', '==', this.profile.id);
   }
 
   public queryOwnProjects(): Observable<Project[]> {
     
     // Sets the loading status
-    this._loading$.next(true);
+    //this._loading$.next(true);
 
     // Query for all the project with the owner corresponding to the current user
     return this.database.collection$<wmProject>('/projects', this.myOwmProjects )
       .pipe( 
         
-        // Resolve the project owners
-        this.resolveOwners(), 
+        // Turns the wmProject[] into Project[]
+        this.wrapProjects()//, 
         
         // Resets the loading status
-        tap( () => this._loading$.next(false) ) 
+        //tap( () => this._loading$.next(false) ) 
       );
   }
 

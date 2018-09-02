@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, 
-         AngularFirestoreCollection, QueryFn,
-         AngularFirestoreDocument
-} from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, Action, DocumentSnapshot, QueryDocumentSnapshot, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable, from } from 'rxjs';
 import { map, tap, take, mergeMap, flatMap, takeWhile } from 'rxjs/operators';
 import { PagedCollection, PageConfig } from './database-page.class';
@@ -10,10 +7,20 @@ import { DistributedCounter,dbCounter } from './database-counter.class';
 
 import * as firebase from 'firebase';
 
-export type dbCollection<T> = string | AngularFirestoreCollection<T>;
-export type dbDocument<T>   = string | AngularFirestoreDocument<T>;
+export { PagedCollection, PageConfig } from './database-page.class';
+export { DistributedCounter, dbCounter } from './database-counter.class';
 
-// Tweak the QueryFn to better support filter chaining like:
+export type dbCollection<T> = string | AngularFirestoreCollection<T>;
+export type dbDocument<T> = string | AngularFirestoreDocument<T>;
+export type dbDocumentChangeAction<T> = DocumentChangeAction<T>;
+//export type dbAction<T> = Action<T>;
+//export type dbSnapshot<T> = DocumentSnapshot<T>;
+export type dbQuerySnapshot<T> = QueryDocumentSnapshot<T>;
+export type dbWriteBatch = firebase.firestore.WriteBatch;
+export type dbTransaction = firebase.firestore.Transaction;
+export type dbTimestamp = firebase.firestore.Timestamp;
+
+// Tweak the AngularFire2 QueryFn to better support filter chaining like:
 /*
 targetObservable = combineLatest( filter1, filter2 ).pipe(
   switchMap(([filter1, filter2]) =>
@@ -24,13 +31,15 @@ targetObservable = combineLatest( filter1, filter2 ).pipe(
     })
   )
 );*/
-export type QueryFn = (ref: firebase.firestore.CollectionReference | firebase.firestore.Query) => firebase.firestore.Query;
-export type Timestamp = firebase.firestore.Timestamp;
+export type dbQueryRef = firebase.firestore.CollectionReference | firebase.firestore.Query;
+export type dbQueryFn = (ref: dbQueryRef) => firebase.firestore.Query;
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
+
+  constructor(public afs: AngularFirestore) { }
 
   public get timestamp() {
     return firebase.firestore.FieldValue.serverTimestamp();
@@ -44,9 +53,7 @@ export class DatabaseService {
     return new firebase.firestore.GeoPoint(lat, lng);
   }
 
-  constructor(public afs: AngularFirestore) { }
-
-  public col<T>(ref: dbCollection<T>, queryFn?: QueryFn): AngularFirestoreCollection<T> {
+  public col<T>(ref: dbCollection<T>, queryFn?: dbQueryFn): AngularFirestoreCollection<T> {
     return typeof ref === 'string' ? this.afs.collection<T>(ref, queryFn) : ref;
   }
 
@@ -60,7 +67,7 @@ export class DatabaseService {
     );
   }
 
-  public col$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+  public col$<T>(ref: dbCollection<T>, queryFn?: dbQueryFn): Observable<T[]> {
     
     return this.col(ref, queryFn).snapshotChanges().pipe(
       map(docs => {
@@ -90,31 +97,24 @@ export class DatabaseService {
    * @param queryFn optional query function to filter the returned values
    * @returns an observable of document values array
    */
-  public collection$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<T[]> {
+  public collection$<T>(ref: dbCollection<T>, queryFn?: dbQueryFn): Observable<T[]> {
 
-    return this.col(ref, queryFn).snapshotChanges().pipe(
-      map(actions => {
+    return this.col(ref, queryFn).snapshotChanges()
+      .pipe( map( actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
           const id = a.payload.doc.id;
-          return ( (typeof data !== 'undefined') ? { ...(data as any), id } : undefined );
-        });
-      })
-    );
+          return ( (typeof data !== 'undefined') ? { ...data as any, id } as T : undefined );
+        })
+      }));
   }
 
-  /**
-   * Retrives a collection of document snapshots. An internal representarion 
-   * suitable for comlpex data management such as pagination
-   * @param ref path or reference to the collection
-   * @param queryFn optional query function to filter the returned values
-   * @returns an observable of document snapshots array
-   */
-  public snapshots$<T>(ref: dbCollection<T>, queryFn?: QueryFn): Observable<any[]> {
-    return this.col(ref, queryFn).snapshotChanges()
-      .pipe( map( actions => 
-        actions.map(a => a.payload.doc ) 
-      ));
+  public batch(): dbWriteBatch {
+    return this.afs.firestore.batch();
+  }
+
+  public transaction<T>( updateFn: (t: dbTransaction) => Promise<T> ): Promise<T> {
+    return this.afs.firestore.runTransaction<T>(updateFn);
   }
 
   /**
@@ -123,7 +123,7 @@ export class DatabaseService {
    * @param opts optional page configuration
    * @returns a class implementing the paged collection to retrive data in pages
    */
-  public pagedCollection$<T>(ref: dbCollection<T>, opts?: PageConfig<T>): PagedCollection<T> {
+  public pagedCollection<T>(ref: dbCollection<T>, opts?: PageConfig<T>): PagedCollection<T> {
     return new PagedCollection(this, ref, opts);
   }
 
@@ -243,7 +243,7 @@ export class DatabaseService {
         mergeMap(snapshot => {
 
           // Delete documents in a batch
-          const batch = this.afs.firestore.batch();
+          const batch = this.batch();
           snapshot.forEach(doc => {
             batch.delete(doc.payload.doc.ref);
           });

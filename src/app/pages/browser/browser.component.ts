@@ -1,9 +1,9 @@
 import { Component, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { ContentService, ProjectService, wmProject, Timestamp } from 'app/core';
+import { ContentService, ProjectService, PagedCollection, Project, wmProject } from 'app/core';
 import { ToolbarService, ScrollViewService } from 'app/navigator';
 import { Observable, Subject, of } from 'rxjs';
-import { map, filter, take, takeUntil, catchError } from 'rxjs/operators';
+import { map, filter, take, takeUntil, tap } from 'rxjs/operators';
 import { $animations } from './browser.animations';
 
 @Component({
@@ -20,13 +20,10 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
   public msgs = null;
   public cols = 1;
 
-  public activeTab = 0;
+  public allProjects: PagedCollection<Project>;
+  public myProjects$: Observable<Project[]>;
 
-  private allProjects$: Observable<wmProject[]>;
-  private newProjects$: Observable<wmProject[]>;
-  private myProjects$: Observable<wmProject[]>;
-
-  //private filters$ = new BehaviorSubject<QueryFn>(undefined);
+  //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
   constructor(private content  : ContentService,
               private toolbar  : ToolbarService,
@@ -44,23 +41,29 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
     // Creates the observable listing all projects (using pagination)
     // resolving all owners
-    this.allProjects$ = this.database.projects$
-      .pipe( takeUntil( this.dispose$ ));
+    this.allProjects = this.database.queryAllProjects();
+    /*.projects$
+      .pipe( takeUntil( this.dispose$ ));*/
 
     // Creates the observable listing current user' projects
     this.myProjects$ = this.database.queryOwnProjects()
-      .pipe( takeUntil( this.dispose$ ) );
+      .pipe( takeUntil( this.dispose$ ), tap( projects => {
+        console.log(projects);
+      }) );
 
     // Subscribes to the scrollPosition event to implement project pagination
     this.scroll.scrollPosition
       // Filters events when the active page does not require pagination
-      .pipe( filter( () => this.tabSource === 'all') )
+      .pipe( takeUntil(this.dispose$), filter( () => this.tabSource === 'all') )
       // Ask for more data to display when at the bottom of the page
       .subscribe( pos => {
         if(pos === 'bottom') {
-          this.database.more();
+          this.allProjects.more();
         }
       });
+
+      // Load the first page of projects
+      //this.database.more();
   }
 
   ngAfterContentInit() {
@@ -75,32 +78,53 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnDestroy() {
 
+    this.allProjects.dispose();
+
     // Disposes all the observables. DO NOT FORGET to use takeUntil() operator
     this.dispose$.next();
     this.dispose$.complete();
   }
 
-  public get tabDescription(): string {
-    return this.msgs.tabs[this.activeTab].description;
-  }
+  public tabIndex = 0;
 
+  public get tabDescription(): string {
+    return this.msgs.tabs[this.tabIndex].description;
+  }
+/*
   public get loading$(): Observable<boolean> {
     return this.database.loading$;
   }
-
+*/
   private get tabSource(): string {
-    return this.msgs.tabs[this.activeTab].source;
+    return this.msgs.tabs[this.tabIndex].value;
   }
 
-  public get projects$(): Observable<wmProject[]> {
+  public switchTab(index: number) {
+    
+    this.tabIndex = index;
+
+    // Returns the relevant observable according to the selected tab
+    switch( this.tabSource ) {
+
+      case 'all':// Resets the paging
+      this.allProjects.more();
+      break;
+
+      case 'mine':
+      this.allProjects.reset();
+      default:
+    }
+  }
+
+  public get tabData$(): Observable<Project[]> {
 
     // Returns the relevant observable according to the selected tab
     switch( this.tabSource ) {
 
       case 'all':
-      return this.allProjects$;
+      return this.allProjects.data$;
 
-      case 'personal':
+      case 'mine':
       return this.myProjects$;
 
       default:
@@ -108,14 +132,10 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
     return of([]);
   }
-
-  // Enables the theme tools on the card whenever the project belongs to me 
-  public enableTools(project: wmProject): boolean {
-    return this.database.isProjectMine(project);
-  }
-
+/*
   // Updates the project theme
   public updateProject(data: wmProject): void {
     this.database.updateProject(data);
   }
+*/
 }
