@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
-import { ContentService, ProjectService, wmProject, wmUser } from 'app/core';
-import { Observable } from 'rxjs';
+import { ContentService, ProjectService, Project, wmUser } from 'app/core';
 import { $animations } from './header-animations';
 
 import * as moment from 'moment';
@@ -17,8 +16,7 @@ export class HeaderComponent implements OnInit {
   public favorite = false;
   public notifications = false;
 
-  constructor(private content:  ContentService,
-              private database: ProjectService) { 
+  constructor(private content:  ContentService) { 
     
     // Initialize the localized content
     this.msgs = this.content.select('project.header');
@@ -26,18 +24,19 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {}
 
-  @Input('project') project: wmProject;
+  @Input('project') project: Project;
 
   @HostBinding('style.background-image') get urlCoverImage(): string{
-    return !!this.project && !!this.project.cover ? `url(${this.project.cover})` : '';
+    return !!this.project && !!this.project.data.cover ? `url(${this.project.data.cover})` : '';
   }
 
   @HostBinding('@cover') get cover() {
-    return !!this.project && !!this.project.cover;
+    return !!this.project && !!this.project.data.cover;
   }
 
-  public modifiedOn(project: wmProject): string {
-    return moment((project.updated || project.created).toMillis()).format('lll');
+  public modifiedOn(project: Project): string {
+    const timestamp = project.data.updated || project.data.created;
+    return moment(timestamp ? timestamp.toMillis() : undefined).format('lll');
   }
 
   public toggleFavorite(): void {

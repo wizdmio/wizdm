@@ -1,0 +1,192 @@
+import { Injectable, OnDestroy } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { auth, User } from 'firebase';
+import { Observable, Subscription } from 'rxjs';
+ 
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService implements OnDestroy {
+
+  public user: User = null;
+  private sub: Subscription;
+
+  constructor(private afire2: AngularFireAuth) {
+
+    // Keeps the user authentication token in sync
+    this.sub = this.user$.subscribe( user => { 
+      this.user = user;
+    });
+  }
+
+  get user$(): Observable<User|null> {
+    return this.afire2.user;
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return !!this.user;
+  }
+
+  // User id helper
+  get userId(): string {
+    return this.user !== null ? this.user.uid : null;
+  }
+
+  // Email verified helper
+  get emailVerified(): boolean {
+    return this.user !== null ? this.user.emailVerified : false;
+  }
+
+  public get userLanguage() {
+    return this.afire2.auth.languageCode;
+  }
+
+  public registerNew(email: string, password: string, name: string = "", lang?: string): Promise<void> {
+    
+    console.log("Registering a new user: " + email);
+
+    // Apply the requested user language
+    this.afire2.auth.languageCode = lang;
+
+    // Create a new user with email and password
+    return this.afire2.auth.createUserWithEmailAndPassword(email, password)
+      .then( credential => { 
+        // Update the user info with the given name
+        return credential.user.updateProfile({ displayName: name } as User)
+          .then ( () => {} ); 
+      });
+  }
+
+  public sendEmailVerification(lang?: string, url?: string): Promise<void> {
+
+    console.log("Send email veriication");
+
+    // Apply the requested user language
+    this.afire2.auth.languageCode = lang;
+    return this.user.sendEmailVerification( url ? { url } : undefined );
+  }
+
+  public applyActionCode(code: string): Promise<void> {
+
+    console.log("Applying action with code: " + code);
+    
+    // Applies the received action code
+    return this.afire2.auth.applyActionCode(code);
+  }
+
+  public updateEmail(password: string, newEmail: string): Promise<void> {
+    
+    const email = this.user.email;
+
+    console.log("Updating user email for: ", email);
+
+    // Gets fresh credentials for the current user
+    let credential = auth.EmailAuthProvider.credential(email, password);
+    
+    // Re-authenticate the user with the fresh credentials
+    return this.user.reauthenticateWithCredential(credential)
+      .then( () => {
+        // Update the email
+        return this.user.updateEmail(newEmail);
+      });
+  }
+
+  public updatePassword(password: string, newPassword: string): Promise<void> {
+    
+    const email = this.user.email;
+
+    console.log("Updating user password for: ", email);
+
+    // Gets fresh credentials for the current user
+    let credential = auth.EmailAuthProvider.credential(email, password);
+    
+    // Re-authenticate the user with the fresh credentials
+    return this.user.reauthenticateWithCredential(credential)
+      .then( () => {
+        // Update the password
+        return this.user.updatePassword(newPassword);
+      });
+  }
+
+  public signIn(email: string, password: string): Promise<any>  {
+    console.log("Signing in as: " + email);
+    return this.afire2.auth.signInWithEmailAndPassword(email, password);
+  }
+
+  public forgotPassword(email: string, lang?: string, url?: string): Promise<void> {
+    
+    console.log("Resetting the password for: " + email);
+
+    // Applies the requested language and send a password reset email
+    this.afire2.auth.languageCode = lang;
+    return this.afire2.auth.sendPasswordResetEmail(email, url ? { url } : undefined );
+  }
+
+  public resetPassword(code: string, newPassword: string): Promise<void> {
+
+    console.log("Confirming the password with code: " + code);
+    
+    // Resets to a new password applying the received activation code
+    return this.afire2.auth.confirmPasswordReset(code, newPassword);
+  }
+
+  public signInWith(provider: string, lang?: string): Promise<void> {
+
+    console.log("Signing-in using: " + provider);
+
+    // Instruct firebase to use a specific language
+    this.afire2.auth.languageCode = lang;
+
+    let authProvider = null;
+
+    switch(provider) {
+
+      case 'google':
+      authProvider = new auth.GoogleAuthProvider();
+
+      case 'facebook':
+      authProvider = new auth.FacebookAuthProvider();
+      
+      case 'twitter':
+      authProvider = new auth.TwitterAuthProvider();
+
+      case 'github':
+      authProvider = new auth.GithubAuthProvider();
+
+      case 'linkedin':// TODO
+      break;
+    }
+
+   if(authProvider === null) {
+      return Promise.reject('auth/unsupportedProvider');
+    }
+
+    return this.afire2.auth.signInWithPopup(authProvider)
+      .then( credential => {}); 
+  }
+
+  public signOut(): void {
+    console.log("Signing-out");
+    this.afire2.auth.signOut();
+  }
+
+  public deleteUser(password: string): Promise<void> {
+
+    const email = this.user.email;
+    
+    console.log("Deleting the user ", email);
+
+    // Gets fresh credentials for the current user
+    let credential = auth.EmailAuthProvider.credential(email, password);
+    
+    // Re-authenticate the user with the fresh credentials
+    return this.user.reauthenticateWithCredential(credential)
+      // Then deletes the user
+      .then( () => this.user.delete() );
+  }
+}

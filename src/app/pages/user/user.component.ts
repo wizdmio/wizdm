@@ -45,7 +45,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   }
 
   public get userImage(): string {
-    return this.profile.img;
+    return this.profile.data.img;
   }
 
   public selectImage(file: wmFile): void {
@@ -71,12 +71,12 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
 
     // Intercepts timestapms requests
     if(key === 'profile:created') {
-      let stamp = this.profile[ keys[1] ];
+      let stamp = this.profile.data[ keys[1] ];
       return stamp ? moment(stamp.toMillis()).toString() : '';
     }
 
     // Select the source of values based on the first half of the key
-    let source = keys[0] === 'profile' ? this.profile :
+    let source = keys[0] === 'profile' ? this.profile.data :
                  keys[0] === 'user' ? this.profile.user :
                  {};
  

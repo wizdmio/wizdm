@@ -1,300 +1,135 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, Action, DocumentSnapshot, QueryDocumentSnapshot, DocumentChangeAction } from 'angularfire2/firestore';
-import { Observable, from } from 'rxjs';
-import { map, tap, take, mergeMap, flatMap, takeWhile } from 'rxjs/operators';
-import { PagedCollection, PageConfig } from './database-page.class';
-import { DistributedCounter,dbCounter } from './database-counter.class';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { DatabaseDocument } from './database-document'
+import { DatabaseCollection } from './database-collection';
+import { PagedCollection, PageConfig } from './database-paged';
+import { RealtimeCollection } from './database-realtime';
+import { DistributedCounter } from './database-counter';
+import { firestore } from 'firebase';
+//--
+export { DatabaseDocument, dbCommon } from './database-document'
+export { DatabaseCollection } from './database-collection';
+export { PagedCollection, PageConfig } from './database-paged';
+export { RealtimeCollection } from './database-realtime';
+export { DistributedCounter } from './database-counter';
+//--
+export type dbCollectionRef<T> = AngularFirestoreCollection<T>;
+export type dbDocumentRef<T> = AngularFirestoreDocument<T>;
+export type dbCollection<T> = string | dbCollectionRef<T>;
+export type dbDocument<T> = string | dbDocumentRef<T>;
+export type dbWriteBatch = firestore.WriteBatch;
+export type dbTransaction = firestore.Transaction;
+export type dbTimestamp = firestore.Timestamp;
+export type dbPath = firestore.FieldPath;
+export type dbValue = firestore.FieldValue;
+export type dbGeopoint = firestore.GeoPoint;
+export type dbStreamRef = firestore.CollectionReference | firestore.Query;
+export type dbStreamFn = (ref: dbStreamRef) => firestore.Query;
 
-import * as firebase from 'firebase';
-
-export { PagedCollection, PageConfig } from './database-page.class';
-export { DistributedCounter, dbCounter } from './database-counter.class';
-
-export type dbCollection<T> = string | AngularFirestoreCollection<T>;
-export type dbDocument<T> = string | AngularFirestoreDocument<T>;
-export type dbDocumentChangeAction<T> = DocumentChangeAction<T>;
-//export type dbAction<T> = Action<T>;
-//export type dbSnapshot<T> = DocumentSnapshot<T>;
-export type dbQuerySnapshot<T> = QueryDocumentSnapshot<T>;
-export type dbWriteBatch = firebase.firestore.WriteBatch;
-export type dbTransaction = firebase.firestore.Transaction;
-export type dbTimestamp = firebase.firestore.Timestamp;
-
-// Tweak the AngularFire2 QueryFn to better support filter chaining like:
-/*
-targetObservable = combineLatest( filter1, filter2 ).pipe(
-  switchMap(([filter1, filter2]) =>
-    return cols$<...>( ref => {
-      if (filter1) { ref = ref.where('field1', '==', filter1); }
-      if (filter2) { ref = ref.where('field2', '==', filter2); }
-      return ref;
-    })
-  )
-);*/
-export type dbQueryRef = firebase.firestore.CollectionReference | firebase.firestore.Query;
-export type dbQueryFn = (ref: dbQueryRef) => firebase.firestore.Query;
+export interface PageConfigRt extends PageConfig {
+  realtime?: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * wizdm database service for firebase. Wraps angularfire2/firestore.
+ */
 export class DatabaseService {
 
-  constructor(public afs: AngularFirestore) { }
+  constructor(readonly fire: AngularFirestore) { }
 
-  public get timestamp() {
-    return firebase.firestore.FieldValue.serverTimestamp();
-  }
-
-  public get sentinelId() {
-    return firebase.firestore.FieldPath.documentId();
-  }
-
-  public geopoint(lat: number, lng: number) {
-    return new firebase.firestore.GeoPoint(lat, lng);
-  }
-
-  public col<T>(ref: dbCollection<T>, queryFn?: dbQueryFn): AngularFirestoreCollection<T> {
-    return typeof ref === 'string' ? this.afs.collection<T>(ref, queryFn) : ref;
-  }
-
-  public doc<T>(ref: dbDocument<T>): AngularFirestoreDocument<T> {
-    return typeof ref === 'string' ? this.afs.doc<T>(ref) : ref;
-  }
-
-  public doc$<T>(ref: dbDocument<T>): Observable<T> {
-    return this.doc(ref).snapshotChanges().pipe(
-      map(doc => doc.payload.data() as T)
-    );
-  }
-
-  public col$<T>(ref: dbCollection<T>, queryFn?: dbQueryFn): Observable<T[]> {
-    
-    return this.col(ref, queryFn).snapshotChanges().pipe(
-      map(docs => {
-        return docs.map(a => a.payload.doc.data()) as T[]
-      })
-    );
+  /**
+   * Return a server timestamp palceholder (it'll turn into a timestamp serverside) 
+   */
+  public get timestamp(): dbValue {
+    return firestore.FieldValue.serverTimestamp();
   }
 
   /**
-   * Retrives a document from the database
-   * @param ref path or reference to the document
-   * @returns an observable of the document value
+   * Return an ID sentinel to be used in queries 
    */
-  public document$<T>(ref: dbDocument<T>): Observable<T> {
-    return this.doc(ref).snapshotChanges().pipe(
-      map(doc => {
-        const data = doc.payload.data();
-        const id = doc.payload.id;
-        return ( (typeof data !== 'undefined') ? { ...(data as any), id } : undefined );
-      })
-    );
+  public get sentinelId(): dbPath {
+    return firestore.FieldPath.documentId();
   }
 
   /**
-   * Retrives a collection of documents
-   * @param ref path or reference to the collection
-   * @param queryFn optional query function to filter the returned values
-   * @returns an observable of document values array
+   * Creates a geopoint at the given lat and lng
    */
-  public collection$<T>(ref: dbCollection<T>, queryFn?: dbQueryFn): Observable<T[]> {
-
-    return this.col(ref, queryFn).snapshotChanges()
-      .pipe( map( actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return ( (typeof data !== 'undefined') ? { ...data as any, id } as T : undefined );
-        })
-      }));
+  public geopoint(lat: number, lng: number): dbGeopoint {
+    return new firestore.GeoPoint(lat, lng);
   }
 
+  /**
+   * Helper returning a reference to a collection for internal use.
+   * @param ref a reference to the collection
+   * @param queryFn an opnional angularfire2 query function re-typed into a dbStreamFn
+   * @returns an AngularFirestoreCollection re-typed into dbColletionRef
+   */
+  public col<T>(ref: dbCollection<T>, queryFn?: dbStreamFn): dbCollectionRef<T> {
+    return typeof ref === 'string' ? this.fire.collection<T>(ref, queryFn) : ref;
+  }
+
+  /**
+   * Helper returning a reference to a document for internal use.
+   * @param ref a reference to the document
+   * @returns an AngularFirestoreDocument re-typed into dbDocumentRef
+   */
+  public doc<T>(ref: dbDocument<T>): dbDocumentRef<T> {
+    return typeof ref === 'string' ? this.fire.doc<T>(ref) : ref;
+  }
+
+  /**
+   * Returns a firestore.WriteBatch re-typed into a dbWriteBatch
+   * to support batch operations
+   */
   public batch(): dbWriteBatch {
-    return this.afs.firestore.batch();
-  }
-
-  public transaction<T>( updateFn: (t: dbTransaction) => Promise<T> ): Promise<T> {
-    return this.afs.firestore.runTransaction<T>(updateFn);
+    return this.fire.firestore.batch();
   }
 
   /**
-   * Retrives a collection of document paginating the result to support infinite scrolling
-   * @param ref path or reference to the collection
-   * @param opts optional page configuration
-   * @returns a class implementing the paged collection to retrive data in pages
+   * Runs a firestore.Transaction to support atomic operations
    */
-  public pagedCollection<T>(ref: dbCollection<T>, opts?: PageConfig<T>): PagedCollection<T> {
-    return new PagedCollection(this, ref, opts);
+  public transaction<T>( updateFn: (t: dbTransaction) => Promise<T> ): Promise<T> {
+    return this.fire.firestore.runTransaction<T>(updateFn);
+  }
+
+  /**
+   * Creates and returns a DatabaseDocument object
+   * @param path the path to the collection containing the document
+   * @param id the id of the document to be retrived
+   */
+  public document<T>(path: string, id: string): DatabaseDocument<T> {
+    return new DatabaseDocument<T>(this, path, id);
+  }
+
+  /**
+   * Creates and returns a DatamaseCOllection object
+   * @param path the path to the collection
+   */
+  public collection<T>(path: string): DatabaseCollection<T> {
+    return new DatabaseCollection<T>(this, path);
+  }
+
+  /**
+   * Creates and returns a collection paginating the stream of documents. The resulting collection
+   * may support realtime documents whenever page opts.realtime is set to true. 
+   * @param path the path to the collection
+   * @param opts optional page configuration
+   */
+  public pagedCollection<T>(path: string, opts?: PageConfigRt): PagedCollection<T> {
+    return !!opts && opts.realtime ?
+      new RealtimeCollection<T>(this, path, opts)
+        : new PagedCollection<T>(this, path, opts);
   }
 
   /**
    * Creates a new, or retrives and existing, distributed counter
-   * @param ref path or collection reference to the distributed counter location
+   * @param path the path to the distributed counter location in the database
    * @param shards number of shards to share the counting with
-   * @returns an object of type DistributedCounter
    */
-  public distributedCounter(ref: dbCounter, shards: number = 3): DistributedCounter {
-    return new DistributedCounter(this, ref, shards);
-  }
-
-  /**
-   * Add a document to the specified collection
-   * @param ref path or reference to the target collection
-   * @param data content
-   * @returns the string containing the new document id
-   */
-  public add<T>(ref: dbCollection<T>, data: any): Promise<string> {
-    const timestamp = this.timestamp;
-    return this.col(ref).add({
-      ...data,
-      created: timestamp
-    }).then( ref => ref.id );
-  }
-
-  /**
-   * Sets the document content overriding any previous value
-   * @param ref path or reference to the requested document
-   * @param data data content
-   */
-  public set<T>(ref: dbDocument<T>, data: any): Promise<void> {
-    const timestamp = this.timestamp;
-    return this.doc(ref).set({
-      ...data,
-      created: timestamp
-    });
-  }
-
-  /**
-   * Sets the document content merging data with any previous value
-   * @param ref path or reference to the requested document
-   * @param data data content
-   */
-  public merge<T>(ref: dbDocument<T>, data: any): Promise<void> {
-    const timestamp = this.timestamp;
-    return this.doc(ref).set({
-      ...data,
-      updated: timestamp
-    }, { merge: true } );
-  }
-
-  /**
-   * Update the document content combining data with any previous value (nested values will be overridden)
-   * @param ref path or reference to the requested document
-   * @param data data content
-   */
-  public update<T>(ref: dbDocument<T>, data: any): Promise<void> {
-    return this.doc(ref).update({
-      ...data,
-      updated: this.timestamp
-    });
-  }
-
-  /**
-   * Deletes a document
-   * @param ref path or reference to the requested document
-   */
-  public delete<T>(ref: dbDocument<T>): Promise<void> {
-    return this.doc(ref).delete();
-  }
-
-  /**
-   * Update the document content when existing or create a new document otherwise 
-   * @param ref path or reference to the requested document
-   * @param data data content
-   */
-  public upsert<T>(ref: dbDocument<T>, data: any): Promise<void> {
-    const doc = this.doc(ref).snapshotChanges().pipe(
-      take(1)
-    ).toPromise();
-
-    return doc.then(snap => {
-      return snap.payload.exists ? this.update(ref, data) : this.set(ref, data);
-    })
-  }
-
-  /**
-   * Deletes a full collection
-   * @param ref path or reference to the target collection
-   * @param batchSize optional size of the atomic batch used to speedup deletion
-   */
-  public deleteCollection<T>(ref: dbCollection<T>, batchSize: number = 5): Promise<void> {
-
-    // Starts by deleting a first batch of documents
-    return this.deleteBatch(ref, batchSize)
-      .pipe( 
-
-        // While there are still documents to delete
-        takeWhile( val => val >= batchSize ),
-
-        // Recurs to delete the next batche otherwise
-        flatMap(() => this.deleteBatch(ref, batchSize) )
-
-        // Turns the result into a promise
-      ).toPromise().then( () => {} );
-  }
-
-  // Detetes documents as batched transaction
-  private deleteBatch<T>(ref: dbCollection<T>, batchSize: number): Observable<number> {
-
-    // Makes sure to limit the request up to bachSize documents
-    return this.col<T>(ref, ref => ref.limit(batchSize))
-      .snapshotChanges().pipe(
-        take(1),
-        mergeMap(snapshot => {
-
-          // Delete documents in a batch
-          const batch = this.batch();
-          snapshot.forEach(doc => {
-            batch.delete(doc.payload.doc.ref);
-          });
-
-          // Commits the batch write and returns the snapshot length
-          return from( batch.commit() )
-            .pipe( map(() => snapshot.length) );
-        })
-      )
+  public distributedCounter(path: string, shards: number = 3): DistributedCounter {
+    return new DistributedCounter(this, path, shards);
   }
 }
-
-/*
-  /// create a reference between two documents
-  public connect(host: dbDocument<any>, key: string, doc: dbDocument<any>): Promise<void> {
-    return this.doc(host).update({ [key]: this.doc(doc).ref });
-  }
-
-  /// returns a documents references mapped to AngularFirestoreDocument
-  public docWithRefs$<T>(ref: dbDocument<T>): Observable<T> {
-    return this.doc$(ref).pipe(
-      map(doc => {
-        for (const k of Object.keys(doc)) {
-          if (doc[k] instanceof firebase.firestore.DocumentReference) {
-            doc[k] = this.doc(doc[k].path);
-          }
-        }
-        return doc;
-      })
-    );
-  }
-
-  public inspectDoc(ref: dbDocument<any>): void {
-    const tick = new Date().getTime();
-    this.doc(ref).snapshotChanges().pipe(
-      take(1),
-      tap(d => {
-        const tock = new Date().getTime() - tick;
-        console.log(`Loaded Document in ${tock}ms`, d);
-      })
-    ).subscribe();
-  }
-
-  public inspectCol(ref: dbCollection<any>): void {
-    const tick = new Date().getTime();
-    this.col(ref).snapshotChanges().pipe(
-      take(1),
-      tap(c => {
-        const tock = new Date().getTime() - tick;
-        console.log(`Loaded Collection in ${tock}ms`, c);
-      })
-    ).subscribe();
-  }
-*/

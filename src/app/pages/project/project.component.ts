@@ -15,14 +15,13 @@ import { $animations } from './project.animations';
 })
 export class ProjectComponent implements OnInit, OnDestroy {
 
-  public  project: wmProject;
-  private buffer: wmProject;
+  public  project: Project;
   public  editMode = false;
   public  saved = true;
   public  msgs;
 
   constructor(private content  : ContentService,
-              private database : ProjectService,
+              private projects : ProjectService,
               private route    : ActivatedRoute,
               private toolbar  : ToolbarService,
               private popup    : PopupService,
@@ -37,8 +36,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // Load the project once first...
-    this.loadProject().pipe( take(1) ).subscribe( project => {
+    // Load the project once
+    this.loadProject().subscribe( project => {
+
+      this.project = project;
 
       // Customizes the action menu according to the project ownership
       let type = project.isMine ? 'owner' : 'guest';
@@ -48,20 +49,20 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.toolbar.activateActions(this.msgs.actions[type])
         .subscribe( code => this.doAction(code) );
     });
-
+/*
     // ...then keep the project in sync reloading changes
     this.loadProject()
       .pipe( 
-        tap( project => this.buffer = project ), // Buffers the project for changes during editing
+        tap( project => this.buffer = project.data ), // Buffers the project for changes during editing
         filter( () => !this.editMode ) // Skips reloading while in editMode
       ) 
       .subscribe( project => {
-        this.project = project || {} as wmProject;
+        this.project = project.data || {} as wmProject;
     });
-
+*/
     // Save the modified project automatically
     this.saveProject().subscribe( project => {
-      this.database.updateProject( project ); this.saved = true; } );
+      this.project.update( project ); this.saved = true; } );
   }
 
   ngOnDestroy() {
@@ -75,21 +76,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   public leaveEditMode(): void {
-    // Updates the project with the latest buffered value
-    this.project = this.buffer;
-    // Turns editMode off
-    this.editMode = false;
+    
+    // Reload the project and turns editMode off
+    this.project.reload()
+    .toPromise()
+    .then( () => {
+      this.editMode = false;
+    });
   }
 
   public get document(): string {
     // Returns the document content
-    return this.project ? this.project.document : "";
+    return this.project ? this.project.data.document : "";
   }
 
   public set document(text: string) {
     
     // Update the preview and pushes the modified document for async saving
-    this.saveDocument$.next( this.project.document = text );
+    this.saveDocument$.next( this.project.data.document = text );
     this.saved = false;
   }
 
@@ -97,9 +101,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     return this.route.paramMap.pipe(
       takeUntil( this.dispose$ ),
-      switchMap( param => 
-        this.database.queryProject( param.get('id') )
-      ));
+      switchMap( param => {
+        return this.projects
+          .project( param.get('id') )
+          .getProject();
+      }));
   }
 
   private saveProject(): Observable<wmProject> {
@@ -114,14 +120,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private changeCover() {
 
-    this.uploads.chooseFile(this.project.cover)
+    this.uploads.chooseFile(this.project.data.cover)
       .then( file => {
         if(!!file) {
           // Updates the project with the new cover
-          this.database.updateProject({ 
-            id: this.project.id,
-            cover: file.url || null
-          } as wmProject );
+          this.project.update({ cover: file.url || null } as wmProject );
         }
       });
   }
@@ -131,7 +134,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.popup.confirmPopup(this.msgs.canDelete)
       .subscribe( () => {
         // Deletes the project
-        this.database.deleteProject( this.project.id );
+        this.project.delete();
       });
   }
 
@@ -168,7 +171,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.scroll.scrollTo(`[data-line="${line}"]`);
   }
 
-  public mdUpdated() {
+  public markdownDone() {
 
     // When in editMode, makes sure the view is scrolled back to the last 
     // source text known position every time the content changes

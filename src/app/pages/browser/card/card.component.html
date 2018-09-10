@@ -1,15 +1,15 @@
 <!-- Headibng cover -->
 <div class="cover" [wmThemeColor]="color">
-  <img *ngIf="project.cover" 
-       [src]="project.cover" 
-       (error)="project.cover = null" />
+  <img *ngIf="project.data.cover" 
+       [src]="project.data.cover" 
+       (error)="project.data.cover = null" />
 
   <!-- Cover picture loader -->
-  <wm-uploads (file)="selectCover($event)" #uploads *ngIf="tools">
+  <!--wm-uploads (file)="selectCover($event)" #uploads *ngIf="tools">
     <button mat-icon-button (click)="uploads.chooseFile(project.cover)" class="tools">
       <mat-icon>insert_photo</mat-icon>
     </button>
-  </wm-uploads>
+  </wm-uploads-->
 </div>
 
 <!-- Card content --> 
@@ -17,21 +17,20 @@
   
   <div class="overlap">
     <wm-avatar [src]="owner.img" [color]="avatarColor" [wmUserInfoTrigger]="userInfo"></wm-avatar>
-    <wm-user-info [owner]="project" #userInfo></wm-user-info>
+    <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
   </div>
 
   <div class="title" [routerLink]="[ '.', project.id ]">
-    {{ project.name }}
+    {{ project.data.name }}
   </div>
   
   <div class="author">{{ owner.name }}</div>
-  <p>{{ project.pitch }}</p>
+  <p>{{ project.data.pitch }}</p>
 
   <!-- Theme color picker -->
-  <wm-color-picker [color]="project.color" (pick)="setColor($event)" class="color" *ngIf="tools">
+  <!--wm-color-picker [color]="project.color" (pick)="setColor($event)" class="color" *ngIf="tools">
     <button mat-icon-button class="tools">
       <mat-icon>brush</mat-icon>
     </button>
-  </wm-color-picker>
+  </wm-color-picker-->
 </div>
-  

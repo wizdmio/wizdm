@@ -4,49 +4,11 @@
   <p fxHide.lt-sm [@fade]="activeTab">{{ tabDescription || msgs.description }}</p>
 </header>
 
-<wm-filter [options]="msgs.tabs" [active]="tabIndex" (activeChange)="switchTab($event)" [ngSwitch]="tabSource">
+<wm-filter [options]="msgs.tabs" [(active)]="tabIndex" [ngSwitch]="tabSource">
 
-<mat-grid-list *ngSwitchCase="'all'" rowHeight="300px" [cols]="cols" gutterSize="10px">
+    <mat-grid-list *ngSwitchCase="'all'" rowHeight="260px" [cols]="cols" gutterSize="10px" @list>
 
-  <mat-grid-tile *ngFor="let project of allProjects.data$ | async">
-
-    <wm-project-card [project]="project" [tools]="project.isMine">
-    </wm-project-card>
-
-  </mat-grid-tile>
-
-  <mat-grid-tile *ngIf="allProjects.loading$ | async">
-    <div fxLayout="column" fxLayoutAlign="center center" class="spinner">
-      <mat-spinner diameter="60" strokeWidth="2"></mat-spinner>
-    </div>
-  </mat-grid-tile>
-
-</mat-grid-list>
-
-<mat-grid-list *ngSwitchCase="'mine'" rowHeight="300px" [cols]="cols" gutterSize="10px">
-
-    <mat-grid-tile *ngFor="let project of myProjects$ | async">
-  
-      <wm-project-card [project]="project" [tools]="project.isMine">
-      </wm-project-card>
-  
-    </mat-grid-tile>
-  
-    <!--mat-grid-tile *ngIf="loading$ | async">
-      <div fxLayout="column" fxLayoutAlign="center center" class="spinner">
-        <mat-spinner diameter="60" strokeWidth="2"></mat-spinner>
-      </div>
-    </mat-grid-tile-->
-  
-  </mat-grid-list>
-
-<!--wm-filter [options]="msgs.tabs" [active]="tabIndex" (activeChange)="switchTab($event)" [ngSwitch]="tabIndex">
-
-  <ng-container *ngFor="let tab of msgs.tabs; let case = index">
-
-    <mat-grid-list *ngSwitchCase="case" rowHeight="260px" [cols]="cols" gutterSize="10px" [@list]="$loading | async">
-
-      <mat-grid-tile *ngFor="let project of tabData$ | async">
+      <mat-grid-tile *ngFor="let project of all$ | async">
 
         <wm-project-card [project]="project"
                           [tools]="project.isMine"
@@ -55,16 +17,27 @@
 
       </mat-grid-tile>
 
-
-      <mat-grid-tile *ngIf="loading$ | async">
+      <mat-grid-tile *ngIf="projects.loading$ | async">
         <div fxLayout="column" fxLayoutAlign="center center" class="spinner">
           <mat-spinner diameter="60" strokeWidth="2"></mat-spinner>
         </div>
       </mat-grid-tile>
 
     </mat-grid-list>
-  </ng-container>
-</wm-filter-->
+
+    <mat-grid-list *ngSwitchCase="'mine'" rowHeight="260px" [cols]="cols" gutterSize="10px" @list>
+
+      <mat-grid-tile *ngFor="let project of mine$ | async">
+
+        <wm-project-card [project]="project" tools="true"
+                          (update)="updateProject($event)" @card>
+        </wm-project-card>
+
+      </mat-grid-tile>
+
+    </mat-grid-list>
+  
+</wm-filter>
 
 <!--mat-tab-group dynamicHeight [(selectedIndex)]="activeTab">
 

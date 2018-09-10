@@ -1,15 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Resolve, 
-         RouterStateSnapshot, 
-         ActivatedRouteSnapshot,
-         Router } from '@angular/router';
-
-import { AuthService } from '../auth/auth.service';
+import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot,Router } from '@angular/router';
+import { UserProfile } from '../user/user-profile.service';
 import { ContentService } from '../content/content-manager.service';
 import { Observable, of } from 'rxjs';
 import { switchMap, take } from 'rxjs/operators';
 import { WindowRef } from '../window/window.service';
-
 import * as moment from 'moment';
 
 @Injectable({
@@ -18,7 +13,7 @@ import * as moment from 'moment';
 export class ResolverService implements Resolve<any> {
 
   constructor(private content : ContentService,
-              private auth    : AuthService, 
+              private profile : UserProfile,
               private router  : Router,
               private window  : WindowRef) { }
 
@@ -37,12 +32,12 @@ export class ResolverService implements Resolve<any> {
     }
 
     // Waits to check for authentication prior to load the content to avoid flickering at startup
-    return this.auth.profile$.pipe(
+    return this.profile.asObservable().pipe(
       take(1),
       switchMap( profile => {
 
         // If authenticated, get the user preferred language
-        if(profile != null && profile.lang != null && profile.lang != lang) {
+        if(!!profile && profile.lang != null && profile.lang != lang) {
           
           console.log('Switch to user language: ' + profile.lang);
 

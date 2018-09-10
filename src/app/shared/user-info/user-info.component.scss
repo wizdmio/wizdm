@@ -1,6 +1,6 @@
 @import "src/variables";
 @import 'src/theme';
-@import "src/app/core/styles/colors";
+@import "src/app/core/colors/colors";
 
 $light: map-get($wm-theme-foreground, contrast);
 $dark : map-get($wm-theme-foreground, text);

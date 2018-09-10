@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
-import { ContentService, AuthService } from 'app/core';
+import { ContentService, UserProfile } from 'app/core';
 import { $loginAnimations } from './login-animations';
 import { take, tap } from 'rxjs/operators';
 
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit  {
   constructor(private content : ContentService,
               private router  : Router, 
               private route   : ActivatedRoute,
-              private auth    : AuthService) {
+              private profile : UserProfile) {
 
     // Gets the localized contents
     this.msgs = this.content.select("login");
@@ -57,6 +57,9 @@ export class LoginComponent implements OnInit  {
     // Group the controls
     this.form = new FormGroup({});
   }
+
+  // Returns the Auth service instance
+  private get auth() { return this.profile.auth; }
 
   ngOnInit() {
 
@@ -114,7 +117,7 @@ export class LoginComponent implements OnInit  {
   // applying the user preferred language
   private loggedIn() {
 
-    this.auth.profile$.pipe(
+    this.profile.asObservable().pipe(
       take(1),
       tap( user => {
 
@@ -210,7 +213,11 @@ export class LoginComponent implements OnInit  {
 
   // Execute the form requested action
   public loginAction() {
+
+    // Makes sure ti apply the current preferred language
+    this.auth.language = this.content.language;
     
+    // Perform the requested action
     switch(this.page) {
 
       case 'register':
@@ -255,7 +262,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;;
 
     // Signing-in with a provider using the current language before jumping to the projects page by applying the user preferrend language (if any)
-    this.auth.signInWith( provider, this.content.language )
+    this.auth.signInWith( provider )
       .then( () => this.loggedIn() )
       .catch( error => this.showError(error.code) );
   }
@@ -270,12 +277,12 @@ export class LoginComponent implements OnInit  {
       .catch( error => this.showError(error.code) );
   }
 
-  private registerNew(email: string, password: string,name: string) {
+  private registerNew(email: string, password: string, name: string) {
 
     this.progress = true;
 
     // Signing-in with a email/password using the current language than send a verification email befor jumping to the profile page
-    this.auth.registerNew(email, password, name, this.content.language )
+    this.auth.registerNew(email, password, name )
       .then( () => this.auth.sendEmailVerification() )
       .then( () => this.jump('profile') )
       .catch( error => this.showError(error.code) );

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ContentService, LanguageOption, AuthService } from '../../core';
+import { Component, Input } from '@angular/core';
+import { ContentService, LanguageOption } from 'app/core';
 
 export interface LanguageData {
 
@@ -15,13 +15,12 @@ export interface LanguageData {
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   
   private _options: LanguageOption[];
   public msgs;
 
-  constructor(private content: ContentService,
-              private auth: AuthService) {
+  constructor(private content: ContentService) {
 
     // Gets the localized user messages from content service
     this.msgs = this.content.select('navigator.footer');
@@ -30,11 +29,7 @@ export class FooterComponent implements OnInit {
     this._options = this.content.languageOptions;
   }
 
-  ngOnInit() { }
-
-  public get signedIn(): boolean {
-    return this.auth.authenticated;
-  }
+  @Input() signedIn: boolean = false;
 
   public get options(): LanguageOption[] {
     

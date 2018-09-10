@@ -1,62 +1,101 @@
-import { Injectable } from '@angular/core';
-import { User } from 'firebase';
-import { wmUser, wmFile } from '../interfaces';
-import { DatabaseService, dbQueryFn, dbTimestamp } from '../database/database.service';
+import { Injectable, OnDestroy } from '@angular/core';
+import { DatabaseService, DatabaseDocument, dbCommon } from '../database/database.service';
+import { AuthService, UserExtension, User } from '../auth/auth.service';
 import { UploaderService } from '../uploader/uploader.service';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, Subscription, of } from 'rxjs';
+import { tap, switchMap } from 'rxjs/operators';
+
+export interface wmUser extends dbCommon {
+
+  img?     : string,
+  name?    : string,
+  email?   : string,
+  phone?   : string,
+  birth?   : string,
+  gender?  : string,
+  motto?   : string,
+  lang?    : string,
+  color?   : string,
+  cover?   : string
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserProfile implements wmUser {
+export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> implements OnDestroy, UserExtension {
 
   // User authentication token
   public user: User = null;
+  public data: T = <T>{};
 
-  // Implements wmUser
-  public id      : string;
-  public img     : string;
-  public name    : string;
-  public email   : string;
-  public phone   : string;
-  public birth   : string;
-  public gender  : string;
-  public motto   : string;
-  public lang    : string;
-  public color   : string;
-  public cover   : string;
-  public created : dbTimestamp;
-  public updated : dbTimestamp;
+  private sub: Subscription;
 
-  public lastApplication: any;
+  constructor(db: DatabaseService, readonly auth: AuthService, readonly uploads: UploaderService) {
+    super(db, '/users', '');
 
-  //uploads? : any; collection reference
+    // Extends AuthService user functionalities to create/destroy the user profile
+    // togheter with the user account
+    this.auth.extendUser(this);
 
-  constructor(private db: DatabaseService, private up: UploaderService) {}
+    // Subscribe to the observable to keep the profile information in sync
+    this.sub = this.asObservable()
+      .subscribe( profile => {
 
-  public asObservable(user: User): Observable<wmUser> {
-    return user ? 
-      this.db.document$<wmUser>(`users/${user.uid}`)
-        : of(null);
+        if(!profile) { this.data = <T>{}; return; }
+
+        // Initialize the user's uploader
+        this.uploads.init(`/users/${this.id}/uploads`, this.id);
+
+        // Sync the profile data
+        this.data = profile;
+      });
   }
 
-  public init(user: User): Promise<wmUser> {
+  // Implements AuthService.UserExtension onUserCreate()
+  public onUserCreate(user: User): boolean | Promise<boolean> {
     
-    this.reset();
+    console.log('Creating new user profile: ', user.uid);
 
-    // Keeps a copy of the authentication token
-    this.user = user;
-
-    // Load the user profile
-    return this.asObservable(user)
-      .pipe( tap( user => Object.assign(this, user) ) )
-        .toPromise();
+    // Create a new user profile whenever a new user account is created
+    return this.create(user, this.auth.language)
+      .then( () => true );
   }
 
-   // Returns true if user is logged in and profile data are available
+  private create(user: User, lang?: string) {
+
+    // Computes a minimal user profile from the authentication token
+    let data = <T>{
+      name  : user.displayName,
+      email : user.email,
+      phone : user.phoneNumber,
+      img   : user.photoURL,
+      lang  : lang || 'en'
+    };
+
+    return this.upsert(data);
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  public asObservable(): Observable<T|null> {
+
+    return this.auth.user$.pipe(
+      switchMap( user => {
+        // Keeps a copy of the authentication token
+        this.user = user;
+        // Initialize the document id
+        this.id = !!user ? user.uid : null;
+        // Streams the document data
+        return !!user ? this.stream() : of(null);
+      })
+    );
+  }
+
+  // Returns true if user is logged in and profile data are available
   get authenticated(): boolean {
-    return !!this.user && !!this.id;
+    return !!this.user && !!this.data;
   }
 
   // Email verified helper
@@ -64,82 +103,28 @@ export class UserProfile implements wmUser {
     return !!this.user && this.user.emailVerified;
   }
 
-  private reset() {
-    this.id      = undefined;
-    this.img     = undefined;
-    this.name    = undefined;
-    this.email   = undefined;
-    this.phone   = undefined;
-    this.birth   = undefined;
-    this.gender  = undefined;
-    this.motto   = undefined;
-    this.lang    = undefined;
-    this.color   = undefined;
-    this.cover   = undefined;
-    this.created = undefined;
-    this.updated = undefined;
-    this.lastApplication= undefined;
-  }
-
-  public create(user: User, lang?: string) {
-
-    // Computes a minimal user profile from the authentication token
-    let data = {  
-      name  : user.displayName,
-      email : user.email,
-      phone : user.phoneNumber,
-      img   : user.photoURL,
-      lang  : lang
-    };
-
-    return this.db.upsert<wmUser>(`users/${user.uid}`, data);
-  }
-
-  public update(data: wmUser) : Promise<void> {
-    return this.db.merge<wmUser>(`users/${this.id}`, data);
-  }
-
-  public delete() {
-    // Deletes the user's uploaded files first
-    return this.deleteAllFiles()
-      // Deletes the user profile data next
-      .then( () => this.db.delete<wmUser>(`users/${this.id}`) )
-  }
-
-  // User file management
-
   public loadImage(file: File): Promise<void> {
-    return this.uploadFileOnce(file)
-      .then( file => this.update({ img: file.url }) );
+    return this.uploads.uploadOnce(file)
+      .then( file => this.update(<T>{ img: file.url }));
   }
 
-  public queryUploads(queryFn?: dbQueryFn): Observable<wmFile[]> {
-    return this.db.collection$<wmFile>(`users/${this.id}/uploads`, queryFn);
-    //return this.up.queryUploads(`users/${this.id}/uploads`, queryFn);
+  public delete(): Promise<void> {
+    // Deletes the user's uploaded files first
+    return this.uploads.deleteAll()
+      // Deletes the user profile data next
+      .then( () => super.delete() )
   }
 
-  public queryFile(id: string): Observable<wmFile> {
-    return this.db.document$<wmFile>(`users/${this.id}/uploads/${id}`);
-    //return this.up.queryFile(`users/${this.id}/uploads/${id}`);
-  }
+  // Implements AuthService.UserExtension onUserDelete()
+  public onUserDelete(user: User): boolean | Promise<boolean> {
+    
+    console.log('Wiping user profile for: ', user.uid);
+    
+    if( user.uid !== this.id ){
+      return false;
+    }
 
-  public queryFileByUrl(url: string): Observable<wmFile> {
-    return this.up.queryFileByUrl(`users/${this.id}/uploads`, url);
-  }
-
-  public uploadFile(file: File): Observable<wmFile> {
-    return this.up.uploadFile(`users/${this.id}/uploads`, this.id, file);
-  }
-
-  public uploadFileOnce(file: File): Promise<wmFile> {
-    return this.up.uploadFileOnce(`users/${this.id}/uploads`, this.id, file);
-  }
-
-  public deleteFile(id: string): Promise<void> {
-    return this.up.deleteFile(`users/${this.id}/uploads/${id}`);
-  }
-
-  public deleteAllFiles(): Promise<void> {
-    return this.up.deleteAllFiles(`users/${this.id}/uploads`, this.id);
+    // Deletes the user profile returning true so AuthService will proceed deleting the user account
+    return this.delete().then( () => true );
   }
 }

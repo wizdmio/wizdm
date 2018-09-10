@@ -1,50 +1,39 @@
 import { Injectable } from '@angular/core';
-import { wmUser, wmProject } from '../interfaces';
-import { DatabaseService, dbQueryFn, PagedCollection, PageConfig, DistributedCounter } from '../database/database.service';
-import { UserProfile } from '../user/user-profile.service';
-import { Observable, BehaviorSubject, of, merge } from 'rxjs';
+import { DatabaseService, PagedCollection, PageConfig, dbStreamFn } from '../database/database.service';
+import { ContentService } from '../content/content-manager.service';
+import { UserProfile, wmUser } from '../user/user-profile.service';
+import { Observable, BehaviorSubject, of, from, merge } from 'rxjs';
 import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
-import { Project } from './project.class';
+import { Project, wmProject } from './project';
+export { Project, wmProject } from './project';
+
+export interface wmApplication {
+
+  name?          : string, // Application name
+  pitch?         : string, // Elevator pitch
+  description?   : string, // Background description
+  revenues?      : string, // Revenue streams
+  players?       : string, // Other similar players
+  differences?   : string, // Uniquenesses
+  users?         : string, // Target users
+  target?        : string, // Target market (geo, ...)
+  comments?      : string  // Additional comments
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService {
+export class ProjectService extends PagedCollection<wmProject> {
 
-  // The full collection of projects (paged)
-  //private _projects$: PagedCollection<Project>;
+  private userUnknown: wmUser;
 
-  // Public observable exposing the full list of projects
-  //public projects$: Observable<Project[]>;
+  constructor(db: DatabaseService, private content: ContentService, readonly profile: UserProfile) {
+    super(db, '/projects');
 
-  // Private loading subject
-  //private _loading$ = new BehaviorSubject<boolean>(false);
-
-  // Public loading observable to display loading status
-  //public loading$: Observable<boolean>;
-
-  constructor(private profile  : UserProfile,
-              private database : DatabaseService) {
-/*
-    // Initialize the private paged collection for internal use
-    this._projects$ = this.database.pagedCollection<Project>('projects', { 
-      // Pass along the postProcess operator to map wmProjects into Projects[]
-      postProcess: this.wrapProjects.bind(this)
-    });
-
-    // Combines the pagination loading status with the local one to provide an unified
-    // interface to the caller
-    this.loading$ = merge( this._projects$.loading$, this._loading$.asObservable() );
-
-    // Exposes the paged data as the main list of projects
-    this.projects$ = this._projects$.data$;
-  */
+    // Loads the localized unknown user object
+    this.userUnknown = this.content.select('project.userUnknown');
   }
-/*
-  // Pagination support
-  public more(): void { this._projects$.more();}
-  public reset(): void { this._projects$.reset();}
-*/
+
   // Current user id
   public get userId(): string { return this.profile.id; }
 
@@ -52,8 +41,20 @@ export class ProjectService {
    * Checks if a specific projects belong to the current user
    * @param project the project to verify
    */
-  public isProjectMine(project: wmProject) : boolean {
+  public isProjectMine(project: wmProject): boolean {
     return project.owner === this.profile.id;
+  }
+
+  public resolveOwner(project: wmProject): Observable<wmUser> {
+    
+    // Short-circuit in case the owner is the current user
+    if( project.owner === this.profile.id ) {
+      return of(this.profile.data);
+    }
+
+    // Load the owner otherwise filling up the content with an 'unkown' user when missing
+    return this.db.document<wmUser>('/users', project.owner)
+      .get().pipe( map( data => data || this.userUnknown ) );
   }
 
   /**
@@ -63,10 +64,9 @@ export class ProjectService {
   public doesProjectExists(name: string): Promise<boolean> {
     
     // Query the projects collection searching for a matching lowerCaseName
-    return this.database.col$<wmProject>('projects', ref => {
+    return this.stream(ref => {
         return ref.where('lowerCaseName', '==', name.trim().toLowerCase());
-      } 
-    ).pipe(
+    }).pipe(
       debounceTime(500),
       take(1),
       map(arr => arr.length > 0),
@@ -74,7 +74,7 @@ export class ProjectService {
   }
 
   // Helper to snitize the Project's data payload
-  private sanitizeData(data: any): any {
+  public sanitizeData(data: any): any {
 
     // Trims the name and creates a lower case version of it for searching purposes 
     if(data.name) {
@@ -88,89 +88,70 @@ export class ProjectService {
     return { ...data, owner: this.userId };
   }
 
-  // Adds a new project returning the corresponding id 
-  public addProject(data: wmProject): Promise<string> {
-    return this.database.add<wmProject>('/projects', this.sanitizeData(data) );
+  public project(id: string): Project {
+    return new Project(this, { id } as wmProject);
   }
 
-  // Updates the existing project
-  public updateProject(data: wmProject): Promise<void> {
-    return data.id ? 
-      this.database.merge<wmProject>(`/projects/${data.id}`, this.sanitizeData(data) ) :
-        Promise.reject('project/invalidId');
+  public addProject(data: wmProject): Promise<Project> {
+    return super.add( this.sanitizeData(data) )
+      .then( doc => {
+        return this.project(doc.id);
+      });
   }
 
-  // Load the owner corresponding to the specified project
-  public loadOwner(project: wmProject): Observable<wmUser> {
-    return !this.isProjectMine(project) 
-      ? this.database.document$<wmUser>(`/users/${project.owner}`)
-        .pipe( take(1) )
-          : of(this.profile);
-  }
+  public browseAll(opts?: PageConfig): Observable<Project[]> {
 
-  public likesCounter(project: wmProject): DistributedCounter {
-    return this.database.distributedCounter(`/projects/${project.id}/likes`);
-  }
+    // Re-initzialize the page configuration
+    if(!!opts) { this.config = this.init(opts);}
 
-  // Quesy for a single specific project
-  public queryProject(ref: string | wmProject): Observable<Project> {
-
-    let id = typeof ref === 'string' ? ref : ref.id;
-
-    // Query for the project coming with the requested id
-    return id ? this.database.document$<wmProject>(`/projects/${id}`)
-      // Turns it into a Project object extending wmProject
-      .pipe( map( project => new Project(this, project) ))
-        : of(null);
-  }
-
-  // rxjs operator to map wmProject observables into Observable<Project[]> stream
-  private wrapProjects(): (input: Observable<wmProject[]>) => Observable<Project[]> {
-    return map( projects => {
-      return projects.map( project => {
-        return new Project(this, project);
-      }); 
-    });
-  }
-
-  public queryAllProjects(opts?: PageConfig<Project>): PagedCollection<Project> {
-
-    // Initialize the private paged collection for internal use
-    return this.database.pagedCollection<Project>('projects', {
-      ...opts, 
-      // Pass along the postProcess operator to map wmProjects into Projects[]
-      postProcess: this.wrapProjects.bind(this)
-    });
+    // Returns a paged stream mapping the output to Project[]
+    return this.streamPage<Project>(
+      map( (projects: wmProject[]) => {
+        return projects.map( project => {
+          return new Project(this, project);
+        }); 
+      })
+    );
   }
 
   // Query function to filter my own projects only
-  private get myOwmProjects(): dbQueryFn {
+  private get myOwmProjects(): dbStreamFn {
     return ref => ref.where('owner', '==', this.profile.id);
   }
 
-  public queryOwnProjects(): Observable<Project[]> {
-    
-    // Sets the loading status
-    //this._loading$.next(true);
+  public loadMine(): Observable<Project[]> {
 
-    // Query for all the project with the owner corresponding to the current user
-    return this.database.collection$<wmProject>('/projects', this.myOwmProjects )
-      .pipe( 
-        
-        // Turns the wmProject[] into Project[]
-        this.wrapProjects()//, 
-        
-        // Resets the loading status
-        //tap( () => this._loading$.next(false) ) 
-      );
+    return this.get(this.myOwmProjects)
+      .pipe( map( projects => {
+        return projects.map( project => {
+          return new Project(this, project);
+        });
+      }));
   }
 
-  public deleteProject(ref: string | wmProject): Promise<void> {
+  // Creates a project instance starting from the given application context
+  public apply(application: wmApplication, template: any, comments?: any): Promise<Project> {
 
-    let id = typeof ref === 'string' ? ref : ref.id;
-    
-    // Deletes the project coming with the requested id
-    return id ? this.database.delete(`/projects/${id}`) :
-      Promise.reject('project/invalidId');
+    // Build a context object combining the given application, 
+    // containing the user answers given during the application 
+    // proces, and optional additional comments (localized)
+    const context = { ...comments, application };
+
+    // Store a new project creating the content from the applicaton
+    return this.addProject( {
+
+      status: 'draft',
+      // Project name inherited from the applciation
+      name: application.name,
+      // Elevator pitch inherited from the applciation
+      pitch: application.pitch,
+      // Document created from the template and the given application 
+      document: template.replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
+        // Replaces the <comma.separated.selectors> found into the template 
+        // with the content coming from the context object
+        return (selector.select(context) || selector).interpolate(context);
+      })
+
+    } as wmProject );
   }
 }

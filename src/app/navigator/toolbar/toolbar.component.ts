@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { ContentService, UserProfile } from 'app/core';
 import { ToolbarService } from './toolbar.service';
 import { $animations } from './toolbar-animations';
-import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'wm-toolbar',
@@ -16,8 +15,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   constructor(private content : ContentService,
               private toolbar : ToolbarService,
-              //private auth    : AuthService) {
-              private user    : UserProfile) {
+              private profile : UserProfile) {
 
     // Gets the localized content
     this.menu = this.content.select("navigator.menu");
@@ -44,11 +42,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   ngOnDestroy() {}
 
   public get signedIn(): boolean {
-    return this.user.authenticated;
+    return this.profile.authenticated;
   }
 
   public get userImage(): string {
-    return this.user.img; 
+    return this.profile.data.img; 
   }
 
   public get actionButtons() {

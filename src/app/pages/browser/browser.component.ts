@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { ContentService, ProjectService, PagedCollection, Project, wmProject } from 'app/core';
+import { ContentService, ProjectService, Project } from 'app/core';
 import { ToolbarService, ScrollViewService } from 'app/navigator';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, from, of } from 'rxjs';
 import { map, filter, take, takeUntil, tap } from 'rxjs/operators';
 import { $animations } from './browser.animations';
 
@@ -20,15 +20,15 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
   public msgs = null;
   public cols = 1;
 
-  public allProjects: PagedCollection<Project>;
-  public myProjects$: Observable<Project[]>;
+  public all$: Observable<Project[]>;
+  public mine$: Observable<Project[]>;
 
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
   constructor(private content  : ContentService,
               private toolbar  : ToolbarService,
               private scroll   : ScrollViewService,
-              private database : ProjectService,
+              private projects : ProjectService,
               private media    : ObservableMedia) {}
 
   ngOnInit() {
@@ -40,16 +40,10 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
     this.toolbar.activateActions(this.msgs.actions);
 
     // Creates the observable listing all projects (using pagination)
-    // resolving all owners
-    this.allProjects = this.database.queryAllProjects();
-    /*.projects$
-      .pipe( takeUntil( this.dispose$ ));*/
+    this.all$ = this.projects.browseAll({ limit: 10 });
 
-    // Creates the observable listing current user' projects
-    this.myProjects$ = this.database.queryOwnProjects()
-      .pipe( takeUntil( this.dispose$ ), tap( projects => {
-        console.log(projects);
-      }) );
+    // Load the personal projects once (limited number?)
+    this.mine$ = this.projects.loadMine();
 
     // Subscribes to the scrollPosition event to implement project pagination
     this.scroll.scrollPosition
@@ -58,12 +52,9 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
       // Ask for more data to display when at the bottom of the page
       .subscribe( pos => {
         if(pos === 'bottom') {
-          this.allProjects.more();
+          this.projects.more();
         }
       });
-
-      // Load the first page of projects
-      //this.database.more();
   }
 
   ngAfterContentInit() {
@@ -78,8 +69,6 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
 
   ngOnDestroy() {
 
-    this.allProjects.dispose();
-
     // Disposes all the observables. DO NOT FORGET to use takeUntil() operator
     this.dispose$.next();
     this.dispose$.complete();
@@ -90,13 +79,14 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
   public get tabDescription(): string {
     return this.msgs.tabs[this.tabIndex].description;
   }
-/*
-  public get loading$(): Observable<boolean> {
-    return this.database.loading$;
-  }
-*/
+
   private get tabSource(): string {
     return this.msgs.tabs[this.tabIndex].value;
+  }
+  
+/*
+  public get loading$(): Observable<boolean> {
+    return this.projects.loading$;
   }
 
   public switchTab(index: number) {
@@ -107,11 +97,10 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
     switch( this.tabSource ) {
 
       case 'all':// Resets the paging
-      this.allProjects.more();
+      //this.all$ = this.projects.browseAll();
       break;
 
       case 'mine':
-      this.allProjects.reset();
       default:
     }
   }
@@ -122,20 +111,15 @@ export class BrowserComponent implements OnInit, AfterContentInit, OnDestroy {
     switch( this.tabSource ) {
 
       case 'all':
-      return this.allProjects.data$;
+      return this.all$;
 
       case 'mine':
-      return this.myProjects$;
+      return this.mine$;
 
       default:
     }
 
     return of([]);
-  }
-/*
-  // Updates the project theme
-  public updateProject(data: wmProject): void {
-    this.database.updateProject(data);
   }
 */
 }

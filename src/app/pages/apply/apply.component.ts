@@ -1,15 +1,19 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
-import { ContentService, CanPageDeactivate, UserProfile, ProjectService, wmApplication, wmProject } from '../../core';
-import { ToolbarService, ActionEnabler } from '../../navigator';
-import { PopupService } from '../../shared';
+import { ContentService, CanPageDeactivate, UserProfile, ProjectService, wmApplication, wmUser } from 'app/core';
+import { ToolbarService, ActionEnabler } from 'app/navigator';
+import { PopupService } from 'app/shared';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
 import { $animations } from './apply.animations';
 import { Observable } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators'
+
+interface userApply extends wmUser {
+  lastApplication?: any,
+}
 
 @Component({
   selector: 'wm-apply',
@@ -31,7 +35,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
               private route   : ActivatedRoute,
               private http    : HttpClient,
               private content : ContentService,
-              private user    : UserProfile,
+              private profile : UserProfile<userApply>,
               private project : ProjectService,
               private toolbar : ToolbarService,
               private popup   : PopupService) { 
@@ -68,7 +72,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   // Helpers to deal with the temporary application 
   private get application(): wmApplication {
-    return this.user.lastApplication || null;
+    return this.profile.data.lastApplication || null;
   }
 
   private resetApplication(): Promise<void> { 
@@ -77,7 +81,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   // Updates the last saved application
   private saveApplication(value: any): Promise<void> {
-    return this.user.update( { lastApplication: value })
+    return this.profile.update( { lastApplication: value })
       // Enables/ Disables the 'clear' action button accordingly
       .then(() => this.enableClear$.enable( value != null ) )
       .catch(error => console.log("something wrong: " + error.code) );
@@ -201,40 +205,17 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   }
 
   // Creates a project instance starting from the given application
-  private createProject(application: wmApplication): Promise<string> {
+  private applyProject(application: wmApplication) {
 
     // Gets the document localized contents
-    let doc = this.content.select('document');
+    const doc = this.content.select('document');
 
     // Load the document template
     return doc ? this.loadTemplate(doc.template)
       .pipe( switchMap( template => { 
 
-        // Build a context object combining the given application, 
-        // containing the user answers given during the application 
-        // proces, and the localized comments
-        let context = { ...doc, application };
-
         // Store a new project creating the content from the applicaton
-        return this.project.addProject( {
-
-          status: 'draft',
-
-          // Project name inherited from the applciation
-          name: application.name,
-          
-          // Elevator pitch inherited from the applciation
-          pitch: application.pitch,
-          
-          // Document created from the template and the given application 
-          document: template.replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
-            
-            // Replaces the <comma.separated.selectors> found into the template 
-            // with the content coming from the context object
-            return (selector.select(context) || selector).interpolate(context);
-          })
-
-        } as wmProject );
+        return this.project.apply( application, template, doc);
 
       })).toPromise() : Promise.reject('project/missingTemplate');
   }
@@ -247,7 +228,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
     this.progress = true;
 
     // Create a new project from the temporary application
-    this.createProject( this.application )
+    this.applyProject( this.application )
       .then( id => {
         
         console.log("project submitted: ", id);
@@ -279,13 +260,11 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
       // Pops up the terms-privacy conditions without leaving the page
       case 'terms':
-      
       this.popup.open(TermsPrivacyPopupComponent);
       break;
 
       // Clears the forrm and the previously saved application to start from 
       case 'clear':
-      
       this.popup.confirmPopup(this.msgs.canClear)
         .subscribe( () => this.clearApplication() );
       break;

@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { ContentService, UserProfile, wmFile } from 'app/core';
+import { ContentService, UserProfile, UploaderService, wmFile } from 'app/core';
 import { Observable, of } from 'rxjs';
-import { filter, take, map, tap, switchMap } from 'rxjs/operators';
+import { filter, take, tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-uploads',
@@ -16,7 +16,7 @@ export class UploadsComponent implements OnInit {
   public msgs;
 
   constructor(private content : ContentService,
-              private user    : UserProfile,
+              private profile : UserProfile,
               private dialog  : MatDialog) {
 
     // Gets the localized content
@@ -26,10 +26,14 @@ export class UploadsComponent implements OnInit {
   // Displays the selection 'none' option
   @Input() none: boolean = true;
 
+  private get uploader(): UploaderService {
+    return this.profile.uploads;
+  }
+
   ngOnInit() {
 
     // Gets the user uploads ob  servable
-    this.uploads = this.user.queryUploads( ref => ref.orderBy('created') )
+    this.uploads = this.uploader.stream( ref => ref.orderBy('created') )
       // Resets the uploading progress eventually running when the list updates
       .pipe( tap( () => this.loading = null ));
   }
@@ -50,7 +54,7 @@ export class UploadsComponent implements OnInit {
     this.loading = file.name;
 
     // Uploads t  he file and selects it when done
-    this.user.uploadFileOnce(file)
+    this.uploader.uploadOnce(file)
       .then( file => {
         this.selectedFile = file;
       }).catch( () => this.loading = null );
@@ -73,7 +77,7 @@ export class UploadsComponent implements OnInit {
   public chooseFile(url?: string): Promise<wmFile> {
 
     // Starts by getting the already selected file if the url is specified
-    return ( url ? this.user.queryFileByUrl(url).pipe( take(1) ) : of<wmFile>({}) )
+    return ( url ? this.uploader.streamByUrl(url).pipe( take(1) ) : of<wmFile>({}) )
       .pipe(
         switchMap( file => {
           // Keeps the previous selection

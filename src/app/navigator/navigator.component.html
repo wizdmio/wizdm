@@ -10,7 +10,7 @@
   <mat-sidenav mode="over" position="end" #snav>
 
     <!-- Side Menu for Mobile version -->
-    <wm-side-menu></wm-side-menu>
+    <wm-side-menu [signedIn]="toolbar.signedIn"></wm-side-menu>
   
   </mat-sidenav>
     
@@ -21,7 +21,8 @@
       <router-outlet (activate)="snav.close()" (deactivate)="toolbar.clearActions()">
       </router-outlet>
     </div>
-    <wm-footer fxFlex="0 0 auto"></wm-footer>
+    
+    <wm-footer fxFlex="0 0 auto" [signedIn]="toolbar.signedIn"></wm-footer>
   
   </mat-sidenav-content>
 

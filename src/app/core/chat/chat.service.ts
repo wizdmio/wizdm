@@ -1,9 +1,31 @@
 import { Injectable } from '@angular/core';
-import { wmUser, wmProject, wmConversation, wmMessage } from '../interfaces';
-import { DatabaseService, dbQueryFn } from '../database/database.service';
+import { DatabaseService, dbStreamFn } from '../database/database.service';
 import { UserProfile } from '../user/user-profile.service';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
+
+import { dbCommon } from '../database/database-document';
+
+export interface wmConversation extends dbCommon {
+  recipient: {
+    [key: string]: boolean
+  },
+  about?   : wmProjectLink,
+  last?    : wmMessage
+
+  //messages?: wmMessage[], collection reference
+}
+
+export interface wmProjectLink {
+  name? : string,
+  id?   : string
+}
+
+export interface wmMessage  extends dbCommon {
+  sender?  : string,
+  content? : string,
+  unread?  : boolean
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +35,7 @@ export class ChatService {
   constructor(private profile  : UserProfile,
               private database : DatabaseService) {
   }
-
+/*
   public retriveRecipient(thread: wmConversation): Observable<wmUser> {
 
     let userId = Object.keys(thread.recipient)
@@ -32,10 +54,6 @@ export class ChatService {
     return ref => ref.orderBy('created', 'desc').limit(1);
   }
 
-  /**
-   * Queries for conversations document filling up the last message from the sub-collection of messages
-   * @param qf an optional query function
-   */
   public queryThreads(qf?: dbQueryFn): Observable<wmConversation[]> {
     
     return this.database.collection$<wmConversation>(`conversations`, qf)
@@ -54,17 +72,5 @@ export class ChatService {
   private get myThreads(): dbQueryFn {
     return ref => ref.where(`recipient.${this.profile.id}`, '==', 'true');
   }
-
-  public queryMyConversations(): Observable<wmConversation[]> {
-
-    return this.queryThreads( this.myThreads );
-/*
-    return forkJoin(
-      
-      this.queryConversations(this.toMe).pipe( take(1) ),
-      
-      this.queryConversations(this.fromMe).pipe( take(1) ),
-
-    ).pipe( zip( ([to, from]) => to.concat(from).sort( this.sortByDate ) ));*/
-  }
+*/
 }

@@ -1,62 +1,82 @@
 import { Injectable } from '@angular/core';
-import { wmFile } from '../interfaces';
-import { dbDocument, dbCollection, DatabaseService, dbQueryFn } from '../database/database.service';
-import { StorageService } from '../storage/storage.service';
-import { Observable, merge } from 'rxjs';
-import { switchMap, map, tap, filter, take } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { DatabaseService, DatabaseCollection, dbCommon } from '../database/database.service';
+import { Observable, merge, of } from 'rxjs';
+import { switchMap, takeWhile, map, filter, take, expand } from 'rxjs/operators';
 
-export type filePath = dbCollection<wmFile>;
-export type fileRef = dbDocument<wmFile>;
+export interface wmFile  extends dbCommon {
+  name?:     string,
+  fullName?: string,
+  path?:     string,
+  size?:     number,
+  url?:      string,
+  xfer?:     number // bytes transferred during the upload
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class UploaderService {
+export class UploaderService extends DatabaseCollection<wmFile> {
 
-  constructor(private database : DatabaseService,
-              private storage  : StorageService) { }
+  public folder: string;
 
-  public queryUploads(path: filePath, queryFn?: dbQueryFn): Observable<wmFile[]> {
-    return this.database.collection$<wmFile>(path, queryFn);
-  }
-
-  public queryFile(ref: fileRef): Observable<wmFile> {
-    return this.database.document$<wmFile>(ref);
+  constructor(db: DatabaseService, private st: AngularFireStorage) { 
+    super(db, '');
   }
 
   /**
-   *  Searches for the user file coming with the specified url
-   * @param url the url of the file to be searched for
+   * Initialize the uploader
+   * @param path the path of the database collection for wmFile(s)
+   * @param folder the folder's name within the storage bucket
    */
-  public queryFileByUrl(path: filePath, url: string): Observable<wmFile> {
-    return this.queryUploads(path, ref => ref.where('url', '==', url) )
+  public init(path: string, folder: string): DatabaseCollection<wmFile> {
+    this.path = path;
+    this.folder = folder;
+    return this;
+  }
+
+  /**
+   * Searches for the single file coming with the specified url
+   * @param url the url of the file to be searched for
+   * @returns a Promise of the requeste wmFile
+   */
+  public getByUrl(url: string): Promise<wmFile> {
+    return this.get(ref => ref.where('url', '==', url) )
+      .toPromise()
+      .then( files => files[0] );
+  }
+
+  /**
+   * Searches for the single file coming with the specified url
+   * and stream it (aka realtime support) into an observable.
+   * @param url the url of the file to be searched for
+   * @returns an Observable of the requeste wmFile
+   */
+  public streamByUrl(url: string): Observable<wmFile> {
+    return this.stream(ref => ref.where('url', '==', url) )
       .pipe( map( files => files[0] ) )
   }
 
-  public add(path: filePath, data: wmFile): Promise<string> {
-    return this.database.add<wmFile>(path, data);
-  }
-
-  private unique(name: string): string {
+  // Computes a unique name based on current date and time
+  protected unique(name: string): string {
     return `${new Date().getTime()}_${name}`;
   }
 
   /**
-   * Uploads a file into the user's upload area
-   * @param file the file object to be uploaded and tracked into the user's uploads area
-   * @returns the StorageTaskSnapshot observable to track the process
+   * Uploads a file storing the content into the given folder and traking the wmFile in the given database collection
+   * @param file the file object to be uploaded and tracked
+   * @returns the TaskSnapshot observable streaming the upload progress till completion
    */
-  public uploadFile(path: filePath, folder: string, file: File): Observable<wmFile> {
+  public upload(file: File): Observable<wmFile> {
 
     // Computes the storage path
-    const storePath = `${folder}/${this.unique(file.name)}`;
+    const storePath = `${this.folder}/${this.unique(file.name)}`;
 
     // Creates the upload task
-    let task = this.storage.upload(storePath, file);
+    const task = this.st.upload(storePath, file);
 
     // Merges two snapshotChanges observables
     return merge(
-
       // During the transfer, maps the snapshot to a wmFile tracking the progress in xfer
       // with a simple map, this allow for minimized latency and better progress preview
       task.snapshotChanges().pipe( 
@@ -70,12 +90,10 @@ export class UploaderService {
           };
        })
       ),
-
       // At completion, gets the download url, saves the file info into user's uploads area...
       task.snapshotChanges().pipe( 
         filter( snap => snap.bytesTransferred === snap.totalBytes ),
         switchMap( snap => {
-
           // Compile the file content
           const result: wmFile = {
             name: file.name,
@@ -83,20 +101,22 @@ export class UploaderService {
             path: storePath,
             size: snap.totalBytes,
           };
-          
           // Gets the download url
           return snap.ref.getDownloadURL()
             // Saves the uploaded file information into the user uploads area
-            .then( url => 
-              this.add(path, { ...result, url })
+            .then( url => {
+              return this.add({ ...result, url })
                 // Returns a copy of the saved data including the id
-                .then( id => { return { ...result, url, id}; })
-            );
+                .then( doc => { 
+                  const id = doc.id;
+                  return { ...result, url, id }; 
+                });
+            });
         }),
 
         // This implementation do not reload the data from the database
         // to improve performances relying on the returned copy with id instead
-        // switchMap( id => this.queryUserFile(id) ),
+        // switchMap( id => this.get(id) ),
 
         // Makes sure it completes
         take(1)
@@ -105,33 +125,54 @@ export class UploaderService {
   }
 
   /**
-   * Simplified version of uploadUserFile() executing the upload once
+   * Simplified version of upload() executing the upload once
    * @param file file object to be uploaded
-   * @returns a promise resolving with the download url
+   * @returns a promise resolving to the wmFile
    */
-  public uploadFileOnce(path: filePath, folder: string, file: File): Promise<wmFile> {
-    return this.uploadFile(path, folder, file).toPromise();
+  public uploadOnce(file: File): Promise<wmFile> {
+    return this.upload(file).toPromise();
   }
 
   /**
-   * Deletes a user uploaded file clearing up both the storage and the user's uploads area
+   * Deletes a user uploaded file clearing up both the storage and the database document
+   * @param id the file id
    */
-  public deleteFile(file: fileRef): Promise<void> {
+  public delete(id: string): Promise<void> {
     
-    let ref = this.database.doc(file);
-    return this.database.doc$<wmFile>(ref)
-      .pipe( 
-        take(1),
-        switchMap( file => this.storage.ref(file.path).delete() ),
-        tap( () => ref.delete() )
-      ).toPromise();
+    const doc = this.document(id);
+    return doc.get().toPromise()
+      .then( file => this.st.ref(file.path).delete() )
+      .then( () => doc.delete() );
   }
 
-  public deleteAllFiles(path: filePath, folder: string): Promise<void> {
-    
-    // Deletes the user's storage folder first
-    return this.storage.ref(folder).delete().toPromise()
-      // Deletes the user uploads collection
-      .then( () => this.database.deleteCollection(path) );
+  // Helper to delete stored files once at a time
+  private deleteNext(): Observable<boolean> {
+    // Gets a snapshot of 1 document in the collection
+    return this.col(ref => ref.limit(1)).get()
+      .pipe( switchMap( snap => {
+        // Once there are no more documents in the snapshow we're done
+        const docs = snap.docs;
+        if(docs.length === 0) { return of(false); }
+        // Gets the document data
+        const file = docs[0].data();
+        // Deletes the file from the storage than delete the docment from the collection
+        return this.st.ref(file.path).delete()
+          .pipe( 
+            switchMap( () => docs[0].ref.delete() ),
+            map( () => true ) 
+          );
+      }));
+  }
+
+  /**
+   * Deletes all the file in the storage
+   */
+  public deleteAll(): Promise<void> {
+
+    // Starts a deletion process recursively
+    return of(true).pipe(
+      expand(() => this.deleteNext() ),
+      takeWhile( next => next )
+    ).toPromise().then( () => {} );
   }
 }

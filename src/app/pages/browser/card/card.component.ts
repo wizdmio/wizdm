@@ -1,6 +1,5 @@
 import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { Project, wmProject, wmColor, wmFile, wmColorMap, COLOR_MAP  } from 'app/core';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-project-card',
@@ -9,8 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class CardComponent implements OnInit {
 
-  constructor(@Inject(COLOR_MAP) 
-              private colorMap: wmColorMap) { }
+  constructor(@Inject(COLOR_MAP) private colorMap: wmColorMap) { }
 
   ngOnInit() {}
 
@@ -20,7 +18,7 @@ export class CardComponent implements OnInit {
 
   // Accepts the color as an input
   private get color(): wmColor { 
-    return this.colorMap[this.project.color || 'none'];
+    return this.colorMap[this.project.data.color || 'none'];
   }
 
   // Computes the color of the avatar based on the theme color
@@ -44,7 +42,7 @@ export class CardComponent implements OnInit {
 
   public setColor(color: wmColor) {
 
-    this.project.color = color.color;
+    this.project.data.color = color.color;
     this.project.update({ color: color.color } as wmProject);
 
     //this.project.color = color.color;
@@ -53,7 +51,7 @@ export class CardComponent implements OnInit {
 
   public selectCover(file: wmFile): void {
 
-    this.project.cover = file.url || null;
+    this.project.data.cover = file.url || null;
     this.project.update({ id: this.project.id, cover: file.url || null } as wmProject);
 
     //this.project.cover = file.url || null;

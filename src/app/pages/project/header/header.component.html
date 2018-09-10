@@ -1,7 +1,7 @@
 
 <!-- Project name on the cover (only if cover image is defined) -->
-<div fxLayout="column" fxLayoutAlign="center center" class="content" *ngIf="project?.cover">
-  <h1>{{ project.name }}</h1>
+<div fxLayout="column" fxLayoutAlign="center center" class="content" *ngIf="project?.data.cover">
+  <h1>{{ project.data.name }}</h1>
 </div>
 
 <!-- Wait fot the project before displaing the content -->
@@ -14,12 +14,12 @@
     <div fxLayout="row" fxLayoutAlign="start center">
       <!-- User picture with info -->
       <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo"></wm-avatar>
-      <wm-user-info [owner]="project" #userInfo></wm-user-info>
+      <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
       
       <div fxLayout="column">
         <span>{{ owner.name || msgs.unnamed }}
           <!-- Project name to be shown in case the image cover is not defined -->
-          <ng-container *ngIf="!project.cover">&nbsp;-&nbsp;{{ project.name }}</ng-container>
+          <ng-container *ngIf="!project.cover">&nbsp;-&nbsp;{{ project.data.name }}</ng-container>
         </span>
         <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
       </div>

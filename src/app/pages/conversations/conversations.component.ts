@@ -41,7 +41,7 @@ export class ConversationsComponent implements OnInit {
   ngOnInit() {
 
     // Gets the user uploads observable
-    this.messages$ = this.chat.queryMyConversations();
+    //this.messages$ = this.chat.queryMyConversations();
     //this.messages$ = of($messages);// DEBUG
       
     // Activates the toolbar actions

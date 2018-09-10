@@ -25,6 +25,10 @@
     "modifiedOn": "Last modified on {{ modified }}"
   },
 
+  "userUnknown": {
+    "name": "Unknown"
+  },
+
   "canLeave": {
     "title": "Unsaved changes",
     "message": "Are you leaving? You may prefer to save the changes first.",

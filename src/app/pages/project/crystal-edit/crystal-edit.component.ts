@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContentService } from 'app/core';
-import { ToolbarService, ActionEnabler, ScrollViewService } from 'app/navigator';
+import { ToolbarService, ActionEnabler } from 'app/navigator';
 import { Subject, fromEvent, merge } from 'rxjs';
 import { map, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { $animations } from './crystal-edit.animations';

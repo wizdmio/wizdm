@@ -12,7 +12,7 @@
 
     <!-- PANEL HEADER -->
     <mat-expansion-panel-header fxLayoutAlign="space-between center">
-      <mat-panel-title>{{panel.title}}</mat-panel-title>
+      <mat-panel-title>{{ panel.title }}</mat-panel-title>
       <mat-panel-description fxLayoutAlign="end center"> 
         <wm-icon [icon]="panel?.icon">"</wm-icon>
       </mat-panel-description>
@@ -61,7 +61,7 @@
                  mat-button color="primary" 
                  (click)="action(btn.action)"
                  [disabled]="disabled(btn.action)">
-          {{btn.caption}}
+          {{ btn.caption }}
         </button>
 
       </ng-container>
@@ -71,7 +71,7 @@
                           color="primary" 
                          [disabled]="!itemChanges"
                          (click)="applyAllItemChanges()">
-        {{panel.applyChanges}}
+        {{ panel.applyChanges }}
       </button>
 
     </mat-action-row>

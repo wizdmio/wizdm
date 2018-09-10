@@ -1,14 +1,6 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { ContentService, DatabaseService, wmUser, wmProject, wmcolor, wmColor, wmColorMap, COLOR_MAP } from 'app/core';
-import { Observable, of } from 'rxjs';
-import { take } from 'rxjs/operators';
-
-export interface UserInfoData {
-  userId?: string,
-  project?: wmProject,
-  user?: wmUser
-}
+import { ContentService, DatabaseService, wmUser, wmProject, wmColor, wmColorMap, COLOR_MAP } from 'app/core';
 
 @Component({
   selector: 'wm-user-info',
@@ -39,9 +31,10 @@ export class UserInfoComponent implements OnInit {
   }
 
   // Loads the user profile from the database
-  private loadUser(userId: string): Observable<wmUser> {
-    return userId ? this.database.doc$<wmUser>(`users/${userId}`)
-      .pipe( take(1) ) : of<wmUser>({});
+  private loadUser(userId: string): Promise<wmUser> {
+    return userId ? this.database.document<wmUser>('/users',userId)
+      .get().toPromise()
+        : Promise.resolve(<wmUser>{});
   }
 
   ngOnInit() {}
@@ -51,7 +44,7 @@ export class UserInfoComponent implements OnInit {
   // Accepts user info in various forms
   @Input('userId') set userId(id: string) { // As a user id
     this.loadUser(id)
-      .subscribe( user => this.user = user );
+      .then( user => this.user = user );
   }   
   
   @Input('user') set setUser(user: wmUser) { // as a user object
@@ -60,7 +53,7 @@ export class UserInfoComponent implements OnInit {
 
   @Input('owner') set setOwner(project: wmProject) { // as a project's owner
     this.loadUser(project.owner)
-      .subscribe( user => this.user = user );
+      .then( user => this.user = user );
   }
 
   // Enable

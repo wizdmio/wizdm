@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { DateAdapter } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { ContentService } from '../../../core';
+import { ContentService } from 'app/core';
 import { $itemAnimations } from './user-item-animations';
 
 import * as moment from 'moment';
