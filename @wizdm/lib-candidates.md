@@ -1,15 +1,33 @@
-# wizdm library
+# Wizdm library
 
 ## Core
 
-Core features depending on @angular/core and @angular/fire
+Core features and general purpose utilities go here
 
+* Utils
+* WindowRef
+* CookieService as Cookie
 * ContentService as ContentManager
+
+## Connect
+
+Interegration features go here
+
+### Firebase
+
 * AuthService
 * DatabaseService, DatabaseDocument, DatabaseCollection, PagedCollection, RealtimeCollection
 * UserProfile
 * UploaderService (as FileUploader)
-* WindowRef
+
+### Mailerlite
+
+* MailerliteService
+
+### Unsplash
+
+* UnsplashService
+
 
 ## Elements
 
