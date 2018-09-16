@@ -2,6 +2,7 @@
  * Public API Surface of integrations
  */
 
-export * from './lib/integrations.service';
-export * from './lib/integrations.component';
-export * from './lib/integrations.module';
+export * from './lib/unsplash/unsplash.interfaces';
+export * from './lib/unsplash/unsplash.types';
+export * from './lib/unsplash/unsplash.service';
+export * from './lib/unsplash/unsplash.module';

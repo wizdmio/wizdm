@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IntegrationsService } from './integrations.service';
+import { UnsplashService } from './unsplash.service';
 
-describe('IntegrationsService', () => {
+describe('UnsplashService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: IntegrationsService = TestBed.get(IntegrationsService);
+    const service: UnsplashService = TestBed.get(UnsplashService);
     expect(service).toBeTruthy();
   });
 });

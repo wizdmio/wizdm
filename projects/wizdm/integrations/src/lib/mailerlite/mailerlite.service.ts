@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 //import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
+//import { Observable, from } from 'rxjs';
 //import { map } from 'rxjs/operators';
 
 export interface mlFormFields {
@@ -10,7 +10,9 @@ export interface mlFormFields {
     value: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MailerliteService {
 
   private urlWebforms: string;
