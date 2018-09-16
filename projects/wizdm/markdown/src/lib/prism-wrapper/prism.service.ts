@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-
 import * as prism from 'prismjs';
-import './prism.languages';
 
 @Injectable({
   providedIn: 'root'

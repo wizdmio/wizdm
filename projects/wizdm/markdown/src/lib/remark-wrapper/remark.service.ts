@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
-
-//import * as remark from 'remark';
 import * as unified from 'unified';
 import * as parse from 'remark-parse';
 import * as align  from 'remark-align';
-//import * as stringify from 'remark-stringify';
 import * as subsup from 'remark-sub-super';
-//import * as emoji from 'remark-emoji';
-//import * as emoticons from 'remark-emoticons';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +23,6 @@ export class RemarkService {
       .use( parse.default, this.options )
       .use( align.default )
       .use( subsup.default )
-      //.use( stringify )
       .freeze();
   }
 

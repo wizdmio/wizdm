@@ -41,6 +41,18 @@
       ],
       "@wizdm/integrations/*": [
         "dist/wizdm/integrations/*"
+      ],
+      "@wizdm/markdown": [
+        "dist/wizdm/markdown"
+      ],
+      "@wizdm/markdown/*": [
+        "dist/wizdm/markdown/*"
+      ],
+      "@wizdm/markdown_debug": [
+        "projects/wizdm/markdown/src/public_api"
+      ],
+      "@wizdm/markdown_debug/*": [
+        "projects/wizdm/markdown/src/lib/*"
       ]
     }
   }

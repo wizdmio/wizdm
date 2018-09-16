@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { RemarkService } from './remark.service';
+import { RemarkService } from '../remark-wrapper/remark.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -7,13 +7,16 @@ export type displayType = 'document' | 'toc' | 'footnotes';
 
 @Component({
   selector: 'wm-markdown, [wm-markdown]',
-  templateUrl: './markdown.component.html',
-  styleUrls: ['./markdown.component.scss']
+  templateUrl: './markdown-renderer.component.html',
+  styleUrls: ['./markdown-renderer.component.scss'],
+  host: {
+    '[class.wm-markdown-theme]': 'true'
+  }
 })
 /** Renders a markdown text into HTML using angular recursive template injection 
  * Using Remark as the input parser @see {https://github.com/remarkjs/remark}
 */
-export class MarkdownComponent implements OnInit, OnDestroy {
+export class MarkdownRendererComponent implements OnInit, OnDestroy {
   
   private data$: BehaviorSubject<string> = new BehaviorSubject('');
   private sub$: Subscription;

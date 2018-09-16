@@ -38,8 +38,8 @@ import { IconComponent } from './icon/icon.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { PopupComponent } from './popup/popup.component';
-import { MarkdownComponent } from './markdown/markdown.component';
-import { CodeHighlightComponent } from './markdown/code-highlight/code-highlight.component';
+//import { MarkdownComponent } from './markdown/markdown.component';
+//import { CodeHighlightComponent } from './markdown/code-highlight/code-highlight.component';
 import { OpenFileComponent } from './file/open-file.component';
 import { DropZoneDirective } from './file/drop-zone.directive';
 import { FileSizePipe } from './file/file-size.pipe';
@@ -91,8 +91,8 @@ const sharedModules = [
     AvatarComponent,
     DisclaimerComponent,
     PopupComponent,
-    MarkdownComponent,
-    CodeHighlightComponent,
+    //MarkdownComponent,
+    //CodeHighlightComponent,
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,
@@ -114,7 +114,7 @@ const sharedModules = [
     AvatarComponent,
     DisclaimerComponent,
     PopupComponent,
-    MarkdownComponent,
+    //MarkdownComponent,
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,

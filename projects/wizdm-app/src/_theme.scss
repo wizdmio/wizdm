@@ -1,4 +1,5 @@
 @import '~@angular/material/theming';
+@import 'projects/wizdm/markdown/src/lib/theming';
 
 // Thes file is actually extending the standard Angular Material theme
 // with customized application specific colors ans typography styles
@@ -27,8 +28,8 @@ $wm-typography: (
   // Application specific typography values
   logo:          mat-typography-level(22px, 24px, 600, $wm-font-family),
   social:        mat-typography-level(22px, 24px, 600, $wm-font-family),
-  footnote:      mat-typography-level(16px, 20px, 400, $wm-font-family),
-  toc:           mat-typography-level(18px, 24px, 500, $wm-font-family),
+  //footnote:      mat-typography-level(16px, 20px, 400, $wm-font-family),
+  //toc:           mat-typography-level(18px, 24px, 500, $wm-font-family),
 );
 
 // Define the main theme palettes.
@@ -56,9 +57,6 @@ $wm-theme-background: (
   disabled-list-option:     map_get($mat-grey, 200),
 
   // Application specific background values
-  inline-code:              mat-color($mat-grey, 200),
-  block-code:               mat-color($mat-grey, 400),
-  table-row:              rgba(0,0,0,0.03),
   edit-box:                 rgba(mat-color($mat-blue, 900), 0.8),
 );
 
@@ -83,11 +81,6 @@ $wm-theme-foreground: (
 
   // Application specific foreground values
   contrast:          white,
-  blockquote:        rgba(mat-color($mat-grey, 600), 0.87),
-  inline-code:       mat-color($mat-red, 800),
-  code:              rgba(black, 0.87),
-  table:             $dark-dividers,
-  toc-delimiter:     $dark-dividers,
   edit-box:          rgba(white, 0.8),
 );
 
@@ -126,6 +119,9 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
 
   // Include all the material theme styles
   @include angular-material-theme($theme);
+
+  // Init the markdown renderer making sure to apply the primary color to links
+  @include wm-markdown-init( ( foreground: ( link: mat-color($wm-primary) )) );
  
   // Adds custom application specific style extensions
   a {

@@ -76,4 +76,11 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * CUSTOM NODE SHIMS - since Angular is dropping node shims from version 6
  */
 
- import './node-shims';
+ /** Implement a minimal 'process' to support node module 'path' used by remark **/
+ if(!!window) {
+  (window as any).process = {
+    env: { DEBUG: undefined },
+    platform: "",
+    cwd: function(){}
+  }
+}

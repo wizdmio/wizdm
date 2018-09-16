@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MarkdownModule } from '@wizdm/markdown';
 //--------
 import { SharedModule } from '../shared/shared.module';
 import { HandlerComponent } from './handler/handler.component';
@@ -29,7 +30,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    MarkdownModule
   ],
 
   declarations: [

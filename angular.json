@@ -265,6 +265,41 @@
           }
         }
       }
+    },
+    "markdown": {
+      "root": "projects/wizdm/markdown",
+      "sourceRoot": "projects/wizdm/markdown/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/markdown/tsconfig.lib.json",
+            "project": "projects/wizdm/markdown/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/markdown/src/test.ts",
+            "tsConfig": "projects/wizdm/markdown/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/markdown/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wizdm/markdown/tsconfig.lib.json",
+              "projects/wizdm/markdown/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "wizdm-app",

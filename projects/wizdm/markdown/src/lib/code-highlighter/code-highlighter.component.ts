@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { PrismService } from './prism.service';
+import { PrismService } from '../prism-wrapper/prism.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'code[wm-highlight]',
-  templateUrl: './code-highlight.component.html',
-  styleUrls: ['./code-highlight.component.scss']
+  templateUrl: './code-highlighter.component.html',
+  styleUrls: ['./code-highlighter.component.scss']
 })
 /** Perform code hilighting by processing an input text to be rendered into an angular template 
  * Using prism as tokenizer @see {https://github.com/PrismJS/prism}
 */
-export class CodeHighlightComponent implements OnInit, OnDestroy {
+export class CodeHighlighterComponent implements OnInit, OnDestroy {
 
   private source$: BehaviorSubject<string> = new BehaviorSubject('');
   private sub$: Subscription;
