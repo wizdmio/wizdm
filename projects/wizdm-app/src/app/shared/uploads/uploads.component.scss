@@ -1,0 +1,37 @@
+@import "../../../variables";
+@import "../../../theme";
+
+$miniature-size: 120px;
+$thumb-size:      60px;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.miniature {
+  width: $miniature-size;
+  height: $miniature-size;
+}
+
+.thumb, .none { 
+  width:  $thumb-size;
+  height: $thumb-size;
+}
+
+.none {
+  border: 1px dashed map-get($wm-theme-foreground, divider);
+}
+
+mat-dialog-content button {
+
+  padding: 0;
+  margin: 1px;
+  box-sizing: border-box;
+
+  &[selected=true] { 
+    outline: 1px solid mat-color($wm-primary);
+    background-color: rgba(mat-color($wm-primary), 0.2);
+  }
+}

@@ -3,24 +3,26 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "wm": {
-      "root": "",
-      "sourceRoot": "src",
+    "wizdm-app": {
+      "root": "projects/wizdm-app/",
+      "sourceRoot": "projects/wizdm-app/src",
       "projectType": "application",
+      "prefix": "wm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "outputPath": "dist/wizdm-app",
+            "index": "projects/wizdm-app/src/index.html",
+            "main": "projects/wizdm-app/src/main.ts",
+            "polyfills": "projects/wizdm-app/src/polyfills.ts",
+            "tsConfig": "projects/wizdm-app/tsconfig.app.json",
             "assets": [
-              "src/assets"
+              "projects/wizdm-app/src/favicon.ico",
+              "projects/wizdm-app/src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "projects/wizdm-app/src/styles.scss"
             ],
             "scripts": [
               "./node_modules/hammerjs/hammer.min.js"
@@ -28,6 +30,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/wizdm-app/src/environments/environment.ts",
+                  "with": "projects/wizdm-app/src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -36,49 +44,44 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
+              "buildOptimizer": true
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "wm:build",
+            "browserTarget": "wizdm-app:build",
             "ssl": true,
-            "sslCert": "ssl/server.crt",
-            "sslKey": "ssl/server.key"
+            "sslCert": "./ssl/server.crt",
+            "sslKey": "./ssl/server.key"
           },
           "configurations": {
             "production": {
-              "browserTarget": "wm:build:production"
+              "browserTarget": "wizdm-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "wm:build"
+            "browserTarget": "wizdm-app:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
+            "main": "projects/wizdm-app/src/test.ts",
+            "polyfills": "projects/wizdm-app/src/polyfills.ts",
+            "tsConfig": "projects/wizdm-app/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm-app/karma.conf.js",
             "styles": [
-              "src/styles.scss"
+              "projects/wizdm-app/src/styles.scss"
             ],
+            "scripts": [],
             "assets": [
-              "src/assets"
+              "projects/wizdm-app/src/favicon.ico",
+              "projects/wizdm-app/src/assets"
             ]
           }
         },
@@ -86,8 +89,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "projects/wizdm-app/tsconfig.app.json",
+              "projects/wizdm-app/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -96,23 +99,165 @@
         }
       }
     },
-    "wm-e2e": {
-      "root": "",
-      "sourceRoot": "",
+    "wizdm-app-e2e": {
+      "root": "projects/wizdm-app-e2e/",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "wm:serve"
+            "protractorConfig": "projects/wizdm-app-e2e/protractor.conf.js",
+            "devServerTarget": "wizdm-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "wizdm-app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/wizdm-app-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "connect": {
+      "root": "projects/wizdm/connect",
+      "sourceRoot": "projects/wizdm/connect/src",
+      "projectType": "library",
+      "prefix": "wm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/connect/tsconfig.lib.json",
+            "project": "projects/wizdm/connect/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/connect/src/test.ts",
+            "tsConfig": "projects/wizdm/connect/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/connect/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "e2e/tsconfig.e2e.json"
+              "projects/wizdm/connect/tsconfig.lib.json",
+              "projects/wizdm/connect/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "content": {
+      "root": "projects/wizdm/content",
+      "sourceRoot": "projects/wizdm/content/src",
+      "projectType": "library",
+      "prefix": "wm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/content/tsconfig.lib.json",
+            "project": "projects/wizdm/content/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/content/src/test.ts",
+            "tsConfig": "projects/wizdm/content/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/content/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wizdm/content/tsconfig.lib.json",
+              "projects/wizdm/content/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "utils": {
+      "root": "projects/wizdm/utils",
+      "sourceRoot": "projects/wizdm/utils/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/utils/tsconfig.lib.json",
+            "project": "projects/wizdm/utils/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/utils/src/test.ts",
+            "tsConfig": "projects/wizdm/utils/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/utils/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wizdm/utils/tsconfig.lib.json",
+              "projects/wizdm/utils/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "integrations": {
+      "root": "projects/wizdm/integrations",
+      "sourceRoot": "projects/wizdm/integrations/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/integrations/tsconfig.lib.json",
+            "project": "projects/wizdm/integrations/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/integrations/src/test.ts",
+            "tsConfig": "projects/wizdm/integrations/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/integrations/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wizdm/integrations/tsconfig.lib.json",
+              "projects/wizdm/integrations/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -122,14 +267,13 @@
       }
     }
   },
-  "defaultProject": "wm",
+  "defaultProject": "wizdm-app",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "wm",
       "styleext": "scss"
     },
     "@schematics/angular:directive": {
-      "prefix": "wm"
+      "styleext": "scss"
     }
   }
 }

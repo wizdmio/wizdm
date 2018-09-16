@@ -1,0 +1,19 @@
+@import "../../../variables";
+@import "../../../theme";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding-top: $wm-content-padding;
+  margin: 0 $wm-content-margin;
+}
+
+mat-grid-list {
+  margin: 32px;
+}
+
+.spinner {
+  width: 210px;
+  height: 260px;
+}

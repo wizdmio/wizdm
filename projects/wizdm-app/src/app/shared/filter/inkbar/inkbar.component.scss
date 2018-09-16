@@ -1,0 +1,10 @@
+@import "../../../../variables";
+@import "../../../../theme";
+
+:host {
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: mat-color($wm-primary);
+}

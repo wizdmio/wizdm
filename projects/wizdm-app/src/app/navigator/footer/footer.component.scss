@@ -1,0 +1,29 @@
+@import "../../../variables";
+@import "../../../theme";
+/*
+:host {
+  display: flex;
+  flex: none; // Inflexible
+  box-sizing: border-box;
+}
+*/
+footer {
+  min-height: $wm-footer-height;
+  width: 100%;
+  padding: 0 32px;
+  
+  color: map-get($wm-theme-foreground,text);
+  background-color: map-get($wm-theme-background, status-bar);
+
+}
+
+.social {
+  font-size: mat-font-size($wm-typography, social);
+}
+/*
+.langImg {
+  height: mat-font-size($wm-typography, subheading-2);
+  padding: 0 5px;
+}
+*/
+

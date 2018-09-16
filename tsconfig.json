@@ -1,10 +1,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "baseUrl": "src",
     "sourceMap": true,
     "declaration": false,
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -15,6 +16,32 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@wizdm/connect": [
+        "dist/wizdm/connect"
+      ],
+      "@wizdm/connect/*": [
+        "dist/wizdm/connect/*"
+      ],
+      "@wizdm/content": [
+        "dist/wizdm/content"
+      ],
+      "@wizdm/content/*": [
+        "dist/wizdm/content/*"
+      ],
+      "@wizdm/utils": [
+        "dist/wizdm/utils"
+      ],
+      "@wizdm/utils/*": [
+        "dist/wizdm/utils/*"
+      ],
+      "@wizdm/integrations": [
+        "dist/wizdm/integrations"
+      ],
+      "@wizdm/integrations/*": [
+        "dist/wizdm/integrations/*"
+      ]
+    }
   }
 }

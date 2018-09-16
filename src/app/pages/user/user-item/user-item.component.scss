@@ -1,6 +1,0 @@
-@import "src/variables";
-@import "src/theme";
-
-wm-icon {
-  color: map-get($wm-theme-foreground, icons);
-}

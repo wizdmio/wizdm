@@ -1,0 +1,19 @@
+@import '../../../theme';
+
+.link-active {
+  text-decoration: underline;
+}
+
+.highlight {
+  background-color: mat-color($wm-primary, A400);
+  color: mat-contrast($wm-primary, A400);
+}
+
+* {
+  &[margin="right"] {
+    margin-right: 10px;
+  }
+  &[margin="left"] {
+    margin-left: 10px;
+  }
+}
