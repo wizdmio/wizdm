@@ -79,8 +79,8 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  /** Implement a minimal 'process' to support node module 'path' used by remark **/
  if(!!window) {
   (window as any).process = {
-    env: { DEBUG: undefined },
+    env: {},
     platform: "",
-    cwd: function(){}
+    cwd: function(){ return '/' }
   }
 }
