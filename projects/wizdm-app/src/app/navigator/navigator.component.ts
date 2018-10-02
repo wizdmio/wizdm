@@ -10,6 +10,8 @@ import { ContentManager } from '@wizdm/content';
 export class NavComponent implements OnInit {
 
   public msgs: any = null;
+  public menu = false;
+  public scrolled = false;
   
   constructor(private content: ContentManager, 
               private title: Title,

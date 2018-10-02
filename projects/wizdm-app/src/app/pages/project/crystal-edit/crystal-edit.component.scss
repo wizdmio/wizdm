@@ -10,7 +10,7 @@ form {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 3;
+  z-index: $wm-zindex-edit;
   box-sizing: border-box;
   border: none;
 

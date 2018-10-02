@@ -18,17 +18,29 @@
       "dom"
     ],
     "paths": {
-      "@wizdm/connect": [
+      "@wizdm/connect_prod": [
         "dist/wizdm/connect"
       ],
-      "@wizdm/connect/*": [
+      "@wizdm/connect_prod/*": [
         "dist/wizdm/connect/*"
       ],
-      "@wizdm/content": [
+      "@wizdm/connect": [
+        "projects/wizdm/connect/src/public_api"
+      ],
+      "@wizdm/connect/*": [
+        "projects/wizdm/connect/src/lib/*"
+      ],
+      "@wizdm/content_prod": [
         "dist/wizdm/content"
       ],
-      "@wizdm/content/*": [
+      "@wizdm/content_prod/*": [
         "dist/wizdm/content/*"
+      ],
+      "@wizdm/content": [
+        "projects/wizdm/content/src/public_api"
+      ],
+      "@wizdm/content/*": [
+        "projects/wizdm/content/src/lib/*"
       ],
       "@wizdm/utils": [
         "dist/wizdm/utils"
@@ -53,6 +65,18 @@
       ],
       "@wizdm/markdown_debug/*": [
         "projects/wizdm/markdown/src/lib/*"
+      ],
+      "@wizdm/elements_prod": [
+        "dist/wizdm/elements"
+      ],
+      "@wizdm/elements_prod/*": [
+        "dist/wizdm/elements/*"
+      ],
+      "@wizdm/elements": [
+        "projects/wizdm/elements/src/public_api"
+      ],
+      "@wizdm/elements/*": [
+        "projects/wizdm/elements/src/lib/*"
       ]
     }
   }

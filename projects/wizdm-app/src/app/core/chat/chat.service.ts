@@ -34,7 +34,7 @@ export class ChatService {
               private database : DatabaseService) {
   }
 /*
-  public retriveRecipient(thread: wmConversation): Observable<wmUser> {
+  public retriveRecipient(thread: wmMessage): Observable<wmUser> {
 
     let userId = Object.keys(thread.recipient)
       .find( user => user !== this.profile.id);
@@ -43,8 +43,8 @@ export class ChatService {
       .pipe( take(1) ) : of({});
   }
 
-  public retriveMessages(thread: wmConversation, qf?: dbQueryFn): Observable<wmMessage[]> {
-    return this.database.collection$<wmMessage>(`conversations/${thread.id}/messages`, qf)
+  public retriveMessages(thread: wmMessage, qf?: dbQueryFn): Observable<wmMessage[]> {
+    return this.database.collection$<wmMessage>(`messages/${thread.id}/messages`, qf)
       .pipe( take(1) );
   }
 
@@ -52,9 +52,9 @@ export class ChatService {
     return ref => ref.orderBy('created', 'desc').limit(1);
   }
 
-  public queryThreads(qf?: dbQueryFn): Observable<wmConversation[]> {
+  public queryThreads(qf?: dbQueryFn): Observable<wmMessage[]> {
     
-    return this.database.collection$<wmConversation>(`conversations`, qf)
+    return this.database.collection$<wmMessage>(`messages`, qf)
       .pipe( mergeMap( threads => 
         forkJoin( threads.map( thread => 
           this.retriveMessages(thread, this.lastMsg)
@@ -63,7 +63,7 @@ export class ChatService {
       ));      
   }
 
-  private sortByDate(a: wmConversation, b: wmConversation) {
+  private sortByDate(a: wmMessage, b: wmMessage) {
     return a.created.toDate().valueOf() - b.created.toDate().valueOf();
   }
 

@@ -124,14 +124,14 @@ export class LoginComponent implements OnInit  {
 
         this.progress = false;    
     
-        // Jumps to the projects browser on successful login
+        // Jumps to the projects explore on successful login
         if(user) {
           console.log('logged in successfully as: ' + user.email);
     
           // Checks for user preferrend language
           let userLang = user.lang || 'en';
   
-          // Jump to the projects browser switching to the user language if needed
+          // Jump to the projects explore switching to the user language if needed
           this.content.switch(userLang, 'projects');
         }
       })

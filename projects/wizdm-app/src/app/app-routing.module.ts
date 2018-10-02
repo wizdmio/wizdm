@@ -5,17 +5,17 @@ import { ContentResolver } from '@wizdm/content';
 import { NavComponent } from './navigator/navigator.component';
 import { AuthGuardService } from './navigator/guards/auth-guard.service';
 import { PageGuardService } from './navigator/guards/page-guard.service';
-import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
 import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HandlerComponent } from './pages/handler/handler.component';
 import { UserComponent } from './pages/user/user.component';
 import { ApplyComponent } from './pages/apply/apply.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProjectComponent } from './pages/project/project.component';
-import { BrowserComponent } from './pages/browser/browser.component';
+import { ExploreComponent } from './pages/explore/explore.component';
 import { UploadComponent } from './pages/upload/upload.component';
-import { ConversationsComponent } from './pages/conversations/conversations.component';
+import { MessagesComponent } from './pages/messages/messages.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 // Define navigation routes
@@ -27,7 +27,7 @@ const routes: Routes = [
   // Redirection handler (for firebase password confirmation/reset and stuff)
   { path: 'handler', component: HandlerComponent },
 
-  // Redirect to the language resolver asking for auto detection of the browser language
+  // Redirect to the language resolver asking for auto detection of the explore language
   { path: '', redirectTo: 'auto', pathMatch: 'full' },
 
   // Load the navigation with the selected language
@@ -39,13 +39,14 @@ const routes: Routes = [
     // Localized pages
     children: [
     
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', redirectTo: 'explore', pathMatch: 'full' },
+      { path: 'home', redirectTo: 'explore', pathMatch: 'full' },
+      { path: 'projects', redirectTo: 'explore', pathMatch: 'full' },
 
-      { path: 'home', component: HomeComponent },
+      { path: 'explore', component: ExploreComponent },
       { path: 'about', component: AboutComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'terms', redirectTo: 'terms/short', pathMatch: 'full' },
-      { path: 'terms/:version', component: TermsPrivacyComponent },
+      { path: 'terms', component: TermsPrivacyComponent },
 
       // Guarded pages requiring authentication
       { path: '', 
@@ -54,12 +55,12 @@ const routes: Routes = [
         
         children: [
           { path: 'profile', component: UserComponent, canDeactivate: [PageGuardService] },
+          { path: 'dashboard', component: DashboardComponent, canDeactivate: [PageGuardService] },
           { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
-          { path: 'projects', component: BrowserComponent }, //canDeactivate: [PageGuardService] },
           { path: 'projects/:id', component: ProjectComponent, canDeactivate: [PageGuardService] },
           { path: 'upload', component: UploadComponent }, //, canDeactivate: [PageGuardService] },
-          { path: 'messages', component: ConversationsComponent }, //, canDeactivate: [PageGuardService] },
-          //{ path: 'messages/:id', component: ConversationsComponent }, //, canDeactivate: [PageGuardService] }
+          { path: 'messages', component: MessagesComponent }, //, canDeactivate: [PageGuardService] },
+          //{ path: 'messages/:id', component: MessagesComponent }, //, canDeactivate: [PageGuardService] }
         ]
       },
     

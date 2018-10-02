@@ -1,0 +1,147 @@
+@import '../markdown';
+
+$theme: $wm-markdown-default;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+// Blockquote style
+blockquote {
+  margin: 16px 24px;
+  padding: 0 1em;
+  color: map-get(map-get($theme, foreground), blockquote);
+  border-left: 3px solid map-get(map-get($theme, background), blockquote);
+}
+
+// Page break
+hr {
+  width: 100%;
+  border-top-color: map-get(map-get($theme, background), divider);
+}
+
+// Apply global link style
+a {
+  cursor: pointer;
+  color: map-get(map-get($theme, foreground), link); 
+  text-decoration: underline;
+}
+
+// Default paragraph align is justified
+p { text-align: justify; }
+
+// Inlide code
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  border-radius: 4px;
+  background-color: map-get(map-get($theme, background), inline-code);
+  color: map-get(map-get($theme, foreground), inline-code);
+}
+
+// Code blocks
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  color: map-get(map-get($theme, foreground), code);
+  border: 1px solid map-get(map-get($theme, background), block-code);
+  border-radius: 4px;
+  word-break: break-all;
+  word-wrap: break-word;
+
+  code {
+    display: block;
+    font-size: inherit;
+    border-radius: 0;
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+// Block alignement
+span {
+
+  // Disables default paragraph justification whenever an alignement is specified
+  &[align] {
+    p { text-align: inherit; }
+  }
+
+  &[align="left"] {
+    text-align: left;
+    align-self: flex-start;
+  }
+
+  &[align="center"] {
+    text-align: center;
+    align-self: center;
+  }
+
+  &[align="right"] {
+    text-align: right;
+    align-self: flex-end;
+  }
+}
+
+// Table style and alignement
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+
+  th, td {
+    padding: 6px 13px;
+    border: 1px solid map-get(map-get($theme, foreground), table);
+
+    &[align="left"] {
+      text-align: left;
+    }
+
+    &[align="center"] {
+      text-align: center;
+    }
+
+    &[align="right"] {
+      text-align: right;
+    }
+  }
+
+  tr:nth-child(2n) {
+    background-color: map-get(map-get($theme, background), table-row);
+  }
+}
+
+// Table of content
+span[toc] {
+  
+  display: block;
+  outline: unset;
+  cursor: pointer;
+
+  //font-size: inherit;
+
+  // Applies an application specific typography style
+  //@include mat-typography-level-to-styles($wm-typography, toc);
+  
+  &[toc='1']{ font-size: 100%; }
+  &[toc='2']{ font-size: 90%; }
+  &[toc='3']{ font-size: 80%; }
+  &[toc='4']{ font-size: 70%; }
+  &[toc='5']{ font-size: 60%; }
+  &[toc='6']{ font-size: 50%; }
+}
+
+// Footnotes
+span[footnote] {
+
+  // Makes sure the content is always displayed inline
+  * { display: inline; }
+
+  // Applies an application specific typography style
+  //@include mat-typography-level-to-styles($wm-typography, footnote);
+}
+
+// Image style Work In Progress...
+img { max-width: 128px;}

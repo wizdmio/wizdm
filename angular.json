@@ -196,46 +196,11 @@
         }
       }
     },
-    "utils": {
-      "root": "projects/wizdm/utils",
-      "sourceRoot": "projects/wizdm/utils/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/wizdm/utils/tsconfig.lib.json",
-            "project": "projects/wizdm/utils/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/wizdm/utils/src/test.ts",
-            "tsConfig": "projects/wizdm/utils/tsconfig.spec.json",
-            "karmaConfig": "projects/wizdm/utils/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/wizdm/utils/tsconfig.lib.json",
-              "projects/wizdm/utils/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "integrations": {
       "root": "projects/wizdm/integrations",
       "sourceRoot": "projects/wizdm/integrations/src",
       "projectType": "library",
-      "prefix": "lib",
+      "prefix": "wm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -270,7 +235,7 @@
       "root": "projects/wizdm/markdown",
       "sourceRoot": "projects/wizdm/markdown/src",
       "projectType": "library",
-      "prefix": "lib",
+      "prefix": "wm",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -293,6 +258,76 @@
             "tsConfig": [
               "projects/wizdm/markdown/tsconfig.lib.json",
               "projects/wizdm/markdown/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "elements": {
+      "root": "projects/wizdm/elements",
+      "sourceRoot": "projects/wizdm/elements/src",
+      "projectType": "library",
+      "prefix": "wm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/elements/tsconfig.lib.json",
+            "project": "projects/wizdm/elements/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/elements/src/test.ts",
+            "tsConfig": "projects/wizdm/elements/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/elements/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wizdm/elements/tsconfig.lib.json",
+              "projects/wizdm/elements/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "utils": {
+      "root": "projects/wizdm/utils",
+      "sourceRoot": "projects/wizdm/utils/src",
+      "projectType": "library",
+      "prefix": "wm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/wizdm/utils/tsconfig.lib.json",
+            "project": "projects/wizdm/utils/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/wizdm/utils/src/test.ts",
+            "tsConfig": "projects/wizdm/utils/tsconfig.spec.json",
+            "karmaConfig": "projects/wizdm/utils/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/wizdm/utils/tsconfig.lib.json",
+              "projects/wizdm/utils/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

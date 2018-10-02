@@ -1,5 +1,5 @@
 
-@mixin preloader($size, $thickness, $color, $background) {
+@mixin preloader($size, $thickness, $color, $background: inherit) {
 
   .preloader {
     position: fixed;

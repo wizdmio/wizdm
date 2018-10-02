@@ -4,7 +4,7 @@ import { map, tap, take, zip, mergeMap } from 'rxjs/operators';
 
 class ChatThread {
   /*
-  constructor(private data: wmConversation, private chat: ChatService) { }
+  constructor(private data: wmMessage, private chat: ChatService) { }
 
   public get recipient$(): Observable<wmUser> {
     return this.chat.retriveRecipient(this.data);

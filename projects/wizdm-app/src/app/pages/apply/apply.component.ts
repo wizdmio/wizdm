@@ -7,7 +7,7 @@ import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { ProjectService, wmApplication } from '../../core';
 import { CanPageDeactivate, ToolbarService, ActionEnabler } from '../../navigator';
-import { PopupService } from '../../shared';
+import { PopupService } from '../../elements';
 import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
 import { $animations } from './apply.animations';
 import { Observable } from 'rxjs';
@@ -241,7 +241,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       })
       .then( () => { 
       
-        // Navigate back to the project browser reporting the creation of a new project
+        // Navigate back to the project explore reporting the creation of a new project
         this.router.navigate(['..', 'projects'], {
           relativeTo: this.route,
           queryParams: {

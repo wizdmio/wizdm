@@ -20,15 +20,15 @@
 
   "modules" : {
     "navigator": "navigator.json",
+    "explore": "explore.json",
     "login": "login.json",
     "profile": "profile.json",
-    "browser": "browser.json",
+    "dashboard": "dashboard.json",
+    "apply": "apply.json",
     "project": "project.json",
     "document": "document.json",
     "upload": "upload.json",
     "messages": "messages.json",
-    "people": "people.json",
-    "apply": "apply.json",
     "about": "about.json",
     "shortTerms": "terms-short.json",
     "fullTerms": "terms-full.json",

@@ -5,7 +5,7 @@ import { MatExpansionPanel } from '@angular/material';
 import { ContentManager, LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { CanPageDeactivate, ToolbarService } from '../../navigator';
-import { PopupService } from '../../shared';
+import { PopupService } from '../../elements';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 
 import * as moment from 'moment';

@@ -1,0 +1,44 @@
+@import './colors/colors';
+
+$wm-elements-default: (
+
+  foreground: (
+    toggler: rgba(black, 0.87),
+    link:    rgba(blue,  0.50),
+    action:  rgba(blue,  0.50)
+  ),
+  
+  background: (
+  )
+);
+
+@mixin wm-toggler-theme($theme) {
+
+  $foreground: map-get($theme, foreground);
+
+  wm-toggler span {
+    background-color: map-get($foreground, toggler);
+  }
+}
+
+@mixin wm-disclaimer-theme($theme) {
+
+  $foreground: map-get($theme, foreground);
+
+  wm-disclaimer {
+
+    a { color: map-get($foreground, link); }
+
+    span { color: map-get($foreground, action); }
+  }
+}
+
+@mixin wm-elements-theme($theme: $wm-elements-default) {
+
+  // Merges the user styles with the default ones
+  $theme: map_merge($wm-elements-default, $theme);
+
+  // Applies the theme to the elements...
+  @include wm-toggler-theme($theme);
+  @include wm-disclaimer-theme($theme);
+}

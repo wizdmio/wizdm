@@ -1,33 +1,26 @@
 
 <!-- Navigation toolbar & Action bar -->
-<wm-toolbar fxFlex="0 0 auto"
-            [toggler]="snav.opened" 
-            (togglerChange)="snav.toggle()" #toolbar>
-</wm-toolbar>
+<wm-toolbar [(toggler)]="menu" [divider]="scrolled && !menu" #toolbar></wm-toolbar>
 
-<mat-sidenav-container fxFlex="1 1 auto" fxLayout="column">
+<!-- Viewport container -->
+<div class="container" fxFlex="1 1 auto" fxLayout="column">
 
-  <mat-sidenav mode="over" position="end" #snav>
-
-    <!-- Side Menu for Mobile version -->
-    <wm-side-menu [signedIn]="toolbar.signedIn"></wm-side-menu>
+  <!-- Mobile version Menu -->
+  <wm-menu *ngIf="menu" [signedIn]="toolbar.signedIn"></wm-menu>
   
-  </mat-sidenav>
-    
-  <!-- Navigation View -->
-  <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" (scrolled)="toolbar.showDivider($event)"> 
+  <!-- Content View -->
+  <div class="content" fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" (scrolled)="scrolled = $event"> 
 
+    <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
-      <router-outlet (activate)="snav.close()" (deactivate)="toolbar.clearActions()">
+      <router-outlet (deactivate)="toolbar.clearActions()">
       </router-outlet>
     </div>
     
+    <!-- Footer alway on the bottom -->
     <wm-footer fxFlex="0 0 auto" [signedIn]="toolbar.signedIn"></wm-footer>
-  
-  </mat-sidenav-content>
+  </div>
+</div>
 
-</mat-sidenav-container>
-
-<!--wm-consent [ask]="askConsent" (granted)="consentGranted()" #consent>
-</wm-consent-->
+<!--wm-consent [ask]="askConsent" (granted)="consentGranted()"></wm-consent-->
   

@@ -3,7 +3,7 @@ import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { ToolbarService, ActionEnabler } from '../../navigator';
-import { OpenFileComponent, PopupService } from '../../shared';
+import { OpenFileComponent, PopupService } from '../../elements';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

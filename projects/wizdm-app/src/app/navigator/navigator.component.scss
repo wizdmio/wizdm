@@ -15,10 +15,7 @@
   box-sizing: border-box;
 }
 
-mat-sidenav { min-width: 50%;}
-
-/* scroll bahavior enabled by wmViewScroll directive
-mat-sidenav-content { 
-  overflow: auto;
-  scroll-behavior: smooth;
-}*/
+.container {
+  position: relative;
+  z-index: $wm-zindex-content;
+}

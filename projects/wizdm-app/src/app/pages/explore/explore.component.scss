@@ -1,0 +1,24 @@
+@import "../../../variables";
+@import "../../../theme";
+
+:host {
+  display: block;
+  position: relative;
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: flex-start;
+  //align-content: center;
+  //align-items: center;
+  box-sizing: border-box;
+  padding-top: $wm-content-padding;
+  margin: 0 $wm-content-margin;
+}
+
+wm-explore-item {
+  margin-bottom: 32px;
+}
+
+.spinner {
+  width: 210px;
+  height: 260px;
+}

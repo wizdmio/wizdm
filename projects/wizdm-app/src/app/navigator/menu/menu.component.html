@@ -1,0 +1,12 @@
+
+<div fxLayout="column" fxLayoutAlign="start center">
+
+  <a mat-button  
+    [routerLink]="item.link"
+    [queryParams]="item.params"
+    routerLinkActive="link-active" 
+    *ngFor="let item of menuItems">
+    {{ item.label }}
+  </a>
+
+</div>

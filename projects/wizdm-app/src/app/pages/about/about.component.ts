@@ -8,7 +8,7 @@ import { ContentManager } from '@wizdm/content';
 })
 export class AboutComponent implements OnInit {
 
-  private msgs = null;
+  public msgs = null;
   
   constructor(private content: ContentManager) {
     // Gets the localized content

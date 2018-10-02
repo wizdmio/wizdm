@@ -1,5 +1,6 @@
 @import '~@angular/material/theming';
-@import 'projects/wizdm/markdown/src/lib/theming';
+@import './app/markdown/markdown';
+@import './app/elements/elements';
 
 // Thes file is actually extending the standard Angular Material theme
 // with customized application specific colors ans typography styles
@@ -56,7 +57,7 @@ $wm-theme-background: (
   unselected-chip:          map_get($mat-grey, 300),
   disabled-list-option:     map_get($mat-grey, 200),
 
-  // Application specific background values
+  // Application specific background extensions
   edit-box:                 rgba(mat-color($mat-blue, 900), 0.8),
 );
 
@@ -79,11 +80,17 @@ $wm-theme-foreground: (
   slider-off:        rgba(mat-color($wm-primary, 900), 0.26),
   slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
 
-  // Application specific foreground values
+  // Application specific foreground extension
   contrast:          white,
   edit-box:          rgba(white, 0.8),
+
+  // Elements specific foreground extensions
+  toggler:           $dark-disabled-text,
+  link:              mat-color($wm-primary),
+  action:            mat-color($wm-primary),
 );
 
+// Mimic the default material theme function using the extended version for fore/background
 @function wm-app-theme($primary, $accent, $warn) {
   @return (
     primary: $primary,
@@ -120,14 +127,15 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   // Include all the material theme styles
   @include angular-material-theme($theme);
 
-  // Init the markdown renderer making sure to apply the primary color to links
-  @include wm-markdown-init( ( foreground: ( link: mat-color($wm-primary) )) );
+  // Init the shared elements theme styles
+  @include wm-elements-theme($theme);
+
+  // Init the markdown renderer theme styles
+  @include wm-markdown-theme($theme);
  
   // Adds custom application specific style extensions
-  a {
-    &[mat-link] {
-      @extend .mat-link;
-    }
+  a[mat-link] {
+    @extend .mat-link;
   }
 
   // Makes sure the content of mat-list is hidden when overflow globally
@@ -151,8 +159,12 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   // to be used in MatDialogConfig.panelClass when needed
   .mat-dialog-reset { mat-dialog-container { padding: 0;} }
 
-  // Applies material typography rules globally
   body {
+    // Applies material typography rules globally
     @extend .mat-typography;
+
+    // Applies theme general colors
+    color: map-get($wm-theme-foreground, text);
+    background-color: map-get($wm-theme-background, background);
   }
 }

@@ -4,10 +4,13 @@ $wm-loader-thick:    3px !default;
 //$wm-toolbar-height: 65px !default;
 //$wm-toolbar-mobile: 57px !default;
 $wm-logo-size:      48px !default;
-$wm-toggler-width:  24px !default;
-$wm-toggler-height: 20px !default;
 $wm-footer-height:  64px !default;
 $wm-login-width:   300px !default;
 
 $wm-content-padding: 8px !default;
 $wm-content-margin:  32px !default;
+$wm-menu-margin:     16px !default;
+
+$wm-zindex-content: 1 !default;
+$wm-zindex-menu:    2 !default;
+$wm-zindex-edit:    3 !default;

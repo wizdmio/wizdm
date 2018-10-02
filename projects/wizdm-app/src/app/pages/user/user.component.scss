@@ -7,16 +7,7 @@ $wm-user-size: 128px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-
-  padding: $wm-content-padding 0;
-
-  & > header {
-    margin: 0 $wm-content-margin;
-  }
-
-  & > mat-accordion {
-    padding: 2vh 5vw;
-  }
+  padding: 2vh 5vw;
 }
 
 .user {

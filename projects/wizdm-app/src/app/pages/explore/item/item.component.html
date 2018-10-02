@@ -1,0 +1,37 @@
+
+<!-- Project name on the cover  -->
+<div fxLayout="column" fxLayoutAlign="center center" class="content">
+  <h1>{{ project.data.name }}</h1>
+</div>
+
+<div fxLayout="column" fxLayoutAlign="space-between center" class="content" *ngIf="project?.owner$ | async as owner" [routerLink]="[ '../projects', project.id ]">
+
+  <!-- top bar -->
+  <div fxLayout="row" fxLayoutAlign="end center" class="wide">
+    <!-- Likes on the right -->
+    <wm-likes [readonly]="project.isMine"
+              [counter]="project.likes.counter$ | async"
+              (changeFavorite)="project.likes.update($event ? 1 : -1)">
+    </wm-likes>
+  </div>
+
+  <!-- bottom bar -->
+  <div fxLayout="row" fxLayoutAlign="start center" class="wide">
+    
+      <!-- Author on the left -->
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <!-- User picture with info -->
+        <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo"></wm-avatar>
+        <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
+        
+        <div fxLayout="column">
+          <span>{{ owner.name || msgs.unnamed }}</span>
+          <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
+        </div>
+  
+      </div>
+  
+    </div>
+
+</div>
+

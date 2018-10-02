@@ -1,0 +1,14 @@
+
+<span [matMenuTriggerFor]="menuColors">
+  <ng-content></ng-content>
+</span>
+
+<mat-menu #menuColors>
+  <div fxLayout="row wrap" class="grid">
+    <button mat-button *ngFor="let col of colors"
+      (click)="pick.emit(colorMap[col])"
+      [wmThemeColor]="colorMap[col]">
+      <mat-icon *ngIf="!!color && col === color">done</mat-icon>
+    </button>
+  </div>
+</mat-menu>

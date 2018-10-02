@@ -1,0 +1,23 @@
+@import '../../../variables';
+@import '../../../theme';
+
+:host {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  z-index: $wm-zindex-menu;
+  box-sizing: border-box;
+  background-color: map-get($wm-theme-background, app-bar);
+  border-bottom: 1px solid map-get($wm-theme-foreground, divider);
+  //overflow: hidden;
+
+  div { margin-bottom: $wm-menu-margin;}
+}
+
+.link-active {
+  border-left: 2px solid mat-color($wm-primary, A400);;
+  border-right: 2px solid mat-color($wm-primary, A400);;
+}

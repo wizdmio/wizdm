@@ -1,14 +1,21 @@
-<header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
-  <p fxHide.lt-sm>{{ msgs.description }}</p>
+
+<!-- USER IMAGE -->
+<header fxLayout="column" fxLayoutAlign="center center">
+
+  <!-- Select the image among the uploads -->
+  <wm-uploads (file)="selectImage($event)" #uploads>
+    <!-- Open the selection on click -->
+    <button mat-button class="user" (click)="uploads.chooseFile(userImage)">
+      <!-- Displays the image as an Avatar -->
+      <wm-avatar [src]="userImage"></wm-avatar>
+    </button>
+  </wm-uploads>
+
 </header>
 
+<!-- PROFILE PANELS -->
 <mat-accordion>
-
-  <!-- PROFILE PANELS -->
-  <mat-expansion-panel *ngFor="let panel of msgs.panels; let i = index" 
-                      [expanded]="panel.expanded" (closed)=panelClose(i)>
+  <mat-expansion-panel *ngFor="let panel of msgs.panels; let i = index" (closed)=panelClose(i)>
 
     <!-- PANEL HEADER -->
     <mat-expansion-panel-header fxLayoutAlign="space-between center">
@@ -17,22 +24,6 @@
         <wm-icon [icon]="panel?.icon">"</wm-icon>
       </mat-panel-description>
     </mat-expansion-panel-header>
-
-    <!-- USER IMAGE -->
-    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="panel.userImage">
-
-      <!-- Select the image among the uploads -->
-      <wm-uploads (file)="selectImage($event)" #uploads>
-        <!-- Open the selection on click -->
-        <button mat-button class="user" (click)="uploads.chooseFile(userImage)">
-          <!-- Displays the image as an Avatar -->
-          <wm-avatar [src]="userImage"></wm-avatar>
-        </button>
-      </wm-uploads>
-
-    </div>
-
-    <mat-divider></mat-divider>
 
     <!-- PANEL ITEM LIST -->
     <mat-list>

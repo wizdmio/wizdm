@@ -14,18 +14,18 @@ export class TermsPrivacyComponent implements OnInit {
   @Input() disableActions = false; // Prevent the activation of navigation actions
   public msgs = null;
   
-  constructor(private content: ContentManager, 
-              private toolbar: ToolbarService,
-              private route: ActivatedRoute) {}
+  constructor(private content : ContentManager, 
+              private toolbar : ToolbarService,
+              private route   : ActivatedRoute) {}
 
   ngOnInit() {
 
-    this.route.paramMap.subscribe( param => { 
+    this.route.queryParamMap.subscribe( param => { 
       
-      let version = param.get('version') || 'short';
+      const version = param.get('version') || 'short';
 
       // Gets the localized content for the requested version (short/full)
-      this.msgs = this.content.select(`${version}Terms`);
+      this.switchVersion(version);
 
       // Activate the navigator action links
       if(this.disableActions === false) {

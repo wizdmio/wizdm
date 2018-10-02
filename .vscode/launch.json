@@ -9,7 +9,13 @@
 			"url": "https://localhost:4200",
 			"webRoot": "${workspaceRoot}",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
-			"sourceMaps": true
+			"sourceMaps": true/*,
+			"sourceMapPathOverrides": {
+        "webpack:/./*": "${webRoot}/*",
+        "webpack:/src/*": "${webRoot}/src/*",
+        "webpack:/*": "*",
+        "webpack:/./~/*": "${webRoot}/node_modules/*"
+      }*/
 			// Uncomment this to get diagnostic logs in the console
 			// "diagnosticLogging": true
 		},
@@ -20,13 +26,13 @@
 			"url": "http://localhost:4200",
 			"webRoot": "${workspaceRoot}",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
-			"sourceMaps": true,
+			"sourceMaps": true/*,
 			"sourceMapPathOverrides": {
         "webpack:/./*": "${webRoot}/*",
         "webpack:/src/*": "${webRoot}/src/*",
         "webpack:/*": "*",
         "webpack:/./~/*": "${webRoot}/node_modules/*"
-      }
+      }*/
 			// Uncomment this to get diagnostic logs in the console
 			// "diagnosticLogging": true
 		},
@@ -36,13 +42,13 @@
 			"request": "attach",
 			"port": 9222,
 			"webRoot": "${workspaceRoot}",
-			"sourceMaps": true,
+			"sourceMaps": true/*,
 			"sourceMapPathOverrides": {
         "webpack:/./*": "${webRoot}/*",
         "webpack:/src/*": "${webRoot}/src/*",
         "webpack:/*": "*",
         "webpack:/./~/*": "${webRoot}/node_modules/*"
-      }
+      }*/
 		}
 	]
 }

@@ -3,17 +3,34 @@
     "title": "Wizdm - Compassionate development",
     "description": "A community of app givers",
 
-    "menu": {
+    "toolbar": {
         "public": [
-            { "label": "How it works", "link": "home" },
-            { "label": "Manifesto", "link": "about" },
-            { "label": "Sign-in/Register", "link": "login" },
-            { "label": "Get started", "link": "projects", "highlight": true} 
+            { "label": "How it works", "link": "about" },
+            { "label": "Explore", "link": "explore" },
+            { "label": "Sign-in", "link": "login" },
+            { "label": "Get started", "link": "apply", "highlight": true }
         ],
         "private": [
-            { "label": "Home", "link": "home" },
-            { "label": "Projects", "link": "projects" },
-            { "label": "About", "link": "about" }
+            { "label": "Explore", "link": "explore" },
+            { "label": "Board", "link": "messages" },
+            { "label": "Apply", "link": "apply"  },
+            { "label": "Upload", "link": "upload" }
+        ]
+    },
+
+    "menu": {
+        "public": [
+            { "label": "How it works", "link": "about" },
+            { "label": "Explore", "link": "explore" },
+            { "label": "Sign-in", "link": "login" }
+        ],
+        "private": [
+            { "label": "Explore", "link": "explore" },
+            { "label": "Board", "link": "messages" },
+            { "label": "Apply", "link": "apply"  },
+            { "label": "Upload", "link": "upload" },
+            { "label": "Profile", "link": "profile" },
+            { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
         ]
     },
 
@@ -21,7 +38,7 @@
         "terms": "Terms and Privacy",
         "language": "Language",
         "items": [
-            { "icon": "fa:fa-envelope", "link": "mailto:me@wizdm.io" },
+            { "icon": "fa:fa-envelope", "link": "mailto:hello@wizdm.io" },
             { "icon": "fab:fa-twitter", "link": "http://twitter.com" },
             { "icon": "fab:fa-facebook", "link": "http://facebook.com" },
             { "icon": "fab:fa-slack", "link": "https://slack.com" },

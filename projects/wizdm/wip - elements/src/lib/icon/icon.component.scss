@@ -1,0 +1,10 @@
+
+$wm-icon-size: 24px !default;
+
+:host {
+  position: relative;
+  display: inline-block;
+  width: $wm-icon-size;
+  height: $wm-icon-size;
+  line-height: $wm-icon-size;
+}
