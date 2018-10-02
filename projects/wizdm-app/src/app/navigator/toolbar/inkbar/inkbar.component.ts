@@ -14,7 +14,7 @@ export interface inkbarPosition {
                    [style.background-color]="color">
               </div>
             </div>`,
-  styles: [],
+  styleUrls: ['./inkbar.component.scss'],
   animations: $animations
 })
 export class InkbarComponent {
@@ -24,7 +24,7 @@ export class InkbarComponent {
   constructor() { }
 
   @Input() height = 2;
-  @Input() color = '#42a5f5';
+  @Input() color;
   @Input() set position(pos: inkbarPosition) {
     this.pos = { ...this.pos, ...pos };
   }
