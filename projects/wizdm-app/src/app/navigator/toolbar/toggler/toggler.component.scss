@@ -14,11 +14,11 @@ $wm-toggler-line: 2px !default;
     margin-left: -$wm-toggler-width / 2;
     
     span {
-        content: '';
         position: absolute;
         
         height: $wm-toggler-line;
         background-color: map-get($wm-theme-foreground, text);
+        border-radius: $wm-toggler-line / 2;
 
         &[top] { top: 10%; left: 10%; width: 80%;}
         &[middle] { top: 50%; left: 10%; width: 80%;}
