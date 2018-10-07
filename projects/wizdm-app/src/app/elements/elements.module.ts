@@ -36,6 +36,8 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-mo
 // Application specific
 import { IconComponent } from './icon/icon.component';
 import { TogglerComponent } from './toggler/toggler.component';
+import { LogoComponent } from './logo/logo.component';
+import { InkbarComponent } from './inkbar/inkbar.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { PopupComponent } from './popup/popup.component';
@@ -66,7 +68,7 @@ const sharedModules = [
   MatProgressSpinnerModule,
   MatDialogModule,
   MatToolbarModule,
-  MatSidenavModule,
+  //MatSidenavModule,
   MatSelectModule,
   MatDividerModule,
   //MatTabsModule,
@@ -85,11 +87,11 @@ const sharedModules = [
   declarations: [
     IconComponent,
     TogglerComponent,
+    LogoComponent,
+    InkbarComponent,
     AvatarComponent,
     DisclaimerComponent,
     PopupComponent,
-    //MarkdownComponent,
-    //CodeHighlightComponent,
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,
@@ -104,10 +106,11 @@ const sharedModules = [
 //------------------------    
     IconComponent,
     TogglerComponent,
+    LogoComponent,
+    InkbarComponent,
     AvatarComponent,
     DisclaimerComponent,
     PopupComponent,
-    //MarkdownComponent,
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,

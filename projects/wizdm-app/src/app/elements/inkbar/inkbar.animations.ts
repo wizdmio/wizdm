@@ -6,8 +6,7 @@ export let $animations = [
 
   trigger('slide', [
     state('*',
-      style({ 
-        position: 'absolute',
+      style({
         left: '{{ left }}',
         width: '{{ width }}' 
       }), { params: { left: '*', width: 0 } }

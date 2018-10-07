@@ -2,8 +2,8 @@ import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, HostList
 import { Router, NavigationEnd } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
+import { inkbarPosition } from '../../elements';
 import { ToolbarService } from './toolbar.service';
-import { inkbarPosition } from './inkbar/inkbar.component';
 import { $animations } from './toolbar-animations';
 import { filter } from 'rxjs/operators';
 

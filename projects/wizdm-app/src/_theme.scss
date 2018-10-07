@@ -58,7 +58,7 @@ $wm-theme-background: (
   disabled-list-option:     map_get($mat-grey, 200),
 
   // Application specific background extensions
-  edit-box:                 rgba(mat-color($mat-blue, 900), 0.8),
+  edit-box: rgba(mat-color($mat-blue, 900), 0.8),
 );
 
 // Custom foreground palette
@@ -85,7 +85,7 @@ $wm-theme-foreground: (
   edit-box:          rgba(white, 0.8),
 
   // Elements specific foreground extensions
-  toggler:           $dark-disabled-text,
+  toggler:           mat-color($mat-grey, 500),
   link:              mat-color($wm-primary),
   action:            mat-color($wm-primary),
 );

@@ -11,14 +11,13 @@ $wm-toggler-size:  20px !default;
     margin-top: -$wm-toggler-size / 2;
     margin-left: -$wm-toggler-size / 2;
 
-    span { position: absolute; }
-
     // Style 'menu'
     &[toggler-style='menu'] {
 
       $element-size: 2px;
 
-      span {     
+      span {
+        position: absolute;
         height: $element-size;
         width: 100%;
         left: 0;
@@ -35,15 +34,16 @@ $wm-toggler-size:  20px !default;
 
       $element-size: 4px;
     
-      span {          
-          height: $element-size;
-          width: $element-size;
-          left: calc(50% - #{$element-size} / 2);
-          border-radius: $element-size / 2;
+      span {
+        position: absolute;
+        height: $element-size;
+        width: $element-size;
+        left: calc(50% - #{$element-size} / 2);
+        border-radius: $element-size / 2;
 
-          &[top]    { top: calc(10% - #{$element-size} / 2); }
-          &[middle] { top: calc(50% - #{$element-size} / 2); }
-          &[bottom] { top: calc(90% - #{$element-size} / 2); }
+        &[top]    { top: calc(10% - #{$element-size} / 2); }
+        &[middle] { top: calc(50% - #{$element-size} / 2); }
+        &[bottom] { top: calc(90% - #{$element-size} / 2); }
       }
     }
 
@@ -52,15 +52,16 @@ $wm-toggler-size:  20px !default;
 
       $element-size: 4px;
     
-      span {          
-          height: $element-size;
-          width: $element-size;
-          top: calc(50% - #{$element-size} / 2);
-          border-radius: $element-size / 2;
+      span {
+        position: absolute;
+        height: $element-size;
+        width: $element-size;
+        top: calc(50% - #{$element-size} / 2);
+        border-radius: $element-size / 2;
 
-          &[top]    { left: calc(10% - #{$element-size} / 2); }
-          &[middle] { left: calc(50% - #{$element-size} / 2); }
-          &[bottom] { left: calc(90% - #{$element-size} / 2); }
+        &[top]    { left: calc(10% - #{$element-size} / 2); }
+        &[middle] { left: calc(50% - #{$element-size} / 2); }
+        &[bottom] { left: calc(90% - #{$element-size} / 2); }
       }
     }
 }

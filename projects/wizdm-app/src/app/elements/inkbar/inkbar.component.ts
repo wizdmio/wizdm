@@ -8,12 +8,10 @@ export interface inkbarPosition {
 
 @Component({
   selector: 'wm-inkbar',
-  template: `<div>
-              <div [@slide]="trigger"
-                   [style.height.px]="height"
-                   [style.background-color]="color">
-              </div>
-            </div>`,
+  template: `<div [@slide]="trigger"
+                  [style.height.px]="height"
+                  [style.background-color]="color">
+             </div>`,
   styleUrls: ['./inkbar.component.scss'],
   animations: $animations
 })

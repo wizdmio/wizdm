@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { trigger, state, animate, style, transition } from '@angular/animations';
-const $timing = '200ms ease-out';
+const $timing = '350ms ease-out';
 
 export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
 
