@@ -1,0 +1,24 @@
+{
+  "npmScope": "monorepo",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "wizdm-app": {
+      "tags": []
+    },
+    "wizdm-app-e2e": {
+      "tags": []
+    },
+    "connect": {
+      "tags": []
+    },
+    "content": {
+      "tags": []
+    }
+  }
+}

@@ -9,6 +9,11 @@ Icon set comes from both Material and Font awesome.
 Including hammerjs (https://hammerjs.github.io) to handle gestures for material components
 Using moment (https://momentjs.com) for time and locale management
 
+## Monorepo
+
+The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl](https://nrwl.io/)
+using their Nx Angular Extension [@nrwl/schematics](https://nrwl.io/nx/guide-getting-started)
+
 ## Multi-language
 
 We use a content manager service to dynamically load contents in different languages by use of a resolver to pre-fetch localilzed content from 'assets/i18n' prior to load the navigator component. 
@@ -20,10 +25,6 @@ The service is then injectend into the components needing to get localized conte
 This approach makes sure the content is always fully loaded and available to the navigator and all the children components (aka no need of observables).
 
 The same resolver is used to ensure user authentication syncs prior to load and to fetch user language preferences when available.
-
-## Development Environment
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
 
 ## Development server
 

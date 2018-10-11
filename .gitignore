@@ -39,4 +39,5 @@ testem.log
 Thumbs.db
 
 # Local backup 
-/backup
+/.backup
+/.projects
