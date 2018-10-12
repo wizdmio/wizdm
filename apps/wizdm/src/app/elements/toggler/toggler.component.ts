@@ -32,7 +32,7 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
       })),
       // Default style on close
       state('close', style('*')),
-      transition('* <=> *', animate($timing))
+      transition('* => *', animate($timing))
     ]),
     // Toggler middle element
     trigger('middle', [
@@ -45,7 +45,7 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
       state('more_vert, more_horiz', style({ opacity: 0 })),
       // Default style on close
       state('close', style('*')),
-      transition('* <=> *', animate($timing))
+      transition('* => *', animate($timing))
     ]),
     // Toggler bottom element
     trigger('bottom', [
@@ -67,7 +67,7 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
       })),
       // Default style on close
       state('close', style('*')),
-      transition('* <=> *', animate($timing))
+      transition('* => *', animate($timing))
     ])
   ]
 })
