@@ -1,31 +1,29 @@
-
-$wm-toggler-size:  20px !default;
+$toggler-size: 20px !default;
 
 :host {
     display: inline-block;
     position: absolute;
     
-    width: $wm-toggler-size;
-    height: $wm-toggler-size;
+    width: $toggler-size;
+    height: $toggler-size;
   
-    margin-top: -$wm-toggler-size / 2;
-    margin-left: -$wm-toggler-size / 2;
+    margin-top: -$toggler-size / 2;
+    margin-left: -$toggler-size / 2;
 
     // Style 'menu'
     &[toggler-style='menu'] {
 
       $element-size: 2px;
 
-      span {
+      div {
         position: absolute;
         height: $element-size;
-        width: 100%;
-        left: 0;
+        width: $toggler-size;
         border-radius: $element-size / 2;
 
-        &[top]    { top: calc(10% - #{$element-size} / 2);}
-        &[middle] { top: calc(50% - #{$element-size} / 2);}
-        &[bottom] { top: calc(90% - #{$element-size} / 2);}
+        &[top]    { top: $toggler-size / 10 - $element-size / 2;}
+        &[middle] { top: ($toggler-size - $element-size) / 2;}
+        &[bottom] { bottom: $toggler-size / 10 - $element-size / 2;}
       }
     }
 
@@ -34,16 +32,16 @@ $wm-toggler-size:  20px !default;
 
       $element-size: 4px;
     
-      span {
-        position: absolute;
+      div {
+        position: absolute;          
         height: $element-size;
         width: $element-size;
-        left: calc(50% - #{$element-size} / 2);
+        left: ($toggler-size - $element-size) / 2;
         border-radius: $element-size / 2;
 
-        &[top]    { top: calc(10% - #{$element-size} / 2); }
-        &[middle] { top: calc(50% - #{$element-size} / 2); }
-        &[bottom] { top: calc(90% - #{$element-size} / 2); }
+        &[top]    { top: 0;}
+        &[middle] { top: ($toggler-size - $element-size) / 2;}
+        &[bottom] { bottom: 0;}
       }
     }
 
@@ -52,16 +50,16 @@ $wm-toggler-size:  20px !default;
 
       $element-size: 4px;
     
-      span {
-        position: absolute;
+      div {
+        position: absolute;    
         height: $element-size;
         width: $element-size;
-        top: calc(50% - #{$element-size} / 2);
+        top: ($toggler-size - $element-size) / 2;
         border-radius: $element-size / 2;
 
-        &[top]    { left: calc(10% - #{$element-size} / 2); }
-        &[middle] { left: calc(50% - #{$element-size} / 2); }
-        &[bottom] { left: calc(90% - #{$element-size} / 2); }
+        &[top]    { left: 0; }
+        &[middle] { left: ($toggler-size - $element-size) / 2; }
+        &[bottom] { right: 0; }
       }
     }
 }
