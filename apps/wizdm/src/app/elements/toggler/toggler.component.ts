@@ -6,9 +6,9 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
 
 @Component({
   selector: 'wm-toggler',
-  template: `<span top    [@top]="trigger"></span>
-             <span middle [@middle]="trigger"></span>
-             <span bottom [@bottom]="trigger"></span>`,
+  template: `<div top    [@top]="trigger"></div>
+             <div middle [@middle]="trigger"></div>
+             <div bottom [@bottom]="trigger"></div>`,
   styleUrls: ['./toggler.component.scss'],
   animations: [
     // Toggler top element
@@ -16,17 +16,19 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
       // Menu style: 
       // Rotates the top bar 135 deg and moves it down to the center
       state('menu', style({
-        transform: 'rotate(-135deg)',
-        top: '50%'
+        transform: 'translateY(8px) rotate(-135deg)'
       })),
       // More vertical/horizontal styles: 
       // Stretches the dot into a line moving it down to the center and rotates it 45 deg
-      state('more_vert, more_horiz', style({
-        left: 0,
-        top: '50%',
-        width: '100%',
+      state('more_vert', style({
+        width: '2px',
+        height: '20px',
+        transform: 'translateX(1px) rotate(-45deg)'
+      })),
+      state('more_horiz', style({
+        width: '20px',
         height: '2px',
-        transform: 'rotate(45deg)'
+        transform: 'translateY(1px) rotate(45deg)'
       })),
       // Default style on close
       state('close', style('*')),
@@ -49,17 +51,19 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
     trigger('bottom', [
       // Menu style: Rises the bottom bar to the middle while rotating it -45 deg
       state('menu', style({
-        transform: 'rotate(-45deg)',
-        top: '50%'
+        transform: 'translateY(-8px) rotate(-45deg)'
       })),
       // More vertical/horizontal styles:
       // Stretches the dot into a line moving it up to the center and rotates it 45 deg
-      state('more_vert, more_horiz', style({
-        left: 0,
-        top: '50%',
-        width: '100%',
+      state('more_vert', style({
+        width: '2px',
+        height: '20px',
+        transform: 'translateX(1px) rotate(45deg)'
+      })),
+      state('more_horiz', style({
+        width: '20px',
         height: '2px',
-        transform: 'rotate(135deg)'
+        transform: 'translateY(1px) rotate(-45deg)'
       })),
       // Default style on close
       state('close', style('*')),
