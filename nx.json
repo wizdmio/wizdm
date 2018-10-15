@@ -1,5 +1,5 @@
 {
-  "npmScope": "monorepo",
+  "npmScope": "wizdm",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": "*",
@@ -18,6 +18,9 @@
       "tags": []
     },
     "content": {
+      "tags": []
+    },
+    "markdown": {
       "tags": []
     }
   }

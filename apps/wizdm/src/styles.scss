@@ -21,10 +21,6 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 @import 'variables';
 @import 'theme';
-
-// Initialze the global application theme, make sure to call this only once
-@include wm-init-application-theme($wm-typography, $wm-theme);
-
 @import 'preloader';
 
 // Creates the .preloader spinner class applying the theme color
@@ -32,3 +28,5 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
                    $wm-loader-thick, 
                    mat-color($wm-primary, A400));
 
+// Initialze the global application theme, make sure to call this only once
+@include wm-init-application-theme();

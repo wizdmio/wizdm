@@ -77,5 +77,5 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
  /** Implement a minimal 'process' to support node module 'path' used by remark **/
- import './app/markdown/process-shim';
+ import '@wizdm/markdown/process-shim';
  

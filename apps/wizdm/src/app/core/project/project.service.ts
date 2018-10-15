@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DatabaseService, PagedCollection, PageConfig, dbStreamFn } from '@wizdm/connect';
 import { ContentManager } from '@wizdm/content';
-import { UserProfile, wmUser } from '@wizdm/connect';
+import { DatabaseService, PagedCollection, PageConfig, dbStreamFn, UserProfile, wmUser } from '@wizdm/connect';
 import { Observable, BehaviorSubject, of, from, merge } from 'rxjs';
 import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
 import { Project, wmProject } from './project';

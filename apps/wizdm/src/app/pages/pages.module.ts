@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 //--------
-import { MarkdownModule } from '../markdown/markdown.module';
+import { MarkdownModule } from '@wizdm/markdown';
+//--------
 import { ElementsModule } from '../elements/elements.module';
 import { HandlerComponent } from './handler/handler.component';
 import { AboutComponent } from './about/about.component';

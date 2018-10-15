@@ -22,6 +22,12 @@
       ],
       "@wizdm/content": [
         "libs/content/src/index.ts"
+      ],
+      "@wizdm/markdown": [
+        "libs/markdown/src/index.ts"
+      ],
+      "@wizdm/markdown/*": [
+        "libs/markdown/src/lib/*"
       ]
     }
   },

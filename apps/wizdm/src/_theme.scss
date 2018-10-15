@@ -1,5 +1,5 @@
 @import '~@angular/material/theming';
-@import './app/markdown/markdown';
+@import 'markdown/src/lib/markdown';
 @import './app/elements/elements';
 
 // Thes file is actually extending the standard Angular Material theme
@@ -110,16 +110,8 @@ $wm-theme-foreground: (
 // Create the customized theme
 $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
 
-// Defines an additional mat-link class to decorate links diviating
-// from the strict rules of material design for the sake of clarity
-.mat-link {
-  cursor: pointer;
-  color: mat-color($wm-primary) !important;
-  text-decoration: underline;
-}
-
 // Initilize the global application theme
-@mixin wm-init-application-theme($typography, $theme) {
+@mixin wm-init-application-theme($typography: $wm-typography, $theme: $wm-theme) {
 
   // Includes the core theme indepeneted material style
   @include mat-core($typography);
@@ -132,6 +124,14 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
 
   // Init the markdown renderer theme styles
   @include wm-markdown-theme($theme);
+
+  // Defines an additional mat-link class to decorate links diviating
+  // from the strict rules of material design for the sake of clarity
+  .mat-link {
+    cursor: pointer;
+    color: mat-color($wm-primary) !important;
+    text-decoration: underline;
+  }
  
   // Adds custom application specific style extensions
   a[mat-link] {
