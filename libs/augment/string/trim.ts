@@ -11,5 +11,5 @@ declare global {
 }
 
 String.prototype.trim = function(this: string): string {
-	return this.replace(/^\s+|\s+$/g,'');
+	return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,'');
 };
