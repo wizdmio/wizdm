@@ -1,5 +1,4 @@
-**wizdm-app**
+**apps/wizdm**
 
-* Move logo, inkbar from /toolbar to /elements
-* Add web-animations-js to polyfill to support Safari (aka all the browsers in ios)
-* 
+* Move out /utlis creating libs/augment [wizdm-augment on stackblitz](https://stackblitz.com/edit/wizdm-augment) 
+* Move out /elements creating libs/elements
