@@ -12,6 +12,9 @@ import '@wizdm/augment/string/select'
 //import '@wizdm/augment/math/normal';
 //import '@wizdm/augment/array//shuffle';
 
+// Include HammerJS to support gestures (used by Material)
+import 'hammerjs';
+
 // Includes a subset of languages to support syntax highlighting to
 // Checkout Prism.js to add more
 /*
