@@ -1,4 +1,4 @@
 **apps/wizdm**
 
-* Move out /utlis creating libs/augment. see [wizdm-augment on stackblitz](https://stackblitz.com/edit/wizdm-augment) 
+* Move out /utlis creating libs/augment and split naming.ts into single functions. See [wizdm-augment on stackblitz](https://stackblitz.com/edit/wizdm-augment) 
 * Move out /elements creating libs/elements
