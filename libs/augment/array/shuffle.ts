@@ -10,18 +10,21 @@ declare global {
   }
 }
 
-Array.prototype.shuffle = function<T>(this: T[]): T[] {
+if(typeof Array.prototype.shuffle === 'undefined') {
 
-  let result = this;
+  Array.prototype.shuffle = function<T>(this: T[]): T[] {
 
-  for(let i = this.length - 1; i > 0;i--) {
+    let result = this;
 
-    let rnd = Math.floor(Math.random() * (i + 1));
-        
-        let tmp     = result[i];
-        result[i]   = result[rnd];
-        result[rnd] = tmp;
-    }
+    for(let i = this.length - 1; i > 0;i--) {
 
-    return result;
+      let rnd = Math.floor(Math.random() * (i + 1));
+          
+          let tmp     = result[i];
+          result[i]   = result[rnd];
+          result[rnd] = tmp;
+      }
+
+      return result;
+  };
 }
