@@ -19,25 +19,28 @@ declare global {
     }
 }
 
-String.prototype.printf = function(this: string, ...args: any[]): string {
+if(typeof String.prototype.printf === 'undefined') {
 
-let i = 0;
+  String.prototype.printf = function(this: string, ...args: any[]): string {
 
-// Uses a regular expression to match the syntax and capturing the following groups:
-// group1 'flags': ([-+ 0#])? captures 0 or 1 flag among '-', '+', ' ', '0', '#'
-// group2 'width': (\d*)? captures 0 or 1 instance of a number of 1 up digits 
-// group3 'precision': (?:.(\d*))? captures 0 or 1 instance of a number of 1 up digits matching only if prepended by '.'
-// group4 'type': ([%dfs]) matches '%', 'd', 'f' or 's'
-//
-return this.replace(/%([-+ 0#])?(\d*)?(?:.(\d*))?([%dfs])/g, 
-    (match, flags, width, precision, type) => {
+  let i = 0;
 
-    //console.log("sprintf: " + match +"," + flags + "," + width + "," + precision + "," + type);
+  // Uses a regular expression to match the syntax and capturing the following groups:
+  // group1 'flags': ([-+ 0#])? captures 0 or 1 flag among '-', '+', ' ', '0', '#'
+  // group2 'width': (\d*)? captures 0 or 1 instance of a number of 1 up digits 
+  // group3 'precision': (?:.(\d*))? captures 0 or 1 instance of a number of 1 up digits matching only if prepended by '.'
+  // group4 'type': ([%dfs]) matches '%', 'd', 'f' or 's'
+  //
+  return this.replace(/%([-+ 0#])?(\d*)?(?:.(\d*))?([%dfs])/g, 
+      (match, flags, width, precision, type) => {
 
-    let value = args[i++];
-    let out = match;
+      //console.log("sprintf: " + match +"," + flags + "," + width + "," + precision + "," + type);
 
-    switch(type) {
+      let value = args[i++];
+      let out = match;
+
+      switch(type) {
+        
         case 'd': {
 
         // Turns the value into an integer
@@ -75,4 +78,5 @@ return this.replace(/%([-+ 0#])?(\d*)?(?:.(\d*))?([%dfs])/g,
 
       return out;
     });
-  }
+  };
+}
