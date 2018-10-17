@@ -12,8 +12,11 @@ declare global {
   }
 }
 
-String.prototype.camelize = function(this: string): string {
-	return this.replace(/([_.\- ][a-z])/g, $1 => {
-    return $1.toUpperCase().replace(/[_.\- ]/g,'');
-  });
-};
+if(typeof String.prototype.camelize === 'undefined') {
+
+  String.prototype.camelize = function(this: string): string {
+    return this.replace(/([_.\- ][a-z])/g, $1 => {
+      return $1.toUpperCase().replace(/[_.\- ]/g,'');
+    });
+  };
+}
