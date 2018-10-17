@@ -3,16 +3,18 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-// Import handy utils to extend global objects with useful functions
-import './app/utils/naming';
-import './app/utils/interpolate';
-import './app/utils/select'
-//import './app/utils/printf';
-//import './app/utils/normal';
-//import './app/utils/shuffle';
+// Augment global objects with useful functions
+import '@wizdm/augment/string/camelize';
+import '@wizdm/augment/string/hyphenize';
+import '@wizdm/augment/string/interpolate';
+import '@wizdm/augment/string/select'
+//import '@wizdm/augment/string/printf';
+//import '@wizdm/augment/math/normal';
+//import '@wizdm/augment/array//shuffle';
 
 // Includes a subset of languages to support syntax highlighting to
 // Checkout Prism.js to add more
+/*
 import 'prismjs/components/prism-c';
 import 'prismjs/components/prism-cpp';
 import 'prismjs/components/prism-csharp';
@@ -24,7 +26,7 @@ import 'prismjs/components/prism-perl';
 import 'prismjs/components/prism-php';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-typescript';
-
+*/
 if (environment.production) {
   enableProdMode();
 }
