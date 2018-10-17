@@ -15,15 +15,17 @@ declare global {
     }
 }
 
-String.prototype.interpolate = function(this: string, context: any): string {
+if(typeof String.prototype.interpolate === 'undefined') {
 
-// Uses a regular expression to match for {{variableName}} capturing variableName
-// accepting a variable numbers of spaces within the brackets
-  return this.replace(/{{\s*([.\w]+)\s*}}/g, (match, capture) => {
-    return capture
-      .split(".")
-      .reduce( (obj, token) => { 
-        return obj && obj[token];
-      }, context) || match;
-    });
+  String.prototype.interpolate = function(this: string, context: any): string {
+  // Uses a regular expression to match for {{variableName}} capturing variableName
+  // accepting a variable numbers of spaces within the brackets
+    return this.replace(/{{\s*([.\w]+)\s*}}/g, (match, capture) => {
+      return capture
+        .split(".")
+        .reduce( (obj, token) => { 
+          return obj && obj[token];
+        }, context) || match;
+      });
+  };
 }
