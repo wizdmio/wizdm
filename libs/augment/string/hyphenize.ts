@@ -12,8 +12,11 @@ declare global {
   }
 }
 
-String.prototype.hyphenize = function(this: string, hyphen = '-'): string {
-	return this.replace(/([A-Z])/g, $1 => {
-        return hyphen + $1.toLowerCase();
-  });
-};
+if(typeof String.prototype.hyphenize === 'undefined') {
+
+  String.prototype.hyphenize = function(this: string, hyphen = '-'): string {
+    return this.replace(/([A-Z])/g, $1 => {
+      return hyphen + $1.toLowerCase();
+    });
+  };
+}
