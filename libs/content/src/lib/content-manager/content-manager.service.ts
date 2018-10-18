@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router, NavigationEnd } from '@angular/router';
 import { Observable, of, forkJoin } from 'rxjs';
 import { zip, map, tap, filter, take, switchMap, catchError } from 'rxjs/operators';
 
@@ -280,45 +279,5 @@ export class ContentManager {
       return value[token];
       
     }, this.data);
-  }
-
-  /**
-   * Helper function to force reloading the content while navigating to the new language
-   * @param lang the new language code to switch to
-   * @param url the optional relative url to navigate to. The function navigates tothe current position if not specified.
-   */
-  public switch(lang: string, url?: string) {
-
-    // Checks if a language change is requested
-    if(lang !== this.lang) {
-
-      // Force reloading component strategy backing-up the current reuse strategy function
-      let strategy = this.router.routeReuseStrategy.shouldReuseRoute;
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
-      // Subscribe to the navigation end
-      this.router.events.pipe( 
-        filter( e => e instanceof NavigationEnd),
-        take(1) 
-      ).subscribe( () => {
-        
-        // Restore the original reausing strategy function after navigation completed
-        this.router.routeReuseStrategy.shouldReuseRoute = strategy;
-      });
-    }
-
-    const re = new RegExp(`^\/${this.lang}\/+`);
-
-    // Computes the target path....
-    let target = url ? 
-    
-      // ...to the requested url when specified
-      `/${lang}/${url}` : 
-
-      // ...or to the exact same page as the current one
-      this.router.url.replace(re, `/${lang}/`);
-
-    // Navigate to the target page (switching language if necessary)
-    this.router.navigateByUrl(target);
   }
 }
