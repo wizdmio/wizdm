@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot, Router, NavigationEnd } from '@angular/router';
 import { ContentManager } from '../content-manager/content-manager.service';
-import { LanguageResolver } from '../language-resolver/language-resolver.service';
 import { Observable, of } from 'rxjs';
 import { switchMap, first } from 'rxjs/operators';
 
@@ -10,9 +9,7 @@ import { switchMap, first } from 'rxjs/operators';
 })
 export class ContentResolver implements Resolve<any> {
 
-  constructor(private content  : ContentManager,
-              private language : LanguageResolver,
-              private router   : Router) { }
+  constructor(readonly content: ContentManager, private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any {
 
@@ -28,10 +25,9 @@ export class ContentResolver implements Resolve<any> {
       return null;
     }
 
-    // Resolve the language according to the current implementation of LanguageResolver
-    // This is used by @wizdm/connect/UserProfile to resolve to the user language when 
-    // authenticated
-    const language = this.language.resolveLanguage();
+    // Resolve the language according to the current implementation of resolveLanguage()
+    // Override the default implementation according to your appliaction logic
+    const language = this.resolveLanguage();
     const resolver = typeof language === 'string' ? of(language) : language;
     return resolver.pipe(
       first(),
@@ -52,7 +48,7 @@ export class ContentResolver implements Resolve<any> {
     );
   }
 
-  public detectLanguage() : string {
+  public detectLanguage(): string {
 
     const navigator: any = window.navigator || {};
 
@@ -61,5 +57,50 @@ export class ContentResolver implements Resolve<any> {
             navigator.language || 
             navigator.browserLanguage || 
             navigator.userLanguage;
+  }
+  
+  // Override this function to resolve for a specific language 
+  public resolveLanguage(): string | Observable<string> {
+    return <string>null;
+  }
+  
+  /**
+   * Helper function to force reloading the content while navigating to the new language
+   * @param lang the new language code to switch to
+   * @param url the optional relative url to navigate to. The function navigates tothe current position if not specified.
+   */
+  public switchLanguage(lang: string, url?: string): void {
+
+    // Checks if a language change is requested
+    if(lang !== this.lang) {
+
+      // Force reloading component strategy backing-up the current reuse strategy function
+      let strategy = this.router.routeReuseStrategy.shouldReuseRoute;
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+      // Subscribe to the navigation end
+      this.router.events.pipe( 
+        filter( e => e instanceof NavigationEnd),
+        first() 
+      ).subscribe( () => {
+        
+        // Restore the original reausing strategy function after navigation completed
+        this.router.routeReuseStrategy.shouldReuseRoute = strategy;
+      });
+    }
+
+    const re = new RegExp(`^\/${this.lang}\/+`);
+
+    // Computes the target path....
+    let target = url ? 
+    
+      // ...to the requested url when specified
+      `/${lang}/${url}` : 
+
+      // ...or to the exact same page as the current one
+      this.router.url.replace(re, `/${lang}/`);
+
+    // Navigate to the target page (switching language if necessary)
+    this.router.navigateByUrl(target);
   }
 }
