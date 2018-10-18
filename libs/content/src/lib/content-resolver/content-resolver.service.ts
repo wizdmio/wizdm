@@ -60,6 +60,6 @@ export class ContentResolver implements Resolve<any> {
     return (navigator.languages ? navigator.languages[0] : null) || 
             navigator.language || 
             navigator.browserLanguage || 
-            navigator.userLanguage || 'en';
+            navigator.userLanguage;
   }
 }
