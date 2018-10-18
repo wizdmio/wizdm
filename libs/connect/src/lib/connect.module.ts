@@ -21,7 +21,7 @@ export class ConnectModule {
     const fire = AngularFireModule.initializeApp(config.firebase, config.appname);
     return {
       ngModule: ConnectModule,
-      providers: [ ...fire.providers ]
+      providers: fire.providers
     }
   }
 }
