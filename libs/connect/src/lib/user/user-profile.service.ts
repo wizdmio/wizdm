@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { ResolveLanguage } from '@wizdm/content';
 import { DatabaseService } from '../database/database.service';
 import { DatabaseDocument, dbCommon } from '../database/database-document';
 import { AuthService, UserExtension, User } from '../auth/auth.service';
@@ -22,7 +21,7 @@ export interface wmUser extends dbCommon {
 }
 
 @Injectable()
-export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> implements OnDestroy, UserExtension, ResolveLanguage {
+export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> implements OnDestroy, UserExtension {
 
   // User authentication token
   public user: User = null;
