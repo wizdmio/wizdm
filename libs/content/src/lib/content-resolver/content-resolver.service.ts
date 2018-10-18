@@ -61,7 +61,7 @@ export class ContentResolver implements Resolve<any> {
   
   // Override this function to resolve for a specific language 
   public resolveLanguage(): string | Observable<string> {
-    return <string>null;
+    return '';
   }
   
   /**
