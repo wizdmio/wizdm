@@ -13,6 +13,6 @@ export class LanguageResolver implements ResolveLanguage {
   constructor() { }
 
   resolveLanguage(): string {
-    return null;
+    return '';
   }
 }
