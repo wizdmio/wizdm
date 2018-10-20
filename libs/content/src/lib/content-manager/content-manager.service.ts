@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
-import { zip, map, tap, filter, take, switchMap, catchError } from 'rxjs/operators';
+import { zip, map, tap, switchMap, catchError } from 'rxjs/operators';
 
 /** LanguageData  describes the language content 
  * @param label text label suitable for UI (menues, dropdown, ...)
@@ -65,8 +65,7 @@ export class ContentManager {
   private lang: string = null;
   private data: any = {};
 
-  constructor(private http   : HttpClient,
-              private router : Router) {}
+  constructor(private http: HttpClient) {}
 
   /** Returns the full list of supported languages */
   public get languages(): Languages {

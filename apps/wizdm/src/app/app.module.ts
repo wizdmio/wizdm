@@ -26,9 +26,7 @@ import { environment } from '../environments/environment';
     AuthModule,
     DatabaseModule,
     UploaderModule,
-
-    // Enable UserProfile to work as LanguageResolver for the the ContentManager
-    UserProfileModule.resolveUserLanguage(),
+    UserProfileModule, //.resolveUserLanguage(),
 
     NavigatorModule,
     PagesModule,

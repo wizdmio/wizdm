@@ -78,14 +78,6 @@ export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> 
     this.sub.unsubscribe();
   }
 
-  // Implements a basic language resolver returning the user preferred language
-  public resolveLanguage(): Observable<string> {
-    return this.asObservable()
-      .pipe( map( profile => {
-        return !!profile ? profile.lang : null;
-      }));
-  }
-
   public asObservable(): Observable<T|null> {
 
     return this.auth.user$.pipe(

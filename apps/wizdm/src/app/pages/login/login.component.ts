@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
-import { ContentManager } from '@wizdm/content';
+import { ContentResolver } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { $loginAnimations } from './login-animations';
 import { take, tap } from 'rxjs/operators';
@@ -39,8 +39,11 @@ export class LoginComponent implements OnInit  {
   public password: FormControl;
   public newEmail: FormControl;
   public newPassword: FormControl;
+
+  // Returns the content manager as if it was injected in the contructor instead of the resolver
+  private get content() { return this.resolver.content;}
   
-  constructor(private content : ContentManager,
+  constructor(private resolver : ContentResolver,
               private router  : Router, 
               private route   : ActivatedRoute,
               private profile : UserProfile) {
@@ -132,7 +135,7 @@ export class LoginComponent implements OnInit  {
           let userLang = user.lang || 'en';
   
           // Jump to the projects explore switching to the user language if needed
-          this.content.switch(userLang, 'projects');
+          this.resolver.switchLanguage(userLang, 'projects');
         }
       })
     ).subscribe();

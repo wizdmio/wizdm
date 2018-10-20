@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentManager, LanguageOption } from '@wizdm/content';
+import { ContentResolver, LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { CanPageDeactivate, ToolbarService } from '../../navigator';
 import { PopupService } from '../../elements';
@@ -23,7 +23,10 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   private msgs = null;
   private langOptions: LanguageOption[]; 
 
-  constructor(private content : ContentManager,
+  // Returns the content manager as if it was injected in the contructor instead of the resolver
+  private get content() { return this.resolver.content;}
+
+  constructor(private resolver : ContentResolver,
               private profile : UserProfile,
               private toolbar : ToolbarService,
               private popup   : PopupService,
@@ -125,7 +128,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
       if(key === 'profile:lang') {
 
         // Switch to the selected language
-        this.content.switch(value);
+        this.resolver.switchLanguage(value);
       }
     }
   }

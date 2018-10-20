@@ -33,7 +33,7 @@ const routes: Routes = [
   // Load the navigation with the selected language
   { path: ':lang', component: NavComponent,
     
-    // Uses the content manager resolver to pre-fetch language data to be used by navigation
+    // Install a resolver to pre-fetch language data according to the user preferences
     resolve: { lang: ContentResolver },
 
     // Localized pages

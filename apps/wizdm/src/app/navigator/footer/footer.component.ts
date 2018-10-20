@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ContentManager, LanguageOption } from '@wizdm/content';
+import { ContentResolver, LanguageOption } from '@wizdm/content';
 
 export interface LanguageData {
 
@@ -20,7 +20,10 @@ export class FooterComponent {
   private _options: LanguageOption[];
   public msgs;
 
-  constructor(private content: ContentManager) {
+  // Returns the content manager as if it was injected in the contructor instead of the resolver
+  private get content() { return this.resolver.content;}
+
+  constructor(private resolver: ContentResolver) {
 
     // Gets the localized user messages from content service
     this.msgs = this.content.select('navigator.footer');
@@ -47,6 +50,6 @@ export class FooterComponent {
   public changeLanguage(lang: string) {
 
     // Switch to the selected language
-    this.content.switch(lang);
+    this.resolver.switchLanguage(lang);
   }
 }
