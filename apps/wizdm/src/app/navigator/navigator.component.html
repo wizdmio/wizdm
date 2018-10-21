@@ -1,24 +1,36 @@
 
 <!-- Navigation toolbar & Action bar -->
-<wm-toolbar [(toggler)]="menu" [divider]="scrolled && !menu" #toolbar></wm-toolbar>
+<wm-toolbar [menuItems]="tbItems" 
+            [userImage]="userImage" 
+            [actionButtons]="actionButtons"
+            (action)="performAction($event)"
+            [(toggler)]="menu"
+            [signedIn]="signedIn">
+</wm-toolbar>
+
+<!-- Global error message displayer -->
+<wm-errors [error]="error" (clear)="clearError()"></wm-errors>
+
+<!-- Displays a divider upon request -->
+<mat-divider [@divider]="scrolled && !menu"></mat-divider>
 
 <!-- Viewport container -->
 <div class="container" fxFlex="1 1 auto" fxLayout="column">
 
   <!-- Mobile version Menu -->
-  <wm-menu *ngIf="menu" [signedIn]="toolbar.signedIn"></wm-menu>
+  <wm-menu *ngIf="menu" [menuItems]="mnItems"></wm-menu>
   
   <!-- Content View -->
-  <div class="content" fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" (scrolled)="scrolled = $event"> 
+  <div class="content" fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" [(scrolled)]="scrolled"> 
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
-      <router-outlet (deactivate)="toolbar.clearActions()">
+      <router-outlet (deactivate)="clearActions()">
       </router-outlet>
     </div>
     
     <!-- Footer alway on the bottom -->
-    <wm-footer fxFlex="0 0 auto" [signedIn]="toolbar.signedIn"></wm-footer>
+    <wm-footer fxFlex="0 0 auto" [signedIn]="signedIn"></wm-footer>
   </div>
 </div>
 

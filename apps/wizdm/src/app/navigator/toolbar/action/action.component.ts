@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { toolbarAction } from '../toolbar.service'; 
+import { wmAction } from '../../service/navigator-actions'; 
 import { $animations } from './action.animations';
 
 @Component({
@@ -12,7 +12,7 @@ export class ActionComponent {
 
   constructor() { }
 
-  @Input() action: toolbarAction;
+  @Input() action: wmAction;
 
   // Emits when action is activated
   @Output() activate = new EventEmitter<string>();

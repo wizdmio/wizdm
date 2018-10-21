@@ -1,8 +1,8 @@
 import { trigger, animate, style, transition } from '@angular/animations';
 
-let $timing = '400ms cubic-bezier(0.5,0.5,0.5,1.0)';
+const $timing = '400ms cubic-bezier(0.5,0.5,0.5,1.0)';
 
-export let $loginAnimations = [
+export let $animations = [
 
   trigger('vanish', [
     transition('* => *', [

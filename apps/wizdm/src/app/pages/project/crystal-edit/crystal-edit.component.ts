@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContentManager } from '@wizdm/content';
-import { ToolbarService, ActionEnabler } from '../../../navigator';
+import { NavigatorService, ActionEnabler } from '../../../navigator';
 import { Subject, fromEvent, merge } from 'rxjs';
 import { map, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { $animations } from './crystal-edit.animations';
@@ -18,7 +18,7 @@ export class CrystalEditComponent implements OnInit, OnDestroy {
   public msgs;
 
   constructor(private content : ContentManager,
-              private toolbar : ToolbarService,
+              private toolbar : NavigatorService,
               private builder : FormBuilder) {
 
     // Gets the localized content

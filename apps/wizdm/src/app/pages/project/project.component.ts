@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project, wmProject } from '../../core';
-import { ToolbarService, ActionEnabler, ScrollViewService } from '../../navigator';
+import { NavigatorService, ActionEnabler, ScrollViewService } from '../../navigator';
 import { PopupService } from '../../elements';
 import { UploadsComponent } from '../uploads/uploads.component';
 import { Observable, Subject, of, empty } from 'rxjs';
@@ -25,7 +25,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(private content  : ContentManager,
               private projects : ProjectService,
               private route    : ActivatedRoute,
-              private toolbar  : ToolbarService,
+              private toolbar  : NavigatorService,
               private popup    : PopupService,
               private scroll   : ScrollViewService) { 
 

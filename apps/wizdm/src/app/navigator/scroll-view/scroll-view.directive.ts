@@ -109,11 +109,11 @@ export class ScrollViewDirective implements OnDestroy {
     this.toElement(`#${anchor}`);
   }
 
-  @Output('scrolled') scrolledChange = new EventEmitter<boolean>();  
   @Input() treshold = 0;
-
-  private scrolled = false;
-
+  
+  @Input() scrolled = false;
+  @Output() scrolledChange = new EventEmitter<boolean>();  
+  
   @HostListener('scroll', ['$event']) onScroll(event: Event) {
 
     try {

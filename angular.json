@@ -30,8 +30,7 @@
                 "libs"
               ]
             },
-            "scripts": [
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -244,10 +243,10 @@
     },
     "defaultCollection": "@nrwl/schematics"
   },
-  "defaultProject": "wizdm",
   "schematics": {
-    "@schematics/angular:component": {
+    "@nrwl/schematics:component": {
       "styleext": "scss"
     }
-  }
+  },
+  "defaultProject": "wizdm"
 }

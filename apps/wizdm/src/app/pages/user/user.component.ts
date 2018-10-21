@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
 import { ContentResolver, LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
-import { CanPageDeactivate, ToolbarService } from '../../navigator';
+import { CanPageDeactivate, NavigatorService } from '../../navigator';
 import { PopupService } from '../../elements';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 
@@ -28,7 +28,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
 
   constructor(private resolver : ContentResolver,
               private profile : UserProfile,
-              private toolbar : ToolbarService,
+              private toolbar : NavigatorService,
               private popup   : PopupService,
               private router  : Router,
               private route   : ActivatedRoute) { 

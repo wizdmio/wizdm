@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
-import { ToolbarService } from '../../navigator';
+import { NavigatorService } from '../../navigator';
 
 @Component({
   selector: 'wm-terms-privacy',
@@ -15,7 +15,7 @@ export class TermsPrivacyComponent implements OnInit {
   public msgs = null;
   
   constructor(private content : ContentManager, 
-              private toolbar : ToolbarService,
+              private toolbar : NavigatorService,
               private route   : ActivatedRoute) {}
 
   ngOnInit() {

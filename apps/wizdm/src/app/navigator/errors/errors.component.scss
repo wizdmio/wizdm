@@ -1,0 +1,12 @@
+@import '../../../variables';
+@import '../../../theme';
+
+:host {
+
+  background-color: mat-color($mat-red, 50);
+  color: mat-color($mat-red, 600);
+}
+
+.error {
+  text-align: center;
+}

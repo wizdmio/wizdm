@@ -3,7 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { ContentResolver } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
-import { $loginAnimations } from './login-animations';
+import { NavigatorService } from '../../navigator';
+import { $animations } from './login-animations';
 import { take, tap } from 'rxjs/operators';
 
 type pageTypes = 'register' | 
@@ -21,7 +22,7 @@ type pageTypes = 'register' |
   selector : 'wm-login',
   templateUrl : './login.component.html',
   styleUrls : ['./login.component.scss'],
-  animations: $loginAnimations
+  animations: $animations
 })
 export class LoginComponent implements OnInit  {
 
@@ -43,10 +44,11 @@ export class LoginComponent implements OnInit  {
   // Returns the content manager as if it was injected in the contructor instead of the resolver
   private get content() { return this.resolver.content;}
   
-  constructor(private resolver : ContentResolver,
-              private router  : Router, 
-              private route   : ActivatedRoute,
-              private profile : UserProfile) {
+  constructor(private resolver  : ContentResolver,
+              private navigator : NavigatorService,
+              private router    : Router, 
+              private route     : ActivatedRoute,
+              private profile   : UserProfile) {
 
     // Gets the localized contents
     this.msgs = this.content.select("login");
@@ -203,16 +205,13 @@ export class LoginComponent implements OnInit  {
   }
 
   /**
-   * Shows the error message relying on the global wmError handler
+   * Shows the error message relying on the global error handler
    * @param error code of the error
    */
   private showError(error: string): void {
-    this.error = error;
+    //this.error = error;
     this.progress = false;
-  }
-
-  public resetError(): void {
-    this.error = null;
+    this.navigator.reportError(error);
   }
 
   // Execute the form requested action

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { ChatService, wmConversation, wmMessage } from '../../core';
-import { ToolbarService, ActionEnabler } from '../../navigator';
+import { NavigatorService, ActionEnabler } from '../../navigator';
 import { PopupService } from '../../elements';
 import { Observable, of } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class MessagesComponent implements OnInit {
   public msgs;
 
   constructor(private content : ContentManager, 
-              private toolbar : ToolbarService,
+              private toolbar : NavigatorService,
               //private auth    : AuthService,
               private chat    : ChatService,
               private popup   : PopupService) {

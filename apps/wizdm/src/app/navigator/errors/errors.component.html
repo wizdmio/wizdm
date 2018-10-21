@@ -1,0 +1,10 @@
+
+<div *ngIf="error" fxLayout="row" fxLayoutAlign="center center" @inflate>
+
+  <div fxFlex fxFlexOffset="40px" class="error">{{ error }}</div>
+
+  <button fxFlex="40px" mat-icon-button (click)="clearError()">
+    <wm-icon inline="true" icon="close"></wm-icon>
+  </button>
+
+</div>

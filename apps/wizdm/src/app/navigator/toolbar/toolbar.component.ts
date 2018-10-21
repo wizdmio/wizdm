@@ -1,9 +1,7 @@
 import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { ContentManager } from '@wizdm/content';
-import { UserProfile } from '@wizdm/connect';
 import { inkbarPosition } from '../../elements';
-import { ToolbarService } from './toolbar.service';
+import { wmAction } from '../service/navigator-actions';
 import { $animations } from './toolbar-animations';
 import { filter } from 'rxjs/operators';
 
@@ -15,16 +13,7 @@ import { filter } from 'rxjs/operators';
 })
 export class ToolbarComponent implements OnInit, AfterViewInit {
 
-  public menu;
-
-  constructor(private router  : Router,
-              private content : ContentManager,
-              private toolbar : ToolbarService,
-              private profile : UserProfile) {
-
-    // Gets the localized content
-    this.menu = this.content.select("navigator.toolbar");
-  }
+  constructor(private router  : Router) {}
 
   ngOnInit(){
 
@@ -40,24 +29,6 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
 
   // Draws the inkbar fter first view init
   ngAfterViewInit() { this.drawInkbar();}
-
-  // Toggler to display the menu on mobile version
-  @Output() togglerChange = new EventEmitter<boolean>();
-  @Input()  toggler = false;
-
-  public toggle() {
-    this.togglerChange.emit(this.toggler = !this.toggler);
-  }
-
-  // Bottom divider: displays a bottom border to divide the toolbar from the content
-  @Output() dividerChange = new EventEmitter<boolean>();
-  @Input('divider') divider = false;
-  
-  public showDivider(show: boolean) {
-    if(this.divider != show) {
-      this.dividerChange.emit(this.divider = show);
-    }
-  }
 
   // Inkbar underlining the active router link
   @ViewChild('linkbar', { read: ElementRef }) 
@@ -86,31 +57,28 @@ export class ToolbarComponent implements OnInit, AfterViewInit {
     this.drawInkbar();
   }
 
-  public get signedIn(): boolean {
-    return this.profile.authenticated;
+  // Toggler to display the menu on mobile version
+  @Output() togglerChange = new EventEmitter<boolean>();
+  @Input()  toggler = false;
+
+  public toggle() {
+    this.togglerChange.emit(this.toggler = !this.toggler);
   }
 
-  public get menuItems() {
-    return this.signedIn ? this.menu.private : this.menu.public;
-  }
+  @Input() signedIn: boolean = false;
+  
+  @Input() menuItems: any[] = [];
+  
+  @Input() userImage: string = null;
 
-  public get userImage(): string {
-    return this.profile.data.img; 
-  }
+  @Input() actionButtons: wmAction[] = [];
 
-  public get actionButtons() {
-    return this.toolbar.buttons;
-  }
+  @Output() action = new EventEmitter<string>();
 
   public get someAction() {
-    return this.actionButtons.length > 0;
+    return !!this.actionButtons && this.actionButtons.length > 0;
   }
-
   public performAction(code: string) {
-    this.toolbar.performAction(code);
-  }
-
-  public clearActions() {
-    this.toolbar.clearActions();
+    this.action.emit(code);
   }
 }

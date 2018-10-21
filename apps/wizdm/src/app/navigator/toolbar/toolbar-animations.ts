@@ -4,12 +4,6 @@ const $timing = '200ms ease-out';
 
 export let $animations = [
 
-    trigger('divider', [
-        state('true',  style({ opacity: 1 })),
-        state('false', style({ opacity: 0 })),
-        transition('true <=> false', animate($timing))
-    ]),
-
     trigger('expand', [
         state('true',  style({ height: '32px' })),
         state('false', style({ height: 0 })),

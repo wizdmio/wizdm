@@ -16,7 +16,7 @@ $wm-elements-default: (
 
   $foreground: map-get($theme, foreground);
 
-  wm-toggler span {
+  wm-toggler div {
     background-color: map-get($foreground, toggler);
   }
 }

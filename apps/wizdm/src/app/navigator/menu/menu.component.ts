@@ -1,5 +1,4 @@
-import { Component, Input, HostBinding, HostListener } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
+import { Component, Input, HostBinding } from '@angular/core';
 import { $animations } from './menu.animations';
 
 @Component({
@@ -10,25 +9,9 @@ import { $animations } from './menu.animations';
 })
 export class MenuComponent {
 
-  public menu;
+  @HostBinding('@menu') menuTrigger = true;
 
-  constructor(private content: ContentManager) { 
+  constructor() { }
 
-    // Gets the localized menu content
-    this.menu = this.content.select("navigator.menu");
-  }
-
-  @Input() signedIn: boolean = false;
-
-  public get menuItems() {
-    return this.signedIn ? this.menu.private : this.menu.public;
-  }
-
-  @HostBinding('@menu') menuTrigger = false;
-
-  @HostListener('@menu.done') menuDone() {
-    this.menuClosed = !this.menuTrigger;
-  }
-
-  public menuClosed = true;
+  @Input() menuItems: any[] = [];
 }

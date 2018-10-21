@@ -12,6 +12,7 @@ import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
 import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
 import { ConsentComponent } from './consent/consent.component';
+import { ErrorsComponent } from './errors/errors.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { ConsentComponent } from './consent/consent.component';
     MenuComponent,
     FooterComponent,
     ScrollViewDirective,
-    ConsentComponent
+    ConsentComponent,
+    ErrorsComponent
   ],
   providers: [
     // Provide a LanguageResolver based on user language preferences
