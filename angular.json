@@ -18,7 +18,6 @@
             "polyfills": "apps/wizdm/src/polyfills.ts",
             "tsConfig": "apps/wizdm/tsconfig.app.json",
             "assets": [
-              "apps/wizdm/src/favicon.ico",
               "apps/wizdm/src/assets"
             ],
             "styles": [
