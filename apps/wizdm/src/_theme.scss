@@ -30,7 +30,7 @@ $wm-typography: map-merge(
   )
 );
 
-// Define the main theme palettes.
+// Define the main theme colors palettes.
 $wm-primary: mat-palette($mat-blue);
 $wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
 $wm-warn:    mat-palette($mat-red);
