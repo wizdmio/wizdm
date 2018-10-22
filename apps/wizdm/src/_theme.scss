@@ -9,28 +9,25 @@
 $wm-font-family: 'Ubuntu, sans-serif';
 
 // Custom typography config
-$wm-typography: (
-
-  // Angular Material standard values
-  display-4:     mat-typography-level(112px, 112px, 300, $wm-font-family),
-  display-3:     mat-typography-level(56px, 56px, 400, $wm-font-family),
-  display-2:     mat-typography-level(45px, 48px, 400, $wm-font-family),
-  display-1:     mat-typography-level(34px, 40px, 400, $wm-font-family),
-  headline:      mat-typography-level(32px, 48px, 700, $wm-font-family),
-  title:         mat-typography-level(24px, 32px, 600, $wm-font-family),
-  subheading-2:  mat-typography-level(20px, 28px, 600, $wm-font-family),
-  subheading-1:  mat-typography-level(18px, 24px, 600, $wm-font-family),
-  body-2:        mat-typography-level(18px, 24px, 500, $wm-font-family),
-  body-1:        mat-typography-level(16px, 24px, 500, $wm-font-family),
-  caption:       mat-typography-level(12px, 20px, 400, $wm-font-family),
-  button:        mat-typography-level(16px, 20px, 500, $wm-font-family),
-  input:         mat-typography-level(inherit, 1.125, 400, $wm-font-family),
-
-  // Application specific typography values
-  logo:          mat-typography-level(22px, 24px, 600, $wm-font-family),
-  social:        mat-typography-level(22px, 24px, 600, $wm-font-family),
-  //footnote:      mat-typography-level(16px, 20px, 400, $wm-font-family),
-  //toc:           mat-typography-level(18px, 24px, 500, $wm-font-family),
+$wm-typography: map-merge(
+  // Customizes some standard Angular Material typography values
+  mat-typography-config(
+    $font-family:   $wm-font-family,
+    $headline:      mat-typography-level(32px, 48px, 700),
+    $title:         mat-typography-level(24px, 32px, 600),
+    $subheading-2:  mat-typography-level(20px, 28px, 600),
+    $subheading-1:  mat-typography-level(18px, 24px, 600),
+    $body-2:        mat-typography-level(18px, 24px, 500),
+    $body-1:        mat-typography-level(16px, 20px, 500),
+    $button:        mat-typography-level(16px, 20px, 500),
+  ),
+  // Adds extra application specific typography values
+  (
+    logo:          mat-typography-level(22px, 24px, 600, $wm-font-family),
+    social:        mat-typography-level(22px, 24px, 600, $wm-font-family),
+    //footnote:      mat-typography-level(16px, 20px, 400, $wm-font-family),
+    //toc:           mat-typography-level(18px, 24px, 500, $wm-font-family)
+  )
 );
 
 // Define the main theme palettes.
