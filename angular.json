@@ -25,9 +25,9 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "apps",
-                "libs",
-                "apps/wizdm/src/stylings"
+                "apps/wizdm/src/stylings",
+                "apps/wizdm/src/app/elements",
+                "libs/markdown/src/lib"
               ]
             },
             "scripts": []
