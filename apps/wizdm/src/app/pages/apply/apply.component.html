@@ -139,7 +139,7 @@
     <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>
 
     <div *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
-      <button mat-button class="apply-btn" type="button" 
+      <button mat-flat-button color="primary" type="button" 
               [disabled]="!agree.checked" 
               (click)="submitProject()">
         {{ msgs.buttons.apply }}

@@ -26,9 +26,7 @@ $wm-elements-default: (
   $foreground: map-get($theme, foreground);
 
   wm-disclaimer {
-
     a { color: map-get($foreground, link); }
-
     span { color: map-get($foreground, action); }
   }
 }

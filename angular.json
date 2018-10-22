@@ -27,7 +27,7 @@
               "includePaths": [
                 "apps/wizdm/src/styles",
                 "apps/wizdm/src/app/elements",
-                "libs/markdown/src/lib"
+                "libs/markdown/src/styles"
               ]
             },
             "scripts": []

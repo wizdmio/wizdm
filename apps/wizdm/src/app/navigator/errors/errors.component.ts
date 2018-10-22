@@ -31,6 +31,7 @@ const $timing = '400ms cubic-bezier(0.5,0.5,0.5,1.0)';
 export class ErrorsComponent {
 
   private msgs = null;
+  private timer: any;
   public error: string;
   
   constructor(private content: ContentManager) {
@@ -57,12 +58,13 @@ export class ErrorsComponent {
     this.error = key.select(this.msgs, code);
 
     // Makes sure to turn off the error message after the specified timeout
-    setTimeout(() => this.clearError(), this.timeout );
+    this.timer = setTimeout(() => this.clearError(), this.timeout );
   }
 
   @Output() clear = new EventEmitter<void>();
 
   public clearError(): void {
+    clearTimeout(this.timer);
     this.error = null;
     this.clear.emit();
   }

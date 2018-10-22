@@ -24,14 +24,3 @@
   max-width: 500px;
   text-align: justify;
 }
-
-.apply-btn {
-  
-  // TODO: Switch to <..mat-button color="primary"..>
-  color: mat-contrast($wm-primary, A400);
-  background-color: mat-color($wm-primary, A400);
-  
-  &[disabled] {
-    background-color: transparent;
-  }
-}
