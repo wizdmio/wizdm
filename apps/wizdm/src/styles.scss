@@ -1,21 +1,21 @@
 // Resets styles with Normalize.css for browser behaviour consistency
 @import '~normalize.css/normalize.css';
 
-// Host material icons
-$material-icons-font-path: '~material-icons/iconfont/';
-@import '~material-icons/iconfont/material-icons.scss';
-//@import '~material-design-icons/iconfont/material-icons.css';
+// Host material design icons
+@import '~material-design-icons/iconfont/material-icons.css';
 
 // Uncomment this option to load material icons from the web
 //@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 // Host fontawesome free icons
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/regular";
-@import "~@fortawesome/fontawesome-free/scss/solid";
-@import "~@fortawesome/fontawesome-free/scss/brands";
+@import '~@fortawesome/fontawesome-free/css/all.css';
+//$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+//@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+//@import "~@fortawesome/fontawesome-free/scss/regular";
+//@import "~@fortawesome/fontawesome-free/scss/solid";
+//@import "~@fortawesome/fontawesome-free/scss/brands";
 
+// Uncomment this option to load fontawsome icons from the web
 // @import url('https://use.fontawesome.com/releases/v5.4.1/css/all.css');
 
 // Load the main Ubuntu google font from the web
