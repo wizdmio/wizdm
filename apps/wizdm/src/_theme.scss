@@ -78,13 +78,12 @@ $wm-theme-foreground: map-merge(
 
 // Mimic the default material theme function using the extended version for fore/background
 @function wm-app-theme($primary, $accent, $warn) {
-  @return (
-    primary: $primary,
-    accent: $accent,
-    warn: $warn,
-    is-dark: false,
-    foreground: $wm-theme-foreground,
-    background: $wm-theme-background,
+  @return map-merge(
+	mat-light-theme($primary, $accent, $warn),
+    (
+	  foreground: $wm-theme-foreground,
+	  background: $wm-theme-background
+	)
   );
 }
 
