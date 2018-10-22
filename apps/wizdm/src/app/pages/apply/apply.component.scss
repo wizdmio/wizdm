@@ -1,5 +1,5 @@
-@import '../../../variables';
-@import '../../../theme';
+@import 'variables';
+@import 'theme';
 
 :host {
   display: flex;
@@ -27,6 +27,7 @@
 
 .apply-btn {
   
+  // TODO: Switch to <..mat-button color="primary"..>
   color: mat-contrast($wm-primary, A400);
   background-color: mat-color($wm-primary, A400);
   

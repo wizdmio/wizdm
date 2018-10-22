@@ -25,7 +25,7 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "apps/wizdm/src/stylings",
+                "apps/wizdm/src/styles",
                 "apps/wizdm/src/app/elements",
                 "libs/markdown/src/lib"
               ]

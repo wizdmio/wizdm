@@ -36,10 +36,8 @@ $wm-primary: mat-palette($mat-blue);
 $wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
 $wm-warn:    mat-palette($mat-red);
 
-// Custom background palette
-$wm-theme-background: map-merge(
-  // Based on the standard material light theme
-  $mat-light-theme-background,
+// Custom background palette based on the standard material light theme
+$wm-theme-background: map-merge( $mat-light-theme-background,
   (
     // Overwrites some Angular Material standard values
     status-bar:             white,
@@ -51,10 +49,8 @@ $wm-theme-background: map-merge(
   )
 );
 
-// Custom foreground palette
-$wm-theme-foreground: map-merge(
-  // Based on the standard material light theme
-  $mat-light-theme-foreground,
+// Custom foreground palette based on the standard material light theme
+$wm-theme-foreground: map-merge( $mat-light-theme-foreground,
   (
     // Overwrites some Angular Material standard values
     base:              mat-color($wm-primary, 900),
@@ -102,7 +98,7 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   // Includes the core theme indepeneted material style
   @include mat-core($typography);
 
-  // Include all the material theme styles
+  // Include a selection of material theme styles
   //@include angular-material-theme($theme);
   @include custom-material-theme($theme);
 

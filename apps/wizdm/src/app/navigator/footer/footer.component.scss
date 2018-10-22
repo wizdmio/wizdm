@@ -1,12 +1,6 @@
-@import "../../../variables";
-@import "../../../theme";
-/*
-:host {
-  display: flex;
-  flex: none; // Inflexible
-  box-sizing: border-box;
-}
-*/
+@import "variables";
+@import "theme";
+
 footer {
   min-height: $wm-footer-height;
   width: 100%;
@@ -20,10 +14,3 @@ footer {
 .social {
   font-size: mat-font-size($wm-typography, social);
 }
-/*
-.langImg {
-  height: mat-font-size($wm-typography, subheading-2);
-  padding: 0 5px;
-}
-*/
-

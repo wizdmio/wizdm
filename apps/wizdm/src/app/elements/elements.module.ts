@@ -44,7 +44,6 @@ import { PopupComponent } from './popup/popup.component';
 import { OpenFileComponent } from './file/open-file.component';
 import { DropZoneDirective } from './file/drop-zone.directive';
 import { FileSizePipe } from './file/file-size.pipe';
-import { ErrorsComponent } from './errors/errors.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ColorsDirective } from './colors/colors.directive';
 import { LikesComponent } from './likes/likes.component';
@@ -93,7 +92,6 @@ const sharedModules = [
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,
-    ErrorsComponent,
     ColorPickerComponent,
     ColorsDirective,
     LikesComponent
@@ -112,7 +110,6 @@ const sharedModules = [
     OpenFileComponent,
     DropZoneDirective,
     FileSizePipe,
-    ErrorsComponent,
     ColorPickerComponent,
     ColorsDirective,
     LikesComponent

@@ -1,5 +1,5 @@
-@import '../../../theme';
-@import '../../../variables';
+@import 'theme';
+@import 'variables';
 
 .highlight {
   background-color: mat-color($wm-primary, A400);
