@@ -1,5 +1,5 @@
 @import '~@angular/material/theming';
-//@import 'material';
+@import 'material';
 @import 'markdown';
 @import 'elements';
 
@@ -103,8 +103,8 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   @include mat-core($typography);
 
   // Include all the material theme styles
-  @include angular-material-theme($theme);
-  //@include custom-material-theme($theme);
+  //@include angular-material-theme($theme);
+  @include custom-material-theme($theme);
 
   // Init the shared elements theme styles
   @include wm-elements-theme($theme);
