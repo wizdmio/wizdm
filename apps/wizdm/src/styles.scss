@@ -19,6 +19,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 // Load the main Ubuntu google font from the web
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
 
+// Import local partials
 @import 'preloader';
 @import 'variables';
 @import 'theme';
