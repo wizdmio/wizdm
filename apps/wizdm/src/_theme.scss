@@ -147,7 +147,6 @@ $wm-theme: wm-app-theme($wm-primary, $wm-accent, $wm-warn);
   body {
     // Applies material typography rules globally
     @extend .mat-typography;
-
     // Applies material theme general colors
     @extend .mat-app-background;
   }
