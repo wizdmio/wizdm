@@ -50,21 +50,6 @@ $wm-theme-background: map-merge(
   )
 );
 
-// Custom background palette
-$wm-theme-background: map-merge(
-  // Based on the standard material light theme
-  $mat-light-theme-background,
-  (
-    // Overwrites some Angular Material standard values
-    status-bar:             white,
-    app-bar:                white,
-    background:             white,
-
-    // Appends extra application specific background extensions
-    edit-box: rgba(mat-color($mat-blue, 900), 0.8),
-  )
-);
-
 // Custom foreground palette
 $wm-theme-foreground: (
 
