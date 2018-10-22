@@ -1,5 +1,5 @@
 
-// Create a theme.
+// Create a theme with selected component only.
 @mixin custom-material-theme($theme) {
   @include mat-core-theme($theme);
   //@include mat-autocomplete-theme($theme);
