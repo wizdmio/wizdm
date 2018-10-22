@@ -19,7 +19,7 @@ $wm-typography: map-merge(
     $subheading-1:  mat-typography-level(18px, 24px, 600),
     $body-2:        mat-typography-level(18px, 24px, 500),
     $body-1:        mat-typography-level(16px, 20px, 500),
-    $button:        mat-typography-level(16px, 20px, 500),
+    $button:        mat-typography-level(16px, 20px, 500)
   ),
   // Adds extra application specific typography values
   (
@@ -79,11 +79,11 @@ $wm-theme-foreground: map-merge(
 // Mimic the default material theme function using the extended version for fore/background
 @function wm-app-theme($primary, $accent, $warn) {
   @return map-merge(
-	mat-light-theme($primary, $accent, $warn),
+	  mat-light-theme($primary, $accent, $warn),
     (
-	  foreground: $wm-theme-foreground,
-	  background: $wm-theme-background
-	)
+	    foreground: $wm-theme-foreground,
+	    background: $wm-theme-background
+	  )
   );
 }
 
