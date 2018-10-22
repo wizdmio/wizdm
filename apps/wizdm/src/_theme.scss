@@ -35,21 +35,19 @@ $wm-primary: mat-palette($mat-blue);
 $wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
 $wm-warn:    mat-palette($mat-red);
 
-$mat-light-theme-background: (
-  status-bar: map_get($mat-grey, 300),
-  app-bar:    map_get($mat-grey, 100),
-  background: map_get($mat-grey, 50),
-  hover:      rgba(black, 0.04), // TODO(kara): check style with Material Design UX
-  card:       white,
-  dialog:     white,
-  disabled-button: rgba(black, 0.12),
-  raised-button: white,
-  focused-button: $dark-focused,
-  selected-button: map_get($mat-grey, 300),
-  selected-disabled-button: map_get($mat-grey, 400),
-  disabled-button-toggle: map_get($mat-grey, 200),
-  unselected-chip: map_get($mat-grey, 300),
-  disabled-list-option: map_get($mat-grey, 200),
+// Custom background palette
+$wm-theme-background: map-merge(
+  // Based on the standard material light theme
+  $mat-light-theme-background,
+  (
+    // Overwrites some Angular Material standard values
+    status-bar:             white,
+    app-bar:                white,
+    background:             white,
+
+    // Appends extra application specific background extensions
+    edit-box: rgba(mat-color($mat-blue, 900), 0.8),
+  )
 );
 
 // Custom background palette
