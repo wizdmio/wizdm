@@ -19,9 +19,9 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 // Load the main Ubuntu google font from the web
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
 
+@import 'preloader';
 @import 'variables';
 @import 'theme';
-@import 'preloader';
 
 // Creates the .preloader spinner class applying the theme color
 @include preloader($wm-loader-size, 
