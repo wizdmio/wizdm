@@ -55,7 +55,7 @@ export class NavComponent implements OnInit {
     return this.profile.authenticated;
   }
 
-  public get desktopMen(): any[] {
+  public get desktopMenu(): any[] {
     const menu = this.msgs.toolbar || {};
     return this.signedIn ? menu.private : menu.public;
   }
