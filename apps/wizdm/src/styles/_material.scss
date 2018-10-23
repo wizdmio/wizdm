@@ -89,9 +89,11 @@ $wm-theme: extend-material-theme($wm-theme,
 */
 
 @function extend-material-theme($mat-theme, $foreground, $background) {
-  
+  @return map-merge($mat-theme, (
+    foreground: $foreground,
+    background: $background
+  ));
 }
-
 
 // Create a theme with selected component only.
 @mixin custom-material-theme($theme) {
