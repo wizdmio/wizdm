@@ -12,16 +12,21 @@
   flex-direction: column;
   box-sizing: border-box;
 
+  // Rise the zindex (2) over the content
   z-index: $wm-zindex-control;
 }
 
 .container {
   position: relative;
   overflow: hidden;
+
+  // Lower the content zindex (1)
   z-index: $wm-zindex-content;
 
+  // Makes sure the menu overlays (2) the content container
   wm-menu { z-index: $wm-zindex-control;}
 
+  // Makes sure the content overflows
   .content { overflow: auto;}
 }
 
