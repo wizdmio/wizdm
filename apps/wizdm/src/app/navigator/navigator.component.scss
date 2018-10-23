@@ -11,14 +11,17 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+   z-index: $wm-zindex-control;
 }
 
 .container {
   position: relative;
   overflow: hidden;
   z-index: $wm-zindex-content;
+
+  wm-menu { z-index: $wm-zindex-control;}
+
+  .content { overflow: auto;}
 }
 
-.content {
-  overflow: auto;
-}
