@@ -1,7 +1,7 @@
 <header fxFlex="0 0 auto">
 
   <!-- Navigation toolbar & Action bar -->
-  <wm-toolbar [menuItems]="tbItems" 
+  <wm-toolbar [menuItems]="desktopMenu" 
               [userImage]="userImage" 
               [actionButtons]="actionButtons"
               (action)="performAction($event)"
@@ -23,7 +23,7 @@
 <div class="container" fxFlex="1 1 auto" fxLayout="column">
 
   <!-- Mobile version Menu -->
-  <wm-menu *ngIf="menu" [menuItems]="mnItems"></wm-menu>
+  <wm-menu *ngIf="menu" [menuItems]="mobileMenu"></wm-menu>
   
   <!-- Content View -->
   <div class="content" fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" [(scrolled)]="scrolled"> 
