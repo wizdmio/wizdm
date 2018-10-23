@@ -55,14 +55,14 @@ export class NavComponent implements OnInit {
     return this.profile.authenticated;
   }
 
-  public get tbItems(): any[] {
-    const tb = this.msgs.toolbar || {};
-    return this.signedIn ? tb.private : tb.public;
+  public get desktopMen(): any[] {
+    const menu = this.msgs.toolbar || {};
+    return this.signedIn ? menu.private : menu.public;
   }
 
-  public get mnItems(): any[] {
-    const mn = this.msgs.menu || {};
-    return this.signedIn ? mn.private : mn.public;
+  public get mobileMenu(): any[] {
+    const menu = this.msgs.menu || {};
+    return this.signedIn ? menu.private : menu.public;
   }
 
   public get userImage(): string {
