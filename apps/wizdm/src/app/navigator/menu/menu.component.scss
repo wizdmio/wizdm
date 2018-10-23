@@ -8,7 +8,7 @@
   top: 0;
   width: 100%;
   height: auto;
-  z-index: $wm-zindex-menu;
+  z-index: $wm-zindex-control;
   box-sizing: border-box;
   background-color: map-get($wm-theme-background, app-bar);
   border-bottom: 1px solid map-get($wm-theme-foreground, divider);
