@@ -2,6 +2,7 @@
 @import 'theme';
 
 :host {
+  display: block;
   // Uses the "warning" color palette
   background-color: mat-color($wm-warn, 50);
   color: mat-color($wm-warn, 600);

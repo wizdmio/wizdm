@@ -42,14 +42,13 @@ $wm-typography: extend-material-typography($wm-typography,
 }
 
 /*
-
-// Define the main theme colors palettes.
+// Defines the main theme colors palettes.
 $wm-primary: mat-palette($mat-blue);
 $wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
 $wm-warn:    mat-palette($mat-red);
 
 // Creates a standard material light theme first...
-$wm-theme: mat-light-theme($primary, $accent, $warn);
+$wm-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
 
 //... than extends the theme with customized fore/backgrounds
 $wm-theme: extend-material-theme($wm-theme, 
@@ -85,13 +84,17 @@ $wm-theme: extend-material-theme($wm-theme,
     edit-box:         rgba(mat-color($mat-blue, 900), 0.8)
   )
 );
-
 */
 
 @function extend-material-theme($mat-theme, $foreground, $background) {
+  // Gets the standard material maps of fore/background
+  $mat-fore: map-get($mat-theme, foreground);
+  $mat-back: map-get($mat-theme, background);
+
+  // Merges the standard values with the extensions
   @return map-merge($mat-theme, (
-    foreground: $foreground,
-    background: $background
+    foreground: map-merge($mat-fore, $foreground),
+    background: map-merge($mat-back, $background)
   ));
 }
 
