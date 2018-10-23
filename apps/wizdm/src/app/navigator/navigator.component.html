@@ -1,18 +1,21 @@
+<header fxFlex="0 0 auto">
 
-<!-- Navigation toolbar & Action bar -->
-<wm-toolbar [menuItems]="tbItems" 
-            [userImage]="userImage" 
-            [actionButtons]="actionButtons"
-            (action)="performAction($event)"
-            [(toggler)]="menu"
-            [signedIn]="signedIn">
-</wm-toolbar>
+  <!-- Navigation toolbar & Action bar -->
+  <wm-toolbar [menuItems]="tbItems" 
+              [userImage]="userImage" 
+              [actionButtons]="actionButtons"
+              (action)="performAction($event)"
+              [(toggler)]="menu"
+              [signedIn]="signedIn">
+  </wm-toolbar>
 
-<!-- Global error message displayer -->
-<wm-errors [error]="error" (clear)="clearError()"></wm-errors>
+  <!-- Global error message displayer -->
+  <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
 
-<!-- Displays a divider upon request -->
-<mat-divider [@divider]="scrolled && !menu"></mat-divider>
+  <!-- Displays a divider upon request -->
+  <mat-divider [@divider]="scrolled && !menu"></mat-divider>
+
+</header>
 
 <!-- Viewport container -->
 <div class="container" fxFlex="1 1 auto" fxLayout="column">
