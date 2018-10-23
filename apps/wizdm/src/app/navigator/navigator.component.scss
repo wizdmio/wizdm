@@ -18,3 +18,7 @@
   position: relative;
   z-index: $wm-zindex-content;
 }
+
+.content {
+  overflow: auto;
+}
