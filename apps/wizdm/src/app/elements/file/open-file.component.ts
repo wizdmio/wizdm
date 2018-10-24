@@ -2,13 +2,13 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 
 @Component({
   selector: 'wm-open-file, [wm-open-file]',
-  template: '<input [style.display]="\'none\'" type="file" [accept]="accept" [multiple]="!!multiple"\
-            (change)="files.emit($event.target.files)" #input />\
-             <ng-content></ng-content>',
+  template: `<input [style.display]="'none'" type="file" [accept]="accept" [multiple]="!!multiple"
+            (change)="files.emit($event.target?.files)" #input />
+             <ng-content></ng-content>`,
   styles: []
 })
 /**
- * SImple component wrapping a file input to help in managing the file dialog window
+ * Simple component wrapping a file input to help managing the file dialog window
  */
 export class OpenFileComponent implements OnInit {
 
