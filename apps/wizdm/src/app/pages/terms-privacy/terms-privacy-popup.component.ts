@@ -4,14 +4,14 @@ import { ContentManager } from '@wizdm/content';
 
 @Component({
   selector: 'wm-terms-privacy-popup',
-  template: '<div mat-dialog-content>\
-              <wm-terms-privacy fullScreen="true" disableActions="true"></wm-terms-privacy>\
-            </div>\
-            <div mat-dialog-actions>\
-              <button mat-button [mat-dialog-close]="true">\
-                {{buttons?.ok}}\
-              </button>\
-            </div>',
+  template: `<div mat-dialog-content>
+              <wm-terms-privacy fullScreen="true" disableActions="true"></wm-terms-privacy>
+            </div>
+            <div mat-dialog-actions>
+              <button mat-button [mat-dialog-close]="true">
+                {{buttons?.ok}}
+              </button>
+            </div>`,
   styles: []
 })
 export class TermsPrivacyPopupComponent implements OnInit {
