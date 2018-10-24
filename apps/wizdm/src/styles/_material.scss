@@ -98,56 +98,47 @@ $wm-theme: extend-material-theme($wm-theme,
   ));
 }
 
-// Create a theme with selected component only.
-@mixin custom-material-theme($theme) {
-  @include mat-core-theme($theme);
-  //@include mat-autocomplete-theme($theme);
-  //@include mat-badge-theme($theme);
-  //@include mat-bottom-sheet-theme($theme);
-  @include mat-button-theme($theme);
-  //@include mat-button-toggle-theme($theme);
-  //@include mat-card-theme($theme);
-  @include mat-checkbox-theme($theme);
-  //@include mat-chips-theme($theme);
-  //@include mat-table-theme($theme);
-  @include mat-datepicker-theme($theme);
-  @include mat-dialog-theme($theme);
-  @include mat-divider-theme($theme);
-  @include mat-expansion-panel-theme($theme);
-  @include mat-form-field-theme($theme);
-  //@include mat-grid-list-theme($theme);
-  @include mat-icon-theme($theme);
-  @include mat-input-theme($theme);
-  @include mat-list-theme($theme);
-  @include mat-menu-theme($theme);
-  //@include mat-paginator-theme($theme);
-  @include mat-progress-bar-theme($theme);
-  @include mat-progress-spinner-theme($theme);
-  //@include mat-radio-theme($theme);
-  @include mat-select-theme($theme);
-  //@include mat-sidenav-theme($theme);
-  //@include mat-slide-toggle-theme($theme);
-  //@include mat-slider-theme($theme);
-  @include mat-stepper-theme($theme);
-  //@include mat-sort-theme($theme);
-  //@include mat-tabs-theme($theme);
-  @include mat-toolbar-theme($theme);
-  //@include mat-tooltip-theme($theme);
-  //@include mat-tree-theme($theme);
-  //@include mat-snack-bar-theme($theme);
-}
-
-/*
+// Create the theme styles for selected component only.
 @mixin custom-material-theme($theme, $config: null) {
 
   @if $config == null {
-    $config: ('autocomplete', 'badge', 'bottom', 'button', 'button-toggle', 'card', 'checkbox', 'chips', 'table', 'datepicker', 'dialog', 'divider', 'expansion-panel', 'form-field', 'grid-list', 'icon', 'input', 'list', 'menu', 'paginator', 'progress-bar', 'progress-spinner', 'radio', 'select', 'sidenav', 'slide', 'slider', 'stepper', 'sort', 'tabs', 'toolbar', 'tooltip', 'tree', 'snack-bar');
+    $config: ('autocomplete', 'badge', 'bottom-sheet', 'button', 'button-toggle', 'card', 'checkbox', 'chips', 'table', 'datepicker', 'dialog', 'divider', 'expansion-panel', 'form-field', 'grid-list', 'icon', 'input', 'list', 'menu', 'paginator', 'progress-bar', 'progress-spinner', 'radio', 'select', 'sidenav', 'slide', 'slider', 'stepper', 'sort', 'tabs', 'toolbar', 'tooltip', 'tree', 'snack-bar');
   }
 
   @include mat-core-theme($theme);
-
-  @each $cmp in $config {
-    @include mat-#{cmp}-theme($theme);
-  } 
+  @if $config contains 'autocomplete' { @include mat-autocomplete-theme($theme);}
+  @if $config contains 'badge' { @include mat-badge-theme($theme);}
+  @if $config contains 'bottom-sheet' { @include mat-bottom-sheet-theme($theme);}
+  @if $config contains 'button' { @include mat-button-theme($theme);}
+  @if $config contains 'button-toggle' { @include mat-button-toggle-theme($theme);}
+  @if $config contains 'card' { @include mat-card-theme($theme);}
+  @if $config contains 'checkbox' { @include mat-checkbox-theme($theme);}
+  @if $config contains 'chip' { @include mat-chips-theme($theme);}
+  @if $config contains 'table' { @include mat-table-theme($theme);}
+  @if $config contains 'datepicker' { @include mat-datepicker-theme($theme);}
+  @if $config contains 'dialog' { @include mat-dialog-theme($theme);}
+  @if $config contains 'divider' { @include mat-divider-theme($theme);}
+  @if $config contains 'expansion-panel' { @include mat-expansion-panel-theme($theme);}
+  @if $config contains 'form-field' { @include mat-form-field-theme($theme);}
+  @if $config contains 'grid-list' { @include mat-grid-list-theme($theme);}
+  @if $config contains 'icon' { @include mat-icon-theme($theme);}
+  @if $config contains 'input' { @include mat-input-theme($theme);}
+  @if $config contains 'list' { @include mat-list-theme($theme);}
+  @if $config contains 'menu' { @include mat-menu-theme($theme);}
+  @if $config contains 'paginator' { @include mat-paginator-theme($theme);}
+  @if $config contains 'progress-bar' { @include mat-progress-bar-theme($theme);}
+  @if $config contains 'progress-spinner' { @include mat-progress-spinner-theme($theme);}
+  @if $config contains 'radio' { @include mat-radio-theme($theme);}
+  @if $config contains 'select' { @include mat-select-theme($theme);}
+  @if $config contains 'sidenav' { @include mat-sidenav-theme($theme);}
+  @if $config contains 'slide-toggle' { @include mat-slide-toggle-theme($theme);}
+  @if $config contains 'slider' { @include mat-slider-theme($theme);}
+  @if $config contains 'stepper' { @include mat-stepper-theme($theme);}
+  @if $config contains 'sort' { @include mat-sort-theme($theme);}
+  @if $config contains 'tabs' { @include mat-tabs-theme($theme);}
+  @if $config contains 'toolbar' { @include mat-toolbar-theme($theme);}
+  @if $config contains 'tooltip' { @include mat-tooltip-theme($theme);}
+  @if $config contains 'tree' { @include mat-tree-theme($theme);}
+  @if $config contains 'snack-bar' { @include mat-snack-bar-theme($theme);}
 }
-*/
+
