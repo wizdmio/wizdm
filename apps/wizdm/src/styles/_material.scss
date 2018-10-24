@@ -136,3 +136,18 @@ $wm-theme: extend-material-theme($wm-theme,
   //@include mat-tree-theme($theme);
   //@include mat-snack-bar-theme($theme);
 }
+
+/*
+@mixin custom-material-theme($theme, $config: null) {
+
+  @if $config == null {
+    $config: ('autocomplete', 'badge', 'bottom', 'button', 'button-toggle', 'card', 'checkbox', 'chips', 'table', 'datepicker', 'dialog', 'divider', 'expansion-panel', 'form-field', 'grid-list', 'icon', 'input', 'list', 'menu', 'paginator', 'progress-bar', 'progress-spinner', 'radio', 'select', 'sidenav', 'slide', 'slider', 'stepper', 'sort', 'tabs', 'toolbar', 'tooltip', 'tree', 'snack-bar');
+  }
+
+  @include mat-core-theme($theme);
+
+  @each $cmp in $config {
+    @include mat-#{cmp}-theme($theme);
+  } 
+}
+*/
