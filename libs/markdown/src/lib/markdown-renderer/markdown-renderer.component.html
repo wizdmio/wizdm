@@ -10,7 +10,7 @@
 
   <!-- Renders the table of contents -->
   <ng-container *ngSwitchCase="'toc'">
-    <ng-container *ngTemplateOutlet="toc; context: root"></ng-container>
+    <ng-container *ngTemplateOutlet="tableOfContent; context: root"></ng-container>
   </ng-container>
 
   <!-- Renders the footnotes -->
@@ -30,22 +30,22 @@
       <!-- Headings -->
       <ng-container *ngSwitchCase="'heading'">
         <ng-container [ngSwitch]="child.depth">
-          <h1 *ngSwitchCase="1" [attr.data-line]="child.position?.start?.line" [id]="'h'+child.position?.start?.line">
+          <h1 *ngSwitchCase="1" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h1>
-          <h2 *ngSwitchCase="2" [attr.data-line]="child.position?.start?.line" [id]="'h'+child.position?.start?.line">
+          <h2 *ngSwitchCase="2" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h2>
-          <h3 *ngSwitchCase="3" [attr.data-line]="child.position?.start?.line" [id]="'h'+child.position?.start?.line">
+          <h3 *ngSwitchCase="3" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h3>
-          <h4 *ngSwitchCase="4" [attr.data-line]="child.position?.start?.line" [id]="'h'+child.position?.start?.line">
+          <h4 *ngSwitchCase="4" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h4>
-          <h5 *ngSwitchCase="5" [attr.data-line]="child.position?.start?.line" [id]="'h'+child.position?.start?.line">
+          <h5 *ngSwitchCase="5" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h5>
-          <h6 *ngSwitchCase="6" [attr.data-line]="child.position?.start?.line" [id]="'h'+child.position?.start?.line">
+          <h6 *ngSwitchCase="6" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h6>
         </ng-container>
@@ -165,7 +165,14 @@
 
       <!-- Link -->
       <ng-container *ngSwitchCase="'link'">
-        <a [routerLink]="parseLink(child.url)" [queryParams]="parseLinkParams(child.url)">
+        <a [href]="child.url" (click)="navigateUrl($event, child.url)">
+          <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+        </a>
+      </ng-container>
+
+      <!-- Link Reference -->
+      <ng-container *ngSwitchCase="'linkReference'">
+        <a [href]="definition(child.identifier)" (click)="navigateDef($event, child.identifier)">
           <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
         </a>
       </ng-container>
@@ -187,7 +194,7 @@
 
       <!-- Footnote Reference -->
       <ng-container *ngSwitchCase="'footnoteReference'">
-        <sup><a routerLink="." [fragment]="'fn'+footnote(child.identifier)">[{{footnote(child.identifier)}}]</a></sup>
+        <sup>[{{footnote(child.identifier)}}]</sup>
       </ng-container>
 
       <!-- Plain text -->
@@ -230,13 +237,11 @@
 </ng-template>
 
 <!-- Table of contents template -->
-<ng-template let-children="children" #toc>
+<ng-template let-children="children" #tableOfContent>
 
   <span *ngFor="let child of filterNodes(children, 'heading')" 
-        routerLink='.' 
-        [fragment]="'h'+child.position?.start?.line"
-        [attr.toc]="child.depth">
-    <!--{{ tocTabs(child.depth) }}-->
+        [href]="'#'+toc(child.position?.start?.line)" 
+        (click)="navigateToc($event, child.position?.start?.line)">
     <ng-container *ngTemplateOutlet="plainText; context: child"></ng-container>
   </span>
 
@@ -247,7 +252,8 @@
 
   <span *ngFor="let child of filterNodes(children, 'footnoteDefinition')"
         [attr.footnote]="footnote(child.identifier)"
-        [id]="'fn'+footnote(child.identifier)">{{footnote(child.identifier)}} -&nbsp;
+        [id]="'fn'+footnote(child.identifier)">
+    {{footnote(child.identifier)}} -&nbsp;
     <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
   </span>
 

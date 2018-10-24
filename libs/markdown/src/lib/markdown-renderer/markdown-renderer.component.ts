@@ -37,6 +37,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
   }
 
   @Output() rendered = new EventEmitter<void>();
+  @Output() navigate = new EventEmitter<string>();
   
   ngOnInit() { 
 
@@ -57,6 +58,11 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     this.sub$.unsubscribe();
   }
 
+  // Table of content anchor helper
+  public toc(n: number | string): string {
+    return `ref${n}`;
+  }
+
   // Definitions helper function
   public definition(id: string): string {
     // Gets the top level children array
@@ -73,6 +79,25 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     const n = this.notes.findIndex(value => value === id);
     // Returns the footnote's index 
     return n < 0 ? this.notes.push(id) : (n + 1);
+  }
+
+  // Navigation helper functions
+  public navigateUrl(ev: Event, url: string) {
+    // Prevent the default browser behavior. This is crucial to avoid reloading the full app 
+    // since the renderer fills [href] for both debugging and clarity purposes
+    ev.preventDefault();
+    // Emits the navigation event for the parent to handle it
+    this.navigate.emit(url);
+  }
+
+  public navigateDef(ev: Event, id: string) {
+    const url = this.definition(id);
+    this.navigateUrl(ev, url);
+  }
+
+  public navigateToc(ev: Event, id: string) {
+    const anchor = `#${this.toc(id)}`;
+    this.navigateUrl(ev, anchor);
   }
 
   // Link helper functions
