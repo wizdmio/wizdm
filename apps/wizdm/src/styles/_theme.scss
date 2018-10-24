@@ -82,14 +82,14 @@ $wm-theme-background: map-get($wm-theme, background);
 */
 
 // Initilize the global application theme
-@mixin wm-init-application-theme($typography: $wm-typography, $theme: $wm-theme) {
+@mixin wm-init-application-theme($typography: $wm-typography, $theme: $wm-theme, $components: null) {
 
   // Includes the core theme indepeneted material style
   @include mat-core($typography);
 
-  // Include a selection of material theme styles
+  // Include a selection of material theme styles matching the list of $components
+  @include custom-material-theme($theme, $components);
   //@include angular-material-theme($theme);
-  @include custom-material-theme($theme);
 
   // Init the shared elements theme styles
   @include wm-elements-theme($theme);
