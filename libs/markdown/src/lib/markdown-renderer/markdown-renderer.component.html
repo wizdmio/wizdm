@@ -198,6 +198,11 @@
         <img [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="child.position?.start?.line">
       </ng-container>
 
+      <!-- Image Reference -->
+      <ng-container *ngSwitchCase="'imageReference'">
+        <img [src]="definition(child.identifier)" [title]="child.title" [alt]="child.alt" [attr.data-line]="child.position?.start?.line">
+      </ng-container>
+
       <!-- Recurs to next level -->
       <ng-container *ngSwitchDefault>
         <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>

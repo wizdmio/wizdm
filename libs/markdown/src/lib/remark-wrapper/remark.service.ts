@@ -30,7 +30,7 @@ export class RemarkService {
     this.options = options;
   }
 
-  public parse(source: string): any[] {
+  public parse(source: string): any {
     return this.remark.parse(source);
   }
 }

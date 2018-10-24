@@ -57,6 +57,25 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     this.sub$.unsubscribe();
   }
 
+  // Definitions helper function
+  public definition(id: string): string {
+    // Gets the top level children array
+    const elements: any[] = this.root ? this.root.children : [];
+    // Lookup for the requested definition across the tree (top level only)
+    const found = elements.find( el => el.type === 'definition' && el.identifier === id );
+    // return the resolve url
+    return found ? found.url : null;
+  }
+
+  // Footnote helper function
+  public footnote(id: string): number {
+    // Check if the footnotes was already defined
+    const n = this.notes.findIndex(value => value === id);
+    // Returns the footnote's index 
+    return n < 0 ? this.notes.push(id) : (n + 1);
+  }
+
+  // Link helper functions
   public parseLink(link: string) {
     // Resturns the very first part of a link string
     return link.split('?')[0];
@@ -79,16 +98,6 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     });
 
     return params;
-  }
-
-  public tocTabs(depth: number) {
-    return '.'.repeat(depth-1);
-  }
-  
-  // Footnote helper function
-  public footnote(id: string): number {
-    let n = this.notes.findIndex(value => value === id);
-    return n < 0 ? this.notes.push(id) : (n + 1);
   }
 
   // Helper funtions to support template rendering
