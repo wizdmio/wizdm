@@ -14,12 +14,12 @@
   <div fxFlex="1 1 auto">
 
     <!-- Renders the table of contents on top on small screens -->
-    <wm-markdown class="table-of-contents" display="toc" [data]="document" fxHide fxShow.lt-sm>
+    <wm-markdown class="table-of-contents" display="toc" [data]="document" (navigate)="onTocNavigate($event)" fxHide fxShow.lt-sm>
       <h2>{{ msgs.tableOfContents }}</h2>
     </wm-markdown>
 
     <!-- Renders the documetn body -->
-    <wm-markdown [data]="document" (rendered)="markdownDone()">
+    <wm-markdown [data]="document" (rendered)="onMarkdownDone()">
     </wm-markdown>
   
     <!-- Renders the footnotes at the end -->
@@ -31,7 +31,7 @@
 
   <!-- Renders the table of contents by side on big screens -->
   <div fxFlex="0 0 auto" fxHide.lt-sm>
-    <wm-markdown class="table-of-contents sticky" display="toc" [data]="document">
+    <wm-markdown class="table-of-contents sticky" display="toc" [data]="document" (navigate)="onTocNavigate($event)">
       <h3>{{ msgs.tableOfContents }}</h3>
     </wm-markdown>
   </div>

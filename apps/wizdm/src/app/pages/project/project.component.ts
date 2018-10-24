@@ -173,7 +173,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.scroll.scrollTo(`[data-line="${line}"]`);
   }
 
-  public markdownDone() {
+  public onTocNavigate(id: string) {
+
+    console.log(id);
+
+    // Scrolls the view to the requested TOC anchor position.
+    // Alternatively, router.navigate() can be used.
+    this.scroll.scrollTo(id);
+  }
+
+  public onMarkdownDone() {
 
     // When in editMode, makes sure the view is scrolled back to the last 
     // source text known position every time the content changes

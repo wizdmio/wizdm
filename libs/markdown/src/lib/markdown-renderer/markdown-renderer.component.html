@@ -240,8 +240,8 @@
 <ng-template let-children="children" #tableOfContent>
 
   <span *ngFor="let child of filterNodes(children, 'heading')" 
-        [href]="'#'+toc(child.position?.start?.line)" 
-        (click)="navigateToc($event, child.position?.start?.line)">
+        (click)="navigateToc($event, child.position?.start?.line)"
+        [attr.toc]="child.depth">
     <ng-container *ngTemplateOutlet="plainText; context: child"></ng-container>
   </span>
 
