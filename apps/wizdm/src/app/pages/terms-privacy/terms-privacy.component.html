@@ -1,34 +1,29 @@
 
-<div fxLayout="row">
-  
-  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!fullScreen"></div>
-  
-  <div fxFlex>
-    <h1>{{msgs?.title}}</h1>
-    <p>
-      <wm-disclaimer [source]="msgs.disclaimer" 
-                     (action)="switchVersion($event)"
-                     actionClass="mat-link">
-      </wm-disclaimer>
-    </p>
+<div fxLayout="row" *ngIf="display === 'page'">
 
-    <section *ngFor="let section of msgs.sections">
-        
-      <h2>{{section?.title}}</h2>
-
-      <ng-container *ngFor="let paragraph of section.paragraphs">
-        <h4>{{paragraph?.title}}</h4>
-        <p>{{paragraph?.text}}</p>
-      </ng-container>
-
-    </section>
-
-    <section *ngIf="msgs.liability">
-      <h2>{{msgs.liability?.title}}</h2>
-      <p>{{msgs.liability?.text}}</p>
-    </section>
-  </div>
-
-  <div fxFlex="15" fxHide.lt-sm="true" *ngIf="!fullScreen"></div>
-
+  <!-- Renders the markdown document whenever the display mode is 'page' (default) -->
+  <wm-markdown fxFlex="80%" fxFlexOffset="10%"
+               fxFlex.lt-sm="100%" fxFlexOffset.lt-sm="0" 
+               [data]="document" (navigate)="navigatePage($event)">
+  </wm-markdown>
 </div>
+
+<!-- Popup dialog version template -->
+<ng-template #popupTemplate>
+
+  <!-- Fits the content into a popup dialog -->
+  <mat-dialog-content #popupContent>
+    
+    <!-- Renders the document body -->
+    <wm-markdown [data]="document" (navigate)="navigatePopup($event)">
+    </wm-markdown>
+
+  </mat-dialog-content>
+  
+  <!--mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">
+      {{ msgs.buttons?.ok }}
+    </button>
+  </mat-dialog-actions-->
+
+</ng-template>

@@ -1,14 +1,7 @@
 @import "variables";
 
 :host {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-
+  display: block;
   padding: $wm-content-padding 0;
   margin: 0 $wm-content-margin;
-}
-
-p {
-  text-align: justify;
 }

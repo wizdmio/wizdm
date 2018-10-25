@@ -28,7 +28,7 @@ In order to understand how your personal data is collected, be sure to read the 
 
 ...
 
-# Terms & Conditions - Full
+# Terms & Conditions - Full <span id="full"></span>
 
 These are meant to be the full terms and conditions of wizdm... 
      

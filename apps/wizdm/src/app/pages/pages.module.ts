@@ -22,7 +22,6 @@ import { UploadComponent } from './upload/upload.component';
 import { MessagesComponent } from './messages/messages.component';
 import { MessageComponent } from './messages/message/message.component';
 import { TermsPrivacyComponent } from './terms-privacy/terms-privacy.component';
-import { TermsPrivacyPopupComponent } from './terms-privacy/terms-privacy-popup.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 import { UploadsComponent } from './uploads/uploads.component';
@@ -60,15 +59,12 @@ import { UserInfoDirective } from './user-info/user-info.directive';
     MessagesComponent,
     MessageComponent,
     TermsPrivacyComponent,
-    TermsPrivacyPopupComponent,
     NotFoundComponent
   ],
 
   providers: [],
 
-  entryComponents: [// These components are declared here to properly work as a Dialogs
-    TermsPrivacyPopupComponent
-  ]
+  entryComponents: []
 
 })
 export class PagesModule { }

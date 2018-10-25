@@ -111,7 +111,7 @@
 
       <!-- HTML -->
       <ng-container *ngSwitchCase="'html'">
-        <html>{{child.value}}</html>
+        <html [innerHTML]="child.value"></html>
       </ng-container>
  
       <!-- Left aligned block - Align plugin -->

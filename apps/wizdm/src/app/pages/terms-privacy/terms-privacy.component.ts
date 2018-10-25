@@ -1,7 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { NavigatorService } from '../../navigator';
+import { Observable } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators'
+
+
+export type displayMode = 'page' | 'popup';
 
 @Component({
   selector: 'wm-terms-privacy',
@@ -10,32 +16,71 @@ import { NavigatorService } from '../../navigator';
 })
 export class TermsPrivacyComponent implements OnInit {
 
-  @Input() fullScreen = false; // Force the content to fit the full screen
-  @Input() disableActions = false; // Prevent the activation of navigation actions
-  public msgs = null;
+  // Display mode defaults to 'page'
+  @Input() display: displayMode = 'page';
+  public msgs;
   
-  constructor(private content : ContentManager, 
-              private toolbar : NavigatorService,
-              private route   : ActivatedRoute) {}
+  constructor(private content : ContentManager,
+              private http    : HttpClient,
+              private dialog  : MatDialog) {
+
+    // Gets the localized content
+    this.msgs = this.content.select('terms');
+  }
+
+  public document = "";
 
   ngOnInit() {
+    // Loads the document from assets
+    this.loadDocument(this.msgs.document)
+      .subscribe( doc => {
+        this.document = doc;
+      });
+  }
 
-    this.route.queryParamMap.subscribe( param => { 
-      
-      const version = param.get('version') || 'short';
+  private loadDocument(path: string): Observable<string> {
+    // Loads the MD document file from the given path
+    return this.http.get(path, { responseType: 'text' } )
+      .pipe( catchError( e => {
+        console.error(e);
+        return "# Something wrong"; 
+      }));
+  }
 
-      // Gets the localized content for the requested version (short/full)
-      this.switchVersion(version);
+  public navigatePage(url: string) {
 
-      // Activate the navigator action links
-      if(this.disableActions === false) {
-        this.toolbar.activateActions(this.msgs.actions);
+  }
+
+  //-- Popup dialog helpers --------
+
+  @ViewChild('popupTemplate') popupTemplate: TemplateRef<TermsPrivacyComponent>;
+
+  private popupConfig: MatDialogConfig = { 
+    //panelClass:  'mat-dialog-reset',
+    autoFocus: false
+    //disableClose: true,
+    //data: this
+  };
+
+  // Shows the popupTemplate as a popupDialog
+  public popup(): Promise<void> {
+    return this.dialog.open(this.popupTemplate, this.popupConfig)
+      .afterClosed()
+      .toPromise();
+  }
+
+  @ViewChild('popupContent', { read: ElementRef }) popupContent: ElementRef;
+
+  public navigatePopup(url: string) {
+
+    try {
+      const el: Element = this.popupContent.nativeElement;
+      const elSelectedById = el.querySelector(url);
+
+      if(elSelectedById) {
+        elSelectedById.scrollIntoView();
       }
-    });
-  }
-
-  // Switch content version without navigation (suitable to support the popup version)
-  public switchVersion(version: string) {
-    this.msgs = this.content.select(`${version}Terms`);
-  }
+    }
+    catch(e) {}
+  } 
 }

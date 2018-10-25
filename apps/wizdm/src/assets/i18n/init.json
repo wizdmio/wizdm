@@ -30,8 +30,7 @@
     "upload": "upload.json",
     "messages": "messages.json",
     "about": "about.json",
-    "shortTerms": "terms-short.json",
-    "fullTerms": "terms-full.json",
+    "terms": "terms.json",
     "notFound": "notFound.json",
     "errors": "errors.json"
   }

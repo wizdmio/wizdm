@@ -8,7 +8,7 @@ import { UserProfile, wmUser } from '@wizdm/connect';
 import { ProjectService, wmApplication } from '../../core';
 import { CanPageDeactivate, NavigatorService, ActionEnabler } from '../../navigator';
 import { PopupService } from '../../elements';
-import { TermsPrivacyPopupComponent } from '../terms-privacy/terms-privacy-popup.component';
+import { TermsPrivacyComponent } from '../terms-privacy/terms-privacy.component';
 import { $animations } from './apply.animations';
 import { Observable } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators'
@@ -256,13 +256,15 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       });
   }
 
+  @ViewChild(TermsPrivacyComponent) terms: TermsPrivacyComponent;  
+
   public disclaimerAction(action: string) {
 
     switch(action) {
 
       // Pops up the terms-privacy conditions without leaving the page
       case 'terms':
-      this.popup.open(TermsPrivacyPopupComponent);
+      this.terms && this.terms.popup();
       break;
 
       // Clears the forrm and the previously saved application to start from 

@@ -46,7 +46,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
       .subscribe( data => {
         // Builds the syntax tree or source it from a source component
         this.root = data ? this.remark.parse(data) : {};
-        //console.log(`Markdown (display=${this.display}): `, this.root);
+        console.log(`Markdown (display=${this.display}): `, this.root);
 
         // Notifies the completion of data parsing the next scheduler round
         // when supposidely the view has been rendered already

@@ -121,23 +121,28 @@
         <p>{{msgs.appSubmit.description}}</p>
         <p class="mat-small">
           <wm-disclaimer [source]="msgs.appSubmit.disclaimer"
-                         (action)="disclaimerAction($event)"
-                          actionClass="mat-link">
+                         (action)="disclaimerAction($event)">
           </wm-disclaimer>
         </p>
+
+        <!-- Agree checkbox -->
         <div fxLayout="row" fxLayoutAlign="center center" fxFill>
           <mat-checkbox labelPosition="before" color="primary" #agree>
             <wm-disclaimer [source]="msgs.appSubmit.agree"
-                           (action)="disclaimerAction($event)"
-                            actionClass="mat-link">
+                           (action)="disclaimerAction($event)">
             </wm-disclaimer>
           </mat-checkbox>
         </div>
       </div>
     </div>
 
+    <!-- Popup dialog version of the Terms and Privacy page -->
+    <wm-terms-privacy display="popup"></wm-terms-privacy>
+
+    <!-- Progress bar -->
     <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>
 
+    <!-- Apply button -->
     <div *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
       <button mat-flat-button color="primary" type="button" 
               [disabled]="!agree.checked" 
