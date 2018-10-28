@@ -25,7 +25,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(private content  : ContentManager,
               private projects : ProjectService,
               private route    : ActivatedRoute,
-              private toolbar  : NavigatorService,
+              private nav      : NavigatorService,
               private popup    : PopupService,
               private scroll   : ScrollViewService) { 
 
@@ -48,7 +48,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       // Enable actions on the navigation bar depending on the 
       // type of user (owner or guest)
-      this.toolbar.activateActions(this.msgs.actions[type])
+      this.nav.activateActions(this.msgs.actions[type])
         .subscribe( code => this.doAction(code) );
     });
 /*

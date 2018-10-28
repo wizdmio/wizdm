@@ -8,7 +8,7 @@ declare global {
    * @example "wrongParrword".hyphenize();
    * @returns "wrong-password"
    */
-    hyphenize(string): string;
+    hyphenize(hyphen?: string): string;
   }
 }
 

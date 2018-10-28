@@ -1,6 +1,6 @@
-# Terms & Conditions - Summary
+# Terms & Conditions - *Summary*
 
-This page is a summary of the most important aspects of the terms of service of wizdm, but it does not replace the [full version](./terms#full).
+This page is a summary of the most important aspects of the terms of service of wizdm, but it does not replace the [full version](#terms-conditions-full).
   
 ## The service
 
@@ -28,7 +28,7 @@ In order to understand how your personal data is collected, be sure to read the 
 
 ...
 
-# Terms & Conditions - Full <span id="full"></span>
+# Terms & Conditions - *Full*
 
 These are meant to be the full terms and conditions of wizdm... 
      

@@ -2,10 +2,9 @@ import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef } from '@a
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
-import { NavigatorService } from '../../navigator';
+import { ScrollViewService } from '../../navigator';
 import { Observable } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators'
-
+import { catchError } from 'rxjs/operators'
 
 export type displayMode = 'page' | 'popup';
 
@@ -22,7 +21,8 @@ export class TermsPrivacyComponent implements OnInit {
   
   constructor(private content : ContentManager,
               private http    : HttpClient,
-              private dialog  : MatDialog) {
+              private dialog  : MatDialog,
+              private scroll  : ScrollViewService) {
 
     // Gets the localized content
     this.msgs = this.content.select('terms');
@@ -47,8 +47,9 @@ export class TermsPrivacyComponent implements OnInit {
       }));
   }
 
-  public navigatePage(url: string) {
-
+  public navigatePage(anchor: string) {
+    // Scroll the main view at the anchor position
+    this.scroll.scrollTo(anchor);
   }
 
   //-- Popup dialog helpers --------
@@ -71,6 +72,7 @@ export class TermsPrivacyComponent implements OnInit {
 
   @ViewChild('popupContent', { read: ElementRef }) popupContent: ElementRef;
 
+  // Implements a simple "scroll to anchor" for the popup version
   public navigatePopup(url: string) {
 
     try {

@@ -21,7 +21,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
   private data$: BehaviorSubject<string> = new BehaviorSubject('');
   private sub$: Subscription;
   private notes: string[] = [];
-  public  root:  any;
+  public  root: any;
 
   constructor(private remark: RemarkService) { }
 
@@ -58,9 +58,44 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     this.sub$.unsubscribe();
   }
 
+  private parseText(children: any[]): string {
+
+    if(!children || children.length <= 0) { return ''; }
+
+    const text = children.reduce( (txt: string, child: any) => {
+
+      txt += child.type === 'text' ? child.value : '';
+      txt += this.parseText(child.children);
+      return txt;
+
+    }, '');
+
+    return text;
+  }
+
+  private sanitizeText(text: string): string {
+    return text
+      // Removes any non alphanumerical characters (keeps spaces)
+      .replace(/[^a-zA-Z0-9 ]/g, '')
+      // Replaces spaces with '-'
+      .replace(/\s+/g,'-')
+      // Lowers the case
+      .toLowerCase();
+  }
+
+  // Top level node position helper
+  public position(node: any): string {
+    return <string>(node.position && node.position.start && node.position.start.line);
+  }
+
   // Table of content anchor helper
-  public toc(n: number | string): string {
-    return `ref${n}`;
+  public toc(heading: any): string {
+    // Parses the heading text
+    let anchor = this.parseText(heading.children);
+    // Converts the text into a suitable format
+    anchor = this.sanitizeText(anchor);
+    // Returns the anchor value
+    return anchor;
   }
 
   // Definitions helper function
@@ -95,9 +130,8 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     this.navigateUrl(ev, url);
   }
 
-  public navigateToc(ev: Event, id: string) {
-    const anchor = `#${this.toc(id)}`;
-    this.navigateUrl(ev, anchor);
+  public navigateToc(ev: Event, anchor: string) {
+    this.navigateUrl(ev, `#${anchor}`);
   }
 
   // Link helper functions
@@ -126,7 +160,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
   }
 
   // Helper funtions to support template rendering
- 
+
   public someNodes(nodes: any[], type: string) {
     return nodes ? nodes.some( value => value.type === type ): undefined;
   }

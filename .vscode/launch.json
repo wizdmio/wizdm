@@ -7,7 +7,7 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "https://localhost:4200",
-			"webRoot": "${workspaceRoot}",
+			"webRoot": "${workspaceRoot}/apps/wizdm",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
 			"sourceMaps": true/*,
 			"sourceMapPathOverrides": {

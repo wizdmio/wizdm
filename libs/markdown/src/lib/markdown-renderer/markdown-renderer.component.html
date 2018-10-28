@@ -30,22 +30,22 @@
       <!-- Headings -->
       <ng-container *ngSwitchCase="'heading'">
         <ng-container [ngSwitch]="child.depth">
-          <h1 *ngSwitchCase="1" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
+          <h1 *ngSwitchCase="1" [attr.data-line]="position(child)" [id]="toc(child)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h1>
-          <h2 *ngSwitchCase="2" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
+          <h2 *ngSwitchCase="2" [attr.data-line]="position(child)" [id]="toc(child)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h2>
-          <h3 *ngSwitchCase="3" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
+          <h3 *ngSwitchCase="3" [attr.data-line]="position(child)" [id]="toc(child)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h3>
-          <h4 *ngSwitchCase="4" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
+          <h4 *ngSwitchCase="4" [attr.data-line]="position(child)" [id]="toc(child)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h4>
-          <h5 *ngSwitchCase="5" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
+          <h5 *ngSwitchCase="5" [attr.data-line]="position(child)" [id]="toc(child)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h5>
-          <h6 *ngSwitchCase="6" [attr.data-line]="child.position?.start?.line" [id]="toc(child.position?.start?.line)">
+          <h6 *ngSwitchCase="6" [attr.data-line]="position(child)" [id]="toc(child)">
             <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
           </h6>
         </ng-container>
@@ -53,27 +53,27 @@
 
       <!-- Paragraph -->
       <ng-container *ngSwitchCase="'paragraph'">
-        <p [attr.data-line]="child.position?.start?.line">
+        <p [attr.data-line]="position(child)">
           <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
         </p>
       </ng-container>
 
       <!-- Blockquote -->
       <ng-container *ngSwitchCase="'blockquote'">
-        <blockquote [attr.data-line]="child.position?.start?.line">
+        <blockquote [attr.data-line]="position(child)">
           <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
         </blockquote>
       </ng-container>
 
       <!-- List -->
       <ng-container *ngSwitchCase="'list'">
-        <ol *ngIf="child.ordered" [start]="child.start" [attr.data-line]="child.position?.start?.line">
+        <ol *ngIf="child.ordered" [start]="child.start" [attr.data-line]="position(child)">
           <li *ngFor="let item of child.children">
             <!--{{assertNode(item, 'listItem')}}-->
             <ng-container *ngTemplateOutlet="decoratedText; context: item"></ng-container>
           </li>
         </ol>
-        <ul *ngIf="!child.ordered" [attr.data-line]="child.position?.start?.line">
+        <ul *ngIf="!child.ordered" [attr.data-line]="position(child)">
           <li *ngFor="let item of child.children">
             <!--{{assertNode(item, 'listItem')}}-->
             <ng-container *ngTemplateOutlet="decoratedText; context: item"></ng-container>
@@ -83,7 +83,7 @@
 
       <!-- Table -->
       <ng-container *ngSwitchCase="'table'">
-        <table [attr.data-line]="child.position?.start?.line">
+        <table [attr.data-line]="position(child)">
           <tbody>
             <tr *ngFor="let row of child.children">
               <!--{{assertNode(row, 'tableRow')}}-->
@@ -97,21 +97,16 @@
       </ng-container>
 
       <!-- Thematic Break -->
-      <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="child.position?.start?.line">
+      <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="position(child)">
 
       <!-- Line Break -->
       <br *ngSwitchCase="'break'">
 
       <!-- Code -->
       <ng-container *ngSwitchCase="'code'">
-        <pre [attr.data-line]="child.position?.start?.line">
+        <pre [attr.data-line]="position(child)">
           <code [wm-highlight]="child.value" [language]="child.lang"></code>
         </pre>
-      </ng-container>
-
-      <!-- HTML -->
-      <ng-container *ngSwitchCase="'html'">
-        <html [innerHTML]="child.value"></html>
       </ng-container>
  
       <!-- Left aligned block - Align plugin -->
@@ -202,12 +197,12 @@
 
       <!-- Image -->
       <ng-container *ngSwitchCase="'image'">
-        <img [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="child.position?.start?.line">
+        <img [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="position(child)">
       </ng-container>
 
       <!-- Image Reference -->
       <ng-container *ngSwitchCase="'imageReference'">
-        <img [src]="definition(child.identifier)" [title]="child.title" [alt]="child.alt" [attr.data-line]="child.position?.start?.line">
+        <img [src]="definition(child.identifier)" [title]="child.title" [alt]="child.alt" [attr.data-line]="position(child)">
       </ng-container>
 
       <!-- Recurs to next level -->
@@ -239,8 +234,8 @@
 <!-- Table of contents template -->
 <ng-template let-children="children" #tableOfContent>
 
-  <span *ngFor="let child of filterNodes(children, 'heading')" 
-        (click)="navigateToc($event, child.position?.start?.line)"
+  <span *ngFor="let child of filterNodes(children, 'heading')"
+        (click)="navigateToc($event, toc(child))"
         [attr.toc]="child.depth">
     <ng-container *ngTemplateOutlet="plainText; context: child"></ng-container>
   </span>
