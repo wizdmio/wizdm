@@ -10,7 +10,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ActionComponent as ToolbarAction } from './toolbar/action/action.component';
 import { MenuComponent } from './menu/menu.component';
 import { FooterComponent } from './footer/footer.component';
-import { ScrollViewDirective } from './scroll-view/scroll-view.directive';
+import { ViewportDirective } from './viewport/viewport.directive';
 import { ConsentComponent } from './consent/consent.component';
 import { ErrorsComponent } from './errors/errors.component';
 
@@ -26,7 +26,7 @@ import { ErrorsComponent } from './errors/errors.component';
     ToolbarAction,
     MenuComponent,
     FooterComponent,
-    ScrollViewDirective,
+    ViewportDirective,
     ConsentComponent,
     ErrorsComponent
   ],

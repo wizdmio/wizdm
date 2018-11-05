@@ -3,16 +3,16 @@ import { Router, ActivatedRoute, Scroll } from '@angular/router';
 //import { ViewportScroller } from '@angular/common';
 import { Subscription, interval, of } from 'rxjs';
 import { filter, switchMap, scan, tap, takeWhile } from 'rxjs/operators';
-import { ScrollViewService } from './scroll-view.service';
+import { ViewportService } from './viewport.service';
 
 @Directive({
-  selector: '[wmScrollView]'
+  selector: '[wmViewport]'
 })
 /** 
  * Handle page scrolling within the navigator. Enables scrolling to anchor and detects when the content has been scrolled 
  * triggering the toolbar divider
  */
-export class ScrollViewDirective implements OnDestroy {
+export class ViewportDirective implements OnDestroy {
 
   private element$: HTMLElement;
   private sub$: Subscription;
@@ -20,7 +20,7 @@ export class ScrollViewDirective implements OnDestroy {
 
   @Output() scrollPosition = new EventEmitter<'top' | 'bottom'>();  
 
-  constructor(private scroll  : ScrollViewService,
+  constructor(private scroll  : ViewportService,
               private element : ElementRef,
               private renderer: Renderer2,
               private router  : Router) {

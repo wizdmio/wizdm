@@ -14,8 +14,8 @@ form {
   box-sizing: border-box;
   border: none;
 
-  background-color: map-get($wm-theme-background, edit-box);
-  color: map-get($wm-theme-foreground, edit-box);
+  background-color: map-get($wm-theme-background, editor);
+  color: map-get($wm-theme-foreground, editor);
 
   textarea {
     @include mat-typography-level-to-styles($wm-typography, body-2);

@@ -25,8 +25,8 @@
   <!-- Mobile version Menu -->
   <wm-menu *ngIf="menu" [menuItems]="mobileMenu"></wm-menu>
   
-  <!-- Content View -->
-  <div class="content" fxFlex="1 1 auto" fxLayout="column" wmScrollView threshold="20" [(scrolled)]="scrolled"> 
+  <!-- Content Viewport (scrollable) -->
+  <div class="content" fxFlex="1 1 auto" fxLayout="column" wmViewport threshold="20" [(scrolled)]="scrolled"> 
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">

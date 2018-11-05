@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project, wmProject } from '../../core';
-import { NavigatorService, ActionEnabler, ScrollViewService } from '../../navigator';
+import { NavigatorService, ActionEnabler, ViewportService } from '../../navigator';
 import { PopupService } from '../../elements';
 import { UploadsComponent } from '../uploads/uploads.component';
 import { Observable, Subject, of, empty } from 'rxjs';
@@ -27,7 +27,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
               private route    : ActivatedRoute,
               private nav      : NavigatorService,
               private popup    : PopupService,
-              private scroll   : ScrollViewService) { 
+              private scroll   : ViewportService) { 
 
     // Gets the localized content
     this.msgs = this.content.select('project');
@@ -51,20 +51,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.nav.activateActions(this.msgs.actions[type])
         .subscribe( code => this.doAction(code) );
     });
-/*
-    // ...then keep the project in sync reloading changes
-    this.loadProject()
-      .pipe( 
-        tap( project => this.buffer = project.data ), // Buffers the project for changes during editing
-        filter( () => !this.editMode ) // Skips reloading while in editMode
-      ) 
-      .subscribe( project => {
-        this.project = project.data || {} as wmProject;
-    });
-*/
+
     // Save the modified project automatically
     this.saveProject().subscribe( project => {
-      this.project.update( project ); this.saved = true; } );
+      this.project.update( project ); 
+      this.saved = true; 
+    });
   }
 
   ngOnDestroy() {

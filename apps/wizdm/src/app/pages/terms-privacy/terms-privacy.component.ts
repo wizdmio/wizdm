@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef } from '@a
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
-import { ScrollViewService } from '../../navigator';
+import { ViewportService } from '../../navigator';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators'
 
@@ -22,7 +22,7 @@ export class TermsPrivacyComponent implements OnInit {
   constructor(private content : ContentManager,
               private http    : HttpClient,
               private dialog  : MatDialog,
-              private scroll  : ScrollViewService) {
+              private scroll  : ViewportService) {
 
     // Gets the localized content
     this.msgs = this.content.select('terms');

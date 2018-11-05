@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project } from '../../core';
-import { NavigatorService, ScrollViewService } from '../../navigator';
+import { NavigatorService, ViewportService } from '../../navigator';
 import { Observable, Subject, of } from 'rxjs';
 import { map, filter, take, takeUntil, tap } from 'rxjs/operators';
 import { $animations } from './explore.animations';
@@ -22,7 +22,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
   
   constructor(private content  : ContentManager,
               private toolbar  : NavigatorService,
-              private scroll   : ScrollViewService,
+              private scroll   : ViewportService,
               private projects : ProjectService) {}
 
   ngOnInit() {

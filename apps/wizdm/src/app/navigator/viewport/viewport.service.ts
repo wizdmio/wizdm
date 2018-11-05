@@ -7,12 +7,11 @@ import { BehaviorSubject } from 'rxjs';
 /**
  * Service to interacts with the main navigation scroll view
  */
-export class ScrollViewService implements OnDestroy {
+export class ViewportService implements OnDestroy {
 
   private status: boolean[] = [];
-  private enabled: boolean = true;
 
-  public enable$ = new BehaviorSubject<boolean>(this.enabled);
+  public enable$ = new BehaviorSubject<boolean>(true);
   public scrollTo$ = new EventEmitter<string>();
 
   public scrollPosition: EventEmitter<'top' | 'bottom'>;
@@ -29,10 +28,10 @@ export class ScrollViewService implements OnDestroy {
   public enable(enable: boolean, save?: boolean): void {
 
     if(save) {
-      this.status.push(this.enabled);
+      this.status.push(this.enable$.value);
     }
 
-    this.enable$.next(this.enabled = enable);
+    this.enable$.next(enable);
   }
 
   /**
