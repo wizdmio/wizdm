@@ -162,7 +162,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     // the view with [data-line="number"] attributes tracking the source
     // text line number for every top level element.
     //
-    this.scroll.scrollTo(`[data-line="${line}"]`);
+    this.scroll.scrollToElement(`[data-line="${line}"]`);
   }
 
   public onTocNavigate(id: string) {
@@ -171,7 +171,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     // Scrolls the view to the requested TOC anchor position.
     // Alternatively, router.navigate() can be used.
-    this.scroll.scrollTo(id);
+    this.scroll.scrollToElement(id);
   }
 
   public onMarkdownDone() {

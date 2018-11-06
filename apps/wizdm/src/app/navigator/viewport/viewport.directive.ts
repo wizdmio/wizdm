@@ -1,126 +1,125 @@
-import { Directive, OnDestroy, ElementRef, HostListener, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
-import { Router, ActivatedRoute, Scroll } from '@angular/router';
+import { Directive, AfterViewInit, OnDestroy, ElementRef, HostListener, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
+import { Router, Scroll } from '@angular/router';
 //import { ViewportScroller } from '@angular/common';
-import { Subscription, interval, of } from 'rxjs';
-import { filter, switchMap, scan, tap, takeWhile } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ViewportService } from './viewport.service';
 
 @Directive({
   selector: '[wmViewport]'
 })
 /** 
- * Handle page scrolling within the navigator. Enables scrolling to anchor and detects when the content has been scrolled 
- * triggering the toolbar divider
+ * Handle page scrolling within the navigator. Enables scrolling to anchor and detects when the content has been scrolled
  */
-export class ViewportDirective implements OnDestroy {
+export class ViewportDirective implements AfterViewInit, OnDestroy {
 
-  private element$: HTMLElement;
   private sub$: Subscription;
-  private anchor: string;
 
-  @Output() scrollPosition = new EventEmitter<'top' | 'bottom'>();  
-
-  constructor(private scroll  : ViewportService,
-              private element : ElementRef,
-              private renderer: Renderer2,
-              private router  : Router) {
-
-    this.element$ = this.element.nativeElement;
+  constructor(private viewport : ViewportService,
+              private element  : ElementRef,
+              private renderer : Renderer2,
+              private router   : Router) {
 
     // Intercepts router scrolling events
     this.sub$ = this.router.events
       .pipe( filter(e => e instanceof Scroll) )
       .subscribe( (e: Scroll) => {
         if (e.anchor) {
-          this.toAnchor(this.anchor = e.anchor);
+          this.scrollToAnchor(e.anchor);
           //console.log('Scroll to anchor: ', e.anchor)
         }
       });
 
+      // Mirrors the Viewport element to the service
+      this.mirrorViewport(viewport);
+  }
+
+  mirrorViewport(mirror: ViewportService) {
+    
     // Subscribes the enable/disable scrollign handler
-    this.scroll.enable$.subscribe( enable => {
+    mirror.enableScroll$.subscribe( enable => {
       this.enableScroll(enable);
     });
 
-    // Subscribes the scrollTo element handler
-    this.scroll.scrollTo$.subscribe( element => {
-      this.toElement(element);
+    // Subscribes the scrollToElement handler
+    mirror.scrollToElement$.subscribe( element => {
+      this.scrollToElement(element);
     });
 
-    // Assign the scroll position event to be schered across components
-    this.scroll.scrollPosition = this.scrollPosition;
+    // Assign the scroll position event to be shared across components
+    mirror.scrollPosition = this.scrollPosition;
   }
 
-  ngOnDestroy() { this.sub$.unsubscribe();}
-
-/*
-  private scrollTo(target: number) {
-    of(target)
-      .pipe( switchMap( target => {
-        return interval(100).pipe(
-          scan( (sum, val) => sum + 5, this.element$.scrollTop ),
-          tap( pos => { this.element$.scrollTo(0, pos); }),
-          takeWhile( val => val < target )
-        );
-      })
-    ).subscribe();
+  // Makes sure to initialize the mirrored viewport
+  ngAfterViewInit() { 
+    this.onScroll(null);
+    this.onResize(null);
   }
-*/
-/*
-  private clearAnchor() {
-    this.router.navigate(['.'], {
-      relativeTo: this.route,
-      queryParamsHandling: 'preserve',
-      replaceUrl: true,
-      fragment: null
-    }).then( () => this.anchor = null);
-  }
-*/
-  private enableScroll(enable: boolean): void {
 
-    if(enable) {
-      this.renderer.setStyle(this.element$, 'overflow', 'auto');
-      this.renderer.setStyle(this.element$, 'scroll-behavior', 'smooth');
-    }
-    else {
-      // Set the overflow style to 'unset', this should override CSS styles if any
-      this.renderer.setStyle(this.element$, 'overflow', 'unset');
-      this.renderer.removeStyle(this.element$, 'scroll-behavior');
-    }
+  // Unsubscribe Observable
+  ngOnDestroy() { this.sub$.unsubscribe();}  
+
+  private get native(): HTMLElement {
+    return this.element.nativeElement;
   }
 
   get position(): [number, number] {
-    return [this.element$.scrollLeft, this.element$.scrollTop];
+    return [this.native.scrollLeft, this.native.scrollTop];
   }
 
-  private toElement(selector: string): void {
-    
-    const element = this.element$.querySelector(selector);
-    if(element) {
-      let e = this.element$.getBoundingClientRect();
-      let r = element.getBoundingClientRect();
-      //this.element$.scrollBy(r.left - e.left, r.top - e.top);
-      this.element$.scrollTo(this.element$.scrollLeft + r.left - e.left,this.element$.scrollTop + r.top - e.top);
-      // element.scrollIntoView();
+  private mirrorPosition() {
+    this.viewport.position$.next(this.position);
+  }
+
+  get rect(): ClientRect {
+    return this.native.getBoundingClientRect();
+  }
+
+  private mirrorRect() {
+    this.viewport.rect$.next(this.rect);
+  }
+
+  private enableScroll(enable: boolean): void {
+
+    if(enable) {
+      this.renderer.setStyle(this.native, 'overflow', 'auto');
+      this.renderer.setStyle(this.native, 'scroll-behavior', 'smooth');
+    }
+    else {
+      // Set the overflow style to 'unset', this should override CSS styles if any
+      this.renderer.setStyle(this.native, 'overflow', 'unset');
+      this.renderer.removeStyle(this.native, 'scroll-behavior');
     }
   }
 
-  private toAnchor(anchor: string): void {
-    this.toElement(`#${anchor}`);
+  private scrollToAnchor(anchor: string): void {
+    this.scrollToElement(`#${anchor}`);
+  }
+
+  private scrollToElement(selector: string): void {
+    
+    const element = this.native.querySelector(selector);
+    if(element) {
+      let e = this.native.getBoundingClientRect();
+      let r = element.getBoundingClientRect();
+      this.native.scrollTo(this.native.scrollLeft + r.left - e.left, this.native.scrollTop + r.top - e.top);
+      //this.native.scrollBy(r.left - e.left, r.top - e.top);
+      //element.scrollIntoView();
+    }
   }
 
   @Input() treshold = 0;
-  
   @Input() scrolled = false;
   @Output() scrolledChange = new EventEmitter<boolean>();  
+  @Output() scrollPosition = new EventEmitter<'top' | 'bottom'>();  
   
   @HostListener('scroll', ['$event']) onScroll(event: Event) {
 
     try {
 
-      const top = this.element$.scrollTop;
-      const height = this.element$.scrollHeight;
-      const offset = this.element$.offsetHeight;
+      const top = this.native.scrollTop;
+      const height = this.native.scrollHeight;
+      const offset = this.native.offsetHeight;
 
       if(top === 0) {
         this.scrollPosition.emit('top')
@@ -138,7 +137,13 @@ export class ViewportDirective implements OnDestroy {
         this.scrolledChange.emit(this.scrolled = scrolled);
       }
 
+      this.mirrorPosition();
+
       // Ignores errors
     } catch(err) {}
+  }
+
+  @HostListener('resize', ['$event']) onResize(event: Event) {
+    this.mirrorRect();
   }
 }

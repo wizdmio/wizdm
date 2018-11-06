@@ -11,35 +11,41 @@ export class ViewportService implements OnDestroy {
 
   private status: boolean[] = [];
 
-  public enable$ = new BehaviorSubject<boolean>(true);
-  public scrollTo$ = new EventEmitter<string>();
-
-  public scrollPosition: EventEmitter<'top' | 'bottom'>;
-
   constructor() { }
 
-  ngOnDestroy() { this.enable$.complete();}
+  ngOnDestroy() { this.enableScroll$.complete();}
+
+  //-- Viewport mirror ---
+  // Posiiton
+  public position$ = new BehaviorSubject<[number, number]>(undefined);
+  // Client rect 
+  public rect$ = new BehaviorSubject<ClientRect>(undefined);
+  // Scroll 'top' 'bottom' event
+  public scrollPosition: EventEmitter<'top' | 'bottom'>;
 
   /**
    * Enables or disables the navigation scrolling
    * @param enable true to enable the scrolling, false to disable it
    * @param save an optiona flag requesting to save the previous status for restoration
    */
-  public enable(enable: boolean, save?: boolean): void {
+  public enableScroll(enable: boolean, save?: boolean): void {
 
     if(save) {
-      this.status.push(this.enable$.value);
+      this.status.push(this.enableScroll$.value);
     }
 
-    this.enable$.next(enable);
+    this.enableScroll$.next(enable);
   }
+
+  // Hook for ViewportDirective
+  public enableScroll$ = new BehaviorSubject<boolean>(true);
 
   /**
    * Restores a previously saved scrolling status
    */
-  public restore(): void {
+  public restoreScroll(): void {
     if(this.status.length) {
-      this.enable( this.status.pop() );
+      this.enableScroll( this.status.pop() );
     }
   }
 
@@ -47,7 +53,10 @@ export class ViewportService implements OnDestroy {
    * Used to scroll the content of the navigation view at a specific position
    * @param selector a query selector pointing the lement to be shown by scrollIntoView()
    */
-  public scrollTo(selector: string) {
-    this.scrollTo$.emit(selector);
+  public scrollToElement(selector: string) {
+    this.scrollToElement$.emit(selector);
   }
+
+  // Hook for ViewportDirective
+  public scrollToElement$ = new EventEmitter<string>();
 }

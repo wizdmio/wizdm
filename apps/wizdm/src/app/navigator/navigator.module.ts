@@ -9,10 +9,12 @@ import { UserLanguageResolver } from './resolver/language-resolver.service';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ActionComponent as ToolbarAction } from './toolbar/action/action.component';
 import { MenuComponent } from './menu/menu.component';
+import { ErrorsComponent } from './errors/errors.component';
 import { FooterComponent } from './footer/footer.component';
 import { ViewportDirective } from './viewport/viewport.directive';
+import { FitViewportDirective } from './viewport/fit-viewport.directive';
 import { ConsentComponent } from './consent/consent.component';
-import { ErrorsComponent } from './errors/errors.component';
+
 
 @NgModule({
   imports: [
@@ -28,7 +30,8 @@ import { ErrorsComponent } from './errors/errors.component';
     FooterComponent,
     ViewportDirective,
     ConsentComponent,
-    ErrorsComponent
+    ErrorsComponent,
+    FitViewportDirective
   ],
   providers: [
     // Provide a LanguageResolver based on user language preferences

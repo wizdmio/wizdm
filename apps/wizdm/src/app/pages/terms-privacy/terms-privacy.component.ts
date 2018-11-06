@@ -49,7 +49,7 @@ export class TermsPrivacyComponent implements OnInit {
 
   public navigatePage(anchor: string) {
     // Scroll the main view at the anchor position
-    this.scroll.scrollTo(anchor);
+    this.scroll.scrollToElement(anchor);
   }
 
   //-- Popup dialog helpers --------

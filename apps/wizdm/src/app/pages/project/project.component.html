@@ -37,10 +37,12 @@
   </div>
 
   <!-- Displays the crystal edit overlay when in editMode -->
-  <wm-crystal-edit [(value)]="document" 
+  <wm-crystal-edit *ngIf="editMode"
+    [(value)]="document" 
     [save]="saved" 
     (scroll)="onEditScroll($event)"
-    (done)="leaveEditMode()" *ngIf="editMode">
+    (done)="leaveEditMode()"
+    wmFitToViewport>
   </wm-crystal-edit>
   
 </div>
