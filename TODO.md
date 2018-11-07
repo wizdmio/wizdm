@@ -7,5 +7,5 @@
 * Collects navigator's guards, resolver, service and directives under navigator/utils folder
 * Converts wmFitViewport directive into wmFitView directive
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
-* Move the action bar out of the toolbar into the navigation header
+* Move the action bar out of the toolbar into the navigation header splitting it into: wm-navbar & wm-toolbar
 * Move out elements creating libs/elements
