@@ -32,7 +32,8 @@ export class FooterComponent {
     this._options = this.content.languageOptions;
   }
 
-  @Input() signedIn: boolean = false;
+  // Flag enabling the multiple language selection
+  @Input('language') multiLanguage: boolean = false;
 
   public get options(): LanguageOption[] {
     

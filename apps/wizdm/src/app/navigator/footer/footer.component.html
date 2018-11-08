@@ -12,7 +12,7 @@
     </a>
   </div>
   
-  <div fxLayout="row" fxFlexOrder.lt-sm="1" *ngIf="!signedIn">
+  <div fxLayout="row" fxFlexOrder.lt-sm="1" *ngIf="multiLanguage">
     <mat-form-field>
       <!--img matPrefix class="langImg" [src]="content.language.img"/-->
       <mat-select [value]="language" (valueChange)=changeLanguage($event)>

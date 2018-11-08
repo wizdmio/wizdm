@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
 import { ContentResolver, LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
-import { CanPageDeactivate, NavigatorService } from '../../navigator';
+import { CanPageDeactivate, ToolbarService } from '../../navigator';
 import { PopupService } from '../../elements';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 
@@ -27,11 +27,11 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   private get content() { return this.resolver.content;}
 
   constructor(private resolver : ContentResolver,
-              private profile : UserProfile,
-              private toolbar : NavigatorService,
-              private popup   : PopupService,
-              private router  : Router,
-              private route   : ActivatedRoute) { 
+              private profile  : UserProfile,
+              private toolbar  : ToolbarService,
+              private popup    : PopupService,
+              private router   : Router,
+              private route    : ActivatedRoute) { 
 
     // Gets the localized content
     this.msgs = this.content.select('profile');

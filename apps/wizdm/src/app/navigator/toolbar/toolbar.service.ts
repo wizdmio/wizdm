@@ -1,3 +1,4 @@
+import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, Observer } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -86,5 +87,88 @@ export class ActionState {
     if(this.dispose$) { this.dispose$.next(); this.dispose$.complete();}
     if(this.events$) { this.events$.complete();}
     this.actionButtons = [];
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ToolbarService implements OnDestroy {
+
+  constructor() { }
+
+  ngOnDestroy() { this.clearActions();}
+
+  //-- Action Buttons ------------
+  private savedStates: ActionState[] = [];
+  private actionState: ActionState;
+
+  get buttons(): wmAction[] {
+    return this.actionState ? this.actionState.buttons : [];
+  }
+
+  public get someAction(): boolean {
+    return !!this.buttons && this.buttons.length > 0;
+  }
+
+  private deleteActions(): void {
+    if(this.actionState) { 
+      this.actionState.dispose();
+      delete this.actionState;
+    }
+  }
+
+  /**
+   * 
+   * @param buttons the array of action buttons or links ot display
+   * @param save an optional flag to save the current status to be restored
+   */
+  public activateActions(buttons: wmAction[], save?: boolean): Observable<string> {
+
+    if(save && this.actionState) {
+      this.savedStates.push(this.actionState);
+    }
+    else {
+      this.clearActions();
+    }
+
+    this.actionState = new ActionState(buttons || []);
+    return this.actionState.events$;
+  }
+
+  /**
+   * Emits an action code to the observer identifying the action to be performed
+   * @param code the action code identifying the action to be performed
+   */
+  public performAction(code: string): void {
+    if(this.actionState) {
+      this.actionState.performAction(code);
+    }
+  }
+
+  /**
+   * Creates an action enabler for the observer to enable/disable the corresponding action button
+   * @param code the code identifying the action
+   */
+  public actionEnabler(code: string): ActionEnabler {
+    return this.actionState ? this.actionState.actionEnabler(code) : undefined;
+  }
+
+  /**
+   * Restores the previously saved action bar
+   */
+  public restoreActions(): void {
+    if(this.savedStates.length) {
+      this.deleteActions();
+      this.actionState = this.savedStates.pop();
+    }
+  }
+
+  /**
+   * Clears the action bar
+   */
+  public clearActions(): void {
+    this.savedStates.forEach( () => this.restoreActions() );
+    this.deleteActions();
   }
 }

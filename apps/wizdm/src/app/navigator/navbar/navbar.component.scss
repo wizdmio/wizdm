@@ -1,0 +1,7 @@
+@import 'theme';
+@import 'variables';
+
+.highlight {
+  background-color: mat-color($wm-primary, A400);
+  color: mat-contrast($wm-primary, A400);
+}

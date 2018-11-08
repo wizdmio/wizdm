@@ -1,32 +1,26 @@
-<header fxFlex="0 0 auto">
+<!-- @Levitates the header while scrolling up the page -->
+<header fxFlex="0 0 auto" [@levitate]="scrolled">
 
-  <!-- Navigation toolbar & Action bar -->
-  <wm-toolbar [menuItems]="desktopMenu" 
-              [userImage]="userImage" 
-              [actionButtons]="actionButtons"
-              (action)="performAction($event)"
-              [(toggler)]="menu"
-              [signedIn]="signedIn">
-  </wm-toolbar>
+  <!-- Navigation bar -->
+  <wm-navbar [menuItems]="desktopMenu" [(toggler)]="menu" [userProfile]="signedIn" [userImage]="userImage">
+  </wm-navbar>
+
+  <!-- Action toolbar -->
+  <wm-toolbar></wm-toolbar>
   
-  <!-- div> TODO: Move the action bar here </div-->
-
-  <!-- Global error message displayer -->
+  <!-- Error message displayer -->
   <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
-
-  <!-- Displays a divider upon request -->
-  <mat-divider [@divider]="scrolled && !menu"></mat-divider>
 
 </header>
 
 <!-- Viewport container -->
-<div class="container" fxFlex="1 1 auto" fxLayout="column">
+<main fxFlex="1 1 auto" fxLayout="column">
 
   <!-- Mobile version Menu -->
   <wm-menu *ngIf="menu" [menuItems]="mobileMenu"></wm-menu>
   
   <!-- Content Viewport (scrollable) -->
-  <div class="content" fxFlex="1 1 auto" fxLayout="column" wmViewport threshold="20" [(scrolled)]="scrolled"> 
+  <wm-viewport fxFlex="1 1 auto" fxLayout="column" treshold="20" [(scrolled)]="scrolled"> 
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
@@ -34,10 +28,10 @@
       </router-outlet>
     </div>
     
-    <!-- Footer alway on the bottom -->
-    <wm-footer fxFlex="0 0 auto" [signedIn]="signedIn"></wm-footer>
-  </div>
-</div>
+    <!-- Footer always on the bottom -->
+    <wm-footer fxFlex="0 0 auto" [language]="!signedIn"></wm-footer>
+  </wm-viewport>
+</main>
 
 <!--wm-consent [ask]="askConsent" (granted)="consentGranted()"></wm-consent-->
   

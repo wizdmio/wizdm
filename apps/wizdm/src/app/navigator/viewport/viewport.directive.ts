@@ -1,12 +1,11 @@
 import { Directive, AfterViewInit, OnDestroy, ElementRef, HostListener, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
-//import { ViewportScroller } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ViewportService } from './viewport.service';
 
 @Directive({
-  selector: '[wmViewport]'
+  selector: 'wm-viewport, [wmViewport]'
 })
 /** 
  * Handle page scrolling within the navigator. Enables scrolling to anchor and detects when the content has been scrolled

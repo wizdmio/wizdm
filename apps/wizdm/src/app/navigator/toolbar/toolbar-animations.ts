@@ -5,24 +5,18 @@ const $timing = '200ms ease-out';
 export let $animations = [
 
     trigger('expand', [
-        state('true',  style({ height: '32px' })),
+        state('true',  style('*')),
         state('false', style({ height: 0 })),
         transition('true <=> false', animate($timing)),
         
         transition(':enter', [
             style({ height: 0 }),
-            animate($timing, style({ height: '32px' }))
+            animate($timing, style('*'))
         ]),
         
         transition(':leave', [
             animate($timing, style({ height: 0 }))
         ])
-    ]),
-
-    trigger('shrink', [
-        state('false', style('*')),
-        state('true',  style({ height: '48px' })),
-        transition('true <=> false', animate($timing))
     ]),
 
     trigger('fadeIn', [

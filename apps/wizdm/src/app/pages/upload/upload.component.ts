@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
-import { NavigatorService, ActionEnabler } from '../../navigator';
+import { ToolbarService, ActionEnabler } from '../../navigator';
 import { OpenFileComponent, PopupService } from '../../elements';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -29,7 +29,7 @@ export class UploadComponent implements OnInit {
   public msgs;
   
   constructor(private content  : ContentManager, 
-              private toolbar  : NavigatorService,
+              private toolbar  : ToolbarService,
               private profile  : UserProfile,
               private popup    : PopupService) {
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project } from '../../core';
-import { NavigatorService, ViewportService } from '../../navigator';
+import { ToolbarService, ViewportService } from '../../navigator';
 import { Observable, Subject, of } from 'rxjs';
 import { map, filter, take, takeUntil, tap } from 'rxjs/operators';
 import { $animations } from './explore.animations';
@@ -21,7 +21,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
   constructor(private content  : ContentManager,
-              private toolbar  : NavigatorService,
+              private toolbar  : ToolbarService,
               private scroll   : ViewportService,
               private projects : ProjectService) {}
 

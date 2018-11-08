@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
-import { NavigatorService } from './service/navigator.service';
+import { NavigatorService } from './navigator.service';
 import { $animations } from './navigator.animations';
 
 @Component({
@@ -17,11 +17,11 @@ export class NavComponent implements OnInit {
   public scrolled = false;
   public menu = false;
   
-  constructor(private content   : ContentManager, 
-              private profile   : UserProfile,
-              private navigator : NavigatorService,
-              private title     : Title,
-              private meta      : Meta) {
+  constructor(private content : ContentManager, 
+              private profile : UserProfile,
+              private service : NavigatorService,
+              private title   : Title,
+              private meta    : Meta) {
 
     // Gets the localized content
     this.msgs = this.content.select("navigator"); 
@@ -37,16 +37,6 @@ export class NavComponent implements OnInit {
     if(this.msgs.description) {
       this.meta.updateTag({content: this.msgs.description}, "name='description'");
     }
-  }
-
-  //-- Error Displaying -----------
-
-  public get error() {
-    return this.navigator.error;
-  }
-
-  public clearError() {
-    this.navigator.clearError();
   }
 
   //-- Signin status -------------
@@ -69,17 +59,12 @@ export class NavComponent implements OnInit {
     return this.profile.data.img;
   }
 
-  //-- Action Buttons -----------
-
-  public get actionButtons() {
-    return this.navigator.buttons;
+  // -- Toolbar Actions -------
+  public get someAction(): boolean {
+    return this.service.toolbar.someAction;
   }
 
   public clearActions(): void {
-    this.navigator.clearActions();
-  }
-
-  public performAction(code: string): void {
-    this.navigator.performAction(code);
+    this.service.toolbar.clearActions();
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { wmAction } from '../../service/navigator-actions'; 
+import { wmAction } from '../toolbar.service'; 
 import { $animations } from './action.animations';
 
 @Component({

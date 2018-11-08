@@ -6,7 +6,7 @@ import { MatStepper } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { ProjectService, wmApplication } from '../../core';
-import { CanPageDeactivate, NavigatorService, ActionEnabler } from '../../navigator';
+import { CanPageDeactivate, ToolbarService, ActionEnabler } from '../../navigator';
 import { PopupService } from '../../elements';
 import { TermsPrivacyComponent } from '../terms-privacy/terms-privacy.component';
 import { $animations } from './apply.animations';
@@ -39,7 +39,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
               private content : ContentManager,
               private profile : UserProfile<userApply>,
               private project : ProjectService,
-              private toolbar : NavigatorService,
+              private toolbar : ToolbarService,
               private popup   : PopupService) { 
 
     // Gets the localized user messages from content manager

@@ -6,15 +6,15 @@ import { LanguageResolver } from '@wizdm/content';
 import { ElementsModule } from '../elements/elements.module';
 import { NavComponent } from './navigator.component';
 import { UserLanguageResolver } from './resolver/language-resolver.service';
+import { NavbarComponent } from './navbar/navbar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { ActionComponent as ToolbarAction } from './toolbar/action/action.component';
+import { ActionComponent } from './toolbar/action/action.component';
 import { MenuComponent } from './menu/menu.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { FooterComponent } from './footer/footer.component';
 import { ViewportDirective } from './viewport/viewport.directive';
 import { FitViewportDirective } from './viewport/fit-viewport.directive';
 import { ConsentComponent } from './consent/consent.component';
-
 
 @NgModule({
   imports: [
@@ -24,14 +24,15 @@ import { ConsentComponent } from './consent/consent.component';
   ],
   declarations: [
     NavComponent,
+    NavbarComponent,
     ToolbarComponent,
-    ToolbarAction,
+    ActionComponent,
     MenuComponent,
     FooterComponent,
     ViewportDirective,
+    FitViewportDirective,
     ConsentComponent,
     ErrorsComponent,
-    FitViewportDirective
   ],
   providers: [
     // Provide a LanguageResolver based on user language preferences

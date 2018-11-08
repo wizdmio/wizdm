@@ -11,9 +11,9 @@
   box-sizing: border-box;
 
   background-color: map-get($wm-theme-background, app-bar);
-  border-bottom: 1px solid map-get($wm-theme-foreground, divider);
-  
-  div { margin-bottom: $wm-menu-margin;}
+  box-shadow: 0 0 6px rgba(black, 0.5);
+
+  nav { margin-bottom: $wm-menu-margin;}
 }
 
 .link-active {
