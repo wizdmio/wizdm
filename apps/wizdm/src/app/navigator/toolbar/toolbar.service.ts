@@ -69,18 +69,24 @@ export class ActionState {
    */
   public actionEnabler(code: string): ActionEnabler {
 
-    let enabler = new BehaviorSubject<boolean>(false);
-
+    // Seeks the requested action by code
     let index = this.actionButtons.findIndex( action => action.code === code );
     if( index >= 0 ) {
+    
+      // Creates an enabler observable
+      const enabler = new BehaviorSubject<boolean>(false);
 
+      // Updated the corresponding action button adding the relevan enabler observable
       this.actionButtons[index] = { 
         ...this.actionButtons[index], 
         enabler: enabler.pipe( takeUntil(this.dispose$) ) 
       };
+      
+      // Returns the enabler
+      return new ActionEnabler(enabler);
     }
 
-    return new ActionEnabler(enabler);
+    return null;
   }
 
   public dispose() {
