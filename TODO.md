@@ -1,6 +1,6 @@
 **apps/wizdm**
 
-* Remove the ContentManager dependency from wm-logo using a caption input instead
+* ~~Remove the ContentManager dependency from `wm-logo` using a caption input instead~~ and update the toolbar accordingly
 * Move out elements creating libs/elements
 * Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)
   * `wm-logo` routing to home
