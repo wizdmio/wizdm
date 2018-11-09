@@ -4,7 +4,7 @@
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
 * Move out elements creating libs/elements
 * Reconsider to implement an homepage with a banner and a short description
-* Turn the explorer into a list of cards without picture
+* Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
 * Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)
   * `wm-logo` routing to home
   * `wm-navba`r containing the navlinks only
