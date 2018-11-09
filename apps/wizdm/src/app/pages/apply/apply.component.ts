@@ -61,8 +61,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       .subscribe( code => this.disclaimerAction(code) );
 
     // Gets the action enabler for 'clear' action code
-    this.enableClear$ = this.toolbar.actionEnabler('clear');
-    this.enableClear$.enable(this.application !== null);
+    this.enableClear$ = this.toolbar.actionEnabler('clear', this.application !== null);
   }
 
   ngAfterViewInit() {
