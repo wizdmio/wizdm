@@ -49,14 +49,14 @@ export class UploadComponent implements OnInit {
       .subscribe( code => this.executeAction(code) );
 
     // Gets the action enabler for 'delete' action code
-    this.enableDelete$ = this.toolbar.actionEnabler('delete');
-    this.enableDelete$.enable(false);
+    this.enableDelete$ = this.toolbar.actionEnabler('delete', false);
   }
 
   public selectionChange(change: MatSelectionListChange): void {
 
     // Enables / disables the delete action upon list selection
-    this.enableDelete$.enable( change.source.selectedOptions.hasValue() );
+    const hadValue = change.source.selectedOptions.hasValue();
+    this.enableDelete$.enable( hasValue );
   }
 
   private executeAction(code: string): void {
