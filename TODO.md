@@ -1,12 +1,10 @@
 **apps/wizdm**
 
-* Refines navigator by using `<main>` element as viewport container instead of a `<div>`
-* Review (again) the logic of navigator component interaction and decides once for all between Inputs/Injection
-* Replaces navigator/mat-divider by animating header bottom shadow instead like: `box-shadow: 0 0 10px rgba(black, 0.5)`
-* Replace wm-menu bottom border with `box-shadow: 0 0 10px rgba(black, 0.5)`
-* Improves navigator converting wmViewport directive to wm-(scroll)view component relying on general NavigatorService istead of ViewportService
-* Collects navigator's guards, resolver, service and directives under navigator/utils folder
-* Converts wmFitViewport directive into wmFitView directive
+* Improve ToolbarService with:
+ * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
+ * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
+ * Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action
+* Collects navigator's guards, resolver and directives under navigator/utils folder
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
 * Move the action bar out of the toolbar into the navigation header splitting it into: wm-navbar & wm-toolbar
 * Move out elements creating libs/elements
