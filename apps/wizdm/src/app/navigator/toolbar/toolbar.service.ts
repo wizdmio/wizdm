@@ -66,6 +66,17 @@ export class ActionState {
   public performAction(code: string) {
     this.events$.next(code);
   }
+  
+  /** Enables/disables the specified action */
+  public enableAction(code: string, value: boolean): void {
+      
+    // Seeks the requested action by code
+    const index = this.actionButtons.findIndex( action => action.code === code );
+    if( index >= 0 && this.actionButtons[index].enabler ) { 
+      // Updates the enabler value
+      this.actionButtons[index].enabler.next(value);
+    }
+  }
 
   /**
    * Creates an action enabler for the observer to enable/disable the action button
@@ -75,7 +86,7 @@ export class ActionState {
   public actionEnabler(code: string, startValue: boolean): ActionEnabler {
 
     // Seeks the requested action by code
-    let index = this.actionButtons.findIndex( action => action.code === code );
+    const index = this.actionButtons.findIndex( action => action.code === code );
     if( index >= 0 ) {
     
       // Creates an enabler observable
@@ -165,7 +176,12 @@ export class ToolbarService implements OnDestroy {
   public actionEnabler(code: string, value = true): ActionEnabler {
     return this.actionState ? this.actionState.actionEnabler(code, value) : undefined;
   }
-
+  
+  /** Enables/disables the specified action */
+  public enableAction(code: string, value: boolean): void {
+    this.actionState && this.actionState.enableAction(code, value);
+  }
+  
   /**
    * Restores the previously saved action bar
    */
