@@ -1,5 +1,7 @@
 **apps/wizdm**
 
+* Remove the ContentManager dependency from wm-logo using a caption input instead
+* Move out elements creating libs/elements
 * Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)
   * `wm-logo` routing to home
   * `wm-navba`r containing the navlinks only
@@ -14,4 +16,4 @@
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
 * Implements toolbar cut/copy/paste and undo/redo using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) in project page while editing
 * ~~Move the action bar out of the toolbar into the navigation header splitting it into: wm-navbar & wm-toolbar~~
-* Move out elements creating libs/elements
+
