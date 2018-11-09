@@ -72,14 +72,14 @@ export class ActionState {
    * @param code the code identifying the action to consider 
    * @returns the action enabler object
    */
-  public actionEnabler(code: string): ActionEnabler {
+  public actionEnabler(code: string, value: boolean): ActionEnabler {
 
     // Seeks the requested action by code
     let index = this.actionButtons.findIndex( action => action.code === code );
     if( index >= 0 ) {
     
       // Creates an enabler observable
-      const enabler = new BehaviorSubject<boolean>(false);
+      const enabler = new BehaviorSubject<boolean>(value);
 
       // Updated the corresponding action button adding the relevan enabler observable
       this.actionButtons[index] = { 
@@ -161,8 +161,8 @@ export class ToolbarService implements OnDestroy {
    * Creates an action enabler for the observer to enable/disable the corresponding action button
    * @param code the code identifying the action
    */
-  public actionEnabler(code: string): ActionEnabler {
-    return this.actionState ? this.actionState.actionEnabler(code) : undefined;
+  public actionEnabler(code: string, value = false): ActionEnabler {
+    return this.actionState ? this.actionState.actionEnabler(code, value) : undefined;
   }
 
   /**
