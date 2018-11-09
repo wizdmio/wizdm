@@ -3,6 +3,8 @@
 * ~~Remove the ContentManager dependency from `wm-logo` using a caption input instead~~ and update the toolbar accordingly
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
 * Move out elements creating libs/elements
+* Reconsider to implement an homepage with a banner and a short description
+* Turn the explorer into a list of cards without picture
 * Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)
   * `wm-logo` routing to home
   * `wm-navba`r containing the navlinks only
