@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding, HostListener } from '@angular/core';
+import { Component, Input, HostBinding, HostListener } from '@angular/core';
 import { ContentManager } from '@wizdm/content';
 import { $animations } from './logo.animations';
 
@@ -8,16 +8,13 @@ import { $animations } from './logo.animations';
   styleUrls: ['./logo.component.scss'],
   animations: $animations
 })
-export class LogoComponent implements OnInit {
+export class LogoComponent {
 
   public loading = false;
-  public logo: string;
-  
-  constructor(private content: ContentManager) {
-    this.logo = this.content.select("navigator.logo");
-  }
+ 
+  constructor() { }
 
-  ngOnInit() {}
+  @Input() caption: string = "wizdm";
 
   /*
   @HostBinding('@blink') blink = false;
