@@ -20,11 +20,16 @@ export type wmAction = {
  */
 export class ActionEnabler {
 
-  constructor(private observer: Observer<boolean>) {}
+  constructor(private observer: BehaviorSubject<boolean>) {}
 
   /** Enables/disables the corresponding action button */
   public enable(value: boolean) {
     this.observer.next(value);
+  }
+  
+  /** Returns the current enable status */
+  public get isEnabled() {
+   return this.observer.value;
   }
 }
 
