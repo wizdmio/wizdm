@@ -163,7 +163,7 @@ export class ToolbarService implements OnDestroy {
    * @param code the action code identifying the action to be performed
    */
   public performAction(code: string): void {
-    if(this.actionState) {
+    if(!!this.actionState) {
       this.actionState.performAction(code);
     }
   }
@@ -179,7 +179,7 @@ export class ToolbarService implements OnDestroy {
   
   /** Enables/disables the specified action */
   public enableAction(code: string, value: boolean): void {
-    this.actionState && this.actionState.enableAction(code, value);
+    !!this.actionState && this.actionState.enableAction(code, value);
   }
   
   /**
