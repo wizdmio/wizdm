@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ToolbarService, wmAction } from './toolbar.service';
 import { $animations } from './toolbar-animations';
+import { Observable } from 'rxjs';
+//import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-toolbar',
@@ -10,16 +12,18 @@ import { $animations } from './toolbar-animations';
 })
 export class ToolbarComponent {
 
-  constructor(private service: ToolbarService) {}
+  @Input() buttons: wmAction[];
 
-  public get actionButtons(): wmAction[] {
-    return this.service.buttons;
+  constructor(readonly service: ToolbarService) {}
+/*
+  public get actionButtons(): Observable<wmAction[]> {
+    return this.service.buttons$;
   }
 
-  public get someAction() {
-    return this.service.someAction;
+  public get someAction(): Observable<boolean> {
+    return this.service.some$;
   }
-
+*/
   public clearActions(): void {
     this.service.clearActions();
   }

@@ -55,7 +55,7 @@ export class UploadComponent implements OnInit {
   public selectionChange(change: MatSelectionListChange): void {
 
     // Enables / disables the delete action upon list selection
-    const hadValue = change.source.selectedOptions.hasValue();
+    const hasValue = change.source.selectedOptions.hasValue();
     this.enableDelete$.enable( hasValue );
   }
 

@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
-import { NavigatorService } from './navigator.service';
+import { NavigatorService, wmAction } from './navigator.service';
 import { $animations } from './navigator.animations';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-navigator',
@@ -42,7 +43,7 @@ export class NavComponent implements OnInit {
   //-- Signin status -------------
 
   public get signedIn(): boolean {
-    return this.profile.authenticated;
+    return this.profile.authenticated || false;
   }
 
   public get desktopMenu(): any[] {
@@ -60,8 +61,12 @@ export class NavComponent implements OnInit {
   }
 
   // -- Toolbar Actions -------
-  public get someAction(): boolean {
-    return this.service.toolbar.someAction;
+  public get actionButtons$(): Observable<wmAction[]> {
+    return this.service.toolbar.buttons$;
+  }
+
+  public get someActions$(): Observable<boolean> {
+    return this.service.toolbar.some$;
   }
 
   public clearActions(): void {

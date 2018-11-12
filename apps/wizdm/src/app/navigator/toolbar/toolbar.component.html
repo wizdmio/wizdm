@@ -1,13 +1,7 @@
 
-  <!-- ACTION BAR -->
-  <div *ngIf="someAction" fxLayout="row" fxLayoutAlign="end center" [@fadeInSequence]="actionButtons" @expand>
-    
-  <ng-container *ngTemplateOutlet="actionBar; context: { buttons: actionButtons, menu: false }">
-  </ng-container>
+<!-- Renders the action buttons -->
+<ng-container *ngTemplateOutlet="actionBar; context: { buttons: buttons, menu: false }"></ng-container>
 
-</div>
-
-<!-- Renders the action bar buttons -->
 <ng-template let-buttons="buttons" let-menuItem="menu" #actionBar>
 
   <ng-container *ngFor="let button of buttons">

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ToolbarService } from './toolbar/toolbar.service';
+import { ToolbarService, wmAction } from './toolbar/toolbar.service';
+export { wmAction };
 
 @Injectable({
   providedIn: 'root'

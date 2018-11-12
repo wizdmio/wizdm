@@ -3,7 +3,7 @@ import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project } from '../../core';
 import { ToolbarService, ViewportService } from '../../navigator';
 import { Observable, Subject, of } from 'rxjs';
-import { map, filter, take, takeUntil, tap } from 'rxjs/operators';
+import { map, filter, take, delay, takeUntil, tap } from 'rxjs/operators';
 import { $animations } from './explore.animations';
 
 @Component({
@@ -37,10 +37,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
     //this.toolbar.activateActions(this.msgs.actions);
     
     // Subscribes to the scrollPosition event to implement project pagination
-    this.scroll.scrollPosition
-      // Filters events when the active page does not require pagination
-      .pipe( takeUntil(this.dispose$) )
-      // Ask for more data to display when at the bottom of the page
+    this.scroll.scrollPosition.pipe( takeUntil(this.dispose$) )
       .subscribe( pos => {
         if(pos === 'bottom') {
           this.projects.more();

@@ -12,7 +12,11 @@ import { filter } from 'rxjs/operators';
 })
 export class NavbarComponent implements OnInit, AfterViewInit {
 
-  constructor(private router : Router) {}
+  constructor(private host: ElementRef, private router: Router) {}
+
+  private get element() {
+    return this.host.nativeElement;
+  }
 
   ngOnInit(){
 
@@ -22,7 +26,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
         // Draws the inkbar at the end of navigation
         this.drawInkbar();
         // Toggle the mobile menu to close when open
-        if(this.toggler) { this.toggle();}
+        //if(this.toggler) { this.toggle();}
       });
   }
 
@@ -30,8 +34,8 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() { this.drawInkbar();}
 
   // Inkbar underlining the active router link
-  @ViewChild('linkbar', { read: ElementRef }) 
-  private linkbar: ElementRef;// Root element or the routing links
+  //@ViewChild('linkbar', { read: ElementRef }) 
+  //private linkbar: ElementRef;// Root element or the routing links
   
   // Inkbar position
   public inkbar: inkbarPosition = { left: 0, width: 0 };
@@ -43,7 +47,7 @@ export class NavbarComponent implements OnInit, AfterViewInit {
     setTimeout(() => { 
       try {
         // Seek for the elmement decorated with the 'link-active' class
-        let e: HTMLElement = this.linkbar.nativeElement.getElementsByClassName('link-active')[0];
+        const e: HTMLElement = this.element.getElementsByClassName('link-active')[0];
         // Updates the inkbar position based on the returned element
         this.inkbar = !!e ? { left: e.offsetLeft, width: e.clientWidth } : { width: 0 };
       }
@@ -60,16 +64,16 @@ export class NavbarComponent implements OnInit, AfterViewInit {
   @Input() menuItems: any[] = [];
 
   // Flag to enable the user profile button
-  @Input() userProfile: boolean = false;
+  //@Input() userProfile: boolean = false;
 
   // User image when available
-  @Input() userImage: string = null;
+  //@Input() userImage: string = null;
 
   // Toggler to display the menu on mobile version
-  @Input()  toggler = false;
-  @Output() togglerChange = new EventEmitter<boolean>();
+  //@Input()  toggler = false;
+  //@Output() togglerChange = new EventEmitter<boolean>();
   
-  public toggle() {
-    this.togglerChange.emit(this.toggler = !this.toggler);
-  }
+  //public toggle() {
+  //  this.togglerChange.emit(this.toggler = !this.toggler);
+  //}
 }

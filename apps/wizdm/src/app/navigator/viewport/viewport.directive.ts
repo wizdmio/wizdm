@@ -1,4 +1,4 @@
-import { Directive, AfterViewInit, OnDestroy, ElementRef, HostListener, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
+import { Directive, OnInit, OnDestroy, ElementRef, HostListener, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { ViewportService } from './viewport.service';
 /** 
  * Handle page scrolling within the navigator. Enables scrolling to anchor and detects when the content has been scrolled
  */
-export class ViewportDirective implements AfterViewInit, OnDestroy {
+export class ViewportDirective implements OnInit, OnDestroy {
 
   private sub$: Subscription;
 
@@ -49,8 +49,7 @@ export class ViewportDirective implements AfterViewInit, OnDestroy {
     mirror.scrollPosition = this.scrollPosition;
   }
 
-  // Makes sure to initialize the mirrored viewport
-  ngAfterViewInit() { 
+  ngOnInit() { 
     this.onScroll(null);
     this.onResize(null);
   }

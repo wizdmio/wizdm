@@ -1,32 +1,37 @@
 <!-- @Levitates the header while scrolling up the page -->
 <header fxFlex="0 0 auto" [@levitate]="scrolled">
 
-  <!--mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+  <mat-toolbar>
 
-    <wm-logo routerLink="."></wm-logo>  
-    
-    <nav  fxLayout="row" fxLayoutAlign="end center">
+    <!-- Navigation bar -->
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
 
-      <wm-navbar [menuItems]="desktopMenu" fxHide.lt-sm></wm-navbar>
-
-      <button mat-icon-button routerLink="profile" *ngIf="signedIn">
-        <wm-avatar [src]="userImage"></wm-avatar>
-      </button>
-
-      <button mat-icon-button (click)="menu = !menu" fxHide fxShow.lt-sm>
-        <wm-toggler toggler-style="more_vert" [status]="menu"></wm-toggler>
-      </button>
-    </nav>
-
-  </mat-toolbar-->
-
-  <!-- Navigation bar -->
-  <wm-navbar [menuItems]="desktopMenu" [(toggler)]="menu" [userProfile]="signedIn" [userImage]="userImage">
-  </wm-navbar>
-
-  <!-- Action toolbar -->
-  <wm-toolbar></wm-toolbar>
+      <wm-logo routerLink="."></wm-logo>  
   
+      <nav fxLayout="row" fxLayoutAlign="end center">
+  
+        <wm-navbar [menuItems]="desktopMenu" fxHide.lt-sm></wm-navbar>
+  
+        <button mat-icon-button routerLink="profile" *ngIf="signedIn">
+          <wm-avatar [src]="userImage"></wm-avatar>
+        </button>
+  
+        <button mat-icon-button (click)="menu = !menu" fxHide fxShow.lt-sm>
+          <wm-toggler toggler-style="more_vert" [status]="menu"></wm-toggler>
+        </button>
+      </nav>
+    
+    </mat-toolbar-row>
+
+    <!-- Action toolbar -->
+    <mat-toolbar-row *ngIf="signedIn" fxLayoutAlign="end center" [@expand]="someActions$ | async">
+
+      <wm-toolbar [buttons]="actionButtons$ | async"></wm-toolbar>
+  
+    </mat-toolbar-row>
+
+  </mat-toolbar>
+
   <!-- Error message displayer -->
   <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
 

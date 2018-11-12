@@ -1,11 +1,24 @@
-<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+
+<!--div #linkbar-->
+    
+  <a mat-button *ngFor="let item of menuItems" 
+    routerLinkActive="link-active" 
+    [routerLink]="item.link"
+    [queryParams]="item.params"
+    [ngClass]="{ 'highlight': item.highlight }">
+    {{ item.label }}
+  </a>
+
+  <!-- INKBAR -->
+  <wm-inkbar [position]="inkbar"></wm-inkbar>      
+<!--/div-->
+
+<!--mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
 
   <wm-logo></wm-logo>
 
-  <!-- DESKTOP VERSION -->
   <div fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm>
     
-    <!-- MENU LINKS w/ INKBAR -->
     <div #linkbar>
     
       <a mat-button *ngFor="let item of menuItems" 
@@ -16,34 +29,28 @@
         {{item.label}}
       </a>
 
-      <!-- INKBAR -->
       <wm-inkbar [position]="inkbar"></wm-inkbar>      
     </div>
 
-    <!-- USER PROFILE BUTTON -->
+    <button mat-icon-button routerLink="messages" margin="right" *ngIf="signedIn">
+      <wm-icon icon="mail_outline" matBadge="3"></wm-icon>
+    </button>
+
     <button mat-icon-button routerLink="profile" *ngIf="userProfile">
       <wm-avatar [src]="userImage"></wm-avatar>
     </button>
     
   </div>
   
-  <!-- MOBILE VERSION -->
   <div fxLayout="row" fxLayoutAlign="end center" fxHide fxShow.lt-sm>
 
-    <!-- USER NOTIFICATIONS -->
-    <!--button mat-icon-button routerLink="messages" margin="right" *ngIf="signedIn">
-      <wm-icon icon="mail_outline" matBadge="3"></wm-icon>
-    </button-->
-
-    <!-- USER PROFILE BUTTON -->
     <button mat-icon-button routerLink="profile" *ngIf="userProfile">
       <wm-avatar [src]="userImage"></wm-avatar>
     </button>
 
-    <!-- MENU TOGGLER -->
     <button mat-icon-button (click)="toggle()">
       <wm-toggler toggler-style="more_vert" [status]="toggler"></wm-toggler>
     </button>
   </div>
 
-</mat-toolbar>
+</mat-toolbar-->
