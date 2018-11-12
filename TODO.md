@@ -5,13 +5,14 @@
 * Move out elements creating libs/elements
 * Reconsider to implement an homepage with a banner and a short description
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
-* Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)
-  * `wm-logo` routing to home
-  * `wm-navba`r containing the navlinks only
-  * `wm-toggler` button for mobile version
-  * `wm-avatar` button when signedIn
-* Consider to go back using `mat-toolbar-row` to wrap the action bar
-* Improve ToolbarService with:
+* Rearrange the navbar/toggler/logo to the left like (angular.io)[https://angular.io/] keeping the profile button on the right
+* ~~Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)~~
+  * ~~`wm-logo` routing to home~~
+  * ~~`wm-navbar` containing the navlinks only~~
+  * ~~`wm-toggler` button for mobile version~~
+  * ~~`wm-avatar` button when signedIn~~
+* ~~Consider to go back using `mat-toolbar-row` to wrap the action bar~~
+* ~~Improve ToolbarService with:~~
   * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
