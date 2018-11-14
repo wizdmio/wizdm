@@ -22,10 +22,13 @@
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
 * Collects navigator's guards, resolver and directives under navigator/utils folder
 
+## Project
+* Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
+* Consider to add a project avatar (using the user uploader?)
+* Implements toolbar cut/copy/paste and undo/redo using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) in project page while editing
+
 ## Various
 * Move out elements creating libs/elements
-* Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
-* Implements toolbar cut/copy/paste and undo/redo using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) in project page while editing
 * Remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule
 
 # libs/connect
