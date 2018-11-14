@@ -40,12 +40,13 @@ export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> 
     this.sub = this.asObservable()
       .subscribe( profile => {
 
+        // Resets the profile data when logging out
         if(!profile) { this.data = <T>{}; return; }
 
         // Initialize the user's uploader
         this.uploads.init(`/users/${this.id}/uploads`, this.id);
 
-        // Sync the profile data
+        // Sync the profile data on log-in
         this.data = profile;
       });
   }
@@ -63,7 +64,7 @@ export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> 
   private create(user: User, lang?: string) {
 
     // Computes a minimal user profile from the authentication token
-    let data = <T>{
+    const data = <T>{
       name  : user.displayName,
       email : user.email,
       phone : user.phoneNumber,
