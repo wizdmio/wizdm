@@ -26,7 +26,7 @@
 * Move out elements creating libs/elements
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
 * Implements toolbar cut/copy/paste and undo/redo using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) in project page while editing
-
+* Remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule
 
 # libs/connect
 
