@@ -28,3 +28,6 @@
 * Implements toolbar cut/copy/paste and undo/redo using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) in project page while editing
 
 
+# libs/connect
+
+* Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
