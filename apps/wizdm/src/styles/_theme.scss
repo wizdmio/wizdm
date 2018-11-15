@@ -119,6 +119,15 @@ $wm-theme-background: map-get($wm-theme, background);
 }
 */
 
+// Padding top helper
+@mixin wm-padding-top($offset: 0) {
+
+  padding-top: $wm-content-top-desktop + $offset;
+  @media ($mat-xsmall) {
+    padding-top: $wm-content-top-mobile + $offset;
+  }
+}
+
 // Initilize the global application theme
 @mixin wm-init-application-theme($typography: $wm-typography, $theme: $wm-theme, $material: $wm-material) {
 

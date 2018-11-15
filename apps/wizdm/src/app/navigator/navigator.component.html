@@ -1,50 +1,68 @@
-<!-- @Levitates the header while scrolling up the page -->
-<header fxFlex="0 0 auto" [@levitate]="scrolled">
-
+<!--header fxFlex="0 0 auto" [@levitate]="scrolled"-->
+<header fxFlex="0 0 auto">
   <mat-toolbar>
 
-    <!-- Navigation bar -->
-    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+    <!-- Background w/ shadow to fade while blending in -->
+    <div class="background" [@blendin]="desktop && !(scrolled$ | async)"></div>
 
-      <wm-logo routerLink="."></wm-logo>  
-  
-      <nav fxLayout="row" fxLayoutAlign="end center">
-  
-        <wm-navbar [menuItems]="desktopMenu" fxHide.lt-sm></wm-navbar>
-  
-        <button mat-icon-button routerLink="profile" *ngIf="signedIn">
+    <!-- Navigation bar -->
+    <mat-toolbar-row fxLayoutAlign="space-between center">
+
+      <!-- Left pane -->
+      <nav fxLayout="row" fxLayoutAlign="start center">
+
+        <!-- Mobile menu toggler -->
+        <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
+          <wm-toggler toggler-style="menu" [status]="menu"></wm-toggler>
+        </button>
+
+        <!-- Wizdm logo routing to home -->
+        <wm-logo [caption]="msgs.logo" routerLink="."></wm-logo>  
+    
+        <!-- Desktop navigation links -->
+        <wm-navbar [menuItems]="desktopMenu" *ngIf="desktop"></wm-navbar>
+      
+      </nav>
+
+      <!-- Right pane -->
+      <div fxLayout="row" fxLayoutAlign="end center" *ngIf="signedIn">
+
+        <!-- Action toolbar -->
+        <wm-toolbar  *ngIf="(someActions$ | async)" [buttons]="actionButtons$ | async"></wm-toolbar>
+
+        <!-- User profile button -->
+        <button mat-icon-button routerLink="profile">
           <wm-avatar [src]="userImage"></wm-avatar>
         </button>
-  
-        <button mat-icon-button (click)="menu = !menu" fxHide fxShow.lt-sm>
-          <wm-toggler toggler-style="more_vert" [status]="menu"></wm-toggler>
-        </button>
-      </nav>
+
+      </div>
     
     </mat-toolbar-row>
 
-    <!-- Action toolbar -->
-    <mat-toolbar-row *ngIf="signedIn" fxLayoutAlign="end center" [@expand]="someActions$ | async">
+    <!-- Mobile menu -->
+    <mat-toolbar-row auto *ngIf="mobile">
+      
+      <wm-menu [menuItems]="mobileMenu" *ngIf="menu"></wm-menu>    
+    
+    </mat-toolbar-row>
 
-      <wm-toolbar [buttons]="actionButtons$ | async"></wm-toolbar>
+    <!-- Error message displayer -->
+    <mat-toolbar-row auto>
+
+      <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
   
     </mat-toolbar-row>
 
   </mat-toolbar>
-
-  <!-- Error message displayer -->
-  <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
 
 </header>
 
 <!-- Viewport container -->
 <main fxFlex="1 1 auto" fxLayout="column">
 
-  <!-- Mobile version Menu -->
-  <wm-menu *ngIf="menu" [menuItems]="mobileMenu"></wm-menu>
-  
   <!-- Content Viewport (scrollable) -->
-  <wm-viewport fxFlex="1 1 auto" fxLayout="column" treshold="20" [(scrolled)]="scrolled"> 
+  <!--wm-viewport fxFlex="1 1 auto" fxLayout="column" treshold="20" [(scrolled)]="scrolled"--> 
+  <div fxFlex="1 1 auto" fxLayout="column"> 
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
@@ -54,7 +72,7 @@
     
     <!-- Footer always on the bottom -->
     <wm-footer fxFlex="0 0 auto" [language]="!signedIn"></wm-footer>
-  </wm-viewport>
+  </div>
 </main>
 
 <!--wm-consent [ask]="askConsent" (granted)="consentGranted()"></wm-consent-->

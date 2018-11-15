@@ -3,17 +3,18 @@
 
 :host {
   display: block;
-  position: absolute;
+  //position: absolute;
+  position: relative;
   left: 0;
   top: 0;
   width: 100%;
   height: auto;
   box-sizing: border-box;
 
-  background-color: map-get($wm-theme-background, app-bar);
-  box-shadow: 0 0 6px rgba(black, 0.5);
+  //background-color: map-get($wm-theme-background, app-bar);
+  //box-shadow: 0 0 6px rgba(black, 0.5);
 
-  nav { margin-bottom: $wm-menu-margin;}
+  //nav { margin-bottom: $wm-menu-margin;}
 }
 
 .link-active {

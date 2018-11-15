@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 @Directive({
   selector: '[wmFitToViewport]'
 })
-export class FitViewportDirective implements AfterViewInit, OnDestroy {
+export class FitViewportDirective /*implements AfterViewInit, OnDestroy*/ {
 
   private get native(): HTMLElement {
     return this.element.nativeElement;
@@ -14,7 +14,7 @@ export class FitViewportDirective implements AfterViewInit, OnDestroy {
   constructor(private viewport : ViewportService,
               private element  : ElementRef,
               private renderer : Renderer2) { }
-
+/*
   private sub$: Subscription;
 
   ngAfterViewInit() {
@@ -38,5 +38,5 @@ export class FitViewportDirective implements AfterViewInit, OnDestroy {
     this.renderer.setStyle(this.native, 'top.px', rect.top);
     this.renderer.setStyle(this.native, 'width.px', rect.width);
     this.renderer.setStyle(this.native, 'height.px', rect.height);
-  }
+  }*/
 }

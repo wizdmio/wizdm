@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd, Scroll } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
+import { ObservableMedia } from '@angular/flex-layout';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
-import { $animations } from './navigator.animations';
 import { Observable } from 'rxjs';
+import { map, filter, distinctUntilChanged } from 'rxjs/operators';
+import { $animations } from './navigator.animations';
 
 @Component({
   selector: 'wm-navigator',
@@ -14,11 +17,12 @@ import { Observable } from 'rxjs';
 })
 export class NavComponent implements OnInit {
 
-  public msgs: any = null;
-  public scrolled = false;
-  public menu = false;
+  readonly msgs: any = null;
+  readonly scrolled$: Observable<boolean>;
   
-  constructor(private content : ContentManager, 
+  constructor(private router  : Router,
+              readonly media  : ObservableMedia,
+              private content : ContentManager,           
               private profile : UserProfile,
               private service : NavigatorService,
               private title   : Title,
@@ -26,6 +30,12 @@ export class NavComponent implements OnInit {
 
     // Gets the localized content
     this.msgs = this.content.select("navigator"); 
+
+    // Creates and observable to monitor the scroll status
+    this.scrolled$ = this.service.viewport.scroll$.pipe(
+      map( pos => pos[1] > 20 ),
+      distinctUntilChanged()
+    );
   }
 
   ngOnInit() { 
@@ -38,6 +48,36 @@ export class NavComponent implements OnInit {
     if(this.msgs.description) {
       this.meta.updateTag({content: this.msgs.description}, "name='description'");
     }
+
+    // Intercepts the NavigationEnd events
+    this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
+      .subscribe(() => {
+        // Closes the nav menu at the end of each navigation
+        this.menu = false;
+      });
+
+    // Intercepts non null router scrolling events
+    this.router.events.pipe( filter(e => e instanceof Scroll && !!e.anchor) )
+      .subscribe( (e: Scroll) => {
+        // Scroll to the routed anchor
+        this.service.viewport.scrollToAnchor(e.anchor);
+      });
+  }
+
+  // Media query
+  public get mobile(): boolean {
+    return this.media.isActive('xs');// || this.media.isActive('sm'); 
+  }
+
+  public get desktop(): boolean {
+    return !this.mobile;
+  }
+
+  // Menu toggle
+  public menu = false;
+
+  public toggleMenu() {
+    this.menu = !this.menu;
   }
 
   //-- Signin status -------------

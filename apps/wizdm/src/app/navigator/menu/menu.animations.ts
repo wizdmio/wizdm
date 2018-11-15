@@ -22,10 +22,6 @@ export let $animations = [
     transition(':leave',
       group([ 
         animate($smooth, style({ height: 0 })),
-        animate($smooth, keyframes([
-          style({ opacity: 1, offset: 0.95 }),
-          style({ opacity: 0, offset: 1.00 })
-        ])),
         query('a', animate($smooth, style({ 
           opacity: '0', 
           transform: 'translateY(-150px)'

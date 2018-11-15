@@ -36,7 +36,6 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-mo
 // Application specific
 import { IconComponent } from './icon/icon.component';
 import { TogglerComponent } from './toggler/toggler.component';
-import { LogoComponent } from './logo/logo.component';
 import { InkbarComponent } from './inkbar/inkbar.component';
 import { AvatarComponent } from './avatar/avatar.component';
 import { DisclaimerComponent } from './disclaimer/disclaimer.component';
@@ -84,7 +83,6 @@ const sharedModules = [
   declarations: [
     IconComponent,
     TogglerComponent,
-    LogoComponent,
     InkbarComponent,
     AvatarComponent,
     DisclaimerComponent,
@@ -102,7 +100,6 @@ const sharedModules = [
 //------------------------    
     IconComponent,
     TogglerComponent,
-    LogoComponent,
     InkbarComponent,
     AvatarComponent,
     DisclaimerComponent,

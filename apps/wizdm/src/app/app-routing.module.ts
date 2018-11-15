@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ContentResolver } from '@wizdm/content';
 
 import { NavComponent } from './navigator/navigator.component';
-import { AuthGuardService } from './navigator/guards/auth-guard.service';
-import { PageGuardService } from './navigator/guards/page-guard.service';
+import { AuthGuardService } from './navigator/utils/auth-guard.service';
+import { PageGuardService } from './navigator/utils/page-guard.service';
 import { AboutComponent } from './pages/about/about.component';
 import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
 import { LoginComponent } from './pages/login/login.component';

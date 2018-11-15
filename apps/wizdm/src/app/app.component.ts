@@ -8,11 +8,8 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'body',
-  template: '<router-outlet></router-outlet>' + 
-            '<div *ngIf="loading" class="preloader" @fade>' + 
-              '<div></div><div></div><div></div>' +
-            '</div>',
-  styles: [], 
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   animations: [
     trigger('fade', [
       transition(':leave', [
@@ -22,12 +19,10 @@ import * as moment from 'moment';
       )
     ])
   ]
-  //templateUrl: './app.component.html',
-  //styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy { 
   
-  private loading: boolean = true;
+  public loading: boolean = true;
 
   constructor(private content: ContentManager,
               private icon: MatIconRegistry,

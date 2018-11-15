@@ -1,4 +1,5 @@
 @import "variables";
+@import "theme";
 
 :host {
   display: flex;
@@ -7,4 +8,6 @@
 
   padding: $wm-content-padding 0;
   margin: 0 $wm-content-margin;
+
+  @include wm-padding-top($wm-content-padding);
 }

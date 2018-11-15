@@ -1,14 +1,14 @@
 $wm-loader-size:   150px !default;
 $wm-loader-thick:    3px !default;
-//$wm-toolbar-height: 64px !default;
-//$wm-toolbar-mobile: 56px !default;
 $wm-logo-size:      48px !default;
-$wm-footer-height:  64px !default;
 $wm-login-width:   300px !default;
 
-$wm-content-padding: 8px !default;
-$wm-content-margin:  32px !default;
-$wm-menu-margin:     16px !default;
+$wm-content-top-desktop: 64px !default;
+$wm-content-top-mobile:  56px !default;
+$wm-content-padding:     8px  !default;
+$wm-content-margin:      32px !default;
+$wm-menu-margin:         16px !default;
+$wm-footer-height:       64px !default;
 
 $wm-zindex-content: 1 !default;
 $wm-zindex-control: 2 !default;

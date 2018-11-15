@@ -5,16 +5,16 @@ import { LanguageResolver } from '@wizdm/content';
 //-------
 import { ElementsModule } from '../elements/elements.module';
 import { NavComponent } from './navigator.component';
-import { UserLanguageResolver } from './resolver/language-resolver.service';
+import { LogoComponent } from './logo/logo.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ActionComponent } from './toolbar/action/action.component';
 import { MenuComponent } from './menu/menu.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { FooterComponent } from './footer/footer.component';
-import { ViewportDirective } from './viewport/viewport.directive';
 import { FitViewportDirective } from './viewport/fit-viewport.directive';
 import { ConsentComponent } from './consent/consent.component';
+import { UserLanguageResolver } from './utils/language-resolver.service';
 
 @NgModule({
   imports: [
@@ -24,12 +24,12 @@ import { ConsentComponent } from './consent/consent.component';
   ],
   declarations: [
     NavComponent,
+    LogoComponent,
     NavbarComponent,
     ToolbarComponent,
     ActionComponent,
     MenuComponent,
     FooterComponent,
-    ViewportDirective,
     FitViewportDirective,
     ConsentComponent,
     ErrorsComponent,

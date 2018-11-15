@@ -3,7 +3,7 @@ import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project } from '../../core';
 import { ToolbarService, ViewportService } from '../../navigator';
 import { Observable, Subject, of } from 'rxjs';
-import { map, filter, take, delay, takeUntil, tap } from 'rxjs/operators';
+import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './explore.animations';
 
 @Component({
@@ -14,21 +14,23 @@ import { $animations } from './explore.animations';
 })
 export class ExploreComponent implements OnInit, OnDestroy {
 
-  public projects$: Observable<Project[]>;
   private dispose$: Subject<void> = new Subject();
-  public msgs = null;
+  public projects$: Observable<Project[]>;
+  
+  readonly msgs = null;
 
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
   constructor(private content  : ContentManager,
               private toolbar  : ToolbarService,
               private scroll   : ViewportService,
-              private projects : ProjectService) {}
-
-  ngOnInit() {
+              private projects : ProjectService) {
 
     // Gets the localized content
     this.msgs = this.content.select('explore');
+  }
+
+  ngOnInit() {
 
     // Listing all projects (using pagination)
     this.projects$ = this.projects.browseAll({ limit: 10 });
@@ -36,13 +38,15 @@ export class ExploreComponent implements OnInit, OnDestroy {
     // Enables the toolbar actions only when dealing with personal projects
     //this.toolbar.activateActions(this.msgs.actions);
     
-    // Subscribes to the scrollPosition event to implement project pagination
-    this.scroll.scrollPosition.pipe( takeUntil(this.dispose$) )
-      .subscribe( pos => {
-        if(pos === 'bottom') {
-          this.projects.more();
-        }
-      });
+    // Subscribes to scrollY$ to load new projects when approaching the bottom of the page
+    this.scroll.scrollY$.pipe(
+      takeUntil(this.dispose$),
+      map( pos => pos[1] < 500 ),
+      distinctUntilChanged(),
+      filter( bottom => bottom )
+    ).subscribe( pos => {
+      this.projects.more();
+    });
   }
 
   ngOnDestroy() {

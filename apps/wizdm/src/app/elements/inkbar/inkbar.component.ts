@@ -17,7 +17,7 @@ export interface inkbarPosition {
 })
 export class InkbarComponent {
 
-  private pos: inkbarPosition;
+  private pos: inkbarPosition = { left: 0, width: 0 };
 
   constructor() { }
 

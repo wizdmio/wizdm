@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToolbarService, wmAction } from './toolbar/toolbar.service';
+import { ViewportService } from './viewport/viewport.service';
 export { wmAction };
 
 @Injectable({
@@ -10,7 +11,8 @@ export class NavigatorService {
   // Global error object
   private errorObj: any;
 
-  constructor(readonly toolbar: ToolbarService) {}
+  constructor(readonly toolbar  : ToolbarService, 
+              readonly viewport : ViewportService) {}
   
   public get error() {
     return this.errorObj;

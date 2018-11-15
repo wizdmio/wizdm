@@ -2,10 +2,12 @@
 @import "theme";
 
 :host {
-   cursor: pointer;
+  display: block;
+  cursor: pointer;
+  outline: none;
    
-   // Inlcudes the application specific logo typography styles
-   @include mat-typography-level-to-styles($wm-typography, logo);
+  // Inlcudes the application specific logo typography styles
+  @include mat-typography-level-to-styles($wm-typography, logo);
 }
 
 .logo {

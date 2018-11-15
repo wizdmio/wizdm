@@ -6,7 +6,7 @@
   flex-direction: column;
   box-sizing: border-box;
 
-  padding-top: $wm-content-padding;
+  @include wm-padding-top($wm-content-padding);
   
   //& > header {
     margin: 0 $wm-content-margin;

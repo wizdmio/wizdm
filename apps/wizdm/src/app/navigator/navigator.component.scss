@@ -1,32 +1,69 @@
 @import 'variables';
+@import 'theme';
+
 
 :host {
+  display: block;
   position: absolute;
-  top: 0;// top property will be overwrite by the code
-  left: 0;
   width: 100%;
   height: 100%;
-
+  top: 0;// top property will be overwrite by the code
+  left: 0;
+  
   // Same as fxLayout="column" on the host element
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  //display: flex;
+  //flex-direction: column;
+  //box-sizing: border-box;
 
   // Settle a lower general zindex (1)
-  z-index: $wm-zindex-content;
+  z-index: 1;//$wm-zindex-content;
 
   // Rise the header zindex (2) over the content
-  header { z-index: $wm-zindex-control; }
+  //header { z-index: $wm-zindex-control; }
 
+  header { 
+    display: block;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    
+    z-index: 2;
+
+    // Makes sure all the children lays on the same z-index
+    & * { z-index: 2; }
+
+    mat-toolbar {
+
+      background-color: transparent !important;
+
+      mat-toolbar-row {
+        &[compact] { height: 40px; }
+        &[auto] { height: auto; }
+      }
+
+      .background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+    
+        background-color: map-get($wm-theme-background, app-bar);
+        box-shadow: 0 6px 12px rgba(black, 0.125);
+      }
+    }
+  }
+/*
   main {
     position: relative;
-    overflow: hidden;
+    //overflow: hidden;
   
     // Makes sure the menu overlays (2) the content same as the header
-    wm-menu { z-index: $wm-zindex-control;}
+    //wm-menu { z-index: $wm-zindex-control;}
   
     // Makes sure the viewport content overflows
-    wm-viewport { overflow: auto; scroll-behavior: smooth; }
-  }
+    //wm-viewport { overflow: auto; scroll-behavior: smooth; }
+  }*/
 }
 

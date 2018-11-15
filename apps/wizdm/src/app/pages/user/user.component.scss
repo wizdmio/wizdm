@@ -1,5 +1,5 @@
-//@import "variables";
-//@import "theme";
+@import "variables";
+@import "theme";
 
 $wm-user-size: 128px;
 
@@ -8,6 +8,8 @@ $wm-user-size: 128px;
   flex-direction: column;
   box-sizing: border-box;
   padding: 2vh 5vw;
+
+  @include wm-padding-top($wm-content-padding);
 }
 
 .user {

@@ -1,6 +1,5 @@
 export * from './disclaimer/disclaimer.component';
 export * from './icon/icon.component';
-export * from './logo/logo.component';
 export * from './inkbar/inkbar.component';
 export * from './colors/colors';
 export * from './colors/colors.directive';
