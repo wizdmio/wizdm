@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, Scroll } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ObservableMedia } from '@angular/flex-layout';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './navigator.animations';
 
@@ -15,7 +15,7 @@ import { $animations } from './navigator.animations';
   styleUrls: ['./navigator.component.scss'],
   animations: $animations
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
 
   readonly msgs: any = null;
   readonly scrolled$: Observable<boolean>;
@@ -38,6 +38,8 @@ export class NavComponent implements OnInit {
     );
   }
 
+  private sub: Subscription;
+
   ngOnInit() { 
 
     // Sets the app title when defined 
@@ -50,18 +52,22 @@ export class NavComponent implements OnInit {
     }
 
     // Intercepts the NavigationEnd events
-    this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
+    this.sub = this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
       .subscribe(() => {
         // Closes the nav menu at the end of each navigation
         this.menu = false;
       });
 
     // Intercepts non null router scrolling events
-    this.router.events.pipe( filter(e => e instanceof Scroll && !!e.anchor) )
+    this.sub.add( this.router.events.pipe( filter(e => e instanceof Scroll && !!e.anchor) )
       .subscribe( (e: Scroll) => {
         // Scroll to the routed anchor
         this.service.viewport.scrollToAnchor(e.anchor);
-      });
+      }));
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   // Media query
