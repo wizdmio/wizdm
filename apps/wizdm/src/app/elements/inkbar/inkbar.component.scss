@@ -1,10 +1,8 @@
-@import 'theme';
 
 :host {
   display: block;
 
   div {
     position: absolute;
-    background-color: mat-color($wm-primary);
   }
 }

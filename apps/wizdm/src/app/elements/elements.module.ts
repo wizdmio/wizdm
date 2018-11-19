@@ -46,7 +46,8 @@ import { FileSizePipe } from './file/file-size.pipe';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ColorsDirective } from './colors/colors.directive';
 import { LikesComponent } from './likes/likes.component';
-import { RouterInkbarDirective } from './inkbar/router-inkbar.directive';
+import { RouterInkbarComponent } from './router-inkbar/router-inkbar.component';
+import { RouterInkbarDirective } from './router-inkbar/router-inkbar.directive';
 
 const sharedModules = [
   FlexLayoutModule,
@@ -94,6 +95,7 @@ const sharedModules = [
     ColorPickerComponent,
     ColorsDirective,
     LikesComponent,
+    RouterInkbarComponent,
     RouterInkbarDirective
   ],
 
@@ -111,7 +113,9 @@ const sharedModules = [
     FileSizePipe,
     ColorPickerComponent,
     ColorsDirective,
-    LikesComponent
+    LikesComponent,
+    RouterInkbarComponent,
+    RouterInkbarDirective
   ],
 
   providers: [

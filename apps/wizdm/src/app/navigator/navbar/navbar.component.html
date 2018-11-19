@@ -1,56 +1,12 @@
 
-<!--div #linkbar-->
+<wm-router-inkbar color="primary">
     
   <a mat-button *ngFor="let item of menuItems" 
-    routerLinkActive="link-active" 
     [routerLink]="item.link"
     [queryParams]="item.params"
-    [ngClass]="{ 'highlight': item.highlight }">
+    [ngClass]="{ 'highlight': item.highlight }"
+    wmRouterInkbar>
     {{ item.label }}
   </a>
 
-  <!-- INKBAR -->
-  <wm-inkbar [position]="inkbar"></wm-inkbar>      
-<!--/div-->
-
-<!--mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
-
-  <wm-logo></wm-logo>
-
-  <div fxLayout="row" fxLayoutAlign="end center" fxHide.lt-sm>
-    
-    <div #linkbar>
-    
-      <a mat-button *ngFor="let item of menuItems" 
-        routerLinkActive="link-active" 
-        [routerLink]="item.link"
-        [queryParams]="item.params"
-        [ngClass]="{'highlight': item.highlight}">
-        {{item.label}}
-      </a>
-
-      <wm-inkbar [position]="inkbar"></wm-inkbar>      
-    </div>
-
-    <button mat-icon-button routerLink="messages" margin="right" *ngIf="signedIn">
-      <wm-icon icon="mail_outline" matBadge="3"></wm-icon>
-    </button>
-
-    <button mat-icon-button routerLink="profile" *ngIf="userProfile">
-      <wm-avatar [src]="userImage"></wm-avatar>
-    </button>
-    
-  </div>
-  
-  <div fxLayout="row" fxLayoutAlign="end center" fxHide fxShow.lt-sm>
-
-    <button mat-icon-button routerLink="profile" *ngIf="userProfile">
-      <wm-avatar [src]="userImage"></wm-avatar>
-    </button>
-
-    <button mat-icon-button (click)="toggle()">
-      <wm-toggler toggler-style="more_vert" [status]="toggler"></wm-toggler>
-    </button>
-  </div>
-
-</mat-toolbar-->
+</wm-router-inkbar>

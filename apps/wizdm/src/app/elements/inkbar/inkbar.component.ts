@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ThemePalette } from '@angular/material/core'
 import { $animations } from './inkbar.animations';
 
 export interface inkbarPosition {
@@ -8,11 +9,9 @@ export interface inkbarPosition {
 
 @Component({
   selector: 'wm-inkbar',
-  template: `<div [@slide]="trigger"
-                  [style.height.px]="height"
-                  [style.background-color]="color">
-             </div>`,
+  templateUrl: './inkbar.component.html',
   styleUrls: ['./inkbar.component.scss'],
+  //host: {'class': 'wm-inkbar-theme'},
   animations: $animations
 })
 export class InkbarComponent {
@@ -22,7 +21,9 @@ export class InkbarComponent {
   constructor() { }
 
   @Input() height = 2;
-  @Input() color;
+
+  @Input() color: ThemePalette;
+  
   @Input() set position(pos: inkbarPosition) {
     this.pos = { ...this.pos, ...pos };
   }

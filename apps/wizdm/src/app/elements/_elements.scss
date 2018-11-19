@@ -21,6 +21,29 @@ $wm-elements-default: (
   }
 }
 
+@mixin wm-inkbar-theme($theme) {
+
+  $primary: map-get($theme, primary);
+  $accent : map-get($theme, accent);
+  $warn   : map-get($theme, warn);
+
+  wm-inkbar {
+
+    .wm-inkbar-theme {
+      background-color: mat-color($primary);
+
+      &[color="accent"] {
+        background-color: mat-color($accent);
+      }
+
+      &[color="warn"] {
+        background-color: mat-color($warn);
+      }
+    }
+  }
+}
+
+
 @mixin wm-disclaimer-theme($theme) {
 
   $foreground: map-get($theme, foreground);
@@ -38,5 +61,6 @@ $wm-elements-default: (
 
   // Applies the theme to the elements...
   @include wm-toggler-theme($theme);
+  @include wm-inkbar-theme($theme);
   @include wm-disclaimer-theme($theme);
 }
