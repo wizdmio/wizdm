@@ -21,6 +21,9 @@
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
 * Collects navigator's guards, resolver and directives under navigator/utils folder
+* Refactors the toolbar animations once the [animateChild() bug][ac] has been fixed
+
+[ac]: https://github.com/angular/angular/issues/27245
 
 ## Project
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
