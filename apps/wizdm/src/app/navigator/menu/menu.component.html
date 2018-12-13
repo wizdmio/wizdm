@@ -1,5 +1,5 @@
 
-<nav fxLayout="column" fxLayoutAlign="start center">
+<nav fxLayout="column" fxLayoutAlign="start center" [@menu]="toggle" (@menu.done)="menuDone()">
 
   <a mat-button  
     [routerLink]="item.link"

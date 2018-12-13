@@ -1,9 +1,8 @@
-<!--header fxFlex="0 0 auto" [@levitate]="scrolled"-->
 <header fxFlex="0 0 auto">
   <mat-toolbar>
 
     <!-- Background w/ shadow to fade while blending in -->
-    <div class="background" [@blendin]="desktop && !(scrolled$ | async)"></div>
+    <div class="background" [@blendin]="!menu && !(scrolled$ | async)"></div>
 
     <!-- Navigation bar -->
     <mat-toolbar-row fxLayoutAlign="space-between center">
@@ -13,7 +12,7 @@
 
         <!-- Mobile menu toggler -->
         <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
-          <wm-toggler toggler-style="menu" [status]="menu"></wm-toggler>
+          <wm-toggler toggler-style="menu" [status]="toggler"></wm-toggler>
         </button>
 
         <!-- Wizdm logo routing to home -->
@@ -28,7 +27,7 @@
       <div fxLayout="row" fxLayoutAlign="end center" *ngIf="signedIn">
 
         <!-- Action toolbar -->
-        <wm-toolbar  *ngIf="(someActions$ | async)" [buttons]="actionButtons$ | async"></wm-toolbar>
+        <wm-toolbar  *ngIf="someActions$ | async" [buttons]="actionButtons$ | async"></wm-toolbar>
 
         <!-- User profile button -->
         <button mat-icon-button routerLink="profile">
@@ -42,7 +41,7 @@
     <!-- Mobile menu -->
     <mat-toolbar-row auto *ngIf="mobile">
       
-      <wm-menu [menuItems]="mobileMenu" *ngIf="menu"></wm-menu>    
+      <wm-menu [menuItems]="mobileMenu" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
     
     </mat-toolbar-row>
 

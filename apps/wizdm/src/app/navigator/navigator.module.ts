@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { LanguageResolver } from '@wizdm/content';
 //-------
 import { ElementsModule } from '../elements/elements.module';
 import { NavComponent } from './navigator.component';
@@ -14,7 +13,6 @@ import { ErrorsComponent } from './errors/errors.component';
 import { FooterComponent } from './footer/footer.component';
 import { FitViewportDirective } from './viewport/fit-viewport.directive';
 import { ConsentComponent } from './consent/consent.component';
-import { UserLanguageResolver } from './utils/language-resolver.service';
 
 @NgModule({
   imports: [
@@ -34,9 +32,6 @@ import { UserLanguageResolver } from './utils/language-resolver.service';
     ConsentComponent,
     ErrorsComponent,
   ],
-  providers: [
-    // Provide a LanguageResolver based on user language preferences
-    { provide: LanguageResolver, useClass: UserLanguageResolver }
-  ]
+  providers: []
 })
 export class NavigatorModule { }

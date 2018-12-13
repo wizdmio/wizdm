@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
-import { ContentResolver, LanguageOption } from '@wizdm/content';
+import { LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
-import { CanPageDeactivate, ToolbarService } from '../../navigator';
+import { CanPageDeactivate, ToolbarService, ContentResolver } from '../../navigator';
 import { PopupService } from '../../elements';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 

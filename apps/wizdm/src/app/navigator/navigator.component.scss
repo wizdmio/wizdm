@@ -28,9 +28,8 @@
     top: 0;
     left: 0;
     
-    z-index: 2;
-
     // Makes sure all the children lays on the same z-index
+    z-index: 2;
     & * { z-index: 2; }
 
     mat-toolbar {

@@ -14,7 +14,7 @@ export let $animations = [
           animate($timing),
           query('@*', animateChild(), { optional: true })
         ]))
-      ]),
+      ])/*,
 
   trigger('levitate', [
       state('true',  style({ boxShadow: '0 0 6px rgba(0,0,0,0.5)' })),
@@ -36,5 +36,5 @@ export let $animations = [
         animate($timing, style({ height: 0 }))
     ])
 
-  ])
+  ])*/
 ];

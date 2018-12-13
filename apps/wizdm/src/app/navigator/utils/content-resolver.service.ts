@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot, Router, NavigationEnd } from '@angular/router';
-import { ContentManager } from '../content-manager/content-manager.service';
-import { LanguageResolver } from '../language-resolver/language-resolver.service';
+import { ContentManager } from '@wizdm/content';
+import { UserProfile } from '@wizdm/connect';
 import { Observable, of } from 'rxjs';
 import { switchMap, filter, first } from 'rxjs/operators';
 
@@ -10,9 +10,9 @@ import { switchMap, filter, first } from 'rxjs/operators';
 })
 export class ContentResolver implements Resolve<any> {
 
-  constructor(readonly content  : ContentManager,
-              private  language : LanguageResolver,
-              private  router   : Router) { }
+  constructor(readonly content : ContentManager,
+              readonly user    : UserProfile,
+              private  router  : Router) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any {
 
@@ -28,24 +28,28 @@ export class ContentResolver implements Resolve<any> {
       return null;
     }
 
-    // Resolve the language according to the current implementation of resolveLanguage()
-    // Override the default implementation according to your appliaction logic
-    const language = this.language.resolveLanguage();
-    const resolver = typeof language === 'string' ? of(language) : language;
-    return resolver.pipe( switchMap( language => {
-      
-      // Switch to a different language when requested
-      if(!!language && language !== lang) {
-        
-        console.log('Resolving to language: ', language);
+    // Implements a basic language resolver returning the user preferred language
+    // captured from the user profile stored in the database. Since this observable
+    // pipes from the AuthService this resolver grants the page won't show up before
+    // the user authentication has been checked preventing page flickering 
+    return this.user.asObservable().pipe( 
+      first(), 
+      switchMap( profile => {
 
-        this.router.navigate([language]);
-        return of(null);
-      }
+        const language = !!profile ? profile.lang : lang;
 
-      // Load the localized content in the requested language
-      return this.content.use(lang);
-    }));
+          // Switch to a different language when requested
+        if(language !== lang) {
+          
+          console.log('Resolving to language: ', language);
+
+          this.router.navigate([language]);
+          return of(null);
+        }
+
+        // Load the localized content in the requested language
+        return this.content.use(lang);
+      }));
   }
 
   public detectLanguage(): string {

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { PrismService } from '../prism-wrapper/prism.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+
+import * as prism from 'prismjs';
 
 @Component({
   selector: 'code[wm-highlight]',
@@ -17,7 +18,7 @@ export class CodeHighlighterComponent implements OnInit, OnDestroy {
   private sub$: Subscription;
   public tokens: any[];
 
-  constructor(private prism: PrismService) { }
+  constructor() { }
 
   @Input('language') language: string;
   @Input('wm-highlight') set highlight(source: string) {
@@ -38,12 +39,21 @@ export class CodeHighlighterComponent implements OnInit, OnDestroy {
     this.sub$ = this.source$.pipe( debounceTime(500) )
       .subscribe( source => {
         // Tokenize the source code using prism (wrapped into a service for DI)
-        this.tokens = source ? this.prism.tokenize(source, this.language) : [];
+        this.tokens = source ? this.tokenize(source, this.language) : [];
         console.log(this.tokens);
       });
   }
 
   ngOnDestroy() {
     this.sub$.unsubscribe();
+  }
+
+  private tokenize(source: string, language: string): any[] {
+
+    // Select the most appropriate grammar according to the language
+    const grammar = language ? prism.languages[language] : undefined;
+
+    // Tokenize the source code. If no loanguage is defined, the full block will be rendered as it is
+    return source ? grammar ? prism.tokenize(source, grammar) : [source] : [];
   }
 }

@@ -55,7 +55,7 @@ export class NavComponent implements OnInit, OnDestroy {
     this.sub = this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
       .subscribe(() => {
         // Closes the nav menu at the end of each navigation
-        this.menu = false;
+        this.toggler = false;
       });
 
     // Intercepts non null router scrolling events
@@ -80,10 +80,15 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   // Menu toggle
+  public toggler = false;
   public menu = false;
 
   public toggleMenu() {
-    this.menu = !this.menu;
+    this.toggler = !this.toggler;
+  }
+
+  done() {
+    console.log('menu done');
   }
 
   //-- Signin status -------------

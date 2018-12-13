@@ -10,9 +10,10 @@
   width: 100%;
   height: auto;
   box-sizing: border-box;
+  overflow: hidden;
 
   //background-color: map-get($wm-theme-background, app-bar);
-  //box-shadow: 0 0 6px rgba(black, 0.5);
+  //box-shadow: 0 6px 12px rgba(black, 0.125);
 
   //nav { margin-bottom: $wm-menu-margin;}
 }

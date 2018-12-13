@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
-import { ContentResolver } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
-import { NavigatorService } from '../../navigator';
+import { NavigatorService, ContentResolver } from '../../navigator';
 import { $animations } from './login-animations';
 import { take, tap } from 'rxjs/operators';
 

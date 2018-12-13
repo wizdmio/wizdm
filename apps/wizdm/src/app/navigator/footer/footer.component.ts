@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ContentResolver, LanguageOption } from '@wizdm/content';
+import { LanguageOption } from '@wizdm/content';
+import { ContentResolver } from '../utils/content-resolver.service';
 
 export interface LanguageData {
 

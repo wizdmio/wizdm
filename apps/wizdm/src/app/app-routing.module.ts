@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ContentResolver } from '@wizdm/content';
+//import { ContentResolver } from '@wizdm/content';
 
 import { NavComponent } from './navigator/navigator.component';
+import { ContentResolver } from './navigator/utils/content-resolver.service';
 import { AuthGuardService } from './navigator/utils/auth-guard.service';
 import { PageGuardService } from './navigator/utils/page-guard.service';
 import { AboutComponent } from './pages/about/about.component';

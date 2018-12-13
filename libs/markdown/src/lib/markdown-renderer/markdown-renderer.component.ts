@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { RemarkService } from '../remark-wrapper/remark.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+
+import * as reparse from './reparse.module';
 
 export type displayType = 'document' | 'toc' | 'footnotes';
 
@@ -23,7 +24,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
   private notes: string[] = [];
   public  root: any;
 
-  constructor(private remark: RemarkService) { }
+  constructor() { }
 
   @Input() display: displayType = "document";
   @Input() delay: 500;
@@ -45,7 +46,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     this.sub$ = this.data$.pipe( debounceTime( this.delay ) )
       .subscribe( data => {
         // Builds the syntax tree or source it from a source component
-        this.root = data ? this.remark.parse(data) : {};
+        this.root = data ? reparse.parse(data) : {};
         //console.log(`Markdown (display=${this.display}): `, this.root);
 
         // Notifies the completion of data parsing the next scheduler round

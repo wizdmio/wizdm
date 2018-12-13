@@ -5,8 +5,8 @@
   if(!!window && !window.process) {
     window.process = {
       env: { DEBUG: undefined },
-      platform: "",
-      cwd: function(){}
+      cwd: function(){ return '';},
+      platform: ''
     }
   }
     
