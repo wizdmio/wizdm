@@ -31,6 +31,8 @@
 * Move out elements creating libs/elements
 * Remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule
 
-# libs/connect
+# libs/content
+* Move ContentResolver out of the lib
 
+# libs/connect
 * Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
