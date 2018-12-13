@@ -2,7 +2,7 @@
 
 ## Styling
 * Reconsider to implement an homepage with a banner and a short description
-* Rearrange the navbar/toggler/logo to the left like (angular.io)[https://angular.io/] keeping the profile button on the right
+* Rearrange the navbar/toggler/logo to the left like [angular.io](https://angular.io/) keeping the profile button on the right
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
 * Get inspired from [fanvestory](https://fanvestory.com) and [dovetail](https://dovetailapp.com/)
 
@@ -21,9 +21,7 @@
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
 * Collects navigator's guards, resolver and directives under navigator/utils folder
-* Refactors the toolbar animations once the [animateChild() bug][ac] has been fixed
-
-[ac]: https://github.com/angular/angular/issues/27245
+* Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
 
 ## Project
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
