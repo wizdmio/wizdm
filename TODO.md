@@ -40,4 +40,4 @@
 
 # libs/markdown
 * ~~Gets rid of wrapper sevices by means of an intermediate JS module. See: https://stackblitz.com/edit/wizdm-markdown?file=src%2Fapp%2Fmarkdown%2Freparse-module.js~~
-* Investigate how to embed the process shim (node)
+* ~~Investigate how to embed the process shim (node)~~
