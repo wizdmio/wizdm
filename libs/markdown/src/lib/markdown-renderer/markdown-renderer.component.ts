@@ -46,7 +46,7 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
     this.sub$ = this.data$.pipe( debounceTime( this.delay ) )
       .subscribe( data => {
         // Builds the syntax tree or source it from a source component
-        this.root = data ? reparse.parse(data) : {};
+        this.root = data ? this.parse(data) : {};
         //console.log(`Markdown (display=${this.display}): `, this.root);
 
         // Notifies the completion of data parsing the next scheduler round
@@ -57,6 +57,10 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub$.unsubscribe();
+  }
+
+  private parse(data: string): any {
+    return reparse.parse(data);
   }
 
   private parseText(children: any[]): string {
