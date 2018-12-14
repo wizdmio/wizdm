@@ -33,10 +33,10 @@
 * Remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule
 
 # libs/content
-* Move ContentResolver out of the lib
+* ~~Move ContentResolver out of the lib~~
 
 # libs/connect
 * Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
 
 # libs/markdown
-* Gets rid of wrapper sevices by means of an intermediate JS module. See: https://stackblitz.com/edit/wizdm-markdown?file=src%2Fapp%2Fmarkdown%2Freparse-module.js
+* ~~Gets rid of wrapper sevices by means of an intermediate JS module. See: https://stackblitz.com/edit/wizdm-markdown?file=src%2Fapp%2Fmarkdown%2Freparse-module.js~~
