@@ -77,5 +77,5 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
  /** Implement a minimal 'process' to support node module 'path' used by remark **/
- import 'libs/markdown/src/utils/process-shim';
- 
+ // import 'libs/markdown/src/utils/process-shim';
+ // Shim is now embedded in markdown module
