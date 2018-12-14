@@ -2,12 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'wm-icon',
-  template: '<mat-icon [color]="color"\
-                       [inline]="inline"\
-                       [fontSet]="fontSet"\
-                       [fontIcon]="fontIcon">\
-            {{matIcon}}\
-            </mat-icon>',
+  template: `<mat-icon [color]="color"
+                       [inline]="inline"
+                       [fontSet]="fontSet"
+                       [fontIcon]="fontIcon">
+            {{matIcon}}
+            </mat-icon>`,
   styleUrls: ['./icon.component.scss'],
   
 })
