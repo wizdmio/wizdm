@@ -1,20 +1,33 @@
 import { trigger, state, animate, style, transition, query, group, animateChild } from '@angular/animations';
 
-const $timing = '350ms ease-out';
+const $timing1 = '350ms ease-out';
+const $timing2 = '200ms ease-out';
 
 export let $animations = [
 
     trigger('blendin', [
         state('false', style('*')),
         state('true', style({
-          height: '120%', 
-          opacity: 0 
+            height: '120%', 
+            opacity: 0 
         })),
         transition('false <=> true', group([
-          animate($timing),
-          query('@*', animateChild(), { optional: true })
+            animate('350ms ease-out'),
+            query('@*', animateChild(), { optional: true })
         ]))
-      ])/*,
+    ]),
+
+    trigger('flip', [
+        transition('* => *', [
+            query(':enter', style({ transform: 'rotateY(-90deg)' })),
+            query(':leave', [
+                animate('200ms ease-out', style({ transform: 'rotateY(90deg)' }))
+            ], { optional: true }),
+            query(':enter', [
+                animate('200ms ease-out', style({ transform: 'rotateY(0)' }))
+            ], { optional: true })
+        ])
+    ])/*,
 
   trigger('levitate', [
       state('true',  style({ boxShadow: '0 0 6px rgba(0,0,0,0.5)' })),

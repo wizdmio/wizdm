@@ -1,0 +1,10 @@
+
+<span *ngIf="!flip">
+  <ng-content select="[front]">
+  </ng-content>
+</span>
+
+<span *ngIf="flip">
+  <ng-content select="[back]">
+  </ng-content>
+</span>

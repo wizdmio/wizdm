@@ -6,9 +6,7 @@
     "toolbar": {
         "public": [
             { "label": "How it works", "link": "about" },
-            { "label": "Explore", "link": "explore" },
-            { "label": "Sign-in", "link": "login" },
-            { "label": "Get started", "link": "apply", "highlight": true }
+            { "label": "Explore", "link": "explore" }
         ],
         "private": [
             { "label": "Explore", "link": "explore" },
@@ -21,8 +19,7 @@
     "menu": {
         "public": [
             { "label": "How it works", "link": "about" },
-            { "label": "Explore", "link": "explore" },
-            { "label": "Sign-in", "link": "login" }
+            { "label": "Explore", "link": "explore" }
         ],
         "private": [
             { "label": "Explore", "link": "explore" },

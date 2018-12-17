@@ -24,14 +24,22 @@
       </nav>
 
       <!-- Right pane -->
-      <div fxLayout="row" fxLayoutAlign="end center" *ngIf="signedIn">
+      <div fxLayout="row" fxLayoutAlign="end center">
 
         <!-- Action toolbar -->
         <wm-toolbar  *ngIf="someActions$ | async" [buttons]="actionButtons$ | async"></wm-toolbar>
 
-        <!-- User profile button -->
-        <button mat-icon-button routerLink="profile">
-          <wm-avatar [src]="userImage"></wm-avatar>
+        <!-- Sign-in / User profile button -->
+        <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
+
+          <wm-flip [flip]="signedIn">
+
+            <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
+        
+            <wm-avatar back [src]="userImage"></wm-avatar>
+        
+          </wm-flip>
+
         </button>
 
       </div>

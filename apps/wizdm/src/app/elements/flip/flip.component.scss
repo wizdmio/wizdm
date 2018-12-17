@@ -1,0 +1,21 @@
+
+$wm-flip-size: 40px !default;
+
+:host {
+  position: relative;
+  display: inline-block;
+  width: $wm-flip-size;
+  height: $wm-flip-size;
+  line-height: $wm-flip-size;
+  box-sizing: border-box;
+
+  & > span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: $wm-flip-size;
+    height: $wm-flip-size;
+    line-height: $wm-flip-size;
+    box-sizing: border-box;
+  }
+}
