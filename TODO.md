@@ -21,8 +21,9 @@
   * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
-* Collects navigator's guards, resolver and directives under navigator/utils folder
+* ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
+* Improve the top bar avatar to support login/logout states. @see: https://wizdm-login-flip.stackblitz.io
 
 ## Project
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
