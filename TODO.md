@@ -1,6 +1,7 @@
 # **apps/wizdm**
 
 ## Styling
+* Updates all the page selectors adding a "-page" suffix such as `wm-login-page` and "-dlg" suffix for popup dialogs suc as `wm-user-info-dlg`.
 * Reconsider to implement an homepage with a banner and a short description
 * Rearrange the navbar/toggler/logo to the left like [angular.io](https://angular.io/) keeping the profile button on the right
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
