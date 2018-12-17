@@ -1,6 +1,7 @@
 # **apps/wizdm**
 
 ## Styling
+* Updates all the page selectors adding a "-page" suffix such as `wm-login-page` and "-dlg" suffix for popup dialogs suc as `wm-user-info-dlg`.
 * Reconsider to implement an homepage with a banner and a short description
 * Rearrange the navbar/toggler/logo to the left like [angular.io](https://angular.io/) keeping the profile button on the right
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
@@ -20,8 +21,9 @@
   * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
-* Collects navigator's guards, resolver and directives under navigator/utils folder
+* ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
+* Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io
 
 ## Project
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
