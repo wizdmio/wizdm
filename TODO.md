@@ -26,6 +26,7 @@
 * ~~Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io~~
 
 ## Elements
+* Move all the relevant material style tweaks from app/_theme.scss to _elements.scss 
 * ~~Adds a wm-flip element to implement a flipping icon for buttons~~
 * Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default
 * Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`) 
