@@ -1,21 +1,22 @@
 @import "variables";
 @import "theme";
 
+$wm-logo-size: 48px !default;
+
 :host {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
   cursor: pointer;
   outline: none;
-   
+
   // Inlcudes the application specific logo typography styles
   @include mat-typography-level-to-styles($wm-typography, logo);
-}
 
-.logo {
-  width: $wm-logo-size;
-  height: $wm-logo-size;
-}
-
-span {
-  line-height: $wm-logo-size;
-  vertical-align: middle;
+  svg {
+    width: $wm-logo-size;
+    height: $wm-logo-size;
+  }
 }
