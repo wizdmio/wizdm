@@ -24,6 +24,7 @@
 * ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
 * ~~Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io~~
+* Animate the menu and toolbar links when switching between private/public versions
 
 ## Elements
 * Move all the relevant material style tweaks from app/_theme.scss to _elements.scss 
