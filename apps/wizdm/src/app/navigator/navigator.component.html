@@ -16,7 +16,7 @@
         </button>
 
         <!-- Wizdm logo routing to home -->
-        <wm-logo [caption]="msgs.logo" routerLink="."></wm-logo>  
+        <wm-logo [caption]="desktop ? msgs.logo : ''" routerLink="."></wm-logo>  
     
         <!-- Desktop navigation links -->
         <wm-navbar [menuItems]="desktopMenu" *ngIf="desktop"></wm-navbar>
