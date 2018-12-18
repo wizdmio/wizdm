@@ -1,4 +1,5 @@
 <header fxFlex="0 0 auto">
+
   <mat-toolbar>
 
     <!-- Background w/ shadow to fade while blending in -->
@@ -53,15 +54,11 @@
     
     </mat-toolbar-row>
 
-    <!-- Error message displayer -->
-    <mat-toolbar-row auto>
-
-      <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
-  
-    </mat-toolbar-row>
-
   </mat-toolbar>
 
+  <!-- Error message displayer -->
+  <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
+  
 </header>
 
 <!-- Viewport container -->

@@ -1,12 +1,17 @@
 @import 'variables';
 @import 'theme';
 
+$wm-error-padding: 16px !default;
+
 :host {
   display: block;
+
+  padding: 0 $wm-error-padding;
+
   // Uses the "warning" color palette
   background-color: mat-color($wm-warn, 50);
   color: mat-color($wm-warn, 600);
-
+  
   .error {
     text-align: center;
   }

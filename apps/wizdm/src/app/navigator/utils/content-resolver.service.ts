@@ -85,14 +85,14 @@ export class ContentResolver implements Resolve<any> {
         });
     }
 
-    const re = new RegExp(`^\/${this.content.language}\/+`);
+    const re = new RegExp(`^\/${this.content.language}`);
 
     // Computes the target path....
     const target = url ? 
       // ...to the requested url when specified
       `/${lang}/${url}` : 
       // ...or to the exact same page as the current one
-      this.router.url.replace(re, `/${lang}/`);
+      this.router.url.replace(re, `/${lang}`);
 
     // Navigate to the target page (switching language if necessary)
     this.router.navigateByUrl(target);

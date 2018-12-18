@@ -6,6 +6,7 @@ import { NavComponent } from './navigator/navigator.component';
 import { ContentResolver } from './navigator/utils/content-resolver.service';
 import { AuthGuardService } from './navigator/utils/auth-guard.service';
 import { PageGuardService } from './navigator/utils/page-guard.service';
+import { HomeComponent } from './pages/home/home.component';
 import { AboutComponent } from './pages/about/about.component';
 import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -39,15 +40,15 @@ const routes: Routes = [
 
     // Localized pages
     children: [
-    
-      { path: '', redirectTo: 'explore', pathMatch: 'full' },
-      { path: 'home', redirectTo: 'explore', pathMatch: 'full' },
-      { path: 'projects', redirectTo: 'explore', pathMatch: 'full' },
 
+      { path: '', component: HomeComponent },
       { path: 'explore', component: ExploreComponent },
       { path: 'about', component: AboutComponent },
       { path: 'login', component: LoginComponent },
       { path: 'terms', component: TermsPrivacyComponent },
+
+      { path: 'home', redirectTo: '', pathMatch: 'full' },
+      { path: 'projects', redirectTo: 'explore', pathMatch: 'full' },
 
       // Guarded pages requiring authentication
       { path: '', 

@@ -14,7 +14,6 @@ import { UserItemComponent } from './user/user-item/user-item.component';
 import { ApplyComponent } from './apply/apply.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProjectComponent } from './project/project.component';
-import { HeaderComponent as ProjectHeader } from './project/header/header.component';
 import { CrystalEditComponent as ProjectEditor } from './project/crystal-edit/crystal-edit.component';
 import { ExploreComponent } from './explore/explore.component';
 import { ExploreItemComponent } from './explore/item/item.component';
@@ -27,6 +26,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { UploadsComponent } from './uploads/uploads.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserInfoDirective } from './user-info/user-info.directive';
+import { HomeComponent } from './home/home.component';
 
 
 
@@ -52,14 +52,14 @@ import { UserInfoDirective } from './user-info/user-info.directive';
     ExploreItemComponent,
     DashboardComponent,
     ProjectComponent,
-    ProjectHeader,
     ProjectEditor,
     UploadComponent,
     UploadsComponent,
     MessagesComponent,
     MessageComponent,
     TermsPrivacyComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    HomeComponent
   ],
 
   providers: [],

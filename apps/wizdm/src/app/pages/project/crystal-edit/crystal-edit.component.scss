@@ -1,8 +1,9 @@
 @import "variables";
 @import "theme";
 
-//$wm-toolbar-end: 80px;
 $wm-line-height: 24px;
+$wm-top-desktop: 64px !default;
+$wm-top-mobile:  56px !default;
 
 :host {
   display: block;
@@ -10,14 +11,12 @@ $wm-line-height: 24px;
   z-index: $wm-zindex-edit;
 
   form {
-    position: absolute;//fixed;
-    top: 0;//$wm-toolbar-end;
+    position: fixed;
+    top: $wm-top-desktop;
     left: 0;
-    //right: 0;
-    //bottom: 0;
     width: 100%;
     height: 100%;
-    //box-sizing: border-box;
+    box-sizing: border-box;
     border: none;
   
     background-color: map-get($wm-theme-background, editor);

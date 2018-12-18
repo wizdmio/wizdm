@@ -87,8 +87,14 @@ export class NavComponent implements OnInit, OnDestroy {
     this.toggler = !this.toggler;
   }
 
-  done() {
-    console.log('menu done');
+  // -- Error Handling -----------
+  
+  public get error() {
+    return this.service.error;
+  }
+
+  public clearError() {
+    this.service.clearError();
   }
 
   //-- Signin status -------------

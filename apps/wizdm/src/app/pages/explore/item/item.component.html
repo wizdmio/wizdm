@@ -21,8 +21,10 @@
       <!-- Author on the left -->
       <div fxLayout="row" fxLayoutAlign="start center">
         <!-- User picture with info -->
-        <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo"></wm-avatar>
-        <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
+        <button mat-icon-button [wmUserInfoTrigger]="userInfo">
+          <wm-avatar [src]="owner.img"></wm-avatar>
+          <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
+        </button>
         
         <div fxLayout="column">
           <span>{{ owner.name || msgs.unnamed }}</span>

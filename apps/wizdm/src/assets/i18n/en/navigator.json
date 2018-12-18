@@ -5,14 +5,13 @@
 
     "toolbar": {
         "public": [
-            { "label": "How it works", "link": "about" },
-            { "label": "Explore", "link": "explore" }
+            { "label": "Explore", "link": "explore" },
+            { "label": "Manifesto", "link": "about" }
         ],
         "private": [
             { "label": "Explore", "link": "explore" },
             { "label": "Board", "link": "messages" },
-            { "label": "Apply", "link": "apply"  },
-            { "label": "Upload", "link": "upload" }
+            { "label": "Apply", "link": "apply"  }
         ]
     },
 
