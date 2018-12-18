@@ -7,7 +7,7 @@ export let $animations = [
   trigger('flip', [
     transition('* => *', [
 
-      query(':enter', style({ transform: 'rotateY(-90deg)' })),
+      query(':enter', style({ transform: 'rotateY(-90deg)' }), { optional: true }),
       
       query(':leave', [
         animate($timing, style({ transform: 'rotateY(90deg)' }))
