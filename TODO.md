@@ -25,6 +25,10 @@
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
 * Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io
 
+## Elements
+* ~~Adds a wm-flip element to implement a flipping icon for buttons~~
+* Change the default size of wm-icon / wm-avatar to 100%, so, to fit within the container by default
+
 ## Project
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
 * Consider to add a project avatar (using the user uploader?)
