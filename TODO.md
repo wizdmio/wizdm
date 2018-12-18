@@ -28,6 +28,7 @@
 ## Elements
 * ~~Adds a wm-flip element to implement a flipping icon for buttons~~
 * Change the default size of wm-icon / wm-avatar to 100%, so, to fit within the container by default
+* Improve wm-avatar to always display the svg while loading the image
 
 ## Project
 * Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
