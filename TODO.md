@@ -23,7 +23,7 @@
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
 * ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
-* Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io
+* ~~Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io~~
 
 ## Elements
 * ~~Adds a wm-flip element to implement a flipping icon for buttons~~
