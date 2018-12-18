@@ -35,12 +35,12 @@ export class RouterInkbarComponent implements AfterViewInit, AfterContentInit, O
         filter((s: RouterEvent) => s instanceof NavigationEnd), 
         // Delays the action on the next scheduler round
         delay(0),
-      ).subscribe( () =>  this.updateInkbar() );
+      ).subscribe( () =>  this.update() );
   }
 
   ngAfterViewInit() {
     // Draws the inkbar at start-up after view initialization
-    setTimeout( () => this.updateInkbar() );
+    setTimeout( () => this.update() );
   }
 
   ngOnDestroy() {
@@ -51,7 +51,7 @@ export class RouterInkbarComponent implements AfterViewInit, AfterContentInit, O
   public inkbar: inkbarPosition = { left: 0, width: 0 };
 
   @HostListener('window:resize') 
-  private updateInkbar() {
+  public update() {
 
     // Search for the active link
     const activeLink = this.links.find( link => link.isActive );
@@ -60,4 +60,7 @@ export class RouterInkbarComponent implements AfterViewInit, AfterContentInit, O
     this.inkbar = !!activeLink ? activeLink.inkbarPosition : { width: 0 };
   }
 
+  public clear() {
+    this.inkbar = { width: 0 };
+  } 
 }
