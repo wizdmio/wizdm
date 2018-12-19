@@ -17,8 +17,13 @@ top: $wm-content-top-desktop;
 
   form {
     position: fixed;
+    
     top: $wm-content-top-desktop;
-    @media ($mat-xsmall) { top: $wm-content-top-mobile; }
+
+    @media ($mat-xsmall) { 
+      top: $wm-content-top-mobile; 
+    }
+    
     left: 0;
     width: 100%;
     height: 100%;
