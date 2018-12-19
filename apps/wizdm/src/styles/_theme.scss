@@ -184,7 +184,7 @@ $wm-theme-background: map-get($wm-theme, background);
     // Applies material theme general colors
     @extend .mat-app-background;
     
-    // Applies a smooth scroll behaviour whenever supported
-    scroll-behavior: smooth;
+    // Applies a smooth scroll behaviour to all elements whenever supported
+    * { scroll-behavior: smooth; }
   }
 }
