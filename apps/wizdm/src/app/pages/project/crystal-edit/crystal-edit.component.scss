@@ -2,8 +2,13 @@
 @import "theme";
 
 $wm-line-height: 24px;
-$wm-top-desktop: 64px !default;
-$wm-top-mobile:  56px !default;
+
+/*
+top: $wm-content-top-desktop;
+@media ($mat-xsmall) {
+  top: $wm-content-top-mobile;
+}
+*/
 
 :host {
   display: block;
@@ -12,7 +17,8 @@ $wm-top-mobile:  56px !default;
 
   form {
     position: fixed;
-    top: $wm-top-desktop;
+    top: $wm-content-top-desktop;
+    @media ($mat-xsmall) { top: $wm-content-top-mobile; }
     left: 0;
     width: 100%;
     height: 100%;
