@@ -37,4 +37,4 @@
 	  .use(subsup)
 	  .freeze()
   
-}(typeof self !== "undefined" && self || typeof window !== "undefined" && window || this.content || this));
+}(window));
