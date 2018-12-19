@@ -183,5 +183,8 @@ $wm-theme-background: map-get($wm-theme, background);
     @extend .mat-typography;
     // Applies material theme general colors
     @extend .mat-app-background;
+    
+    // Applies a smooth scroll behaviour whenever supported
+    scroll-behavior: smooth;
   }
 }
