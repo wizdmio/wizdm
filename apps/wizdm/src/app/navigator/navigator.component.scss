@@ -47,6 +47,8 @@
         height: 100%;
         left: 0;
         top: 0;
+        
+        pointer-events: none;
     
         background-color: map-get($wm-theme-background, app-bar);
         box-shadow: 0 6px 12px rgba(black, 0.125);
