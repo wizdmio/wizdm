@@ -1,0 +1,13 @@
+
+<table [id]="elementId(table)">
+  <thead>
+    <tr [id]="elementId(head)">
+      <th *ngFor="let cell of updateTree(head)" [wm-editable]="cell"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of body" [id]="elementId(row)">
+      <td *ngFor="let cell of updateTree(row)" [wm-editable]="cell"></td>
+    </tr>
+  </tbody>
+</table>

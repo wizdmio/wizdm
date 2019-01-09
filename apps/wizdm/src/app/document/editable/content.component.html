@@ -1,0 +1,44 @@
+
+<!-- Loops on children nodes -->
+<ng-container *ngFor="let node of updateTree(root)">
+
+  <ng-container [ngSwitch]="node.type">
+
+    <!-- Emphasis -->
+    <em *ngSwitchCase="'emphasis'" [id]="elementId(node)" [wm-content]="node"></em>
+
+    <!-- Strong -->
+    <strong *ngSwitchCase="'strong'" [id]="elementId(node)" [wm-content]="node"></strong>
+
+    <!-- Delete -->
+    <del *ngSwitchCase="'delete'" [id]="elementId(node)" [wm-content]="node"></del>
+
+    <!-- Link -->
+    <a *ngSwitchCase="'link'" [id]="elementId(node)" [routerLink]="node.url" [wm-content]="node"></a>
+
+    <!-- Sub-script -->
+    <sub *ngSwitchCase="'sub'" [id]="elementId(node)" [wm-content]="node"></sub>
+
+    <!-- Super-script -->
+    <sup *ngSwitchCase="'sup'" [id]="elementId(node)" [wm-content]="node"></sup>
+
+    <!-- Undelined text -->
+    <u *ngSwitchCase="'underline'" [id]="elementId(node)" [wm-content]="node"></u>
+
+    <!-- Inline Code -->
+    <!--code *ngSwitchCase="'inlineCode'" [id]="elementId(node)" [wm-content]="node"></code-->
+
+    <!-- Plain text -->
+    <span *ngSwitchCase="'text'" [id]="elementId(node)">{{ node.value || '\u200B' }}</span>
+
+    <!-- Line break -->
+    <!--br *ngSwitchCase="'break'" [id]="elementId(node)" /-->
+
+    <!-- Recurs to next level -->
+    <!--ng-container *ngSwitchDefault [wm-content]="node"></ng-container-->
+
+  </ng-container>
+
+</ng-container>
+
+  

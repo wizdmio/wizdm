@@ -1,0 +1,22 @@
+
+:host {
+  outline: none;
+  & * { outline: none };
+
+  u {
+    text-decoration: underline;
+  }
+
+  span { 
+
+    white-space: pre;
+
+  //&:empty{ content: ' ';}
+  /*  
+    &::after {
+      display: inline-block;
+      box-sizing: border-box;
+      content: ' ';
+    }*/
+  }
+}

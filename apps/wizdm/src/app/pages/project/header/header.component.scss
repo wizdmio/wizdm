@@ -1,0 +1,20 @@
+@import "variables";
+@import "theme";
+
+$wm-bar-height: 60px;
+
+:host {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  min-height: $wm-bar-height;
+  box-sizing: border-box;
+
+  wm-avatar {
+    margin: 0 10px;
+  }
+}

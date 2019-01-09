@@ -1,0 +1,10 @@
+
+<ng-content></ng-content>
+
+<ng-container *ngFor="let node of headings">
+
+  <span [attr.toc]="node.level" routerLink="." [fragment]="elementId(node)">
+    {{ stringify(node.children) }}
+  </span>
+
+</ng-container>

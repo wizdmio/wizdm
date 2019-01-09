@@ -1,8 +1,7 @@
 
-<!--mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar-->
 
-<!-- Hidden cover picture loader -->
-<wm-uploads #uploads></wm-uploads>
+<!-- Project header -->
+<!--wm-project-header [project]="project"></wm-project-header-->
 
 <!-- Document body -->
 <div fxLayout="row" fxLayoutAlign="space-between strech">
@@ -10,35 +9,20 @@
   <div fxFlex="1 1 auto">
 
     <!-- Renders the table of contents on top on small screens -->
-    <wm-markdown class="table-of-contents" display="toc" [data]="document" (navigate)="onTocNavigate($event)" fxHide fxShow.lt-sm>
+    <wm-document-toc class="table-of-contents" [source]="document" fxHide fxShow.lt-sm>
       <h2>{{ msgs.tableOfContents }}</h2>
-    </wm-markdown>
+    </wm-document-toc>
 
     <!-- Renders the documetn body -->
-    <wm-markdown [data]="document" (rendered)="onMarkdownDone()">
-    </wm-markdown>
+    <wm-document [source]="document"></wm-document>
   
-    <!-- Renders the footnotes at the end -->
-    <wm-markdown class="footnotes" display="footnotes" [data]="document">
-      <h4>{{ msgs.footnotes }}</h4>
-    </wm-markdown>
-
   </div>
 
   <!-- Renders the table of contents by side on big screens -->
   <div fxFlex="0 0 auto" fxHide.lt-sm>
-    <wm-markdown class="table-of-contents sticky" display="toc" [data]="document" (navigate)="onTocNavigate($event)">
+    <wm-document-toc class="table-of-contents sticky" [source]="document">
       <h3>{{ msgs.tableOfContents }}</h3>
-    </wm-markdown>
+    </wm-document-toc>
   </div>
 
-  <!-- Displays the crystal edit overlay when in editMode -->
-  <wm-crystal-edit *ngIf="editMode"
-    [(value)]="document" 
-    [save]="saved" 
-    (scroll)="onEditScroll($event)"
-    (done)="leaveEditMode()"
-    wmFitToViewport>
-  </wm-crystal-edit>
-  
 </div>

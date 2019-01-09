@@ -1,0 +1,35 @@
+
+<!-- Project name on the cover (only if cover image is defined) -->
+<div fxLayout="column" fxLayoutAlign="center center" class="content" *ngIf="project?.data.cover">
+  <h1>{{ project.data.name }}</h1>
+</div>
+
+<!-- Wait fot the project before displaing the content -->
+<div fxLayout="column" fxLayoutAlign="end center" class="content" *ngIf="project?.owner$ | async as owner">
+
+  <!-- bottom bar -->
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="wide">
+    
+    <!-- Author on the left -->
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <!-- User picture with info -->
+      <wm-avatar [src]="owner.img" [wmUserInfoTrigger]="userInfo"></wm-avatar>
+      <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
+      
+      <div fxLayout="column">
+        <span>{{ owner.name || msgs.unnamed }}
+          <!-- Project name to be shown in case the image cover is not defined -->
+          <ng-container *ngIf="!project.cover">&nbsp;-&nbsp;{{ project.data.name }}</ng-container>
+        </span>
+        <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
+      </div>
+
+    </div>
+
+    <!-- Likes on the right -->
+    <wm-likes [readonly]="project.isMine"
+              [counter]="project.likes.counter$ | async"
+              (changeFavorite)="project.likes.update($event ? 1 : -1)"></wm-likes>
+  </div>
+
+</div>

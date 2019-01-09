@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MarkdownModule } from '@wizdm/markdown';
 //--------
 import { ElementsModule } from '../elements/elements.module';
+import { DocumentModule } from '../document/document.module';
 import { HandlerComponent } from './handler/handler.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -14,7 +15,7 @@ import { UserItemComponent } from './user/user-item/user-item.component';
 import { ApplyComponent } from './apply/apply.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProjectComponent } from './project/project.component';
-import { CrystalEditComponent as ProjectEditor } from './project/crystal-edit/crystal-edit.component';
+import { HeaderComponent } from './project/header/header.component';
 import { ExploreComponent } from './explore/explore.component';
 import { ExploreItemComponent } from './explore/item/item.component';
 import { UploadComponent } from './upload/upload.component';
@@ -28,15 +29,14 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { UserInfoDirective } from './user-info/user-info.directive';
 import { HomeComponent } from './home/home.component';
 
-
-
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
+    MarkdownModule,
     ElementsModule,
-    MarkdownModule
+    DocumentModule
   ],
 
   declarations: [
@@ -52,7 +52,7 @@ import { HomeComponent } from './home/home.component';
     ExploreItemComponent,
     DashboardComponent,
     ProjectComponent,
-    ProjectEditor,
+    HeaderComponent,
     UploadComponent,
     UploadsComponent,
     MessagesComponent,

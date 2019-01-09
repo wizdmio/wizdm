@@ -52,19 +52,15 @@
       </ng-container>
 
       <!-- Paragraph -->
-      <ng-container *ngSwitchCase="'paragraph'">
-        <p [attr.data-line]="position(child)">
-          <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
-        </p>
-      </ng-container>
+      <p *ngSwitchCase="'paragraph'" [attr.data-line]="position(child)">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+      </p>
 
       <!-- Blockquote -->
-      <ng-container *ngSwitchCase="'blockquote'">
-        <blockquote [attr.data-line]="position(child)">
-          <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
-        </blockquote>
-      </ng-container>
-
+      <blockquote *ngSwitchCase="'blockquote'" [attr.data-line]="position(child)">
+        <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
+      </blockquote>
+      
       <!-- List -->
       <ng-container *ngSwitchCase="'list'">
         <ol *ngIf="child.ordered" [start]="child.start" [attr.data-line]="position(child)">
@@ -82,53 +78,43 @@
       </ng-container>
 
       <!-- Table -->
-      <ng-container *ngSwitchCase="'table'">
-        <table [attr.data-line]="position(child)">
-          <tbody>
-            <tr *ngFor="let row of child.children">
-              <!--{{assertNode(row, 'tableRow')}}-->
-              <td *ngFor="let cell of row?.children; let i = index" [attr.align]="child.align[i]">
-                <!--{{assertNode(cell, 'tableCell')}}-->
-                <ng-container *ngTemplateOutlet="decoratedText; context: cell"></ng-container>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </ng-container>
+      <table *ngSwitchCase="'table'" [attr.data-line]="position(child)">
+        <tbody>
+          <tr *ngFor="let row of child.children">
+            <!--{{assertNode(row, 'tableRow')}}-->
+            <td *ngFor="let cell of row?.children; let i = index" [attr.align]="child.align[i]">
+              <!--{{assertNode(cell, 'tableCell')}}-->
+              <ng-container *ngTemplateOutlet="decoratedText; context: cell"></ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <!-- Thematic Break -->
-      <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="position(child)">
+      <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="position(child)" />
 
       <!-- Line Break -->
-      <br *ngSwitchCase="'break'">
+      <br *ngSwitchCase="'break'" />
 
       <!-- Code -->
-      <ng-container *ngSwitchCase="'code'">
-        <pre [attr.data-line]="position(child)">
-          <code [wm-highlight]="child.value" [language]="child.lang"></code>
-        </pre>
-      </ng-container>
+      <pre *ngSwitchCase="'code'" [attr.data-line]="position(child)">
+        <code [wm-highlight]="child.value" [language]="child.lang"></code>
+      </pre>
  
       <!-- Left aligned block - Align plugin -->
-      <ng-container *ngSwitchCase="'leftAligned'">
-        <span [attr.align]="'left'">
-          <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
-        </span>
-      </ng-container>
+      <span *ngSwitchCase="'leftAligned'" [attr.align]="'left'">
+        <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
+      </span>
 
       <!-- Center aligned block - Align plugin -->
-      <ng-container *ngSwitchCase="'centerAligned'">
-        <span [attr.align]="'center'">
-          <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
-        </span>
-      </ng-container>
+      <span *ngSwitchCase="'centerAligned'" [attr.align]="'center'">
+        <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
+      </span>
 
       <!-- Right aligned block - Align plugin -->
-      <ng-container *ngSwitchCase="'rightAligned'">
-        <span [attr.align]="'right'">
-          <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
-        </span>
-      </ng-container>
+      <span *ngSwitchCase="'rightAligned'" [attr.align]="'right'">
+        <ng-container *ngTemplateOutlet="document; context: child"></ng-container>
+      </span>
 
     </ng-container>
 
@@ -144,67 +130,56 @@
     <ng-container [ngSwitch]="child.type">
       
       <!-- Emphasis -->
-      <ng-container *ngSwitchCase="'emphasis'">
-        <em><ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container></em>
-      </ng-container>
-
-      <!-- Strong -->
-      <ng-container *ngSwitchCase="'strong'">
-        <strong><ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container></strong>
-      </ng-container>
-
-      <!-- Delete -->
-      <ng-container *ngSwitchCase="'delete'">
-        <del><ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container></del>
-      </ng-container>
-
-      <!-- Link -->
-      <ng-container *ngSwitchCase="'link'">
-        <a [href]="child.url" (click)="navigateUrl($event, child.url)">
+      <em *ngSwitchCase="'emphasis'">
           <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
-        </a>
-      </ng-container>
+      </em>
+      
+      <!-- Strong -->
+      <strong *ngSwitchCase="'strong'">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+      </strong>
+      
+      <!-- Delete -->
+      <del *ngSwitchCase="'delete'">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child">
+        </ng-container>
+      </del>
+      
+      <!-- Link -->
+      <a *ngSwitchCase="'link'" [href]="child.url" (click)="navigateUrl($event, child.url)">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+      </a>
 
       <!-- Link Reference -->
-      <ng-container *ngSwitchCase="'linkReference'">
-        <a [href]="definition(child.identifier)" (click)="navigateDef($event, child.identifier)">
-          <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
-        </a>
-      </ng-container>
+      <a *ngSwitchCase="'linkReference'" [href]="definition(child.identifier)" (click)="navigateDef($event, child.identifier)">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+      </a>
 
       <!-- Inlide Code -->
-      <ng-container *ngSwitchCase="'inlineCode'">
-        <code>{{child.value}}</code>
-      </ng-container>
-
+      <code *ngSwitchCase="'inlineCode'">{{child.value}}</code>
+      
       <!-- Sub-script Super-script plugin -->
-      <ng-container *ngSwitchCase="'sub'">
-        <sub><ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container></sub>
-      </ng-container>
-
+      <sub *ngSwitchCase="'sub'">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+      </sub>
+      
       <!-- Super-script Super-script plugin -->
-      <ng-container *ngSwitchCase="'sup'">
-        <sup><ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container></sup>
-      </ng-container>
-
+      <sup *ngSwitchCase="'sup'">
+        <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>
+      </sup>
+      
       <!-- Footnote Reference -->
-      <ng-container *ngSwitchCase="'footnoteReference'">
-        <sup>[{{footnote(child.identifier)}}]</sup>
-      </ng-container>
-
+      <sup *ngSwitchCase="'footnoteReference'">[{{footnote(child.identifier)}}]</sup>
+      
       <!-- Plain text -->
       <ng-container *ngSwitchCase="'text'">{{child.value}}</ng-container>
 
       <!-- Image -->
-      <ng-container *ngSwitchCase="'image'">
-        <img [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="position(child)">
-      </ng-container>
+      <img *ngSwitchCase="'image'" [src]="child.url" [title]="child.title" [alt]="child.alt" [attr.data-line]="position(child)" />
 
       <!-- Image Reference -->
-      <ng-container *ngSwitchCase="'imageReference'">
-        <img [src]="definition(child.identifier)" [title]="child.title" [alt]="child.alt" [attr.data-line]="position(child)">
-      </ng-container>
-
+      <img *ngSwitchCase="'imageReference'" [src]="definition(child.identifier)" [title]="child.title" [alt]="child.alt" [attr.data-line]="position(child)" />
+      
       <!-- Recurs to next level -->
       <ng-container *ngSwitchDefault>
         <ng-container *ngTemplateOutlet="decoratedText; context: child"></ng-container>

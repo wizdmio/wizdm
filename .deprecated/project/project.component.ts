@@ -1,15 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { ProjectService, Project, wmProject } from '../../core';
-import { ToolbarService, ActionEnabler } from '../../navigator';
-import { wmDocument } from '../../document/editable/editable-types';
+import { ToolbarService, ActionEnabler, ViewportService } from '../../navigator';
 import { PopupService } from '../../elements';
+import { UploadsComponent } from '../uploads/uploads.component';
 import { Observable, Subject, of, empty } from 'rxjs';
 import { switchMap, catchError, tap, take, map, filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { $animations } from './project.animations';
-
-import { $document } from './debug-document';
 
 @Component({
   selector: 'wm-project',
@@ -27,8 +25,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(private content  : ContentManager,
               private projects : ProjectService,
               private route    : ActivatedRoute,
-              private toolbar  : ToolbarService,
-              private popup    : PopupService) { 
+              private nav      : ToolbarService,
+              private popup    : PopupService,
+              private scroll   : ViewportService) { 
 
     // Gets the localized content
     this.msgs = this.content.select('project');
@@ -49,7 +48,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       // Enable actions on the navigation bar depending on the 
       // type of user (owner or guest)
-      this.toolbar.activateActions(this.msgs.actions[type])
+      this.nav.activateActions(this.msgs.actions[type])
         .subscribe( code => this.doAction(code) );
     });
 
@@ -80,16 +79,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  public get document(): wmDocument {
+  public get document(): string {
     // Returns the document content
-    //return this.project ? this.project.data.document : null ;
-    return $document as wmDocument;
+    return this.project ? this.project.data.document : "";
   }
 
-  public set document(source: wmDocument) {
+  public set document(text: string) {
     
     // Update the preview and pushes the modified document for async saving
-    //this.saveDocument$.next( this.project.data.document = text );
+    this.saveDocument$.next( this.project.data.document = text );
     this.saved = false;
   }
 
@@ -112,6 +110,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
     );
   }
 
+  @ViewChild('uploads') uploads: UploadsComponent;
+
+  private changeCover() {
+
+    this.uploads.chooseFile(this.project.data.cover)
+      .then( file => {
+        if(!!file) {
+          // Updates the project with the new cover
+          this.project.update({ cover: file.url || null } as wmProject );
+        }
+      });
+  }
+
   private deleteProject(): void {
     // Ask for confirmation prior to delete the project
     this.popup.confirmPopup(this.msgs.canDelete)
@@ -129,9 +140,46 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.enterEditMode();
       break;
 
+      case 'cover':
+      this.changeCover();
+      break;
+
       case 'delete':
       this.deleteProject();
       break;
+    }
+  }
+
+  private lastLine = 0;
+
+  public onEditScroll(line: number) {
+  
+    // Keeps track of the last line the editor view has been scrolled to
+    this.lastLine = line;
+
+    // Scrolls the main view to the mardown attribute data-line selector
+    // This works based on the feature of wm-markdown component rendering
+    // the view with [data-line="number"] attributes tracking the source
+    // text line number for every top level element.
+    //
+    this.scroll.scrollToElement(`[data-line="${line}"]`);
+  }
+
+  public onTocNavigate(id: string) {
+
+    console.log(id);
+
+    // Scrolls the view to the requested TOC anchor position.
+    // Alternatively, router.navigate() can be used.
+    this.scroll.scrollToElement(id);
+  }
+
+  public onMarkdownDone() {
+
+    // When in editMode, makes sure the view is scrolled back to the last 
+    // source text known position every time the content changes
+    if(this.editMode) {
+      this.onEditScroll(this.lastLine);
     }
   }
 

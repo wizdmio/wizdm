@@ -1,0 +1,102 @@
+@import '../../../../variables';
+@import '../../../../theme';
+
+$wm-pcard-width    : 210px !default;
+$wm-pcard-height   : 260px !default; 
+$wm-avatar-size    : 48px !default;
+$wm-border-radius  : 5px !default;
+$wm-cover-height   : 46%;
+$wm-content-pad    : 14px !default;
+$wm-content-height : calc(100% - #{$wm-cover-height} - #{$wm-content-pad});
+
+:host {
+  display: block;
+  position: relative;
+  
+  width: $wm-pcard-width;
+  height: $wm-pcard-height;
+
+  border-radius: $wm-border-radius;
+
+  @include mat-elevation(2);
+
+  color: white;
+  .tools { opacity: 0.5; }
+
+  &[wm-theme-contrast="dark"] { 
+    color: black; 
+    .tools { opacity: 0.25; }
+  }
+}
+
+.cover {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: $wm-cover-height;
+
+  border-top-left-radius: $wm-border-radius;
+  border-top-right-radius: $wm-border-radius;
+
+  &[wm-theme-contrast="light"] { background-color: rgba(white, 0.5);}
+  &[wm-theme-contrast="dark"] { background-color: rgba(black, 0.1);}
+
+  img {
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+.content {
+  position: absolute;
+  height: $wm-content-height;
+  bottom: $wm-content-pad;
+  left:   $wm-content-pad;
+  right:  $wm-content-pad;
+
+  .overlap {
+    position: relative;
+    height: $wm-avatar-size;
+    margin-top: -$wm-avatar-size/2;
+    //margin-left: 10px;
+
+    wm-avatar {
+      width: $wm-avatar-size;
+      height: $wm-avatar-size;
+      line-height: $wm-avatar-size;
+      //margin-left: -10px;
+    }
+  }
+
+  .title {
+    @include mat-typography-level-to-styles($wm-typography, subheading-2);
+    cursor: pointer;
+    outline: none;
+  }
+
+  .author {
+    @include mat-typography-level-to-styles($wm-typography, caption);
+    opacity: 0.5;
+  }
+
+  .color {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-right: -$wm-content-pad;
+    margin-bottom: -$wm-content-pad; 
+  }
+}
