@@ -1,18 +1,22 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { wmImage, EditableContent } from '../editable/editable-content';
+import { wmImage, EditableContent } from '../common/editable-content';
 
 @Component({
   selector: 'wm-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss']
 })
-export class ImageComponent extends EditableContent {
-
-  //constructor() { super(); }
+export class ImageComponent {
 
   @HostBinding('style.background-image') get url() {
-    return !!this.img && !!this.img.url ? `url(${this.img.url})` : undefined;
+    return !!this.image && !!this.image.data.url ? `url(${this.image.data.url})` : undefined;
   }
 
-  @Input('wm-image') img: wmImage;
+  constructor() { }
+
+  @Input('wm-image') image: EditableContent<wmImage>;
+
+  @HostBinding('id') get id() {
+    return this.image.id;
+  }
 }

@@ -17,17 +17,14 @@ export const $document = {
     ]},
     { type: "paragraph", align: "justify", children: [
       { type: "text", value: "This is a "},
-      { type: "strong", children: [
-        { type: "text", value: "strong" }
+      { type: "bold", children: [
+        { type: "text", value: "bold" }
       ]},
-      { type: "text", value: " paragraph..."}
-    ]},
-    { type: "paragraph", align: "justify", children: [
-      { type: "text", value: "This is an "},
-      { type: "emphasis",  children: [
+      { type: "text", value: " paragraph... filled with "},
+      { type: "italic",  children: [
         { type: "text", value: "emphasized" }
       ]},
-      { type: "text", value: " paragraph..."}
+      { type: "text", value: " text..."}
     ]},
     { type: "paragraph", align: "justify", children: [
       { type: "text", value: "This is an "},

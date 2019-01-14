@@ -1,7 +1,7 @@
 
-<ol *ngIf="list?.ordered" [id]="elementId(list)" [start]="list.start">
-  <li *ngFor="let item of updateTree(list)" [wm-editable]="item"></li>
+<ol *ngIf="list?.data.ordered" [id]="list.id" [start]="list.data.start">
+  <li *ngFor="let item of list.content" [wm-editable]="item"></li>
 </ol>
-<ul *ngIf="!list?.ordered" [id]="elementId(list)">
-  <li *ngFor="let item of updateTree(list)" [wm-editable]="item"></li>
+<ul *ngIf="!list?.data.ordered" [id]="list.id">
+  <li *ngFor="let item of list.content" [wm-editable]="item"></li>
 </ul>

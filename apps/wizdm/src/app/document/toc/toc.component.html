@@ -3,8 +3,8 @@
 
 <ng-container *ngFor="let node of headings">
 
-  <span [attr.toc]="node.level" routerLink="." [fragment]="elementId(node)">
-    {{ stringify(node.children) }}
+  <span [attr.toc]="node.data.level" routerLink="." [fragment]="node.id">
+    {{ node.stringify() }}
   </span>
 
 </ng-container>

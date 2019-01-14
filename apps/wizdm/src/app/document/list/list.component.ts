@@ -1,14 +1,18 @@
 import { Component, Input } from '@angular/core';
-import { wmList, EditableContent } from '../editable/editable-content';
+import { wmList, EditableContent } from '../common/editable-content';
 
 @Component({
   selector: 'wm-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss']
+  templateUrl: './list.component.html'
 })
-export class ListComponent extends EditableContent {
+export class ListComponent {
 
-  //constructor() { super(); }
+  constructor() { }
 
-  @Input('wm-list') list: wmList;
+  list: EditableContent<wmList>;
+
+  @Input('wm-list') set source(list: EditableContent<wmList>) {
+    // Updates the node deferring descendants
+    this.list = list.update(true);
+  }
 }

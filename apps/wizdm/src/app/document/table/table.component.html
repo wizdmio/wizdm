@@ -1,13 +1,18 @@
 
-<table [id]="elementId(table)">
-  <thead>
-    <tr [id]="elementId(head)">
-      <th *ngFor="let cell of updateTree(head)" [wm-editable]="cell"></th>
+<table [id]="table?.id">
+  <thead *ngIf="!!head?.length">
+    <tr *ngFor="let row of head" [id]="row.id">
+      <th *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let row of body" [id]="elementId(row)">
-      <td *ngFor="let cell of updateTree(row)" [wm-editable]="cell"></td>
+    <tr *ngFor="let row of body" [id]="row.id">
+      <td *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
     </tr>
   </tbody>
+  <tfoot *ngIf="!!foot?.length">
+    <tr *ngFor="let row of foot" [id]="row.id">
+      <td *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
+    </tr>
+  </tfoot>
 </table>

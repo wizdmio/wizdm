@@ -1,23 +1,20 @@
 
-<ng-content></ng-content>
+<ng-container *ngFor="let node of root?.content">
 
-<ng-container *ngFor="let node of updateTree(source)">
+    <ng-container [ngSwitch]="node.type">
 
-  <ng-container [ngSwitch]="node.type">
+      <wm-heading *ngSwitchCase="'heading'" [wm-heading]="node"></wm-heading>
 
-    <wm-heading *ngSwitchCase="'heading'" [wm-heading]="node"></wm-heading>
+      <wm-list *ngSwitchCase="'list'" [wm-list]="node"></wm-list>
 
-    <wm-list *ngSwitchCase="'list'" [wm-list]="node"></wm-list>
+      <wm-table *ngSwitchCase="'table'" [wm-table]="node"></wm-table>
 
-    <wm-table *ngSwitchCase="'table'" [wm-table]="node"></wm-table>
+      <wm-image *ngSwitchCase="'image'" [wm-image]="node"></wm-image>
 
-    <wm-image *ngSwitchCase="'image'" [wm-image]="node"></wm-image>
+      <blockquote *ngSwitchCase="'blockquote'" [wm-editable]="node"></blockquote>
 
-    <blockquote *ngSwitchCase="'blockquote'" [wm-editable]="node"></blockquote>
-
-    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
+      <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
 
   </ng-container>
   
 </ng-container>
-
