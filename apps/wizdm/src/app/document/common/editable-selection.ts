@@ -185,23 +185,40 @@ export class EditableSelection  {
     this.modified = false;
   }
 
-  private timer = null;
+  private updating = null;
 
   public insert(): boolean {
 
     if(this.collapsed) {
 
-      clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
+      clearTimeout(this.updating);
 
-        this.start.sync();
-
-      }, 1000);
+      this.updating = setTimeout((node: EditableContent) => {
+        
+        this.sync();
+        this.query();
+        this.mark();
+      
+      }, 1000, this.start);
       
       return true;
     }
     
     return this.delete();
+  }
+
+  private sync() {
+    
+    if(!!this.start && !!this.updating) {
+
+      clearTimeout(this.updating);
+      
+      const debug = this.start.sync();
+
+      console.log(debug);
+
+      this.updating = null;
+    }
   }
 /*
   public insert(text: string): boolean {
@@ -215,10 +232,66 @@ export class EditableSelection  {
     return false;
   }
 */
+
+  private _delete(): boolean {
+
+    // Multiple node selection
+    if(this.multi) {
+
+      if(this.endOfs < this.end.length) {
+        this.end.cut(this.endOfs);
+        this.setEnd(this.end.previousText(), -1);
+        return this._delete();
+      }
+  
+      if(this.startOfs > 0) {
+        this.start.cut(0, this.startOfs);
+        this.setStart(this.start.nextText(), 0);
+        return this._delete();
+      }
+    }
+    // Single node selection
+    else {
+
+      this.start.extract(this.startOfs, this.endOfs);
+      if(!this.start.empty) {
+        this.collapse();
+        return false;
+      }
+    }
+
+    let node = this.end;
+    while( node.compare(this.start) >= 0) {
+      node.clear().prune();
+      node = node.previousText();
+    }
+
+    if(!!node) {
+
+      const ofs = node.length;
+      node.merge(this.end.nextText());
+      this.setCursor(node, ofs);
+    }
+      
+    this.update();
+    return false;
+  }
+
+  public delete(): boolean {
+
+    this.sync();
+
+    if(this.collapsed) { this.move(0, 1);}
+
+    return this._delete();
+  }
+
   public backspace(): boolean {
 
+    this.sync();
+
     if(this.collapsed) { this.move(-1, 0); }
-    return this.delete();
+    return this._delete();
 
     if(!this.collapsed) { return this.delete(); }
 
@@ -252,56 +325,14 @@ export class EditableSelection  {
     }
   }
 
-  public delete(): boolean {
-
-    if(this.collapsed) { this.move(0, 1);}
-
-    // Multiple node selection
-    if(this.multi) {
-
-      if(this.endOfs < this.end.length) {
-        this.end.cut(this.endOfs);
-        this.setEnd(this.end.previousText(), -1);
-        return this.delete();
-      }
-  
-      if(this.startOfs > 0) {
-        this.start.cut(0, this.startOfs);
-        this.setStart(this.start.nextText(), 0);
-        return this.delete();
-      }
-    }
-    // Single node selection
-    else {
-
-      this.start.extract(this.startOfs, this.endOfs);
-      if(!this.start.empty) {
-        this.collapse();
-        return false;
-      }
-    }
-
-    let node = this.end;
-    while( node.compare(this.start) >= 0) {
-      node.clear().prune();
-      node = node.previousText();
-    }
-
-    if(!!node) {
-
-      const ofs = node.length;
-      node.merge(this.end.nextText());
-      this.setCursor(node, ofs);
-    }
-      
-    this.update();
-    return false;
-  }
-
   public enter() {
 
+    this.sync();
+
     if(!this.collapsed) {
-      this.delete();
+      return this._delete();
     }
+
+    return false;
   }
 }

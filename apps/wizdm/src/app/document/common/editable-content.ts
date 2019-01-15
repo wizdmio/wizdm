@@ -105,7 +105,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return this.value || '\u200B';
   }
 
-  public sync() {
+  public sync(): string {
 
     if(!!this.element) {
 
@@ -113,6 +113,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
       this.modified = text !== this.value;
       this.value = text;
     }
+
+    return this.value;
   }
 
   /**
