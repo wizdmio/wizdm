@@ -152,10 +152,8 @@ $wm-theme-background: map-get($wm-theme, background);
     text-decoration: underline;
   }
  
-  // Adds custom application specific style extensions
-  a[mat-link] {
-    @extend .mat-link;
-  }
+  // Ensure all links will look the same
+  a { @extend .mat-link;}
 
   // Makes sure the content of mat-list is hidden when overflow globally
   mat-list { overflow: hidden;}

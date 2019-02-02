@@ -1,18 +1,20 @@
-import { Component, Input } from '@angular/core';
-import { wmList, EditableContent } from '../common/editable-content';
+import { Component, Input, HostBinding } from '@angular/core';
+import { EditableContent } from '../common/editable-content';
+import { wmList } from '../common/editable-types';
 
 @Component({
-  selector: 'wm-list',
+  selector: '[wm-list]',
   templateUrl: './list.component.html'
 })
 export class ListComponent {
+  
+  @Input('wm-list') list: EditableContent<wmList>;
 
-  constructor() { }
+  @HostBinding('id') get id() {
+    return !!this.list && this.list.id;
+  }
 
-  list: EditableContent<wmList>;
-
-  @Input('wm-list') set source(list: EditableContent<wmList>) {
-    // Updates the node deferring descendants
-    this.list = list.update(true);
+  @HostBinding('attr.start') get start() {
+    return !!this.list && this.list.data.start;
   }
 }

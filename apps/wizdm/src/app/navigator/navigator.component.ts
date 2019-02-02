@@ -33,7 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
     // Creates and observable to monitor the scroll status
     this.scrolled$ = this.service.viewport.scroll$.pipe(
-      map( pos => pos[1] > 20 ),
+      map( pos => pos[1] > 0 ),
       distinctUntilChanged()
     );
   }

@@ -1,0 +1,16 @@
+
+:host {  
+  display: block;
+  position: fixed;
+  left: 0;
+  bottom: 20px;
+  width: 100%;
+  pointer-events: none;
+
+  //& * { user-select: none; }
+
+  span {
+    pointer-events: all;
+    box-shadow: 0 0 6px 3px rgba(0,0,0,0.125);
+  }
+}

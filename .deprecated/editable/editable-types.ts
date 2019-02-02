@@ -1,9 +1,9 @@
-export type wmListType = 'bulletted'|'numbered';
-export type wmTableType = 'table'|'row';
-export type wmEditableType = 'heading'|'paragraph'|'blockquote'|'item'|'cell';
+
 export type wmInlineType = 'text'|'link';
-export type wmImageType = 'image';
-export type wmNodeType = 'document'|wmEditableType|wmListType|wmTableType|wmInlineType|wmImageType;
+export type wmBlockType = 'heading'|'paragraph'|'blockquote'|'image';
+export type wmListType = 'list'|'listItem';
+export type wmTableType = 'table'|'tableRow'|'tableCell';
+export type wmNodeType = 'document'|wmBlockType|wmInlineType|wmListType|wmTableType;
 export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
 export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
@@ -17,7 +17,11 @@ export interface wmEditable {
 export interface wmText extends wmEditable {
   type: 'text'|'link',
   style?: wmTextStyle[],
-  value?: string,
+  value?: string
+}
+
+export interface wmLink extends wmText {
+  type: 'link',
   url?: string
 }
 
@@ -28,27 +32,30 @@ export interface wmHeading extends wmEditable {
 }
 
 export interface wmList extends wmEditable {
-  type: 'numbered'|'bulletted',
+  type: 'list',
+  ordered?: boolean,
   start?: number
 }
 
-export interface wmItem extends wmEditable {
-  type: 'item',
+export interface wmListItem extends wmEditable {
+  type: 'listItem',
   children?: wmText[]
 }
 
 export interface wmTable extends wmEditable {
   type: 'table',
-  children?: wmRow[]
+  children?: wmTableRow[]
 }
 
-export interface wmRow extends wmEditable {
-  type: 'row',
-  children?: wmCell[]
+export interface wmTableRow extends wmEditable {
+  type: 'tableRow',
+  head?: boolean,
+  foot?: boolean,
+  children?: wmTableCell[]
 }
 
-export interface wmCell extends wmEditable {
-  type: 'cell',
+export interface wmTableCell extends wmEditable {
+  type: 'tableCell',
   valign?: wmVertAlignType,
   colspan?: number,
   children?: wmText[]

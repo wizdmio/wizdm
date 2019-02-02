@@ -5,9 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // Angular material + Flex layout
 import { FlexLayoutModule } from '@angular/flex-layout';
-
 import {
   MatButtonModule,
+  MatButtonToggleModule,
   MatIconModule,
   MatMenuModule,
   MatBadgeModule,
@@ -22,16 +22,14 @@ import {
   MatProgressSpinnerModule,
   MatDialogModule,
   MatToolbarModule,
-  MatSidenavModule,
   MatSelectModule,
   MatDividerModule,
-  MatTabsModule,
-  MatTooltipModule,
+  //MatTooltipModule,
   MatDatepickerModule,
   DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material';
 
-import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+//import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 
 // Application specific
 import { IconComponent } from './icon/icon.component';
@@ -49,10 +47,12 @@ import { ColorsDirective } from './colors/colors.directive';
 import { LikesComponent } from './likes/likes.component';
 import { RouterInkbarComponent } from './router-inkbar/router-inkbar.component';
 import { RouterInkbarDirective } from './router-inkbar/router-inkbar.directive';
-
+import { ContextMenuComponent } from './context-menu/context-menu.component';
+/*
 const sharedModules = [
   FlexLayoutModule,
   MatButtonModule,
+  MatButtonToggleModule,
   MatIconModule,
   MatMenuModule,
   MatBadgeModule,
@@ -73,14 +73,36 @@ const sharedModules = [
   //MatTabsModule,
   //MatTooltipModule,
   MatDatepickerModule
-];
+];*/
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    ...sharedModules
+    FlexLayoutModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDialogModule
+    //MatMenuModule,
+    //MatFormFieldModule,
+    //MatInputModule,
+    //MatStepperModule,
+    //MatExpansionModule,
+    //MatListModule,
+    //MatGridListModule,
+    //MatCheckboxModule,
+    //MatProgressBarModule,
+    //MatProgressSpinnerModule,
+    //MatToolbarModule,
+    //MatSidenavModule,
+    //MatSelectModule,
+    //MatDividerModule,
+    //MatTabsModule,
+    //MatTooltipModule,
+    //MatDatepickerModule
   ],
   
   declarations: [
@@ -98,12 +120,11 @@ const sharedModules = [
     ColorsDirective,
     LikesComponent,
     RouterInkbarComponent,
-    RouterInkbarDirective
+    RouterInkbarDirective,
+    ContextMenuComponent
   ],
 
   exports: [
-    ...sharedModules,
-//------------------------    
     IconComponent,
     TogglerComponent,
     FlipComponent,
@@ -121,9 +142,9 @@ const sharedModules = [
     RouterInkbarDirective
   ],
 
-  providers: [
+  providers: [/*
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }*/
   ],
 
   entryComponents: [// Don't forget to declare dialogs here

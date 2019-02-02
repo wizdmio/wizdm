@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { wmTable, wmTableRow, EditableContent } from '../common/editable-content';
+import { Component, Input, HostBinding } from '@angular/core';
+import { EditableContent } from '../common/editable-content';
+import { wmTable } from '../common/editable-types';
 
 @Component({
-  selector: 'wm-table',
+  selector: 'table[wm-table]',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
@@ -10,38 +11,38 @@ export class TableComponent {
 
   constructor() { }
 
-  public table: EditableContent<wmTable>;
-  public head: EditableContent<wmTableRow>[];
-  public foot: EditableContent<wmTableRow>[];
-  public body: EditableContent<wmTableRow>[];
-/*
-  private updateRow(row: EditableContent<wmTableRow>, update: boolean): boolean {
-    if(update) { row.update();}
-    return update;
+  @Input('wm-table') table: EditableContent<wmTable>;
+
+  @HostBinding('id') get id() {
+    return !!this.table && this.table.id;
   }
-*/
+/*
+  public table: EditableContent<wmTable>;
+  public head: EditableContent<wmRow>[];
+  public foot: EditableContent<wmRow>[];
+  public body: EditableContent<wmRow>[];
+
   @Input('wm-table') set source(table: EditableContent<wmTable>) {
-    // Updates the node deferring descendants
-    this.table = table.update(true);
-    this.updateRows(this.table);
+    // Split the table rows
+    this.table = this.splitRows(table);
   }
 
-  private updateRows(table: EditableContent<wmTable>) {
+  private splitRows(table: EditableContent<wmTable>) {
 
     this.head = [];
     this.foot = [];
     this.body = [];
 
-    // Splits and updates rows
-    const rows = table.content as EditableContent<wmTableRow>[]
+    // Splits the table rows
+    const rows = table.content as EditableContent<wmRow>[]
     rows.forEach( row => {
-      if(!!row.data.head) { this.head.push( row.update(true) ); } 
-      else if(!!row.data.foot) { this.foot.push( row.update(true) ); } 
-      else { this.body.push( row.update(true) ); }
+      if(!!row.data.head) { this.head.push( row ); } 
+      else if(!!row.data.foot) { this.foot.push( row ); } 
+      else { this.body.push( row ); }
     });
-
     //this.head = rows.filter( row => this.updateRow(row, !!row.data.head) );
     //this.foot = rows.filter( row => this.updateRow(row, !!row.data.foot) );
     //this.body = rows.filter( row => this.updateRow(row, !row.data.head && !row.data.foot) );
-  }
+    return table;
+  }*/
 }

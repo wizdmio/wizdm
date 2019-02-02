@@ -1,0 +1,29 @@
+
+<ng-container *ngFor="let node of content">
+
+  <ng-container [ngSwitch]="node.type">
+
+    <ng-container *ngSwitchCase="'heading'">
+      <h1 *ngIf="node.data.level === 1" [wm-editable]="node"></h1>
+      <h2 *ngIf="node.data.level === 2" [wm-editable]="node"></h2>
+      <h3 *ngIf="node.data.level === 3" [wm-editable]="node"></h3>
+      <h4 *ngIf="node.data.level === 4" [wm-editable]="node"></h4>
+      <h5 *ngIf="node.data.level === 5" [wm-editable]="node"></h5>
+      <h6 *ngIf="node.data.level === 6" [wm-editable]="node"></h6>
+    </ng-container>
+
+    <blockquote *ngSwitchCase="'blockquote'" [wm-editable]="node"></blockquote>
+
+    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
+
+    <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
+
+    <ul *ngSwitchCase="'bulletted'" [wm-list]="node"></ul>
+
+    <table *ngSwitchCase="'table'" [wm-table]="node"></table>
+
+    <div *ngSwitchCase="'image'" [wm-image]="node"></div>
+
+  </ng-container>
+
+</ng-container>

@@ -1,7 +1,2 @@
 
-<ol *ngIf="list?.data.ordered" [id]="list.id" [start]="list.data.start">
-  <li *ngFor="let item of list.content" [wm-editable]="item"></li>
-</ol>
-<ul *ngIf="!list?.data.ordered" [id]="list.id">
-  <li *ngFor="let item of list.content" [wm-editable]="item"></li>
-</ul>
+<li *ngFor="let item of list.content" [wm-editable]="item"></li>

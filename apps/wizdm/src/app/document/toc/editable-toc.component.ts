@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { EditableContent, wmDocument, wmHeading } from '../common/editable-content';
+import { EditableContent } from '../common/editable-content';
+import { wmDocument, wmHeading } from '../common/editable-types';
 
 @Component({
-  selector: 'wm-document-toc',
-  templateUrl: './toc.component.html',
-  styleUrls: ['./toc.component.scss']
+  selector: 'wm-editable-toc',
+  templateUrl: './editable-toc.component.html',
+  styleUrls: ['./editable-toc.component.scss']
 })
-export class DocumentTocComponent {
+export class EditableToc {
   
   private root: EditableContent<wmDocument>;
   public headings: EditableContent<wmHeading>[];
@@ -14,6 +15,7 @@ export class DocumentTocComponent {
   @Input() set source(source: wmDocument) {
     // Creates the root node and updates its children
     // deferring descendants nodes to their components
+    /*
     this.root = new EditableContent(source).update(true);
     this.headings = <EditableContent<wmHeading>[]>this
       .root.content.filter( node => {
@@ -22,7 +24,7 @@ export class DocumentTocComponent {
           return true;
         }
         return false;
-      });
+      });*/
   }
 
   public encode(id: string) {

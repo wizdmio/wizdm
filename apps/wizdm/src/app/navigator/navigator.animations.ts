@@ -8,15 +8,15 @@ export let $animations = [
     trigger('blendin', [
         state('false', style('*')),
         state('true', style({
-            height: '120%', 
+            //height: '120%', 
             opacity: 0 
         })),
-        transition('false <=> true', group([
-            animate('350ms ease-out'),
-            query('@*', animateChild(), { optional: true })
-        ]))
+        transition('false <=> true', //group([
+            animate('450ms ease'),
+            //query('@*', animateChild(), { optional: true })
+        )//]))
     ]),
-
+/*
     trigger('flip', [
         transition('* => *', [
             query(':enter', style({ transform: 'rotateY(-90deg)' })),

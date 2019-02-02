@@ -1,12 +1,12 @@
 
 <nav fxLayout="column" fxLayoutAlign="start center" [@menu]="toggle" (@menu.done)="menuDone()">
 
-  <a mat-button  
+  <button mat-button  
     [routerLink]="item.link"
     [queryParams]="item.params"
     routerLinkActive="link-active" 
     *ngFor="let item of menuItems">
     {{ item.label }}
-  </a>
+  </button>
 
 </nav>

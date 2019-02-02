@@ -4,8 +4,9 @@
 :host {
   display: block;
   position: relative;
-  margin: 16px;
+  
   outline: none;
+  //& * { outline: none; }
 }
 
 // Blockquote style
@@ -14,4 +15,3 @@ blockquote {
   color: rgba(0,0,0,0.535);
   border-left: 0.25em solid rgba(0,0,0,0.11);
 }
-

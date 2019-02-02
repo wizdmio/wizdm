@@ -1,0 +1,54 @@
+
+<div anchor [style.left.px]="left" [style.top.px]="top" [matMenuTriggerFor]="menu"></div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item [matMenuTriggerFor]="align">Alignement</button>
+  <!--button mat-menu-item>Menu item 1</button>
+  <button mat-menu-item>Menu item 2</button-->
+
+</mat-menu>
+
+<mat-menu #align="matMenu">
+
+  <!-- Alignement -->
+  <mat-button-toggle-group [value]="align">
+    <mat-button-toggle *ngFor="let align of aligns" [value]="align">
+      <mat-icon>{{'format_align_' + align}}</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
+</mat-menu>
+
+
+<!--mat-button-toggle-group #style="matButtonToggleGroup">
+      <mat-button-toggle value="size">
+        <mat-icon>format_size</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="quote">
+        <mat-icon>format_quote</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="bulletted">
+        <mat-icon>format_list_bulleted</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="numbered">
+        <mat-icon>format_list_numbered</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group-->
+
+    <!-- Alignement -->
+    <!--mat-button-toggle-group #alignement="matButtonToggleGroup" 
+      [value]="align"
+      (valueChange)="changeAlign($event)">
+      <mat-button-toggle value="left">
+        <mat-icon>format_align_left</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="center">
+        <mat-icon>format_align_center</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="right">
+        <mat-icon>format_align_right</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="justify" disabled>
+        <mat-icon>format_align_justify</mat-icon>
+      </mat-button-toggle>
+  </mat-button-toggle-group-->

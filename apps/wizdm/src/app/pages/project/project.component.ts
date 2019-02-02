@@ -72,18 +72,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public leaveEditMode(): void {
     
+    this.editMode = false;
+    /*
     // Reload the project and turns editMode off
     this.project.reload()
     .toPromise()
     .then( () => {
       this.editMode = false;
     });
+    */
   }
 
   public get document(): wmDocument {
     // Returns the document content
     //return this.project ? this.project.data.document : null ;
-    return $document as wmDocument;
+    return $document as any as wmDocument;
   }
 
   public set document(source: wmDocument) {

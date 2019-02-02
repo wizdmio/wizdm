@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrystalEditComponent } from './crystal-edit.component';
+import { EditableToolbar } from './editable-toolbar.component';
 
-describe('CrystalEditComponent', () => {
-  let component: CrystalEditComponent;
-  let fixture: ComponentFixture<CrystalEditComponent>;
+describe('EditableToolbar', () => {
+  let component: EditableToolbar;
+  let fixture: ComponentFixture<EditableToolbar>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CrystalEditComponent ]
+      declarations: [ EditableToolbar ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CrystalEditComponent);
+    fixture = TestBed.createComponent(EditableToolbar);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

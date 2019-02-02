@@ -6,23 +6,37 @@
 <!-- Document body -->
 <div fxLayout="row" fxLayoutAlign="space-between strech">
 
-  <div fxFlex="1 1 auto">
+  <div fxFlex="1 1 auto" class="desk">
 
-    <!-- Renders the table of contents on top on small screens -->
-    <wm-document-toc class="table-of-contents" [source]="document" fxHide fxShow.lt-sm>
-      <h2>{{ msgs.tableOfContents }}</h2>
-    </wm-document-toc>
+    <div fxLayout="column" fxLayoutAlign="start start" class="page" [@editing]="editMode">
 
-    <!-- Renders the documetn body -->
-    <wm-document [source]="document"></wm-document>
+      <!-- Renders the table of contents on top on small screens -->
+      <!--wm-document-toc class="table-of-contents" [source]="document" fxHide fxShow.lt-sm>
+        <h2>{{ msgs.tableOfContents }}</h2>
+      </wm-document-toc-->
+
+      <!-- Renders the documetn body -->
+      <wm-editable-document
+        (contextmenu)="menu.open($event)" 
+        [source]="document"
+        [edit]="editMode">
+      </wm-editable-document>
+
+    </div>
   
   </div>
 
   <!-- Renders the table of contents by side on big screens -->
-  <div fxFlex="0 0 auto" fxHide.lt-sm>
+  <!--div fxFlex="0 0 auto" fxHide.lt-sm>
     <wm-document-toc class="table-of-contents sticky" [source]="document">
       <h3>{{ msgs.tableOfContents }}</h3>
     </wm-document-toc>
-  </div>
+  </div-->
 
 </div>
+
+<!-- Context menu -->
+<wm-editable-menu #menu></wm-editable-menu>
+
+<!-- Editing tools -->
+<wm-editable-toolbar *ngIf="editMode" fxFlex="0 0 auto"></wm-editable-toolbar>
