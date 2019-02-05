@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EditableText, EditableContent } from '../common/editable-content';
-import { wmDocument, wmTextStyle } from '../common/editable-types';
+import { wmDocument, wmTextStyle, wmAlignType, wmEditableType } from '../common/editable-types';
+import { BreakPointRegistry } from '@angular/flex-layout';
 
 @Injectable({
   providedIn: 'root'
@@ -210,15 +211,17 @@ export class EditableSelection {
   public trim(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
-  
-    if(this.startOfs === this.start.length) {
-      const start = this.start.nextText(true);
-      if(!!start) { this.setStart(start, 0);}
-    }
-
+    // Retrive the end edge back 
     if(this.endOfs === 0) {
       const end = this.end.previousText(true);
       if(!!end) { this.setEnd(end, -1);}
+    }
+    // Special case, if now the selection collapsed we are done.
+    if(this.collapsed) { return this; }
+    // Push the start edge ahead
+    if(this.startOfs === this.start.length) {
+      const start = this.start.nextText(true);
+      if(!!start) { this.setStart(start, 0);}
     }
 
     return this;
@@ -253,11 +256,41 @@ export class EditableSelection {
     return [before, after];
   }
 
-  // Returns the first range of the current document selection
-  private range(): Range {
-      
-    const sel = !!this.document && this.document.getSelection();
-    return !!sel && sel.rangeCount > 0 && sel.getRangeAt(0);
+  // Maps a given DOM node into the internal tree data node
+  private fromDom(node: Node, offset: number): [EditableText, number]{
+    // Skips null nodes
+    if(!node) { return [null, 0]; }
+    // If node is a text node we look for the node parent assuming 
+    // its ID correctly maps the corresponding tree data editable
+    if(node.nodeType === Node.TEXT_NODE) {
+      // Gets the text node parent elements
+      // note: since IE supports parentElement only on Elements, we cast the parentNode instead
+      const element = node.parentNode as Element;
+      // Walks the tree searching for the node to return
+      const txt = this.root.walkTree(!!element && element.id) as EditableText;
+      if(!txt || txt.type !== 'text' && txt.type !== 'link') { return [null, 0]; }
+      return [txt, offset];
+    }
+    // If not, selection is likely falling on a parent element, so, 
+    // we search for the child element relative to the parent offfset 
+    if(!node.hasChildNodes()) { return [null, 0]; }
+    // Let's search for text nodes or element (so basically skipping comments)
+    let child = node.firstChild as Node;
+    while(!!child) {
+      // Recurs on both elements and text nodes. This way will keep going till we reach
+      // the element or text node the offset falls within
+      if(child.nodeType === Node.ELEMENT_NODE || child.nodeType === Node.TEXT_NODE) {
+        if(offset <= child.textContent.length) {
+          return this.fromDom(child, offset);
+        }
+        // Adjust the offset
+        offset -= child.textContent.length;
+      }
+      // Goes next
+      child = child.nextSibling;
+    }
+    // Something wrong
+    return [null, offset];
   }
 
   /**
@@ -266,17 +299,26 @@ export class EditableSelection {
   public query(): EditableSelection {
 
     try {
-      // Query for the selection range
-      const range = this.range();
+      // Query for the document selection range
+      const sel = this.document.getSelection();
+      const range = (!!sel && sel.rangeCount > 0) && sel.getRangeAt(0);
       if(!!range) {
-        // Maps the selection start node to the data node
-        this.setStart(this.root.fromDom(range.startContainer), range.startOffset);
-        // Maps the selection end node to the data node
-        this.setEnd(this.root.fromDom(range.endContainer), range.endOffset);
-        // Makes sure start node comes always first
-        this.sort();
+        // Cut it short on a collapsed range
+        if(range.collapsed) { 
+          // Maps the cursor position at once
+          this.setCursor(...this.fromDom(range.startContainer, range.startOffset));
+        }
+        // Maps the full range otherwise
+        else {
+          // Maps the selection start node to the data node
+          this.setStart(...this.fromDom(range.startContainer, range.startOffset));
+          // Maps the selection end node to the data node
+          this.setEnd(...this.fromDom(range.endContainer, range.endOffset));
+          // Makes sure start node comes always first
+          this.sort();
+        }
       }
-      // Resets the vales in case the range is undefined or null
+      // Resets the values in case the range is undefined or null
       else { this.setCursor(undefined, 0); }
   
     } catch(e) {}
@@ -285,6 +327,22 @@ export class EditableSelection {
     return this.mark(false);
   }
 
+  private toDom(node: EditableText): Node {
+    // Gets the node container element
+    const el = !!node ? this.document.getElementById(node.id) : null;
+    if(!el.hasChildNodes()) { return null; }
+    // Let's search for the first element (so basically skipping comments)
+    let child = el.firstChild as Node;
+    while(!!child) {
+      // Returns the very first text node
+      if(child.nodeType === Node.TEXT_NODE) { return child; }
+      // Goes next
+      child = child.nextSibling;
+    }
+    // No text nodes found
+    return null;
+  }
+   
   /**
    * Applies the current selection to the document.
    */
@@ -300,9 +358,11 @@ export class EditableSelection {
       // Creates a new range
       const range = this.document.createRange();
       // Maps the selection to the relevant dom nodes
-      range.setStart(this.start.domNode, this.startOfs);
-      range.setEnd(this.end.domNode, this.endOfs);
+      const start = this.toDom(this.start);
+      const end = this.single ? start : this.toDom(this.end);
       // Apply the new range to the document
+      range.setStart(start, this.startOfs);
+      range.setEnd(end, this.endOfs);
       sel.addRange(range);
     }
     catch(e) {}
@@ -311,21 +371,19 @@ export class EditableSelection {
     return this.mark(false);
   }
 
-  /** 
-   * Syncs the start node content, so, to reflect the element innerText.
-   * This is the recommended way to insert new text into the data tree,
-   * so, to ensure taking advantage of all the different OS input features
-   * such as OSX 'click and hold'.  
-   */
-  public sync(): EditableSelection {
-    if(this.valid) { this.start.sync();}
-    return this;
-  }
-
   public insert(char: string): EditableSelection {
-
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
-
+    // In case the selection is on the end edge of a link...
+    if(this.start.type === 'link' && this.startOfs === this.start.length) {
+      // Jumps on the following text, if any or create a new text node otherwise
+      const next = this.start.nextText() || this.start.insertTextNext('');
+      // Updates the new position
+      this.setCursor(next, 0);
+    }
+    // Inserts the new char at the specified position
     this.start.insert(char, this.startOfs);
     return this.move(1);
   }
@@ -333,7 +391,7 @@ export class EditableSelection {
   /** Deletes the selection from the document tree */
   public delete(): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid) { return; }
+    if(!this.valid) { return this; }
     // Whenever the selection applies on a single node...
     if(this.single) {
       // Extracts the selected text within the node 
@@ -354,7 +412,7 @@ export class EditableSelection {
     const ofs = this.start.length;
     // Merges the nodes
     this.start.merge(this.end);
-     // Updates the cursor position
+    // Updates the cursor position
     return this.setCursor(this.start, ofs);
   }
   
@@ -370,7 +428,7 @@ export class EditableSelection {
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
     // Just insert a new line on request forcing it on links
-    if(newline || this.start.type === 'link') {
+    if(newline || this.start.type === 'link' && this.startOfs < this.start.length) {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
@@ -386,11 +444,6 @@ export class EditableSelection {
     const node = this.start.insertEditable(match[block.type] || 'paragraph', backward);
     // Updates the cursor position when needed
     return backward ? this : this.setCursor(node, 0);
-  }
-
-  /** Returns the style of the selection always corresponding to the style of the start node */
-  public get style(): wmTextStyle[] {
-    return this.valid ? this.start.style : [];
   }
 
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
@@ -431,6 +484,28 @@ export class EditableSelection {
     return this;
   }
 
+  public get align(): wmAlignType {
+    return this.valid ? this.start.align : 'left';
+  }
+
+  public set align(align: wmAlignType) {
+    
+    if(this.valid && !!align) {
+
+      let node = this.start;
+      while(!!node) {
+        node.align = align;
+        if(node.siblings(this.end)) { break; }
+        node = node.nextText(true);
+      }
+    }
+  }
+
+  /** Returns the style of the selection always corresponding to the style of the start node */
+  public get style(): wmTextStyle[] {
+    return this.valid ? this.start.style : [];
+  }
+
   /** 
    * Applies (or removes) a given style set to the selection.
    * @param style style array to be applied.
@@ -443,14 +518,68 @@ export class EditableSelection {
     if(this.collapsed) { this.wordWrap(); }
     // Trims and splits the selection
     this.trim().split();
-    // Apply the given style to all the text nodes in the seelction
+    // Loop on nodes within the seleciton
     let node = this.start;
     while(!!node && node.compare(this.end) <= 0) {
-
+      // Apply the given style
       node = remove ? node.unformat(style) : node.format(style);
       node = node.nextText(true);
     }
     // Defragments the text nodes when done
     return this.defrag();
+  }
+
+  public get isLink(): boolean {
+    // Skips on invalid selection
+    if(!this.valid) { return false; }
+    // Returns true if the curson is on a link 
+    return this.single && this.start.type === 'link';
+  }
+
+  public link(url: string): EditableSelection {
+    // Performs unlinking when url is null
+    if(!url) { return this.unlink(); }
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // Forces wordwrapping when collapsed 
+    if(this.collapsed) { this.wordWrap(); }
+    // Trims and splits the selection
+    this.trim().split();
+    // Join multiple nodes when needed
+    if(this.multi) {
+      let node = this.start.nextText(true);
+      while(!!node && node.compare(this.end) <= 0) {
+        this.start.join(node);
+        if(node === this.end) { break; }
+        node = this.start.nextText(true);
+      }
+    }
+    // Turns the resulting node into a link
+    this.start.link(url);
+    // Updates the selection
+    return this.set(this.start, 0, this.start, -1);
+  }
+
+  public unlink(): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // Search for links within the selection
+    let node = this.start;
+    while(!!node && node.compare(this.end) <= 0) {
+      // Turns links into plain text
+      node = node.link(null).nextText(true);
+    }
+    // Defragments the text nodes when done
+    return this.defrag();
+  }
+
+  public isHeading(): boolean { return this.editableType('heading'); }
+  //public isQuote(): boolean { return this.editableType('blockquote'); }
+
+  private editableType(type: wmEditableType): boolean {
+    // Skips on invalid selection
+    if(!this.valid) { return false; }
+    // Returns true if the selection entirely falls into the requested container type
+    return this.start.common(this.end) && this.start.container.type === type;
   }
 }

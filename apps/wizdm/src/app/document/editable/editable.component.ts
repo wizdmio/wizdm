@@ -20,38 +20,41 @@ export class EditableComponent {
 
   style(node: EditableText): any {
 
-    const style = {};
+    return !!node && node.style.reduce( (obj, style) => {
 
-    if(!!node && node.bold) {
-      style['font-weight'] = '700';
-    }
+      switch(style) {
+        case 'bold': 
+        obj['font-weight'] = '700'; 
+        break;
+        
+        case 'italic': 
+        obj['font-style'] = 'italic';
+        break;
 
-    if(!!node && node.italic) {
-      style['font-style'] = 'italic';
-    }
+        case 'underline':
+        obj['text-decoration'] = 'underline';
+        break;
 
-    if(!!node && node.underline) {
-      style['text-decoration'] = 'underline';
-    }
+        case 'overline':
+        obj['text-decoration'] = 'overline';
+        break;
 
-    if(!!node && node.overline) {
-      style['text-decoration'] = 'overline';
-    }
+        case 'strikethrough':
+        obj['text-decoration'] = 'line-through';
+        break;
 
-    if(!!node && node.strikethrough) {
-      style['text-decoration'] = 'line-through';
-    }
+        case 'super':
+        obj['vertical-align'] = 'super';
+        obj['font-size'] = '70%';
+        break;
+    
+        case 'sub': 
+        obj['vertical-align'] = 'sub';
+        obj['font-size'] = '60%';
+        break;
+      }
 
-    if(!!node && node.superScript) {
-      style['vertical-align'] = 'super';
-      style['font-size'] = '70%';
-    }
-
-    if(!!node && node.subScript) {
-      style['vertical-align'] = 'sub';
-      style['font-size'] = '60%';
-    }
-
-    return style;
+      return obj;
+    }, {});
   }
 }

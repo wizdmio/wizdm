@@ -1,10 +1,11 @@
 
 <ng-content></ng-content>
 
-<ng-container *ngFor="let node of headings">
+<ng-container *ngFor="let node of source?.content">
 
-  <span [attr.toc]="node.data.level" routerLink="." [fragment]="node.id">
-    {{ node.stringify() }}
-  </span>
+  <span *ngIf="node.type === 'heading'" 
+        [attr.toc]="node.data.level" 
+        routerLink="." 
+        [fragment]="node.id">{{ render(node) }}</span>
 
 </ng-container>

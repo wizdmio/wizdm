@@ -1,7 +1,8 @@
 
 :host {
   outline: none;
-  //& * { outline: none };
+  & * { outline: none };
+  //span, a { outline: none; }
 
   font-weight: unset;
   font-style: unset;
@@ -9,13 +10,4 @@
   text-decoration: unset;
   vertical-align: unset;
   white-space: pre-wrap;
-
-  span {
-
-    outline: none;
-    
-    &[link] {
-      text-decoration: underline;
-    }
-  }
 }

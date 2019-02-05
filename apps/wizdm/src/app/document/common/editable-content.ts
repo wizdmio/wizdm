@@ -13,27 +13,35 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   constructor(data: T) {
     this.node = data || {} as T;
   }
-
+  /** Returns the node private data */
   get data(): T { return this.node; }
-  
+  /** Returns the node type */
   get type(): wmNodeType { return this.node.type; }
-  get align(): wmAlignType { return this.node.align || 'left'; }  
-
+  /** Sets/gets the node alignement */
+  set align(align: wmAlignType) { this.node.align = align; }
+  get align(): wmAlignType { return this.node.align || 'left'; }
+  /** Returns the parent container */
   get container(): EditableContent { return this.parent; }
-  
+  /** Returns the array of children */
   get content(): EditableContent[] { return this.children || []; }
+  /** Returns the number of child nodes */
   get count(): number { return this.content.length; }
+  /** Returns true whenever the node is the first child within its parent */
   get first(): boolean { return this.index === 0; }
+  /** Returns true whenever the node is the last child within its parent */
   get last(): boolean { return this.index === this.count - 1; }
-
+  /** Return the node depth within the tree */
   get depth(): number { return !!this.pos ? this.pos.length : 0; }
+  /** Returns the node unique ID based on node absolute position in the tree */
   get id(): string { return this.pos ? 'N'+this.pos.join('.') : '' ; }
-
+  /** Returns true wheneer this node has no content */
   get empty(): boolean { return this.count <= 0; }
-  
+  /** Returns true whenever this node has been removed from the tree */
+  get removed(): boolean { return !this.parent || !this.parent.childOfMine(this);}
+  /** Returns true wheneve this node is the only child within its parent */
+  get alone(): boolean { return this.removed || !this.parent && this.parent.count <= 1; }
   /** Setting text value from cointainer is not supported */
   set value(text: string) { throw "Setting text value at container level is not supported";}
-  
   /** Returns the text content of a branch by appending text node values recursively */
   get value(): string {
 
@@ -222,11 +230,6 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return nodes;
   }
 
-  /** Returns true whenever this node has been removed from the tree */
-  get removed(): boolean {
-    return !this.parent || !this.parent.childOfMine(this);
-  }
-
   /** 
    * Removes this node from the tree recurring up along the tree
    * to remove empty ancestors if any.
@@ -376,7 +379,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   }
 
   /** Traverse the tree till the node requested by id */
-  private walkTree(id: string): EditableContent {
+  public walkTree(id: string): EditableContent {
     // Turns the element id into the node absolute position
     const pos = this.position(id);
     // Walks the tree
@@ -386,44 +389,6 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     }
     // Found it!
     return node;
-  }
-
-  // Maps a given DOM node into the internal tree data node
-  public fromDom(node: Node): EditableText {
-
-    if(!node) { return null; }
-    // If node is a text node we look for the node parent assuming 
-    // its ID correctly maps the corresponding tree data node
-    if(node.nodeType === Node.TEXT_NODE) {
-      // Gets the text node parent elements
-      // note: since IE supports parentElement only on Elements, we cast the parentNode instead
-      const element = node.parentNode as Element;
-      // Walks the tree searching for the node to return
-      //return this.walkTree(!!element && element.id) as EditableText;
-      const txt = this.walkTree(!!element && element.id) as EditableText;
-
-      if(!txt || txt.type === 'text' || txt.type === 'link') { return txt; }
-
-      debugger;
-
-      return txt;
-    }
-    // If not, selection is likely falling between elements, so, 
-    // we search for the first child element assuming its ID will do
-    if(!node.hasChildNodes()) { return null; }
-    // Let's search for the first element (so basically skipping comments)
-    let child = node.firstChild as Node;
-    while(!!child) {
-      // Recurs on both elements and text nodes. This way will keep going till we reach
-      // the very first text node within the deepest first element
-      if(child.nodeType === Node.ELEMENT_NODE || child.nodeType === Node.TEXT_NODE) {
-        return this.fromDom(child);
-      }
-      // Goes next
-      child = child.nextSibling;
-    }
-    // Something wrong
-    return null;
   }
 
   /** 
@@ -503,21 +468,12 @@ export class EditableContent<T extends wmEditable = wmEditable> {
 /** Implements text nodes */
 export class EditableText extends EditableContent<wmText> {
 
-  private element: HTMLElement;
-  private modified: boolean = false;
-
+  //public element: HTMLElement;
+  
   constructor(data: wmText) { super(data); }
-
-  // Returns the dom text node used when rendering
-  public get domNode(): Node {
-    // Returns the element's first child node
-    return !!this.element ? this.element.firstChild : null;
-  }
-
+/*
   get text() { return this.type === 'text'; }
   get link() { return this.type === 'link'; }
-
-  get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
 
   public hasStyle(style: string) { return this.text && this.style.some( s => s === style ); }
   
@@ -528,13 +484,33 @@ export class EditableText extends EditableContent<wmText> {
   get strikethrough() { return this.hasStyle('strikethrough'); }
   get subScript() { return this.hasStyle('sub'); }
   get superScript() { return this.hasStyle('super'); }
-
+*/
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
   get length() { return this.value.length; }
   get empty(): boolean { return this.length <= 0;}
-  //get emptish(): boolean { return this.empty || this.value.search(/[^\s]/) < 0;}
+  /** Sets/gets the container's alignement */
+  set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align;} }
+  get align(): wmAlignType { return !!this.parent ? this.parent.align : 'left'; }
+  get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
 
+/*
+  public render(el: HTMLElement): string {
+    this.element = el;
+    return this.value || '\u200B';
+  }
+
+  public sync(): EditableText {
+
+    if( !!this.element ) {
+
+      const text = this.element.textContent;
+      this.value = text.replace('\u200B', '');
+    }
+
+    return this;
+  }
+*/
   /** Compares whenever two nodes share the same type and format */
   public same(node: EditableText): boolean {
     // Skips testing null or non text nodes (links are never the same)
@@ -556,20 +532,6 @@ export class EditableText extends EditableContent<wmText> {
     this.append(node.value);
     // Remove the empty node
     return node.remove(), this;
-  }
-
-  /**
-   * Creates a new node of the specified type
-   * @param type the type of node to be created
-   * @return the new node
-   */
-  public createText(text: string, style?: wmTextStyle[]): EditableText {
-
-    return this.createNode({ 
-      type: 'text',
-      value: text,
-      style: !!style ? [...style] : []
-    } as wmEditable) as EditableText;
   }
 
   /** Appends a new text */
@@ -616,32 +578,8 @@ export class EditableText extends EditableContent<wmText> {
   }
 
   /** Clears the text content */
-  public clear(): EditableContent {
-    this.value = '';
-    return this;
-  }
-
-  /** Renders the node value */
-  public render(el: HTMLElement): string {
-    // Hooks the node to the DOM element it renders in
-    this.element = el;
-    // Returns the value or a zero-with-space placehoder
-    return this.value || '\u200B';
-  }
-
-  /** Syncs the node value with the element text contents */ 
-  public sync(): string {
-
-    if(!!this.element) {
-      // Gets the element's inner text removing zero-width-spaces
-      const text = (this.element.innerText || '').replace('\u200B', '');
-      // Marks the node as modified when changes applied
-      this.modified = this.modified || text !== this.value;
-      // Updates thenode value
-      this.value = text;
-    }
-    // Returns the updated value
-    return this.value;
+  public clear(): EditableText {
+    return this.value = '', this;
   }
 
   /** 
@@ -668,6 +606,28 @@ export class EditableText extends EditableContent<wmText> {
     if(!node) { return null; }
     //if(!traverse) { node = node.firstDescendant(); }
     return (node.type === 'text' || node.type === 'link') ? node  as EditableText : this.nextText(traverse);
+  }
+
+  /**
+   * Creates a new node of the specified type
+   * @param type the type of node to be created
+   * @return the new node
+   */
+  public createText(text: string, style?: wmTextStyle[]): EditableText {
+
+    return this.createNode({ 
+      type: 'text',
+      value: text,
+      style: !!style ? [...style] : []
+    } as wmEditable) as EditableText;
+  }
+
+  public insertTextPrev(text: string, style?: wmTextStyle[]): EditableText {
+    return this.insertPrevious(this.createText(text, style)) as EditableText;
+  }
+
+  public insertTextNext(text: string, style?: wmTextStyle[]): EditableText {
+    return this.insertNext(this.createText(text, style)) as EditableText;
   }
 
   public format(style: wmTextStyle[]): EditableText {
@@ -717,10 +677,10 @@ export class EditableText extends EditableContent<wmText> {
       // Append the content of node to this
       this.parent.splice(this.parent.count, 0, ...node.parent.content);
     }
-    // If target node is empty, makes sure it'll be merged 
+    // If target node is empty, make sure it'll be merged with the proper styles
     if(this.empty) { this.data.style = [...node.style]; }
     // Compares the node's styles to eventually join them
-    if(this.same(node)) { this.join(node); }
+    if(this.same(node) || node.empty) { this.join(node); }
     // Return this for chaining
     return this;
   }
@@ -733,7 +693,7 @@ export class EditableText extends EditableContent<wmText> {
    */
   public split(from: number, to?: number): EditableText {
     // Only text node are splittable
-    if(this.text) { 
+    if(this.type === 'text') { 
       // Saturate till the end if to is not defined
       if(to === undefined) { to = this.length; }
       // When there's something to split at the tip...
@@ -769,20 +729,26 @@ export class EditableText extends EditableContent<wmText> {
     // Creates the new node
     const editable = this.createNode({ type });
     if(!editable) { return null; }
-
     // Extracts the siblings to become the content of the new editable
     const content = backward ? this.parent.splice(0, Math.max(this.index - 1, 0))
       : this.parent.splice(this.index + 1, -1);
-
     // Pushes the new content when available or a new empty text node otherwise
     if(content.length > 0) { editable.splice(0, 0, ...content); }
     else { editable.appendChild( this.createText('') ); } 
-
     // Inserts the editable as this container sibling
     const node = backward ? this.parent.insertPrevious(editable)
       : this.parent.insertNext(editable);
-    
     // Returns the new etitable first child
     return node.firstChild() as EditableText;
+  }
+
+  public link(url: string): EditableText {
+    // Turns the node into a link (if not already) or back to a plain text
+    this.data.type = !!url ? 'link' : 'text';
+    // Updates the url accordingly
+    this.data.url = !!url ? url : undefined;
+    // Resets the style
+    this.data.style = [];
+    return this;
   }
 }

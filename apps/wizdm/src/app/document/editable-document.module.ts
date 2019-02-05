@@ -16,6 +16,7 @@ import { EditableComponent } from './editable/editable.component';
 import { ListComponent } from './list/list.component';
 import { TableComponent } from './table/table.component';
 import { ImageComponent } from './image/image.component';
+import { EditableToc } from './toc/editable-toc.component';
 import { EditableMenu } from './menu/editable-menu.component';
 import { EditableToolbar } from './toolbar/editable-toolbar.component';
 
@@ -35,11 +36,13 @@ import { EditableToolbar } from './toolbar/editable-toolbar.component';
     ListComponent, 
     TableComponent, 
     ImageComponent, 
+    EditableToc,
     EditableMenu, 
     EditableToolbar
   ],
   exports: [
     EditableDocument,
+    EditableToc,
     EditableMenu,
     EditableToolbar
   ]

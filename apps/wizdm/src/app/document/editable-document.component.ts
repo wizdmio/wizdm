@@ -70,8 +70,6 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
       
       // Merging foreward
       case 'Delete':
-      // Force content syncing prior to any layout modification
-      this.sync();
       // Extends the selection one char forward when collapsed
       if(this.sel.collapsed) { this.sel.move(0, 1); }
       // Deletes the selection
@@ -79,8 +77,6 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
       
       // Merging backward
       case 'Backspace':
-      // Force content syncing prior to any layout modification
-      this.sync(); 
       // extends the selection one char backward when collapsed
       if(this.sel.collapsed) { this.sel.move(-1, 0); }
       // Deletes the selection
@@ -88,59 +84,19 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
       
       // Splitting
       case 'Enter':
-      // Force content syncing prior to any layout modification
-      this.sync();
       // Breaks the current selection on enter
       return this.sel.break(ev.shiftKey), false;
 
       // Editing, does the minimun so to not interfere with press-and-hold feature on mac OSX
       default: if(ev.key.length === 1) {
+
         //if(ev.repeat) { return false; }
 
-        if(this.sel.start.type !== 'text') {
-          debugger;
-        }
 
-        return this.insert(ev.key);
+        return this.sel.insert(ev.key), false;
       }
-      // Don't bother applying the selection change if not needed
-      // to avoid messing with the cursor position
-      this.sel.mark(false);
     }
     // Fallback to default
     return true;
-  }
-
-  private updating = null;
-
-  private insert(char: string): boolean {
-
-    if(this.sel.collapsed) {
-
-      clearTimeout(this.updating);
-
-      this.updating = setTimeout(() => {
-        this.sync();
-
-        this.sel.query();
-        this.sel.mark();
-      }, 1000);
-      
-      return true;
-    }
-
-    return this.sel.insert(char), false;
-  }
-
-  private sync() {
-    
-    if(!!this.updating) {
-
-      clearTimeout(this.updating);
-      
-      this.sel.sync();
-
-      this.updating = null;
-    }
   }
 }

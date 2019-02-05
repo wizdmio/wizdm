@@ -1,21 +1,58 @@
-
 <div anchor [style.left.px]="left" [style.top.px]="top" [matMenuTriggerFor]="menu"></div>
 
 <mat-menu #menu="matMenu">
-  <button mat-menu-item [matMenuTriggerFor]="align">Alignement</button>
-  <!--button mat-menu-item>Menu item 1</button>
-  <button mat-menu-item>Menu item 2</button-->
+
+  <button mat-menu-item *ngIf="!this.sel.isHeading" [matMenuTriggerFor]="sizeMenu">
+    <mat-icon>format_size</mat-icon>
+    <span>{{ labels.format.size }}</span>
+  </button>
+
+  <!-- Alignement -->
+  <button mat-menu-item [matMenuTriggerFor]="alignMenu">
+    <mat-icon>{{'format_align_' + align }}</mat-icon>
+    <span>{{ labels.align.title }}</span>
+  </button>
+  <!-- Format -->
+  <!--button mat-menu-item [matMenuTriggerFor]="formatMenu">
+    <mat-icon>{{'format_italic' }}</mat-icon>
+    <span>{{ labels.format.title }}</span>
+  </button-->
+
+  <button mat-menu-item *ngIf="!this.sel.isLink" (click)="dummyLink()">
+    <mat-icon>link</mat-icon>
+    <span>{{ labels.insert.link }}</span>
+  </button>
+
+  <button mat-menu-item *ngIf="this.sel.isLink" (click)="unlink()">
+    <mat-icon>link_off</mat-icon>
+    <span>{{ labels.insert.unlink }}</span>
+  </button>
+
+  <button mat-menu-item>
+    <mat-icon>format_clear</mat-icon>
+    <span>{{ labels.format.clear }}</span>
+  </button>
+
 
 </mat-menu>
 
-<mat-menu #align="matMenu">
+<!-- Alignement -->
+<mat-menu #alignMenu="matMenu">
 
-  <!-- Alignement -->
-  <mat-button-toggle-group [value]="align">
-    <mat-button-toggle *ngFor="let align of aligns" [value]="align">
-      <mat-icon>{{'format_align_' + align}}</mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  <button mat-menu-item *ngFor="let item of alignements" (click)="align = item">
+    <mat-icon>{{'format_align_' + item }}</mat-icon>
+    <span>{{ labels.align[item] }}</span>
+  </button>
+
+</mat-menu>
+
+<!-- Format -->
+<mat-menu #formatMenu="matMenu">
+
+  <button mat-menu-item *ngFor="let item of formats">
+    <mat-icon>{{'format_' + item }}</mat-icon>
+    <span>{{ labels.format[item] }}</span>
+  </button>
 
 </mat-menu>
 
@@ -34,21 +71,3 @@
         <mat-icon>format_list_numbered</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group-->
-
-    <!-- Alignement -->
-    <!--mat-button-toggle-group #alignement="matButtonToggleGroup" 
-      [value]="align"
-      (valueChange)="changeAlign($event)">
-      <mat-button-toggle value="left">
-        <mat-icon>format_align_left</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="center">
-        <mat-icon>format_align_center</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="right">
-        <mat-icon>format_align_right</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="justify" disabled>
-        <mat-icon>format_align_justify</mat-icon>
-      </mat-button-toggle>
-  </mat-button-toggle-group-->

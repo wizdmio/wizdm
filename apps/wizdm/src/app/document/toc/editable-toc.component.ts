@@ -9,25 +9,9 @@ import { wmDocument, wmHeading } from '../common/editable-types';
 })
 export class EditableToc {
   
-  private root: EditableContent<wmDocument>;
-  public headings: EditableContent<wmHeading>[];
+  @Input() source: EditableContent<wmDocument>;
 
-  @Input() set source(source: wmDocument) {
-    // Creates the root node and updates its children
-    // deferring descendants nodes to their components
-    /*
-    this.root = new EditableContent(source).update(true);
-    this.headings = <EditableContent<wmHeading>[]>this
-      .root.content.filter( node => {
-        if(node.type === 'heading') {
-          node.update(true);
-          return true;
-        }
-        return false;
-      });*/
-  }
-
-  public encode(id: string) {
-    return encodeURIComponent(id);
+  public render(node: EditableContent): string {
+    return !!node ? node.value.replace('\n', ' ') : '';
   }
 }

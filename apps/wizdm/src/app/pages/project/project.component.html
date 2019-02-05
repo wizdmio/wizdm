@@ -8,18 +8,19 @@
 
   <div fxFlex="1 1 auto" class="desk">
 
-    <div fxLayout="column" fxLayoutAlign="start start" class="page" [@editing]="editMode">
+    <!--div fxLayout="column" fxLayoutAlign="start start" class="page" [@editing]="editMode"-->
+    <div class="page" [@editing]="editMode">
 
       <!-- Renders the table of contents on top on small screens -->
-      <!--wm-document-toc class="table-of-contents" [source]="document" fxHide fxShow.lt-sm>
+      <!--wm-editable-toc class="table-of-contents" [source]="doc" fxHide fxShow.lt-sm>
         <h2>{{ msgs.tableOfContents }}</h2>
-      </wm-document-toc-->
+      </wm-editable-toc-->
 
       <!-- Renders the documetn body -->
       <wm-editable-document
-        (contextmenu)="menu.open($event)" 
+        (contextmenu)="editMode ? menu.open($event) : true" 
         [source]="document"
-        [edit]="editMode">
+        [edit]="editMode" #doc>
       </wm-editable-document>
 
     </div>
@@ -28,9 +29,9 @@
 
   <!-- Renders the table of contents by side on big screens -->
   <!--div fxFlex="0 0 auto" fxHide.lt-sm>
-    <wm-document-toc class="table-of-contents sticky" [source]="document">
+    <wm-editable-toc class="table-of-contents sticky" [source]="doc">
       <h3>{{ msgs.tableOfContents }}</h3>
-    </wm-document-toc>
+    </wm-editable-toc>
   </div-->
 
 </div>
