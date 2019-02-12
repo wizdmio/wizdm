@@ -8,6 +8,8 @@ export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
 export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
 
+export type wmEditableTypes = wmEditable | wmText | wmHeading | wmList | wmItem | wmTable | wmRow | wmCell;
+
 export interface wmEditable {
   type: wmNodeType,
   align?: wmAlignType,

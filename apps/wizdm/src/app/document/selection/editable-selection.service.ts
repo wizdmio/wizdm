@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EditableText, EditableContent } from '../common/editable-content';
 import { wmDocument, wmTextStyle, wmAlignType, wmEditableType } from '../common/editable-types';
-import { BreakPointRegistry } from '@angular/flex-layout';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class EditableSelection {
 
   private modified = false;
 
-  constructor(@Inject(DOCUMENT) private document: Document) { }
+  constructor(@Inject(DOCUMENT) readonly document: Document) { }
 
   public attach(document: EditableContent<wmDocument>): EditableSelection {
     return (this.root = document), this;
@@ -33,7 +32,7 @@ export class EditableSelection {
   public get multi(): boolean { return !this.single; }
 
   public get whole(): boolean {
-    return this.valid && (this.startOfs <= 0) && (this.endOfs >= this.end.length);
+    return this.valid && (this.startOfs === 0) && (this.endOfs === this.end.length);
   }
 
   public get partial(): boolean { return !this.whole; }
@@ -379,7 +378,7 @@ export class EditableSelection {
     // In case the selection is on the end edge of a link...
     if(this.start.type === 'link' && this.startOfs === this.start.length) {
       // Jumps on the following text, if any or create a new text node otherwise
-      const next = this.start.nextText() || this.start.insertTextNext('');
+      const next = this.start.nextText() || this.start.createTextNext('');
       // Updates the new position
       this.setCursor(next, 0);
     }
@@ -427,23 +426,33 @@ export class EditableSelection {
     if(!this.valid) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
-    // Just insert a new line on request forcing it on links
+    // Just insert a new line on request forcing it always on links
     if(newline || this.start.type === 'link' && this.startOfs < this.start.length) {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
-    // Get the node block type (the root child contaning it)
+    // Get this node block type (the root child contaning it)
     const block = this.start.ancestor(1);
     // Matches the relevant editable container to be added depending on the block type 
     const match = { numbered: 'item', bulletted: 'item', table: 'cell' };
-    // Splits the node when needed
-    this.start.split(this.startOfs);
-    // Prepare to insert the new block backward when cursor is at the start edge of a block
-    const backward = this.start.first && this.startOfs === 0;
-    // Inserts a new editable container right after this node 
-    const node = this.start.insertEditable(match[block.type] || 'paragraph', backward);
-    // Updates the cursor position when needed
-    return backward ? this : this.setCursor(node, 0);
+    // Inserts an extra empty text on the start edge
+    if(this.start.first && this.startOfs === 0) {
+      // Preserve the same start node style
+      this.start.createTextPrev('', this.start.style);
+    }
+    // Inserts an extrsa empty text node on the end edge
+    if(this.start.last && this.startOfs === this.start.length) {
+      // Preserve the same start node style
+      this.start.createTextNext('', this.start.style);
+    }
+    // Makes sure the cursor is on the right side of node's edges 
+    if(this.startOfs === this.start.length) { 
+      this.setCursor(this.start.nextText(), 0);
+    }
+    // Wraps the content from this node foreward in a new editable container
+    const editable = this.start.split(this.startOfs).wrap(match[block.type] || 'paragraph');
+    // Updates the cursor position
+    return this.setCursor(editable, 0);
   }
 
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
@@ -471,39 +480,71 @@ export class EditableSelection {
   public defrag(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
-    // CLimbs up to the common ancestor
-    const root = this.start.common(this.end);
-    if(!!root)  {
-      // Save the current selection
-      this.save();
-      // Runs defragmentation down from the common root node
-      root.defrag();
-      // Restores the selection
-      this.restore().trim();
+    // Save the current selection
+    this.save();
+    // Defrags the few editable containers between the nodes
+    let container = this.start.container;
+    while(!!container && container.compare(this.end) < 0) {
+      // Deframents the container
+      container.defrag();
+      // Makes sure to skip structural node levels
+      const next = container.lastChild().next();
+      // Gets the next container
+      container = !!next ? next.container : null;
     }
+    // Restores the selection
+    this.restore().trim();
+    // Returns the selection supporting chaining
     return this;
   }
 
+  /** Returns the current selection alignement (corresponding to the start node container's) */
   public get align(): wmAlignType {
     return this.valid ? this.start.align : 'left';
   }
 
+  /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
-    
-    if(this.valid && !!align) {
-
-      let node = this.start;
-      while(!!node) {
-        node.align = align;
-        if(node.siblings(this.end)) { break; }
-        node = node.nextText(true);
-      }
+    // Skips invalid or null
+    if(!this.valid || !align) { return; }
+    // Loops on the few containers within the selection
+    let container = this.start.container;
+    while(!!container && container.compare(this.end) < 0) {
+      // Applies the alignement
+      container.align = align;
+      //// Gets the next container
+      const next = container.lastChild().next();
+      container = !!next ? next.container : null;
     }
   }
 
   /** Returns the style of the selection always corresponding to the style of the start node */
   public get style(): wmTextStyle[] {
     return this.valid ? this.start.style : [];
+  }
+
+  /** Applies the given style to the selection */
+  public set style(style: wmTextStyle[]) {
+    // Skips on invalid selection
+    if(!this.valid) { return; }
+    // Forces wordwrapping when collapsed 
+    if(this.collapsed) { this.wordWrap(); }
+    // Trims and splits the selection
+    this.trim().split();
+    // Loop on nodes within the seleciton
+    let node = this.start;
+    while(!!node && node.compare(this.end) <= 0) {
+      // Applies the give node style
+      node.style = style;
+      node = node.nextText(true);
+    }
+    // Defragments the text nodes when done
+    this.defrag();
+  }
+
+  /** Resets the selection style removing all formatting */
+  public clear(): EditableSelection {
+    return this.style = [], this;
   }
 
   /** 
@@ -529,6 +570,13 @@ export class EditableSelection {
     return this.defrag();
   }
 
+  /** Toggles a single format style on/off */
+  public toggleFormat(style: wmTextStyle): EditableSelection {
+    const remove = this.style.some( s => s === style );
+    return this.format([style], remove);
+  }
+
+  /** Returns true when the selected node is a link */
   public get isLink(): boolean {
     // Skips on invalid selection
     if(!this.valid) { return false; }
@@ -536,6 +584,7 @@ export class EditableSelection {
     return this.single && this.start.type === 'link';
   }
 
+  /** Turns the selection into a link node */
   public link(url: string): EditableSelection {
     // Performs unlinking when url is null
     if(!url) { return this.unlink(); }
@@ -560,6 +609,7 @@ export class EditableSelection {
     return this.set(this.start, 0, this.start, -1);
   }
 
+  /** Removes the links falling into the selection */
   public unlink(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
@@ -580,6 +630,64 @@ export class EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return false; }
     // Returns true if the selection entirely falls into the requested container type
-    return this.start.common(this.end) && this.start.container.type === type;
+    return this.start.siblings(this.end) && this.start.container.type === type;
+  }
+
+  /** Returns a tree fragment containing a copy of the selection  */
+  public copy(): EditableContent {
+    // Skips on invalid selection
+    if(!this.valid) { return null; }
+    // Forces wordwrapping when collapsed 
+    if(this.collapsed) { this.wordWrap(); }
+    // Trims the selection's edges
+    this.trim();
+    // Clones the selection into a tree fragment
+    const fragment = this.start.fragment(this.end);
+    // Skips any further process on whole selection
+    if(this.whole) { return fragment; }
+    // Gets the starting text node
+    const start = fragment.firstDescendant() as EditableText;
+    // Trims the text according to the selection offsets
+    if(this.single) { start.cut(this.startOfs, this.endOfs); }
+    // In case of multiple node selection
+    else {
+      // Trims both ends separately
+      const end = fragment.lastDescendant() as EditableText;
+      start.cut(this.startOfs);
+      end.cut(0, this.endOfs);
+    }
+    // Returns the fragments
+    return fragment;
+  }
+
+  /** 
+   * Returns the plain text content falling into the selection
+   * @param newline (default '\n') the char sequence to be used as line break
+   */
+  public text(newline = '\n'): string {
+    // Skips on invalid selection
+    if(!this.valid || this.collapsed) { return ''; }
+    // Handles the special case of a single text node
+    if(this.single) { 
+      return this.start.value.substring(this.startOfs, this.endOfs); 
+    }
+    // Concatenates the multiple text nodes
+    let text = this.start.tail(this.startOfs);
+    // Loops on the text nodes falling into the selection
+    let node = this.start;
+    while(!!node && node.compare(this.end) < 0) {
+      // Jumps on the next node
+      const next = node.nextText(true);
+      if(!next) { return text; }
+      // Appends a new line when switching between containers
+      if(!node.siblings(next)) { text += newline; }
+      // Concats the text values
+      text += next.value;
+      // Goes next
+      node = next;
+    }
+    // Completes with the tip text of the end node
+    if(!!node && !this.end.siblings(node)) { text += newline; }
+    return text + this.end.tip(this.endOfs);
   }
 }

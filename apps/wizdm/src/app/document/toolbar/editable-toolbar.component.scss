@@ -10,6 +10,16 @@
 
   span {
     pointer-events: all;
+    background-color: white;
     box-shadow: 0 0 6px 3px rgba(0,0,0,0.125);
+  }
+
+  button { 
+    border-radius: unset;
+    //color: rgba( black, 0.7 );
+    &.selected {
+      //color: black;
+      background-color: rgba( black, 0.1 );
+    }
   }
 }

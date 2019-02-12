@@ -8,7 +8,7 @@ export let $animations = [
     state('true', style({ height: '*' })),
     transition('false => true', [
       style({ height: 0 }),
-      query('a',
+      query('button',
         style({ 
           opacity: '0', 
           transform: 'translateY(-150px)'
@@ -16,14 +16,14 @@ export let $animations = [
       ),
       group([
         animate($smooth, style({ height: '*' })),
-        query('a', stagger(-100, animate($smooth, style('*'))))
+        query('button', stagger(-100, animate($smooth, style('*'))))
       ]),
     ]),
 
     transition('true => false',
       group([ 
         animate($smooth, style({ height: 0 })),
-        query('a', animate($smooth, style({ 
+        query('button', animate($smooth, style({ 
           opacity: '0', 
           transform: 'translateY(-150px)'
         })))

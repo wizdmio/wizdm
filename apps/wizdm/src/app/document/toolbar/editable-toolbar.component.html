@@ -3,15 +3,35 @@
 
     <span>
 
-      <mat-button-toggle-group [value]="style" (change)="format($event)" multiple>
+      <!-- Text Format -->
+      <button mat-icon-button *ngFor="let item of styles" (click)="sel.toggleFormat(item)" [ngClass]="{'selected': hasStyle(item) }">
+        <mat-icon>{{ 'format_' + item }}</mat-icon>
+      </button>
+
+      <!-- Alignement -->
+      <button mat-icon-button [matMenuTriggerFor]="alignMenu">
+        <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
+      </button>
+
+      <!--mat-button-toggle-group [value]="style" (change)="format($event)" multiple>
         <mat-button-toggle *ngFor="let format of styles" [value]="format">
           <mat-icon>{{ 'format_' + format }}</mat-icon>
         </mat-button-toggle>
-      </mat-button-toggle-group>
+      </mat-button-toggle-group-->
 
     </span>
 
   </div>
+
+<!-- Alignement -->
+<mat-menu #alignMenu="matMenu" fxLayout="column">
+
+  <button mat-icon-button *ngFor="let item of alignements" (click)="sel.align = item">
+    <mat-icon>{{'format_align_' + item }}</mat-icon>
+    <!--span>{{ labels.align[item] }}</span-->
+  </button>
+
+</mat-menu>
 
   <!--/div-->
 

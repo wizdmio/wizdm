@@ -1,7 +1,6 @@
-import { wmEditable, wmText, wmTextStyle, wmEditableType, wmNodeType, wmAlignType } from './editable-types';
+import { wmEditableTypes, wmEditable, wmText, wmTextStyle, wmEditableType, wmNodeType, wmAlignType } from './editable-types';
 
 export type EditablePosition = number[];
-
 export class EditableContent<T extends wmEditable = wmEditable> {
 
   protected node: T;
@@ -10,9 +9,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   protected pos: EditablePosition = [];
   protected children: EditableContent[] = [];
 
-  constructor(data: T) {
-    this.node = data || {} as T;
-  }
+  constructor(data: T) { this.node = data || {} as T; }
+
   /** Returns the node private data */
   get data(): T { return this.node; }
   /** Returns the node type */
@@ -23,13 +21,9 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns the parent container */
   get container(): EditableContent { return this.parent; }
   /** Returns the array of children */
-  get content(): EditableContent[] { return this.children || []; }
+  get content(): EditableContent[] { return this.children || (this.children = []); }
   /** Returns the number of child nodes */
   get count(): number { return this.content.length; }
-  /** Returns true whenever the node is the first child within its parent */
-  get first(): boolean { return this.index === 0; }
-  /** Returns true whenever the node is the last child within its parent */
-  get last(): boolean { return this.index === this.count - 1; }
   /** Return the node depth within the tree */
   get depth(): number { return !!this.pos ? this.pos.length : 0; }
   /** Returns the node unique ID based on node absolute position in the tree */
@@ -39,7 +33,12 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns true whenever this node has been removed from the tree */
   get removed(): boolean { return !this.parent || !this.parent.childOfMine(this);}
   /** Returns true wheneve this node is the only child within its parent */
-  get alone(): boolean { return this.removed || !this.parent && this.parent.count <= 1; }
+  get alone(): boolean { return this.removed || this.parent.count <= 1; }
+  /** Returns true whenever the node is the first child within its parent */
+  get first(): boolean { return !this.removed && this.index === 0; }
+  /** Returns true whenever the node is the last child within its parent */
+  get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }
+  
   /** Setting text value from cointainer is not supported */
   set value(text: string) { throw "Setting text value at container level is not supported";}
   /** Returns the text content of a branch by appending text node values recursively */
@@ -64,7 +63,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
    * @param type the type of node to be created
    * @return the new node
    */
-  public createNode(data: wmEditable): EditableContent {
+  public createNode(data: wmEditableTypes): EditableContent<wmEditableTypes> {
 
     if(!data) { return null; }
 
@@ -77,21 +76,38 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return new EditableContent(data);
   }
 
-  protected build(node: wmEditable): EditableContent<T> {
+  public build(source?: T): EditableContent<T> {
 
-    if(!!node && !!node.children) {
+    if(!!source) { this.node = source; }
+
+    if(this.node.children) {
       
-      this.children = node.children.map( (node, i) => {
-        // Wraps every child into an EditableContent instance 
-        const child = this.createNode(node);
-        // Makes  it a child of this
-        child.inherit(this, i);
-        // Recurs along further descendants
-        return child.build(node);
+      this.children = this.node.children.map( (node, i) => {
+
+        return this.createNode(node)
+          .inherit(this, i)
+          .build();
       });
     }
 
     return this;
+  }
+
+  public clone(withChildren: boolean = true): EditableContent {
+
+    const sanitize = function(node: EditableContent): wmEditable {
+      return {
+        // Spreads all the original data values
+        ...node.data,
+        // Makes sure children are sanitized as well (or undefined on request)
+        children: withChildren ? node.content.map( n => sanitize(n) ) : undefined, 
+        // Copies the style array, if any
+        style: !!(node.data as any).style ? [...(node.data as any).style] : undefined
+      } as wmEditable;
+    }
+
+    // Creates a new node mirroring this one 
+    return this.createNode( sanitize(this) ).build();
   }
 
   /**
@@ -117,10 +133,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   */
   private refresh(from: number = 0): EditableContent<T> {
 
-    let i = from;
-    for(let n = from; n < this.count; n++) {
-      this.content[n].inherit(this, i++);
-      this.content[n].refresh();
+    for(let i = from; i < this.count; i++) {
+      this.content[i].inherit(this, i).refresh();
     }
     return this;
   }
@@ -208,24 +222,26 @@ export class EditableContent<T extends wmEditable = wmEditable> {
 
   /** Checks if the requested node is among this children */
   public childOfMine(node: EditableContent): boolean {
-    return node.index < this.count && this.content[node.index] === node;
+    return !!node && node.index < this.count && this.content[node.index] === node;
   }
 
   /**
    * Splices the node content (children array) refreshing the siblings
-   * @param start index of which starting to change the array
+   * @param start child or index of which starting to change the array
    * @param count (optional) number of old nodes to be removed. 
    * When negative all the nodes from start till the end will be removed.
    * @param items (optional) the new items to be added starting at start 
    */
-  public splice(start: number, count: number, ...items: EditableContent[]) {
+  public splice(start: number|EditableContent, count: number, ...items: EditableContent[]) {
+    // Extracts the starting index
+    const index = typeof start === 'number' ? start : start.index;
     // Adjusts count to the max when negative
-    count = count < 0 ? (this.count - start) : count;
+    count = count < 0 ? (this.count - index) : count;
     if(count <= 0 && items.length <= 0) { return []; }
     // Insert/remove children nodes as requested
-    const nodes = this.content.splice(start, count, ...items);
+    const nodes = this.content.splice(index, count, ...items);
     // Refreshes the added and shifted children inheritance
-    this.refresh(start);
+    this.refresh(index);
     // Return the removed nodes
     return nodes;
   }
@@ -238,7 +254,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     // Makes sure the node still belongs to its parent
     if(this.removed) { return null; }
     // Removes the node by index
-    const node = this.parent.splice(this.index, 1)[0];
+    const node = this.parent.splice(this, 1)[0];
     // Recurs removing the parent if empty, returns otherwise
     return this.parent.empty ? this.parent.remove() : node;
   }
@@ -273,15 +289,6 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return this.childOfMine(before) ? (this.splice(before.index, 0, node), node) : null;
   }
 
-  /** 
-   * Insert a sibling node before this one 
-   * @param node the node to be inserted
-   * @return the new inserted node or null in case this node has no parent
-  */
-  public insertPrevious(node: EditableContent): EditableContent {
-    return !!this.parent ? this.parent.insertBefore(this, node) : null;
-  }
-
   /**
    * Inserts a node after the specified one
    * @param after the child node after wich to insert the new child
@@ -293,12 +300,29 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   }
 
   /** 
+   * Insert a sibling node before this one 
+   * @param node the node to be inserted
+   * @return the new inserted node or null in case this node has no parent
+  */
+  public insertPrevious(node: EditableContent): EditableContent {
+    return !!this.parent ? this.parent.insertBefore(this, node) : null;
+  }
+
+  /** 
    * Insert a sibling node after this one 
    * @param node the node to be inserted
    * @return the new inserted node or null in case this node has no parent
    */
   public insertNext(node: EditableContent): EditableContent {
     return !!this.parent ? this.parent.insertAfter(this, node) : null;
+  }
+
+  public createPrevious(data: wmEditableTypes): EditableContent {
+    return this.insertPrevious( this.createNode(data) );
+  }
+
+  public createNext(data: wmEditableTypes): EditableContent {
+    return this.insertNext( this.createNode(data) );
   }
 
   /** Returns the child node at the specified position or null */
@@ -391,6 +415,23 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return node;
   }
 
+  /** Helper function to perform depth-first lke tree traversal minimizing the number of traversed node */
+  private traverse(node: EditableContent, callbackfn: (left: EditablePosition, right: EditablePosition) => EditableContent): EditableContent {
+    // Skips on null or invalid parameters
+    if(!node || typeof callbackfn !== 'function') { return null; }
+    // Reverts the operation if node comes in the wrong order
+    if(this.compare(node) > 0) { return node.traverse(this, callbackfn); }
+    // Climbs up to the common ancestor
+    const root = this.common(node);
+    if(!!root) {
+      // Computes the node relative positions
+      const left = this.pos.slice(root.depth);
+      const right = node.pos.slice(root.depth);
+      // Starts traversing by calling the callback function on the root node
+      return callbackfn.call(root, left, right);
+    }
+    return null;
+  }
   /** 
    * Remove branches between the two nodes
    * @param node the node to remove branches up to.
@@ -398,18 +439,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
    * @return the common ancestor pruning started from
    */
   public prune(node: EditableContent): EditableContent {
-    // Reverts the operation if node comes in the wrong order
-    if(this.compare(node) > 0) { return node.prune(this); }
-    // Climbs up to the common ancestor
-    const root = this.common(node);
-    if(!!root) {
-      // Computes the node relative positions
-      const left = this.pos.slice(root.depth);
-      const right = node.pos.slice(root.depth);
-      // Starts pruning node in between positions
-      return root._prune(left, right);
-    }
-    return null;
+    // Depth-first traversal
+    return this.traverse(node, this._prune);
   }
 
   private _prune(left: EditablePosition, right: EditablePosition) {
@@ -418,29 +449,43 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     const rx = !!right ? right.shift() : undefined;
     // When both lx and rx are undefined we are done
     if(lx === undefined && rx === undefined) { return this; }
-    // Remove children in between. This works assuming both indexes are child of this node
-    if(lx !== undefined && rx !== undefined) {
-
-      this.childAt(lx)._prune(left, undefined);
-      this.childAt(rx)._prune(undefined, right);
-      this.splice(lx + 1, Math.max(rx - lx - 1, 0) );
-      // Done recurring
-      return this;
-    }
-    // Remove children right
-    if(lx !== undefined) {
-      
-      this.childAt(lx)._prune(left, undefined);
-      this.splice(lx + 1, -1);
-    }
-    // Remove children left
-    if(rx !== undefined) {
-
-      this.childAt(rx)._prune(undefined, right);
-      this.splice(0, rx);
-    }
-
+    // Depth-first traversal with post-order, recurs on left partial branch first
+    lx !== undefined && this.childAt(lx)._prune(left, undefined);
+    // Recurs on the right partial branch second
+    rx !== undefined && this.childAt(rx)._prune(undefined, right);
+    // Removes the full nodes in between last
+    const start = lx !== undefined ? lx + 1 : 0;
+    const count = rx !== undefined ? Math.max(rx - start, 0) : -1;
+    this.splice(start, count);
+    // Done recurring
     return this;
+  }
+
+  public fragment(node: EditableContent): EditableContent {
+    // Depth-first traversal
+    return this.traverse(node, this._fragment);
+  }
+
+  private _fragment(left: EditablePosition, right: EditablePosition): EditableContent {
+    // Consumes left and right indexes
+    const lx = !!left ? left.shift() : undefined;
+    const rx = !!right ? right.shift() : undefined;
+    // Clones the root node without children
+    const node = this.clone(false);
+    // Done
+    if(lx === undefined && rx === undefined) { return node; }
+    // Depth-first Traversal, appends the left partial branch first
+    lx !== undefined && node.appendChild( this.childAt(lx)._fragment(left, undefined) )
+    // Appends the full branches in between
+    const from = lx !== undefined ? lx + 1 : 0;
+    const till = rx !== undefined ? rx : this.count;
+    for(let i = from; i < till; i++) {
+      node.appendChild( this.childAt(i).clone() );
+    }
+    // Appends the right partial branch last
+    rx !== undefined && node.appendChild( this.childAt(rx)._fragment(undefined, right) );
+    // Done recurring
+    return node;
   }
 
   /**
@@ -448,19 +493,19 @@ export class EditableContent<T extends wmEditable = wmEditable> {
    * by joining siblings when sharing the same attributes
    */
   public defrag(): EditableContent {
-    
+    // Skips empty containers
     if(this.count <= 0) { return this; }
-
+    // Starts by recurring on the first child
     let start = this.firstChild().defrag();
-
+    // Loops on the sibling children
     for(let i = 1; i < this.count; i++) {
-
+      // Recurs down every sibling
       const next = this.childAt(i).defrag();
-
+      // Compare the two sibling nodes to join them eventually  
       if(start.same(next)) { start.join(next); i--;}
       else { start = next; }
     }
-
+    // Returs thenode for chaining
     return this;
   }
 }
@@ -492,25 +537,10 @@ export class EditableText extends EditableContent<wmText> {
   /** Sets/gets the container's alignement */
   set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align;} }
   get align(): wmAlignType { return !!this.parent ? this.parent.align : 'left'; }
+  /** Sets/gets the node style set */
+  set style(style: wmTextStyle[]) { this.data.style = [...style]; }
   get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
 
-/*
-  public render(el: HTMLElement): string {
-    this.element = el;
-    return this.value || '\u200B';
-  }
-
-  public sync(): EditableText {
-
-    if( !!this.element ) {
-
-      const text = this.element.textContent;
-      this.value = text.replace('\u200B', '');
-    }
-
-    return this;
-  }
-*/
   /** Compares whenever two nodes share the same type and format */
   public same(node: EditableText): boolean {
     // Skips testing null or non text nodes (links are never the same)
@@ -577,11 +607,6 @@ export class EditableText extends EditableContent<wmText> {
     return ret;
   }
 
-  /** Clears the text content */
-  public clear(): EditableText {
-    return this.value = '', this;
-  }
-
   /** 
    * Jumps to the previous editable text node.
    * @param traverse (default = false) when true the previous node will be returned
@@ -622,11 +647,11 @@ export class EditableText extends EditableContent<wmText> {
     } as wmEditable) as EditableText;
   }
 
-  public insertTextPrev(text: string, style?: wmTextStyle[]): EditableText {
+  public createTextPrev(text: string, style?: wmTextStyle[]): EditableText {
     return this.insertPrevious(this.createText(text, style)) as EditableText;
   }
 
-  public insertTextNext(text: string, style?: wmTextStyle[]): EditableText {
+  public createTextNext(text: string, style?: wmTextStyle[]): EditableText {
     return this.insertNext(this.createText(text, style)) as EditableText;
   }
 
@@ -697,7 +722,7 @@ export class EditableText extends EditableContent<wmText> {
       // Saturate till the end if to is not defined
       if(to === undefined) { to = this.length; }
       // When there's something to split at the tip...
-      if(from > 0) {
+      if(from > 0 && from < this.length) {
         // Creates a new text node splitting the text content
         const node = this.createText( this.extract(from), this.style );
         //...and inserts it after this node, than recurs to manage the tail
@@ -716,30 +741,19 @@ export class EditableText extends EditableContent<wmText> {
   }
 
   /** 
-   * Inserts a new editable block of the specified type right
-   * after this node to contain the following siblings, if any, 
-   * or an empty text node otherwise.
-   * @param type the typo  of editable to be inserted.
-   * @param backward when true insert the new block preceding this node, inserts it following otherwise.
-   * @return the new inserted block first child. 
+   * Wraps the content from this node foreward into an editable conteiner of the specified type
+   * @param type the type of editable for the content to be wrapped with.
+   * @return the new inserted block first child.
    */
-  public insertEditable(type: wmEditableType, backward: boolean = false): EditableText {
+  public wrap(type: wmEditableType): EditableText {
     // Skips the operation when not possible
     if(!this.parent) { return null; }
-    // Creates the new node
-    const editable = this.createNode({ type });
-    if(!editable) { return null; }
-    // Extracts the siblings to become the content of the new editable
-    const content = backward ? this.parent.splice(0, Math.max(this.index - 1, 0))
-      : this.parent.splice(this.index + 1, -1);
-    // Pushes the new content when available or a new empty text node otherwise
-    if(content.length > 0) { editable.splice(0, 0, ...content); }
-    else { editable.appendChild( this.createText('') ); } 
-    // Inserts the editable as this container sibling
-    const node = backward ? this.parent.insertPrevious(editable)
-      : this.parent.insertNext(editable);
-    // Returns the new etitable first child
-    return node.firstChild() as EditableText;
+    // Creates a new node as this container next sibling
+    const editable = this.parent.createNext({ type });
+    // Relocates the content from this node foreward to the new container 
+    editable.splice(0, 0, ...this.parent.splice(this.index, -1));
+    // Returns the new editable first child
+    return editable.firstChild() as EditableText;
   }
 
   public link(url: string): EditableText {

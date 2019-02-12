@@ -47,13 +47,6 @@ export class EditableMenu {
 
   constructor(private sel: EditableSelection) { }
 
-  public get align() { return this.sel.align; }
-  public set align(align) { this.sel.align = align; }
-
-  public dummyLink() { this.sel.link('./'); }
-
-  public unlink() { this.sel.unlink(); }
-
   //--
 
   public left = 0;

@@ -1,9 +1,9 @@
 export const $document = {
   header: {
     author: "wizdm",
-    version: "1",
-    type: "document"
+    version: "1"
   },
+  type: "document",
   children: [
     { type: "heading", "level": 1, align: "center", children: [
       { type: "text", value: "Title", style: ["bold"] }

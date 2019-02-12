@@ -2,14 +2,14 @@
 
 <mat-menu #menu="matMenu">
 
-  <button mat-menu-item *ngIf="!this.sel.isHeading" [matMenuTriggerFor]="sizeMenu">
+  <button mat-menu-item *ngIf="!sel.isHeading" [matMenuTriggerFor]="sizeMenu">
     <mat-icon>format_size</mat-icon>
     <span>{{ labels.format.size }}</span>
   </button>
 
   <!-- Alignement -->
   <button mat-menu-item [matMenuTriggerFor]="alignMenu">
-    <mat-icon>{{'format_align_' + align }}</mat-icon>
+    <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
     <span>{{ labels.align.title }}</span>
   </button>
   <!-- Format -->
@@ -18,17 +18,17 @@
     <span>{{ labels.format.title }}</span>
   </button-->
 
-  <button mat-menu-item *ngIf="!this.sel.isLink" (click)="dummyLink()">
+  <button mat-menu-item *ngIf="!sel.isLink" (click)="sel.link('./')">
     <mat-icon>link</mat-icon>
     <span>{{ labels.insert.link }}</span>
   </button>
 
-  <button mat-menu-item *ngIf="this.sel.isLink" (click)="unlink()">
+  <button mat-menu-item *ngIf="sel.isLink" (click)="sel.unlink()">
     <mat-icon>link_off</mat-icon>
     <span>{{ labels.insert.unlink }}</span>
   </button>
 
-  <button mat-menu-item>
+  <button mat-menu-item (click)="sel.clear()">
     <mat-icon>format_clear</mat-icon>
     <span>{{ labels.format.clear }}</span>
   </button>
@@ -39,7 +39,7 @@
 <!-- Alignement -->
 <mat-menu #alignMenu="matMenu">
 
-  <button mat-menu-item *ngFor="let item of alignements" (click)="align = item">
+  <button mat-menu-item *ngFor="let item of alignements" (click)="sel.align = item">
     <mat-icon>{{'format_align_' + item }}</mat-icon>
     <span>{{ labels.align[item] }}</span>
   </button>

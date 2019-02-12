@@ -2,7 +2,7 @@ import { trigger, state, animate, style, transition, group, query, animateChild 
 const $timing = '350ms ease-out';
 
 export const $animations = [
-  
+  /*
   trigger('toggler', [
     transition('* => *', group([ 
       //query(':self', []),
@@ -11,7 +11,7 @@ export const $animations = [
       query('@bottom', animateChild())
     ]))
   ]),
-
+*/
   // Toggler top element
   trigger('top', [
     // Menu style: 

@@ -17,9 +17,14 @@ export class EditableToolbar{
   constructor(private sel: EditableSelection) { }
 
   public styles = ['bold', 'italic', 'underline', 'strikethrough'];
+  public alignements = ['left', 'center', 'right', 'justify'];
 
-  get style(): wmTextStyle[] { return this.sel.style; }
+  //get style(): wmTextStyle[] { return this.sel.style; }
 
+  public hasStyle(style: wmTextStyle): boolean {
+    return this.sel.style.some( s => s === style);
+  }
+/*
   public format(change: MatButtonToggleChange) {
 
     const oldFormat: wmTextStyle[] = this.style || [];
@@ -36,15 +41,5 @@ export class EditableToolbar{
       console.log('rem: ' + rem);
        this.sel.format(rem, true);
     }  
-  }
-/*
-  
-  public style: string[] = [];
-
-  @Input('style') set currentFormat(format: string[]) {
-
-    this.style = !!format ? format.filter( ff => this.styles.some(sm => ff === sm) ) : [];
-    console.log(this.style);
-  }
- */
+  }*/
 }

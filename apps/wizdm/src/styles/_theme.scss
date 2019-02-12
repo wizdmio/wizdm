@@ -92,7 +92,7 @@ $wm-theme: extend-material-theme($wm-theme,
     editor:            rgba(white, 0.8),
   
     // Adds Elements/Markdown specific foreground extensions
-    toggler:           mat-color($mat-grey, 500),
+    toggler:           mat-color($wm-primary),//rgba(mat-color($wm-primary, 900), 0.87),
     action:            mat-color($wm-primary),
     link:              mat-color($wm-primary)
   ),
