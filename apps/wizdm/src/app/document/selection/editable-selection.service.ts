@@ -267,8 +267,10 @@ export class EditableSelection {
       const element = node.parentNode as Element;
       // Walks the tree searching for the node to return
       const txt = this.root.walkTree(!!element && element.id) as EditableText;
+      // Returns null when nodes are of unexpected types
       if(!txt || txt.type !== 'text' && txt.type !== 'link') { return [null, 0]; }
-      return [txt, offset];
+      // Zeroes the offset on empty nodes
+      return [txt, txt.empty ? 0 : offset];
     }
     // If not, selection is likely falling on a parent element, so, 
     // we search for the child element relative to the parent offfset 
