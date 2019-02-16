@@ -9,7 +9,17 @@ export const $document = {
       { type: "text", value: "Title", style: ["bold"] }
     ]},
     { type: "blockquote", align: "left", children: [
-      { type: "text", value: "This is a note" }
+      { type: "paragraph", align: "justify", children: [
+        { type: "text", value: "This is an quote containing a list :)"}
+      ]},
+      { type: "bulleted", children: [
+        { type: "item",  children: [
+          { type: "text", value: "List item" }
+        ]},
+        { type: "item",  children: [
+          { type: "text", value: "List item" }
+        ]}
+      ]}
     ]},
     { type: "paragraph", align: "justify", children: [
       { type: "text", value: "This is a "},
@@ -52,11 +62,19 @@ export const $document = {
       ]}
     ]},
     { type: "paragraph", align: "left", children: [
-      { type: "text", value: "...followed by an unordered one:" }
+      { type: "text", value: "...followed by an unordered multiple level one:" }
     ]},
-    { type: "bulletted", children: [
+    { type: "bulleted", children: [
       { type: "item",  children: [
         { type: "text", value: "List item" }
+      ]},
+      { type: "bulleted", children: [
+        { type: "item",  children: [
+          { type: "text", value: "Nested item" }
+        ]},
+        { type: "item",  children: [
+          { type: "text", value: "Nested item" }
+        ]}
       ]},
       { type: "item",  children: [
         { type: "text", value: "List item" }

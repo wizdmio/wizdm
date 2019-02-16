@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { EditableText, EditableContent } from '../common/editable-content';
-import { wmDocument, wmTextStyle, wmAlignType, wmEditableType } from '../common/editable-types';
+import { wmDocument, wmHeading, wmTextStyle, wmAlignType, wmEditableType, wmBlockType, wmInlineType } from '../common/editable-types';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class EditableSelection {
 
   private modified = false;
 
-  constructor(@Inject(DOCUMENT) readonly document: Document) { }
+  constructor() { }
 
   public attach(document: EditableContent<wmDocument>): EditableSelection {
     return (this.root = document), this;
@@ -40,6 +39,8 @@ export class EditableSelection {
   public get collapsed(): boolean {
     return this.single && (this.startOfs === this.endOfs);
   }
+
+  public get marked(): boolean { return this.modified; }
 
   public mark(modified = true): EditableSelection {
     this.modified = modified;
@@ -297,11 +298,13 @@ export class EditableSelection {
   /**
    * Queries the document for the current selection
    */
-  public query(): EditableSelection {
+  public query(from: Document): EditableSelection {
+
+    if(!from) { return null; }
 
     try {
       // Query for the document selection range
-      const sel = this.document.getSelection();
+      const sel = from.getSelection();
       const range = (!!sel && sel.rangeCount > 0) && sel.getRangeAt(0);
       if(!!range) {
         // Cut it short on a collapsed range
@@ -328,9 +331,9 @@ export class EditableSelection {
     return this.mark(false);
   }
 
-  private toDom(node: EditableText): Node {
+  private toDom(node: EditableText, document: Document): Node {
     // Gets the node container element
-    const el = !!node ? this.document.getElementById(node.id) : null;
+    const el = !!node ? document.getElementById(node.id) : null;
     if(!el.hasChildNodes()) { return null; }
     // Let's search for the first element (so basically skipping comments)
     let child = el.firstChild as Node;
@@ -347,20 +350,20 @@ export class EditableSelection {
   /**
    * Applies the current selection to the document.
    */
-  public apply(): EditableSelection {
-    // Skips on invalid or unmodified selections
-    if(!this.valid || !this.modified) { return this; }
+  public apply(to: Document): EditableSelection {
+    // Skips on invalid selections
+    if(!to || !this.valid) { return this; }
 
     try {
       // Gets the current selection
-      const sel = this.document.getSelection();
+      const sel = to.getSelection();
       // Removes all ranges (aka empty the selection)
       sel.removeAllRanges();
       // Creates a new range
-      const range = this.document.createRange();
+      const range = to.createRange();
       // Maps the selection to the relevant dom nodes
-      const start = this.toDom(this.start);
-      const end = this.single ? start : this.toDom(this.end);
+      const start = this.toDom(this.start, to);
+      const end = this.single ? start : this.toDom(this.end, to);
       // Apply the new range to the document
       range.setStart(start, this.startOfs);
       range.setEnd(end, this.endOfs);
@@ -386,7 +389,7 @@ export class EditableSelection {
     }
     // Inserts the new char at the specified position
     this.start.insert(char, this.startOfs);
-    return this.move(1);
+    return this.move(char.length);
   }
 
   /** Deletes the selection from the document tree */
@@ -433,10 +436,10 @@ export class EditableSelection {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
-    // Get this node block type (the root child contaning it)
-    const block = this.start.ancestor(1);
+    // Get this node block type
+    const block = this.start.block();
     // Matches the relevant editable container to be added depending on the block type 
-    const match = { numbered: 'item', bulletted: 'item', table: 'cell' };
+    const match = { numbered: 'item', bulleted: 'item', table: 'cell' };
     // Inserts an extra empty text on the start edge
     if(this.start.first && this.startOfs === 0) {
       // Preserve the same start node style
@@ -500,6 +503,16 @@ export class EditableSelection {
     return this;
   }
 
+  /** Returns true when the selection fully belongs within a container at root level */
+  public get atRoot(): boolean {
+    // Skips invalid selection
+    if(!this.valid) { return false; }
+    // Compares the start/end containers
+    const container = this.start.container === this.end.container ? this.start.container : null; 
+    // Verifies the common container is a root child
+    return !!container && container.depth === 1;
+  }
+
   /** Returns the current selection alignement (corresponding to the start node container's) */
   public get align(): wmAlignType {
     return this.valid ? this.start.align : 'left';
@@ -517,6 +530,19 @@ export class EditableSelection {
       //// Gets the next container
       const next = container.lastChild().next();
       container = !!next ? next.container : null;
+    }
+  }
+
+  /** Returns the current selection level (corresponding to the start node container's) */
+  public get level(): number { 
+    return this.valid ? this.start.level : 0;
+  }
+
+  /** Applies a new level to the selection */
+  public set level(level: number) {
+    if(this.valid) {
+      this.start.level = level;
+      this.mark();
     }
   }
 
@@ -578,14 +604,6 @@ export class EditableSelection {
     return this.format([style], remove);
   }
 
-  /** Returns true when the selected node is a link */
-  public get isLink(): boolean {
-    // Skips on invalid selection
-    if(!this.valid) { return false; }
-    // Returns true if the curson is on a link 
-    return this.single && this.start.type === 'link';
-  }
-
   /** Turns the selection into a link node */
   public link(url: string): EditableSelection {
     // Performs unlinking when url is null
@@ -625,14 +643,17 @@ export class EditableSelection {
     return this.defrag();
   }
 
-  public isHeading(): boolean { return this.editableType('heading'); }
-  //public isQuote(): boolean { return this.editableType('blockquote'); }
-
-  private editableType(type: wmEditableType): boolean {
+  /** Returns true if the current selection fully belongs to the specified block or inline type */
+  public belongsTo(type: wmBlockType|wmInlineType): boolean {
     // Skips on invalid selection
     if(!this.valid) { return false; }
-    // Returns true if the selection entirely falls into the requested container type
-    return this.start.siblings(this.end) && this.start.container.type === type;
+    // Treat single text/link as a special cases
+    if(type === 'text' || type === 'link') { return this.single && this.start.type === type; }
+    // Gets the start node block otherwise
+    const block = this.start.block();
+    if(!block) { return false; }
+    // Returns true if the selection entirely falls into the same block of the requested type
+    return (this.single || this.end.block() === block) && block.type === type;
   }
 
   /** Returns a tree fragment containing a copy of the selection  */

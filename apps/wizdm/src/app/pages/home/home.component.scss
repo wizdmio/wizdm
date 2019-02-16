@@ -1,0 +1,20 @@
+@import "variables";
+@import "theme";
+
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  
+  //padding: $wm-content-padding;
+  //margin: $wm-content-margin;
+
+  @include wm-padding-top();
+
+  .banner {
+
+    padding: 30px;
+
+    text-align: center;
+  }
+}

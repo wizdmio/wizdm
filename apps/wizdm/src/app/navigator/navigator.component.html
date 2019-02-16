@@ -11,11 +11,6 @@
       <!-- Left pane -->
       <nav fxLayout="row" fxLayoutAlign="start center">
 
-        <!-- Mobile menu toggler -->
-        <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
-          <wm-toggler toggler-style="menu" [status]="toggler"></wm-toggler>
-        </button>
-
         <!-- Wizdm logo routing to home -->
         <wm-logo [caption]="desktop ? msgs.logo : ''" routerLink="."></wm-logo>  
     
@@ -41,6 +36,11 @@
         
           </wm-flip>
 
+        </button>
+
+        <!-- Mobile menu toggler -->
+        <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
+          <wm-toggler toggler-style="menu" [status]="toggler"></wm-toggler>
         </button>
 
       </div>

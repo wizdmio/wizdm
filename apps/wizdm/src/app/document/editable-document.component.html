@@ -1,8 +1,8 @@
-
 <ng-container *ngFor="let node of content">
 
   <ng-container [ngSwitch]="node.type">
 
+    <!-- Headings as root children only (no indentation) -->
     <ng-container *ngSwitchCase="'heading'">
       <h1 *ngIf="node.data.level === 1" [wm-editable]="node"></h1>
       <h2 *ngIf="node.data.level === 2" [wm-editable]="node"></h2>
@@ -12,18 +12,24 @@
       <h6 *ngIf="node.data.level === 6" [wm-editable]="node"></h6>
     </ng-container>
 
-    <blockquote *ngSwitchCase="'blockquote'" [wm-editable]="node"></blockquote>
-
+    <!-- Plain paragraphs at root child level -->
     <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
 
+    <!-- Numbered lists with nesting -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
 
-    <ul *ngSwitchCase="'bulletted'" [wm-list]="node"></ul>
+    <!-- Bulleted lists with nesting -->
+    <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
 
+    <!-- Blockquotes supporting paragraph and list indentation -->
+    <blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote>
+
+    <!-- Tables as root children only -->
     <table *ngSwitchCase="'table'" [wm-table]="node"></table>
 
+    <!-- Images as root children only -->
     <div *ngSwitchCase="'image'" [wm-image]="node"></div>
 
   </ng-container>
-
+  
 </ng-container>

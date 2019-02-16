@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ContentManager } from '@wizdm/content';
 
 @Component({
   selector: 'wm-home',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  public msgs = null;
+  
+  constructor(private content: ContentManager) {
+    // Gets the localized content
+    this.msgs = this.content.select('home');
+  }
 
   ngOnInit() {
   }

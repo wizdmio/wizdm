@@ -1,69 +1,124 @@
+<div fxLayout="row" fxLayoutAlign="center center">
 
-  <div fxLayout="row" fxLayoutAlign="center center">
+  <span>
 
-    <span>
+      <!-- Size -->
+    <button mat-icon-button [matMenuTriggerFor]="sizeMenu" [disabled]="!hasSize()">
+      <mat-icon>format_size</mat-icon>
+    </button>
 
-      <!-- Text Format -->
-      <button mat-icon-button *ngFor="let item of styles" (click)="sel.toggleFormat(item)" [ngClass]="{'selected': hasStyle(item) }">
-        <mat-icon>{{ 'format_' + item }}</mat-icon>
-      </button>
+    <!-- Text Format -->
+    <button mat-icon-button [matMenuTriggerFor]="formatMenu" [disabled]="sel.belongsTo('link')">
+      <mat-icon>{{ sel.style.length > 0 ? 'format_' + sel.style[0] : 'text_format' }}</mat-icon>
+    </button>
 
-      <!-- Alignement -->
-      <button mat-icon-button [matMenuTriggerFor]="alignMenu">
-        <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
-      </button>
+    <!-- Alignement -->
+    <button mat-icon-button [matMenuTriggerFor]="alignMenu">
+      <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
+    </button>
 
-      <!--mat-button-toggle-group [value]="style" (change)="format($event)" multiple>
-        <mat-button-toggle *ngFor="let format of styles" [value]="format">
-          <mat-icon>{{ 'format_' + format }}</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group-->
+    <!-- Numbered list -->
+    <button mat-icon-button (click)="doNothing()">
+      <mat-icon>format_list_numbered</mat-icon>
+    </button>
 
-    </span>
+    <!-- Bulletted list -->
+    <button mat-icon-button (click)="doNothing()">
+      <mat-icon>format_list_bulleted</mat-icon>
+    </button>
 
-  </div>
+      <!-- Indent less -->
+    <button mat-icon-button (click)="doNothing()">
+      <mat-icon>format_indent_decrease</mat-icon>
+    </button>
 
-<!-- Alignement -->
-<mat-menu #alignMenu="matMenu" fxLayout="column">
+    <!-- More -->
+    <button mat-icon-button [matMenuTriggerFor]="extraMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
 
-  <button mat-icon-button *ngFor="let item of alignements" (click)="sel.align = item">
-    <mat-icon>{{'format_align_' + item }}</mat-icon>
-    <!--span>{{ labels.align[item] }}</span-->
+  </span>
+
+</div>
+
+<!-- Size -->
+<mat-menu #sizeMenu="matMenu">
+
+  <button mat-menu-item 
+          [style.backgroundColor]="sel.level === 1 ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.level = 1">
+    <h1 style="margin: 0">Heading 1</h1>
+  </button>
+
+  <button mat-menu-item 
+          [style.backgroundColor]="sel.level === 2 ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.level = 2">
+    <h2 style="margin: 0">Heading 2</h2>
+  </button>
+
+  <button mat-menu-item 
+          [style.backgroundColor]="sel.level === 3 ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.level = 3">
+    <h3 style="margin: 0">Heading 3</h3>
+  </button>
+
+  <button mat-menu-item 
+          [style.backgroundColor]="sel.level === 0 ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.level = 0">
+    <p style="margin: 0">Paragraph</p>
   </button>
 
 </mat-menu>
 
-  <!--/div-->
+<!-- format -->
+<mat-menu #formatMenu="matMenu">
 
-    <!--mat-button-toggle-group #style="matButtonToggleGroup">
-      <mat-button-toggle value="size">
-        <mat-icon>format_size</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="quote">
-        <mat-icon>format_quote</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="bulletted">
-        <mat-icon>format_list_bulleted</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="numbered">
-        <mat-icon>format_list_numbered</mat-icon>
-      </mat-button-toggle>
-    </mat-button-toggle-group-->
+  <button mat-icon-button *ngFor="let item of styles" 
+          style="display: block; border-radius: 0"
+          [style.backgroundColor]="hasStyle(item) ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.toggleFormat(item)">
+    <mat-icon>{{'format_' + item }}</mat-icon>
+  </button>
 
-    <!-- Alignement -->
-    <!--mat-button-toggle-group #alignement="matButtonToggleGroup" 
-      [value]="align"
-      (valueChange)="changeAlign($event)">
-      <mat-button-toggle value="left">
-        <mat-icon>format_align_left</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="center">
-        <mat-icon>format_align_center</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="right">
-        <mat-icon>format_align_right</mat-icon>
-      </mat-button-toggle>
-      <mat-button-toggle value="justify" disabled>
-        <mat-icon>format_align_justify</mat-icon>
-      </mat-button-toggle>
-  </mat-button-toggle-group-->
+</mat-menu>
+
+<!-- Alignement -->
+<mat-menu #alignMenu="matMenu">
+
+  <button mat-icon-button *ngFor="let item of alignements" 
+          style="display: block; border-radius: 0"
+          [style.backgroundColor]="item === sel.align ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.align = item">
+    <mat-icon>{{'format_align_' + item }}</mat-icon>
+  </button>
+
+</mat-menu>
+
+<!-- Extras -->
+<mat-menu #extraMenu="matMenu">
+
+  <button mat-icon-button style="display: block; border-radius: 0" (click)="doNothing()">
+    <mat-icon>format_quote</mat-icon>
+  </button>
+
+  <button mat-icon-button style="display: block; border-radius: 0" *ngIf="!sel.belongsTo('link')" (click)="sel.link('./')">
+    <mat-icon>link</mat-icon>
+  </button>
+
+  <button mat-icon-button style="display: block; border-radius: 0" *ngIf="sel.belongsTo('link')" (click)="sel.unlink()">
+    <mat-icon>link_off</mat-icon>
+  </button>
+
+  <button mat-icon-button style="display: block; border-radius: 0" (click)="doNothing()">
+    <mat-icon>format_clear</mat-icon>
+  </button>
+
+  <button mat-icon-button style="display: block; border-radius: 0" (click)="doNothing()">
+    <mat-icon>table_chart</mat-icon>
+  </button>
+
+  <button mat-icon-button style="display: block; border-radius: 0" (click)="doNothing()">
+    <mat-icon>insert_photo</mat-icon>
+  </button>
+
+</mat-menu>

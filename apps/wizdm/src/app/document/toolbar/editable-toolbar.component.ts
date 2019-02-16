@@ -21,6 +21,10 @@ export class EditableToolbar{
 
   //get style(): wmTextStyle[] { return this.sel.style; }
 
+  public hasSize(): boolean {
+    return this.sel.belongsTo('heading') || (this.sel.atRoot && this.sel.belongsTo('paragraph'));
+  }
+
   public hasStyle(style: wmTextStyle): boolean {
     return this.sel.style.some( s => s === style);
   }

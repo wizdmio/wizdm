@@ -20,8 +20,9 @@
 
   "modules" : {
     "navigator": "navigator.json",
-    "explore": "explore.json",
     "login": "login.json",
+    "home": "home.json",
+    "explore": "explore.json",
     "profile": "profile.json",
     "dashboard": "dashboard.json",
     "apply": "apply.json",

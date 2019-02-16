@@ -1,4 +1,4 @@
-import { wmEditableTypes, wmEditable, wmText, wmTextStyle, wmEditableType, wmNodeType, wmAlignType } from './editable-types';
+import { wmEditableTypes, wmEditable, wmHeading, wmText, wmTextStyle, wmEditableType, wmNodeType, wmAlignType } from './editable-types';
 
 export type EditablePosition = number[];
 export class EditableContent<T extends wmEditable = wmEditable> {
@@ -37,26 +37,30 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns true whenever the node is the first child within its parent */
   get first(): boolean { return !this.removed && this.index === 0; }
   /** Returns true whenever the node is the last child within its parent */
-  get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }
-  
+  get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }  
   /** Setting text value from cointainer is not supported */
   set value(text: string) { throw "Setting text value at container level is not supported";}
   /** Returns the text content of a branch by appending text node values recursively */
-  get value(): string {
-
-    return this.content.reduce( (txt: string, node: EditableContent) => {
-
-      txt += node.value.replace('\n', ' ');
-      return txt;
-
-    }, '');
-  }
+  get value(): string { return this.content.reduce( (txt, node) => txt + node.value, ''); }
   // Containers node lenght not supported to avoid performance issues
   get length() { return 0; }
-  /** Structural nodes never chare the same atttributes */
+  /** Structural nodes never share the same atttributes */
   public same(node: EditableContent): boolean { return false; }
   /** Structural nodes never need to be joined */
   public join(node: EditableContent): EditableContent { return this; }
+  /** Returns the current heading node level*/
+  public get level(): number { return this.type === 'heading' ? (this.data as wmHeading).level : 0;}
+  /** Applies a new level to the node, when applicable */
+  public set level(level: number) {
+    // Skips invalid values
+    if(level < 0 || level > 6) { return; }
+    // When level is zeroed, turn the heading into a paragraph
+    if(this.type === 'heading' && level === 0) { this.data.type = 'paragraph'; }
+    // When the level is greater than zero, turn a root paragraph into an heading
+    else if(this.type === 'paragraph' && level > 0 && this.depth === 1) { this.data.type = 'heading'; }
+    // Applies the new level
+    (this.data as wmHeading).level = level > 0 ? level : undefined; 
+  }
 
    /**
    * Creates a new node of the specified type
@@ -76,23 +80,47 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return new EditableContent(data);
   }
 
-  public build(source?: T): EditableContent<T> {
-
-    if(!!source) { this.node = source; }
-
-    if(this.node.children) {
-      
+  /** Loads the source document building the data tree */
+  public load(source: T): EditableContent<T> {
+    // Assigns the source to the node data
+    if(!!(this.node = source) && this.node.children) {
+      // Recurs on children
       this.children = this.node.children.map( (node, i) => {
-
+        // Creates the children nodes of the requested type
         return this.createNode(node)
+          // Links it to the parent
           .inherit(this, i)
-          .build();
+          // Recurs down the tree
+          .load(node);
       });
     }
 
     return this;
   }
 
+  /** Creates a new empty document */
+  public new(): EditableContent<T> {
+    // Creates a new tree made of a document containing 
+    // a single paragraph with a signle empty text node
+    return this.load({
+      type: 'document', children: [{ 
+        type: 'paragraph', children: [{ 
+          type: 'text', value: '' 
+    }]}]} as any);
+  }
+
+  /** Saves the document by updating the inner data tree and returning it */
+  public save(): T {
+    // Loops on content children updating the data children
+    this.data.children = this.content.map( node => {
+      // Recurs down the tree
+      return node.save();
+    });
+    // Returns the inner data
+    return this.data;
+  }
+
+  /** Clones a node with or whithout its children */
   public clone(withChildren: boolean = true): EditableContent {
 
     const sanitize = function(node: EditableContent): wmEditable {
@@ -106,8 +134,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
       } as wmEditable;
     }
 
-    // Creates a new node mirroring this one 
-    return this.createNode( sanitize(this) ).build();
+    // Creates a new node/tree mirroring this one 
+    return this.createNode( sanitize(this) ).load(this.data);
   }
 
   /**
@@ -131,7 +159,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Refreshes children inheritance recurring along descendants 
    * @param from (optional) optionally start from a non-zero index 
   */
-  private refresh(from: number = 0): EditableContent<T> {
+  private refresh(from: number = 0): EditableContent {
 
     for(let i = from; i < this.count; i++) {
       this.content[i].inherit(this, i).refresh();
@@ -186,6 +214,16 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     if(this.depth === depth) { return this; }
     // Climbs to the next level
     return !!this.parent ? this.parent.ancestor(depth) : null;
+  }
+
+  /** Seeks for the block ancestor */  
+  public block(): EditableContent {
+    // DOne when reaching a block type, climb up the tree otherwise
+    return this.type === 'paragraph' ||
+           this.type === 'heading'   ||
+           this.type === 'numbered'  ||
+           this.type === 'bulleted'  ||
+           this.type === 'table' ? this : (!!this.parent ? this.parent.block() : null); 
   }
 
   /** 
@@ -513,23 +551,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
 /** Implements text nodes */
 export class EditableText extends EditableContent<wmText> {
 
-  //public element: HTMLElement;
-  
   constructor(data: wmText) { super(data); }
-/*
-  get text() { return this.type === 'text'; }
-  get link() { return this.type === 'link'; }
 
-  public hasStyle(style: string) { return this.text && this.style.some( s => s === style ); }
-  
-  get bold() { return this.hasStyle('bold'); }
-  get italic() { return this.hasStyle('italic'); }
-  get underline() { return this.hasStyle('underline'); }
-  get overline() { return this.hasStyle('overline'); }
-  get strikethrough() { return this.hasStyle('strikethrough'); }
-  get subScript() { return this.hasStyle('sub'); }
-  get superScript() { return this.hasStyle('super'); }
-*/
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
   get length() { return this.value.length; }
@@ -537,6 +560,9 @@ export class EditableText extends EditableContent<wmText> {
   /** Sets/gets the container's alignement */
   set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align;} }
   get align(): wmAlignType { return !!this.parent ? this.parent.align : 'left'; }
+  /** Sets/gets the container's level */
+  set level(level: number) { if(!!this.parent) { this.parent.level = level;} }
+  get level(): number { return !!this.parent ? this.parent.level : 0; }
   /** Sets/gets the node style set */
   set style(style: wmTextStyle[]) { this.data.style = [...style]; }
   get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
@@ -740,8 +766,19 @@ export class EditableText extends EditableContent<wmText> {
     return this;
   }
 
+  /** Turns a text into a link node and back */
+  public link(url: string): EditableText {
+    // Turns the node into a link (if not already) or back to a plain text
+    this.data.type = !!url ? 'link' : 'text';
+    // Updates the url accordingly
+    this.data.url = !!url ? url : undefined;
+    // Resets the style
+    this.data.style = [];
+    return this;
+  }
+
   /** 
-   * Wraps the content from this node foreward into an editable conteiner of the specified type
+   * Moves the content from this node foreward into a new editable container of the specified type
    * @param type the type of editable for the content to be wrapped with.
    * @return the new inserted block first child.
    */
@@ -756,13 +793,11 @@ export class EditableText extends EditableContent<wmText> {
     return editable.firstChild() as EditableText;
   }
 
-  public link(url: string): EditableText {
-    // Turns the node into a link (if not already) or back to a plain text
-    this.data.type = !!url ? 'link' : 'text';
-    // Updates the url accordingly
-    this.data.url = !!url ? url : undefined;
-    // Resets the style
-    this.data.style = [];
+  public xform(type: wmNodeType): EditableText {
+    // Skips the operation when not possible
+    if(!this.parent) { return null; }
+
+
     return this;
   }
 }

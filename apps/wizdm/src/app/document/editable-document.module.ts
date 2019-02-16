@@ -14,6 +14,7 @@ import {
 import { EditableDocument } from './editable-document.component';
 import { EditableComponent } from './editable/editable.component';
 import { ListComponent } from './list/list.component';
+import { BlockComponent } from './block/block.component';
 import { TableComponent } from './table/table.component';
 import { ImageComponent } from './image/image.component';
 import { EditableToc } from './toc/editable-toc.component';
@@ -34,6 +35,7 @@ import { EditableToolbar } from './toolbar/editable-toolbar.component';
     EditableDocument, 
     EditableComponent,
     ListComponent, 
+    BlockComponent,
     TableComponent, 
     ImageComponent, 
     EditableToc,

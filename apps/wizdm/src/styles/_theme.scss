@@ -50,13 +50,13 @@ $wm-font-family: 'Ubuntu, sans-serif';
 // Creates a customized material typography first...
 $wm-typography: mat-typography-config(
   $font-family:   $wm-font-family,
-  $headline:      mat-typography-level(32px, 48px, 700),
-  $title:         mat-typography-level(24px, 32px, 600),
-  $subheading-2:  mat-typography-level(20px, 28px, 600),
-  $subheading-1:  mat-typography-level(18px, 24px, 600),
-  $body-2:        mat-typography-level(18px, 24px, 500),
-  $body-1:        mat-typography-level(16px, 20px, 500),
-  $button:        mat-typography-level(16px, 20px, 500)
+  $headline:      mat-typography-level(36px, 48px, 400),
+  $title:         mat-typography-level(24px, 32px, 400),
+  $subheading-2:  mat-typography-level(20px, 28px, 400),
+  $subheading-1:  mat-typography-level(18px, 24px, 400),
+  $body-2:        mat-typography-level(18px, 24px, 400),
+  $body-1:        mat-typography-level(16px, 20px, 400),
+  $button:        mat-typography-level(16px, 20px, 400)
 );
 //.. than extends with some application specific values
 $wm-typography: extend-material-typography($wm-typography, (
@@ -92,7 +92,7 @@ $wm-theme: extend-material-theme($wm-theme,
     editor:            rgba(white, 0.8),
   
     // Adds Elements/Markdown specific foreground extensions
-    toggler:           mat-color($wm-primary),//rgba(mat-color($wm-primary, 900), 0.87),
+    toggler:           rgba(mat-color($wm-primary, 900), 0.87),
     action:            mat-color($wm-primary),
     link:              mat-color($wm-primary)
   ),
@@ -160,6 +160,7 @@ $wm-theme-background: map-get($wm-theme, background);
 
   // Resets the default mat-menu padding
   .mat-menu-content { padding: 0 !important;}
+  .mat-menu-panel { min-width: unset !important;}
 
   // Resets the default menu typography to buttons
   .mat-menu-item {

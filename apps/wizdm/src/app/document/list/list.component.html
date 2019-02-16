@@ -1,2 +1,16 @@
+<ng-container *ngFor="let node of list?.content">
 
-<li *ngFor="let item of list.content" [wm-editable]="item"></li>
+  <ng-container [ngSwitch]="node.type">
+
+    <!-- List items -->
+    <li *ngSwitchCase="'item'" [wm-editable]="node"></li>
+
+    <!-- Next level indentation ordered list -->
+    <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
+
+    <!-- Next level indentation unordered list -->
+    <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
+
+  </ng-container>
+
+</ng-container>

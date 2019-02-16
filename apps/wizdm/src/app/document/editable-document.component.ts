@@ -1,4 +1,5 @@
-import { Component, AfterViewChecked, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
+import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { EditableContent } from './common/editable-content';
 import { wmDocument, wmTextStyle } from './common/editable-types';
 import { EditableSelection } from './selection/editable-selection.service';
@@ -14,13 +15,13 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
     return this.editMode ? 'true' : 'false';
   }
 
-  constructor(private sel: EditableSelection) { 
+  constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection) { 
     super(null); sel.attach(this);
   }
 
   @Input() set source(source: wmDocument) {
-    // Build the data tree
-    this.build(source);
+    // Loads the source data building the tree
+    this.load(source);
   }
 
   private editMode = false;
@@ -28,7 +29,7 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
   @Input() set edit(mode: boolean) { 
     
     if(this.editMode = mode) {
-      this.sel.query();
+      this.sel.query(this.document);
     }
   }
 
@@ -42,22 +43,25 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
 
   ngAfterViewChecked() {
     // Applies the current selection to the document when needed. This is essential even when the selection
-    // isn't modified since the document selection gets resetted when the involved node(s) are modified 
-    // (like view rendering after content update)
-    this.sel.apply();    
+    // isn't modified since view changes (aka rendering) affects the selection that requires to be restored
+    if(this.editMode && this.sel.marked) { 
+      // Makes sure to restore the selection after the view has been rendered but anyhow ell before
+      // the next change will be applied to the data tree (such as while typing) 
+      Promise.resolve().then( () => this.sel.apply(this.document) ); 
+    }
   }
 
-  @HostListener('mouseup', ['$event']) //mouseUp(ev: Event) { this.keyUp(ev);}
+  @HostListener('mouseup', ['$event'])
   @HostListener('keyup', ['$event']) keyUp(ev: Event) {
     // Query the selection, so, it's always up to date
-    if(this.editMode) { this.sel.query(); }
+    if(this.editMode) { this.sel.query(this.document); }
   }
 
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     // Query the selection, so, it's always up to date. 
-    this.sel.query();
+    this.sel.query(this.document);
     // Runs key accellerators on CTRL hold 
     if(ev.ctrlKey || ev.metaKey) { return this.keyAccellerators(ev); }
     // Edits the content otherwise
@@ -95,14 +99,14 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
   }
 
   private get window(): Window {
-    return this.sel.document.defaultView;
+    return this.document.defaultView;
   }
 
   @HostListener('cut', ['$event']) cut(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     // Reverts the cut request to a native copy...
-    if( this.sel.document.execCommand('copy') ) {
+    if( this.document.execCommand('copy') ) {
       // Deletes the selection when succeeded
       this.sel.delete();
     }
@@ -159,6 +163,10 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
       case 'c': case 'C':
       case 'v': case 'V':
       break;
+
+      // Size
+      case '0': case '1': case '2': case '3':
+      return this.sel.level = +ev.key, false;
   
       // Italic format
       case 'i': case 'I':

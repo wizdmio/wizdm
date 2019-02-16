@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { MatMenuTrigger } from '@angular/material';
 import { EditableSelection } from '../selection/editable-selection.service';
+import { wmTextStyle } from '../common/editable-types';
 
 @Component({
   selector: 'wm-editable-menu',
@@ -11,11 +13,17 @@ export class EditableMenu {
 
   @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
 
-  public headings = ['Heading 1', 'Heading 2', 'Heading 3', 'Paragraph'];
   public alignements = ['left', 'center', 'right', 'justify'];
   public formats = ['bold', 'italic', 'underline', 'strikethrough'];
 
   public labels = {
+    size: {
+      title: "Text size",
+      heading1: "Heading 1",
+      heading2: "Heading 2",
+      heading3: "Heading 3",
+      paragraph: "Paragraph"
+    },
     insert: {
       title: "Insert",
       heading: "Heading",
@@ -45,9 +53,22 @@ export class EditableMenu {
     }
   };
 
-  constructor(private sel: EditableSelection) { }
+  constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection) { }
 
-  //--
+  public get align() { return this.sel.align; }
+  public set align(align) { this.sel.align = align; }
+
+  public dummyLink() { this.sel.link('./'); }
+
+  public unlink() { this.sel.unlink(); }
+
+  public hasSize(): boolean {
+    return this.sel.belongsTo('heading') || (this.sel.atRoot && this.sel.belongsTo('paragraph'));
+  }
+
+  public hasStyle(style: wmTextStyle): boolean {
+    return this.sel.style.some( s => s === style );
+  }
 
   public left = 0;
   public top = 0;
@@ -55,7 +76,7 @@ export class EditableMenu {
   // Opens the menu at the specified position
   public open({ x, y }: MouseEvent, data?: any) {
     // Makes sure the selection is up to date
-    this.sel.query().trim().apply();
+    this.sel.query(this.document).trim().apply(this.document);
     // Pass along the context data to support lazily-rendered content
     if(!!data) { this.trigger.menuData = data; }
     // Adjust the menu anchor position
