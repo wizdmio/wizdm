@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EditableText, EditableContent } from '../common/editable-content';
-import { wmDocument, wmHeading, wmTextStyle, wmAlignType, wmEditableType, wmBlockType, wmInlineType } from '../common/editable-types';
+import { wmDocument, wmTextStyle, wmAlignType, wmBlockType, wmInlineType, wmEditableType } from '../common/editable-types';
 
 @Injectable({
   providedIn: 'root'
@@ -436,28 +436,16 @@ export class EditableSelection {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
-    // Get this node block type
-    const block = this.start.block();
-    // Matches the relevant editable container to be added depending on the block type 
-    const match = { numbered: 'item', bulleted: 'item', table: 'cell' };
-    // Inserts an extra empty text on the start edge
-    if(this.start.first && this.startOfs === 0) {
-      // Preserve the same start node style
-      this.start.createTextPrev('', this.start.style);
-    }
-    // Inserts an extrsa empty text node on the end edge
-    if(this.start.last && this.startOfs === this.start.length) {
-      // Preserve the same start node style
-      this.start.createTextNext('', this.start.style);
-    }
+    // Inserts an extra empty text on the start edge preserving the same style
+    if(this.start.first && this.startOfs === 0) { this.start.createTextPrev('', this.start.style); }
+    // Inserts an extra empty text node on the end edge preserving the same style
+    if(this.start.last && this.startOfs === this.start.length) { this.start.createTextNext('', this.start.style); }
     // Makes sure the cursor is on the right side of node's edges 
-    if(this.startOfs === this.start.length) { 
-      this.setCursor(this.start.nextText(), 0);
-    }
-    // Wraps the content from this node foreward in a new editable container
-    const editable = this.start.split(this.startOfs).wrap(match[block.type] || 'paragraph');
+    if(this.startOfs === this.start.length) { this.setCursor(this.start.nextText(), 0);}
+    // Breaks the content from this node foreward in a new editable container
+    const node = this.start.split(this.startOfs).break();
     // Updates the cursor position
-    return this.setCursor(editable, 0);
+    return this.setCursor(node, 0);
   }
 
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
@@ -504,14 +492,14 @@ export class EditableSelection {
   }
 
   /** Returns true when the selection fully belongs within a container at root level */
-  public get atRoot(): boolean {
+  /*public get atRoot(): boolean {
     // Skips invalid selection
     if(!this.valid) { return false; }
     // Compares the start/end containers
     const container = this.start.container === this.end.container ? this.start.container : null; 
     // Verifies the common container is a root child
     return !!container && container.depth === 1;
-  }
+  }*/
 
   /** Returns the current selection alignement (corresponding to the start node container's) */
   public get align(): wmAlignType {
@@ -649,11 +637,8 @@ export class EditableSelection {
     if(!this.valid) { return false; }
     // Treat single text/link as a special cases
     if(type === 'text' || type === 'link') { return this.single && this.start.type === type; }
-    // Gets the start node block otherwise
-    const block = this.start.block();
-    if(!block) { return false; }
-    // Returns true if the selection entirely falls into the same block of the requested type
-    return (this.single || this.end.block() === block) && block.type === type;
+    // Returns true if the selection entirely falls into the same container of the requested type
+    return (this.single || this.end.container === this.start.container) && this.start.container.type === type;
   }
 
   /** Returns a tree fragment containing a copy of the selection  */

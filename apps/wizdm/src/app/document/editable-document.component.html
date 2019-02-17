@@ -2,18 +2,16 @@
 
   <ng-container [ngSwitch]="node.type">
 
-    <!-- Headings as root children only (no indentation) -->
-    <ng-container *ngSwitchCase="'heading'">
-      <h1 *ngIf="node.data.level === 1" [wm-editable]="node"></h1>
-      <h2 *ngIf="node.data.level === 2" [wm-editable]="node"></h2>
-      <h3 *ngIf="node.data.level === 3" [wm-editable]="node"></h3>
-      <h4 *ngIf="node.data.level === 4" [wm-editable]="node"></h4>
-      <h5 *ngIf="node.data.level === 5" [wm-editable]="node"></h5>
-      <h6 *ngIf="node.data.level === 6" [wm-editable]="node"></h6>
+    <!-- Paragraphs at root level -->
+    <ng-container *ngSwitchCase="'paragraph'">
+      <p  *ngIf="node.level === 0" [wm-editable]="node"></p>
+      <h1 *ngIf="node.level === 1" [wm-editable]="node"></h1>
+      <h2 *ngIf="node.level === 2" [wm-editable]="node"></h2>
+      <h3 *ngIf="node.level === 3" [wm-editable]="node"></h3>
+      <h4 *ngIf="node.level === 4" [wm-editable]="node"></h4>
+      <h5 *ngIf="node.level === 5" [wm-editable]="node"></h5>
+      <h6 *ngIf="node.level === 6" [wm-editable]="node"></h6>
     </ng-container>
-
-    <!-- Plain paragraphs at root child level -->
-    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
 
     <!-- Numbered lists with nesting -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
@@ -24,10 +22,10 @@
     <!-- Blockquotes supporting paragraph and list indentation -->
     <blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote>
 
-    <!-- Tables as root children only -->
+    <!-- Tables at root level only -->
     <table *ngSwitchCase="'table'" [wm-table]="node"></table>
 
-    <!-- Images as root children only -->
+    <!-- Images at root level only -->
     <div *ngSwitchCase="'image'" [wm-image]="node"></div>
 
   </ng-container>

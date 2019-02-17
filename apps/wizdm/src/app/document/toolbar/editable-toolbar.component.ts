@@ -19,31 +19,9 @@ export class EditableToolbar{
   public styles = ['bold', 'italic', 'underline', 'strikethrough'];
   public alignements = ['left', 'center', 'right', 'justify'];
 
-  //get style(): wmTextStyle[] { return this.sel.style; }
-
-  public hasSize(): boolean {
-    return this.sel.belongsTo('heading') || (this.sel.atRoot && this.sel.belongsTo('paragraph'));
-  }
-
   public hasStyle(style: wmTextStyle): boolean {
     return this.sel.style.some( s => s === style);
   }
-/*
-  public format(change: MatButtonToggleChange) {
 
-    const oldFormat: wmTextStyle[] = this.style || [];
-    const newFormat: wmTextStyle[] = change.value || [];
-
-    const add = newFormat.filter( ff => oldFormat.every(oo => oo !== ff) );
-    if(add.length > 0) {
-      console.log('add: ' + add);
-      this.sel.format(add);
-    }
-
-    const rem = oldFormat.filter( ff => newFormat.every(oo => oo !== ff) );
-    if(rem.length > 0) {
-      console.log('rem: ' + rem);
-       this.sel.format(rem, true);
-    }  
-  }*/
+  doNothing() {}
 }

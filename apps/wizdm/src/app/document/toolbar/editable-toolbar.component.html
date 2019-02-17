@@ -3,7 +3,7 @@
   <span>
 
       <!-- Size -->
-    <button mat-icon-button [matMenuTriggerFor]="sizeMenu" [disabled]="!hasSize()">
+    <button mat-icon-button [matMenuTriggerFor]="sizeMenu" [disabled]="!sel.belongsTo('paragraph')">
       <mat-icon>format_size</mat-icon>
     </button>
 

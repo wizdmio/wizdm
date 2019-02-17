@@ -3,7 +3,7 @@
 <mat-menu #menu="matMenu">
 
   <!-- Text size -->
-  <button mat-menu-item *ngIf="hasSize()" [matMenuTriggerFor]="sizeMenu">
+  <button mat-menu-item *ngIf="sel.belongsTo('paragraph')" [matMenuTriggerFor]="sizeMenu">
     <mat-icon>format_size</mat-icon>
     <span>{{ labels.size.title }}</span>
   </button>

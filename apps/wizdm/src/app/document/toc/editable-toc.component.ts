@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { EditableContent } from '../common/editable-content';
-import { wmDocument, wmHeading } from '../common/editable-types';
+import { wmDocument } from '../common/editable-types';
 
 @Component({
   selector: 'wm-editable-toc',

@@ -5,7 +5,7 @@ export const $document = {
   },
   type: "document",
   children: [
-    { type: "heading", "level": 1, align: "center", children: [
+    { type: "paragraph", level: 1, align: "center", children: [
       { type: "text", value: "Title", style: ["bold"] }
     ]},
     { type: "blockquote", align: "left", children: [
@@ -36,7 +36,7 @@ export const $document = {
       { type: "text", value: "underlined", style: ["underline"] },
       { type: "text", value: " paragraph..."}
     ]},
-    { type: "heading", "level": 2, align: "left", children: [
+    { type: "paragraph", level: 2, align: "left", children: [
       { type: "text", value: "Links", style: ["bold"] }
     ]},
     { type: "paragraph", align: "justify", children: [
@@ -45,7 +45,7 @@ export const $document = {
       { type: "text", value: " pointing somewhere else.\n" },
       { type: "text", value: "Eventually." }
     ]},
-    { type: "heading", "level": 2, align: "left", children: [
+    { type: "paragraph", level: 2, align: "left", children: [
       { type: "text", value: "Lists", style: ["bold"] }
     ]},
     { type: "paragraph", align: "justify", children: [
@@ -80,7 +80,7 @@ export const $document = {
         { type: "text", value: "List item" }
       ]}
     ]},
-    { type: "heading", "level": 2, align: "left", children: [
+    { type: "paragraph", level: 2, align: "left", children: [
       { type: "text", value: "Tables", style: ["bold"] }
     ]},
     { type: "paragraph", align: "justify", children: [
@@ -126,7 +126,7 @@ export const $document = {
         ]}
       ]}
     ]},
-    { type: "heading", "level": 2, align: "left", children: [
+    { type: "paragraph", level: 2, align: "left", children: [
       { type: "text", value: "Finally... pictures", style: ["bold"] }
     ]},
     { type: "paragraph", align: "justify", children: [

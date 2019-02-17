@@ -1,4 +1,4 @@
-import { wmEditableTypes, wmEditable, wmHeading, wmText, wmTextStyle, wmEditableType, wmNodeType, wmAlignType } from './editable-types';
+import { wmEditableTypes, wmEditable, wmText, wmTextStyle, wmNodeType, wmAlignType } from './editable-types';
 
 export type EditablePosition = number[];
 export class EditableContent<T extends wmEditable = wmEditable> {
@@ -18,8 +18,9 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Sets/gets the node alignement */
   set align(align: wmAlignType) { this.node.align = align; }
   get align(): wmAlignType { return this.node.align || 'left'; }
-  /** Returns the parent container */
-  get container(): EditableContent { return this.parent; }
+  /** Sets/gets the node level */
+  set level(level: number) { if(level >= 0 && level <= 6) { this.data.level = level; } }
+  get level(): number { return this.data.level || 0;}
   /** Returns the array of children */
   get content(): EditableContent[] { return this.children || (this.children = []); }
   /** Returns the number of child nodes */
@@ -44,24 +45,19 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   get value(): string { return this.content.reduce( (txt, node) => txt + node.value, ''); }
   // Containers node lenght not supported to avoid performance issues
   get length() { return 0; }
+  /** Seeks for the node's container ancestor */  
+  get container(): EditableContent {
+    // Done when reaching a container type, climb up the tree otherwise
+    return this.type === 'paragraph' ||
+           this.type === 'numbered'  ||
+           this.type === 'bulleted'  ||
+           this.type === 'table' ? this : (!!this.parent ? this.parent.container : null); 
+  }
   /** Structural nodes never share the same atttributes */
   public same(node: EditableContent): boolean { return false; }
   /** Structural nodes never need to be joined */
   public join(node: EditableContent): EditableContent { return this; }
-  /** Returns the current heading node level*/
-  public get level(): number { return this.type === 'heading' ? (this.data as wmHeading).level : 0;}
-  /** Applies a new level to the node, when applicable */
-  public set level(level: number) {
-    // Skips invalid values
-    if(level < 0 || level > 6) { return; }
-    // When level is zeroed, turn the heading into a paragraph
-    if(this.type === 'heading' && level === 0) { this.data.type = 'paragraph'; }
-    // When the level is greater than zero, turn a root paragraph into an heading
-    else if(this.type === 'paragraph' && level > 0 && this.depth === 1) { this.data.type = 'heading'; }
-    // Applies the new level
-    (this.data as wmHeading).level = level > 0 ? level : undefined; 
-  }
-
+  
    /**
    * Creates a new node of the specified type
    * @param type the type of node to be created
@@ -99,11 +95,11 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   }
 
   /** Creates a new empty document */
-  public new(): EditableContent<T> {
+  public new(header?: any): EditableContent<T> {
     // Creates a new tree made of a document containing 
     // a single paragraph with a signle empty text node
     return this.load({
-      type: 'document', children: [{ 
+      type: 'document', header, children: [{ 
         type: 'paragraph', children: [{ 
           type: 'text', value: '' 
     }]}]} as any);
@@ -214,16 +210,6 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     if(this.depth === depth) { return this; }
     // Climbs to the next level
     return !!this.parent ? this.parent.ancestor(depth) : null;
-  }
-
-  /** Seeks for the block ancestor */  
-  public block(): EditableContent {
-    // DOne when reaching a block type, climb up the tree otherwise
-    return this.type === 'paragraph' ||
-           this.type === 'heading'   ||
-           this.type === 'numbered'  ||
-           this.type === 'bulleted'  ||
-           this.type === 'table' ? this : (!!this.parent ? this.parent.block() : null); 
   }
 
   /** 
@@ -778,26 +764,47 @@ export class EditableText extends EditableContent<wmText> {
   }
 
   /** 
-   * Moves the content from this node foreward into a new editable container of the specified type
-   * @param type the type of editable for the content to be wrapped with.
+   * Moves the content from this node foreward into a new editable container of the same type
    * @return the new inserted block first child.
    */
-  public wrap(type: wmEditableType): EditableText {
+  public break(): EditableText {
     // Skips the operation when not possible
     if(!this.parent) { return null; }
     // Creates a new node as this container next sibling
-    const editable = this.parent.createNext({ type });
+    const editable = this.parent.createNext({ type: this.parent.type });
     // Relocates the content from this node foreward to the new container 
     editable.splice(0, 0, ...this.parent.splice(this.index, -1));
     // Returns the new editable first child
     return editable.firstChild() as EditableText;
   }
-
-  public xform(type: wmNodeType): EditableText {
+/*
+  public wrap2(type: wmNodeType): EditableContent {
     // Skips the operation when not possible
     if(!this.parent) { return null; }
 
+    switch(type) {
+
+      // Editable containers
+      case 'heading': case 'paragraph': case 'item': case 'cell':
+      // Creates a new node as this container next sibling
+      const editable = this.parent.createNext({ type });
+      // Relocates the content from this node foreward to the new container 
+      editable.splice(0, 0, ...this.parent.splice(this.index, -1));
+      // Returns the new editable
+      return editable;
+
+      // List
+      case 'bulleted': case 'numbered':
+
+      const list = this.parent
+
+      list.splice(0, 0, ...this.parent.splice(this.index, -1));
+
+      return list;
+
+    }
+
 
     return this;
-  }
+  }*/
 }
