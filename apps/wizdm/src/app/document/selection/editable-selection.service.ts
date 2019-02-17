@@ -43,7 +43,7 @@ export class EditableSelection {
   public get marked(): boolean { return this.modified; }
 
   public mark(modified = true): EditableSelection {
-    this.modified = modified;
+    this.modified = this.valid && modified;
     return this;
   }
 
@@ -466,6 +466,22 @@ export class EditableSelection {
     return this;
   }
 
+  /** Helper function to loop on all the containers within the selection */
+  private containers(callbackfn: (container: EditableContent) => void): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid || !callbackfn) { return this; }
+    // Loops on the editable whithin the selection
+    let container = this.start.container;
+    while(!!container && container.compare(this.end) < 0) {
+      // Callback on the container
+      callbackfn.call(this, container);
+      // Makes sure to skip structural node levels
+      const next = container.lastChild().next();
+      // Gets the next container
+      container = !!next ? next.container : null;
+    }
+  }
+
   /** 
    * Defragments the selections, so, minimizing the number of text nodes comprised in it
    * by joining siblings sharing the same attributes.
@@ -476,15 +492,7 @@ export class EditableSelection {
     // Save the current selection
     this.save();
     // Defrags the few editable containers between the nodes
-    let container = this.start.container;
-    while(!!container && container.compare(this.end) < 0) {
-      // Deframents the container
-      container.defrag();
-      // Makes sure to skip structural node levels
-      const next = container.lastChild().next();
-      // Gets the next container
-      container = !!next ? next.container : null;
-    }
+    this.containers( container => container.defrag() );
     // Restores the selection
     this.restore().trim();
     // Returns the selection supporting chaining
@@ -508,17 +516,8 @@ export class EditableSelection {
 
   /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
-    // Skips invalid or null
-    if(!this.valid || !align) { return; }
-    // Loops on the few containers within the selection
-    let container = this.start.container;
-    while(!!container && container.compare(this.end) < 0) {
-      // Applies the alignement
-      container.align = align;
-      //// Gets the next container
-      const next = container.lastChild().next();
-      container = !!next ? next.container : null;
-    }
+    // Applies the alignement on the containers within the selection
+    this.containers( container => container.align = align );
   }
 
   /** Returns the current selection level (corresponding to the start node container's) */
@@ -528,10 +527,8 @@ export class EditableSelection {
 
   /** Applies a new level to the selection */
   public set level(level: number) {
-    if(this.valid) {
-      this.start.level = level;
-      this.mark();
-    }
+    // Applies the level on the containers within the selection
+    this.containers( container => container.level = level );
   }
 
   /** Returns the style of the selection always corresponding to the style of the start node */

@@ -3,7 +3,7 @@
 <mat-menu #menu="matMenu">
 
   <!-- Text size -->
-  <button mat-menu-item *ngIf="sel.belongsTo('paragraph')" [matMenuTriggerFor]="sizeMenu">
+  <button mat-menu-item [matMenuTriggerFor]="sizeMenu">
     <mat-icon>format_size</mat-icon>
     <span>{{ labels.size.title }}</span>
   </button>
@@ -45,29 +45,15 @@
 <!-- Size -->
 <mat-menu #sizeMenu="matMenu">
 
-  <button mat-menu-item 
-          [style.backgroundColor]="sel.level === 1 ? 'rgba(0,0,0,0.1)' : 'unset'"
-          (click)="sel.level = 1">
-    <h1 style="margin: 0">{{ labels.size.heading1 }}</h1>
-  </button>
-
-  <button mat-menu-item 
-          [style.backgroundColor]="sel.level === 2 ? 'rgba(0,0,0,0.1)' : 'unset'"
-          (click)="sel.level = 2">
-    <h2 style="margin: 0">{{ labels.size.heading2 }}</h2>
-  </button>
-
-  <button mat-menu-item 
-          [style.backgroundColor]="sel.level === 3 ? 'rgba(0,0,0,0.1)' : 'unset'"
-          (click)="sel.level = 3">
-    <h3 style="margin: 0">{{ labels.size.heading3 }}</h3>
+  <button mat-menu-item *ngFor="let level of [1, 2, 3]"
+          [style.backgroundColor]="sel.level === level ? 'rgba(0,0,0,0.1)' : 'unset'"
+          (click)="sel.level = level">
+    <span [ngClass]="'mat-h' + level">{{ labels.size['heading' + level] }}</span>
   </button>
 
   <button mat-menu-item 
           [style.backgroundColor]="sel.level === 0 ? 'rgba(0,0,0,0.1)' : 'unset'"
-          (click)="sel.level = 0">
-    <p style="margin: 0">{{ labels.size.paragraph }}</p>
-  </button>
+          (click)="sel.level = 0">{{ labels.size.paragraph }}</button>
 
 </mat-menu>
 

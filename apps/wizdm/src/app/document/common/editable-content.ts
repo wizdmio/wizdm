@@ -45,13 +45,15 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   get value(): string { return this.content.reduce( (txt, node) => txt + node.value, ''); }
   // Containers node lenght not supported to avoid performance issues
   get length() { return 0; }
-  /** Seeks for the node's container ancestor */  
-  get container(): EditableContent {
+  /** Returns the parent container */
+  get container(): EditableContent { return this.parent; }
+  /** Seeks for the node's block ancestor */  
+  get block(): EditableContent {
     // Done when reaching a container type, climb up the tree otherwise
     return this.type === 'paragraph' ||
            this.type === 'numbered'  ||
            this.type === 'bulleted'  ||
-           this.type === 'table' ? this : (!!this.parent ? this.parent.container : null); 
+           this.type === 'table' ? this : (!!this.parent ? this.parent.block : null); 
   }
   /** Structural nodes never share the same atttributes */
   public same(node: EditableContent): boolean { return false; }

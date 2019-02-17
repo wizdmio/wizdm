@@ -3,15 +3,7 @@
   <ng-container [ngSwitch]="node.type">
 
     <!-- First level indentation --> 
-    <ng-container *ngSwitchCase="'paragraph'">
-      <p  *ngIf="node.level === 0" [wm-editable]="node"></p>
-      <h1 *ngIf="node.level === 1" [wm-editable]="node"></h1>
-      <h2 *ngIf="node.level === 2" [wm-editable]="node"></h2>
-      <h3 *ngIf="node.level === 3" [wm-editable]="node"></h3>
-      <h4 *ngIf="node.level === 4" [wm-editable]="node"></h4>
-      <h5 *ngIf="node.level === 5" [wm-editable]="node"></h5>
-      <h6 *ngIf="node.level === 6" [wm-editable]="node"></h6>
-    </ng-container>
+    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
     
     <!-- Numbered lists with nesting -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
