@@ -1,4 +1,4 @@
-import { wmEditableTypes, wmEditable, wmText, wmTextStyle, wmNodeType, wmAlignType } from './editable-types';
+import { wmEditableTypes, wmEditable, wmText, wmTextStyle, wmNodeType, wmIndentType, wmAlignType } from './editable-types';
 
 export type EditablePosition = number[];
 export class EditableContent<T extends wmEditable = wmEditable> {
@@ -47,15 +47,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   get length() { return 0; }
   /** Returns the parent container */
   get container(): EditableContent { return this.parent; }
-  /** Seeks for the node's block ancestor */  
-  get block(): EditableContent {
-    // Done when reaching a container type, climb up the tree otherwise
-    return this.type === 'paragraph' ||
-           this.type === 'numbered'  ||
-           this.type === 'bulleted'  ||
-           this.type === 'table' ? this : (!!this.parent ? this.parent.block : null); 
-  }
-  /** Structural nodes never share the same atttributes */
+    
+  /** Structural nodes never share the same attributes */
   public same(node: EditableContent): boolean { return false; }
   /** Structural nodes never need to be joined */
   public join(node: EditableContent): EditableContent { return this; }
@@ -102,7 +95,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     // a single paragraph with a signle empty text node
     return this.load({
       type: 'document', header, children: [{ 
-        type: 'paragraph', children: [{ 
+        type: 'item', children: [{ 
           type: 'text', value: '' 
     }]}]} as any);
   }
@@ -214,6 +207,11 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return !!this.parent ? this.parent.ancestor(depth) : null;
   }
 
+  public climb(...types: wmNodeType[]): EditableContent {
+    if(!types || !this.parent) { return null; }
+    return types.some( type => type === this.type ) ? this : this.parent.climb(...types);
+  }
+
   /** 
    * Seeks for a common ancestor between this and the requested node 
    * @param node the node to be compared with
@@ -272,6 +270,24 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return nodes;
   }
 
+  public wrap(type: wmNodeType): EditableContent {
+    // Creates a new node to wrap this node with
+    const wrap = this.createNode({ type });
+    // Wraps the node within 
+    this.parent.replaceChild(this, wrap).appendChild(this);
+    // Returns the wrapping node
+    return wrap;
+  }
+
+  public unwrap(): EditableContent {
+    // Skips unwrapping removed nodes
+    if(this.removed) { return null; }
+    // Relocates the node content into the parent container
+    this.parent.splice(this, 1, ...this.content );//.splice(0, -1) );
+    // Return the container node the unwrapped content now belongs to
+    return this;
+  }
+
   /** 
    * Removes this node from the tree recurring up along the tree
    * to remove empty ancestors if any.
@@ -281,16 +297,22 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     if(this.removed) { return null; }
     // Removes the node by index
     const node = this.parent.splice(this, 1)[0];
-    // Recurs removing the parent if empty, returns otherwise
-    return this.parent.empty ? this.parent.remove() : node;
+    // Recurs removing the parent when empty
+    if(this.parent.empty) { this.parent.remove(); }
+    // Returns the removed node
+    return node;
   }
 
   /** 
    * Append a child node updating the tree
    * @param node the new child
+   * @return the new appended node
    */
-  public appendChild(node: EditableContent): number {    
-    return this.content.push(node.inherit(this, this.count).refresh());
+  public appendChild(node: EditableContent): EditableContent {
+    // Pushes the node into the content array
+    this.content.push(node.inherit(this, this.count).refresh());
+    // Return the appended child node
+    return node;
   }
 
   /** 
@@ -531,8 +553,60 @@ export class EditableContent<T extends wmEditable = wmEditable> {
       if(start.same(next)) { start.join(next); i--;}
       else { start = next; }
     }
-    // Returs thenode for chaining
+    // Returs this for chaining
     return this;
+  }
+
+  public indent(type: wmIndentType): EditableContent {
+    // Skips on invalid nodes
+    if(this.removed) { return this; }
+
+    if(this.type === 'item') {
+
+      const prev = this.previousSibling();
+      const next = this.nextSibling();
+      
+      const block = (!!prev && prev.type === type) ? 
+        (prev.appendChild( this.remove() ), prev) : 
+          this.wrap(type);
+
+      if(!!next && next.type === type) { 
+        block.appendChild( next.remove() ).unwrap(); 
+      }
+
+      return this;
+    }
+
+    return this.parent.indent(type);
+  }
+
+  public unindent(): EditableContent {
+    // Skips on invalid nodes
+    if(this.removed) { return this; }
+    // Helper function to group sibling nodes
+    const groupSiblings = (from: number, to?: number) => {
+      // Forces to proceed till the end
+      if(to === undefined) { to = this.parent.count; }
+      // Wraps the first sibling within the same parent indentation node
+      const block = this.parent.childAt(from).wrap(this.parent.type);
+      // Appends the following siblings
+      for(let i = from + 1; i < to; i++) {
+        block.appendChild( this.parent.childAt(i).remove() );
+      }
+    }
+    // Performs unindentation
+    switch(this.parent.type) {
+      // Seeks for indentation nodes
+      case 'blockquote': case 'bulleted': case 'numbered':
+      // Groups the preceding siblings
+      if(this.index > 0) { groupSiblings(0, this.index); }
+      // Groups the following siblings
+      if(this.index < this.parent.count - 1) { groupSiblings(this.index + 1); }
+      // Unwrap the parent indentation node and we are done
+      return this.parent.unwrap(), this; 
+    }
+    // Climbs up to the next level
+    return this.parent.unindent();
   }
 }
 
@@ -779,34 +853,4 @@ export class EditableText extends EditableContent<wmText> {
     // Returns the new editable first child
     return editable.firstChild() as EditableText;
   }
-/*
-  public wrap2(type: wmNodeType): EditableContent {
-    // Skips the operation when not possible
-    if(!this.parent) { return null; }
-
-    switch(type) {
-
-      // Editable containers
-      case 'heading': case 'paragraph': case 'item': case 'cell':
-      // Creates a new node as this container next sibling
-      const editable = this.parent.createNext({ type });
-      // Relocates the content from this node foreward to the new container 
-      editable.splice(0, 0, ...this.parent.splice(this.index, -1));
-      // Returns the new editable
-      return editable;
-
-      // List
-      case 'bulleted': case 'numbered':
-
-      const list = this.parent
-
-      list.splice(0, 0, ...this.parent.splice(this.index, -1));
-
-      return list;
-
-    }
-
-
-    return this;
-  }*/
 }

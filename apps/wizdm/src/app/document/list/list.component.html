@@ -11,6 +11,9 @@
     <!-- Next level indentation unordered list -->
     <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
 
+    <!-- Blockquotes implying paragraph and list indentation -->
+    <blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote>
+
   </ng-container>
 
 </ng-container>

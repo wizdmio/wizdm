@@ -2,8 +2,8 @@
 
   <ng-container [ngSwitch]="node.type">
 
-    <!-- Paragraphs at root level -->
-    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
+    <!-- Renders document items as paragraphs -->
+    <p *ngSwitchCase="'item'" [wm-editable]="node"></p>
 
     <!-- Numbered lists with nesting -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>

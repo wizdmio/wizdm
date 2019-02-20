@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EditableText, EditableContent } from '../common/editable-content';
-import { wmDocument, wmTextStyle, wmAlignType, wmBlockType, wmInlineType, wmEditableType } from '../common/editable-types';
+import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../common/editable-types';
 
 @Injectable({
   providedIn: 'root'
@@ -21,26 +21,22 @@ export class EditableSelection {
   public attach(document: EditableContent<wmDocument>): EditableSelection {
     return (this.root = document), this;
   }
+  /** Returns true on valid selection */
+  get valid(): boolean { return !!this.start && !!this.end; }
+  /** Returns true when the selection belongs within a single text node */
+  get single(): boolean { return this.valid && (this.start === this.end); }
+  /** Returns true when the selection spread across moltiple text nodes */
+  get multi(): boolean { return !this.single; }
+  /** Returns true when the selection includes the whole nodes */
+  get whole(): boolean { return this.valid && (this.startOfs === 0) && (this.endOfs === this.end.length); }
+  /** Returns true when the selection falls in trhe middle of text nodes */
+  get partial(): boolean { return !this.whole; }
+  /** Retunrns true when the selection is collpased in a cursor */
+  get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
+  /** Returns true then the selection fully belongs to a single container  */
+  get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
 
-  public get valid(): boolean { return !!this.start && !!this.end; }
-
-  public get single(): boolean {
-    return this.valid && (this.start === this.end);
-  }
-
-  public get multi(): boolean { return !this.single; }
-
-  public get whole(): boolean {
-    return this.valid && (this.startOfs === 0) && (this.endOfs === this.end.length);
-  }
-
-  public get partial(): boolean { return !this.whole; }
-
-  public get collapsed(): boolean {
-    return this.single && (this.startOfs === this.endOfs);
-  }
-
-  public get marked(): boolean { return this.modified; }
+  get marked(): boolean { return this.modified; }
 
   public mark(modified = true): EditableSelection {
     this.modified = this.valid && modified;
@@ -466,6 +462,21 @@ export class EditableSelection {
     return this;
   }
 
+  /** Helper function to loop on all the text nodes within the selection */
+  private nodes(callbackfn: (node: EditableText) => void): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid || !callbackfn) { return this; }
+    // Loops on the editable whithin the selection
+    let node = this.start;
+    while(!!node && node.compare(this.end) <= 0) {
+      // Callback on the container
+      callbackfn.call(this, node);
+      // Gets the next text container
+      node = node.nextText(true);
+    }
+    return this;
+  }
+
   /** Helper function to loop on all the containers within the selection */
   private containers(callbackfn: (container: EditableContent) => void): EditableSelection {
     // Skips on invalid selection
@@ -480,6 +491,7 @@ export class EditableSelection {
       // Gets the next container
       container = !!next ? next.container : null;
     }
+    return this;
   }
 
   /** 
@@ -544,13 +556,8 @@ export class EditableSelection {
     if(this.collapsed) { this.wordWrap(); }
     // Trims and splits the selection
     this.trim().split();
-    // Loop on nodes within the seleciton
-    let node = this.start;
-    while(!!node && node.compare(this.end) <= 0) {
-      // Applies the give node style
-      node.style = style;
-      node = node.nextText(true);
-    }
+    // Applies the given style to all the nodes within the selection
+    this.nodes( node => node.style = style );
     // Defragments the text nodes when done
     this.defrag();
   }
@@ -572,13 +579,11 @@ export class EditableSelection {
     if(this.collapsed) { this.wordWrap(); }
     // Trims and splits the selection
     this.trim().split();
-    // Loop on nodes within the seleciton
-    let node = this.start;
-    while(!!node && node.compare(this.end) <= 0) {
-      // Apply the given style
-      node = remove ? node.unformat(style) : node.format(style);
-      node = node.nextText(true);
-    }
+    // Formats all the nodes within the selection
+    this.nodes( node => {
+      if(remove) { node.unformat(style); } 
+      else { node.format(style); } 
+    });
     // Defragments the text nodes when done
     return this.defrag();
   }
@@ -618,24 +623,70 @@ export class EditableSelection {
   public unlink(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
-    // Search for links within the selection
-    let node = this.start;
-    while(!!node && node.compare(this.end) <= 0) {
-      // Turns links into plain text
-      node = node.link(null).nextText(true);
-    }
+    // Turns links into plain text
+    this.nodes( node => node.link(null) );
     // Defragments the text nodes when done
     return this.defrag();
   }
 
-  /** Returns true if the current selection fully belongs to the specified block or inline type */
-  public belongsTo(type: wmBlockType|wmInlineType): boolean {
+  /** Removes an indentation level when applicable */
+  public unindent(): EditableSelection {
+    // Unindent all the containers within the selection
+    this.containers( container => container.unindent() );
+    // Mark the selection to update on the next rendering round
+    return this.mark();
+  }
+
+  /** Applies an indentation of the requested type or increase the indentation level when applicable */
+  public indent(type?: wmIndentType): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // Increases the indentation level of bulleted lists
+    if(type === undefined && this.belongsTo('bulleted')) { type = 'bulleted'; }
+    // Increases the indentation level of numbered lists
+    if(type === undefined && this.belongsTo('numbered')) { type = 'numbered'; }
+    // At this point, skips indentation when type is not specified
+    if(type === undefined) { return this; }
+    // Indent all the containers within the selection
+    this.containers( item => item.indent(type) );
+    // Mark the selection to update on the next rendering round
+    return this.mark();
+  }
+
+  public toggleList(type: 'bulleted'|'numbered'): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+
+    return this.belongsTo(type) ? this.unindent() : this.indent(type);
+  }
+
+  /** Returns true if the current selection fully belongs to a single specified node or branch */
+  public belongsTo(type: wmNodeType): boolean {
     // Skips on invalid selection
     if(!this.valid) { return false; }
-    // Treat single text/link as a special cases
-    if(type === 'text' || type === 'link') { return this.single && this.start.type === type; }
-    // Returns true if the selection entirely falls into the same container of the requested type
-    return (this.single || this.end.container === this.start.container) && this.start.container.type === type;
+    // Perform the check
+    switch(type) {
+      // Evevrything belongs to the document
+      case 'document': return true;
+      // Inline types
+      case 'text': case 'link':
+      return this.single && this.start.type === type;
+      // Editable container types
+      case 'item': case 'cell':
+      return this.contained && this.start.container.type === type;
+      // Block types
+      case 'blockquote': case 'bulleted': case 'numbered': case 'row': case 'table':
+      // Climbs up to the specified ancestor
+      const block = this.start.climb(type);
+      // Returns false when not there
+      if(!block) { return false; }
+      // Return true when there on a single node selection
+      if(this.single) { return true; }
+      // Compares the start and end node ancestors otherwise
+      return block === this.end.climb(type);
+    }
+
+    return false;
   }
 
   /** Returns a tree fragment containing a copy of the selection  */
@@ -668,7 +719,7 @@ export class EditableSelection {
   /** 
    * Returns the plain text content falling into the selection
    * @param newline (default '\n') the char sequence to be used as line break
-   */
+   *//*
   public text(newline = '\n'): string {
     // Skips on invalid selection
     if(!this.valid || this.collapsed) { return ''; }
@@ -694,5 +745,5 @@ export class EditableSelection {
     // Completes with the tip text of the end node
     if(!!node && !this.end.siblings(node)) { text += newline; }
     return text + this.end.tip(this.endOfs);
-  }
+  }*/
 }

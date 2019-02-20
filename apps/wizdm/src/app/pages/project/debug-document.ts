@@ -5,11 +5,11 @@ export const $document = {
   },
   type: "document",
   children: [
-    { type: "paragraph", level: 1, align: "center", children: [
+    { type: "item", level: 1, align: "center", children: [
       { type: "text", value: "Title", style: ["bold"] }
     ]},
     { type: "blockquote", align: "left", children: [
-      { type: "paragraph", align: "justify", children: [
+      { type: "item", align: "justify", children: [
         { type: "text", value: "This is an quote containing a list :)"}
       ]},
       { type: "bulleted", children: [
@@ -21,37 +21,37 @@ export const $document = {
         ]}
       ]}
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "This is a "},
       { type: "text", value: "bold", style: ["bold"] },
-      { type: "text", value: " paragraph..."}
+      { type: "text", value: " item..."}
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "This is an "},
       { type: "text", value: "emphasized", style: ["italic"] },
-      { type: "text", value: " paragraph..."}
+      { type: "text", value: " item..."}
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "This is an "},
       { type: "text", value: "underlined", style: ["underline"] },
-      { type: "text", value: " paragraph..."}
+      { type: "text", value: " item..."}
     ]},
-    { type: "paragraph", level: 2, align: "left", children: [
+    { type: "item", level: 2, align: "left", children: [
       { type: "text", value: "Links", style: ["bold"] }
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "Here's something new. "},
       { type: "link", value: "This is a link", url: "./" },
       { type: "text", value: " pointing somewhere else.\n" },
       { type: "text", value: "Eventually." }
     ]},
-    { type: "paragraph", level: 2, align: "left", children: [
+    { type: "item", level: 2, align: "left", children: [
       { type: "text", value: "Lists", style: ["bold"] }
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "Yet another "},
       { type: "text", value: "deleted", style: ["strikethrough"] },
-      { type: "text", value: " paragraph introducing lists\nHere an ordered one starting from 2:" }
+      { type: "text", value: " item introducing lists\nHere an ordered one starting from 2:" }
     ]},
     { type: "numbered", "start": 2, children: [
       { type: "item",  children: [
@@ -61,7 +61,7 @@ export const $document = {
         { type: "text", value: "List item" }
       ]}
     ]},
-    { type: "paragraph", align: "left", children: [
+    { type: "item", align: "left", children: [
       { type: "text", value: "...followed by an unordered multiple level one:" }
     ]},
     { type: "bulleted", children: [
@@ -80,10 +80,10 @@ export const $document = {
         { type: "text", value: "List item" }
       ]}
     ]},
-    { type: "paragraph", level: 2, align: "left", children: [
+    { type: "item", level: 2, align: "left", children: [
       { type: "text", value: "Tables", style: ["bold"] }
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "Introducing tables\nHere an example:" }
     ]},
     { type: "table", align: "center", children: [
@@ -126,10 +126,10 @@ export const $document = {
         ]}
       ]}
     ]},
-    { type: "paragraph", level: 2, align: "left", children: [
+    { type: "item", level: 2, align: "left", children: [
       { type: "text", value: "Finally... pictures", style: ["bold"] }
     ]},
-    { type: "paragraph", align: "justify", children: [
+    { type: "item", align: "justify", children: [
       { type: "text", value: "Introducing pictures\nHere an example:" }
     ]},
     { type: "image", url: "https://octodex.github.com/images/ironcat.jpg", title: "", alt: "" }

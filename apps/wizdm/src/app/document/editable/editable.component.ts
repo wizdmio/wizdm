@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableText } from '../common/editable-content';
+import { EditableContent, EditableText } from '../common/editable-content';
 
 @Component({
   selector: '[wm-editable]',
@@ -8,12 +8,12 @@ import { EditableText } from '../common/editable-content';
 })
 export class EditableComponent {
 
-  @Input('wm-editable') node: EditableText;
-
+  @Input('wm-editable') node: EditableContent;
+  // Applies the node id to the element
   @HostBinding('id') get id() { return !!this.node && this.node.id; }
-
+  // Applies text align style according to node alignement
   @HostBinding('style.text-align') get align() { return !!this.node && this.node.align; }
-
+  // Applies material typography classes based on node level
   @HostBinding('class.mat-h1') get h1() { return !!this.node && this.node.level === 1; }
   @HostBinding('class.mat-h2') get h2() { return !!this.node && this.node.level === 2; }
   @HostBinding('class.mat-h3') get h3() { return !!this.node && this.node.level === 3; }
