@@ -578,20 +578,17 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   public unindent(type: wmIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
-    
     // Performs unindentation when the parent node match the requested type
     if(this.parent.type === type) {
-
       // Helper function to group sibling nodes
       const groupSiblings = (from: number, to?: number) => {
         // Forces to proceed till the end
         if(to === undefined) { to = this.parent.count; }
         // Wraps the first sibling within the same parent indentation node
         const block = this.parent.childAt(from++).wrap(this.parent.type);
-        // Appends the following siblings to the new indentation node
+        // Relocates the following siblings from the parent to the nested indentation node
         if(to > from) { block.splice(1, 0, ...this.parent.splice(from, to - from) ); }
       }
-
       // Groups the preceding siblings
       if(this.index > 0) { groupSiblings(0, this.index); }
       // Groups the following siblings

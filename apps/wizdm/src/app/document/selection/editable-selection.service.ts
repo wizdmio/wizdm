@@ -540,7 +540,7 @@ export class EditableSelection {
   /** Applies a new level to the selection */
   public set level(level: number) {
     // Applies the level on the containers within the selection
-    this.containers( container => container.level = level );
+    this.containers( container => container.level = level ).mark();
   }
 
   /** Returns the style of the selection always corresponding to the style of the start node */
