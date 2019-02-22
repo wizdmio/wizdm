@@ -631,24 +631,25 @@ export class EditableSelection {
 
   /** Removes an indentation level when applicable */
   public unindent(): EditableSelection {
+    // Guesses which indentation the selection belongs to
+    const indent = this.start.climb('blockquote', 'bulleted', 'numbered'); 
+    if(!indent) { return this; }
     // Unindent all the containers within the selection
-    this.containers( container => container.unindent() );
+    this.containers( container => container.unindent(indent.type as wmIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
 
   /** Applies an indentation of the requested type or increase the indentation level when applicable */
-  public indent(type?: wmIndentType): EditableSelection {
+  public indent(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
-    // Increases the indentation level of bulleted lists
-    if(type === undefined && this.belongsTo('bulleted')) { type = 'bulleted'; }
-    // Increases the indentation level of numbered lists
-    if(type === undefined && this.belongsTo('numbered')) { type = 'numbered'; }
+    // Guesses which list the selection belongs to
+    const list = this.start.climb('bulleted', 'numbered'); 
     // At this point, skips indentation when type is not specified
-    if(type === undefined) { return this; }
+    if(!list) { return this; }
     // Indent all the containers within the selection
-    this.containers( item => item.indent(type) );
+    this.containers( item => item.indent(list.type as wmIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
@@ -656,8 +657,35 @@ export class EditableSelection {
   public toggleList(type: 'bulleted'|'numbered'): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
+    // Verifies if the selection already belongs to a list
+    const list = this.start.climb('bulleted', 'numbered'); 
+    if(!!list) {
+      // If so, unindent the list it belongs to
+      this.containers( item => item.unindent(list.type as wmIndentType) );
+      // Stop on toggle off
+      if(list.type === type) { return this.mark(); }
+    }
+    // Apply the requested list identation excluding table cells
+    this.containers( item => { if(item.type !== 'cell') { item.indent(type); } });
+    // Mark the selection to update on the next rendering round
+    return this.mark();
+  }
 
-    return this.belongsTo(type) ? this.unindent() : this.indent(type);
+  public toggleQuote(): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+
+    const block = this.start.climb('blockquote'); 
+    if(!!block) { 
+      return this.containers( item => item.unindent('blockquote') ).mark(); 
+    }
+
+    let node = this.start.ancestor(1);
+    while(!!node && node.compare(this.end) < 0) { 
+      node = node.indent('blockquote').nextSibling();
+    }
+    // Mark the selection to update on the next rendering round
+    return this.mark();
   }
 
   /** Returns true if the current selection fully belongs to a single specified node or branch */

@@ -25,14 +25,16 @@
     </button>
 
     <!-- Bulletted list -->
-    <button mat-icon-button 
+    <button mat-icon-button
       [style.backgroundColor]="sel.belongsTo('bulleted') ? 'rgba(0,0,0,0.1)' : 'unset'"
       (click)="sel.toggleList('bulleted')">
       <mat-icon>format_list_bulleted</mat-icon>
     </button>
 
     <!-- Quote -->
-    <button mat-icon-button (click)="sel.indent('blockquote')">
+    <button mat-icon-button 
+      [style.backgroundColor]="sel.belongsTo('blockquote') ? 'rgba(0,0,0,0.1)' : 'unset'"
+      (click)="sel.toggleQuote()">
       <mat-icon>format_quote</mat-icon>
     </button>
 

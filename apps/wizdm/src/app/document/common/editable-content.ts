@@ -561,43 +561,37 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     // Skips on invalid nodes
     if(this.removed) { return this; }
 
-    if(this.type === 'item') {
+    const prev = this.previousSibling();
+    const next = this.nextSibling();
+    
+    const block = (!!prev && prev.type === type) ? 
+      (prev.appendChild( this.remove() ), prev) : 
+        this.wrap(type);
 
-      const prev = this.previousSibling();
-      const next = this.nextSibling();
-      
-      const block = (!!prev && prev.type === type) ? 
-        (prev.appendChild( this.remove() ), prev) : 
-          this.wrap(type);
-
-      if(!!next && next.type === type) { 
-        block.appendChild( next.remove() ).unwrap(); 
-      }
-
-      return this;
+    if(!!next && next.type === type) { 
+      block.appendChild( next.remove() ).unwrap(); 
     }
 
-    return this.parent.indent(type);
+    return block;
   }
 
-  public unindent(): EditableContent {
+  public unindent(type: wmIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
-    // Helper function to group sibling nodes
-    const groupSiblings = (from: number, to?: number) => {
-      // Forces to proceed till the end
-      if(to === undefined) { to = this.parent.count; }
-      // Wraps the first sibling within the same parent indentation node
-      const block = this.parent.childAt(from).wrap(this.parent.type);
-      // Appends the following siblings
-      for(let i = from + 1; i < to; i++) {
-        block.appendChild( this.parent.childAt(i).remove() );
+    
+    // Performs unindentation when the parent node match the requested type
+    if(this.parent.type === type) {
+
+      // Helper function to group sibling nodes
+      const groupSiblings = (from: number, to?: number) => {
+        // Forces to proceed till the end
+        if(to === undefined) { to = this.parent.count; }
+        // Wraps the first sibling within the same parent indentation node
+        const block = this.parent.childAt(from++).wrap(this.parent.type);
+        // Appends the following siblings to the new indentation node
+        if(to > from) { block.splice(1, 0, ...this.parent.splice(from, to - from) ); }
       }
-    }
-    // Performs unindentation
-    switch(this.parent.type) {
-      // Seeks for indentation nodes
-      case 'blockquote': case 'bulleted': case 'numbered':
+
       // Groups the preceding siblings
       if(this.index > 0) { groupSiblings(0, this.index); }
       // Groups the following siblings
@@ -606,7 +600,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
       return this.parent.unwrap(), this; 
     }
     // Climbs up to the next level
-    return this.parent.unindent();
+    return this.parent.unindent(type);
   }
 }
 

@@ -6,7 +6,23 @@
   </thead>
 <tbody-->
 <tr *ngFor="let row of table?.content" [id]="row.id">
+
   <td *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
+
+  <!--ng-container *ngFor="let cell of row.content">
+
+    <ng-container [ngSwitch]="cell.type">
+
+      <td *ngSwitchCase="'cell'" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
+      
+      <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
+
+      <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
+
+    </ng-container>
+
+  </ng-container-->
+
 </tr>
 <!--/tbody>
 <tfoot *ngIf="!!foot?.length">
