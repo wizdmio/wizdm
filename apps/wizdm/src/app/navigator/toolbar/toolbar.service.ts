@@ -48,17 +48,6 @@ export class ActionState {
    * Contructs the action state using the given array of actions
    */
   constructor(readonly buttons: wmAction[]) {}
-  
-  /** Enables/disables the specified action */
-  /*public enableAction(code: string, value: boolean): void {
-      
-    // Seeks the requested action by code
-    const index = this.actionButtons.findIndex( action => action.code === code );
-    if( index >= 0 && this.actionButtons[index].enabler ) { 
-      // Updates the enabler value
-      this.actionButtons[index].enabler.next(value);
-    }
-  }*/
 
   /**
    * Creates an action enabler for the observer to enable/disable the action button
@@ -101,55 +90,36 @@ export class ToolbarService implements OnDestroy {
 
   //-- Action Buttons ------------
   private savedStates: ActionState[] = [];
-  //private actionState: ActionState;
-
+ 
   /** Array of action buttons as observable */
   private state$: BehaviorSubject<ActionState> = new BehaviorSubject(null);
   public buttons$: Observable<wmAction[]>;
   public some$: Observable<boolean>;
   
   constructor() { 
-    
     // Maps the state to button asynchronously. This is a trick to ensure navigator view
     // updates consistently although children pages are responsible for action bar update
     // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
     this.buttons$ = this.state$.pipe( delay(0), map( state => !!state ? state.buttons : [] ));
-
     // Maps the buttons to a boolean reporting actions are available or not
     this.some$ = this.buttons$.pipe( map( buttons => buttons.length > 0));
   }
 
   ngOnDestroy() { this.clearActions();}
-/*
-  get buttons(): wmAction[] {
-    return this.actionState ? this.actionState.buttons : [];
-  }
-
-  public get someAction(): boolean {
-    return !!this.buttons && this.buttons.length > 0;
-  }
-*/
 
   /**
-   * 
+   * Activtes toolbar actions
    * @param buttons the array of action buttons or links ot display
    * @param save an optional flag to save the current status to be restored
    */
   public activateActions(buttons: wmAction[], save?: boolean): Observable<string> {
-
-    if(save) {
-      this.savedStates.push(this.state$.value);
-    }
-    else {
-      this.clearActions();
-    }
-
+    // Saves the current state on request
+    if(save) { this.savedStates.push(this.state$.value); }
+    else { this.clearActions(); }
     // Creates the new action state
     const state = new ActionState(buttons || []);
-
     // Pushes the state into the observable
     this.state$.next( state );
-
     // Returns the state event osrevable for the observe to subscribe on actions
     return state.events$;
   }
@@ -170,11 +140,6 @@ export class ToolbarService implements OnDestroy {
   public actionEnabler(code: string, value = true): ActionEnabler {
     return !!this.state$.value ? this.state$.value.actionEnabler(code, value) : undefined;
   }
-  
-  /** Enables/disables the specified action */
-  /*public enableAction(code: string, value: boolean): void {
-    !!this.actionState && this.actionState.enableAction(code, value);
-  }*/
   
   /**
    * Restores the previously saved action bar

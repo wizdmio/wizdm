@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, Scroll } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
-import { ObservableMedia } from '@angular/flex-layout';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
@@ -21,10 +20,9 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly scrolled$: Observable<boolean>;
   
   constructor(private router  : Router,
-              readonly media  : ObservableMedia,
               private content : ContentManager,           
               private profile : UserProfile,
-              private service : NavigatorService,
+              private nav     : NavigatorService,
               private title   : Title,
               private meta    : Meta) {
 
@@ -32,7 +30,7 @@ export class NavComponent implements OnInit, OnDestroy {
     this.msgs = this.content.select("navigator"); 
 
     // Creates and observable to monitor the scroll status
-    this.scrolled$ = this.service.viewport.scroll$.pipe(
+    this.scrolled$ = this.nav.viewport.scroll$.pipe(
       map( pos => pos[1] > 0 ),
       distinctUntilChanged()
     );
@@ -62,21 +60,12 @@ export class NavComponent implements OnInit, OnDestroy {
     this.sub.add( this.router.events.pipe( filter(e => e instanceof Scroll && !!e.anchor) )
       .subscribe( (e: Scroll) => {
         // Scroll to the routed anchor
-        this.service.viewport.scrollToAnchor(e.anchor);
+        this.nav.viewport.scrollToAnchor(e.anchor);
       }));
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  // Media query
-  public get mobile(): boolean {
-    return this.media.isActive('xs');// || this.media.isActive('sm'); 
-  }
-
-  public get desktop(): boolean {
-    return !this.mobile;
   }
 
   // Menu toggle
@@ -85,16 +74,6 @@ export class NavComponent implements OnInit, OnDestroy {
 
   public toggleMenu() {
     this.toggler = !this.toggler;
-  }
-
-  // -- Error Handling -----------
-  
-  public get error() {
-    return this.service.error;
-  }
-
-  public clearError() {
-    this.service.clearError();
   }
 
   //-- Signin status -------------
@@ -119,14 +98,14 @@ export class NavComponent implements OnInit, OnDestroy {
 
   // -- Toolbar Actions -------
   public get actionButtons$(): Observable<wmAction[]> {
-    return this.service.toolbar.buttons$;
+    return this.nav.toolbar.buttons$;
   }
 
   public get someActions$(): Observable<boolean> {
-    return this.service.toolbar.some$;
+    return this.nav.toolbar.some$;
   }
 
   public clearActions(): void {
-    this.service.toolbar.clearActions();
+    this.nav.toolbar.clearActions();
   }
 }

@@ -12,10 +12,10 @@
       <nav fxLayout="row" fxLayoutAlign="start center">
 
         <!-- Wizdm logo routing to home -->
-        <wm-logo [caption]="desktop ? msgs.logo : ''" routerLink="."></wm-logo>  
+        <wm-logo [caption]="nav.desktop ? msgs.logo : ''" routerLink="."></wm-logo>  
     
         <!-- Desktop navigation links -->
-        <wm-navbar [menuItems]="desktopMenu" *ngIf="desktop"></wm-navbar>
+        <wm-navbar [menuItems]="desktopMenu" *ngIf="nav.desktop"></wm-navbar>
       
       </nav>
 
@@ -27,28 +27,25 @@
 
         <!-- Sign-in / User profile button -->
         <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
-
+          <!-- Flip button -->
           <wm-flip [flip]="signedIn">
-
+            <!-- Shows a generic signIn icon on the front -->
             <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
-        
+            <!-- Shows the loggedIn avatar on the back -->
             <wm-avatar back [src]="userImage"></wm-avatar>
-        
           </wm-flip>
-
         </button>
 
         <!-- Mobile menu toggler -->
-        <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
+        <button mat-icon-button (click)="toggleMenu()" *ngIf="nav.mobile">
           <wm-toggler toggler-style="menu" [status]="toggler"></wm-toggler>
         </button>
 
       </div>
-    
     </mat-toolbar-row>
 
     <!-- Mobile menu -->
-    <mat-toolbar-row auto *ngIf="mobile">
+    <mat-toolbar-row auto *ngIf="nav.mobile">
       
       <wm-menu [menuItems]="mobileMenu" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
     
@@ -56,28 +53,24 @@
 
   </mat-toolbar>
 
-  <!-- Error message displayer -->
-  <wm-errors [error]="error" (clear)="clearError()"></wm-errors>
+  <!-- Global error message displayer -->
+  <wm-errors [error]="nav.error" (clear)="nav.clearError()"></wm-errors>
   
 </header>
 
 <!-- Viewport container -->
 <main fxFlex="1 1 auto" fxLayout="column">
 
-  <!-- Content Viewport (scrollable) -->
-  <!--wm-viewport fxFlex="1 1 auto" fxLayout="column" treshold="20" [(scrolled)]="scrolled"--> 
-  <div fxFlex="1 1 auto" fxLayout="column"> 
-
-    <!-- Router Outlet stretched to fit -->
-    <div fxFlex="1 1 auto">
-      <router-outlet (deactivate)="clearActions()">
-      </router-outlet>
-    </div>
-    
-    <!-- Footer always on the bottom -->
-    <wm-footer fxFlex="0 0 auto" [language]="!signedIn"></wm-footer>
+  <!-- Router Outlet stretched to fit -->
+  <div fxFlex="1 1 auto">
+    <router-outlet (deactivate)="clearActions()">
+    </router-outlet>
   </div>
+  
+  <!-- Footer always on the bottom -->
+  <wm-footer fxFlex="0 0 auto" [language]="!signedIn"></wm-footer>
 </main>
 
+<!-- Cookies conset pop-up -->
 <!--wm-consent [ask]="askConsent" (granted)="consentGranted()"></wm-consent-->
   

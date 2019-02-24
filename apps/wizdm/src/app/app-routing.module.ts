@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-//import { ContentResolver } from '@wizdm/content';
 
 import { NavComponent } from './navigator/navigator.component';
 import { ContentResolver } from './navigator/utils/content-resolver.service';
@@ -57,8 +56,8 @@ const routes: Routes = [
         
         children: [
           { path: 'profile', component: UserComponent, canDeactivate: [PageGuardService] },
-          { path: 'dashboard', component: DashboardComponent, canDeactivate: [PageGuardService] },
           { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
+          { path: 'dashboard', component: DashboardComponent, canDeactivate: [PageGuardService] },
           { path: 'projects/:id', component: ProjectComponent, canDeactivate: [PageGuardService] },
           { path: 'upload', component: UploadComponent }, //, canDeactivate: [PageGuardService] },
           { path: 'messages', component: MessagesComponent }, //, canDeactivate: [PageGuardService] },

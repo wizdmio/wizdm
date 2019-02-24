@@ -14,7 +14,6 @@ import {
   //MatStepperModule,
   //MatExpansionModule,
   MatListModule,
-  //MatGridListModule,
   //MatCheckboxModule,
   //MatProgressBarModule,
   //MatProgressSpinnerModule,
@@ -34,7 +33,6 @@ import { ActionComponent } from './toolbar/action/action.component';
 import { MenuComponent } from './menu/menu.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { FooterComponent } from './footer/footer.component';
-import { FitViewportDirective } from './viewport/fit-viewport.directive';
 import { ConsentComponent } from './consent/consent.component';
 
 @NgModule({
@@ -61,7 +59,6 @@ import { ConsentComponent } from './consent/consent.component';
     ActionComponent,
     MenuComponent,
     FooterComponent,
-    FitViewportDirective,
     ConsentComponent,
     ErrorsComponent,
   ],

@@ -7,7 +7,8 @@ $wm-user-size: 128px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 2vh 5vw;
+  //padding: 2vh 5vw;
+  margin: 0 $wm-content-margin;
 
   @include wm-padding-top($wm-content-padding);
 }

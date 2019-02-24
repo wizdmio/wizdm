@@ -21,6 +21,7 @@ export class EditableComponent {
   @HostBinding('class.mat-h5') get h5() { return !!this.node && this.node.level === 5; }
   @HostBinding('class.mat-h6') get h6() { return !!this.node && this.node.level === 6; }
 
+  // Helper function computing the text node style
   style(node: EditableText): any {
 
     return !!node && node.style.reduce( (obj, style) => {

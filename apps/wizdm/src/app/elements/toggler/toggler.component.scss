@@ -2,13 +2,15 @@ $toggler-size: 20px !default;
 
 :host {
     display: inline-block;
-    position: absolute;
+    position: relative;
     
     width: $toggler-size;
     height: $toggler-size;
   
-    margin-top: -$toggler-size / 2;
-    margin-left: -$toggler-size / 2;
+    //Use positios relative to behave exactly like a mat-icon/wm-icon/wm-flip 
+    //position: absolute;
+    //margin-top: -$toggler-size / 2;
+    //margin-left: -$toggler-size / 2;
 
     // Style 'menu'
     &[toggler-style='menu'] {

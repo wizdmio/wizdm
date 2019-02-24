@@ -18,7 +18,8 @@
     "menu": {
         "public": [
             { "label": "How it works", "link": "about" },
-            { "label": "Explore", "link": "explore" }
+            { "label": "Explore", "link": "explore" },
+            { "label": "Register/Sign-in", "link": "login", "params": { "mode": "signIn" } }
         ],
         "private": [
             { "label": "Explore", "link": "explore" },

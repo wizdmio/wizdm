@@ -7,4 +7,14 @@ $wm-icon-size: 24px !default;
   width: $wm-icon-size;
   height: $wm-icon-size;
   line-height: $wm-icon-size;
+/*
+  & > mat-icon { 
+    position: absolute;
+    //display: inline-block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    //box-sizing: border-box;
+  }*/
 }

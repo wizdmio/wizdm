@@ -1,26 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'wm-icon',
-  template: `<mat-icon [color]="color"
-                       [inline]="inline"
-                       [fontSet]="fontSet"
-                       [fontIcon]="fontIcon">
-            {{matIcon}}
-            </mat-icon>`,
+  templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
   
 })
-export class IconComponent implements OnInit {
+export class IconComponent {
 
   public fontSet: string  = undefined;
   public fontIcon: string = undefined;
   public matIcon = "code";
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   @Input() color: string = undefined;
   @Input() inline: boolean = undefined;

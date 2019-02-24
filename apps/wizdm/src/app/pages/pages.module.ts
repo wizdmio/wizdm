@@ -15,14 +15,13 @@ import {
   MatStepperModule,
   MatExpansionModule,
   MatListModule,
-  MatGridListModule,
   MatCheckboxModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatDialogModule,
   MatToolbarModule,
   MatSelectModule,
-  MatDividerModule,
+  //MatDividerModule,
   //MatTooltipModule,
   MatDatepickerModule,
   DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
@@ -54,7 +53,6 @@ import { UploadsComponent } from './uploads/uploads.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { UserInfoDirective } from './user-info/user-info.directive';
 import { HomeComponent } from './home/home.component';
-import { ToolsComponent } from './project/tools/tools.component';
 
 @NgModule({
   imports: [
@@ -103,8 +101,7 @@ import { ToolsComponent } from './project/tools/tools.component';
     MessageComponent,
     TermsPrivacyComponent,
     NotFoundComponent,
-    HomeComponent,
-    ToolsComponent
+    HomeComponent
   ],
 
   providers: [

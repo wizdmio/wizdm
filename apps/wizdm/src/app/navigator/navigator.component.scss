@@ -7,19 +7,11 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  top: 0;// top property will be overwrite by the code
+  top: 0;
   left: 0;
   
-  // Same as fxLayout="column" on the host element
-  //display: flex;
-  //flex-direction: column;
-  //box-sizing: border-box;
-
   // Settle a lower general zindex (1)
   z-index: 1;//$wm-zindex-content;
-
-  // Rise the header zindex (2) over the content
-  //header { z-index: $wm-zindex-control; }
 
   header { 
     display: block;
@@ -33,10 +25,13 @@
     & * { z-index: 2; }
 
     mat-toolbar {
-
+    
       background-color: transparent !important;
 
       mat-toolbar-row {
+        // Reduces the standard 16px left/right padding to 8px
+        padding: 0 8px;
+        // Adjusts the height based on the specified attribute
         &[compact] { height: 40px; }
         &[auto] { height: auto; }
       }
@@ -55,16 +50,5 @@
       }
     }
   }
-/*
-  main {
-    position: relative;
-    //overflow: hidden;
-  
-    // Makes sure the menu overlays (2) the content same as the header
-    //wm-menu { z-index: $wm-zindex-control;}
-  
-    // Makes sure the viewport content overflows
-    //wm-viewport { overflow: auto; scroll-behavior: smooth; }
-  }*/
 }
 

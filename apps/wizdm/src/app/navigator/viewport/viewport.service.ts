@@ -94,8 +94,6 @@ export class ViewportService implements OnDestroy {
     this.dispose$.next();
     this.dispose$.complete();
   }
-
-
   /**
    * Used to scroll the content of the navigation view at a specific position
    * @param selector a query selector pointing the lement to be shown by scrollIntoView()
