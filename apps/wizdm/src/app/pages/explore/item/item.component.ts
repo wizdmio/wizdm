@@ -10,7 +10,7 @@ import * as moment from 'moment';
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss']
 })
-export class ExploreItemComponent implements OnInit {
+export class ExploreItemComponent {
 
   public msgs;
   public favorite = false;
@@ -23,12 +23,11 @@ export class ExploreItemComponent implements OnInit {
     // Initialize the localized content
     this.msgs = this.content.select('explore.item');
   }
-
+/*
   @HostBinding('style.background-image') get urlCoverImage(): string{
     return !!this.project && !!this.project.data.cover ? `url(${this.project.data.cover})` : '';
   }
-
-  ngOnInit() {}
+*/
 
   public modifiedOn(project: Project): string {
     const timestamp = project.data.updated || project.data.created;

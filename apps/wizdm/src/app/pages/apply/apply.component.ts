@@ -46,7 +46,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
     this.msgs = this.content.select('apply');
   }
 
-  private enableClear$: ActionEnabler;
+  private cleared$: ActionEnabler;
 
   ngOnInit() {
 
@@ -61,7 +61,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       .subscribe( code => this.disclaimerAction(code) );
 
     // Gets the action enabler for 'clear' action code
-    this.enableClear$ = this.toolbar.actionEnabler('clear', this.application !== null);
+    this.cleared$ = this.toolbar.actionEnabler('clear', this.welcomeBack);
   }
 
   ngAfterViewInit() {
@@ -84,7 +84,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   private saveApplication(value: any): Promise<void> {
     return this.profile.update( { lastApplication: value })
       // Enables/ Disables the 'clear' action button accordingly
-      .then(() => this.enableClear$.enable( value != null ) )
+      .then(() => this.cleared$.enable( value != null ) )
       .catch(error => console.log("something wrong: " + error.code) );
   }
 
@@ -118,8 +118,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   // Project Name Validator Factory 
   get projectNameValidator() {
     
-    // Returns a validator function async checking if the project name
-    // already exists
+    // Returns a validator function async checking if the project name already exists
     return (control: AbstractControl): Promise<{[key: string]: any} | null> => {
       
       let name: string = control.value;

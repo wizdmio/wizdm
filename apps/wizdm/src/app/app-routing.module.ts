@@ -11,10 +11,10 @@ import { TermsPrivacyComponent } from './pages/terms-privacy/terms-privacy.compo
 import { LoginComponent } from './pages/login/login.component';
 import { HandlerComponent } from './pages/handler/handler.component';
 import { UserComponent } from './pages/user/user.component';
-import { ApplyComponent } from './pages/apply/apply.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ProjectComponent } from './pages/project/project.component';
 import { ExploreComponent } from './pages/explore/explore.component';
+import { ApplyComponent } from './pages/apply/apply.component';
+import { EditorComponent } from './pages/editor/editor.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { MessagesComponent } from './pages/messages/messages.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -58,7 +58,7 @@ const routes: Routes = [
           { path: 'profile', component: UserComponent, canDeactivate: [PageGuardService] },
           { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
           { path: 'dashboard', component: DashboardComponent, canDeactivate: [PageGuardService] },
-          { path: 'projects/:id', component: ProjectComponent, canDeactivate: [PageGuardService] },
+          { path: 'documents/:id', component: EditorComponent, canDeactivate: [PageGuardService] },
           { path: 'upload', component: UploadComponent }, //, canDeactivate: [PageGuardService] },
           { path: 'messages', component: MessagesComponent }, //, canDeactivate: [PageGuardService] },
           //{ path: 'messages/:id', component: MessagesComponent }, //, canDeactivate: [PageGuardService] }

@@ -1,5 +1,3 @@
-//export type wmBlockType = 'paragraph'|'bulleted'|'numbered'|'table'; 
-//export type wmEditableType = 'paragraph'|'item'|'cell';
 export type wmInlineType = 'text'|'link';
 export type wmIndentType = 'blockquote'|'bulleted'|'numbered';
 export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmInlineType|'image';
@@ -12,15 +10,14 @@ export interface wmEditable {
   type: wmNodeType,
   align?: wmAlignType,
   level?: number,
-  children?: wmEditable[]
+  content?: wmEditable[]
 }
 
 export interface wmDocument extends wmEditable {
   type: 'document',
-  header: {
-    author?: string,
-    version?: string
-  }
+  name?: string,
+  author?: string,
+  version?: string
 }
 
 export interface wmBlock extends wmEditable {
@@ -31,22 +28,22 @@ export interface wmBlock extends wmEditable {
 export interface wmList extends wmEditable {
   type: 'numbered'|'bulleted',
   start?: number,
-  children?: (wmItem|wmList)[]
+  content?: (wmItem|wmList)[]
 }
 
 export interface wmItem extends wmEditable {
   type: 'item',
-  children?: wmText[]
+  content?: wmText[]
 }
 
 export interface wmTable extends wmEditable {
   type: 'table',
-  children?: wmRow[]
+  content?: wmRow[]
 }
 
 export interface wmRow extends wmEditable {
   type: 'row',
-  children?: wmCell[]
+  content?: wmCell[]
 }
 
 export interface wmCell extends wmEditable {
@@ -54,7 +51,7 @@ export interface wmCell extends wmEditable {
   valign?: wmVertAlignType,
   rowspan?: number,
   colspan?: number,
-  children?: wmText[]
+  content?: wmText[]
 }
 
 export interface wmText extends wmEditable {

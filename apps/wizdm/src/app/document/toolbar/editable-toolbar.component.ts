@@ -1,5 +1,4 @@
 import { Component, HostBinding, Input, Output, EventEmitter } from '@angular/core';
-import { MatButtonToggleChange } from '@angular/material';
 import { EditableSelection } from '../selection/editable-selection.service';
 import { wmTextStyle } from '../common/editable-types';
 import { $animations } from './editable-toolbar.animations';

@@ -54,8 +54,8 @@ export class UserInfoComponent implements OnInit {
     this.user = user;
   }
 
-  @Input('owner') set setOwner(project: wmProject) { // as a project's owner
-    this.loadUser(project.owner)
+  @Input('author') set setOwner(project: wmProject) { // as a project's author
+    this.loadUser(project.author)
       .then( user => this.user = user );
   }
 

@@ -3,15 +3,13 @@ import { Observable, Subject, BehaviorSubject, Observer } from 'rxjs';
 import { map, takeUntil, delay } from 'rxjs/operators';
 
 export type wmAction = {
+
   caption?: string,
   icon?:    string,
-  
   code?:    string,
   enabler?: Observable<boolean>
-  
   link?:    string,
   params?:  any,
-
   menu?:    wmAction[]
 };
 
@@ -64,10 +62,7 @@ export class ActionState {
       const enabler = new ActionEnabler(startValue);
 
       // Updated the corresponding action button adding the relevan enabler observable
-      this.buttons[index] = { 
-        ...this.buttons[index], 
-        enabler: enabler.pipe( takeUntil(this.dispose$) ) 
-      };
+      this.buttons[index].enabler = enabler.pipe( delay(0), takeUntil(this.dispose$) );
       
       // Returns the enabler
       return enabler;

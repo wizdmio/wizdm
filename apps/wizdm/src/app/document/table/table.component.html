@@ -1,32 +1,11 @@
 
-<!--thead *ngIf="!!head?.length">
-  <tr *ngFor="let row of head" [id]="row.id">
-    <th *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></th>
-  </tr>
-  </thead>
-<tbody-->
 <tr *ngFor="let row of table?.content" [id]="row.id">
 
-  <td *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
-
-  <!--ng-container *ngFor="let cell of row.content">
-
-    <ng-container [ngSwitch]="cell.type">
-
-      <td *ngSwitchCase="'cell'" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
-      
-      <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
-
-      <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
-
-    </ng-container>
-
-  </ng-container-->
+  <td *ngFor="let cell of row.content" 
+      [style.vertical-align]="cell.data.valign"
+      [attr.rowspan]="cell.data.rowspan"
+      [attr.colspan]="cell.data.colspan" 
+      [wm-editable]="cell">
+  </td>
 
 </tr>
-<!--/tbody>
-<tfoot *ngIf="!!foot?.length">
-  <tr *ngFor="let row of foot" [id]="row.id">
-    <td *ngFor="let cell of row.content" [attr.colspan]="cell.data.colspan" [wm-editable]="cell"></td>
-  </tr>
-</tfoot-->

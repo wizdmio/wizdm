@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
 import { DatabaseService, PagedCollection, PageConfig, dbStreamFn, UserProfile, wmUser } from '@wizdm/connect';
 import { Observable, BehaviorSubject, of, from, merge } from 'rxjs';
 import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
@@ -24,13 +23,8 @@ export interface wmApplication {
 })
 export class ProjectService extends PagedCollection<wmProject> {
 
-  private userUnknown: wmUser;
-
-  constructor(db: DatabaseService, private content: ContentManager, readonly profile: UserProfile) {
+  constructor(db: DatabaseService, readonly profile: UserProfile) {
     super(db, '/projects');
-
-    // Loads the localized unknown user object
-    this.userUnknown = this.content.select('project.userUnknown');
   }
 
   // Current user id
@@ -41,19 +35,18 @@ export class ProjectService extends PagedCollection<wmProject> {
    * @param project the project to verify
    */
   public isProjectMine(project: wmProject): boolean {
-    return project.owner === this.profile.id;
+    return project.author === this.profile.id;
   }
 
-  public resolveOwner(project: wmProject): Observable<wmUser> {
+  public resolveAuthor(project: wmProject): Observable<wmUser> {
     
-    // Short-circuit in case the owner is the current user
-    if( project.owner === this.profile.id ) {
+    // Short-circuit in case the author is the current user
+    if( project.author === this.profile.id ) {
       return of(this.profile.data);
     }
 
-    // Load the owner otherwise filling up the content with an 'unkown' user when missing
-    return this.db.document<wmUser>('/users', project.owner)
-      .get().pipe( map( data => data || this.userUnknown ) );
+    // Load the author data once
+    return this.db.document<wmUser>('/users', project.author).get();
   }
 
   /**
@@ -63,28 +56,27 @@ export class ProjectService extends PagedCollection<wmProject> {
   public doesProjectExists(name: string): Promise<boolean> {
     
     // Query the projects collection searching for a matching lowerCaseName
-    return this.stream(ref => {
-        return ref.where('lowerCaseName', '==', name.trim().toLowerCase());
-    }).pipe(
-      debounceTime(500),
-      take(1),
-      map(arr => arr.length > 0),
-    ).toPromise();
+    return this.stream(ref => ref.where('lowerCaseName', '==', name.trim().toLowerCase()) )
+      .pipe(
+        debounceTime(500),
+        take(1),
+        map(arr => arr.length > 0),
+      ).toPromise();
   }
 
   // Helper to snitize the Project's data payload
   public sanitizeData(data: any): any {
-
     // Trims the name and creates a lower case version of it for searching purposes 
-    if(data.name) {
+    if(!!data.name) {
       data.name = data.name.trim();
-      data['lowerCaseName'] = data.name.toLowerCase();
+      data.lowerCaseName = data.name.toLowerCase();
     }
-
-    // Makes sure data payload always specifies the owner as a string
-    // Note that queryProject fills the owner field with the wmUser
+    // Makes sure data payload always specifies the author as a string
+    // Note that queryProject fills the author field with the wmUser
     // object, so, this ensure eventual updates do not corrupt the db
-    return { ...data, owner: this.userId };
+    data.author = this.userId;
+    // Returns the very same object instance
+    return data;
   }
 
   public project(id: string): Project {
@@ -115,7 +107,7 @@ export class ProjectService extends PagedCollection<wmProject> {
 
   // Query function to filter my own projects only
   private get myOwmProjects(): dbStreamFn {
-    return ref => ref.where('owner', '==', this.profile.id);
+    return ref => ref.where('author', '==', this.profile.id);
   }
 
   public loadMine(): Observable<Project[]> {
@@ -143,13 +135,13 @@ export class ProjectService extends PagedCollection<wmProject> {
       // Project name inherited from the applciation
       name: application.name,
       // Elevator pitch inherited from the applciation
-      pitch: application.pitch,
+      pitch: application.pitch/*,
       // Document created from the template and the given application 
       document: template.replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
         // Replaces the <comma.separated.selectors> found into the template 
         // with the content coming from the context object
         return (selector.select(context) || selector).interpolate(context);
-      })
+      })*/
 
     } as wmProject );
   }

@@ -1,13 +1,13 @@
 <!-- Loops on text/link elements -->
 <ng-container *ngFor="let child of node?.content">
 
-    <!-- Renders a text node -->
-    <span *ngIf="child.type === 'text'" [id]="child.id" [ngStyle]="style(child)">{{ child.value || '\u200B' }}</span>
-  
-    <!-- Renders a link node -->
-    <a *ngIf="child.type === 'link'" [id]="child.id" [routerLink]="child.url">{{ child.value || '\u200B' }}</a>
-  
-    <!-- Recurs to render a link node -->
-    <!--a *ngIf="child.type === 'link'" [routerLink]="child.url" [wm-editable]="child"></a-->
-  
-  </ng-container>
+  <!-- Renders a text node -->
+  <span *ngIf="child.type === 'text'" [id]="child.id" [ngStyle]="style(child)">{{ child.value || '\u200B' }}</span>
+
+  <!-- Renders a link node -->
+  <a *ngIf="child.type === 'link'" [id]="child.id" [routerLink]="child.url">{{ child.value || '\u200B' }}</a>
+
+  <!-- Recurs to render a link node -->
+  <!--a *ngIf="child.type === 'link'" [routerLink]="child.url" [wm-editable]="child"></a-->
+
+</ng-container>

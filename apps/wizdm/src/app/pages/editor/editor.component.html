@@ -19,6 +19,7 @@
       <!-- Renders the documetn body -->
       <wm-editable-document
         (contextmenu)="editMode ? menu.open($event) : true" 
+        (change)="save($event)"
         [source]="document"
         [edit]="editMode" #doc>
       </wm-editable-document>

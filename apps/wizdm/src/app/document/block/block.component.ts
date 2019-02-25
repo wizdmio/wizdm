@@ -14,9 +14,4 @@ export class BlockComponent {
   @HostBinding('id') get id() {
     return !!this.block && this.block.id;
   }
-/*
-  @HostBinding('attr.start') get start() {
-    return !!this.block && this.block.data.start;
-  }
-*/
 }

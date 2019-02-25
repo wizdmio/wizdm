@@ -4,7 +4,7 @@
   <h1>{{ project.data.name }}</h1>
 </div>
 
-<div fxLayout="column" fxLayoutAlign="space-between center" class="content" *ngIf="project?.owner$ | async as owner" [routerLink]="[ '../projects', project.id ]">
+<div fxLayout="column" fxLayoutAlign="space-between center" class="content" *ngIf="project?.author$ | async as author" [routerLink]="[ '../documents', project.id ]">
 
   <!-- top bar -->
   <div fxLayout="row" fxLayoutAlign="end center" class="wide">
@@ -22,12 +22,12 @@
       <div fxLayout="row" fxLayoutAlign="start center">
         <!-- User picture with info -->
         <button mat-icon-button [wmUserInfoTrigger]="userInfo">
-          <wm-avatar [src]="owner.img"></wm-avatar>
-          <wm-user-info [owner]="project.data" #userInfo></wm-user-info>
+          <wm-avatar [src]="author?.img"></wm-avatar>
+          <wm-user-info [author]="project.data" #userInfo></wm-user-info>
         </button>
         
         <div fxLayout="column">
-          <span>{{ owner.name || msgs.unnamed }}</span>
+          <span>{{ author?.name || msgs.unnamed }}</span>
           <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
         </div>
   

@@ -529,7 +529,7 @@ export class EditableSelection {
   /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
     // Applies the alignement on the containers within the selection
-    this.containers( container => container.align = align );
+    this.containers( container => container.align = align ).mark();
   }
 
   /** Returns the current selection level (corresponding to the start node container's) */

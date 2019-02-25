@@ -1,7 +1,7 @@
-import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener } from '@angular/core';
+import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EditableContent } from './common/editable-content';
-import { wmDocument, wmTextStyle } from './common/editable-types';
+import { wmDocument } from './common/editable-types';
 import { EditableSelection } from './selection/editable-selection.service';
 
 @Component({
@@ -18,41 +18,39 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
   constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection) { 
     super(null); sel.attach(this);
   }
-
+  /** Document source */
   @Input() set source(source: wmDocument) {
     // Loads the source data building the tree
-    this.load(source);
+    this.load(source).defrag();
   }
 
   private editMode = false;
 
+  /** When true switches to edit mode */
   @Input() set edit(mode: boolean) { 
-    
+    // Switches to/from edit mode
     if(this.editMode = mode) {
+      // Queries for the current selection
       this.sel.query(this.document);
     }
   }
-
-  get style(): string[] {
-    return !!this.sel.start ? this.sel.start.style : [];
-  }
-
-  public format(style: wmTextStyle[]) {
-    !!this.sel && this.sel.format(style);
-  }
+  /** change event notifying for document changes */
+  @Output() change = new EventEmitter<wmDocument>();
 
   ngAfterViewChecked() {
     // Applies the current selection to the document when needed. This is essential even when the selection
     // isn't modified since view changes (aka rendering) affects the selection that requires to be restored
     if(this.editMode && this.sel.marked) { 
-      // Makes sure to restore the selection after the view has been rendered but anyhow ell before
+      // Makes sure to restore the selection after the view has been rendered but anyhow well before
       // the next change will be applied to the data tree (such as while typing) 
       Promise.resolve().then( () => this.sel.apply(this.document) ); 
+      // Notifies listeners for document change
+      this.change.emit(this.data);
     }
   }
 
   @HostListener('mouseup', ['$event'])
-  @HostListener('keyup', ['$event']) keyUp(ev: Event) {
+  @HostListener('keyup', ['$event']) up(ev: Event) {
     // Query the selection, so, it's always up to date
     if(this.editMode) { this.sel.query(this.document); }
   }
@@ -110,48 +108,46 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
       // Deletes the selection when succeeded
       this.sel.delete();
     }
-    // Prevents default
+    // Always prevent default
     return false;
   } 
   
   @HostListener('copy', ['$event']) copy(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-    //console.log(ev);
-    //const text = this.sel.plainText();//.replace('\n', '\r\n');
-    //ev.clipboardData.setData('text/plain', this.sel.plainText('\r\n') );
-    //ev.clipboardData.setData('text/html', '<b>Hello, world!</b>');
 
+    const cp = ev.clipboardData || (this.window as any).clipboardData;
+    if(!cp) { return true; }
+
+    // Copies the selected branch into a local variable to maximize browser portability
     const copied = this.sel.copy();
-    console.log(copied);
 
-    return true;// Perform default
+    try {
+        cp.setData('text', copied.value );
+        cp.setData('application/json', JSON.stringify( copied.data ) );
+    }
+    catch(e) {
+      console.error(e);
+    }
+    
+    return false;
   }
 
   @HostListener('paste', ['$event']) paste(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
 
+    const cp = (ev.clipboardData || (window as any).clipboardData);
+    if(!cp) { return false; }
+
     try {
-
-      //console.log(((window as any).clipboardData).getData('text'));
-
-      const html = (ev.clipboardData || (window as any).clipboardData).getData('text/html');
-
-      console.log(html);
-
-      const parser = new DOMParser();
-      const parsedHtml = parser.parseFromString(html, 'text/html');
-
-      console.log(parsedHtml);
+      console.log( JSON.parse( cp.getData('application/json') ) );
     }
     catch(e) {
+      console.log( cp.getData('text') );
       console.error(e);
     }
-    //const text = ev.clipboardData.getData('text/plain');
-    //console.log(text);
 
-    // Prevents default
     return false;
   }
   
@@ -166,23 +162,25 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
 
       // Size
       case '0': case '1': case '2': case '3':
+      // Change the selection size
       return this.sel.level = +ev.key, false;
   
       // Italic format
       case 'i': case 'I':
+      // Toggles the selection format
       return this.sel.toggleFormat('italic'), false;
       
       // Bold format
       case 'b': case 'B':
+      // Toggles the selection format
       return this.sel.toggleFormat('bold'), false;
       
       // Underline format
       case 'u': case 'U':
+      // Toggles the selection format
       return this.sel.toggleFormat('underline'), false;
-  
     }
     // Reverts to default
     return true;
-    }
+  }
 }
-

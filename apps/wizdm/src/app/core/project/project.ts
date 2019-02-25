@@ -1,20 +1,20 @@
 import { DatabaseDocument, DistributedCounter, dbCommon, wmUser } from '@wizdm/connect';
+import { wmDocument } from '../../document/common/editable-types';
 import { ProjectService } from './project.service';
 import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft' | 'deleted';
 
-export interface wmProject extends dbCommon {
+export interface wmProject extends wmDocument, dbCommon {
   
   name         : string,
+  author?      : string,
   pitch?       : string,
   status?      : wmProjectStatus,
-  owner?       : string,
-  cover?       : string,
-  color?       : string,
-  document?    : string, // markdown formatted business plan description
-  
+  //cover?       : string,
+  //color?       : string,
+  //document?    : string, 
   //team?        : string[] | wmUser[], collection of users
   //development? : wmDevelopment,
 }
@@ -40,8 +40,8 @@ export class Project extends DatabaseDocument<wmProject> {
   public data: wmProject = <wmProject>{};
 
   // Extends wmProject
-  public owner$ : Observable<wmUser>;
-  public likes  : DistributedCounter;
+  public author$ : Observable<wmUser>;
+  public likes   : DistributedCounter;
   
   constructor(private ps: ProjectService, source: wmProject) {
     super(ps.db, '/projects', source.id);
@@ -53,9 +53,9 @@ export class Project extends DatabaseDocument<wmProject> {
     this.id = source.id;
     // Copies the wmProject data
     this.data = source;
-    // Resolve the owner profile as an observable
-    this.owner$ = this.resolveOwner();
-    // Creates/connects to the ikes counter
+    // Resolve the author profile as an observable
+    this.author$ = this.resolveAuthor();
+    // Creates/connects to the likes counter
     this.likes = this.counter('likes');
     return this;
   }
@@ -64,8 +64,8 @@ export class Project extends DatabaseDocument<wmProject> {
     return this.ps.isProjectMine(this.data);
   }
 
-  public resolveOwner(): Observable<wmUser> {
-    return this.ps.resolveOwner(this.data);
+  public resolveAuthor(): Observable<wmUser> {
+    return this.ps.resolveAuthor(this.data);
   }
 
   public getProject(): Observable<Project> {
@@ -92,22 +92,22 @@ export class Project extends DatabaseDocument<wmProject> {
 
   // Updates the database contents making sure to update the buffered copy as well
   public update(data: wmProject): Promise<void> {
-
     // Sanitizes the new data
     const sanitized = this.ps.sanitizeData(data);
-
-    // Updates the local buffered copy
-    this.data = { ...this.data, ...sanitized };
-
+    // Updates the local buffered data without mutating the object
+    Object.assign(this.data, sanitized);
     // Updates the database
     return super.update( sanitized );
   }
 
   public delete(): Promise<void> {
-
-    this.data = null;
-
+    // Deletes the project from the db
     return super.delete()
-      .then(() => this.likes.wipe() );
+      .then(() => {
+        // Wipes the associated likes
+        this.likes.wipe();
+        // Resets the buffered data
+        this.data = null;
+      } );
   }
 }

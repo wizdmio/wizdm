@@ -99,10 +99,6 @@
 <!-- Extras -->
 <mat-menu #extraMenu="matMenu">
 
-  <button mat-icon-button style="display: block; border-radius: 0" (click)="doNothing()">
-    <mat-icon>format_quote</mat-icon>
-  </button>
-
   <button mat-icon-button style="display: block; border-radius: 0" *ngIf="!sel.belongsTo('link')" (click)="sel.link('./')">
     <mat-icon>link</mat-icon>
   </button>

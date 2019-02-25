@@ -74,9 +74,9 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Loads the source document building the data tree */
   public load(source: T): EditableContent<T> {
     // Assigns the source to the node data
-    if(!!(this.node = source) && this.node.children) {
+    if(!!(this.node = source) && this.node.content) {
       // Recurs on children
-      this.children = this.node.children.map( (node, i) => {
+      this.children = this.node.content.map( (node, i) => {
         // Creates the children nodes of the requested type
         return this.createNode(node)
           // Links it to the parent
@@ -90,25 +90,14 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   }
 
   /** Creates a new empty document */
-  public new(header?: any): EditableContent<T> {
+  public new(info?: { title?: string, author?: string, version?: string }): EditableContent<T> {
     // Creates a new tree made of a document containing 
     // a single paragraph with a signle empty text node
-    return this.load({
-      type: 'document', header, children: [{ 
-        type: 'item', children: [{ 
+    return this.load({ ...info,
+      type: 'document', content: [{ 
+        type: 'item', content: [{ 
           type: 'text', value: '' 
     }]}]} as any);
-  }
-
-  /** Saves the document by updating the inner data tree and returning it */
-  public save(): T {
-    // Loops on content children updating the data children
-    this.data.children = this.content.map( node => {
-      // Recurs down the tree
-      return node.save();
-    });
-    // Returns the inner data
-    return this.data;
   }
 
   /** Clones a node with or whithout its children */
@@ -119,14 +108,13 @@ export class EditableContent<T extends wmEditable = wmEditable> {
         // Spreads all the original data values
         ...node.data,
         // Makes sure children are sanitized as well (or undefined on request)
-        children: withChildren ? node.content.map( n => sanitize(n) ) : undefined, 
+        content: withChildren ? node.content.map( n => sanitize(n) ) : undefined, 
         // Copies the style array, if any
         style: !!(node.data as any).style ? [...(node.data as any).style] : undefined
       } as wmEditable;
     }
-
     // Creates a new node/tree mirroring this one 
-    return this.createNode( sanitize(this) ).load(this.data);
+    return this.createNode({ type: this.type } ).load( sanitize(this) );
   }
 
   /**
@@ -149,9 +137,10 @@ export class EditableContent<T extends wmEditable = wmEditable> {
 
   /** Refreshes children inheritance recurring along descendants 
    * @param from (optional) optionally start from a non-zero index 
-  */
+   */
   private refresh(from: number = 0): EditableContent {
 
+    // Refreshes the content inheritance after any update
     for(let i = from; i < this.count; i++) {
       this.content[i].inherit(this, i).refresh();
     }
@@ -264,6 +253,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     if(count <= 0 && items.length <= 0) { return []; }
     // Insert/remove children nodes as requested
     const nodes = this.content.splice(index, count, ...items);
+    // Syncs the data children accordingly
+    this.data.content = this.content.map( node => node.data );
     // Refreshes the added and shifted children inheritance
     this.refresh(index);
     // Return the removed nodes
@@ -273,8 +264,10 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   public wrap(type: wmNodeType): EditableContent {
     // Creates a new node to wrap this node with
     const wrap = this.createNode({ type });
-    // Wraps the node within 
-    this.parent.replaceChild(this, wrap).appendChild(this);
+    // Replaces the current node with the new wrapper 
+    this.parent.splice(this, 1, wrap);
+    // Appends the node to the wrapper
+    wrap.splice(0, 0, this);
     // Returns the wrapping node
     return wrap;
   }
@@ -310,21 +303,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
    */
   public appendChild(node: EditableContent): EditableContent {
     // Pushes the node into the content array
-    this.content.push(node.inherit(this, this.count).refresh());
-    // Return the appended child node
-    return node;
-  }
-
-  /** 
-   * Replaces an existing child with a new node 
-   * @param child the existing child node
-   * @param node the new child node
-   * @return the new inserted node or null whenever child was not a child of this
-   */
-  public replaceChild(child: EditableContent, node: EditableContent): EditableContent {
-          
-    if(!this.childOfMine(child)) { return null; }
-    return this.content[child.index] = node.inherit(this, child.index).refresh();
+    return this.splice(this.count, 0, node), node;
   }
 
   /**
@@ -560,18 +539,18 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   public indent(type: wmIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
-
+    // Checks on the preceding sibling
     const prev = this.previousSibling();
-    const next = this.nextSibling();
-    
-    const block = (!!prev && prev.type === type) ? 
-      (prev.appendChild( this.remove() ), prev) : 
-        this.wrap(type);
-
+    // Appends the node on the prececding siblings when matching the same block type,
+    // or wraps it in a new block otherwise 
+    const block = (!!prev && prev.type === type) ? (prev.appendChild( this.remove() ), prev) : this.wrap(type);
+    // Checks on the following sibling
+    const next = block.nextSibling();
+    // Merges the next sibling bloxk when matching the same type
     if(!!next && next.type === type) { 
       block.appendChild( next.remove() ).unwrap(); 
     }
-
+    // Returns the indentation block instance
     return block;
   }
 
