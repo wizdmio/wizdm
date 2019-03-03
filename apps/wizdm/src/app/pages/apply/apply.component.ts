@@ -1,17 +1,14 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmUser } from '@wizdm/connect';
-import { ProjectService, wmApplication } from '../../core';
+import { ProjectService, wmApplication, wmProject } from '../../core';
 import { CanPageDeactivate, ToolbarService, ActionEnabler } from '../../navigator';
 import { PopupService } from '../../elements';
 import { TermsPrivacyComponent } from '../terms-privacy/terms-privacy.component';
 import { $animations } from './apply.animations';
-import { Observable } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators'
 
 interface userApply extends wmUser {
   lastApplication?: any,
@@ -35,7 +32,6 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   constructor(private builder : FormBuilder, 
               private router  : Router,
               private route   : ActivatedRoute,
-              private http    : HttpClient,
               private content : ContentManager,
               private profile : UserProfile<userApply>,
               private project : ProjectService,
@@ -82,9 +78,14 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   // Updates the last saved application
   private saveApplication(value: any): Promise<void> {
-    return this.profile.update( { lastApplication: value })
-      // Enables/ Disables the 'clear' action button accordingly
+    
+    return this.profile.update({ lastApplication: {
+        ...this.application,
+        ...value
+      }})
+      // Enables/Disables the 'clear' action button accordingly
       .then(() => this.cleared$.enable( value != null ) )
+      // Catches errors
       .catch(error => console.log("something wrong: " + error.code) );
   }
 
@@ -121,8 +122,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
     // Returns a validator function async checking if the project name already exists
     return (control: AbstractControl): Promise<{[key: string]: any} | null> => {
       
-      let name: string = control.value;
-      return this.project.doesProjectExists( name.trim() )
+      return this.project.doesProjectExists( control.value )
         .then( r => r ? { alreadyExist: true } : null , e => e );
     };
   }
@@ -194,30 +194,28 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
     this.saveApplication( value );
   }
 
-  private loadTemplate(path: string): Observable<string> {
-    
-    // Loads the MD template file from the given path
-    return this.http.get(path, { responseType: 'text' } )
-      .pipe( catchError( e => {
-        console.error(e);
-        return "# Something wrong"; 
-      }));
-  }
-
   // Creates a project instance starting from the given application
   private applyProject(application: wmApplication) {
-
-    // Gets the document localized contents
-    const doc = this.content.select('document');
-
-    // Load the document template
-    return doc ? this.loadTemplate(doc.template)
-      .pipe( switchMap( template => { 
-
-        // Store a new project creating the content from the applicaton
-        return this.project.apply( application, template, doc);
-
-      })).toPromise() : Promise.reject('project/missingTemplate');
+    // Gets the localized template
+    const template = this.content.select('template');
+    // Stringifies it to replace selectors
+    const document = JSON.stringify(template).replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
+      // Replaces the <comma.separated.selectors> found into the template 
+      // with the content coming from the application object
+      return selector.select(application) || selector;
+    });
+    // Store the new project
+    return this.project.addProject( {
+      // Document content coming from the template
+      ...JSON.parse( document ),
+      // Sets the status as draft
+      status: 'draft',
+      // Overwrite the name from the application
+      name: application.name,
+      // Adds the elevator pitch
+      pitch: application.pitch
+  
+    } as wmProject );
   }
 
   public submitProject() {
@@ -240,7 +238,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       .then( () => { 
       
         // Navigate back to the project explore reporting the creation of a new project
-        this.router.navigate(['..', 'projects'], {
+        this.router.navigate(['..', 'explore'], {
           relativeTo: this.route,
           queryParams: {
             project: 'new'

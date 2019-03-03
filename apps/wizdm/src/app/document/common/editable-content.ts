@@ -10,7 +10,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   protected children: EditableContent[] = [];
 
   constructor(data: T) { this.node = data || {} as T; }
-
+  /** Returns the parent container */
+  get container(): EditableContent { return this.parent; }
   /** Returns the node private data */
   get data(): T { return this.node; }
   /** Returns the node type */
@@ -40,14 +41,26 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns true whenever the node is the last child within its parent */
   get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }  
   /** Setting text value from cointainer is not supported */
-  set value(text: string) { throw "Setting text value at container level is not supported";}
+  set value(text: string) { throw "Setting value at container level is not supported";}
   /** Returns the text content of a branch by appending text node values recursively */
-  get value(): string { return this.content.reduce( (txt, node) => txt + node.value, ''); }
-  // Containers node lenght not supported to avoid performance issues
-  get length() { return 0; }
-  /** Returns the parent container */
-  get container(): EditableContent { return this.parent; }
-    
+  get value(): string { return this.content.reduce( (txt, node) => txt + node.value + node.pad, '');}
+  /** Returns the appropriate pad character to terminate the node value */
+  get pad(): string { return this.type === 'text' || this.type === 'link' || this.last ? '' : (this.type === 'cell' ? '\t' : '\n');}
+  /** Returns the value's length */
+  get length(): number { return this.value.length; }
+  /** Returns the value's length from the very first node up to the preceding sibling */
+  get offset(): number {
+    // Done when no more parents
+    if(this.removed) { return 0; }
+    // Accumulate the length of the preceding siblings
+    let offset = 0;
+    for(let i = 0; i < this.index; i++) {
+      const node = this.parent.content[i];
+      offset += (node.value + node.pad).length;
+    }
+    // Returns the offset recurring up the tree
+    return offset + this.parent.offset;
+  }
   /** Structural nodes never share the same attributes */
   public same(node: EditableContent): boolean { return false; }
   /** Structural nodes never need to be joined */
@@ -101,20 +114,22 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   }
 
   /** Clones a node with or whithout its children */
-  public clone(withChildren: boolean = true): EditableContent {
+  public clone(withChildren: boolean = true): EditableContent<T> {
 
     const sanitize = function(node: EditableContent): wmEditable {
-      return {
-        // Spreads all the original data values
-        ...node.data,
-        // Makes sure children are sanitized as well (or undefined on request)
-        content: withChildren ? node.content.map( n => sanitize(n) ) : undefined, 
-        // Copies the style array, if any
-        style: !!(node.data as any).style ? [...(node.data as any).style] : undefined
-      } as wmEditable;
+      // Spreads all the original data values
+      const data = { ...node.data } as any;
+      // Makes sure children are sanitized as well when requested
+      if(withChildren) { data.content = node.content.map( n => sanitize(n) );}
+      // Othrwise remove the content property at all
+      else if(!!data.content) { delete data.content; }
+      // Copies the style array, if any
+      if(!!(node.data as any).style ) { data.style = [...(node.data as any).style]; }
+      // Returns the cloned data payload
+      return data as wmEditable;
     }
     // Creates a new node/tree mirroring this one 
-    return this.createNode({ type: this.type } ).load( sanitize(this) );
+    return this.createNode({ type: this.type }).load( sanitize(this) ) as any;
   }
 
   /**
@@ -261,11 +276,12 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return nodes;
   }
 
+  /** Wraps the node with the specified container updating the hierarchy, if any*/
   public wrap(type: wmNodeType): EditableContent {
     // Creates a new node to wrap this node with
     const wrap = this.createNode({ type });
-    // Replaces the current node with the new wrapper 
-    this.parent.splice(this, 1, wrap);
+    // Replaces the current node with the new wrapper within the parent content 
+    if(!this.removed) { this.parent.splice(this, 1, wrap); }
     // Appends the node to the wrapper
     wrap.splice(0, 0, this);
     // Returns the wrapping node
@@ -274,7 +290,7 @@ export class EditableContent<T extends wmEditable = wmEditable> {
 
   public unwrap(): EditableContent {
     // Skips unwrapping removed nodes
-    if(this.removed) { return null; }
+    if(this.removed) { return this; }
     // Relocates the node content into the parent container
     this.parent.splice(this, 1, ...this.content );//.splice(0, -1) );
     // Return the container node the unwrapped content now belongs to
@@ -446,6 +462,8 @@ export class EditableContent<T extends wmEditable = wmEditable> {
   private traverse(node: EditableContent, callbackfn: (left: EditablePosition, right: EditablePosition) => EditableContent): EditableContent {
     // Skips on null or invalid parameters
     if(!node || typeof callbackfn !== 'function') { return null; }
+    // Short-circuits when traversing the very same node
+    if(this === node) { return callbackfn.call(this, [], []); }
     // Reverts the operation if node comes in the wrong order
     if(this.compare(node) > 0) { return node.traverse(this, callbackfn); }
     // Climbs up to the common ancestor
@@ -488,9 +506,34 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     return this;
   }
 
+  /** 
+   * Return a copy of the tree between the two nodes (includes) as a document fragment 
+   * so always reflecting a document(/block)/item/text hierarchy
+   */
   public fragment(node: EditableContent): EditableContent {
     // Depth-first traversal
-    return this.traverse(node, this._fragment);
+    let fragment = this.traverse(node, this._fragment);
+    // Return null if something wrong
+    if(!fragment) { return null; }
+    // Check on the fragment root node type
+    switch(fragment.type) {
+      // When the root node is already a document, we are done
+      case 'document': break;
+      // When the root node belongs to a table...
+      case 'cell':
+      fragment = fragment.wrap('row');
+      case 'row':
+      fragment = fragment.wrap('table').wrap('document');
+      break;
+      // When the root node is a simple text/link...
+      case 'text': case 'link':
+      fragment = fragment.wrap('item');
+      // Wraps everything else in a document
+      default:
+      fragment = fragment.wrap('document');
+    }
+    // Returns a consistent document fragment
+    return fragment;
   }
 
   private _fragment(left: EditablePosition, right: EditablePosition): EditableContent {
@@ -514,6 +557,21 @@ export class EditableContent<T extends wmEditable = wmEditable> {
     // Done recurring
     return node;
   }
+
+  /** Cleaves the tree between this node and the next sibling climbing up till the root node*/
+  public cleave(): EditableContent {
+    // Done when removed or we reached the top 
+    if(this.removed || this.depth === 1) { return this; }
+    // Gets the next sibling node
+    const next = this.nextSibling();
+    if(!!next) {
+      // Relocates teh node from the next sibling foreward to a new branch
+      this.parent.insertNext( this.parent.clone(false) )
+        .splice(0, 0, ...this.parent.splice(next, -1));
+    }
+    // Climbs up the tree
+    return this.parent.cleave();
+  } 
 
   /**
    * Defragments the tree content, so, text nodes are minimized
@@ -587,7 +645,7 @@ export class EditableText extends EditableContent<wmText> {
 
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
-  get length() { return this.value.length; }
+  //get length() { return this.value.length; }
   get empty(): boolean { return this.length <= 0;}
   /** Sets/gets the container's alignement */
   set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align;} }
@@ -664,6 +722,22 @@ export class EditableText extends EditableContent<wmText> {
     this.value = this.value.slice(till, from);
     return ret;
   }
+  /** Returns a touple of indexes representing the word edges within the node value
+   * @param index the index position to start seeking the word edges from 
+  */
+  public edges(index: number): [number, number] {
+    
+    let before = 0, after = this.length;
+    this.value.replace(/\b/g, ( match, offset ) => {
+
+      if(offset <= index && offset > before) { before = offset; }
+      if(offset >= index && offset < after) { after = offset; }
+
+      return '';
+    });
+
+    return [before, after];
+  }
 
   /** 
    * Jumps to the previous editable text node.
@@ -672,10 +746,10 @@ export class EditableText extends EditableContent<wmText> {
    */
   public previousText(traverse: boolean = false): EditableText {
 
-    let node = this.previous(traverse);
+    const node = this.previous(traverse);
     if(!node) { return null; }
-    //if(!traverse) { node = node.lastDescendant(); }
-    return (node.type === 'text' || node.type === 'link') ? node  as EditableText : this.previousText(traverse);
+    if(node.type === 'text' || node.type === 'link') { return node as EditableText; }
+    return (node as EditableText).previousText(traverse);
   }
 
   /** 
@@ -685,10 +759,43 @@ export class EditableText extends EditableContent<wmText> {
    */
   public nextText(traverse: boolean = false): EditableText {
 
-    let node = this.next(traverse);
+    const node = this.next(traverse);
     if(!node) { return null; }
-    //if(!traverse) { node = node.firstDescendant(); }
-    return (node.type === 'text' || node.type === 'link') ? node  as EditableText : this.nextText(traverse);
+    if(node.type === 'text' || node.type === 'link') { return node as EditableText; }
+    return (node as EditableText).nextText(traverse);
+  }
+
+   public move(offset: number): [EditableText, number] {
+    // Gets a reference to this nodes
+    let node: EditableText = this as any;
+    // Jumps on previous nodes whenever the new offset crossed 0
+    while(offset < 0) {
+      // Jumps on the previous node traversing the full tree
+      const prev = node.previousText(true);
+      // If null, we are done
+      if(!prev) { offset = 0; break; }
+      // When crossing text containers, account for the new line
+      if(!prev.siblings(node)) { offset++; }
+      // Adjust the offset according to node length
+      offset += prev.length;
+      // Loop on the next node
+      node = prev;
+    }
+    // Jumps on next nodes whenever the new offset cossed the  node length
+    while(offset > node.length) {
+      // Jumps on the next node traversing the full tree
+      const next = node.nextText(true);
+      // If null, we are done
+      if(!next) { offset = node.length; break; }
+      // When crossing text containers, account for the new line
+      if(!next.siblings(node)) { offset--; }
+      // Adjust the offset according to node length
+      offset -= node.length;
+      // Loop on the next node
+      node = next;
+    }
+    // Return the new node/offset pair
+    return [node, offset]; 
   }
 
   /**

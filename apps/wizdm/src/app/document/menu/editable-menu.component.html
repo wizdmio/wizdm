@@ -2,6 +2,26 @@
 
 <mat-menu #menu="matMenu">
 
+  <!-- Content copy -->
+  <button mat-menu-item (click)="content('copy')">
+    <mat-icon>content_copy</mat-icon>
+    <span>{{ labels.content.copy }}</span>
+  </button>
+
+  <!-- Content cut -->
+  <button mat-menu-item (click)="content('cut')">
+    <mat-icon>content_cut</mat-icon>
+    <span>{{ labels.content.cut }}</span>
+  </button>
+
+  <!-- Content paste -->
+  <button mat-menu-item (click)="content('paste')">
+    <mat-icon>content_paste</mat-icon>
+    <span>{{ labels.content.paste }}</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
   <!-- Text size -->
   <button mat-menu-item [matMenuTriggerFor]="sizeMenu">
     <mat-icon>format_size</mat-icon>
@@ -19,8 +39,6 @@
     <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
     <span>{{ labels.align.title }}</span>
   </button>
-
-  <!--mat-divider></mat-divider-->
 
   <!-- Link -->
   <button mat-menu-item *ngIf="!sel.belongsTo('link')" (click)="sel.link('./')">

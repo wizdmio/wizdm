@@ -8,7 +8,8 @@ import {
   MatButtonModule,
   MatButtonToggleModule,
   MatIconModule,
-  MatMenuModule
+  MatMenuModule,
+  MatDividerModule
 } from '@angular/material';
 
 import { EditableDocument } from './editable-document.component';
@@ -29,7 +30,8 @@ import { EditableToolbar } from './toolbar/editable-toolbar.component';
     MatButtonModule,
     MatButtonToggleModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDividerModule,
   ],
   declarations: [
     EditableDocument, 

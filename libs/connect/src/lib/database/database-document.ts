@@ -39,6 +39,25 @@ export class DatabaseDocument<T extends dbCommon> {
     return this.db.distributedCounter(`${this.path}/${this.id}/${name}`);
   }
 
+  private sanitize(data: T): any {
+    
+    Object.keys(data).forEach( key => {
+      // Analyzes the object data properties
+      switch( typeof data[key] ) {
+        // Recurses on objects
+        case 'object':
+        this.sanitize( data[key] );
+        break;
+        // Removes undefined fields
+        case 'undefined':
+        delete data[key];
+        break;
+      }
+    });
+
+    return data;
+  }
+
   /**
    * Creates / destructively re-writes the document content.
    * Adds the 'created' timestamp
@@ -46,7 +65,7 @@ export class DatabaseDocument<T extends dbCommon> {
   public set(data: T): Promise<void> {
     const timestamp = this.db.timestamp;
     return this.doc.set({
-      ...data as any,
+      ...this.sanitize(data),
       created: timestamp
     } as T);
   }
@@ -58,7 +77,7 @@ export class DatabaseDocument<T extends dbCommon> {
   public merge(data: T): Promise<void> {
     const timestamp = this.db.timestamp;
     return this.doc.set({
-      ...data as any,
+      ...this.sanitize(data),
       updated: timestamp
     } as T, { merge: true } );
   }
@@ -70,7 +89,7 @@ export class DatabaseDocument<T extends dbCommon> {
   public update(data: T): Promise<void> {
     const timestamp = this.db.timestamp;
     return this.doc.update({
-      ...data as any,
+      ...this.sanitize(data),
       updated: timestamp
     } as T);
   }

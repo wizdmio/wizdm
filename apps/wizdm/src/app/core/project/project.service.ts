@@ -3,7 +3,6 @@ import { DatabaseService, PagedCollection, PageConfig, dbStreamFn, UserProfile, 
 import { Observable, BehaviorSubject, of, from, merge } from 'rxjs';
 import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
 import { Project, wmProject } from './project';
-export { Project, wmProject } from './project';
 
 export interface wmApplication {
 
@@ -91,10 +90,8 @@ export class ProjectService extends PagedCollection<wmProject> {
   }
 
   public browseAll(opts?: PageConfig): Observable<Project[]> {
-
     // Re-initzialize the page configuration
     if(!!opts) { this.config = this.init(opts);}
-
     // Returns a paged stream mapping the output to Project[]
     return this.streamPage<Project>(
       map( (projects: wmProject[]) => {
@@ -118,31 +115,5 @@ export class ProjectService extends PagedCollection<wmProject> {
           return new Project(this, project);
         });
       }));
-  }
-
-  // Creates a project instance starting from the given application context
-  public apply(application: wmApplication, template: any, comments?: any): Promise<Project> {
-
-    // Build a context object combining the given application, 
-    // containing the user answers given during the application 
-    // proces, and optional additional comments (localized)
-    const context = { ...comments, application };
-
-    // Store a new project creating the content from the applicaton
-    return this.addProject( {
-
-      status: 'draft',
-      // Project name inherited from the applciation
-      name: application.name,
-      // Elevator pitch inherited from the applciation
-      pitch: application.pitch/*,
-      // Document created from the template and the given application 
-      document: template.replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
-        // Replaces the <comma.separated.selectors> found into the template 
-        // with the content coming from the context object
-        return (selector.select(context) || selector).interpolate(context);
-      })*/
-
-    } as wmProject );
   }
 }

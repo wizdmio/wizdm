@@ -1,4 +1,4 @@
-import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewChecked, OnDestroy, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EditableContent } from './common/editable-content';
 import { wmDocument } from './common/editable-types';
@@ -9,7 +9,7 @@ import { EditableSelection } from './selection/editable-selection.service';
   templateUrl: './editable-document.component.html',
   styleUrls: ['./editable-document.component.scss']
 })
-export class EditableDocument extends EditableContent<wmDocument> implements AfterViewChecked  {
+export class EditableDocument extends EditableContent<wmDocument> implements AfterViewChecked {
 
   @HostBinding('attr.contenteditable') get editable() {
     return this.editMode ? 'true' : 'false';
@@ -20,7 +20,7 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
   }
   /** Document source */
   @Input() set source(source: wmDocument) {
-    // Loads the source data building the tree
+    // Loads the source data building the tree 
     this.load(source).defrag();
   }
 
@@ -31,8 +31,12 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
     // Switches to/from edit mode
     if(this.editMode = mode) {
       // Queries for the current selection
-      this.sel.query(this.document);
+      this.sel.query(this.document)
+        // Initializes the history buffer
+        .enableHistory()
     }
+    // Clears the history buffer while exiting edit mode
+    else { this.sel.clearHistory(); }
   }
   /** change event notifying for document changes */
   @Output() change = new EventEmitter<wmDocument>();
@@ -40,12 +44,14 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
   ngAfterViewChecked() {
     // Applies the current selection to the document when needed. This is essential even when the selection
     // isn't modified since view changes (aka rendering) affects the selection that requires to be restored
-    if(this.editMode && this.sel.marked) { 
+    if(this.editMode && this.sel.marked) {
+      // Saves the current selection in the document
+      this.sel.save(this.data);
+      // Notifies listeners for document change
+      this.change.emit(this.data);
       // Makes sure to restore the selection after the view has been rendered but anyhow well before
       // the next change will be applied to the data tree (such as while typing) 
       Promise.resolve().then( () => this.sel.apply(this.document) ); 
-      // Notifies listeners for document change
-      this.change.emit(this.data);
     }
   }
 
@@ -115,51 +121,58 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
   @HostListener('copy', ['$event']) copy(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-
+    if(!this.sel.valid) { return false; }
+    // Gets the clipboard
     const cp = ev.clipboardData || (this.window as any).clipboardData;
     if(!cp) { return true; }
-
-    // Copies the selected branch into a local variable to maximize browser portability
+    // Copies the selected tree branch
     const copied = this.sel.copy();
-
+    // Copies the data to the clipboard
     try {
-        cp.setData('text', copied.value );
-        cp.setData('application/json', JSON.stringify( copied.data ) );
+      // Text format first, this should always work 
+      cp.setData('text', copied.value );
+      // JSON format 
+      cp.setData('application/json', JSON.stringify( copied.data ) );
     }
-    catch(e) {
-      console.error(e);
-    }
-    
+    catch(e) { /*console.error(e);*/}
+    // Prevents default
     return false;
   }
 
   @HostListener('paste', ['$event']) paste(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-
+    if(!this.sel.valid) { return false; }
+    // Gets the clipboard
     const cp = (ev.clipboardData || (window as any).clipboardData);
     if(!cp) { return false; }
-
+    // Pastes the data from the clipboard
     try {
-      console.log( JSON.parse( cp.getData('application/json') ) );
-    }
-    catch(e) {
-      console.log( cp.getData('text') );
-      console.error(e);
-    }
+      // Tries to paste the json format first
+      const json = cp.getData('application/json');
+      if(!!json) {
+        // Parse the json data into a document fragment
+        const fragment = JSON.parse( json ) as wmDocument;
+        // Checks for document fragment consistency
+        if(fragment.type === 'document' && !!fragment.content) {
+          // Pastes the fragment
+          this.sel.paste(fragment);
+          // Prevents default
+          return false;
+        }
+      }
 
+    }
+    catch(e) { /*console.error(e);*/ }
+    // When everything else fails, text should always work
+    this.sel.insert( cp.getData('text') );
+    // Prevents default
     return false;
   }
   
   private keyAccellerators(ev: KeyboardEvent): boolean {
 
     switch(ev.key) {
-      // Cut/Copy/Paste -> Reverts to default
-      case 'x': case 'X':
-      case 'c': case 'C':
-      case 'v': case 'V':
-      break;
-
       // Size
       case '0': case '1': case '2': case '3':
       // Change the selection size
@@ -179,6 +192,13 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
       case 'u': case 'U':
       // Toggles the selection format
       return this.sel.toggleFormat('underline'), false;
+
+      case 'z': case 'Z':
+      if(!ev.shiftKey) { return this.sel.undo(), false };
+
+      case 'y': case 'Y':
+      return this.sel.redo(), false;
+
     }
     // Reverts to default
     return true;

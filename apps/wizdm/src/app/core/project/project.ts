@@ -107,7 +107,7 @@ export class Project extends DatabaseDocument<wmProject> {
         // Wipes the associated likes
         this.likes.wipe();
         // Resets the buffered data
-        this.data = null;
+        this.data = <wmProject>{};
       } );
   }
 }

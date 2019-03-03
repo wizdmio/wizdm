@@ -17,7 +17,8 @@ export interface wmDocument extends wmEditable {
   type: 'document',
   name?: string,
   author?: string,
-  version?: string
+  version?: string,
+  range?: [ number, number ]
 }
 
 export interface wmBlock extends wmEditable {

@@ -88,7 +88,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public save(document: wmDocument) {
-    
+
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
     this.saved$.enable(true);
@@ -108,7 +108,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   private onSave(): Observable<wmProject> {
     return this.saveDocument$.pipe(
       takeUntil( this.dispose$ ),
-      debounceTime( 3000 ),
+      debounceTime( 1000 ),
       map( document => document as wmProject )
     );
   }

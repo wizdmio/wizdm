@@ -1,26 +1,28 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { EditableText, EditableContent } from '../common/editable-content';
 import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../common/editable-types';
+import { Subject, Subscription } from 'rxjs';
+import { timeInterval, tap, map, filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 /** Virtual document selection mapping browser range selection to the internal document data tree */
-export class EditableSelection {
+export class EditableSelection implements OnDestroy {
 
   private root: EditableContent<wmDocument>;
+  private modified = false;
+
   public start: EditableText;
   public startOfs: number;
   public end: EditableText;
   public endOfs: number;
 
-  private modified = false;
+  constructor() { /*this.enableHistory(2000, 128);*/ }
+  ngOnDestroy() { this.clearHistory(); }
 
-  constructor() { }
+  public attach(document: EditableContent<wmDocument>): EditableSelection { return (this.root = document), this; }
 
-  public attach(document: EditableContent<wmDocument>): EditableSelection {
-    return (this.root = document), this;
-  }
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
   /** Returns true when the selection belongs within a single text node */
@@ -31,11 +33,11 @@ export class EditableSelection {
   get whole(): boolean { return this.valid && (this.startOfs === 0) && (this.endOfs === this.end.length); }
   /** Returns true when the selection falls in trhe middle of text nodes */
   get partial(): boolean { return !this.whole; }
-  /** Retunrns true when the selection is collpased in a cursor */
+  /** Returns true when the selection is collpased in a cursor */
   get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
   /** Returns true then the selection fully belongs to a single container  */
   get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
-
+  /** Returns true whenever the selection has been modified */
   get marked(): boolean { return this.modified; }
 
   public mark(modified = true): EditableSelection {
@@ -54,132 +56,65 @@ export class EditableSelection {
     this.endOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
-
+  /** Sets the selection range */
   public set(start: EditableText, startOfs: number, end: EditableText, endOfs: number): EditableSelection {
     this.setStart(start, startOfs);
     this.setEnd(end, endOfs);
     return this;
   }
-
+  
+  /** Collapses the selection to a cursor at the specified position */
   public setCursor(node: EditableText, ofs: number): EditableSelection {
     return this.set(node, ofs, node, ofs);
   }
 
-  public collapse(): EditableSelection {
-    return this.set(this.start, this.startOfs, this.start, this.startOfs);
+  /** Resets the selection as a cursor position at the very beginning of the document tree */
+  public reset(): EditableSelection {
+    return this.setCursor(this.root.firstDescendant() as EditableText, 0);
   }
-
-  private absPoint(node: EditableText, ofs: number): [EditableContent, number] {
-    
-    if(!node || node.removed) { return [null, 0]; }
-
-    for(let child of node.container.content) { 
-      if(child === node) { 
-        return [child.container, ofs]; 
-      }
-      ofs += child.length;
-    }
-
-    return [null, 0];
-  }
-
-  private relPoint(node: EditableContent, ofs: number): [EditableText, number] {
-
-    if(!node) { return [null, 0]; }
-    
-    for(let child of node.content) {
-      if(ofs <= child.length) { 
-        return [child as EditableText, ofs]; 
-      }
-      ofs -= child.length;
-    }
-  
-    return [null, 0];
-  }
-
-  private movePoint(node: EditableText, offset: number, delta: number): [EditableText, number] {
-
-    if(!node) { return [null, offset]; }
-    // Shifts the current offset
-    offset += delta;
-    // Jumps on previous nodes whenever the new offset crossed 0
-    while(offset < 0) {
-      // Jumps on the previous node traversing the full tree
-      const prev = node.previousText(true);
-      // If null, we are done
-      if(!prev) { offset = 0; break; }
-      // When crossing text containers, account for the new line
-      if(!prev.siblings(node)) { offset++; }
-      // Adjust the offset according to node length
-      offset += prev.length;
-      // Loop on the next node
-      node = prev;
-    }
-    // Jumps on next nodes whenever the new offset cossed the  node length
-    while(offset > node.length) {
-      // Jumps on the next node traversing the full tree
-      const next = node.nextText(true);
-      // If null, we are done
-      if(!next) { offset = node.length; break; }
-      // When crossing text containers, account for the new line
-      if(!next.siblings(node)) { offset--; }
-      // Adjust the offset according to node length
-      offset -= node.length;
-      // Loop on the next node
-      node = next;
-    }
-    // Return the new node/offset pair
-    return [node, offset]; 
+  /** 
+   * Collapses the curernt selection to a cursor
+   * @param end (optional) when true, collapses the cursor to the end edge of the selection.
+   * It collapses to the start edge otherwise.
+   */
+  public collapse(end?: boolean): EditableSelection {
+    return !!end ? this.setCursor(this.end, this.endOfs) : this.setCursor(this.start, this.startOfs);
   }
 
   /** Moves the selection start and end points by the specified offsets */
   public move(deltaStart: number, deltaEnd?: number): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
     // Move the selection points
-    const start = this.movePoint(this.start, this.startOfs, deltaStart);
-    const end = (deltaEnd === undefined) ? start : this.movePoint(this.end, this.endOfs, deltaEnd);
+    const start = this.start.move(this.startOfs + deltaStart);
+    const end = (deltaEnd === undefined) ? start : this.end.move(this.endOfs + deltaEnd);
     // Update the selection
     return this.set(start[0], start[1], end[0], end[1]);
   }
 
-  private stack: [EditableContent, number][] = [];
-
-  /** Saves the current seleciton to be restored by calling @see restore() */
-  public save(): EditableSelection {
-    // Computes the absolute version of the start point
-    const start = this.absPoint(this.start, this.startOfs);
-    // Saves the current absolute selection in the stack
-    this.stack.push( start );
-    // Duplicates the start point when collapsed
-    if(this.collapsed) { this.stack.push( start ); }
-    // Computes the absolute end point otherwise
-    else { this.stack.push( this.absPoint(this.end, this.endOfs) ); }
+  /** Saves the current selection into the document data to be eventually restored by calling @see restore() */
+  public save(document: wmDocument): EditableSelection {
+    // Skips on invalid selection
+    if(!document || !this.valid) { return this; }
+    // Computes the absolute start offset
+    const start = this.start.offset;
+    // Saves the selection range in the root data
+    document.range = [
+      start + this.startOfs, 
+      (this.single ? start : this.end.offset) + this.endOfs
+    ];
     return this;
   }
 
-  /** Restores the previously saved selection. @see save() */
-  public restore(): EditableSelection {
-    // Restores the selection from the stack
-    if(this.stack.length > 0) {
-      // Pops the absolute points
-      const absEnd = this.stack.pop();
-      const absStart = this.stack.pop();
-      // Checks if the selection still falls into existing nodes
-      if(absStart[0].removed || absEnd[0].removed) {
-        return this.set(null, 0, null, 0);
-      }
-      // If both abs points matches restores the cursor position
-      if(absStart === absEnd) {
-        this.setCursor( ...this.relPoint(...absStart) );
-      }
-      // Restores the relative seleciton otherwise
-      else {
-        this.setStart(...this.relPoint(...absStart) );
-        this.setEnd(...this.relPoint(...absEnd) ); 
-      }
-    }
-    return this;
+  /** Restores the selection range from the documenta data. @see save() */
+  public restore(document: wmDocument): EditableSelection {
+    // Gets the range from the root data
+    const range = !!document && document.range;
+    // Updates the selection to reflect the absolute range
+    return !!range ? this.reset().move(range[0], range[0] !== range[1] ? range[1] : undefined) : this;
   }
 
+  /** Returns true whenever the start node/offset comes after the end ones */
   public get reversed(): boolean {
     if(!this.valid) { return false; }
     return this.start === this.end && this.startOfs > this.endOfs || this.start.compare(this.end) > 0;
@@ -187,7 +122,6 @@ export class EditableSelection {
 
   /** Sort the start/end selection nodes, so, to make sure start comes always first */
   public sort(): EditableSelection {
-
     // Compares the points' position
     if(this.reversed) {
 
@@ -198,8 +132,7 @@ export class EditableSelection {
       const ofs = this.startOfs;
       this.startOfs = this.endOfs;
       this.endOfs = ofs;
-    }
-    
+    }    
     return this;
   }
 
@@ -228,28 +161,13 @@ export class EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Seeks for the word edges around the cursor at start node
-    const edges = this.edges(this.start.value, this.startOfs);
+    const edges = this.start.edges(this.startOfs);
     // When collapsed, just set the selection at the given edges 
     if(this.collapsed) { return this.set(this.start, edges[0], this.start, edges[1]); }
     // Seeks for the edges at the end node otherwise
     this.startOfs = edges[0];
-    this.endOfs = this.edges(this.end.value, this.endOfs)[1];
+    this.endOfs = this.end.edges(this.endOfs)[1];
     return this.mark();
-  }
-
-  private edges(value: string, index: number): [number, number] {
-    
-    let before = 0;
-    let after = value.length;
-    value.replace(/\b/g, ( match, offset ) => {
-
-      if(offset <= index && offset > before) { before = offset; }
-      if(offset >= index && offset < after) { after = offset; }
-
-      return '';
-    });
-
-    return [before, after];
   }
 
   // Maps a given DOM node into the internal tree data node
@@ -372,8 +290,8 @@ export class EditableSelection {
   }
 
   public insert(char: string): EditableSelection {
-    // Skips on invalid selection
-    if(!this.valid) { return this; }
+    // Skips on invalid selection or null string
+    if(!this.valid || !char) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
     // In case the selection is on the end edge of a link...
@@ -383,6 +301,8 @@ export class EditableSelection {
       // Updates the new position
       this.setCursor(next, 0);
     }
+    // Store a snapshot for undo history
+    this.store();
     // Inserts the new char at the specified position
     this.start.insert(char, this.startOfs);
     return this.move(char.length);
@@ -392,6 +312,8 @@ export class EditableSelection {
   public delete(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
+    // Store a snapshot for undo history
+    this.store();
     // Whenever the selection applies on a single node...
     if(this.single) {
       // Extracts the selected text within the node 
@@ -427,8 +349,10 @@ export class EditableSelection {
     if(!this.valid) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
+    // Store a snapshot for undo history
+    this.store();
     // Just insert a new line on request forcing it always on links
-    if(newline || this.start.type === 'link' && this.startOfs < this.start.length) {
+    if(newline || this.belongsTo('link')) {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
@@ -502,24 +426,14 @@ export class EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Save the current selection
-    this.save();
+    this.save(this.root.data);
     // Defrags the few editable containers between the nodes
     this.containers( container => container.defrag() );
     // Restores the selection
-    this.restore().trim();
+    this.restore(this.root.data).trim();
     // Returns the selection supporting chaining
     return this;
   }
-
-  /** Returns true when the selection fully belongs within a container at root level */
-  /*public get atRoot(): boolean {
-    // Skips invalid selection
-    if(!this.valid) { return false; }
-    // Compares the start/end containers
-    const container = this.start.container === this.end.container ? this.start.container : null; 
-    // Verifies the common container is a root child
-    return !!container && container.depth === 1;
-  }*/
 
   /** Returns the current selection alignement (corresponding to the start node container's) */
   public get align(): wmAlignType {
@@ -528,8 +442,10 @@ export class EditableSelection {
 
   /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
+    // Skips on invalid selection
+    if(!this.valid) { return; }
     // Applies the alignement on the containers within the selection
-    this.containers( container => container.align = align ).mark();
+    this.store().containers( container => container.align = align ).mark();
   }
 
   /** Returns the current selection level (corresponding to the start node container's) */
@@ -539,8 +455,10 @@ export class EditableSelection {
 
   /** Applies a new level to the selection */
   public set level(level: number) {
+    // Skips on invalid selection
+    if(!this.valid) { return; }
     // Applies the level on the containers within the selection
-    this.containers( container => container.level = level ).mark();
+    this.store().containers( container => container.level = level ).mark();
   }
 
   /** Returns the style of the selection always corresponding to the style of the start node */
@@ -552,6 +470,8 @@ export class EditableSelection {
   public set style(style: wmTextStyle[]) {
     // Skips on invalid selection
     if(!this.valid) { return; }
+    // Store a snapshot for undo history
+    this.store();
     // Forces wordwrapping when collapsed 
     if(this.collapsed) { this.wordWrap(); }
     // Trims and splits the selection
@@ -575,6 +495,8 @@ export class EditableSelection {
   public format(style: wmTextStyle[], remove: boolean = false): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
+    // Store a snapshot for undo history
+    this.store();
     // Forces wordwrapping when collapsed 
     if(this.collapsed) { this.wordWrap(); }
     // Trims and splits the selection
@@ -600,6 +522,8 @@ export class EditableSelection {
     if(!url) { return this.unlink(); }
     // Skips on invalid selection
     if(!this.valid) { return this; }
+    // Store a snapshot for undo history
+    this.store();
     // Forces wordwrapping when collapsed 
     if(this.collapsed) { this.wordWrap(); }
     // Trims and splits the selection
@@ -624,18 +548,20 @@ export class EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Turns links into plain text
-    this.nodes( node => node.link(null) );
+    this.store().nodes( node => node.link(null) );
     // Defragments the text nodes when done
     return this.defrag();
   }
 
   /** Removes an indentation level when applicable */
   public unindent(): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
     // Guesses which indentation the selection belongs to
     const indent = this.start.climb('blockquote', 'bulleted', 'numbered'); 
     if(!indent) { return this; }
     // Unindent all the containers within the selection
-    this.containers( container => container.unindent(indent.type as wmIndentType) );
+    this.store().containers( container => container.unindent(indent.type as wmIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
@@ -649,7 +575,7 @@ export class EditableSelection {
     // At this point, skips indentation when type is not specified
     if(!list) { return this; }
     // Indent all the containers within the selection
-    this.containers( item => item.indent(list.type as wmIndentType) );
+    this.store().containers( item => item.indent(list.type as wmIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
@@ -657,6 +583,8 @@ export class EditableSelection {
   public toggleList(type: 'bulleted'|'numbered'): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
+    // Store a snapshot for undo history
+    this.store();
     // Verifies if the selection already belongs to a list
     const list = this.start.climb('bulleted', 'numbered'); 
     if(!!list) {
@@ -674,6 +602,8 @@ export class EditableSelection {
   public toggleQuote(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
+    // Store a snapshot for undo history
+    this.store();
 
     const block = this.start.climb('blockquote'); 
     if(!!block) { 
@@ -698,7 +628,7 @@ export class EditableSelection {
       case 'document': return true;
       // Inline types
       case 'text': case 'link':
-      return this.single && this.start.type === type;
+      return this.single && this.start.type === type && this.startOfs < this.start.length;
       // Editable container types
       case 'item': case 'cell':
       return this.contained && this.start.container.type === type;
@@ -744,34 +674,122 @@ export class EditableSelection {
     return fragment;
   }
 
-  /** 
-   * Returns the plain text content falling into the selection
-   * @param newline (default '\n') the char sequence to be used as line break
-   *//*
-  public text(newline = '\n'): string {
+   /** Pastes a data fragment to the current selection */
+  public paste(source: wmDocument): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid || this.collapsed) { return ''; }
-    // Handles the special case of a single text node
-    if(this.single) { 
-      return this.start.value.substring(this.startOfs, this.endOfs); 
+    if(!this.valid || this.belongsTo('link')) { return this; }
+    // Builds the fragment to paste to
+    const fragment = this.start.createNode(source).load(source);
+    if(!!fragment) {
+      // Breaks the selection at the current position 
+      this.store().break().move(-1, 0);
+      // Cleaves the tree and inserts the new content in between
+      this.start.cleave()
+        .insertNext(fragment)
+        .unwrap();
+      // Merges the new content first node with start
+      const first = fragment.firstDescendant() as EditableText;
+      this.start.merge(first);
+      // Merges the new content last node with end 
+      const last = fragment.lastDescendant() as EditableText;
+      last.merge(this.end);
+      // Collapses the selection in a cursor at the end edge
+      this.collapse(true);
     }
-    // Concatenates the multiple text nodes
-    let text = this.start.tail(this.startOfs);
-    // Loops on the text nodes falling into the selection
-    let node = this.start;
-    while(!!node && node.compare(this.end) < 0) {
-      // Jumps on the next node
-      const next = node.nextText(true);
-      if(!next) { return text; }
-      // Appends a new line when switching between containers
-      if(!node.siblings(next)) { text += newline; }
-      // Concats the text values
-      text += next.value;
-      // Goes next
-      node = next;
+    // Done
+    return this;
+  }
+
+  /***** HISTORY UNDO/REDO *****/
+
+  private store$ = new Subject<EditableContent<wmDocument>>();
+  private history: wmDocument[];
+  private timeIndex: number;
+  private sub$: Subscription;
+
+  /** Clears the history buffer */
+  public clearHistory(): EditableSelection {
+    // Unsubscribe the previous subscription, if any
+    if(!!this.sub$) { this.sub$.unsubscribe(); }
+    // Initializes the history buffer
+    this.timeIndex = 0;
+    this.history = [];
+    return this;
+  }
+
+  /** Initilizes the history buffer */
+  public enableHistory(debounce: number = 2000, limit: number = 128): EditableSelection {
+    // Clears the history buffer
+    this.clearHistory();
+    // Builts up the stream optimizing the amout of snapshot saved in the history 
+    this.sub$ = this.store$.pipe( 
+      // Append a time interval between storing emissions
+      timeInterval(), 
+      // Filters requests coming to fast (within 'debounce time')
+      filter( payload => payload.interval > debounce), 
+      // Gets a snapshot of the document
+      map( payload => payload.value.clone().data ),
+      // Saves the current selection
+      tap( snapshot => this.save(snapshot) )
+    // Subscribes the history save handler
+    ).subscribe( snapshot => {
+      // Wipes the further future undoed snapshots since they are now 
+      if(this.timeIndex > 0) {
+        // Save the last snapshot wiping the further future undoed once
+        this.history.splice(0, this.timeIndex + 1, snapshot);
+        // Resets the time index
+        this.timeIndex = 0;
+      }
+      // Saves the last snapshot in the history
+      else { this.history.unshift(snapshot); }
+      // Removes the oldest snapshot when exceeeding the history limit
+      if(this.history.length > limit) { this.history.pop(); }
+    });
+
+    return this;
+  }
+
+  /** Stores a snapshot in the undo/redo history buffer 
+   * @param force (option) when true forces the storage unconditionally.
+   * Storage will be performed conditionally to the time elapsed since 
+   * the last modification otherwise.
+  */
+  public store(force?: boolean): EditableSelection { 
+
+    if(!!force) {
+      const snapshot = this.root.clone().data;
+      this.save(snapshot);
+      return this.history.unshift(snapshot), this; 
     }
-    // Completes with the tip text of the end node
-    if(!!node && !this.end.siblings(node)) { text += newline; }
-    return text + this.end.tip(this.endOfs);
-  }*/
+
+    return this.store$.next(this.root), this; 
+  }
+
+  /** Undoes the latest changes. It requires enableHistory() to be called */
+  public undo(): EditableSelection {
+    // Stops undoing when history is finished
+    if(this.history.length === 0 || this.timeIndex >= this.history.length - (!!this.timeIndex ? 1 : 0)) { return this; }
+    // Saves the present moment to be restored eventually
+    if(this.timeIndex === 0) { this.store(true); }
+    // Gets the latest snapshot from the history
+    const snapshot = this.history[++this.timeIndex];
+    // Reloads the snapshot's content
+    this.root.load(snapshot);
+    // Restores the selection too
+    return this.restore(snapshot);
+  }
+
+  /** Redoes the last undone modifications. It requires enableHistory() to be called */
+  public redo(): EditableSelection {
+    // Stops redoing when back to the present
+    if(this.timeIndex <= 0) { return this; }
+    // Gets the previous snapshot from the history
+    const snapshot = this.history[--this.timeIndex];
+    // Removes the newest snapshot when back to the present
+    if(this.timeIndex === 0) { this.history.shift(); }
+    // Reloads the snapshot's content
+    this.root.load(snapshot);
+    // Restores the selection too
+    return this.restore(snapshot);
+  }
 }

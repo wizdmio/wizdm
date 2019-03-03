@@ -17,6 +17,11 @@ export class EditableMenu {
   public formats = ['bold', 'italic', 'underline', 'strikethrough'];
 
   public labels = {
+    content: {
+      copy: "Copy",
+      cut: "Cut",
+      paste: "Paste"
+    },
     size: {
       title: "Text size",
       heading1: "Heading 1",
@@ -63,7 +68,7 @@ export class EditableMenu {
   public unlink() { this.sel.unlink(); }
 
   public hasStyle(style: wmTextStyle): boolean {
-    return this.sel.style.some( s => s === style );
+    return this.sel.style.some( s => s === style);
   }
 
   public left = 0;
@@ -82,5 +87,11 @@ export class EditableMenu {
     this.trigger.openMenu();
     // prevents default
     return false;
+  }
+
+  public content(cmd: 'copy'|'cut'|'paste') {
+    //debugger;
+    //this.sel.apply(this.document);
+    //this.document.execCommand(cmd);
   }
 }
