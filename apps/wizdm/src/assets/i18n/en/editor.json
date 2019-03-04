@@ -33,6 +33,60 @@
     "modifiedOn": "Last modified on {{ modified }}"
   },
 
+  "tools": {
+    "edit": {
+      "copy": "Copy\t(Ctrl+C)",
+      "cut": "Cut\t(Ctrol+X)",
+      "paste": "Paste\t(Ctrl+V)",
+      "undo": "Undo\t(Ctrl+Z)",
+      "redo": "Redo\t(Ctrl+Y)"
+    },
+    "size": {
+      "title": "Text size",
+      "0": "Normal\t(Ctrl+0)",
+      "1": "Heading 1\t(Ctrl+1)",
+      "2": "Heading 2\t(Ctrl+2)",
+      "3": "Heading 3\t(Ctrl+3)"
+    },
+    "insert": {
+      "numbered": "Numbered list",
+      "bulleted": "Bulleted list",
+      "quote": "Quote",
+      "link": "Insert link...",
+      "unlink": "Remove link",
+      "table": "Insert table",
+      "image": "Insert image"
+    },
+    "align": {
+      "title": "Alignement",
+      "left": "Left",
+      "center": "Center",
+      "right": "Right",
+      "justify": "Justify"
+    },
+    "indent": {
+      "more": "Indent more\t(Ctrl+[)",
+      "less": "Indent less\t(Ctrl+])"
+    },
+    "format": {
+      "title": "Format",
+      "bold": "Bold\t(Ctrl+B)",
+      "italic": "Italic\t(Ctrl+I)",
+      "underline": "Underline\t(Ctrl+U)",
+      "strikethrough": "Strikethrough",
+      "clear": "Clear formatting"
+    },
+    "table": {
+      "rowAbove": "Insert row above",
+      "rowBelow": "Insert row below",
+      "columnLeft": "Insert column left",
+      "columnRight": "Insert column right",
+      "deleteRow": "Delete row",
+      "deleteColumn": "Delete column",
+      "delete": "Delete table"
+    }
+  },
+
   "canLeave": {
     "title": "Unsaved changes",
     "message": "Are you leaving? You may prefer to save the changes first.",

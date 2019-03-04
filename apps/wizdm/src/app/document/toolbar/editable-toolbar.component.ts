@@ -15,11 +15,18 @@ export class EditableToolbar{
 
   constructor(private sel: EditableSelection) { }
 
-  public styles = ['bold', 'italic', 'underline', 'strikethrough'];
-  public alignements = ['left', 'center', 'right', 'justify'];
+  readonly styles = ['bold', 'italic', 'underline', 'strikethrough'];
+  readonly alignements = ['left', 'center', 'right', 'justify'];
+
+  @Input() msgs: { [key: string]: string };
+  @Input() tooltipDelay = 1000;
 
   public hasStyle(style: wmTextStyle): boolean {
     return this.sel.style.some( s => s === style);
+  }
+
+  public label(msg: string): string {
+    return !!msg && msg.replace(/\t.*/, '');
   }
 
   doNothing() {}

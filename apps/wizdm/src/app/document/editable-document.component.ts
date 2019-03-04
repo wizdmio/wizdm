@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, AfterViewChecked, OnDestroy, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EditableContent } from './common/editable-content';
 import { wmDocument } from './common/editable-types';
@@ -161,7 +161,6 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
           return false;
         }
       }
-
     }
     catch(e) { /*console.error(e);*/ }
     // When everything else fails, text should always work

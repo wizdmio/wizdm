@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { EditableText, EditableContent } from '../common/editable-content';
 import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../common/editable-types';
+import { EditableContent, EditableText } from '../common/editable-content';
 import { Subject, Subscription } from 'rxjs';
 import { timeInterval, tap, map, filter } from 'rxjs/operators';
 
@@ -580,6 +580,7 @@ export class EditableSelection implements OnDestroy {
     return this.mark();
   }
 
+  /** Toggles selection in/out of a list */
   public toggleList(type: 'bulleted'|'numbered'): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
@@ -599,6 +600,7 @@ export class EditableSelection implements OnDestroy {
     return this.mark();
   }
 
+  /** Toggles selection in/out of a blockquote */
   public toggleQuote(): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
@@ -726,7 +728,7 @@ export class EditableSelection implements OnDestroy {
       // Append a time interval between storing emissions
       timeInterval(), 
       // Filters requests coming to fast (within 'debounce time')
-      filter( payload => payload.interval > debounce), 
+      filter( payload => this.history.length === 0 || payload.interval > debounce), 
       // Gets a snapshot of the document
       map( payload => payload.value.clone().data ),
       // Saves the current selection
@@ -757,18 +759,26 @@ export class EditableSelection implements OnDestroy {
   public store(force?: boolean): EditableSelection { 
 
     if(!!force) {
+      // Gets a document snapshot immediately
       const snapshot = this.root.clone().data;
+      // Saves the current selection within the snapshot
       this.save(snapshot);
-      return this.history.unshift(snapshot), this; 
+      // Pushes the snapshot into the history buffer
+      this.history.unshift(snapshot); 
+      // Return this for chaining
+      return this; 
     }
-
+    // Pushes the document for conditional history save
     return this.store$.next(this.root), this; 
   }
+
+  /** Returns true whenever the last modifications can be undone */
+  get undoable(): boolean { return this.history.length > 0 && this.timeIndex < this.history.length - (!!this.timeIndex ? 1 : 0); }
 
   /** Undoes the latest changes. It requires enableHistory() to be called */
   public undo(): EditableSelection {
     // Stops undoing when history is finished
-    if(this.history.length === 0 || this.timeIndex >= this.history.length - (!!this.timeIndex ? 1 : 0)) { return this; }
+    if(!this.undoable) { return this; }
     // Saves the present moment to be restored eventually
     if(this.timeIndex === 0) { this.store(true); }
     // Gets the latest snapshot from the history
@@ -779,10 +789,13 @@ export class EditableSelection implements OnDestroy {
     return this.restore(snapshot);
   }
 
+  /** Returns true whenever the last undone modifications can be redone */
+  get redoable(): boolean { return this.history.length > 0 && this.timeIndex > 0; }
+
   /** Redoes the last undone modifications. It requires enableHistory() to be called */
   public redo(): EditableSelection {
     // Stops redoing when back to the present
-    if(this.timeIndex <= 0) { return this; }
+    if(!this.redoable) { return this; }
     // Gets the previous snapshot from the history
     const snapshot = this.history[--this.timeIndex];
     // Removes the newest snapshot when back to the present

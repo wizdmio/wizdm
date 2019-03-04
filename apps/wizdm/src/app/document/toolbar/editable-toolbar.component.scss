@@ -6,12 +6,10 @@
   width: 100%;
   pointer-events: none;
 
-  //& * { user-select: none; }
-
-  span {
+  .wrapper {
     pointer-events: all;
-    background-color: white;
     box-shadow: 0 0 6px 3px rgba(0,0,0,0.125);
+    background-color: white;
   }
 
   button { 

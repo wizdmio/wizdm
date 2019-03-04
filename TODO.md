@@ -1,52 +1,37 @@
 # **apps/wizdm**
 
 ## Styling
-* Updates all the page selectors adding a "-page" suffix such as `wm-login-page` and "-dlg" suffix for popup dialogs suc as `wm-user-info-dlg`.
-* Reconsider to implement an homepage with a banner and a short description
-* Rearrange the navbar/toggler/logo to the left like [angular.io](https://angular.io/) keeping the profile button on the right
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
 * Get inspired from [fanvestory](https://fanvestory.com) and [dovetail](https://dovetailapp.com/)
 
 ## Navigator
-* ~~Remove the ContentManager dependency from `wm-logo` using a caption input instead and update the toolbar accordingly~~
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
-* ~~Move the action bar out of the toolbar into the navigation header splitting it into: wm-navbar & wm-toolbar~~
-* ~~Spreads the wm-navbar components into the navigator (eventually contained into a `mat-toolbar` component)~~
-  * ~~`wm-logo` routing to home~~
-  * ~~`wm-navbar` containing the navlinks only~~
-  * ~~`wm-toggler` button for mobile version~~
-  * ~~`wm-avatar` button when signedIn~~
-* ~~Consider to go back using `mat-toolbar-row` to wrap the action bar~~
 * ~~Improve ToolbarService with:~~
   * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~
   * ~~Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action~~
 * ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
-* ~~Improve the top bar avatar to support login/logout states. See: https://wizdm-login-flip.stackblitz.io~~
-* Animate the menu and toolbar links when switching between private/public versions
 
 ## Elements
 * Move all the relevant material style tweaks from app/_theme.scss to _elements.scss 
-* ~~Adds a wm-flip element to implement a flipping icon for buttons~~
 * Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default
 * Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`) 
 
-## Project
-* Improve pages/project using `<nav>` element for toc (and eventually remove some classes by means of attr.display)
-* Consider to add a project avatar (using the user uploader?)
-* Implements toolbar cut/copy/paste and undo/redo using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand) in project page while editing
+## Document
+* Implements an HTML renderer to be used while copying to the clipboard and for PDF creation?
 
-## Various
-* Move out elements creating libs/elements
-* Remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule
+## Editor
+* Refactor the document toc, so, to become a side bar with author properties and toc
+* Implements a responsive version of the editing bottombar so to accomodate for undo/redo buttons
+* Redirects cut/copy/past bottombar or contextmenu calls to the document using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand)
+* Implements link url editing, insert table and insert picture functionalities
+* Implements a press-and-hold tool for extended akphabet support. See [press and hold](https://github.com/kasperpeulen/PressAndHold) and [long press](https://github.com/quentint/long-press)
 
-# libs/content
-* ~~Move ContentResolver out of the lib~~
+## libs/various
+* Move out elements creating libs/elements (@wizdm/elements)
+* Move out document creating libs/document (@wizdm/document)
+* Consider to remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule
 
 # libs/connect
 * Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
-
-# libs/markdown
-* ~~Gets rid of wrapper sevices by means of an intermediate JS module. See: https://stackblitz.com/edit/wizdm-markdown?file=src%2Fapp%2Fmarkdown%2Freparse-module.js~~
-* ~~Investigate how to embed the process shim (node)~~

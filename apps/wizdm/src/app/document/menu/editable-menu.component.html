@@ -5,19 +5,19 @@
   <!-- Content copy -->
   <button mat-menu-item (click)="content('copy')">
     <mat-icon>content_copy</mat-icon>
-    <span>{{ labels.content.copy }}</span>
+    <span>{{ label(msgs?.edit?.copy) }}</span>
   </button>
 
   <!-- Content cut -->
   <button mat-menu-item (click)="content('cut')">
     <mat-icon>content_cut</mat-icon>
-    <span>{{ labels.content.cut }}</span>
+    <span>{{ label(msgs?.edit?.cut) }}</span>
   </button>
 
   <!-- Content paste -->
   <button mat-menu-item (click)="content('paste')">
     <mat-icon>content_paste</mat-icon>
-    <span>{{ labels.content.paste }}</span>
+    <span>{{ label(msgs?.edit?.paste) }}</span>
   </button>
 
   <mat-divider></mat-divider>
@@ -25,76 +25,96 @@
   <!-- Text size -->
   <button mat-menu-item [matMenuTriggerFor]="sizeMenu">
     <mat-icon>format_size</mat-icon>
-    <span>{{ labels.size.title }}</span>
+    <span>{{ label(msgs?.size.title) }}</span>
   </button>
 
   <!-- Format -->
   <button mat-menu-item *ngIf="!sel.belongsTo('link')" [matMenuTriggerFor]="formatMenu">
     <mat-icon>{{ sel.style.length > 0 ? 'format_' + sel.style[0] : 'text_format' }}</mat-icon>
-    <span>{{ labels.format.title }}</span>
+    <span>{{ label(msgs?.format?.title) }}</span>
   </button>
 
   <!-- Alignement -->
   <button mat-menu-item [matMenuTriggerFor]="alignMenu">
     <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
-    <span>{{ labels.align.title }}</span>
+    <span>{{ label(msgs?.align?.title) }}</span>
+  </button>
+
+  <!-- Insert table -->
+  <button mat-menu-item *ngIf="sel.belongsTo('table')" [matMenuTriggerFor]="tableMenu">
+    <mat-icon>table_chart</mat-icon>
+    <span>{{ label(msgs?.insert?.table) }}</span>
   </button>
 
   <!-- Link -->
   <button mat-menu-item *ngIf="!sel.belongsTo('link')" (click)="sel.link('./')">
     <mat-icon>link</mat-icon>
-    <span>{{ labels.insert.link }}</span>
+    <span>{{ label(msgs?.insert?.link) }}</span>
   </button>
 
   <!-- Unlink -->
   <button mat-menu-item *ngIf="sel.belongsTo('link')" (click)="sel.unlink()">
     <mat-icon>link_off</mat-icon>
-    <span>{{ labels.insert.unlink }}</span>
+    <span>{{ label(msgs?.insert?.unlink) }}</span>
   </button>
 
   <!-- Clear format -->
   <button mat-menu-item (click)="sel.clear()">
     <mat-icon>format_clear</mat-icon>
-    <span>{{ labels.format.clear }}</span>
+    <span>{{ label(msgs?.format?.clear) }}</span>
   </button>
 
 </mat-menu>
 
-<!-- Size -->
+<!-- Size menu -->
 <mat-menu #sizeMenu="matMenu">
 
   <button mat-menu-item *ngFor="let level of [1, 2, 3]"
           [style.backgroundColor]="sel.level === level ? 'rgba(0,0,0,0.1)' : 'unset'"
           (click)="sel.level = level">
-    <span [ngClass]="'mat-h' + level">{{ labels.size['heading' + level] }}</span>
+    <span [ngClass]="'mat-h' + level">{{ label(msgs?.size[level]) }}</span>
   </button>
 
   <button mat-menu-item 
           [style.backgroundColor]="sel.level === 0 ? 'rgba(0,0,0,0.1)' : 'unset'"
-          (click)="sel.level = 0">{{ labels.size.paragraph }}</button>
+          (click)="sel.level = 0">{{ label(msgs?.size[0]) }}</button>
 
 </mat-menu>
 
-<!-- Format -->
+<!-- Format menu -->
 <mat-menu #formatMenu="matMenu">
 
   <button mat-menu-item *ngFor="let item of formats"
           [style.backgroundColor]="hasStyle(item) ? 'rgba(0,0,0,0.1)' : 'unset'"
           (click)="sel.toggleFormat(item)">
     <mat-icon>{{'format_' + item }}</mat-icon>
-    <span>{{ labels.format[item] }}</span>
+    <span>{{ label(msgs?.format[item]) }}</span>
   </button>
 
 </mat-menu>
 
-<!-- Alignement -->
+<!-- Alignement menu -->
 <mat-menu #alignMenu="matMenu">
 
   <button mat-menu-item *ngFor="let item of alignements" 
           [style.backgroundColor]="item === sel.align ? 'rgba(0,0,0,0.1)' : 'unset'"
           (click)="sel.align = item">
     <mat-icon>{{'format_align_' + item }}</mat-icon>
-    <span>{{ labels.align[item] }}</span>
+    <span>{{ label(msgs?.align[item]) }}</span>
   </button>
+
+</mat-menu>
+
+<!-- Table menu -->
+<mat-menu #tableMenu="matMenu">
+
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.rowAbove) }}</button>
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.rowBelow) }}</button>
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.columnLeft) }}</button>
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.columnRight) }}</button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.deleteRow) }}</button>
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.deleteColumn) }}</button>
+  <button mat-menu-item (click)="doNothing()">{{ label(msgs?.table?.delete) }}</button>
 
 </mat-menu>

@@ -12,7 +12,7 @@
       { "type": "item", "align": "justify", "content": [
         { "type": "text", "value": "Welcome to your business plan for <name>. This is a draft based on the information you provided during the application process. Your application, together with this business plan, is now visible to the Wizdm community. Waiting to be contacted by our members willing to help, we recommend you keep working on this document, so, to better present your business idea to both our community and the future investors." }
       ]},
-      { "type": "item", "align": "center", "content": [
+      { "type": "item", "level": 2, "align": "center", "content": [
         { "type": "text", "value": "Good Luck", "style": ["bold"] }
       ]}
     ]},

@@ -38,7 +38,7 @@
 </div>
 
 <!-- Context menu -->
-<wm-editable-menu #menu></wm-editable-menu>
+<wm-editable-menu #menu [msgs]="msgs.tools"></wm-editable-menu>
 
 <!-- Editing tools -->
-<wm-editable-toolbar *ngIf="editMode" fxFlex="0 0 auto"></wm-editable-toolbar>
+<wm-editable-toolbar *ngIf="editMode" [msgs]="msgs.tools"></wm-editable-toolbar><!--fxFlex="0 0 auto"-->

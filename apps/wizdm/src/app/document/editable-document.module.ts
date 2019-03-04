@@ -6,9 +6,9 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
-  MatButtonToggleModule,
   MatIconModule,
   MatMenuModule,
+  MatTooltipModule,
   MatDividerModule
 } from '@angular/material';
 
@@ -28,9 +28,9 @@ import { EditableToolbar } from './toolbar/editable-toolbar.component';
     RouterModule,
     FlexLayoutModule,
     MatButtonModule,
-    MatButtonToggleModule,
     MatIconModule,
     MatMenuModule,
+    MatTooltipModule,
     MatDividerModule,
   ],
   declarations: [

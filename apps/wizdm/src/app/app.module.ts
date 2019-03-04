@@ -26,7 +26,7 @@ import { environment } from '../environments/environment';
     AuthModule,
     DatabaseModule,
     UploaderModule,
-    UserProfileModule, //.resolveUserLanguage(),
+    UserProfileModule,
 
     NavigatorModule,
     PagesModule,

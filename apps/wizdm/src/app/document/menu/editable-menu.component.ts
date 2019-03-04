@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { MatMenuTrigger } from '@angular/material';
 import { EditableSelection } from '../selection/editable-selection.service';
@@ -13,50 +13,10 @@ export class EditableMenu {
 
   @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
 
-  public alignements = ['left', 'center', 'right', 'justify'];
-  public formats = ['bold', 'italic', 'underline', 'strikethrough'];
+  readonly alignements = ['left', 'center', 'right', 'justify'];
+  readonly formats = ['bold', 'italic', 'underline', 'strikethrough'];
 
-  public labels = {
-    content: {
-      copy: "Copy",
-      cut: "Cut",
-      paste: "Paste"
-    },
-    size: {
-      title: "Text size",
-      heading1: "Heading 1",
-      heading2: "Heading 2",
-      heading3: "Heading 3",
-      paragraph: "Paragraph"
-    },
-    insert: {
-      title: "Insert",
-      heading: "Heading",
-      paragraph: 'Paragraph',
-      bulletted_list: "Bulletted list",
-      numbered_list: "Numbered_list",
-      table: "Table",
-      link: "Link...",
-      unlink: "Remove link"
-
-    },
-    align: {
-      title: "Alignement",
-      left: 'Left',
-      center: 'Center',
-      right: 'Right',
-      justify: 'Justify'
-    },
-    format: {
-      title: "Format",
-      bold: "Bold",
-      italic: "Italic",
-      underline: "Underline",
-      strikethrough: "Strikethrough",
-      clear: "Clear formatting",
-      size: "Heading size"
-    }
-  };
+  @Input() msgs: { [key:string]: string };
 
   constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection) { }
 
@@ -69,6 +29,10 @@ export class EditableMenu {
 
   public hasStyle(style: wmTextStyle): boolean {
     return this.sel.style.some( s => s === style);
+  }
+
+  public label(msg: string): string {
+    return !!msg && msg.replace(/\t.*/, '');
   }
 
   public left = 0;
