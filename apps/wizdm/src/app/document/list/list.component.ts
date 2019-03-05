@@ -1,6 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableContent } from '../common/editable-content';
-import { wmList } from '../common/editable-types';
+import { EditableList } from '../model';
 
 @Component({
   selector: '[wm-list]',
@@ -8,7 +7,7 @@ import { wmList } from '../common/editable-types';
 })
 export class ListComponent {
   
-  @Input('wm-list') list: EditableContent<wmList>;
+  @Input('wm-list') list: EditableList;
 
   @HostBinding('id') get id() {
     return !!this.list && this.list.id;

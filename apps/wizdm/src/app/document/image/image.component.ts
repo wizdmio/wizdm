@@ -1,6 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableContent } from '../common/editable-content';
-import { wmImage } from '../common/editable-types';
+import { EditableImage } from '../model';
 
 @Component({
   selector: '[wm-image]',
@@ -9,7 +8,7 @@ import { wmImage } from '../common/editable-types';
 })
 export class ImageComponent {
 
-  @Input('wm-image') image: EditableContent<wmImage>;
+  @Input('wm-image') image: EditableImage;
   
   @HostBinding('id') get id() {
     return !!this.image && this.image.id;

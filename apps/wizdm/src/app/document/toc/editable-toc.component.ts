@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { EditableContent } from '../common/editable-content';
-import { wmDocument } from '../common/editable-types';
+import { EditableDoc } from '../model';
 
 @Component({
   selector: 'wm-editable-toc',
@@ -9,9 +8,9 @@ import { wmDocument } from '../common/editable-types';
 })
 export class EditableToc {
   
-  @Input() source: EditableContent<wmDocument>;
+  @Input() source: EditableDoc;
 
-  public render(node: EditableContent): string {
+  public render(node: any): string {
     return !!node ? node.value.replace('\n', ' ') : '';
   }
 }

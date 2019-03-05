@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input, Output, EventEmitter } from '@angular/core';
 import { EditableSelection } from '../selection/editable-selection.service';
-import { wmTextStyle } from '../common/editable-types';
+import { wmTextStyle } from '../model/editable-types';
 import { $animations } from './editable-toolbar.animations';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { EditableContent } from './common/editable-content';
-import { wmDocument } from './common/editable-types';
+import { EditableFactory } from './factory/editable-factory.service';
+import { EditableDoc, wmDocument } from './model';
 import { EditableSelection } from './selection/editable-selection.service';
 
 @Component({
@@ -9,15 +9,16 @@ import { EditableSelection } from './selection/editable-selection.service';
   templateUrl: './editable-document.component.html',
   styleUrls: ['./editable-document.component.scss']
 })
-export class EditableDocument extends EditableContent<wmDocument> implements AfterViewChecked {
+export class EditableDocument extends EditableDoc implements AfterViewChecked {
 
   @HostBinding('attr.contenteditable') get editable() {
     return this.editMode ? 'true' : 'false';
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection) { 
-    super(null); sel.attach(this);
+  constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection, factory: EditableFactory) { 
+    super(factory, null); sel.attach(this);
   }
+
   /** Document source */
   @Input() set source(source: wmDocument) {
     // Loads the source data building the tree 
@@ -161,6 +162,7 @@ export class EditableDocument extends EditableContent<wmDocument> implements Aft
           return false;
         }
       }
+
     }
     catch(e) { /*console.error(e);*/ }
     // When everything else fails, text should always work

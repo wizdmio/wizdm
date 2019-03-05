@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableContent, EditableText } from '../common/editable-content';
+import { EditableItem, EditableCell, EditableText } from '../model';
 
 @Component({
   selector: '[wm-editable]',
@@ -8,7 +8,7 @@ import { EditableContent, EditableText } from '../common/editable-content';
 })
 export class EditableComponent {
 
-  @Input('wm-editable') node: EditableContent;
+  @Input('wm-editable') node: EditableItem | EditableCell;
   // Applies the node id to the element
   @HostBinding('id') get id() { return !!this.node && this.node.id; }
   // Applies text align style according to node alignement

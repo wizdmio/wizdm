@@ -70,9 +70,7 @@ export class ProjectService extends PagedCollection<wmProject> {
       data.name = data.name.trim();
       data.lowerCaseName = data.name.toLowerCase();
     }
-    // Makes sure data payload always specifies the author as a string
-    // Note that queryProject fills the author field with the wmUser
-    // object, so, this ensure eventual updates do not corrupt the db
+    // Makes sure the data payload always specifies the author
     data.author = this.userId;
     // Returns the very same object instance
     return data;

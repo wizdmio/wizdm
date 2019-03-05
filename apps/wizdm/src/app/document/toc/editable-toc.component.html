@@ -3,7 +3,7 @@
 
 <ng-container *ngFor="let node of source?.content">
 
-  <span *ngIf="node.type === 'heading'" 
+  <span *ngIf="node.data.type === 'item'" 
         [attr.toc]="node.data.level" 
         routerLink="." 
         [fragment]="node.id">{{ render(node) }}</span>

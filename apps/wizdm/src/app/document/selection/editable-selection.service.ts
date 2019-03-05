@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../common/editable-types';
-import { EditableContent, EditableText } from '../common/editable-content';
+import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../model';
+import { EditableDoc, EditableText } from '../model';
+import { EditableContent } from '../model/editable-content';
 import { Subject, Subscription } from 'rxjs';
 import { timeInterval, tap, map, filter } from 'rxjs/operators';
 
@@ -10,7 +11,7 @@ import { timeInterval, tap, map, filter } from 'rxjs/operators';
 /** Virtual document selection mapping browser range selection to the internal document data tree */
 export class EditableSelection implements OnDestroy {
 
-  private root: EditableContent<wmDocument>;
+  private root: EditableDoc;
   private modified = false;
 
   public start: EditableText;
@@ -21,7 +22,9 @@ export class EditableSelection implements OnDestroy {
   constructor() { /*this.enableHistory(2000, 128);*/ }
   ngOnDestroy() { this.clearHistory(); }
 
-  public attach(document: EditableContent<wmDocument>): EditableSelection { return (this.root = document), this; }
+  public attach(document: EditableDoc): EditableSelection { 
+    return (this.root = document), this; 
+  }
 
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
@@ -351,8 +354,8 @@ export class EditableSelection implements OnDestroy {
     if(!this.collapsed) { this.delete(); }
     // Store a snapshot for undo history
     this.store();
-    // Just insert a new line on request forcing it always on links
-    if(newline || this.belongsTo('link')) {
+    // Just insert a new line on request forcing it always on links and table cells
+    if(newline || this.belongsTo('link') || this.belongsTo('cell')) {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
@@ -679,12 +682,16 @@ export class EditableSelection implements OnDestroy {
    /** Pastes a data fragment to the current selection */
   public paste(source: wmDocument): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid || this.belongsTo('link')) { return this; }
-    // Builds the fragment to paste to
-    const fragment = this.start.createNode(source).load(source);
+    if(!this.valid) { return this; }
+    // Builds the fragment to paste from
+    const fragment = this.root.factory.document.load(source);
     if(!!fragment) {
-      // Breaks the selection at the current position 
-      this.store().break().move(-1, 0);
+      // Paste the content as text within links or table cells
+      if(this.belongsTo('link') || this.belongsTo('cell')) {
+        return this.insert(fragment.value);
+      }
+      // Breaks the selection at the current position otherwise
+      this.break().move(-1, 0);
       // Cleaves the tree and inserts the new content in between
       this.start.cleave()
         .insertNext(fragment)
@@ -704,7 +711,7 @@ export class EditableSelection implements OnDestroy {
 
   /***** HISTORY UNDO/REDO *****/
 
-  private store$ = new Subject<EditableContent<wmDocument>>();
+  private store$ = new Subject<EditableDoc>();
   private history: wmDocument[];
   private timeIndex: number;
   private sub$: Subscription;
@@ -757,6 +764,8 @@ export class EditableSelection implements OnDestroy {
    * the last modification otherwise.
   */
   public store(force?: boolean): EditableSelection { 
+
+    if(!this.root || !this.root.data) { debugger; }
 
     if(!!force) {
       // Gets a document snapshot immediately

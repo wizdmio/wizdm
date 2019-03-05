@@ -1,6 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableContent } from '../common/editable-content';
-import { wmTable } from '../common/editable-types';
+import { EditableTable } from '../model';
 
 @Component({
   selector: 'table[wm-table]',
@@ -11,7 +10,7 @@ export class TableComponent {
 
   constructor() { }
 
-  @Input('wm-table') table: EditableContent<wmTable>;
+  @Input('wm-table') table: EditableTable;
 
   @HostBinding('id') get id() {
     return !!this.table && this.table.id;

@@ -2,7 +2,7 @@ import { Component, Inject, ViewChild, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { MatMenuTrigger } from '@angular/material';
 import { EditableSelection } from '../selection/editable-selection.service';
-import { wmTextStyle } from '../common/editable-types';
+import { wmTextStyle } from '../model/editable-types';
 
 @Component({
   selector: 'wm-editable-menu',

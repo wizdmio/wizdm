@@ -4,7 +4,7 @@ export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmI
 export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
 export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
-export type wmEditableTypes = wmEditable | wmText | wmList | wmTable | wmRow | wmCell | wmBlock;
+export type wmEditableTypes = wmDocument | wmBlock | wmList | wmItem | wmTable | wmRow | wmCell | wmText | wmImage;
 
 export interface wmEditable {
   type: wmNodeType,
@@ -22,8 +22,7 @@ export interface wmDocument extends wmEditable {
 }
 
 export interface wmBlock extends wmEditable {
-  type: 'blockquote',
-  note?: boolean
+  type: 'blockquote'
 }
 
 export interface wmList extends wmEditable {

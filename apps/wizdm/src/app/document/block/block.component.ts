@@ -1,6 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableContent } from '../common/editable-content';
-import { wmBlock } from '../common/editable-types';
+import { EditableBlock } from '../model';
 
 @Component({
   selector: '[wm-block]',
@@ -9,7 +8,7 @@ import { wmBlock } from '../common/editable-types';
 })
 export class BlockComponent {
 
-  @Input('wm-block') block: EditableContent<wmBlock>;
+  @Input('wm-block') block: EditableBlock;
 
   @HostBinding('id') get id() {
     return !!this.block && this.block.id;
