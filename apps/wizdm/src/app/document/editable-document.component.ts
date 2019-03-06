@@ -46,10 +46,8 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     // Applies the current selection to the document when needed. This is essential even when the selection
     // isn't modified since view changes (aka rendering) affects the selection that requires to be restored
     if(this.editMode && this.sel.marked) {
-      // Saves the current selection in the document
-      this.sel.save(this.data);
-      // Notifies listeners for document change
-      this.change.emit(this.data);
+      // Notifies listeners for document change saving the current selection
+      this.change.emit( this.sel.save(this).data );
       // Makes sure to restore the selection after the view has been rendered but anyhow well before
       // the next change will be applied to the data tree (such as while typing) 
       Promise.resolve().then( () => this.sel.apply(this.document) ); 

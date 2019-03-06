@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EditableFactoryService } from './editable-factory.service';
+import { EditableFactory } from './editable-factory.service';
 
-describe('EditableFactoryService', () => {
+describe('EditableFactory', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: EditableFactoryService = TestBed.get(EditableFactoryService);
+    const service: EditableFactory = TestBed.get(EditableFactory);
     expect(service).toBeTruthy();
   });
 });

@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../model';
-import { EditableDoc, EditableText } from '../model';
+import { EditableDoc, EditableText, EditableTable, EditableRow, EditableCell } from '../model';
 import { EditableContent } from '../model/editable-content';
 import { Subject, Subscription } from 'rxjs';
-import { timeInterval, tap, map, filter } from 'rxjs/operators';
+import { timeInterval, map, filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -96,23 +96,23 @@ export class EditableSelection implements OnDestroy {
   }
 
   /** Saves the current selection into the document data to be eventually restored by calling @see restore() */
-  public save(document: wmDocument): EditableSelection {
+  public save(document: EditableDoc): EditableDoc {
     // Skips on invalid selection
-    if(!document || !this.valid) { return this; }
+    if(!document || !this.valid) { return document; }
     // Computes the absolute start offset
     const start = this.start.offset;
     // Saves the selection range in the root data
-    document.range = [
+    document.data.range = [
       start + this.startOfs, 
       (this.single ? start : this.end.offset) + this.endOfs
     ];
-    return this;
+    return document;
   }
 
   /** Restores the selection range from the documenta data. @see save() */
-  public restore(document: wmDocument): EditableSelection {
+  public restore(document: EditableDoc): EditableSelection {
     // Gets the range from the root data
-    const range = !!document && document.range;
+    const range = !!document && document.data.range;
     // Updates the selection to reflect the absolute range
     return !!range ? this.reset().move(range[0], range[0] !== range[1] ? range[1] : undefined) : this;
   }
@@ -429,11 +429,11 @@ export class EditableSelection implements OnDestroy {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Save the current selection
-    this.save(this.root.data);
+    this.save(this.root);
     // Defrags the few editable containers between the nodes
     this.containers( container => container.defrag() );
     // Restores the selection
-    this.restore(this.root.data).trim();
+    this.restore(this.root).trim();
     // Returns the selection supporting chaining
     return this;
   }
@@ -556,12 +556,15 @@ export class EditableSelection implements OnDestroy {
     return this.defrag();
   }
 
+  /** Picks the first selection's parent matching the specified types  */
+  public pick(...types: wmNodeType[]): EditableContent {
+    return this.valid ? this.start.climb(...types) : null;
+  }
+
   /** Removes an indentation level when applicable */
   public unindent(): EditableSelection {
-    // Skips on invalid selection
-    if(!this.valid) { return this; }
     // Guesses which indentation the selection belongs to
-    const indent = this.start.climb('blockquote', 'bulleted', 'numbered'); 
+    const indent = this.pick('blockquote', 'bulleted', 'numbered'); 
     if(!indent) { return this; }
     // Unindent all the containers within the selection
     this.store().containers( container => container.unindent(indent.type as wmIndentType) );
@@ -571,10 +574,8 @@ export class EditableSelection implements OnDestroy {
 
   /** Applies an indentation of the requested type or increase the indentation level when applicable */
   public indent(): EditableSelection {
-    // Skips on invalid selection
-    if(!this.valid) { return this; }
     // Guesses which list the selection belongs to
-    const list = this.start.climb('bulleted', 'numbered'); 
+    const list = this.pick('bulleted', 'numbered'); 
     // At this point, skips indentation when type is not specified
     if(!list) { return this; }
     // Indent all the containers within the selection
@@ -684,7 +685,7 @@ export class EditableSelection implements OnDestroy {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Builds the fragment to paste from
-    const fragment = this.root.factory.document.load(source);
+    const fragment = this.root.create.document.load(source);
     if(!!fragment) {
       // Paste the content as text within links or table cells
       if(this.belongsTo('link') || this.belongsTo('cell')) {
@@ -706,6 +707,72 @@ export class EditableSelection implements OnDestroy {
       this.collapse(true);
     }
     // Done
+    return this;
+  }
+
+  /** Insert a new empty table
+   * @param rows number of rows
+   * @param cols number of columns
+   */
+  public tableNew(rows: number, cols: number): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // Creates a new empty table
+    const table = this.root.create.table.initTable(rows, cols);
+    if(!!table) {
+      // Store the current snapshot in the history
+      this.store();
+      // Cleaves the tree and inserts the new table in between
+      this.start.cleave().insertNext(table);
+    }
+    // Done
+    return this;
+  }
+
+  public tableRow(where: 'above'|'below'): EditableSelection {
+    
+    const table = this.pick('table') as EditableTable;
+    if(!table) { return this; }
+
+    this.store();
+    
+    table.insertRow(this.pick('row') as EditableRow, where);
+    
+    return this;
+  }
+
+  public tableColumn(where: 'left'|'right'): EditableSelection {
+    
+    const table = this.pick('table') as EditableTable;
+    if(!table) { return this; }
+
+    this.store();
+    
+    table.insertColumn(this.pick('cell') as EditableCell, where);
+    
+    return this;
+  }
+
+  public tableDelete(what: 'row'|'column'|'table') {
+
+    const table = this.pick('table') as EditableTable;
+    if(!table) { return this; }
+
+    this.store();
+
+    switch(what) { 
+      case 'row':
+      table.removeRow(this.pick('row') as EditableRow);
+      break;
+
+      case 'column':
+      table.removeColumn(this.pick('cell') as EditableCell);
+      break;
+
+      case 'table': 
+      table.remove() as EditableTable;
+    }
+    
     return this;
   }
 
@@ -736,10 +803,8 @@ export class EditableSelection implements OnDestroy {
       timeInterval(), 
       // Filters requests coming to fast (within 'debounce time')
       filter( payload => this.history.length === 0 || payload.interval > debounce), 
-      // Gets a snapshot of the document
-      map( payload => payload.value.clone().data ),
-      // Saves the current selection
-      tap( snapshot => this.save(snapshot) )
+      // Gets a snapshot of the document with updated selection
+      map( payload => this.save( payload.value.clone() ).data ),
     // Subscribes the history save handler
     ).subscribe( snapshot => {
       // Wipes the further future undoed snapshots since they are now 
@@ -768,12 +833,8 @@ export class EditableSelection implements OnDestroy {
     if(!this.root || !this.root.data) { debugger; }
 
     if(!!force) {
-      // Gets a document snapshot immediately
-      const snapshot = this.root.clone().data;
-      // Saves the current selection within the snapshot
-      this.save(snapshot);
-      // Pushes the snapshot into the history buffer
-      this.history.unshift(snapshot); 
+      // Pushes a snapshot into the history buffer unconditionally
+      this.history.unshift( this.save( this.root.clone() ).data ); 
       // Return this for chaining
       return this; 
     }
@@ -792,10 +853,8 @@ export class EditableSelection implements OnDestroy {
     if(this.timeIndex === 0) { this.store(true); }
     // Gets the latest snapshot from the history
     const snapshot = this.history[++this.timeIndex];
-    // Reloads the snapshot's content
-    this.root.load(snapshot);
-    // Restores the selection too
-    return this.restore(snapshot);
+    // Reloads the snapshot's content restoring the selection too
+    return this.restore( this.root.load(snapshot) as EditableDoc);
   }
 
   /** Returns true whenever the last undone modifications can be redone */
@@ -809,9 +868,7 @@ export class EditableSelection implements OnDestroy {
     const snapshot = this.history[--this.timeIndex];
     // Removes the newest snapshot when back to the present
     if(this.timeIndex === 0) { this.history.shift(); }
-    // Reloads the snapshot's content
-    this.root.load(snapshot);
-    // Restores the selection too
-    return this.restore(snapshot);
+    // Reloads the snapshot's content restoring the selection too
+    return this.restore( this.root.load(snapshot) as EditableDoc);
   }
 }

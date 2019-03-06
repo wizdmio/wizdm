@@ -10,7 +10,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   protected pos: EditablePosition = [];
   protected children: EditableContent[] = [];
 
-  constructor(readonly factory: EditableFactory, data: T) { this.node = data || {} as T; }
+  constructor(readonly create: EditableFactory, data: T) { this.node = data || {} as T; }
   /** Returns the parent container */
   get container(): EditableContent { return this.parent; }
   /** Returns the node private data */
@@ -41,8 +41,8 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   get first(): boolean { return !this.removed && this.index === 0; }
   /** Returns true whenever the node is the last child within its parent */
   get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }  
-  /** Setting text value from cointainer is not supported */
-  set value(text: string) { throw "Setting value at container level is not supported";}
+  /** Sets the text value of all the content nodes */
+  set value(text: string) { this.set(text); }
   /** Returns the text content of a branch by appending text node values recursively */
   get value(): string { return this.content.reduce( (txt, node) => txt + node.value + node.pad, '');}
   /** Returns the appropriate pad character to terminate the node value */
@@ -62,10 +62,14 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Returns the offset recurring up the tree
     return offset + this.parent.offset;
   }
+  /** Sets the text value of the contained nodes returning this for chaining */
+  public set(text: string): this { return this.content.forEach( node => node.value = text ), this; }
   /** Structural nodes never share the same attributes */
   public same(node: EditableContent): boolean { return false; }
   /** Structural nodes never need to be joined */
   public join(node: EditableContent): EditableContent { return this; }
+  /** Initializes the node data */
+  public init(data: T): this { return this.node = data, this; }
 
   /** Loads the source document building the data tree */
   public load(source: T): EditableContent<T> {
@@ -74,7 +78,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
       // Recurs on children
       this.children = this.node.content.map( (node, i) => {
         // Creates the children nodes of the requested type
-        return this.factory.create(node as any)
+        return this.create.node(node.type as any)
           // Links it to the parent
           .inherit(this, i)
           // Recurs down the tree
@@ -117,26 +121,9 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
 
   /** Clones a node with or whithout its children */
   public clone(withChildren: boolean = true): this { 
-    return this.factory.clone(this as EditableTypes, withChildren) as this; 
+    return this.create.clone(this as EditableTypes, withChildren) as this; 
   }
-  /*public clone(withChildren: boolean = true): this {
-
-    const sanitize = function(node: EditableContent) {
-      // Spreads all the original data values
-      const data = { ...node.data } as any;
-      // Makes sure children are sanitized as well when requested
-      if(withChildren) { data.content = node.content.map( n => sanitize(n) );}
-      // Othrwise remove the content property at all
-      else if(!!data.content) { delete data.content; }
-      // Copies the style array, if any
-      if(!!(node.data as any).style ) { data.style = [...(node.data as any).style]; }
-      // Returns the cloned data payload
-      return data;
-    }
-    // Creates a new node/tree mirroring this one 
-    return this.factory.create({ type: this.type } as any).load( sanitize(this) ) as this;
-  }*/
-
+  
   /**
    * Compares two nodes position
    * @param node the node to be compared with
@@ -228,6 +215,10 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     return !!node && node.index < this.count && this.content[node.index] === node;
   }
 
+  public findIndex(child: EditableContent): number {
+    return this.childOfMine(child) ? child.index : -1;
+  }
+
   /**
    * Splices the node content (children array) refreshing the siblings
    * @param start child or index of which starting to change the array
@@ -254,7 +245,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Wraps the node with the specified container updating the hierarchy, if any*/
   public wrap(type: wmNodeType): EditableContent {
     // Creates a new node to wrap this node with
-    const wrap = this.factory.create({ type } as any);
+    const wrap = this.create.node(type as any);
     // Replaces the current node with the new wrapper within the parent content 
     if(!this.removed) { this.parent.splice(this, 1, wrap); }
     // Appends the node to the wrapper
@@ -336,11 +327,11 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   }
 
   public createPrevious(data: wmEditableTypes): EditableContent {
-    return this.insertPrevious( this.factory.create(data as any) );
+    return this.insertPrevious( this.create.node(data.type as any).init(data as any) );
   }
 
   public createNext(data: wmEditableTypes): EditableContent {
-    return this.insertNext( this.factory.create(data as any) );
+    return this.insertNext( this.create.node(data.type as any).init(data as any) );
   }
 
   /** Returns the child node at the specified position or null */

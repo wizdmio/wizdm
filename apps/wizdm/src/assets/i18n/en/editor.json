@@ -36,7 +36,7 @@
   "tools": {
     "edit": {
       "copy": "Copy\t(Ctrl+C)",
-      "cut": "Cut\t(Ctrol+X)",
+      "cut": "Cut\t(Ctrl+X)",
       "paste": "Paste\t(Ctrl+V)",
       "undo": "Undo\t(Ctrl+Z)",
       "redo": "Redo\t(Ctrl+Y)"

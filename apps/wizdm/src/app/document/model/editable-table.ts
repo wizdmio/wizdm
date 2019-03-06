@@ -10,25 +10,59 @@ export class EditableTable extends EditableContent<wmTable> {
     return this.childAt(index) as EditableRow;
   }
 
-  private seekRow(ref: EditableContent): EditableRow {
-    const row = ref.climb('row') as EditableRow;
-    return !!row && this.childOfMine(row) ? row : null;
+  public initTable(rows: number, cols: number): EditableTable {
+
+    for(let r = 0; r < rows; r++) { 
+      this.addRow().initRow(cols); 
+    }
+    return this;
   }
 
-  private emptyRow(cols: number): EditableRow {
-    return this.factory.create({ type: 'row'}).emptyRow(cols);
+  private addRow(): EditableRow {
+    return this.appendChild(this.create.row) as EditableRow;
   }
 
-  public rowAbove(ref: EditableContent): EditableRow {
+  public insertRow(ref: EditableRow, where: 'above'|'below'): EditableRow {
 
-    const above = this.seekRow(ref);
-    return !!above ? this.insertBefore(above, this.emptyRow(above.count)) as EditableRow : null;
+    switch(this.childOfMine(ref) && where) {
+
+      case 'above':
+      return this.insertBefore(ref, ref.clone().set('') ) as EditableRow;
+
+      case 'below':
+      return this.insertAfter(ref, ref.clone().set('') ) as EditableRow;
+    }
+    return null;
   }
 
-  public rowBelow(ref: EditableContent): EditableRow {
+  public removeRow(row: EditableRow) { 
+    return this.childOfMine(row) && row.remove(), row;
+  }
 
-    const below = this.seekRow(ref);
-    return !!below ? this.insertAfter(below, this.emptyRow(below.count)) as EditableRow : null;
+  public insertColumn(ref: EditableCell, where: 'left'|'right'): EditableCell {
+
+    const row = this.content.find( row => row.childOfMine(ref) ) as EditableCell;
+    if(!row) { return null; }
+
+    const index = row.findIndex(ref);
+    index >= 0 && this.content.forEach( (row: EditableRow) => {
+      row.insertCell( row.col(index), where );
+    });
+    
+    return ref;
+  }
+
+  public removeColumn(ref: EditableCell) {
+
+    const row = this.content.find( row => row.childOfMine(ref) ) as EditableCell;
+    if(!row) { return null; }
+
+    const index = row.findIndex(ref);
+    index >= 0 && this.content.forEach( (row: EditableRow) => {
+      row.col(index).remove();
+    });
+    
+    return ref; 
   }
 }
 
@@ -38,24 +72,47 @@ export class EditableRow extends EditableContent<wmRow> {
     return this.childAt(index) as EditableCell;
   }
 
-  private seekCell(ref: EditableContent): EditableCell {
-    const cell = ref.climb('cell') as EditableCell;
-    return !!cell && this.childOfMine(cell) ? cell : null;
+  public initRow(cells: number): EditableRow {
+
+    for(let c = 0; c < cells; c++) { 
+      this.addCell().initCell(); 
+    }
+    return this;
   }
 
-  public emptyRow(cols: number): EditableRow {
+  private addCell(): EditableCell {
+    return this.appendChild(this.create.cell) as EditableCell;
+  }
 
-    this.children = Array(cols).map( () => {
-      return this.factory.create({ type: 'cell' }).emptyCell();
-    });
-    return this;
+  public insertCell(ref: EditableCell, where: 'left'|'right'): EditableCell {
+
+    switch(this.childOfMine(ref) &&  where) {
+
+      case 'left':
+      this.insertBefore(ref, ref.clone().set('') ) as EditableCell;
+      break;
+
+      case 'right':
+      this.insertAfter(ref, ref.clone().set('') ) as EditableCell;
+      break;
+    }
+    return ref;
   }
 }
 
 export class EditableCell extends EditableContent<wmCell> {
 
-  public emptyCell(): EditableCell {
-    this.children = [ this.factory.create({ type: 'text', value: '' })];
-    return this;
+  // Overrides the default setter forcing a single node value 
+  public set(text: string): this {
+    // Wipes text nodes exceeding the fist
+    if(this.count > 1) { this.splice(1, -1); }
+    // Updates the first node value
+    if(this.count > 0) { this.firstChild().value = text };
+    // Return this for chaining
+    return this; 
+  }
+
+  public initCell(): EditableCell {
+    return this.appendChild(this.create.text).set('') as EditableCell;
   }
 }

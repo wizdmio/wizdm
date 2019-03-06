@@ -1,10 +1,21 @@
-import { wmEditableTypes, wmEditable, wmNodeType, wmIndentType, wmAlignType, wmText, wmTextStyle } from './editable-types';
-import { wmDocument, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell } from './editable-types';
+import { wmEditableTypes, wmAlignType, wmText, wmTextStyle } from './editable-types';
+import { wmBlock, wmList, wmItem } from './editable-types';
 import { EditableContent } from './editable-content';
 
 export class EditableBlock extends EditableContent<wmBlock> {}
 export class EditableList extends EditableContent<wmList> {}
-export class EditableItem extends EditableContent<wmItem> {}
+export class EditableItem extends EditableContent<wmItem> {
+
+  // Overrides the default setter forcing a single node value 
+  public set(text: string): this {
+    // Wipes text nodes exceeding the fist
+    if(this.count > 1) { this.splice(1, -1); }
+    // Updates the first node value
+    if(this.count > 0) { this.firstChild().value = text };
+    // Return this for chaining
+    return this; 
+  }
+}
 
 /** Implements text nodes */
 export class EditableText extends EditableContent<wmText> {
@@ -23,6 +34,11 @@ export class EditableText extends EditableContent<wmText> {
   set style(style: wmTextStyle[]) { this.data.style = [...style]; }
   get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
 
+  /** Sets both the text value and optionally the style array */
+  public set(text: string, style?: wmTextStyle[]): this { 
+    this.value = text; if(!!style) { this.style = style; }
+    return this;
+  }
   /** Compares whenever two nodes share the same type and format */
   public same(node: EditableText): boolean {
     // Skips testing null or non text nodes (links are never the same)
@@ -164,26 +180,12 @@ export class EditableText extends EditableContent<wmText> {
     return [node, offset]; 
   }
 
-  /**
-   * Creates a new node of the specified type
-   * @param type the type of node to be created
-   * @return the new node
-   */
-  public createText(text: string, style?: wmTextStyle[]): EditableText {
-
-    return this.factory.create({ 
-      type: 'text',
-      value: text,
-      style: !!style ? [...style] : []
-    } as wmText);
-  }
-
   public createTextPrev(text: string, style?: wmTextStyle[]): EditableText {
-    return this.insertPrevious(this.createText(text, style)) as EditableText;
+    return this.insertPrevious(this.create.text.set(text, style)) as EditableText;
   }
 
   public createTextNext(text: string, style?: wmTextStyle[]): EditableText {
-    return this.insertNext(this.createText(text, style)) as EditableText;
+    return this.insertNext(this.create.text.set(text, style)) as EditableText;
   }
 
   public format(style: wmTextStyle[]): EditableText {
@@ -255,14 +257,14 @@ export class EditableText extends EditableContent<wmText> {
       // When there's something to split at the tip...
       if(from > 0 && from < this.length) {
         // Creates a new text node splitting the text content
-        const node = this.createText( this.extract(from), this.style );
+        const node = this.create.text.set( this.extract(from), this.style );
         //...and inserts it after this node, than recurs to manage the tail
         return (this.insertNext(node) as EditableText).split(0, to - from);
       }
       // When there's something to split at the tail...
       if(to > 0 && to < this.length) {
         // Creates a new text node splitting the text content 
-        const node = this.createText( this.extract(0, to), this.style );
+        const node = this.create.text.set( this.extract(0, to), this.style );
         //...and inserts it before this node
         return this.insertPrevious(node) as EditableText;
       }

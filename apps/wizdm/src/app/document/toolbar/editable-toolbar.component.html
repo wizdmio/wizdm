@@ -119,14 +119,16 @@
         <button mat-icon-button 
           [matTooltip]="msgs?.insert?.table"
           [matTooltipShowDelay]="tooltipDelay"
+          [disabled]="sel.belongsTo('table')" 
           style="display: block; border-radius: 0" 
-          (click)="doNothing()">
+          (click)="sel.tableNew(1, 3)">
           <mat-icon>table_chart</mat-icon>
         </button>
         <!-- Insert image -->
         <button mat-icon-button 
           [matTooltip]="msgs?.insert?.image"
           [matTooltipShowDelay]="tooltipDelay"
+          [disabled]="true"
           style="display: block; border-radius: 0" 
           (click)="doNothing()">
           <mat-icon>insert_photo</mat-icon>
