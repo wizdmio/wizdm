@@ -1,4 +1,4 @@
-import { wmEditableTypes, wmEditable, wmNodeType, wmIndentType, wmAlignType } from './editable-types';
+import { wmEditable, wmNodeType, wmIndentType, wmAlignType } from './editable-types';
 import { EditableFactory, EditableTypes } from '../factory/editable-factory.service';
 
 export type EditablePosition = number[];
@@ -46,22 +46,9 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns the text content of a branch by appending text node values recursively */
   get value(): string { return this.content.reduce( (txt, node) => txt + node.value + node.pad, '');}
   /** Returns the appropriate pad character to terminate the node value */
-  get pad(): string { return this.type === 'text' || this.type === 'link' || this.last ? '' : (this.type === 'cell' ? '\t' : '\n');}
+  get pad(): string { return this.last ? '' : '\n'; }
   /** Returns the value's length */
   get length(): number { return this.value.length; }
-  /** Returns the value's length from the very first node up to the preceding sibling */
-  get offset(): number {
-    // Done when no more parents
-    if(this.removed) { return 0; }
-    // Accumulate the length of the preceding siblings
-    let offset = 0;
-    for(let i = 0; i < this.index; i++) {
-      const node = this.parent.content[i];
-      offset += (node.value + node.pad).length;
-    }
-    // Returns the offset recurring up the tree
-    return offset + this.parent.offset;
-  }
   /** Sets the text value of the contained nodes returning this for chaining */
   public set(text: string): this { return this.content.forEach( node => node.value = text ), this; }
   /** Structural nodes never share the same attributes */
@@ -70,11 +57,10 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public join(node: EditableContent): EditableContent { return this; }
   /** Initializes the node data */
   public init(data: T): this { return this.node = data, this; }
-
   /** Loads the source document building the data tree */
   public load(source: T): EditableContent<T> {
     // Assigns the source to the node data
-    if(!!(this.node = source) && this.node.content) {
+    if(!!this.init(source).node && !!this.data.content) {
       // Recurs on children
       this.children = this.node.content.map( (node, i) => {
         // Creates the children nodes of the requested type
@@ -325,7 +311,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public insertNext(node: EditableContent): EditableContent {
     return !!this.parent ? this.parent.insertAfter(this, node) : null;
   }
-
+/*
   public createPrevious(data: wmEditableTypes): EditableContent {
     return this.insertPrevious( this.create.node(data.type as any).init(data as any) );
   }
@@ -333,7 +319,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public createNext(data: wmEditableTypes): EditableContent {
     return this.insertNext( this.create.node(data.type as any).init(data as any) );
   }
-
+*/
   /** Returns the child node at the specified position or null */
   public childAt(index: number): EditableContent {
     return index >= 0 && index < this.count ? this.content[index] : null;
@@ -409,6 +395,53 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
 
   private position(id: string): EditablePosition {
     return !!id ? id.replace(/[^0-9\.]+/g, '').split('.').map( n => +n ) : [];
+  }
+
+  /** Returns the value's length from the very first node up to the preceding sibling */
+  get offset(): number {
+    // Done when no more parents
+    if(this.removed) { return 0; }
+    // Accumulate the length of the preceding siblings
+    let offset = 0;
+    for(let i = 0; i < this.index; i++) {
+      const node = this.parent.content[i];
+      offset += (node.value + node.pad).length;
+    }
+    // Returns the offset recurring up the tree
+    return offset + this.parent.offset;
+  }
+
+  public move(offset: number): [EditableContent, number] {
+    // Gets a reference to this nodes
+    let node: EditableContent = this as any;
+    // Jumps on previous nodes whenever the new offset crossed 0
+    while(offset < 0) {
+      // Jumps on the previous node traversing the full tree
+      const prev = node.previous(true);
+      // If null, we are done
+      if(!prev) { offset = 0; break; }
+      // When crossing text containers, account for the new line
+      if(!prev.siblings(node)) { offset++; }
+      // Adjust the offset according to node length
+      offset += prev.length;
+      // Loop on the next node
+      node = prev;
+    }
+    // Jumps on next nodes whenever the new offset cossed the  node length
+    while(offset > node.length) {
+      // Jumps on the next node traversing the full tree
+      const next = node.next(true);
+      // If null, we are done
+      if(!next) { offset = node.length; break; }
+      // When crossing text containers, account for the new line
+      if(!next.siblings(node)) { offset--; }
+      // Adjust the offset according to node length
+      offset -= node.length;
+      // Loop on the next node
+      node = next;
+    }
+    // Return the new node/offset pair
+    return [node, offset]; 
   }
 
   /** Traverse the tree till the node requested by id */

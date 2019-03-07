@@ -1,4 +1,4 @@
-import { wmEditableTypes, wmAlignType, wmText, wmTextStyle } from './editable-types';
+import { wmAlignType, wmText, wmTextStyle } from './editable-types';
 import { wmBlock, wmList, wmItem } from './editable-types';
 import { EditableContent } from './editable-content';
 
@@ -22,6 +22,7 @@ export class EditableText extends EditableContent<wmText> {
 
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
+  get pad(): string { return ''; }
   //get length() { return this.value.length; }
   get empty(): boolean { return this.length <= 0;}
   /** Sets/gets the container's alignement */
@@ -119,73 +120,6 @@ export class EditableText extends EditableContent<wmText> {
     });
 
     return [before, after];
-  }
-
-  /** 
-   * Jumps to the previous editable text node.
-   * @param traverse (default = false) when true the previous node will be returned
-   * traversing the full tree. It'll stop on the same parent's sibling otherwise 
-   */
-  public previousText(traverse: boolean = false): EditableText {
-
-    const node = this.previous(traverse);
-    if(!node) { return null; }
-    if(node.type === 'text' || node.type === 'link') { return node as EditableText; }
-    return (node as EditableText).previousText(traverse);
-  }
-
-  /** 
-   * Jumps to the next editable text node.
-   * @param traverse (default = false) when true the next node will be returned
-   * traversing the full tree. It'll stop on the same parent's sibling otherwise. 
-   */
-  public nextText(traverse: boolean = false): EditableText {
-
-    const node = this.next(traverse);
-    if(!node) { return null; }
-    if(node.type === 'text' || node.type === 'link') { return node as EditableText; }
-    return (node as EditableText).nextText(traverse);
-  }
-
-   public move(offset: number): [EditableText, number] {
-    // Gets a reference to this nodes
-    let node: EditableText = this as any;
-    // Jumps on previous nodes whenever the new offset crossed 0
-    while(offset < 0) {
-      // Jumps on the previous node traversing the full tree
-      const prev = node.previousText(true);
-      // If null, we are done
-      if(!prev) { offset = 0; break; }
-      // When crossing text containers, account for the new line
-      if(!prev.siblings(node)) { offset++; }
-      // Adjust the offset according to node length
-      offset += prev.length;
-      // Loop on the next node
-      node = prev;
-    }
-    // Jumps on next nodes whenever the new offset cossed the  node length
-    while(offset > node.length) {
-      // Jumps on the next node traversing the full tree
-      const next = node.nextText(true);
-      // If null, we are done
-      if(!next) { offset = node.length; break; }
-      // When crossing text containers, account for the new line
-      if(!next.siblings(node)) { offset--; }
-      // Adjust the offset according to node length
-      offset -= node.length;
-      // Loop on the next node
-      node = next;
-    }
-    // Return the new node/offset pair
-    return [node, offset]; 
-  }
-
-  public createTextPrev(text: string, style?: wmTextStyle[]): EditableText {
-    return this.insertPrevious(this.create.text.set(text, style)) as EditableText;
-  }
-
-  public createTextNext(text: string, style?: wmTextStyle[]): EditableText {
-    return this.insertNext(this.create.text.set(text, style)) as EditableText;
   }
 
   public format(style: wmTextStyle[]): EditableText {
@@ -292,7 +226,7 @@ export class EditableText extends EditableContent<wmText> {
     // Skips the operation when not possible
     if(!this.parent) { return null; }
     // Creates a new node as this container next sibling
-    const editable = this.parent.createNext({ type: this.parent.type } as wmEditableTypes);
+    const editable = this.parent.insertNext( this.create.node(this.parent.type as any) );//createNext({ type: this.parent.type } as wmEditableTypes);
     // Relocates the content from this node foreward to the new container 
     editable.splice(0, 0, ...this.parent.splice(this.index, -1));
     // Returns the new editable first child

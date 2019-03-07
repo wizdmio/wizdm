@@ -102,6 +102,8 @@ export class EditableRow extends EditableContent<wmRow> {
 
 export class EditableCell extends EditableContent<wmCell> {
 
+  // Overrides with cell specific pad value
+  get pad(): string { return this.last ? '' : '\t';}
   // Overrides the default setter forcing a single node value 
   public set(text: string): this {
     // Wipes text nodes exceeding the fist

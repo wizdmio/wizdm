@@ -11,4 +11,12 @@
   //background-origin: 0;
   background-repeat: no-repeat;
   background-size: cover;
+
+  span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
 }

@@ -3,7 +3,7 @@ import { EditableImage } from '../model';
 
 @Component({
   selector: '[wm-image]',
-  template: '',
+  templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss']
 })
 export class ImageComponent {
