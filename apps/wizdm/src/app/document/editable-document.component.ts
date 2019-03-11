@@ -1,13 +1,14 @@
 import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { EditableFactory } from './factory/editable-factory.service';
-import { EditableDoc, wmDocument } from './model';
 import { EditableSelection } from './selection/editable-selection.service';
+import { EditableDoc, wmDocument } from './model';
 
 @Component({
   selector: 'wm-editable-document, [wm-editable-document]',
   templateUrl: './editable-document.component.html',
-  styleUrls: ['./editable-document.component.scss']
+  styleUrls: ['./editable-document.component.scss'],
+  host: { 'class': 'wm-editable-document' }
 })
 export class EditableDocument extends EditableDoc implements AfterViewChecked {
 
@@ -21,7 +22,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
 
   /** Document source */
   @Input() set source(source: wmDocument) {
-    // Loads the source data building the tree 
+    // Loads the source data building the tree
     this.load(source).defrag();
   }
 
@@ -36,8 +37,8 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
         // Initializes the history buffer
         .enableHistory()
     }
-    // Clears the history buffer while exiting edit mode
-    else { this.sel.clearHistory(); }
+    // Resets the seelction and clears the history buffer while exiting edit mode
+    else { this.sel.reset().clearHistory(); }
   }
   /** change event notifying for document changes */
   @Output() change = new EventEmitter<wmDocument>();
@@ -58,6 +59,8 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   @HostListener('keyup', ['$event']) up(ev: Event) {
     // Query the selection, so, it's always up to date
     if(this.editMode) { this.sel.query(this.document); }
+
+    console.log(this.sel.start);
   }
 
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
@@ -105,7 +108,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     return this.document.defaultView;
   }
 
-  @HostListener('cut', ['$event']) cut(ev: ClipboardEvent) {
+  @HostListener('cut', ['$event']) editCut(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     // Reverts the cut request to a native copy...
@@ -117,7 +120,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     return false;
   } 
   
-  @HostListener('copy', ['$event']) copy(ev: ClipboardEvent) {
+  @HostListener('copy', ['$event']) editCopy(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     if(!this.sel.valid) { return false; }
@@ -138,7 +141,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     return false;
   }
 
-  @HostListener('paste', ['$event']) paste(ev: ClipboardEvent) {
+  @HostListener('paste', ['$event']) editPaste(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     if(!this.sel.valid) { return false; }

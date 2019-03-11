@@ -1,4 +1,4 @@
-import { wmEditable, wmNodeType, wmIndentType, wmAlignType } from './editable-types';
+import { wmEditable, wmNodeType, wmIndentType, wmAlignType, wmTextStyle } from './editable-types';
 import { EditableFactory, EditableTypes } from '../factory/editable-factory.service';
 
 export type EditablePosition = number[];
@@ -49,16 +49,54 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   get pad(): string { return this.last ? '' : '\n'; }
   /** Returns the value's length */
   get length(): number { return this.value.length; }
+  /** Sets the style array for the content */
+  set style(style: wmTextStyle[]) { this.content.forEach( node => node.style = style ); }
+  /** Returns the content's style array */
+  get style(): wmTextStyle[] { return this.count > 0 ? this.firstChild().style : []; } 
+  /** Initializes the node data */
+  public init(data: T): this { return (this.node = data), this; }
   /** Sets the text value of the contained nodes returning this for chaining */
   public set(text: string): this { return this.content.forEach( node => node.value = text ), this; }
-  /** Structural nodes never share the same attributes */
+  // Text specifics passively implemented 
+  public append(text: string): string { return ''; }
+  public tip(till: number): string { return ''; }
+  public tail(from: number): string { return ''; }
+  public insert(text: string, at?: number): string { return ''; }
+  public extract(from: number, to?: number): string { return ''; }
+  public cut(till: number, from?: number): string { return ''; }
+  public edges(index: number): [number, number] { return [0,0]; }
+  public split(from: number, to?: number): this { return this; }
+  public link(url: string): this { return this;}
+  public break(): this { return this; }
+  // Recursively apply or unapply text formatting to the content 
+  public format(style: wmTextStyle[]): this { return this.content.forEach( node => node.format(style) ), this;}
+  public unformat(style: wmTextStyle[]): this { return this.content.forEach( node => node.unformat(style) ), this;}
+  // Disable joining and defragment on structural nodes
+  public join(node: EditableContent): this { return this; }
   public same(node: EditableContent): boolean { return false; }
-  /** Structural nodes never need to be joined */
-  public join(node: EditableContent): EditableContent { return this; }
-  /** Initializes the node data */
-  public init(data: T): this { return this.node = data, this; }
+  /** 
+   * Merges the two nodes. Merging nodes implies that the target node content
+   * is appended to the source while all the tree nodes in between are removed 
+   * from the tree. Text values are also joined when sharing the same styles.
+   * @param node the node to be merged with
+  */
+  public merge(node: EditableContent): this {
+    // Skips when null or unnecessary
+    if(!node || node === this) { return this; }
+    // Prunes the branches between the nodes, so, this and node are now siblings
+    this.prune(node);
+    // Whenever the nodes are not sharing the parent already...
+    if(!this.siblings(node) && !!this.parent && !!node.parent) {
+      // Removes the node parent from the tree (since is supposedly going to be empty)
+      node.parent.remove();
+      // Append the content of node to this
+      this.parent.splice(this.parent.count, 0, ...node.parent.content);
+    }
+    // Return this for chaining
+    return this;
+  }
   /** Loads the source document building the data tree */
-  public load(source: T): EditableContent<T> {
+  public load(source: T): this {
     // Assigns the source to the node data
     if(!!this.init(source).node && !!this.data.content) {
       // Recurs on children
@@ -68,19 +106,18 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
           // Links it to the parent
           .inherit(this, i)
           // Recurs down the tree
-          .load(node);
+          .load(node as any);
       });
     }
 
     return this;
   }
-
   /**
    * Inherits the node coordinates from the specified parent
    * @param parent the parent node to inherit from
    * @param index the offset position within the children array
    */
-  private inherit(parent: EditableContent, index: number): EditableContent {
+  private inherit(parent: EditableContent, index: number): this {
      
     if(!parent) { return null; }
     // Parent node
@@ -92,11 +129,10 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Return this to support chaining
     return this;
   }
-
   /** Refreshes children inheritance recurring along descendants 
    * @param from (optional) optionally start from a non-zero index 
    */
-  private refresh(from: number = 0): EditableContent {
+  private refresh(from: number = 0): this {
 
     // Refreshes the content inheritance after any update
     for(let i = from; i < this.count; i++) {
@@ -104,12 +140,10 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     }
     return this;
   }
-
   /** Clones a node with or whithout its children */
   public clone(withChildren: boolean = true): this { 
     return this.create.clone(this as EditableTypes, withChildren) as this; 
   }
-  
   /**
    * Compares two nodes position
    * @param node the node to be compared with
@@ -134,7 +168,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // We should never come down here unless two different nodes have the same position
     return 0;
   }
-
   /** 
    * Returns an array of all the ancestors' types up to the specified depth 
    * @param depth the node level to drive the search up to. Specifying 'inline'
@@ -163,7 +196,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     if(!types || !this.parent) { return null; }
     return types.some( type => type === this.type ) ? this : this.parent.climb(...types);
   }
-
   /** 
    * Seeks for a common ancestor between this and the requested node 
    * @param node the node to be compared with
@@ -188,14 +220,12 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Found!
     return this.parent;
   }
-
+  /** Returns true whenever the tow nodes belongs to the same cocntainer */
   public siblings(node: EditableContent): boolean {
     
     if(!node || !node.parent || !this.parent) { return false; }
-
     return this.parent === node.parent;
   }
-
   /** Checks if the requested node is among this children */
   public childOfMine(node: EditableContent): boolean {
     return !!node && node.index < this.count && this.content[node.index] === node;
@@ -204,7 +234,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public findIndex(child: EditableContent): number {
     return this.childOfMine(child) ? child.index : -1;
   }
-
   /**
    * Splices the node content (children array) refreshing the siblings
    * @param start child or index of which starting to change the array
@@ -227,7 +256,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Return the removed nodes
     return nodes;
   }
-
   /** Wraps the node with the specified container updating the hierarchy, if any*/
   public wrap(type: wmNodeType): EditableContent {
     // Creates a new node to wrap this node with
@@ -248,7 +276,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Return the container node the unwrapped content now belongs to
     return this;
   }
-
   /** 
    * Removes this node from the tree recurring up along the tree
    * to remove empty ancestors if any.
@@ -263,7 +290,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Returns the removed node
     return node;
   }
-
   /** 
    * Append a child node updating the tree
    * @param node the new child
@@ -273,7 +299,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Pushes the node into the content array
     return this.splice(this.count, 0, node), node;
   }
-
   /**
    * Inserts a node before the specified one
    * @param before the child node to shift
@@ -283,7 +308,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public insertBefore(before: EditableContent, node: EditableContent): EditableContent {    
     return this.childOfMine(before) ? (this.splice(before.index, 0, node), node) : null;
   }
-
   /**
    * Inserts a node after the specified one
    * @param after the child node after wich to insert the new child
@@ -293,7 +317,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public insertAfter(after: EditableContent, node: EditableContent): EditableContent {  
     return this.childOfMine(after) ? (this.splice(after.index + 1, 0, node), node) : null;
   }
-
   /** 
    * Insert a sibling node before this one 
    * @param node the node to be inserted
@@ -302,7 +325,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public insertPrevious(node: EditableContent): EditableContent {
     return !!this.parent ? this.parent.insertBefore(this, node) : null;
   }
-
   /** 
    * Insert a sibling node after this one 
    * @param node the node to be inserted
@@ -311,42 +333,28 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public insertNext(node: EditableContent): EditableContent {
     return !!this.parent ? this.parent.insertAfter(this, node) : null;
   }
-/*
-  public createPrevious(data: wmEditableTypes): EditableContent {
-    return this.insertPrevious( this.create.node(data.type as any).init(data as any) );
-  }
-
-  public createNext(data: wmEditableTypes): EditableContent {
-    return this.insertNext( this.create.node(data.type as any).init(data as any) );
-  }
-*/
   /** Returns the child node at the specified position or null */
   public childAt(index: number): EditableContent {
     return index >= 0 && index < this.count ? this.content[index] : null;
   }
-
   /** Returns the last child node in this parent list */
   public lastChild(): EditableContent {
     return this.childAt(this.count-1);
   }
-
    /** Returns the first child node in this parent list */
   public firstChild(): EditableContent{
     return this.childAt(0);
   }
-
   /** Returns the deepest descendant of the last child */
   public lastDescendant(): EditableContent {
     const last = this.lastChild();
     return !!last ? last.lastDescendant() : this;
   }
-
   /** Returns the deepest descendant of the first child */
   public firstDescendant(): EditableContent{
     const first = this.firstChild();
     return !!first ? first.firstDescendant() : this;
   }
-
   /** 
    * Jumps to the previous sibling node.
    * @return the node immediately preceding this in its parent's list, 
@@ -355,7 +363,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public previousSibling(): EditableContent {
     return (!!this.parent) ? this.parent.childAt(this.index-1) : null;
   }
-
   /** 
    * Jumps to the next sibling node.
    * @return the node immediately following this in its parent's list, 
@@ -364,7 +371,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public nextSibling(): EditableContent {
     return (!!this.parent) ? this.parent.childAt(this.index+1) : null;
   }
-
   /**
    * Jumps to the previous node traversing the tree when necessary.
    * @param traverse (default = true) when false, behaves like previousSibling()
@@ -378,7 +384,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     if(!traverse) { return sibling; }
     return !!sibling ? sibling.lastDescendant() : this.parent.previous();
   }
-
   /**
    * Jumps to the next node traversing the tree when necessary.
    * @param traverse (default = true) when false, behaves like nextSibling()
@@ -396,7 +401,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   private position(id: string): EditablePosition {
     return !!id ? id.replace(/[^0-9\.]+/g, '').split('.').map( n => +n ) : [];
   }
-
   /** Returns the value's length from the very first node up to the preceding sibling */
   get offset(): number {
     // Done when no more parents
@@ -410,7 +414,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Returns the offset recurring up the tree
     return offset + this.parent.offset;
   }
-
+  /** Moves from the current node towards the sibling leafs based on the absolut value position */
   public move(offset: number): [EditableContent, number] {
     // Gets a reference to this nodes
     let node: EditableContent = this as any;
@@ -443,7 +447,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Return the new node/offset pair
     return [node, offset]; 
   }
-
   /** Traverse the tree till the node requested by id */
   public walkTree(id: string): EditableContent {
     // Turns the element id into the node absolute position
@@ -456,7 +459,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Found it!
     return node;
   }
-
   /** Helper function to perform depth-first lke tree traversal minimizing the number of traversed node */
   private traverse(node: EditableContent, callbackfn: (left: EditablePosition, right: EditablePosition) => EditableContent): EditableContent {
     // Skips on null or invalid parameters
@@ -504,7 +506,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Done recurring
     return this;
   }
-
   /** 
    * Return a copy of the tree between the two nodes (includes) as a document fragment 
    * so always reflecting a document(/block)/item/text hierarchy
@@ -557,7 +558,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Done recurring
     return node;
   }
-
   /** Cleaves the tree between this node and the next sibling climbing up till the root node*/
   public cleave(): EditableContent {
     // Done when removed or we reached the top 
@@ -572,7 +572,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Climbs up the tree
     return this.parent.cleave();
   } 
-
   /**
    * Defragments the tree content, so, text nodes are minimized
    * by joining siblings when sharing the same attributes

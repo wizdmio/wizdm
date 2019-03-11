@@ -12,11 +12,9 @@
   background-repeat: no-repeat;
   background-size: cover;
 
-  span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
+  caret-color: transparent;
+
+  &[selected] {
+    outline: solid #BBDEFB;
   }
 }

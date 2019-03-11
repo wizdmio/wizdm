@@ -6,18 +6,12 @@ export let $animations = [
 
   trigger('menu', [
     transition('* => *', [
-/*      
-      query(':enter', style({ display: 'none'}), { optional: true }),
-
-      query(':leave', stagger(-100, 
-        animate($timing, 
-          style({ transform: 'scale(0.5)', opacity: 0 }) 
-        )
-      ), { optional: true }),
-  */
       query(':enter', [
-        style({ display: '*', transform: 'scale(0.5)', opacity: 0 }),
-        stagger(100, animate($timing))
+        style({ 
+          transform: 'scale(0.5)', 
+          opacity: 0 
+        }),
+        stagger(100, animate($timing) )
       ], { optional: true })
     ])
   ])

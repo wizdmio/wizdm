@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
+import { FileOpenComponent, PopupService } from '@wizdm/elements';
 import { ToolbarService, ActionEnabler } from '../../navigator';
-import { OpenFileComponent, PopupService } from '../../elements';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ interface UploadTask {
 })
 export class UploadComponent implements OnInit {
 
-  @ViewChild(OpenFileComponent) openFile: OpenFileComponent;
+  @ViewChild(FileOpenComponent) openFile: FileOpenComponent;
   @ViewChild(MatSelectionList) fileList: MatSelectionList;
 
   private enableDelete$: ActionEnabler;

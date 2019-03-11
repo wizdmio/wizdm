@@ -1,7 +1,6 @@
 @import 'variables';
 @import 'theme';
 
-
 :host {
   display: block;
   position: absolute;
@@ -29,8 +28,8 @@
       background-color: transparent !important;
 
       mat-toolbar-row {
-        // Reduces the standard 16px left/right padding to 8px
-        padding: 0 8px;
+        // Reduces the standard 16px left/right padding to 8px on mobile
+        @media ($mat-xsmall) { padding: 0 8px; }
         // Adjusts the height based on the specified attribute
         &[compact] { height: 40px; }
         &[auto] { height: auto; }

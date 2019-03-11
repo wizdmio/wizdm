@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../model';
-import { EditableDoc, EditableText, EditableTable, EditableRow, EditableCell/*, EditableImage*/ } from '../model';
+import { EditableDoc, EditableText, EditableTable, EditableRow, EditableCell, EditableImage } from '../model';
 import { EditableContent } from '../model/editable-content';
 import { timeInterval, map, filter } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
@@ -14,9 +14,9 @@ export class EditableSelection implements OnDestroy {
   private root: EditableDoc;
   private modified = false;
 
-  public start: EditableText;
+  public start: EditableContent;
   public startOfs: number;
-  public end: EditableText;
+  public end: EditableContent;
   public endOfs: number;
 
   constructor() { /*this.enableHistory(2000, 128);*/ }
@@ -25,7 +25,6 @@ export class EditableSelection implements OnDestroy {
   public attach(document: EditableDoc): EditableSelection { 
     return (this.root = document), this; 
   }
-
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
   /** Returns true when the selection belongs within a single text node */
@@ -40,6 +39,16 @@ export class EditableSelection implements OnDestroy {
   get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
   /** Returns true then the selection fully belongs to a single container  */
   get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
+  /** Returns true whenever the start/end are text nodes */
+  get textsafe(): boolean { return this.valid && this.start instanceof EditableText && this.end instanceof EditableText; }
+  /** Returns true when the selection contains text nodes only (so no images) */
+  /*get textonly(): boolean {
+
+    if(!this.valid) { return false; }
+    let result = true;
+    this.nodes( node => result = result && node instanceof EditableText );
+    return result;
+  }*/
   /** Returns true whenever the selection has been modified */
   get marked(): boolean { return this.modified; }
 
@@ -48,29 +57,27 @@ export class EditableSelection implements OnDestroy {
     return this;
   }
 
-  private setStart(node: EditableText, ofs: number) {
+  private setStart(node: EditableContent, ofs: number) {
     this.start = node;
     this.startOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
 
-  private setEnd(node: EditableText, ofs: number) {
+  private setEnd(node: EditableContent, ofs: number) {
     this.end = node;
     this.endOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
   /** Sets the selection range */
-  public set(start: EditableText, startOfs: number, end: EditableText, endOfs: number): EditableSelection {
+  public set(start: EditableContent, startOfs: number, end: EditableContent, endOfs: number): EditableSelection {
     this.setStart(start, startOfs);
     this.setEnd(end, endOfs);
     return this;
   }
-  
   /** Collapses the selection to a cursor at the specified position */
-  public setCursor(node: EditableText, ofs: number): EditableSelection {
+  public setCursor(node: EditableContent, ofs: number): EditableSelection {
     return this.set(node, ofs, node, ofs);
   }
-
   /** Resets the selection as a cursor position at the very beginning of the document tree */
   public reset(): EditableSelection {
     return this.setCursor(this.root.firstDescendant() as any, 0);
@@ -83,7 +90,6 @@ export class EditableSelection implements OnDestroy {
   public collapse(end?: boolean): EditableSelection {
     return !!end ? this.setCursor(this.end, this.endOfs) : this.setCursor(this.start, this.startOfs);
   }
-
   /** Moves the selection start and end points by the specified offsets */
   public move(deltaStart: number, deltaEnd?: number): EditableSelection {
     // Skips on invalid selection
@@ -92,10 +98,22 @@ export class EditableSelection implements OnDestroy {
     const start = this.start.move(this.startOfs + deltaStart);
     const end = (deltaEnd === undefined) ? start : this.end.move(this.endOfs + deltaEnd);
     // Update the selection
-    return this.set(start[0] instanceof EditableText ? start[0] : null, start[1], 
-                      end[0] instanceof EditableText ? end[0]   : null, end[1]);
+    return this.set(start[0], start[1], end[0], end[1]);
   }
+  /** Jumps to the previous text node skipping non text ones*/
+  private previous(node: EditableContent, traverse: boolean = false): EditableContent {
 
+    let prev = node.previous(traverse) as any;
+    while(!!prev && !(prev instanceof EditableText)) { prev = prev.previous(traverse); }
+    return prev;
+  }
+  /** Jumps to the next text node skipping non text ones*/
+  private next(node: EditableContent, traverse: boolean = false): EditableContent {
+
+    let next = node.next(traverse) as any;
+    while(!!next && !(next instanceof EditableText)) { next = next.next(traverse); }
+    return next;
+  }
   /** Saves the current selection into the document data to be eventually restored by calling @see restore() */
   public save(document: EditableDoc): EditableDoc {
     // Skips on invalid selection
@@ -109,7 +127,6 @@ export class EditableSelection implements OnDestroy {
     ];
     return document;
   }
-
   /** Restores the selection range from the documenta data. @see save() */
   public restore(document: EditableDoc): EditableSelection {
     // Gets the range from the root data
@@ -117,13 +134,11 @@ export class EditableSelection implements OnDestroy {
     // Updates the selection to reflect the absolute range
     return !!range ? this.reset().move(range[0], range[0] !== range[1] ? range[1] : undefined) : this;
   }
-
   /** Returns true whenever the start node/offset comes after the end ones */
   public get reversed(): boolean {
     if(!this.valid) { return false; }
     return this.start === this.end && this.startOfs > this.endOfs || this.start.compare(this.end) > 0;
   }
-
   /** Sort the start/end selection nodes, so, to make sure start comes always first */
   public sort(): EditableSelection {
     // Compares the points' position
@@ -139,35 +154,8 @@ export class EditableSelection implements OnDestroy {
     }    
     return this;
   }
-
-  private previous(node: EditableText, traverse: boolean = false): EditableText {
-
-    let prev = node.previous(traverse) as any;
-    while(!!prev && !(prev instanceof EditableText)) { 
-      prev = prev.previous(traverse); 
-    }
-    return prev;
-  }
-
-  private next(node: EditableText, traverse: boolean = false): EditableText {
-
-    let next = node.next(traverse) as any;
-    while(!!next && !(next instanceof EditableText)) { 
-      next = next.next(traverse); 
-    }
-    return next;
-  }
-
-  /** Returns true when the selection contains text nodes only (so no images) */
-  /*get textonly(): boolean {
-
-    let result = true;
-    this.nodes( node => result = result && node instanceof EditableText );
-    return result;
-  }*/
-
   /** Helper function to loop on all the text nodes within the selection */
-  private nodes(callbackfn: (node: EditableText) => void): EditableSelection {
+  private nodes(callbackfn: (node: EditableContent) => void): EditableSelection {
     // Skips on invalid selection
     if(!this.valid || !callbackfn) { return this; }
     // Loops on the editable whithin the selection
@@ -180,7 +168,6 @@ export class EditableSelection implements OnDestroy {
     }
     return this;
   }
-
   /** Helper function to loop on all the containers within the selection */
   private containers(callbackfn: (container: EditableContent) => void): EditableSelection {
     // Skips on invalid selection
@@ -197,8 +184,6 @@ export class EditableSelection implements OnDestroy {
     }
     return this;
   }
-
-
   /** Makes sure the selection falls within the inner nodes when on the edges.  */ 
   public trim(): EditableSelection {
     // Skips on invalid selection
@@ -218,7 +203,6 @@ export class EditableSelection implements OnDestroy {
 
     return this;
   }
-
   /** Forces the selection to wrap around the closes text word boundaries */
   public wordWrap(): EditableSelection {
     // Skips on invalid selection
@@ -234,7 +218,7 @@ export class EditableSelection implements OnDestroy {
   }
 
   // Maps a given DOM node into the internal tree data node
-  private fromDom(node: Node, offset: number): [EditableText, number]{
+  private fromDom(node: Node, offset: number): [EditableContent, number]{
     // Skips null nodes
     if(!node) { debugger; return [null, 0]; }
     // If node is a text node we look for the node parent assuming 
@@ -246,7 +230,8 @@ export class EditableSelection implements OnDestroy {
       // Walks the tree searching for the node to return
       const txt = this.root.walkTree(!!element && element.id);
       // Returns null when nodes are of unexpected types
-      return txt instanceof EditableText ? [txt, txt.empty ? 0 : offset] : [null, 0];    
+      //return txt instanceof EditableText ? [txt, txt.empty ? 0 : offset] : [null, 0];    
+      return [txt, txt.empty ? 0 : offset];    
     }
     // If not, selection is likely falling on a parent element, so, 
     // we search for the child element relative to the parent offfset 
@@ -269,10 +254,7 @@ export class EditableSelection implements OnDestroy {
     // Something wrong
     return [null, offset];
   }
-
-  /**
-   * Queries the document for the current selection
-   */
+  /** Queries the document for the current selection */
   public query(from: Document): EditableSelection {
 
     if(!from) { return null; }
@@ -306,7 +288,7 @@ export class EditableSelection implements OnDestroy {
     return this.mark(false);
   }
 
-  private toDom(node: EditableText, document: Document): Node {
+  private toDom(node: EditableContent, document: Document): Node {
     // Gets the node container element
     const el = !!node ? document.getElementById(node.id) : null;
     if(!el.hasChildNodes()) { return null; }
@@ -321,10 +303,7 @@ export class EditableSelection implements OnDestroy {
     // No text nodes found
     return null;
   }
-   
-  /**
-   * Applies the current selection to the document.
-   */
+  /** Applies the current selection to the document */
   public apply(to: Document): EditableSelection {
     // Skips on invalid selections
     if(!to || !this.valid) { return this; }
@@ -349,18 +328,18 @@ export class EditableSelection implements OnDestroy {
     // Resets the modified flag
     return this.mark(false);
   }
-
+  /** Insert new text at the cursor position */
   public insert(char: string): EditableSelection {
     // Skips on invalid selection or null string
-    if(!this.valid || !char) { return this; }
+    if(!this.textsafe || !char) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
-    // Store a snapshot for undo history
+    // Do nothing on images
     this.store();
     // In case the selection is on the end edge of a link...
     if(this.start.type === 'link' && this.startOfs === this.start.length) {
       // Jumps on the following text, if any or create a new text node otherwise
-      const next = this.next(this.start) || this.start.insertNext(this.start.create.text.set('')) as EditableText;//.createTextNext('');
+      const next = this.next(this.start) || this.start.insertNext(this.start.create.text.set(''));
       // Updates the new position
       this.setCursor(next, 0);
     }
@@ -368,11 +347,10 @@ export class EditableSelection implements OnDestroy {
     this.start.insert(char, this.startOfs);
     return this.move(char.length);
   }
-
   /** Deletes the selection from the document tree */
   public delete(): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid) { return this; }
+    if(!this.textsafe) { return this; }
     // Store a snapshot for undo history
     this.store();
     // Whenever the selection applies on a single node...
@@ -398,7 +376,6 @@ export class EditableSelection implements OnDestroy {
     // Updates the cursor position
     return this.setCursor(this.start, ofs);
   }
-  
   /**
    * Breaks the selection by inserting a new line char or an entire new editable block
    * @param newline when true, a new line charachter wil be used to break the selection,
@@ -407,7 +384,7 @@ export class EditableSelection implements OnDestroy {
    */
   public break(newline: boolean = false): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid) { return this; }
+    if(!this.textsafe) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
     // Store a snapshot for undo history
@@ -419,11 +396,11 @@ export class EditableSelection implements OnDestroy {
     }
     // Inserts an extra empty text on the start edge preserving the same style
     if(this.start.first && this.startOfs === 0) { 
-      this.start.insertPrevious(this.start.clone().set(''));//createTextPrev('', this.start.style); 
+      this.start.insertPrevious(this.start.clone().set('')); 
     }
     // Inserts an extra empty text node on the end edge preserving the same style
     if(this.start.last && this.startOfs === this.start.length) { 
-      this.start.insertNext(this.start.clone().set(''));//.createTextNext('', this.start.style); 
+      this.start.insertNext(this.start.clone().set('')); 
     }
     // Makes sure the cursor is on the right side of node's edges 
     if(this.startOfs === this.start.length) { this.setCursor(this.next(this.start), 0);}
@@ -432,7 +409,6 @@ export class EditableSelection implements OnDestroy {
     // Updates the cursor position
     return this.setCursor(node, 0);
   }
-
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
   public split(): EditableSelection {
     // Skips on invalid selection
@@ -450,7 +426,6 @@ export class EditableSelection implements OnDestroy {
     }
     return this;
   }
-
   /** 
    * Defragments the selections, so, minimizing the number of text nodes comprised in it
    * by joining siblings sharing the same attributes.
@@ -467,12 +442,10 @@ export class EditableSelection implements OnDestroy {
     // Returns the selection supporting chaining
     return this;
   }
-
   /** Returns the current selection alignement (corresponding to the start node container's) */
   public get align(): wmAlignType {
     return this.valid ? this.start.align : 'left';
   }
-
   /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
     // Skips on invalid selection
@@ -480,12 +453,10 @@ export class EditableSelection implements OnDestroy {
     // Applies the alignement on the containers within the selection
     this.store().containers( container => container.align = align ).mark();
   }
-
   /** Returns the current selection level (corresponding to the start node container's) */
   public get level(): number { 
     return this.valid ? this.start.level : 0;
   }
-
   /** Applies a new level to the selection */
   public set level(level: number) {
     // Skips on invalid selection
@@ -493,12 +464,10 @@ export class EditableSelection implements OnDestroy {
     // Applies the level on the containers within the selection
     this.store().containers( container => container.level = level ).mark();
   }
-
   /** Returns the style of the selection always corresponding to the style of the start node */
   public get style(): wmTextStyle[] {
     return this.valid ? this.start.style : [];
   }
-
   /** Applies the given style to the selection */
   public set style(style: wmTextStyle[]) {
     // Skips on invalid selection
@@ -514,12 +483,10 @@ export class EditableSelection implements OnDestroy {
     // Defragments the text nodes when done
     this.defrag();
   }
-
   /** Resets the selection style removing all formatting */
   public clear(): EditableSelection {
     return this.style = [], this;
   }
-
   /** 
    * Applies (or removes) a given style set to the selection.
    * @param style style array to be applied.
@@ -542,7 +509,6 @@ export class EditableSelection implements OnDestroy {
     // Defragments the text nodes when done
     return this.defrag();
   }
-
   /** Toggles a single format style on/off */
   public toggleFormat(style: wmTextStyle): EditableSelection {
     const remove = this.style.some( s => s === style );
@@ -565,7 +531,7 @@ export class EditableSelection implements OnDestroy {
     if(this.multi) {
       let node = this.next(this.start, true);
       while(!!node && node.compare(this.end) <= 0) {
-        this.start.join(node as EditableText);
+        this.start.join(node);
         if(node === this.end) { break; }
         node = this.next(this.start, true);
       }
@@ -669,7 +635,7 @@ export class EditableSelection implements OnDestroy {
       case 'item': case 'cell':
       return this.contained && this.start.container.type === type;
       // Block types
-      case 'blockquote': case 'bulleted': case 'numbered': case 'row': case 'table':
+      case 'blockquote': case 'bulleted': case 'numbered': case 'row': case 'table': case 'image':
       // Climbs up to the specified ancestor
       const block = this.start.climb(type);
       // Returns false when not there
@@ -696,13 +662,13 @@ export class EditableSelection implements OnDestroy {
     // Skips any further process on whole selection
     if(this.whole) { return fragment; }
     // Gets the starting text node
-    const start = fragment.firstDescendant() as EditableText;
+    const start = fragment.firstDescendant();
     // Trims the text according to the selection offsets
     if(this.single) { start.cut(this.startOfs, this.endOfs); }
     // In case of multiple node selection
     else {
       // Trims both ends separately
-      const end = fragment.lastDescendant() as EditableText;
+      const end = fragment.lastDescendant();
       start.cut(this.startOfs);
       end.cut(0, this.endOfs);
     }
@@ -728,10 +694,10 @@ export class EditableSelection implements OnDestroy {
         .insertNext(fragment)
         .unwrap();
       // Merges the new content first node with start
-      const first = fragment.firstDescendant() as EditableText;
+      const first = fragment.firstDescendant();
       this.start.merge(first);
       // Merges the new content last node with end 
-      const last = fragment.lastDescendant() as EditableText;
+      const last = fragment.lastDescendant();
       last.merge(this.end);
       // Collapses the selection in a cursor at the end edge
       this.collapse(true);

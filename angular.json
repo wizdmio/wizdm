@@ -26,7 +26,7 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "apps/wizdm/src/styles",
-                "apps/wizdm/src/app/elements",
+                "libs/elements/src/styles",
                 "libs/markdown/src/styles"
               ]
             },
@@ -227,6 +227,62 @@
             "tsConfig": [
               "libs/markdown/tsconfig.lib.json",
               "libs/markdown/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "wizdm-elements": {
+      "root": "libs/wizdm/elements",
+      "sourceRoot": "libs/wizdm/elements/src",
+      "projectType": "library",
+      "prefix": "wizdm",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/wizdm/elements/src/test.ts",
+            "tsConfig": "libs/wizdm/elements/tsconfig.spec.json",
+            "karmaConfig": "libs/wizdm/elements/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/wizdm/elements/tsconfig.lib.json",
+              "libs/wizdm/elements/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "elements": {
+      "root": "libs/elements",
+      "sourceRoot": "libs/elements/src",
+      "projectType": "library",
+      "prefix": "wizdm",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/elements/src/test.ts",
+            "tsConfig": "libs/elements/tsconfig.spec.json",
+            "karmaConfig": "libs/elements/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/elements/tsconfig.lib.json",
+              "libs/elements/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

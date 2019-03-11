@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
-  MatButtonToggleModule,
   MatIconModule,
   MatMenuModule,
   MatBadgeModule,
@@ -26,13 +25,24 @@ import {
   MatDatepickerModule,
   DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
 } from '@angular/material';
-
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
-
-//--------
+// Wizdm elements (wizdm material extension)
+import { 
+  //TogglerModule,
+  IconModule, 
+  //FlipModule,
+  AvatarModule,
+  //InkbarModule,
+  //RouterInkbarModule
+  DisclaimerModule,
+  PopupModule,
+  FileOpenModule,
+  ColorsModule,
+  ColorPickerModule,
+  LikesModule
+} from '@wizdm/elements';
 import { MarkdownModule } from '@wizdm/markdown';
 //--------
-import { ElementsModule } from '../elements/elements.module';
 import { DocumentModule } from '../document/editable-document.module';
 //--------
 import { HandlerComponent } from './handler/handler.component';
@@ -62,7 +72,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ReactiveFormsModule,
     FlexLayoutModule,
     MatButtonModule,
-    //MatButtonToggleModule,
     MatIconModule,
     MatMenuModule,
     MatBadgeModule,
@@ -77,10 +86,16 @@ import { NotFoundComponent } from './not-found/not-found.component';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatToolbarModule,
-    //MatTooltipModule,
     MatDatepickerModule,
     MarkdownModule,
-    ElementsModule,
+    IconModule, 
+    AvatarModule,
+    DisclaimerModule,
+    PopupModule,
+    FileOpenModule,
+    ColorsModule,
+    ColorPickerModule,
+    LikesModule,
     DocumentModule
   ],
 

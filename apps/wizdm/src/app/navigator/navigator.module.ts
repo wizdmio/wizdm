@@ -5,26 +5,31 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatButtonModule,
-  //MatButtonToggleModule,
   MatIconModule,
   MatMenuModule,
-  //MatBadgeModule,
   MatFormFieldModule,
   MatInputModule,
-  //MatStepperModule,
-  //MatExpansionModule,
   MatListModule,
-  //MatCheckboxModule,
-  //MatProgressBarModule,
-  //MatProgressSpinnerModule,
   MatDialogModule,
   MatToolbarModule,
-  MatSelectModule,
-  //MatDividerModule,
-  //MatTooltipModule,
+  MatSelectModule
 } from '@angular/material';
+// Wizdm elements (wizdm material extension)
+import { 
+  TogglerModule,
+  IconModule, 
+  FlipModule,
+  AvatarModule,
+  InkbarModule,
+  RouterInkbarModule,
+  DisclaimerModule
+  //PopupModule,
+  //FileOpenModule,
+  //ColorsModule,
+  //ColorPickerModule,
+  //LikesModule
+} from '@wizdm/elements';
 //-------
-import { ElementsModule } from '../elements/elements.module';
 import { NavComponent } from './navigator.component';
 import { LogoComponent } from './logo/logo.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -49,7 +54,13 @@ import { ConsentComponent } from './consent/consent.component';
     MatDialogModule,
     MatToolbarModule,
     MatSelectModule,
-    ElementsModule
+    TogglerModule,
+    IconModule, 
+    FlipModule,
+    AvatarModule,
+    InkbarModule,
+    RouterInkbarModule,
+    DisclaimerModule
   ],
   declarations: [
     NavComponent,

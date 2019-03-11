@@ -4,8 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
 import { LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
+import { PopupService } from '@wizdm/elements';
 import { CanPageDeactivate, ToolbarService, ContentResolver } from '../../navigator';
-import { PopupService } from '../../elements';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 
 import * as moment from 'moment';

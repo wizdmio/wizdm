@@ -4,9 +4,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmUser } from '@wizdm/connect';
+import { PopupService } from '@wizdm/elements';
 import { ProjectService, wmApplication, wmProject } from '../../core';
 import { CanPageDeactivate, ToolbarService, ActionEnabler } from '../../navigator';
-import { PopupService } from '../../elements';
 import { TermsPrivacyComponent } from '../terms-privacy/terms-privacy.component';
 import { $animations } from './apply.animations';
 

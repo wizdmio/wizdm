@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
+import { PopupService } from '@wizdm/elements';
 import { ProjectService, Project, wmProject } from '../../core';
 import { ToolbarService, ActionEnabler } from '../../navigator';
 import { wmDocument } from '../../document/model';
-import { PopupService } from '../../elements';
 import { Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil, debounceTime, map } from 'rxjs/operators';
 import { $animations } from './editor.animations';
