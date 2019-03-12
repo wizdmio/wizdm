@@ -13,6 +13,7 @@
   * Adding a general `enableAction()` function to search for the action code and enable/disable the corresponding action
 * ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
+* Consider refactoring the content resolver so to dynamically load the content for each page on demand supporting lazy loading too 
 
 ## Pages
 * Turn every page into a module to be eventually lazely loaded
