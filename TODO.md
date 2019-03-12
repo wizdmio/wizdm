@@ -14,6 +14,9 @@
 * ~~Collects navigator's guards, resolver and directives under navigator/utils folder~~
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
 
+## Pages
+* Turn every page into a module to be eventually lazely loaded
+
 ## Elements
 * Consider to apply `encapsulation: ViewEncapsulation.None` to all elements while the global styling will be managed by specific classes
 * Move all the relevant material style tweaks from app/_theme.scss to _elements.scss 
