@@ -152,11 +152,25 @@ export class ContentManager {
     }
     
     // Gets the config via http and saves it in this.config
-    return this.http
-               .get<ContentConfig>(this.path + 'init.json')
-               .pipe(tap( cfg => { 
-                  this.config = cfg;
-              }));          
+    return this.http.get<ContentConfig>(this.path + 'init.json')
+      .pipe(tap( cfg => this.config = cfg ));          
+  }
+
+  private merge(localModule: any, defaultModule?: any): any {
+    // Skips recurring when no default module is available
+    if(!!defaultModule) {
+      // Loops on the keys of the default object
+      Object.keys(defaultModule).forEach( key => {
+        // Add the property when undefined
+        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
+        // Recurs down the inner objects when needed
+        else if(typeof localModule[key] === 'object') {
+          localModule[key] = this.merge(localModule[key], defaultModule[key]);
+        }
+      });
+    }
+    // Returns the merged object
+    return localModule;
   }
 
   private loadModule(moduleName: string): Observable<any> {
@@ -168,42 +182,31 @@ export class ContentManager {
     // Starts by loading the default language module
     return this.http.get<Object>(this.defaultPath + moduleFile).pipe( 
       switchMap( defaultData => {
-
         // Stops if the requested language corresponds to the default one
         if( this.language == this.defaultLanguage ){
           return of(defaultData);
         }
-
         // Loads the requested language otherwise
         return this.http.get<Object>(this.languagePath + moduleFile).pipe(
-          
           // Reverts to the default language in case of errors (basically it pass an empty object 
           // since default content will be merged in the next map() )
-          catchError(error => of({})),
-
-          // Merges the requested language data with the default one to make sure
-          // covering for missing translations
-          map( requestedData => {
-            const merged = { ...defaultData, ...requestedData };
-            return merged;
-          })
+          catchError( () => of({}) ),
+          // Merges the requested language data with the default one to make sure covering missing translations
+          map( requestedData => this.merge(requestedData, defaultData) )
         );
       }),
-      
-      map(data => { 
-        return { name: moduleName, data }; 
-      })
+      // Maps the loaded content into a name/data pair for further use
+      map(data => { return { name: moduleName, data }; })
     );
   }
 
   // Load the modules of the specified language
   private loadModules(modules: string[]): Observable<any> { 
-
     // Uses forkJoin to load the modules in parallel
     return forkJoin<any>(
 
       modules.map( module => this.loadModule(module) ) 
-      
+
     // Zips the array of resulting emissions into a single object of objects
     ).pipe( zip( objs => {
 
@@ -219,10 +222,8 @@ export class ContentManager {
 
   // Loads the requested language
   public use(lang: string, modules: string[] = null): Observable<any> {
-
     // Notifies the loading process starting up to all the listener
     this.events.emit({reason: "loading", data: null});
-
     // Initialize the translation by loading the config than load all modules
     // and merge them into the parent stream (this is also known as flatMap)
     return this.init().pipe( 
@@ -234,7 +235,6 @@ export class ContentManager {
           console.log('Requested language [' + lang + '] was already loaded, skipping...');
           return of<any>(this.data);
         }
-
         // Check if requested language is supported or revert to the default
         if(!this.isLanguageSupported(lang)) {
 
@@ -245,7 +245,6 @@ export class ContentManager {
         }
         // Sets the selected current language
         this.lang = lang;
-
         // Loads the requested modules or all the available ones if not specified
         return this.loadModules(modules || Object.keys(config.modules));
       }), 

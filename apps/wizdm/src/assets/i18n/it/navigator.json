@@ -1,31 +1,33 @@
 {
-    "logo": "WIZDM",
     "title": "Wizdm - Sviluppo compassionevole",
     "description": "La communità degli sviluppatori illuminati",
 
-    "menu": {
+    "toolbar": {
         "public": [
-            { "label": "Come funziona", "link": "home" },
-            { "label": "Manifesto", "link": "about" },
-            { "label": "Entra/Registrati", "link": "login" },
-            { "label": "Inizio", "link": "projects"} 
+            { "label": "Esplora" },
+            { "label": "Manifesto" }
         ],
         "private": [
-            { "label": "Principale", "link": "home" },
-            { "label": "Progetti", "link": "projects" },
-            { "label": "A proposito di noi", "link": "about" }
+            { "label": "Esplora" },
+            { "label": "Messaggi" },
+            { "label": "Applica" }
+        ]
+    },
+
+    "menu": {
+        "public": [
+            { "label": "Come funziona" },
+            { "label": "Esplora" },
+            { "label": "Entra/Registrati" }
+        ],
+        "private": [
+            { "label": "Principale" },
+            { "label": "Messaggi" }
         ]
     },
 
     "footer": {
         "terms": "Termini e Privacy",
-        "language": "Lingua",
-        "items": [
-            { "icon": "fa:fa-envelope", "link": "mailto:me@wizdm.io" },
-            { "icon": "fab:fa-twitter", "link": "http://twitter.com" },
-            { "icon": "fab:fa-facebook", "link": "http://facebook.com" },
-            { "icon": "fab:fa-slack", "link": "https://slack.com" },
-            { "icon": "fab:fa-github", "link": "https://github.com" }
-        ]
+        "language": "Lingua"
     }
 }

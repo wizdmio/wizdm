@@ -88,8 +88,8 @@ $wm-theme: extend-material-theme($wm-theme,
     slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
 
     // Adds extra application specific foreground extension
-    contrast:          white,
-    editor:            rgba(white, 0.8),
+    //contrast:          white,
+    //editor:            rgba(white, 0.8),
   
     // Adds Elements/Markdown specific foreground extensions
     toggler:           rgba(mat-color($wm-primary, 900), 0.87),
@@ -104,7 +104,8 @@ $wm-theme: extend-material-theme($wm-theme,
     background:       white,
 
     // Appends extra application specific background extensions
-    editor:           rgba(mat-color($mat-blue, 900), 0.8)
+    //editor:           rgba(mat-color($mat-blue, 900), 0.8)
+    //selection:          rgba(mat-color($mat-blue, 900), 0.5)
   )
 );
 

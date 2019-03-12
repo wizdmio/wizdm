@@ -30,11 +30,7 @@ $wm-elements-default: (
 
   wm-avatar {
 
-    svg, img { 
-
-      border: 2px solid mat-get($background, background) !important; 
-    }
-
+    svg, img { border: 2px solid mat-get($background, background) !important; }
     svg {
 
       fill: mat-color($primary) !important;
