@@ -33,10 +33,14 @@
 * Implements link url editing, insert table and insert picture functionalities
 * Implements a press-and-hold tool for extended akphabet support. See [press and hold](https://github.com/kasperpeulen/PressAndHold) and [long press](https://github.com/quentint/long-press)
 
+## libs/content
+* Refactors the `use()` function to support incremental module loading
+* Implement recursive content copy function to better merge loaded content with the default one
+
 ## libs/various
 * ~~Move out elements creating libs/elements (@wizdm/elements)~~
 * Move out document creating libs/document (@wizdm/document)
 * ~~Consider to remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule~~
 
-# libs/connect
+## libs/connect
 * Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
