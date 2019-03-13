@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MatIconRegistry } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { Subscription } from 'rxjs';
-import * as moment from 'moment';
 
 @Component({
   selector: 'body',
@@ -41,16 +40,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
       // Shows the loader on status 'loading' (hides on 'error' or 'complete') 
       this.loading = e.reason === 'loading';
-
-      // Applies any global level language-related logic when done
-      if(e.reason === 'complete') {
-        const lang = e.data;
-
-        console.log('Application language: ', lang);
-
-        // Sets the moment locale globally
-        moment.locale(lang);
-      }
 
       // Jumps to the global 'not-found' page in case of loading errors or missing files 
       if(e.reason === 'error') {

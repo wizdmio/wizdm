@@ -78,11 +78,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   // Updates the last saved application
   private saveApplication(value: any): Promise<void> {
+
+    const lastApplication = !!value ? {
+      ...this.application,
+      ...value
+    } : null;
     
-    return this.profile.update({ lastApplication: {
-        ...this.application,
-        ...value
-      }})
+    return this.profile.update({ lastApplication })
       // Enables/Disables the 'clear' action button accordingly
       .then(() => this.cleared$.enable( value != null ) )
       // Catches errors

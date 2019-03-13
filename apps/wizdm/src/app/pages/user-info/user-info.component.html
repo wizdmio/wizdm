@@ -38,17 +38,15 @@
       </div>      
     </div>
 
-    <!--mat-divider></mat-divider-->
-
     <!-- Options menu-->
     <mat-menu #options>
       <button mat-menu-item>
         <mat-icon>photo</mat-icon>
-        <span>Cover picture</span>
+        <span>{{ msgs?.menu?.cover }}</span>
       </button>
       <button mat-menu-item [matMenuTriggerFor]="picker.menu">
         <mat-icon>brush</mat-icon>
-        <span>Theme color</span>
+        <span>{{ msgs?.menu?.color }}</span>
       </button>
     </mat-menu>
 
@@ -57,41 +55,3 @@
 
  </mat-dialog-content>
 </ng-template>
-
-<!--h2 mat-dialog-title>{{ msgs.title }}</h2>
-
-<mat-dialog-content *ngIf="user$ | async as user">
-
-  <section fxLayout="row" fxLayoutAlign="start center">
-
-    <wm-avatar [src]="user.img"></wm-avatar>
-
-    <div fxLayout="column" fxLayoutAlign="center start">
-      <strong>{{ user.name }}</strong>
-      <p>{{ user.motto }}</p>
-    </div>
-
-  </section>
-
-  <mat-divider></mat-divider>
-
-  <section fxLayout="column" fxLayoutAlign="start start">
-
-    <p>
-      <wm-icon [icon]="msgs.icons.email"></wm-icon>
-      <span>{{ user.email }}</span>
-    </p>
-
-    <p>
-      <wm-icon [icon]="msgs.icons.phone"></wm-icon>
-      <span>{{ user.phone }}</span>
-    </p>
-
-  </section>
-
-    
-</mat-dialog-content>
-
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close cdkFocusInitial>{{ msgs.close }}</button>
-</mat-dialog-actions-->

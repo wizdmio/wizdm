@@ -14,10 +14,8 @@ export class UserInfoDirective {
   // Shows the user info popup dialog on click
   @HostListener('click') onClick() {
 
-    if(this.info) {
+    if(!!this.info) {
       this.info.show();
     }
   }
-
-  constructor() { }
 }

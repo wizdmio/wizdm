@@ -10,7 +10,7 @@ import { wmProject } from '../../core';
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss']
 })
-export class UserInfoComponent implements OnInit {
+export class UserInfoComponent {
 
   @ViewChild('template') template: TemplateRef<UserInfoComponent>;
 
@@ -21,7 +21,7 @@ export class UserInfoComponent implements OnInit {
     //data: this
   };
 
-  public msgs;  
+  public msgs: any;  
 
   constructor(@Inject(COLOR_MAP) 
               private colorMap: wmColorMap, 
@@ -30,17 +30,14 @@ export class UserInfoComponent implements OnInit {
               private database: DatabaseService) {
 
     // Gets the localized content
-    this.msgs = this.content.select('profile.info');
+    this.msgs = this.content.select('info');
   }
 
   // Loads the user profile from the database
   private loadUser(userId: string): Promise<wmUser> {
     return userId ? this.database.document<wmUser>('/users',userId)
-      .get().toPromise()
-        : Promise.resolve(<wmUser>{});
+      .get().toPromise() : Promise.resolve(<wmUser>{});
   }
-
-  ngOnInit() {}
 
   public user: wmUser;
 

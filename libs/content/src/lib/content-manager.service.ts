@@ -145,15 +145,11 @@ export class ContentManager {
    * @see ContentConfig
   */
   private init(): Observable<ContentConfig> {
-
     // Short-circuit if already loaded
-    if(this.config) { // Emulates a successfull http loading
-      return of<ContentConfig>( this.config );
-    }
-    
-    // Gets the config via http and saves it in this.config
-    return this.http.get<ContentConfig>(this.path + 'init.json')
-      .pipe(tap( cfg => this.config = cfg ));          
+    return !!this.config ? of<ContentConfig>( this.config ) 
+      // Gets the config via http and saves it in this.config
+      : this.http.get<ContentConfig>(this.path + 'init.json')
+        .pipe(tap( cfg => this.config = cfg ));          
   }
 
   private merge(localModule: any, defaultModule?: any): any {
@@ -175,10 +171,15 @@ export class ContentManager {
 
   private loadModule(moduleName: string): Observable<any> {
 
-    let moduleFile = this.config.modules[moduleName];
+    if(!!this.data && !!this.data[moduleName]) {
+      console.log('Skipping reloading module: ', moduleName);
+      return of(this.data[moduleName]);
+    }
+
+    // Gets the module name
+    const moduleFile = this.config.modules[moduleName];
     
     console.log('Loading module: ', moduleFile);
-      
     // Starts by loading the default language module
     return this.http.get<Object>(this.defaultPath + moduleFile).pipe( 
       switchMap( defaultData => {
@@ -210,8 +211,6 @@ export class ContentManager {
     // Zips the array of resulting emissions into a single object of objects
     ).pipe( zip( objs => {
 
-      this.data = {};// Empties the database
-
       objs.forEach(module => { 
         this.data[module.name] = module.data;
       });
@@ -221,7 +220,7 @@ export class ContentManager {
   }
 
   // Loads the requested language
-  public use(lang: string, modules: string[] = null): Observable<any> {
+  public use(lang: string, modules?: string[]): Observable<any> {
     // Notifies the loading process starting up to all the listener
     this.events.emit({reason: "loading", data: null});
     // Initialize the translation by loading the config than load all modules
@@ -230,11 +229,6 @@ export class ContentManager {
         
       switchMap( config => {
 
-        if(this.lang === lang) {
-    
-          console.log('Requested language [' + lang + '] was already loaded, skipping...');
-          return of<any>(this.data);
-        }
         // Check if requested language is supported or revert to the default
         if(!this.isLanguageSupported(lang)) {
 
@@ -243,6 +237,14 @@ export class ContentManager {
           lang = this.defaultLanguage;
           console.log('Reverting to default:', lang);
         }
+
+        // Empties the database whenever the language changes
+        if(this.lang !== lang) { 
+          
+          this.data = {}; 
+          console.log('Switching to language ', lang);
+        }
+
         // Sets the selected current language
         this.lang = lang;
         // Loads the requested modules or all the available ones if not specified
@@ -257,25 +259,35 @@ export class ContentManager {
     ); 
   }
 
-  /** Selects the requested portion of content data from the database 
+  /** Resolve the requested content asyncrounously making sure to load the relevant module when needed
+   * @param select a string delimiter to select the requested portion of the content
+   * @param default (optional) an optional object to be returned in the eventuality the required content is not present
+   */
+  public resolve(select: string, defaults?: any): Observable<any> {
+    // Reverts to loadModule conditionally loading the content
+    return this.loadModule( select.split('.')[0] ).pipe(
+      map( () => this.select( select, defaults ) )
+    );
+  }
+
+  /** Selects statically the requested portion of content data from the database 
    * @param select a string delimiter to select the requested portion of the content
    * @param default (optional) an optional object to be returned in the eventuality the required content is not present
    * @example let content = this.contentService.select('navigator.toolbar');
   */
-  public select(select: string, defaults?: any): any {
+ public select(select: string, defaults?: any): any {
 
-    if(!this.data) {
+  if(!this.data) { return defaults; }
+    
+  return select.split(".").reduce( (value, token) => {
+
+    if(typeof value[token] === "undefined") { 
       return defaults;
     }
-      
-    return select.split(".").reduce( (value, token) => {
+        
+    return value[token];
+    
+  }, this.data);
+}
 
-      if(typeof value[token] === "undefined") { 
-        return defaults;
-      }
-          
-      return value[token];
-      
-    }, this.data);
-  }
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot, Router, NavigationEnd } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Router, NavigationEnd } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { Observable, of } from 'rxjs';
 import { switchMap, filter, first } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,20 +15,19 @@ export class ContentResolver implements Resolve<any> {
               readonly user    : UserProfile,
               private  router  : Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | any {
+  resolve(route: ActivatedRouteSnapshot): Observable<any> | any {
 
-    let lang = route.params['lang'];
-
+    // When lang params is specified we are loading the navigator or switching language. Defaulting to the current language if already loaded
+    let lang = route.params['lang'] || this.content.language;
     // Detects the browser language on request and re-route to it
     if(lang === 'auto') {
       
       lang = this.detectLanguage().split('-')[0];
       console.log('Using browser language: ' + lang);
-
+      // Switch to the detected language
       this.router.navigate([lang || 'en']);
       return null;
     }
-
     // Implements a basic language resolver returning the user preferred language
     // captured from the user profile stored in the database. Since this observable
     // pipes from the AuthService this resolver grants the page won't show up before
@@ -37,18 +37,19 @@ export class ContentResolver implements Resolve<any> {
       switchMap( profile => {
 
         const language = !!profile ? profile.lang : lang;
-
-          // Switch to a different language when requested
+          // Switch to the user profile language when needed
         if(language !== lang) {
           
-          console.log('Resolving to language: ', language);
+          console.log('Resolving to profile language: ', language);
 
           this.router.navigate([language]);
           return of(null);
         }
-
+        // Sets the moment locale globally
+        moment.locale(lang);
+        
         // Load the localized content in the requested language
-        return this.content.use(lang);
+        return this.content.use( lang, route.data.modules );
       }));
   }
 

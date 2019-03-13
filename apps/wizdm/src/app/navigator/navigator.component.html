@@ -12,7 +12,7 @@
       <nav fxLayout="row" fxLayoutAlign="start center">
 
         <!-- Wizdm logo routing to home -->
-        <wm-logo [caption]="nav.desktop ? msgs.logo : ''" routerLink="."></wm-logo>  
+        <wm-logo [caption]="nav.desktop ? msgs?.logo : ''" routerLink="."></wm-logo>  
     
         <!-- Desktop navigation links -->
         <wm-navbar [menuItems]="desktopMenu" *ngIf="nav.desktop"></wm-navbar>

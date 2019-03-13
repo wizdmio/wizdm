@@ -41,7 +41,7 @@ export class DatabaseDocument<T extends dbCommon> {
 
   private sanitize(data: T): any {
     
-    Object.keys(data).forEach( key => {
+    !!data && Object.keys(data).forEach( key => {
       // Analyzes the object data properties
       switch( typeof data[key] ) {
         // Recurses on objects

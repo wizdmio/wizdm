@@ -16,59 +16,59 @@
 
     <!-- NAME -->
     <mat-form-field appearance="legacy" *ngIf="form.contains('name')" @inflate>
-      <mat-label>{{ msgs.labels.fullname }}</mat-label>
+      <mat-label>{{ msgs?.labels.fullname }}</mat-label>
       <input matInput formControlName="name">
       <mat-error *ngIf="form.controls.name.errors?.required">
-        {{ msgs.errors.nameRequired }}
+        {{ msgs?.errors.nameRequired }}
       </mat-error>
     </mat-form-field>
 
     <!-- EMAIL -->
     <mat-form-field appearance="legacy" *ngIf="form.contains('email')" @inflate>
-      <mat-label>{{ msgs.labels.email }}</mat-label>
+      <mat-label>{{ msgs?.labels.email }}</mat-label>
       <input matInput formControlName="email">
       <mat-error *ngIf="form.controls.email.errors?.required">
-        {{ msgs.errors.emailRequired }}
+        {{ msgs?.errors.emailRequired }}
       </mat-error>
       <mat-error *ngIf="form.controls.email.errors?.email">
-        {{ msgs.errors.emailInvalid }}
+        {{ msgs?.errors.emailInvalid }}
       </mat-error>
     </mat-form-field>
 
     <!-- PASSWORD -->
     <mat-form-field appearance="legacy" *ngIf="form.contains('password')" @inflate>
-      <mat-label>{{ msgs.labels.password }}</mat-label>
+      <mat-label>{{ msgs?.labels.password }}</mat-label>
       <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
       <wm-icon matSuffix 
               [icon]="hide ? 'visibility_off' : 'visibility'" 
               (click)="hide = !hide">
       </wm-icon>
       <mat-error *ngIf="form.controls.password.errors?.required">
-        {{ msgs.errors.passwordRequired }}
+        {{ msgs?.errors.passwordRequired }}
       </mat-error>
       <mat-hint class="mat-link" align="end" 
               (click)="switchPage('forgotPassword')" *ngIf="page === 'signIn'" 
-              @inflate>{{ msgs.forgotPassword }}</mat-hint>
+              @inflate>{{ msgs?.forgotPassword }}</mat-hint>
     </mat-form-field>
 
     <!-- NEW EMAIL -->
     <mat-form-field appearance="legacy" *ngIf="form.contains('newEmail')" @inflate>
-      <mat-label>{{ msgs.labels.newEmail }}</mat-label>
+      <mat-label>{{ msgs?.labels.newEmail }}</mat-label>
       <input matInput formControlName="newEmail">
       <mat-error *ngIf="form.controls.newEmail.errors?.required">
-        {{ msgs.errors.emailRequired }}
+        {{ msgs?.errors.emailRequired }}
       </mat-error>
       <mat-error *ngIf="form.controls.newEmail.errors?.email">
-        {{ msgs.errors.emailInvalid }}
+        {{ msgs?.errors.emailInvalid }}
       </mat-error>
     </mat-form-field>
 
     <!-- NEW PASSWORD -->
     <mat-form-field appearance="legacy" *ngIf="form.contains('newPassword')" @inflate>
-      <mat-label>{{ msgs.labels.newPassword }}</mat-label>
+      <mat-label>{{ msgs?.labels.newPassword }}</mat-label>
       <input matInput formControlName="newPassword">
       <mat-error *ngIf="form.controls.newPassword.errors?.required">
-        {{ msgs.errors.passwordRequired }}
+        {{ msgs?.errors.passwordRequired }}
       </mat-error>
     </mat-form-field>
 
@@ -82,22 +82,22 @@
 
   <!-- REGISTER LINK -->
   <p class="mat-small bit-of-space" *ngIf="page === 'signIn'">
-    {{ msgs.newUser }}&nbsp;<span class="mat-link" (click)="switchPage('register')">{{ msgs.register }}</span>
+    {{ msgs?.newUser }}&nbsp;<span class="mat-link" (click)="switchPage('register')">{{ msgs?.register }}</span>
   </p>
 
   <!-- BACK TO SIGN-IN LINK -->
   <p class="mat-small bit-of-space" *ngIf="page === 'register' || page === 'forgotPassword'">
-    {{ msgs.registeredUser }}&nbsp;<span class="mat-link" (click)="switchPage('signIn')">{{ msgs.signIn }}</span>
+    {{ msgs?.registeredUser }}&nbsp;<span class="mat-link" (click)="switchPage('signIn')">{{ msgs?.signIn }}</span>
   </p>
 
   <!-- SIGN IN WITH OPTION LINKS -->
   <div fxLayout="column" fxLayoutAlign="center center" *ngIf="page === 'signIn'" @inflate>
 
-    <p class="mat-small">{{ msgs.signInWith }}</p>
+    <p class="mat-small">{{ msgs?.signInWith }}</p>
 
     <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
 
-      <button mat-icon-button *ngFor="let p of msgs.providers" (click)="signInWith(p.name)">
+      <button mat-icon-button *ngFor="let p of msgs?.providers" (click)="signInWith(p.name)">
         <wm-icon class="providers"
                 [icon]="p.icon"
                 [ngStyle]="{ color: p.color }">

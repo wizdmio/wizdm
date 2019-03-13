@@ -12,14 +12,5 @@
     "message": "WARNING, by proceeding you'll permanently delete the selected file(s).",
     "cancel": "Cancel",
     "ok": "Proceed"
-  },
-
-  "dialog": {
-    "title": "Choose an image",
-    "noFiles": "There's no files uploaded yet",
-    "none": "None",
-    "cancel": "Cancel",
-    "select": "Select",
-    "browse": "Browse..."
   }
 }

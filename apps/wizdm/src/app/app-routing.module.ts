@@ -22,11 +22,11 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 // Define navigation routes
 const routes: Routes = [
 
-  // Global NotFound page using default language content
-  { path: 'not-found', component: NotFoundComponent },
-
   // Redirection handler (for firebase password confirmation/reset and stuff)
   { path: 'handler', component: HandlerComponent },
+
+  // Global NotFound page using default language content
+  { path: 'not-found', component: NotFoundComponent },
 
   // Redirect to the language resolver asking for auto detection of the explore language
   { path: '', redirectTo: 'auto', pathMatch: 'full' },
@@ -34,18 +34,42 @@ const routes: Routes = [
   // Load the navigation with the selected language
   { path: ':lang', component: NavComponent,
     
-    // Install a resolver to pre-fetch language data according to the user preferences
-    resolve: { lang: ContentResolver },
-
+    // Install a resolver to pre-fetch localized data dynamically according to the user preferences
+    resolve: { content: ContentResolver },
+    // Uses static data to instructs the resolver about the modules to be loaded
+    data: { modules: ['navigator', 'errors'] },
     // Localized pages
     children: [
-
-      { path: '', component: HomeComponent },
-      { path: 'explore', component: ExploreComponent },
-      { path: 'about', component: AboutComponent },
-      { path: 'login', component: LoginComponent },
-      { path: 'terms', component: TermsPrivacyComponent },
-
+      { 
+        path: '', 
+        component: HomeComponent, 
+        resolve: { content: ContentResolver }, 
+        data: { modules: ['home'] }
+      },
+      { 
+        path: 'explore', 
+        component: ExploreComponent, 
+        resolve: { content: ContentResolver }, 
+        data: { modules: ['explore', 'info'] }
+      },
+      { 
+        path: 'about', 
+        component: AboutComponent, 
+        resolve: { content: ContentResolver }, 
+        data: { modules: ['about'] }
+      },
+      { 
+        path: 'login', 
+        component: LoginComponent, 
+        resolve: { content: ContentResolver }, 
+        data: { modules: ['login'] }
+      },
+      { 
+        path: 'terms', 
+        component: TermsPrivacyComponent, 
+        resolve: { content: ContentResolver }, 
+        data: { modules: ['terms'] }
+      },
       { path: 'home', redirectTo: '', pathMatch: 'full' },
       { path: 'projects', redirectTo: 'explore', pathMatch: 'full' },
 
@@ -55,25 +79,63 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         
         children: [
-          { path: 'profile', component: UserComponent, canDeactivate: [PageGuardService] },
-          { path: 'apply', component: ApplyComponent, canDeactivate: [PageGuardService] },
-          { path: 'dashboard', component: DashboardComponent, canDeactivate: [PageGuardService] },
-          { path: 'documents/:id', component: EditorComponent, canDeactivate: [PageGuardService] },
-          { path: 'upload', component: UploadComponent }, //, canDeactivate: [PageGuardService] },
-          { path: 'messages', component: MessagesComponent }, //, canDeactivate: [PageGuardService] },
-          //{ path: 'messages/:id', component: MessagesComponent }, //, canDeactivate: [PageGuardService] }
+          { 
+            path: 'profile', 
+            component: UserComponent,
+            canDeactivate: [ PageGuardService ],
+            resolve: { content: ContentResolver }, 
+            data: { modules: ['profile', 'uploads'] }
+          },
+          { 
+            path: 'upload', 
+            component: UploadComponent,
+            resolve: { content: ContentResolver }, 
+            data: { modules: ['upload'] }
+          },
+          { 
+            path: 'apply', 
+            component: ApplyComponent, 
+            canDeactivate: [ PageGuardService ],
+            resolve: { content: ContentResolver }, 
+            data: { modules: ['apply', 'terms', 'template'] }
+          },
+          { 
+            path: 'documents/:id', 
+            component: EditorComponent, 
+            canDeactivate: [ PageGuardService ],
+            resolve: { content: ContentResolver }, 
+            data: { modules: ['editor', 'info'] }
+          },
+          { 
+            path: 'dashboard', 
+            component: DashboardComponent, 
+            canDeactivate: [ PageGuardService ],
+            resolve: { content: ContentResolver }, 
+            data: { modules: ['dashboard'] }
+          },
+          { 
+            path: 'messages', 
+            component: MessagesComponent,
+            resolve: { content: ContentResolver }, 
+            data: { modules: ['messages', 'info'] }
+          },
+          //{ path: 'messages/:id', component: MessagesComponent }
         ]
       },
-    
       // NotFound page with localized translation loaded
-      { path: 'not-found', component: NotFoundComponent },
-      
+      { 
+        path: 'not-found', 
+        component: NotFoundComponent,
+        resolve: { content: ContentResolver },
+        data: { modules: ['notFound'] },
+    
+      },
       // Localized redirector to missing pages
       { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
     ]
   },
 
-  // Global redirector to missing pages unlocalized
+  // Global redirector to missing pages
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
 ];
 

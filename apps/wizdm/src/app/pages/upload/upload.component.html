@@ -1,6 +1,6 @@
 <header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
 </header>
 
 <mat-divider></mat-divider>
@@ -12,7 +12,7 @@
 <mat-selection-list *ngIf="uploads$ | async as files" (selectionChange)="selectionChange($event)">
 
   <!-- No files message -->
-  <p *ngIf="!files.length && !tasks.length">{{ msgs.description }}</p>
+  <p *ngIf="!files.length && !tasks.length">{{ msgs?.description }}</p>
 
   <!-- Uploaded file items -->
   <mat-list-option *ngFor="let file of files" [value]="file" [disabled]="isFileDeleting(file)">

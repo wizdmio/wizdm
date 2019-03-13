@@ -21,7 +21,7 @@ export class UploadsComponent implements OnInit {
               private dialog  : MatDialog) {
 
     // Gets the localized content
-    this.msgs = this.content.select('upload.dialog');
+    this.msgs = this.content.select('uploads');
   }
 
   // Displays the selection 'none' option
