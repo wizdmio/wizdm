@@ -16,11 +16,11 @@ export class HandlerComponent implements OnInit {
     // Intercept the firebase handler parameters
     this.route.queryParamMap.subscribe( (params: ParamMap ) => {
 
-      let mode = params.get('mode');
-      let code = params.get('oobCode');
-      let api  = params.get('apiKey');
-      let lang = params.get('lang') || 'en';
-      let url  = params.get('continueUrl');
+      const mode = params.get('mode');
+      const code = params.get('oobCode');
+      const api  = params.get('apiKey');
+      const lang = params.get('lang') || 'en';
+      const url  = params.get('continueUrl');
 
         //...and navigate to the login page with the requested language
         this.router.navigate([lang,'login'], { 

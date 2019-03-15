@@ -146,7 +146,7 @@ export class EditableText extends EditableContent<wmText> {
     // Skips the operation when not possible
     if(!this.parent) { return null; }
     // Creates a new node as this container next sibling
-    const editable = this.parent.insertNext( this.create.node(this.parent.type as any) );
+    const editable = this.parent.insertNext( this.parent.clone(false) );
     // Relocates the content from this node foreward to the new container 
     editable.splice(0, 0, ...this.parent.splice(this.index, -1));
     // Returns the new editable first child

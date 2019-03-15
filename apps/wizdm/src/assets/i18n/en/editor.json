@@ -4,10 +4,12 @@
   "footnotes": "Footnotes",
 
   "guestActions": [
+    { "caption": "Back", "icon": "arrow_back", "link": "./explore" },
     { "caption": "Contact the owner", "icon": "envelope", "code": "contact"}
   ],
 
   "authorActions": [
+    { "caption": "Back", "icon": "arrow_back", "link": "./explore" },
     { "caption": "Edit", "icon": "edit", "code": "edit" },
     { "menu": [
         { "caption": "Change cover", "icon": "insert_photo", "code": "cover" },

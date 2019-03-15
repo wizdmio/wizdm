@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { ViewportService } from '../../navigator';
 import { Observable } from 'rxjs';
@@ -21,7 +20,6 @@ export class TermsPrivacyComponent implements OnInit {
   
   constructor(private content : ContentManager,
               private http    : HttpClient,
-              private dialog  : MatDialog,
               private scroll  : ViewportService) {
 
     // Gets the localized content
@@ -51,38 +49,4 @@ export class TermsPrivacyComponent implements OnInit {
     // Scroll the main view at the anchor position
     this.scroll.scrollToElement(anchor);
   }
-
-  //-- Popup dialog helpers --------
-
-  @ViewChild('popupTemplate') popupTemplate: TemplateRef<TermsPrivacyComponent>;
-
-  private popupConfig: MatDialogConfig = { 
-    //panelClass:  'mat-dialog-reset',
-    autoFocus: false
-    //disableClose: true,
-    //data: this
-  };
-
-  // Shows the popupTemplate as a popupDialog
-  public popup(): Promise<void> {
-    return this.dialog.open(this.popupTemplate, this.popupConfig)
-      .afterClosed()
-      .toPromise();
-  }
-
-  @ViewChild('popupContent', { read: ElementRef }) popupContent: ElementRef;
-
-  // Implements a simple "scroll to anchor" for the popup version
-  public navigatePopup(url: string) {
-
-    try {
-      const el: Element = this.popupContent.nativeElement;
-      const elSelectedById = el.querySelector(url);
-
-      if(elSelectedById) {
-        elSelectedById.scrollIntoView();
-      }
-    }
-    catch(e) {}
-  } 
 }

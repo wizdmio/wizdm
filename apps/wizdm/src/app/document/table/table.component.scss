@@ -1,16 +1,44 @@
 
-// Table style and alignement
 :host {
+  position: relative;
   border-spacing: 0;
   border-collapse: collapse;
   margin-bottom: 16px;
 
-  th, td {
+  tr:nth-child(2n) {
+    background-color: rgba(0,0,0,0.03); 
+  }
+  td {
+    position: relative;
     padding: 6px 13px;
     border: 1px solid #ddd;
   }
   
-  tr:nth-child(2n) {
-    background-color: rgba(0,0,0,0.03);
+  div { 
+    position: absolute;
+    cursor: pointer;
+
+    &[column] { 
+      top: -3px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+
+    &[row] { 
+      top: 0;
+      left: -3px;
+      width: 3px;
+      height: 100%;
+    }
+
+    &[table] { 
+      top: -11px;
+      left: -11px;
+      width: 10px;
+      height: 10px;
+    }
   }
+  // Displays the table selection handler on hover 
+  &:hover { div[table] { border: solid 1px #ddd;} }
 }

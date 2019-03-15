@@ -22,10 +22,8 @@ import {
   MatSelectModule,
   //MatDividerModule,
   //MatTooltipModule,
-  MatDatepickerModule,
-  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE
+  MatDatepickerModule
 } from '@angular/material';
-import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 // Wizdm elements (wizdm material extension)
 import { 
   //TogglerModule,
@@ -46,24 +44,27 @@ import { MarkdownModule } from '@wizdm/markdown';
 import { DocumentModule } from '../document/editable-document.module';
 //--------
 import { HandlerComponent } from './handler/handler.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user/user.component';
-import { UserItemComponent } from './user/user-item/user-item.component';
-import { UserInfoComponent } from './user-info/user-info.component';
-import { UserInfoDirective } from './user-info/user-info.directive';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ExploreComponent } from './explore/explore.component';
-import { ExploreItemComponent } from './explore/item/item.component';
-import { ApplyComponent } from './apply/apply.component';
-import { EditorComponent } from './editor/editor.component';
-import { UploadComponent } from './upload/upload.component';
-import { UploadsComponent } from './uploads/uploads.component';
-import { MessagesComponent } from './messages/messages.component';
-import { MessageComponent } from './messages/message/message.component';
-import { TermsPrivacyComponent } from './terms-privacy/terms-privacy.component';
-import { NotFoundComponent } from './not-found/not-found.component';
+//import { HomeComponent } from './home/home.component';
+//import { AboutComponent } from './about/about.component';
+//import { LoginComponent } from './login/login.component';
+//import { UserComponent } from './user/user.component';
+//import { UserItemComponent } from './user/user-item/user-item.component';
+//import { UserInfoComponent } from './user-info/user-info.component';
+//import { UserInfoDirective } from './user-info/user-info.directive';
+//import { DashboardComponent } from './dashboard/dashboard.component';
+//import { ExploreComponent } from './explore/explore.component';
+//import { ExploreItemComponent } from './explore/item/item.component';
+//import { ApplyComponent } from './apply/apply.component';
+//import { EditorComponent } from './editor/editor.component';
+//import { UploadComponent } from './upload/upload.component';
+//import { UploadsComponent } from './uploads/uploads.component';
+//import { MessagesComponent } from './messages/messages.component';
+//import { MessageComponent } from './messages/message/message.component';
+//import { TermsPrivacyComponent } from './terms-privacy/terms-privacy.component';
+//import { NotFoundComponent } from './not-found/not-found.component';
+
+//import { UploadsModule } from './uploads/uploads.module';
+//import { UserModule } from './user/user.module';
 
 @NgModule({
   imports: [
@@ -96,35 +97,34 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ColorsModule,
     ColorPickerModule,
     LikesModule,
-    DocumentModule
+    DocumentModule,
+    //UploadsModule,
+    //UserModule
   ],
 
   declarations: [
     HandlerComponent,
-    HomeComponent,
-    AboutComponent,
-    LoginComponent,
-    UserComponent,
-    UserItemComponent,
-    UserInfoComponent,
-    UserInfoDirective,
-    DashboardComponent,
-    ExploreComponent,
-    ExploreItemComponent,
-    ApplyComponent,
-    EditorComponent,
-    UploadComponent,
-    UploadsComponent,
-    MessagesComponent,
-    MessageComponent,
-    TermsPrivacyComponent,
-    NotFoundComponent
+    //HomeComponent,
+    //AboutComponent,
+    //LoginComponent,
+    //UserComponent,
+    //UserItemComponent,
+    //UserInfoComponent,
+    //UserInfoDirective,
+    //DashboardComponent,
+    //ExploreComponent,
+    //ExploreItemComponent,
+    //ApplyComponent,
+    //EditorComponent,
+    //UploadComponent,
+    //UploadsComponent,
+    //MessagesComponent,
+    //MessageComponent,
+    //TermsPrivacyComponent,
+    //NotFoundComponent
   ],
 
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
-  ],
+  providers: [],
 
   entryComponents: []
 

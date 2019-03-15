@@ -17,7 +17,9 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   }
 
   constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection, factory: EditableFactory) { 
-    super(factory, null); sel.attach(this);
+    super(factory, null); 
+    // Makes sure a minimal document exists prior to attach the selection
+    this.new().sel.attach(this);
   }
 
   /** Document source */

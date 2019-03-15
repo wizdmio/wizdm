@@ -2,8 +2,8 @@
   <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
   <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
   <div fxHide.lt-sm>
-    <p *ngIf="welcomeBack" @fadeIn>{{msgs?.welcomeBack}}</p>
-    <p *ngIf="!welcomeBack" @fadeIn>{{msgs?.description}}</p>
+    <p *ngIf="welcomeBack" @fadeIn>{{ msgs?.welcomeBack }}</p>
+    <p *ngIf="!welcomeBack" @fadeIn>{{ msgs?.description }}</p>
     <p *ngIf="application" @fadeIn>
       <wm-disclaimer [source]="msgs?.clearForm" 
                      (action)="disclaimerAction($event)"
@@ -135,9 +135,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Popup dialog version of the Terms and Privacy page -->
-    <wm-terms-privacy display="popup"></wm-terms-privacy>
 
     <!-- Progress bar -->
     <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>

@@ -230,6 +230,10 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public childOfMine(node: EditableContent): boolean {
     return !!node && node.index < this.count && this.content[node.index] === node;
   }
+  /** Checks if the requested node is among this descendants */
+  public descendantOfMine(node: EditableContent): boolean {
+    return !!node && (this.childOfMine(node) || this.content.some( child => child.descendantOfMine(node) ));
+  }
 
   public findIndex(child: EditableContent): number {
     return this.childOfMine(child) ? child.index : -1;

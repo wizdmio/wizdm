@@ -1,11 +1,23 @@
 
-<tr *ngFor="let row of table?.content" [id]="row.id">
+<!-- Loops on rows -->
+<tr *ngFor="let row of table?.content; index as r; first as top" [id]="row.id">
 
-  <td *ngFor="let cell of row.content" 
+  <!-- Cell content -->
+  <td *ngFor="let cell of row.content; index as c"
       [style.vertical-align]="cell.data.valign"
       [attr.rowspan]="cell.data.rowspan"
       [attr.colspan]="cell.data.colspan" 
       [wm-editable]="cell">
+
+    <!-- Column selection handler -->
+    <div column *ngIf="top" (click)="selectColumn(c)"></div>
+
   </td>
 
+  <!-- Row selection handler -->
+  <!--div row (click)="selectRow(r)"></div-->
+  
 </tr>
+
+<!-- Table selection handler -->
+<div table (click)="selectTable()"></div> 

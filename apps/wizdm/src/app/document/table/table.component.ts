@@ -1,5 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { EditableTable } from '../model';
+import { EditableSelection } from '../selection/editable-selection.service';
 
 @Component({
   selector: 'table[wm-table]',
@@ -8,40 +9,30 @@ import { EditableTable } from '../model';
 })
 export class TableComponent {
 
-  constructor() { }
+  constructor(private sel: EditableSelection) {}
 
   @Input('wm-table') table: EditableTable;
-
-  @HostBinding('id') get id() {
-    return !!this.table && this.table.id;
+  // Applies the node id to the element
+  @HostBinding('id') get id() { return !!this.table && this.table.id;}
+  // Applies table margins according to node alignement
+  @HostBinding('style.margin-left') get mleft() { 
+    return !!this.table && !!this.table.align && this.table.align !== 'left' ? 'auto' : null; 
   }
-/*
-  public table: EditableContent<wmTable>;
-  public head: EditableContent<wmRow>[];
-  public foot: EditableContent<wmRow>[];
-  public body: EditableContent<wmRow>[];
+  @HostBinding('style.margin-right') get mright() { 
+    return !!this.table && !!this.table.align && this.table.align !== 'right' ? 'auto' : null; 
+  }
+  // Applies the 'selected' attribute for selection styling
+  @HostBinding('attr.selected') get selected() { return this.sel.selected(this.table) ? '' : undefined; }
 
-  @Input('wm-table') set source(table: EditableContent<wmTable>) {
-    // Split the table rows
-    this.table = this.splitRows(table);
+  public selectColumn(col: number) {
+    debugger;
   }
 
-  private splitRows(table: EditableContent<wmTable>) {
+  public selectRow(row: number) {
+    debugger;
+  }
 
-    this.head = [];
-    this.foot = [];
-    this.body = [];
-
-    // Splits the table rows
-    const rows = table.content as EditableContent<wmRow>[]
-    rows.forEach( row => {
-      if(!!row.data.head) { this.head.push( row ); } 
-      else if(!!row.data.foot) { this.foot.push( row ); } 
-      else { this.body.push( row ); }
-    });
-    //this.head = rows.filter( row => this.updateRow(row, !!row.data.head) );
-    //this.foot = rows.filter( row => this.updateRow(row, !!row.data.foot) );
-    //this.body = rows.filter( row => this.updateRow(row, !row.data.head && !row.data.foot) );
-    return table;
-  }*/
+  public selectTable() {
+    this.sel.setCursor(this.table, 0);
+  }
 }

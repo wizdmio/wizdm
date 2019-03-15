@@ -123,8 +123,8 @@
   "appSubmit": {
     "title": "Ready to apply",
     "description": "You are all set!",
-    "disclaimer": "By subitting this new application I accept the <terms and privacy:[terms]> conditions under which my application will be evaluated to become one of the active project within the wizdm.io community.",
-    "agree": "I do agree on the <terms:[terms]>"
+    "disclaimer": "By subitting this new application I accept the <terms and privacy:[@../../terms]> conditions under which my application will be evaluated to become one of the active project within the wizdm.io community.",
+    "agree": "I do agree on the <terms:[@../../terms]>"
   },
 
   "canClear": {

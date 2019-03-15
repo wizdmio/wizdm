@@ -4,7 +4,7 @@
   <h1>{{ project.data.name }}</h1>
 </div>
 
-<div fxLayout="column" fxLayoutAlign="space-between center" class="content" *ngIf="project?.author$ | async as author" [routerLink]="[ '../documents', project.id ]">
+<div fxLayout="column" fxLayoutAlign="space-between center" class="content" *ngIf="project?.author$ | async as author" [routerLink]="[ project.id ]">
 
   <!-- top bar -->
   <div fxLayout="row" fxLayoutAlign="end center" class="wide">

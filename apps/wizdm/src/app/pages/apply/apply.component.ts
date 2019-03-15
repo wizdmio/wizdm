@@ -6,8 +6,8 @@ import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
 import { ProjectService, wmApplication, wmProject } from '../../core';
-import { CanPageDeactivate, ToolbarService, ActionEnabler } from '../../navigator';
-import { TermsPrivacyComponent } from '../terms-privacy/terms-privacy.component';
+import { ToolbarService, ActionEnabler } from '../../navigator';
+import { CanPageDeactivate } from '../../utils';
 import { $animations } from './apply.animations';
 
 interface userApply extends wmUser {
@@ -254,15 +254,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       });
   }
 
-  @ViewChild(TermsPrivacyComponent) terms: TermsPrivacyComponent;  
-
   public disclaimerAction(action: string) {
 
     switch(action) {
 
       // Pops up the terms-privacy conditions without leaving the page
       case 'terms':
-      this.terms && this.terms.popup();
+      //this.terms && this.terms.popup();
       break;
 
       // Clears the forrm and the previously saved application to start from 

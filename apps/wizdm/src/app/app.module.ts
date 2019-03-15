@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations' 
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
+import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 
 import { 
   ConnectModule, 
@@ -16,6 +17,7 @@ import { AppComponent } from './app.component';
 import { NavigatorModule } from './navigator/navigator.module';
 import { PagesModule } from './pages/pages.module';
 import { AppRoutingModule } from './app-routing.module';
+//import { UserModule } from './pages/user/user.module';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -37,8 +39,11 @@ import { environment } from '../environments/environment';
     AppRoutingModule
   ],
   providers: [
-    MatIconRegistry
+    MatIconRegistry,
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
   ],
+  entryComponents: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

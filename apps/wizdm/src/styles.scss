@@ -29,7 +29,8 @@
 // Creates the .preloader spinner class applying the theme color
 @include preloader($wm-loader-size, 
                    $wm-loader-thick, 
-                   mat-color($wm-primary, A400));
+                   mat-color($wm-primary, A400),
+                   transparent);
 
 // Initialze the global application theme, make sure to call this only once
 @include wm-init-application-theme();

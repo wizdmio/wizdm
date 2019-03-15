@@ -1,5 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { EditableItem, EditableCell, EditableText } from '../model';
+import { EditableSelection } from '../selection/editable-selection.service';
 
 @Component({
   selector: '[wm-editable]',
@@ -7,6 +8,8 @@ import { EditableItem, EditableCell, EditableText } from '../model';
   styleUrls: ['./editable.component.scss']
 })
 export class EditableComponent {
+
+  constructor(private sel: EditableSelection) {}
 
   @Input('wm-editable') node: EditableItem | EditableCell;
   // Applies the node id to the element
@@ -20,6 +23,8 @@ export class EditableComponent {
   @HostBinding('class.mat-h4') get h4() { return !!this.node && this.node.level === 4; }
   @HostBinding('class.mat-h5') get h5() { return !!this.node && this.node.level === 5; }
   @HostBinding('class.mat-h6') get h6() { return !!this.node && this.node.level === 6; }
+  // Applies the 'selected' attribute for selection styling
+  @HostBinding('attr.selected') get selected() { return this.sel.selected(this.node) ? '' : undefined; }
 
   // Helper function computing the text node style
   style(node: EditableText): any {

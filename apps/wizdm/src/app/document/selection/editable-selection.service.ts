@@ -187,7 +187,7 @@ export class EditableSelection implements OnDestroy {
   /** Makes sure the selection falls within the inner nodes when on the edges.  */ 
   public trim(): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid) { return this; }
+    if(!this.valid || this.collapsed) { return this; }
     // Retrive the end edge back 
     if(this.endOfs === 0) {
       const end = this.previous(this.end, true);
@@ -350,31 +350,47 @@ export class EditableSelection implements OnDestroy {
   /** Deletes the selection from the document tree */
   public delete(): EditableSelection {
     // Skips on invalid selection
-    if(!this.textsafe) { return this; }
+    if(!this.valid) { return this; }
     // Store a snapshot for undo history
     this.store();
-    // Whenever the selection applies on a single node...
-    if(this.single) {
-      // Extracts the selected text within the node 
-      this.start.extract(this.startOfs, this.endOfs);
-      // If the node is still containing text, we are done...
-      if(!this.start.empty) { return this.collapse(); }
+    // Deletes the selected text content
+    if(this.textsafe) {
+      // Whenever the selection applies on a single node...
+      if(this.single) {
+        // Extracts the selected text within the node 
+        this.start.extract(this.startOfs, this.endOfs);
+        // If the node is still containing text, we are done...
+        if(!this.start.empty) { return this.collapse(); }
+      }
+      //...otherwise we are dealing with multiple nodes, so...
+      else {
+        //...just cut the text away each side
+        this.start.cut(0, this.startOfs);
+        this.end.cut(this.endOfs);
+      }
+      // Moves the selection just outside the empty nodes, so, for merge to do its magic...  
+      if(this.start.empty) { this.start = this.next(this.start) || this.start; }
+      if(this.end.empty) { this.end = this.next(this.end) || this.end; }
+      // Keeps the current text length...
+      const ofs = this.start.length;
+      // Merges the nodes
+      this.start.merge(this.end);
+      // Updates the cursor position
+      return this.setCursor(this.start, ofs);
     }
-    //...otherwise we are dealing with multiple nodes, so...
-    else {
-      //...just cut the text away each side
-      this.start.cut(0, this.startOfs);
-      this.end.cut(this.endOfs);
+    // Deletes the non-text tip/tail from the seleciton
+    if(!(this.start instanceof EditableText)) {
+      const next = this.start.next(true);
+      this.start.remove();
+      this.setStart(next, 0);
     }
-    // Moves the selection just outside the empty nodes, so, for merge to do its magic...  
-    if(this.start.empty) { this.start = this.next(this.start) || this.start; }
-    if(this.end.empty) { this.end = this.next(this.end) || this.end; }
-    // Keeps the current text length...
-    const ofs = this.start.length;
-    // Merges the nodes
-    this.start.merge(this.end);
-    // Updates the cursor position
-    return this.setCursor(this.start, ofs);
+    if(!(this.end instanceof EditableText)) {
+      const prev = this.end.previous(true);
+      this.end.remove();
+      this.setEnd(prev, -1);
+    }
+    // Recurs to delete the rest
+    return this.delete();
   }
   /**
    * Breaks the selection by inserting a new line char or an entire new editable block
@@ -383,36 +399,46 @@ export class EditableSelection implements OnDestroy {
    * nodes exlucing this one.
    */
   public break(newline: boolean = false): EditableSelection {
-    // Skips on invalid selection
-    if(!this.textsafe) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
-    // Store a snapshot for undo history
-    this.store();
-    // Just insert a new line on request forcing it always on links and table cells
-    if(newline || this.belongsTo('link') || this.belongsTo('cell')) {
-      this.start.insert('\n', this.startOfs);
-      return this.move(1);
+    // Breaks the text content
+    if(this.textsafe) {
+      // Store a snapshot for undo history
+      this.store();
+      // Just insert a new line on request forcing it always on links and table cells
+      if(newline || this.belongsTo('link') || this.belongsTo('cell')) {
+        this.start.insert('\n', this.startOfs);
+        return this.move(1);
+      }
+      // Inserts an extra empty text on the start edge preserving the same style
+      if(this.start.first && this.startOfs === 0) { 
+        this.start.insertPrevious(this.start.clone().set('')); 
+      }
+      // Inserts an extra empty text node on the end edge preserving the same style
+      if(this.start.last && this.startOfs === this.start.length) { 
+        this.start.insertNext(this.start.clone().set('')); 
+      }
+      // Makes sure the cursor is on the right side of node's edges 
+      if(this.startOfs === this.start.length) { this.setCursor(this.next(this.start), 0);}
+      // Breaks the content from this node foreward in a new editable container
+      const node = this.start.split(this.startOfs).break();
+      // Updates the cursor position
+      return this.setCursor(node, 0);
     }
-    // Inserts an extra empty text on the start edge preserving the same style
-    if(this.start.first && this.startOfs === 0) { 
-      this.start.insertPrevious(this.start.clone().set('')); 
-    }
-    // Inserts an extra empty text node on the end edge preserving the same style
-    if(this.start.last && this.startOfs === this.start.length) { 
-      this.start.insertNext(this.start.clone().set('')); 
-    }
-    // Makes sure the cursor is on the right side of node's edges 
-    if(this.startOfs === this.start.length) { this.setCursor(this.next(this.start), 0);}
-    // Breaks the content from this node foreward in a new editable container
-    const node = this.start.split(this.startOfs).break();
-    // Updates the cursor position
-    return this.setCursor(node, 0);
+
+    // TODO: Complkete this addition to work with tables
+    const paragraph = this.start.create.item;  
+    
+    const next = paragraph.appendChild( this.start.create.text.set('') );
+
+    this.start.insertNext(paragraph);
+    
+    return this.setCursor(next, 0);
   }
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
   public split(): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid) { return this; }
+    if(!this.textsafe) { return this; }
     if(this.single) {
       // Splits the single node both sides
       const node = this.start.split(this.startOfs, this.endOfs); 
@@ -448,10 +474,16 @@ export class EditableSelection implements OnDestroy {
   }
   /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
-    // Skips on invalid selection
-    if(!this.valid) { return; }
-    // Applies the alignement on the containers within the selection
-    this.store().containers( container => container.align = align ).mark();
+    // Applies the alignement on the text containers within the selection
+    if(this.textsafe) { 
+      this.store().containers( container => container.align = align ).mark();
+    }
+    // Align the start node otherwise (could be an image or a table)
+    else if(this.valid) { 
+      this.store();
+      this.start.align = align; 
+      this.mark(); 
+    }
   }
   /** Returns the current selection level (corresponding to the start node container's) */
   public get level(): number { 
@@ -471,17 +503,22 @@ export class EditableSelection implements OnDestroy {
   /** Applies the given style to the selection */
   public set style(style: wmTextStyle[]) {
     // Skips on invalid selection
-    if(!this.valid) { return; }
-    // Store a snapshot for undo history
-    this.store();
-    // Forces wordwrapping when collapsed 
-    if(this.collapsed) { this.wordWrap(); }
-    // Trims and splits the selection
-    this.trim().split();
-    // Applies the given style to all the nodes within the selection
-    this.nodes( node => node.style = style );
-    // Defragments the text nodes when done
-    this.defrag();
+    if(this.valid) {
+      // Store a snapshot for undo history
+      this.store();
+      // Applies style on the selected text
+      if(this.textsafe) {
+        // Forces wordwrapping when collapsed 
+        if(this.collapsed) { this.wordWrap(); }
+        // Applies the given style to all the nodes within the selection
+        this.trim().split().nodes( node => node.style = style ).defrag();
+      }
+      // Styles the start node otherwise (could be a table, a row or a column)
+      else {
+        this.start.style = style; 
+        this.mark(); 
+      }
+    }
   }
   /** Resets the selection style removing all formatting */
   public clear(): EditableSelection {
@@ -520,7 +557,7 @@ export class EditableSelection implements OnDestroy {
     // Performs unlinking when url is null
     if(!url) { return this.unlink(); }
     // Skips on invalid selection
-    if(!this.valid) { return this; }
+    if(!this.textsafe) { return this; }
     // Store a snapshot for undo history
     this.store();
     // Forces wordwrapping when collapsed 
@@ -545,11 +582,9 @@ export class EditableSelection implements OnDestroy {
   /** Removes the links falling into the selection */
   public unlink(): EditableSelection {
     // Skips on invalid selection
-    if(!this.valid) { return this; }
+    if(!this.textsafe) { return this; }
     // Turns links into plain text
-    this.store().nodes( node => node.link(null) );
-    // Defragments the text nodes when done
-    return this.defrag();
+    return this.store().nodes( node => node.link(null) ).defrag();
   }
 
   /** Picks the first selection's parent matching the specified types  */
@@ -648,7 +683,18 @@ export class EditableSelection implements OnDestroy {
 
     return false;
   }
-
+  /** Returns true whenever the inspected node falls within the current selection  */
+  public selected(node: EditableContent): boolean {
+    // Skips on invalid selection
+    return this.valid && !!node && (
+      // Node matches the selection itself
+      node === this.start ||
+      // Node is the selection's ancestor of the matching type
+      node === this.start.climb(node.type) ||
+      // Node falls within the selection range
+      this.start.compare(node) <= 0 && this.end.compare(node) >= 0
+    );
+  }
   /** Returns a tree fragment containing a copy of the selection  */
   public copy(): EditableContent {
     // Skips on invalid selection

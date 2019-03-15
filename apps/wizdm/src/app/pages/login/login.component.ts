@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
-import { NavigatorService, ContentResolver } from '../../navigator';
+import { NavigatorService } from '../../navigator';
+import { ContentResolver } from '../../utils';
 import { $animations } from './login-animations';
 import { take, tap } from 'rxjs/operators';
 
@@ -111,7 +112,7 @@ export class LoginComponent implements OnInit  {
 
   // Routing helper to easily jump on a specified page
   private jump(to: string, overwrite = false, params?: Params) {
-    this.router.navigate(['..',to], { 
+    this.router.navigate(['..', to], { 
       relativeTo: this.route,
       replaceUrl: overwrite,
       queryParams: params
@@ -136,7 +137,7 @@ export class LoginComponent implements OnInit  {
           let userLang = user.lang || 'en';
   
           // Jump to the projects explore switching to the user language if needed
-          this.resolver.switchLanguage(userLang, 'projects');
+          this.resolver.switchLanguage(userLang, 'explore');
         }
       })
     ).subscribe();
@@ -343,7 +344,6 @@ export class LoginComponent implements OnInit  {
     
     // Sign-out...
     this.auth.signOut();
-
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
     this.jump('home', true);
