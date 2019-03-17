@@ -15,9 +15,7 @@ import {
 
 import { AppComponent } from './app.component';
 import { NavigatorModule } from './navigator/navigator.module';
-import { PagesModule } from './pages/pages.module';
 import { AppRoutingModule } from './app-routing.module';
-//import { UserModule } from './pages/user/user.module';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -35,7 +33,6 @@ import { environment } from '../environments/environment';
     UploaderModule,
     UserProfileModule,
     NavigatorModule,
-    PagesModule,
     AppRoutingModule
   ],
   providers: [

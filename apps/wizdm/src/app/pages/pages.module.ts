@@ -43,7 +43,7 @@ import { MarkdownModule } from '@wizdm/markdown';
 //--------
 import { DocumentModule } from '../document/editable-document.module';
 //--------
-import { HandlerComponent } from './handler/handler.component';
+//import { HandlerComponent } from '../utils/handler.component';
 //import { HomeComponent } from './home/home.component';
 //import { AboutComponent } from './about/about.component';
 //import { LoginComponent } from './login/login.component';
@@ -103,7 +103,7 @@ import { HandlerComponent } from './handler/handler.component';
   ],
 
   declarations: [
-    HandlerComponent,
+    //HandlerComponent,
     //HomeComponent,
     //AboutComponent,
     //LoginComponent,

@@ -5,7 +5,6 @@ import { DateAdapter } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { Subscription } from 'rxjs';
 import { $itemAnimations } from './user-item-animations';
-
 import * as moment from 'moment';
 
 export type UserItemOption = {
@@ -126,7 +125,7 @@ export class UserItemComponent implements OnInit, OnDestroy {
   public get displayValue(): string {
 
     if(this.type === 'date') {
-      return this.value ? moment(this.value).format('ll') : '';
+      return this.value ? moment(this.value, moment.defaultFormat).format('ll') : '';
     }
 
     return this.matchedOption.label || this.value;
@@ -146,7 +145,7 @@ export class UserItemComponent implements OnInit, OnDestroy {
   public editMode() {
 
     // Makes sure to properly convert the value into a moment object whenever it's undefined or null
-    let value = this.type === 'date' ? this.value ? moment(this.value) : moment() : this.value;
+    const value = this.type === 'date' ? this.value ? moment(this.value, moment.defaultFormat) : moment() : this.value;
 
     // Updates the control value
     this.control.patchValue(value);
@@ -161,8 +160,8 @@ export class UserItemComponent implements OnInit, OnDestroy {
   public updateControl(): boolean {
 
     // Convert the value back to a string
-    let value: string = this.type === 'date'  && this.control.value ? 
-      (<moment.Moment>this.control.value).toString() : this.control.value;
+    const value: string = this.type === 'date'  && this.control.value ? 
+      (<moment.Moment>this.control.value).format(moment.defaultFormat) : this.control.value;
     
     // Skips on no changes
     if(this.control.pristine || this.value == value) {

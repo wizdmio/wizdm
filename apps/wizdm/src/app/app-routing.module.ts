@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NavComponent } from './navigator/navigator.component';
-import { ContentResolver } from './utils';
-import { HandlerComponent } from './pages/handler/handler.component';
+import { ContentResolver, HandlerComponent } from './utils';
 
 // Define navigation routes
 const routes: Routes = [
@@ -21,7 +20,6 @@ const routes: Routes = [
     // Localized lazily loaded pages
     children: [
       { path: '',            loadChildren: './pages/home/home.module#HomeModule' },
-      { path: 'home',        redirectTo:   '', pathMatch: 'full' },
       { path: 'apply',       loadChildren: './pages/apply/apply.module#ApplyModule' },
       { path: 'explore',     loadChildren: './pages/explore/explore.module#ExploreModule' },
       { path: 'explore/:id', loadChildren: './pages/editor/editor.module#EditorModule' },
@@ -33,6 +31,8 @@ const routes: Routes = [
       { path: 'messages',    loadChildren: './pages/messages/messages.module#MessagesModule' },
       { path: 'terms',       loadChildren: './pages/terms-privacy/terms-privacy.module#TermsPrivacyModule' },
       { path: 'not-found',   loadChildren: './pages/not-found/not-found.module#NotFoundModule' },
+      // Redirections
+      { path: 'home',        redirectTo:   '', pathMatch: 'full' },
       { path: '**',          redirectTo:   'not-found', pathMatch: 'full' }
     ]
   },
@@ -41,6 +41,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  declarations: [ HandlerComponent ],
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ]
 })
