@@ -19,8 +19,7 @@
 * Turn every page into a module to be eventually lazely loaded
 
 ## Elements
-* Consider to apply `encapsulation: ViewEncapsulation.None` to all elements while the global styling will be managed by specific classes
-* Move all the relevant material style tweaks from app/_theme.scss to _elements.scss 
+* Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`
 * Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default
 * ~~Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`)~~
 
