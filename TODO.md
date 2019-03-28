@@ -34,6 +34,7 @@
 
 ## Document
 * Implements an HTML renderer to be used while copying to the clipboard and for PDF creation?
+* Move the core editable-document component, editable-** classes and editable-selection service to libs/document and refactor the editor to use local version of toolbox and context menu
 
 ## Editor
 * Refactor the document toc, so, to becomewith dark background and reacher informations a side bar with author properties and toc
