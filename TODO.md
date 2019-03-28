@@ -17,6 +17,9 @@
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
 * Consider refactoring the content resolver so to dynamically load the content for each page on demand supporting lazy loading too 
 
+## Uploads popup
+* improve thumbnails so to have a fixed size while picture is loading
+
 ## Pages
 * Turn every page into a module to be eventually lazely loaded
 
