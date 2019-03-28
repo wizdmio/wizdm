@@ -43,8 +43,9 @@
 * Implements a press-and-hold tool for extended akphabet support. See [press and hold](https://github.com/kasperpeulen/PressAndHold) and [long press](https://github.com/quentint/long-press)
 
 ## libs/content
-* Refactors the `use()` function to support incremental module loading
-* Implement recursive content copy function to better merge loaded content with the default one
+* ~~Refactors the `use()` function to support incremental module loading~~
+* ~~Implement recursive content copy function to better merge loaded content with the default one~~
+* Tweak the recursive content copy to overwrite the full array content on length mismatch (so preventing shifted translations)
 
 ## libs/various
 * ~~Move out elements creating libs/elements (@wizdm/elements)~~
