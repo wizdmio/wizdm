@@ -8,8 +8,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class DisclaimerComponent {
 
   public segments: any[];
-
-  constructor() { }
   
   // Classes for links/actions - works only for global defined class due to ViewEncapsulation
   // Supports the same syntax as 'ngClass'

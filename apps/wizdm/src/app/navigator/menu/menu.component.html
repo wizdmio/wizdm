@@ -5,6 +5,7 @@
     [routerLink]="item.link"
     [queryParams]="item.params"
     routerLinkActive="link-active" 
+    [routerLinkActiveOptions]="{ exact: true }" 
     *ngFor="let item of menuItems">
     {{ item.label }}
   </button>

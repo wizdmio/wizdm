@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material';
-import { IconModule } from '@wizdm/elements';
+import { DisclaimerModule } from '@wizdm/elements';
 import { ContentResolver, PageGuardService } from '../../utils';
 import { HomeComponent } from './home.component';
 
@@ -21,8 +21,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FlexLayoutModule,
-    //MatButtonModule,
-    //IconModule, 
+    MatButtonModule,
+    DisclaimerModule, 
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

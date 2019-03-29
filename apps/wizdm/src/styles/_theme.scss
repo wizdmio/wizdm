@@ -1,15 +1,15 @@
 @import '~@angular/material/theming';
 @import 'material';
 @import 'elements';
-@import 'markdown';
+//@import 'markdown';
 
 // This file is actually extending the standard Angular Material theme
 // with customized application specific colors and typography styles
 
-// Defines the list of material components to be styled in the application
+// Defines the list of material components to be styled in the application. Uncomment the component dame to enable its styling
 $wm-material: (
   //'autocomplete', 
-  'badge', 
+  //'badge', 
   //'bottom-sheet', 
   'button', 
   //'button-toggle', 
@@ -50,25 +50,27 @@ $wm-font-family: 'Ubuntu, sans-serif';
 // Creates a customized material typography first...
 $wm-typography: mat-typography-config(
   $font-family:   $wm-font-family,
+  $display-4:     mat-typography-level(112px, 112px, 300),
+  $display-3:     mat-typography-level(72px, 72px, 400),
+  $display-2:     mat-typography-level(56px, 56px, 400),
+  $display-1:     mat-typography-level(45px, 48px, 400),
   $headline:      mat-typography-level(36px, 48px, 400),
   $title:         mat-typography-level(24px, 32px, 400),
-  $subheading-2:  mat-typography-level(20px, 28px, 400),
-  $subheading-1:  mat-typography-level(18px, 24px, 400),
+  $subheading-2:  mat-typography-level(22px, 28px, 400),
+  $subheading-1:  mat-typography-level(20px, 24px, 400),
   $body-2:        mat-typography-level(18px, 24px, 400),
   $body-1:        mat-typography-level(16px, 20px, 400),
   $button:        mat-typography-level(16px, 20px, 400)
 );
 //.. than extends with some application specific values
 $wm-typography: extend-material-typography($wm-typography, (
-  logo:           mat-typography-level(22px, 24px, 600),
-  social:         mat-typography-level(22px, 24px, 600),
-  //footnote:       mat-typography-level(16px, 20px, 400),
-  //toc:            mat-typography-level(18px, 24px, 500)
+  button-big:     mat-typography-level(22px, 24px, 800),
+  social:         mat-typography-level(22px, 24px, 600)
 ));
 
 // Define the main theme colors palettes.
-$wm-primary: mat-palette($mat-blue);
-$wm-accent:  mat-palette($mat-indigo, A200, A100, A400);
+$wm-primary: mat-palette($mat-indigo);
+$wm-accent:  mat-palette($mat-blue);//, A200, A100, A400);
 $wm-warn:    mat-palette($mat-red);
 
 // Creates a standard material light theme first...
@@ -82,19 +84,12 @@ $wm-theme: extend-material-theme($wm-theme,
     disabled-button:   rgba(mat-color($wm-primary, 900), 0.26),
     icon:              mat-color($wm-primary),
     icons:             mat-color($wm-primary),
-    text:              rgba(mat-color($wm-primary, 900), 0.87),
-    slider-min:        rgba(mat-color($wm-primary, 900), 0.87),
-    slider-off:        rgba(mat-color($wm-primary, 900), 0.26),
-    slider-off-active: rgba(mat-color($wm-primary, 900), 0.38),
-
-    // Adds extra application specific foreground extension
-    //contrast:          white,
-    //editor:            rgba(white, 0.8),
-  
+    text:              mat-color($wm-primary, 900),
+    
     // Adds Elements/Markdown specific foreground extensions
-    toggler:           rgba(mat-color($wm-primary, 900), 0.87),
-    action:            mat-color($wm-primary),
-    link:              mat-color($wm-primary)
+    toggler:           mat-color($wm-primary, 900),
+    //action:            mat-color($wm-accent),
+    //link:              mat-color($wm-accent)
   ),
 
   $background: (
@@ -113,13 +108,6 @@ $wm-theme: extend-material-theme($wm-theme,
 $wm-theme-foreground: map-get($wm-theme, foreground);
 $wm-theme-background: map-get($wm-theme, background);
 
-/*
-// Helper to dig into themes
-@function mat-theme-get($config, $level, $name) {
-  @return map-get(map-get($config, $level), $name);
-}
-*/
-
 // Padding top helper
 @mixin wm-padding-top($offset: 0) {
 
@@ -131,34 +119,28 @@ $wm-theme-background: map-get($wm-theme, background);
 
 // Initilize the global application theme
 @mixin wm-init-application-theme($typography: $wm-typography, $theme: $wm-theme, $material: $wm-material) {
-
+  
   // Includes the core theme indepeneted material style
   @include mat-core($typography);
-
+  
   // Include a selection of material theme styles matching the list of $components
-  @include custom-material-theme($theme, $material);
-  //@include angular-material-theme($theme);
-
-  // Init the shared elements theme styles
+  @include custom-material-theme($theme, $material);//@include angular-material-theme($theme);
+  
+  // Init the wizdm elements theme styles, extending material components. 
+  // NOTE: This tweaks some of the global material styles to better blend the components in
   @include wm-elements-theme($theme);
-
-  // Init the markdown renderer theme styles
-  @include wm-markdown-theme($theme);
+  
+  // Let the global styling being applied. Uncomment to customize the theme
+  // @include wm-markdown-theme($theme);
 
   // Defines an additional mat-link class to decorate links diviating
   // from the strict rules of material design for the sake of clarity
   .mat-link {
     cursor: pointer;
-    color: mat-color($wm-primary) !important;
+    color: mat-color($wm-accent) !important;
     text-decoration: underline;
   }
  
-  // Ensure all links will look the same
-  a { @extend .mat-link;}
-
-  // Makes sure the content of mat-list is hidden when overflow globally
-  mat-list { overflow: hidden;}
-
   // Resets the default mat-menu padding
   .mat-menu-content { padding: 0 !important;}
   .mat-menu-panel { min-width: unset !important;}
@@ -170,14 +152,13 @@ $wm-theme-background: map-get($wm-theme, background);
       size:   mat-font-size($wm-typography, button);
       weight: mat-font-weight($wm-typography, button);
     }
-    // Restores the same $mat-menu-icon-margin value
-    wm-icon { padding-right: 16px;}
   }
 
   // Defines a global class to resets dialog container's padding on request
   // to be used in MatDialogConfig.panelClass when needed
   .mat-dialog-reset { mat-dialog-container { padding: 0;} }
 
+  // Styles the body
   body {
     // Applies material typography rules globally
     @extend .mat-typography;
@@ -186,5 +167,22 @@ $wm-theme-background: map-get($wm-theme, background);
     
     // Applies a smooth scroll behaviour to all elements whenever supported
     * { scroll-behavior: smooth; }
+
+    // Disables outline on all elements
+    * { outline: none; }
+
+    // Ensure all links will look the same
+    a { @extend .mat-link; }
+
+    // Smoothen the text color on content
+    p, li, td { color: rgba(map-get($wm-theme-foreground, text), 0.6); }
+
+    // Defines a global style for blockquotes
+    blockquote {
+      padding: 0 1em;
+      color: rgba(black, 0.4);
+      border-left: 0.25em solid rgba(black, 0.11);
+      p, li, td { color: inherit; }
+    }
   }
 }

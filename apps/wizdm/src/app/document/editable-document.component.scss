@@ -2,14 +2,6 @@
 :host {
   display: block;
   position: relative;
-  
-  outline: none;
-  //& * { outline: none; }
 }
 
-// Blockquote style
-blockquote {
-  padding: 0 1em;
-  color: rgba(0,0,0,0.535);
-  border-left: 0.25em solid rgba(0,0,0,0.11);
-}
+

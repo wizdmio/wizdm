@@ -1,9 +1,23 @@
 
-<section fxLayout="row" fxLayoutAlign="center center">
+<div class="background"></div>
 
-  <div class="banner">
+<section fxLayout="row" fxLayoutAlign="center center" class="banner">
+
+  <div fxFlexOffset.gt-sm="10" fxFlex.gt-sm="450px" fxLayout="column" fxLayoutAlign="center center" @landing>
+
     <h1>{{ msgs?.title }}</h1>
-    <h2>{{ msgs?.pitch }}</h2>
-  </div>  
+    
+    <p>{{ msgs?.pitch }}</p>
+    
+    <button mat-raised-button color="accent" routerLink="apply">{{ msgs?.start }}</button>
+    
+    <p class="mat-small"><wm-disclaimer [source]="msgs?.join"></wm-disclaimer></p>
+ 
+  </div>
+
+  <img fxHide.lt-sm fxFlex="40" src="assets/img/blue-buddha.svg" alt="wizdm">
 
 </section>
+
+
+

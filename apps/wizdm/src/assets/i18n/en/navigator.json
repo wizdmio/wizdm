@@ -1,14 +1,15 @@
 {
-    "logo": "Wizdm",
     "title": "Wizdm - Compassionate development",
     "description": "A community of app givers",
 
     "toolbar": {
         "public": [
+            { "label": "Wizdm", "link": ".", "highlight": true },
             { "label": "Explore", "link": "explore" },
             { "label": "Manifesto", "link": "about" }
         ],
         "private": [
+            { "label": "Wizdm", "link": ".", "highlight": true },
             { "label": "Explore", "link": "explore" },
             { "label": "Board", "link": "messages" },
             { "label": "Apply", "link": "apply"  }
@@ -17,14 +18,16 @@
 
     "menu": {
         "public": [
+            { "label": "Home", "link": "." },
             { "label": "How it works", "link": "about" },
             { "label": "Explore", "link": "explore" },
             { "label": "Register/Sign-in", "link": "login", "params": { "mode": "signIn" } }
         ],
         "private": [
+            { "label": "Home", "link": "." },
             { "label": "Explore", "link": "explore" },
             { "label": "Board", "link": "messages" },
-            { "label": "Apply", "link": "apply"  },
+            { "label": "Apply", "link": "apply" },
             { "label": "Upload", "link": "upload" },
             { "label": "Profile", "link": "profile" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }

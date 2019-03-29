@@ -3,18 +3,45 @@
 
 :host {
   display: block;
-  position: relative;
   width: 100%;
-  
-  //padding: $wm-content-padding;
-  //margin: $wm-content-margin;
 
-  @include wm-padding-top();
+  .background {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 480px;
+    height: 80vh;
+    max-height: 560px;
+    box-sizing: border-box;
+    transform: skewY(-10deg);
+    transform-origin: 0 100%;
+    background-color: rgba(mat-color($wm-accent), 0.1);
+    background: linear-gradient(145deg, rgba(mat-color($wm-accent), 0.1), rgba(mat-color($wm-accent), 0));
+    //background-image: url('/assets/img/pattern.png');
+    //background-repeat: repeat;
+    //background-size: 3%;
+  }
 
   .banner {
+    position: relative;
+    min-height: 350px;
 
-    padding: 30px;
+    @include wm-padding-top();
 
-    text-align: center;
+    div { padding: 25px; }
+
+    h1 {
+      //@include mat-typography-level-to-styles($wm-typography, display-1);
+      font-family: mat-font-family($wm-typography, display-1);
+      font-size  : mat-font-size($wm-typography, display-1);
+      font-weight: 800;
+    }
+
+    p { text-align: justify; }
+
+    button { margin: 16px 0; }
+    
   }
 }

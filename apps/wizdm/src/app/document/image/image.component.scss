@@ -4,12 +4,17 @@
 :host {
   display: block;
   position: relative;
-  width: 250px;
-  height: 250px;
+  //width: 250px;
+  //height: 250px;
+
+  img { 
+    width: 250px;
+    height: 250px;
+  }
 
   //background-origin: 0;
-  background-repeat: no-repeat;
-  background-size: cover;
+  //background-repeat: no-repeat;
+  //background-size: cover;
 
   caret-color: transparent;
 

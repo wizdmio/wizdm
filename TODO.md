@@ -3,8 +3,8 @@
 ## Styling
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
 * Get inspired from [fanvestory](https://fanvestory.com) and [dovetail](https://dovetailapp.com/)
-* Review the overall color styling, so, to use a darker default text color to be mitigated by a global opacity level on `p` elements
-* Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`
+* ~~Review the overall color styling, so, to use a darker default text color to be mitigated by a global opacity level on `p` elements~~
+* ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
 ## Navigator
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
@@ -21,7 +21,7 @@
 * Turn every page into a module to be eventually lazely loaded
 
 ## Elements
-* Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`
+* ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
 * Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default
 * ~~Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`)~~
 

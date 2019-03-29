@@ -16,15 +16,13 @@
     border: 2px solid white;
     border-radius: 50%;
     box-sizing: border-box;
+    background-color: white;
   }
 
   svg {
-    // Sets opacity of both background and foreground, so, the latter 
-    // will results being the sum of both
+    // Sets opacity of both background and foreground, so, the latter will results being the sum of both
     #background, #foreground { opacity: 0.25; }
     // Both background and foreground are semi-transparent due to the previous opacity rules
     fill: grey;
-    // Underlying background defaults to white
-    background-color: white;
   }
 }

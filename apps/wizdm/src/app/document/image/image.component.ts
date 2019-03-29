@@ -1,18 +1,30 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableImage } from '../model';
+import { EditableFrame, EditableImage } from '../model';
 import { EditableSelection } from '../selection/editable-selection.service';
 
 @Component({
   selector: '[wm-image]',
-  template: '&#8203;',
-  //templateUrl: './image.component.html',
+  //template: '&#8203;',
+  templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss']
 })
 export class ImageComponent {
 
   constructor(private sel: EditableSelection) {}
 
-  @Input('wm-image') image: EditableImage;
+  @Input('wm-image') frame: EditableFrame;//EditableImage;
+
+  get image(): EditableImage {
+    return !!this.frame  && this.frame.count > 0 ? <EditableImage>this.frame.firstChild() : undefined;
+  }
+
+  // Applies the node id to the element
+  @HostBinding('id') get id() { return !!this.frame && this.frame.id; }
+
+  // Applies text align style according to node alignement
+  @HostBinding('style.text-align') get align() { return !!this.frame && this.frame.align; }
+
+  /*
   // Applies the node id to the element
   @HostBinding('id') get id() { return !!this.image && this.image.id; }
   // Applies image margins according to node alignement
@@ -28,4 +40,5 @@ export class ImageComponent {
   @HostBinding('style.background-image') get url() {
     return !!this.image && !!this.image.data.url ? `url(${this.image.data.url})` : undefined;
   }
+  */
 }

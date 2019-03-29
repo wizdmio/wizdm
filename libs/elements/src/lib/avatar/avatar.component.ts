@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ThemePalette } from '@angular/material/core'
 import { $animations } from './avatar.animations';
 
 @Component({
@@ -9,13 +10,15 @@ import { $animations } from './avatar.animations';
 })
 export class AvatarComponent {
 
-  public load = false;
+  load: boolean;
+  url: string;
 
-  constructor() { }
+  @Input() set src(src: string) {
+    this.load = false;
+    this.url  = src;
+  }
 
-  @Input() src: string;
   @Input() alt: string;
 
-  // Avatar color customization
-  @Input() color: string;
+  @Input() color: ThemePalette;
 }

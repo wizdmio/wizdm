@@ -1,10 +1,10 @@
 export type wmInlineType = 'text'|'link';
 export type wmIndentType = 'blockquote'|'bulleted'|'numbered';
-export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmInlineType|'image';
+export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmInlineType|'frame'|'image';
 export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
 export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
-export type wmEditableTypes = wmDocument | wmBlock | wmList | wmItem | wmTable | wmRow | wmCell | wmText | wmImage;
+export type wmEditableTypes = wmDocument | wmBlock | wmList | wmItem | wmTable | wmRow | wmCell | wmText | wmFrame | wmImage;
 
 export interface wmEditable {
   type: wmNodeType,
@@ -59,6 +59,11 @@ export interface wmText extends wmEditable {
   style?: wmTextStyle[],
   value?: string,
   url?: string
+}
+
+export interface wmFrame extends wmEditable {
+  type: 'frame',
+  content?: wmImage[]
 }
 
 export interface wmImage extends wmEditable {

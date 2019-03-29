@@ -14,6 +14,8 @@ export class RouterInkbarDirective extends RouterLinkActive {
 
     // Applies a class '.wm-inkbar' when active
     this.routerLinkActive = 'wm-inkbar';
+    // Makes sure the route match is exact
+    this.routerLinkActiveOptions = { exact: true };
   }
 
   // Returns the inkbarPosition based of this very element

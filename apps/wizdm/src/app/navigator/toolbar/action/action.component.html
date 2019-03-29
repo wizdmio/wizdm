@@ -22,16 +22,16 @@
 <ng-container *ngIf="action.link && !menu">
   
   <!-- TEXT LINK (DESKTOP) -->
-  <a mat-button color="primary" [fxHide.lt-sm]="!!action.icon" 
+  <button mat-button color="primary" [fxHide.lt-sm]="!!action.icon" 
     [routerLink]="action.link" [queryParams]="action.params" @fadeIn>
     {{ action.caption }}
-  </a>
+  </button>
 
   <!-- ICON LINK (MOBILE) -->
-  <a mat-icon-button color="primary" [fxHide]="!!action.caption || !action.icon" [fxShow.lt-sm]="!!action.icon" 
-    [routerLink]="action.link" [queryParams]="action.params" @fadeIn>
-    <wm-icon [icon]="action.icon"></wm-icon>
-  </a>
+  <button mat-icon-button color="primary" [fxHide]="!!action.caption || !action.icon" [fxShow.lt-sm]="!!action.icon" 
+  [routerLink]="action.link" [queryParams]="action.params" @fadeIn>
+  <wm-icon [icon]="action.icon"></wm-icon>
+  </button>
 
 </ng-container>
 

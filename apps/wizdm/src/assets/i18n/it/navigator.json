@@ -4,10 +4,12 @@
 
     "toolbar": {
         "public": [
+            { "label": "Wizdm" },
             { "label": "Esplora" },
             { "label": "Manifesto" }
         ],
         "private": [
+            { "label": "Wizdm" },
             { "label": "Esplora" },
             { "label": "Messaggi" },
             { "label": "Applica" }
@@ -16,13 +18,19 @@
 
     "menu": {
         "public": [
+            { "label": "Home" },
             { "label": "Come funziona" },
             { "label": "Esplora" },
             { "label": "Entra/Registrati" }
         ],
         "private": [
-            { "label": "Principale" },
-            { "label": "Messaggi" }
+            { "label": "Home" },
+            { "label": "Esplora" },
+            { "label": "Messaggi" },
+            { "label": "Applica" },
+            { "label": "Upload" },
+            { "label": "Profilo" },
+            { "label": "Esci" }
         ]
     },
 

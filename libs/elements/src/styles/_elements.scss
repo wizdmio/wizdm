@@ -12,6 +12,13 @@ $wm-elements-default: (
   )
 );
 
+@mixin wm-icon-theme($theme) {
+  // Restores the same $mat-menu-icon-margin value
+  .mat-menu-item {
+    wm-icon { padding-right: 16px;}
+  }
+}
+
 @mixin wm-toggler-theme($theme) {
 
   $foreground: map-get($theme, foreground);
@@ -78,8 +85,9 @@ $wm-elements-default: (
   // Merges the user styles with the default ones
   $theme: map_merge($wm-elements-default, $theme);
   // Applies the theme to the elements...
-  @include  wm-avatar-theme($theme);
+  @include wm-icon-theme($theme);
+  @include wm-avatar-theme($theme);
   @include wm-toggler-theme($theme);
   @include wm-inkbar-theme($theme);
-  @include wm-disclaimer-theme($theme);
+  @include wm-disclaimer-theme($theme);  
 }

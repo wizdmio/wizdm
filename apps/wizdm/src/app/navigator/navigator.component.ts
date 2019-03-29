@@ -19,12 +19,12 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly msgs: any = null;
   readonly scrolled$: Observable<boolean>;
   
-  constructor(private router  : Router,
-              private content : ContentManager,           
-              private profile : UserProfile,
-              private nav     : NavigatorService,
-              private title   : Title,
-              private meta    : Meta) {
+  constructor(private  router  : Router,
+              private  content : ContentManager,           
+              private  profile : UserProfile,
+              readonly nav     : NavigatorService,
+              private  title   : Title,
+              private  meta    : Meta) {
 
     // Gets the localized content
     this.msgs = this.content.select("navigator"); 

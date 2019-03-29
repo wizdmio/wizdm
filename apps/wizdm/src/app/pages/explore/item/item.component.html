@@ -22,7 +22,7 @@
       <div fxLayout="row" fxLayoutAlign="start center">
         <!-- User picture with info -->
         <button mat-icon-button [wmUserInfoTrigger]="userInfo">
-          <wm-avatar [src]="author?.img"></wm-avatar>
+          <wm-avatar color="accent" [src]="author?.img"></wm-avatar>
           <wm-user-info [author]="project.data" #userInfo></wm-user-info>
         </button>
         
