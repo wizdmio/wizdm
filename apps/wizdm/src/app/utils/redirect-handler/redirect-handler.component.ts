@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
-  selector: 'wm-handler',
+  selector: 'wm-redirect-handler',
   template: '',
   styles: []
 })
-export class HandlerComponent implements OnInit {
+export class RedirectHandler implements OnInit {
 
   constructor(private router : Router, 
               private route  : ActivatedRoute) { }

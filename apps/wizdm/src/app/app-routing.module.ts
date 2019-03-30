@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NavComponent } from './navigator/navigator.component';
-import { ContentResolver, HandlerComponent } from './utils';
+import { NavComponent } from './navigator';
+import { ContentResolver, RedirectHandler } from './utils';
 
 // Define navigation routes
 const routes: Routes = [
   // Redirection handler (for firebase password confirmation/reset and stuff)
-  { path: 'handler', component: HandlerComponent },
+  { path: 'handler', component: RedirectHandler },
   // Global NotFound page using default language content
   { path: 'not-found', loadChildren: './pages/not-found/not-found.module#NotFoundModule' },
   // Redirect to the language resolver asking for auto detection of the explore language
@@ -41,7 +41,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ HandlerComponent ],
+  declarations: [ RedirectHandler ],
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ]
 })

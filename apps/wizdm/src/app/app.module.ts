@@ -14,7 +14,7 @@ import {
 } from '@wizdm/connect';
 
 import { AppComponent } from './app.component';
-import { NavigatorModule } from './navigator/navigator.module';
+import { NavigatorModule } from './navigator';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 

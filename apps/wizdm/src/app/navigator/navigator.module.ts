@@ -23,11 +23,6 @@ import {
   InkbarModule,
   RouterInkbarModule,
   DisclaimerModule
-  //PopupModule,
-  //FileOpenModule,
-  //ColorsModule,
-  //ColorPickerModule,
-  //LikesModule
 } from '@wizdm/elements';
 //-------
 import { NavComponent } from './navigator.component';
