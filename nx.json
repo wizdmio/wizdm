@@ -28,6 +28,9 @@
     },
     "elements": {
       "tags": []
+    },
+    "editable": {
+      "tags": []
     }
   }
 }

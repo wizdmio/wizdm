@@ -1,0 +1,21 @@
+<ng-container *ngFor="let node of block?.content">
+
+  <ng-container [ngSwitch]="node.type">
+
+    <!-- First level indentation --> 
+    <p *ngSwitchCase="'item'" [wm-editable]="node"></p>
+    
+    <!-- Numbered lists with nesting -->
+    <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
+
+    <!-- Bulleted lists with nesting -->
+    <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
+
+    <!-- Blockquotes nesting disabled -->
+    <!--blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote-->
+
+    <table *ngSwitchCase="'table'" [wm-table]="node"></table>
+
+  </ng-container>
+
+</ng-container>

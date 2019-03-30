@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { PopupService } from '@wizdm/elements';
+import { wmDocument } from '@wizdm/editable';
 import { ProjectService, Project, wmProject } from '../../core';
 import { ToolbarService, ActionEnabler } from '../../navigator';
-import { wmDocument } from '../../document/model';
 import { Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil, debounceTime, map } from 'rxjs/operators';
 import { $animations } from './editor.animations';
@@ -19,7 +19,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   public project: Project;
   public editMode = false;
-  public msgs;
+  readonly msgs;
 
   constructor(private content  : ContentManager,
               private projects : ProjectService,

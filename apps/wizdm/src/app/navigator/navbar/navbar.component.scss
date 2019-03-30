@@ -4,6 +4,12 @@
 :host {
   display: block;
 
+  button {
+    // Shrinks the standard 16px padding to 4px adding a margin in between to compensate
+    padding: 0 4px;
+    margin-right: 24px;
+  }
+
   .highlight { 
     font-size:   mat-font-size($wm-typography, button-big);
     font-weight: mat-font-weight($wm-typography, button-big); 

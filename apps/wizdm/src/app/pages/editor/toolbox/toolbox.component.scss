@@ -1,4 +1,4 @@
-:host {  
+:host {
   display: block;
   position: fixed;
   left: 0;
@@ -8,16 +8,16 @@
 
   .wrapper {
     pointer-events: all;
-    box-shadow: 0 0 6px 3px rgba(0,0,0,0.125);
+    box-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.125);
     background-color: white;
   }
 
-  button { 
+  button {
     border-radius: unset;
     //color: rgba( black, 0.7 );
     &.selected {
       //color: black;
-      background-color: rgba( black, 0.1 );
+      background-color: rgba(black, 0.1);
     }
   }
 }

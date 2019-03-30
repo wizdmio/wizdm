@@ -1,0 +1,18 @@
+
+:host {
+  outline: none;
+  & * { outline: none };
+  //span, a { outline: none; }
+
+  font-weight: unset;
+  font-style: unset;
+  //font-size: unset;
+  text-decoration: unset;
+  vertical-align: unset;
+  white-space: pre-wrap;
+/*
+  ::selection {
+    background-color: #BBDEFB;
+  }
+*/
+}

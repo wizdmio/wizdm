@@ -17,7 +17,7 @@
 * Refactors the toolbar animations once the [animateChild() bug](https://github.com/angular/angular/issues/27245) has been fixed
 * ~~Consider refactoring the content resolver so to dynamically load the content for each page on demand supporting lazy loading too~~
 * Improve navigation bar with "type" property to switch among normal button/link, strong or notification (showing the badge)
-* Refactor the navigation bar replacing most of the padding on buttons with a gap between them ( let's say from 16px to 4px + 24px gap so the wizdm button will get closer to the logo)
+* ~~Refactor the navigation bar replacing most of the padding on buttons with a gap between them ( let's say from 16px to 4px + 24px gap so the wizdm button will get closer to the logo)~~
 * Add a notification button to display instead of the full navigation bar on mobile version
 * Refactor the footer to a taller version with accent-like background and reacher informations
 
@@ -25,7 +25,7 @@
 * improve thumbnails so to have a fixed size while picture is loading
 
 ## Pages
-* Turn every page into a module to be eventually lazely loaded
+* ~~Turn every page into a module to be eventually lazely loaded~~
 
 ## Elements
 * ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
@@ -34,7 +34,7 @@
 
 ## Document
 * Implements an HTML renderer to be used while copying to the clipboard and for PDF creation?
-* Move the core editable-document component, editable-** classes and editable-selection service to libs/document and refactor the editor to use local version of toolbox and context menu
+* ~~Move the core editable-document component, editable-** classes and editable-selection service to libs/document and refactor the editor to use local version of toolbox and context menu~~
 
 ## Editor
 * Refactor the document toc, so, to becomewith dark background and reacher informations a side bar with author properties and toc
@@ -50,7 +50,7 @@
 
 ## libs/various
 * ~~Move out elements creating libs/elements (@wizdm/elements)~~
-* Move out document creating libs/document (@wizdm/document)
+* ~~Move out document creating libs/document (@wizdm/document)~~
 * ~~Consider to remove AuthModule, DatabaseModule and UploaderModule from app.module since they are already included by UserProfileModule~~
 
 ## libs/connect

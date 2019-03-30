@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditableMenu } from './editable-menu.component';
+import { EditableToc } from './editable-toc.component';
 
-describe('EditableMenu', () => {
-  let component: EditableMenu;
-  let fixture: ComponentFixture<EditableMenu>;
+describe('EditableToc', () => {
+  let component: EditableToc;
+  let fixture: ComponentFixture<EditableToc>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditableMenu ]
+      declarations: [ EditableToc ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditableMenu);
+    fixture = TestBed.createComponent(EditableToc);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

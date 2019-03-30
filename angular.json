@@ -27,7 +27,8 @@
               "includePaths": [
                 "apps/wizdm/src/styles",
                 "libs/elements/src/styles",
-                "libs/markdown/src/styles"
+                "libs/markdown/src/styles",
+                "libs/editable/src/styles"
               ]
             },
             "scripts": []
@@ -235,34 +236,6 @@
         }
       }
     },
-    "wizdm-elements": {
-      "root": "libs/wizdm/elements",
-      "sourceRoot": "libs/wizdm/elements/src",
-      "projectType": "library",
-      "prefix": "wizdm",
-      "architect": {
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/wizdm/elements/src/test.ts",
-            "tsConfig": "libs/wizdm/elements/tsconfig.spec.json",
-            "karmaConfig": "libs/wizdm/elements/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/wizdm/elements/tsconfig.lib.json",
-              "libs/wizdm/elements/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "elements": {
       "root": "libs/elements",
       "sourceRoot": "libs/elements/src",
@@ -283,6 +256,34 @@
             "tsConfig": [
               "libs/elements/tsconfig.lib.json",
               "libs/elements/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "editable": {
+      "root": "libs/editable",
+      "sourceRoot": "libs/editable/src",
+      "projectType": "library",
+      "prefix": "wizdm",
+      "architect": {
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/editable/src/test.ts",
+            "tsConfig": "libs/editable/tsconfig.spec.json",
+            "karmaConfig": "libs/editable/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/editable/tsconfig.lib.json",
+              "libs/editable/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

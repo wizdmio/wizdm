@@ -1,5 +1,5 @@
 import { DatabaseDocument, DistributedCounter, dbCommon, wmUser } from '@wizdm/connect';
-import { wmDocument } from '../../document/model';
+import { wmDocument } from '@wizdm/editable';
 import { ProjectService } from './project.service';
 import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
