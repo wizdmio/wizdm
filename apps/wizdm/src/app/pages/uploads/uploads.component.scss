@@ -11,11 +11,13 @@ $thumb-size:      60px;
 }
 
 .miniature {
+  box-sizing: border-box;
   width: $miniature-size;
   height: $miniature-size;
 }
 
 .thumb, .none { 
+  box-sizing: border-box;
   width:  $thumb-size;
   height: $thumb-size;
 }
@@ -24,14 +26,17 @@ $thumb-size:      60px;
   border: 1px dashed map-get($wm-theme-foreground, divider);
 }
 
-mat-dialog-content button {
+mat-dialog-content {
 
-  padding: 0;
-  margin: 1px;
-  box-sizing: border-box;
+  min-height: $miniature-size + 2px;
+  
+  button {
+    padding: 0;
+    border: 1px solid transparent;
 
-  &[selected=true] { 
-    outline: 1px solid mat-color($wm-primary);
-    background-color: rgba(mat-color($wm-primary), 0.2);
+    &[selected=true] { 
+      border: 1px solid mat-color($wm-primary);
+      background-color: rgba(mat-color($wm-primary), 0.2);
+    }
   }
 }

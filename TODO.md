@@ -22,7 +22,7 @@
 * Refactor the footer to a taller version with accent-like background and reacher informations
 
 ## Uploads popup
-* improve thumbnails so to have a fixed size while picture is loading
+* ~~improve thumbnails so to have a fixed size while picture is loading~~
 
 ## Pages
 * ~~Turn every page into a module to be eventually lazely loaded~~

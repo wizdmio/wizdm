@@ -48,7 +48,7 @@ export class UploadsComponent implements OnInit {
   public upload(files: FileList): void {
 
     // Gets the first file
-    let file = files.item(0);
+    const file = files.item(0);
     
     // Shows the uploading progress for the selected file
     // it'll be resetted when the uploads list updates
