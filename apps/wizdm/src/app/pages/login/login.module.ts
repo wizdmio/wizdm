@@ -10,7 +10,7 @@ import {
   MatProgressBarModule
 } from '@angular/material';
 import { IconModule } from '@wizdm/elements';
-import { ContentResolver, PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { LoginComponent } from './login.component';
 
 const routes: Routes = [
@@ -18,7 +18,9 @@ const routes: Routes = [
     path: '',
     component: LoginComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['login'] }
+    data: { modules: ['login'] },
+    //canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 

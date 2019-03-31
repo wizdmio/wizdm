@@ -3,11 +3,9 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { PopupComponent, PopupData } from './popup.component';
 export { PopupData } from './popup.component';
 import { Observable, of } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 /**  
  * PopupService - used to shows a popup dialog typically to ask for user intervention 
  */

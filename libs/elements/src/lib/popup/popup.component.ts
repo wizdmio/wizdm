@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 /** PopupData describes the popup dialog content
@@ -20,8 +20,9 @@ export interface PopupData {
   styleUrls: ['./popup.component.scss']
 })
 /** PopupComponent implements the popup dialog standard appearance */
-export class PopupComponent implements OnInit {
+export class PopupComponent {
 
-  constructor(private ref: MatDialogRef<PopupComponent>, @Inject(MAT_DIALOG_DATA) public data: PopupData ) { }
-  ngOnInit() {}
+  constructor(private ref: MatDialogRef<PopupComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: PopupData) {         
+  }
 }

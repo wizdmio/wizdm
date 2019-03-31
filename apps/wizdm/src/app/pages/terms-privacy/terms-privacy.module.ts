@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MarkdownModule } from '@wizdm/markdown';
-import { ContentResolver, PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { TermsPrivacyComponent } from './terms-privacy.component';
 
 const routes: Routes = [
@@ -12,7 +12,8 @@ const routes: Routes = [
     component: TermsPrivacyComponent,
     resolve: { content: ContentResolver }, 
     data: { modules: ['terms'] },
-    canDeactivate: [ PageGuardService ]
+    //canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 

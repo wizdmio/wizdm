@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material';
 import { IconModule } from '@wizdm/elements';
-import { ContentResolver, PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { AboutComponent } from './about.component';
 
 const routes: Routes = [
@@ -12,7 +12,9 @@ const routes: Routes = [
     path: '',
     component: AboutComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['about'] }
+    data: { modules: ['about'] },
+    //canActivate: [ ContentResolver ]
+    canDeactivate: [ ContentResolver ]
   }
 ];
 

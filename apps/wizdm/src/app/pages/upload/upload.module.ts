@@ -6,10 +6,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule,
          MatListModule,
          MatProgressBarModule } from '@angular/material';
-import { FileOpenModule } from '@wizdm/elements';
-import { ContentResolver, 
-         AuthGuardService, 
-         PageGuardService } from '../../utils';
+import { FileOpenModule,PopupModule } from '@wizdm/elements';
+import { ContentResolver } from '../../utils';
 import { UploadComponent } from './upload.component';
 
 const routes: Routes = [
@@ -18,7 +16,8 @@ const routes: Routes = [
     component: UploadComponent,
     resolve: { content: ContentResolver }, 
     data: { modules: ['upload'] },
-    canActivate: [ AuthGuardService ]
+    canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 
@@ -32,6 +31,7 @@ const routes: Routes = [
     MatListModule,
     MatProgressBarModule,
     FileOpenModule,
+    PopupModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

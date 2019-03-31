@@ -20,7 +20,7 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly scrolled$: Observable<boolean>;
   
   constructor(private  router  : Router,
-              private  content : ContentManager,           
+              private  content : ContentManager,
               private  profile : UserProfile,
               readonly nav     : NavigatorService,
               private  title   : Title,

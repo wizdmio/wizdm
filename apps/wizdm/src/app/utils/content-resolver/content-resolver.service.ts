@@ -1,20 +1,32 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, Router, NavigationEnd } from '@angular/router';
+import { Router, 
+         UrlTree,
+         Resolve, 
+         CanActivate,
+         CanDeactivate,
+         ActivatedRouteSnapshot, 
+         RouterStateSnapshot,
+         NavigationEnd } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { Observable, of } from 'rxjs';
-import { switchMap, filter, first } from 'rxjs/operators';
+import { switchMap, filter, first, map, tap } from 'rxjs/operators';
 import * as moment from 'moment';
+
+export interface CanPageDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+ }
 
 @Injectable({
   providedIn: 'root'
 })
-export class ContentResolver implements Resolve<any> {
+export class ContentResolver implements Resolve<any>, CanActivate {
 
   constructor(readonly content : ContentManager,
               readonly user    : UserProfile,
-              private  router  : Router) { }
+              readonly router  : Router) { }
 
+  // Implements routint pre-fetch data resolving
   resolve(route: ActivatedRouteSnapshot): Observable<any> | any {
 
     // When lang params is specified we are loading the navigator or switching language. Defaulting to the current language if already loaded
@@ -53,6 +65,34 @@ export class ContentResolver implements Resolve<any> {
       }));
   }
 
+  // Implements single route user authentication guarding
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean|UrlTree> {
+
+    return this.user.asObservable().pipe(
+      first(),
+      map( user => {
+        // Reverts navigation to the login page on invalid user profile
+        if(!user) {
+
+          console.log('canActivate: Authentication required');
+          // Gets the current language when possible
+          const lang = this.content.language || 'en';
+          // Returns an UrlTree pointing to the login page
+          return this.router.createUrlTree([lang, 'login']); 
+        }
+        // Allows navigation otherwise
+        console.log('canActivate: Access granted');
+        return true;
+      })
+    );
+  }
+
+  // Implements single route deactivation
+  canDeactivate(page: CanPageDeactivate) {
+    // Simply reverts to the current page implementation of canDeactivate interface
+    return !!page.canDeactivate ? page.canDeactivate() : true;
+  }
+
   public detectLanguage(): string {
 
     const navigator: any = window.navigator || {};
@@ -69,7 +109,7 @@ export class ContentResolver implements Resolve<any> {
    * @param lang the new language code to switch to
    * @param url the optional relative url to navigate to. The function navigates tothe current position if not specified.
    */
-  public switchLanguage(lang: string, url?: string): void {
+  public switchLanguage(lang: string, url?: string): Promise<boolean> {
 
     // Checks if a language change is requested
     if(lang !== this.content.language) {
@@ -96,6 +136,6 @@ export class ContentResolver implements Resolve<any> {
       this.router.url.replace(re, `/${lang}`);
 
     // Navigate to the target page (switching language if necessary)
-    this.router.navigateByUrl(target);
+    return this.router.navigateByUrl(target);
   }
 }

@@ -134,7 +134,7 @@ export class LoginComponent implements OnInit  {
           console.log('logged in successfully as: ' + user.email);
     
           // Checks for user preferrend language
-          let userLang = user.lang || 'en';
+          const userLang = user.lang || 'en';
   
           // Jump to the projects explore switching to the user language if needed
           this.resolver.switchLanguage(userLang, 'explore');

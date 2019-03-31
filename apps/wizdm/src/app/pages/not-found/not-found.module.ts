@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 //import {  } from '@angular/material';
 //import {  } from '@wizdm/elements';
-import { ContentResolver, PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { NotFoundComponent } from './not-found.component';
 
 const routes: Routes = [
@@ -12,7 +12,9 @@ const routes: Routes = [
     path: '',
     component: NotFoundComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['notFound'] }
+    data: { modules: ['notFound'] },
+    //canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 

@@ -11,10 +11,8 @@ import {
   MatStepperModule,
   MatProgressBarModule
 } from '@angular/material';
-import { DisclaimerModule } from '@wizdm/elements';
-import { ContentResolver, 
-         AuthGuardService, 
-         PageGuardService } from '../../utils';
+import { DisclaimerModule, PopupModule } from '@wizdm/elements';
+import { ContentResolver } from '../../utils';
 import { ApplyComponent } from './apply.component';
 
 const routes: Routes = [
@@ -23,8 +21,8 @@ const routes: Routes = [
     component: ApplyComponent,
     resolve: { content: ContentResolver }, 
     data: { modules: ['apply', 'terms', 'template'] },
-    canActivate: [ AuthGuardService ],
-    canDeactivate: [ PageGuardService ]
+    canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 
@@ -41,6 +39,7 @@ const routes: Routes = [
     MatStepperModule,
     MatProgressBarModule,
     DisclaimerModule,
+    PopupModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

@@ -4,9 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 //import { MatDividerModule } from '@angular/material';
 //import { IconModule } from '@wizdm/elements';
-import { ContentResolver, 
-         AuthGuardService, 
-         PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
@@ -15,8 +13,8 @@ const routes: Routes = [
     component: DashboardComponent,
     resolve: { content: ContentResolver }, 
     data: { modules: ['dashboard'] },
-    canActivate: [ AuthGuardService ],
-    canDeactivate: [ PageGuardService ],
+    canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ],
   }
 ];
 

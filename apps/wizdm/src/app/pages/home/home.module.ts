@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material';
 import { DisclaimerModule } from '@wizdm/elements';
-import { ContentResolver, PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [
@@ -12,7 +12,9 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['home'] }
+    data: { modules: ['home'] },
+    //canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 

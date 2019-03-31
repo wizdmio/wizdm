@@ -14,10 +14,8 @@ import {
   MatSelectModule,
   MatDatepickerModule
 } from '@angular/material';
-import { IconModule, AvatarModule } from '@wizdm/elements';
-import { ContentResolver, 
-         AuthGuardService, 
-         PageGuardService } from '../../utils';
+import { IconModule, AvatarModule, PopupModule } from '@wizdm/elements';
+import { ContentResolver } from '../../utils';
 import { UploadsModule } from '../uploads/uploads.module';
 import { UserComponent } from './user.component';
 import { UserItemComponent } from './user-item/user-item.component';
@@ -28,8 +26,8 @@ const routes: Routes = [
     component: UserComponent,
     resolve: { content: ContentResolver }, 
     data: { modules: ['profile', 'uploads'] },
-    canActivate: [ AuthGuardService ],
-    canDeactivate: [ PageGuardService ]
+    canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ]
   }
 ];
 
@@ -53,6 +51,7 @@ const routes: Routes = [
     MatDatepickerModule,
     IconModule, 
     AvatarModule,
+    PopupModule,
     UploadsModule,
     RouterModule.forChild(routes)
   ],

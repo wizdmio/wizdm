@@ -10,11 +10,9 @@ import {
   MatTooltipModule,
   MatDividerModule
 } from '@angular/material';
-//import { } from '@wizdm/elements';
+import { PopupModule } from '@wizdm/elements';
 import { EditableModule } from '@wizdm/editable';
-import { ContentResolver, 
-         AuthGuardService, 
-         PageGuardService } from '../../utils';
+import { ContentResolver } from '../../utils';
 import { EditorComponent } from './editor.component';
 import { ContextMenuComponent } from './menu/context-menu.component';
 import { ToolboxComponent } from './toolbox/toolbox.component';
@@ -25,8 +23,8 @@ const routes: Routes = [
     component: EditorComponent,
     resolve: { content: ContentResolver }, 
     data: { modules: ['editor', 'info'] },
-    canActivate: [ AuthGuardService ],
-    canDeactivate: [ PageGuardService ],
+    canActivate: [ ContentResolver ],
+    canDeactivate: [ ContentResolver ],
   }
 ];
 
@@ -40,6 +38,7 @@ const routes: Routes = [
     MatMenuModule,
     MatTooltipModule,
     MatDividerModule,
+    PopupModule,
     EditableModule,
     RouterModule.forChild(routes)
   ],
