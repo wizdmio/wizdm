@@ -6,50 +6,55 @@ export type wmAction = {
   caption?:  string,
   icon?:     string,
   code?:     string,
-  disabled?: boolean,
   link?:     string,
   params?:   any,
-  menu?:     wmAction[]
+  menu?:     wmAction[],
+
+  enabler?:  Observable<boolean>
 };
 
-/**
- * Defines the toolbar action state
- */
-export class ActionState {
+/** Defines the toolbar action button */
+class ActionButton {
 
-  /**  Action buttons */
+  private enabler$ = new BehaviorSubject<boolean>(true);
+
+  constructor(public data: wmAction) { 
+    // Maps the action button enabler asynchronously. This is a trick to ensure navigator view
+    // updates consistently although children pages are responsible for action bar update
+    // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
+    data.enabler = this.enabler$.pipe( delay(0) );
+  }
+
+  public enable(enable: boolean) {
+    this.enabler$.next(enable);
+  }
+}
+
+/** Defines the toolbar action state */
+class ActionState {
+
+  private actions$: BehaviorSubject<ActionButton[]>;
+
+  private get actions(): ActionButton[] { return this.actions$.value;}
+
   public buttons$: Observable<wmAction[]>;
-  private _buttons$: BehaviorSubject<wmAction[]>;
-
-  /**  Action events emitter */
   public events$: Subject<string> = new Subject();
 
-  /**
-   * Contructs the action state using the given array of actions
-   */
   constructor(buttons: wmAction[]) {
-
-    this._buttons$ = new BehaviorSubject<wmAction[]>(buttons);
+    // Wraps the wmAction into ActioButton for internal use
+    this.actions$ = new BehaviorSubject<ActionButton[]>( buttons.map( btn => new ActionButton(btn) ));
     // Maps the action buttons array asynchronously. This is a trick to ensure navigator view
     // updates consistently although children pages are responsible for action bar update
     // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
-    this.buttons$ = this._buttons$.pipe( delay(0) );
+    this.buttons$ = this.actions$.pipe( delay(0), map( actions => actions.map( act => act.data ) ));
   }
 
-  private get buttons(): wmAction[] {
-    return this._buttons$.value;
-  }
-
+  /** Enables/disables the specified action button  */
   public enable(code: string, enable: boolean) {
-
     // Seeks the requested action by code
-    const index = this.buttons.findIndex( action => action.code === code );
-    if( index >= 0 ) { 
-
-      const buttons = [...this.buttons];
-      buttons[index].disabled = !enable;
-      this._buttons$.next(buttons);
-    }
+    const action = this.actions.find( action => action.data.code === code );
+    // Pushes the new enable state
+    !!action && action.enable(enable);
   }
 
   public dispose() { this.events$.complete(); }

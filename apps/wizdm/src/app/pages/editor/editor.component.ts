@@ -6,7 +6,7 @@ import { wmDocument } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
 import { ProjectService, Project, wmProject } from '../../utils';
 import { Observable, Subject } from 'rxjs';
-import { switchMap, takeUntil, debounceTime, map } from 'rxjs/operators';
+import { switchMap, takeUntil, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';
 
 @Component({
@@ -52,7 +52,6 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.project.update( data )
         .then( () => this.toolbar.enableAction('save', false) );
     });
-
   }
 
   ngOnDestroy() {
@@ -90,8 +89,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public save(document: wmDocument) {
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
-    // Enables the save button
-    this.toolbar.enableAction('save', true);
   }
 
   private onLoad(): Observable<Project> {
@@ -108,7 +105,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   private onSave(): Observable<wmProject> {
     return this.saveDocument$.pipe(
       takeUntil( this.dispose$ ),
+      //
+      tap( () => this.toolbar.enableAction('save', true) ),
+      
       debounceTime( 1000 ),
+      
       map( document => document as wmProject )
     );
   }
