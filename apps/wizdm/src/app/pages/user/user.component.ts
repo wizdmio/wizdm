@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MatExpansionPanel } from '@angular/material';
 import { LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
@@ -29,9 +28,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   constructor(private resolver : ContentResolver,
               private profile  : UserProfile,
               private toolbar  : ToolbarService,
-              private popup    : PopupService,
-              private router   : Router,
-              private route    : ActivatedRoute) { 
+              private popup    : PopupService) { 
 
     // Gets the localized content
     this.msgs = this.content.select('profile');
@@ -176,13 +173,10 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
     // Note: the function resolves to of(true) in case popup is null
     this.popup.confirmPopup(popup).subscribe( () => {
 
-        // If we can proceed, navigates to the login page applying the requested action code
-        this.router.navigate(['..','login'], {
-          relativeTo: this.route, 
-          queryParams: { 
-            mode: code 
-          } 
-        });
+      // If we can proceed, navigates to the login page applying the requested action code
+      this.resolver.goTo('login', { queryParams: { 
+        mode: code 
+      }});
     });
   }
 

@@ -6,7 +6,8 @@ import { Router,
          CanDeactivate,
          ActivatedRouteSnapshot, 
          RouterStateSnapshot,
-         NavigationEnd } from '@angular/router';
+         NavigationEnd,
+         NavigationExtras } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { Observable, of } from 'rxjs';
@@ -20,7 +21,7 @@ export interface CanPageDeactivate {
 @Injectable({
   providedIn: 'root'
 })
-export class ContentResolver implements Resolve<any>, CanActivate {
+export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate<CanPageDeactivate> {
 
   constructor(readonly content : ContentManager,
               readonly user    : UserProfile,
@@ -89,8 +90,19 @@ export class ContentResolver implements Resolve<any>, CanActivate {
 
   // Implements single route deactivation
   canDeactivate(page: CanPageDeactivate) {
+    // Allows deactivation for pages not implementing the canDeactivate interface
+    if(!page || !page.canDeactivate) {
+      console.log('canDeactivate: Allowed');
+      return true;
+    }
     // Simply reverts to the current page implementation of canDeactivate interface
-    return !!page.canDeactivate ? page.canDeactivate() : true;
+    console.log('canDeactivate: Reverts to page...');
+    return page.canDeactivate();
+  }
+
+  // Routing helper to easily jump on a specified page keeping the current language
+  public goTo(to: string, extras?: NavigationExtras): Promise<boolean> {
+    return this.router.navigate([ this.content.language || 'en', to ], extras );
   }
 
   public detectLanguage(): string {

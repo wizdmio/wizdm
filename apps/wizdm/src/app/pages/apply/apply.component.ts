@@ -1,13 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
 import { ProjectService, wmApplication, wmProject } from '../../core';
 import { ToolbarService, ActionEnabler } from '../../navigator';
-import { CanPageDeactivate } from '../../utils';
+import { CanPageDeactivate, ContentResolver } from '../../utils';
 import { $animations } from './apply.animations';
 
 interface userApply extends wmUser {
@@ -29,18 +27,19 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   public progress = false;
   public msgs;
 
-  constructor(private builder : FormBuilder, 
-              private router  : Router,
-              private route   : ActivatedRoute,
-              private content : ContentManager,
-              private profile : UserProfile<userApply>,
-              private project : ProjectService,
-              private toolbar : ToolbarService,
-              private popup   : PopupService) { 
+  constructor(private builder  : FormBuilder, 
+              private resolver : ContentResolver,
+              private profile  : UserProfile<userApply>,
+              private project  : ProjectService,
+              private toolbar  : ToolbarService,
+              private popup    : PopupService) { 
 
     // Gets the localized user messages from content manager
     this.msgs = this.content.select('apply');
   }
+
+  // Returns the content manager as if it was injected in the contructor instead of the resolver
+  private get content() { return this.resolver.content; }
 
   private cleared$: ActionEnabler;
 
@@ -238,14 +237,11 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
         return this.resetApplication();
       })
       .then( () => { 
-      
+
         // Navigate back to the project explore reporting the creation of a new project
-        this.router.navigate(['..', 'explore'], {
-          relativeTo: this.route,
-          queryParams: {
-            project: 'new'
-          }
-        })
+        this.resolver.goTo('explore', { queryParams: {
+          project: 'new'
+        }});
       })
       .catch(error => {
 

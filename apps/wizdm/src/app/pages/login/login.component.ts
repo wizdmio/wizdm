@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService } from '../../navigator';
 import { ContentResolver } from '../../utils';
@@ -40,13 +40,9 @@ export class LoginComponent implements OnInit  {
   public password: FormControl;
   public newEmail: FormControl;
   public newPassword: FormControl;
-
-  // Returns the content manager as if it was injected in the contructor instead of the resolver
-  private get content() { return this.resolver.content;}
   
   constructor(private resolver  : ContentResolver,
               private navigator : NavigatorService,
-              private router    : Router, 
               private route     : ActivatedRoute,
               private profile   : UserProfile) {
 
@@ -63,6 +59,9 @@ export class LoginComponent implements OnInit  {
     // Group the controls
     this.form = new FormGroup({});
   }
+
+  // Returns the content manager as if it was injected in the contructor instead of the resolver
+  private get content() { return this.resolver.content; }
 
   // Returns the Auth service instance
   private get auth() { return this.profile.auth; }
@@ -109,15 +108,6 @@ export class LoginComponent implements OnInit  {
       this.switchPage(mode as pageTypes);
     });
    }
-
-  // Routing helper to easily jump on a specified page
-  private jump(to: string, overwrite = false, params?: Params) {
-    this.router.navigate(['..', to], { 
-      relativeTo: this.route,
-      replaceUrl: overwrite,
-      queryParams: params
-    });
-  }
 
   // Loggin-in helper to navigate to the project page after successfully signing-in by 
   // applying the user preferred language
@@ -287,7 +277,7 @@ export class LoginComponent implements OnInit  {
     // Signing-in with a email/password using the current language than send a verification email befor jumping to the profile page
     this.auth.registerNew(email, password, name )
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.jump('profile') )
+      .then( () => this.resolver.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -306,7 +296,7 @@ export class LoginComponent implements OnInit  {
 
     // Resets the forgotten password by applying the action code received than jumps to the profile page
     this.auth.resetPassword(code, newPassword)
-      .then( () => this.jump('profile') )
+      .then( () => this.resolver.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -317,7 +307,7 @@ export class LoginComponent implements OnInit  {
     // Update the account email by re-authenticating than send a verification request and jumps to the profile page
     this.auth.updateEmail(password, newEmail)
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.jump('profile') )
+      .then( () => this.resolver.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -327,7 +317,7 @@ export class LoginComponent implements OnInit  {
 
     // Updte the account password by re-authenticating than jumps to the profile page
     this.auth.updatePassword(password, newPassword)
-      .then( () => this.jump('profile') )
+      .then( () => this.resolver.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -336,7 +326,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
   
     this.auth.deleteUser(password)
-      .then( () => this.jump('home') )
+      .then( () => this.resolver.goTo('home') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -346,6 +336,6 @@ export class LoginComponent implements OnInit  {
     this.auth.signOut();
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
-    this.jump('home', true);
+    this.resolver.goTo('home', { replaceUrl: true });
   }
 }  
