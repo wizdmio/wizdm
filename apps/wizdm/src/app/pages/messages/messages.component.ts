@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { PopupService } from '@wizdm/elements';
-import { ToolbarService, ActionEnabler } from '../../navigator';
+import { ToolbarService } from '../../navigator';
 import { ChatService, wmConversation, wmMessage } from '../../utils';
 import { Observable, of } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
@@ -25,7 +25,6 @@ export class MessagesComponent implements OnInit {
 
   @ViewChild(MatSelectionList) msgList: MatSelectionList;
 
-  //private enableDelete$: ActionEnabler;
   public messages$: Observable<wmConversation[]>;
   public msgs;
 

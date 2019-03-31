@@ -3,7 +3,7 @@ import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { FileOpenComponent, PopupService } from '@wizdm/elements';
-import { ToolbarService, ActionEnabler } from '../../navigator';
+import { ToolbarService } from '../../navigator';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -23,7 +23,6 @@ export class UploadComponent implements OnInit {
   @ViewChild(FileOpenComponent) openFile: FileOpenComponent;
   @ViewChild(MatSelectionList) fileList: MatSelectionList;
 
-  private enableDelete$: ActionEnabler;
   public uploads$: Observable<any[]>;
   public tasks: UploadTask[] = [];
   public msgs;
@@ -48,15 +47,15 @@ export class UploadComponent implements OnInit {
     this.toolbar.activateActions(this.msgs.actions)
       .subscribe( code => this.executeAction(code) );
 
-    // Gets the action enabler for 'delete' action code
-    this.enableDelete$ = this.toolbar.actionEnabler('delete', false);
+    // Disables the delete action
+    this.toolbar.enableAction('delete', false);
   }
 
   public selectionChange(change: MatSelectionListChange): void {
 
     // Enables / disables the delete action upon list selection
     const hasValue = change.source.selectedOptions.hasValue();
-    this.enableDelete$.enable( hasValue );
+    this.toolbar.enableAction('delete', hasValue );
   }
 
   private executeAction(code: string): void {
@@ -176,7 +175,7 @@ export class UploadComponent implements OnInit {
       });
 
       // Disables the delete action
-      this.enableDelete$.enable(false);
+      this.toolbar.enableAction('delete', false);
     }
   }
 }

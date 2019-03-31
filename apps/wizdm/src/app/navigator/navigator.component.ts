@@ -105,6 +105,10 @@ export class NavComponent implements OnInit, OnDestroy {
     return this.nav.toolbar.some$;
   }
 
+  public performAction(code: string): void {
+    this.nav.toolbar.performAction(code);
+  }
+
   public clearActions(): void {
     this.nav.toolbar.clearActions();
   }

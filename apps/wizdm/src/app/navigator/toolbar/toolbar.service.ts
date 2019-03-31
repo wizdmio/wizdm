@@ -1,81 +1,58 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, Observer } from 'rxjs';
-import { map, takeUntil, delay } from 'rxjs/operators';
+import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
+import { map, switchMap, delay } from 'rxjs/operators';
 
 export type wmAction = {
-
-  caption?: string,
-  icon?:    string,
-  code?:    string,
-  enabler?: Observable<boolean>
-  link?:    string,
-  params?:  any,
-  menu?:    wmAction[]
+  caption?:  string,
+  icon?:     string,
+  code?:     string,
+  disabled?: boolean,
+  link?:     string,
+  params?:   any,
+  menu?:     wmAction[]
 };
-
-/**
- * Implements a simple class to wrap tne action enabler observer
- */
-export class ActionEnabler extends BehaviorSubject<boolean> {
-
-  constructor( value: boolean ) { super(value); }
-
-  /** Enables/disables the corresponding action button */
-  public enable(value: boolean) {
-    this.next(value);
-  }
-  
-  /** Returns the current enable status */
-  public get isEnabled() {
-   return this.value;
-  }
-}
 
 /**
  * Defines the toolbar action state
  */
 export class ActionState {
 
+  /**  Action buttons */
+  public buttons$: Observable<wmAction[]>;
+  private _buttons$: BehaviorSubject<wmAction[]>;
+
   /**  Action events emitter */
   public events$: Subject<string> = new Subject();
-
-  // Subject to dispose for all the Obervables belonging to this state
-  private dispose$: Subject<void> = new Subject();
 
   /**
    * Contructs the action state using the given array of actions
    */
-  constructor(readonly buttons: wmAction[]) {}
+  constructor(buttons: wmAction[]) {
 
-  /**
-   * Creates an action enabler for the observer to enable/disable the action button
-   * @param code the code identifying the action to consider 
-   * @returns the action enabler object
-   */
-  public actionEnabler(code: string, startValue: boolean): ActionEnabler {
+    this._buttons$ = new BehaviorSubject<wmAction[]>(buttons);
+    // Maps the action buttons array asynchronously. This is a trick to ensure navigator view
+    // updates consistently although children pages are responsible for action bar update
+    // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
+    this.buttons$ = this._buttons$.pipe( delay(0) );
+  }
+
+  private get buttons(): wmAction[] {
+    return this._buttons$.value;
+  }
+
+  public enable(code: string, enable: boolean) {
 
     // Seeks the requested action by code
     const index = this.buttons.findIndex( action => action.code === code );
-    if( index >= 0 ) {
-    
-      // Creates an enabler observable
-      const enabler = new ActionEnabler(startValue);
+    if( index >= 0 ) { 
 
-      // Updated the corresponding action button adding the relevan enabler observable
-      this.buttons[index].enabler = enabler.pipe( delay(0), takeUntil(this.dispose$) );
-      
-      // Returns the enabler
-      return enabler;
+      const buttons = [...this.buttons];
+      buttons[index].disabled = !enable;
+      this._buttons$.next(buttons);
     }
-
-    return null;
   }
 
-  public dispose() {
-    this.dispose$.next(); 
-    this.dispose$.complete();
-    this.events$.complete();
-  }
+  public dispose() { this.events$.complete(); }
 }
 
 @Injectable({
@@ -83,25 +60,20 @@ export class ActionState {
 })
 export class ToolbarService implements OnDestroy {
 
-  //-- Action Buttons ------------
+  private state$ = new BehaviorSubject<ActionState>(null);
   private savedStates: ActionState[] = [];
- 
-  /** Array of action buttons as observable */
-  private state$: BehaviorSubject<ActionState> = new BehaviorSubject(null);
+  
   public buttons$: Observable<wmAction[]>;
   public some$: Observable<boolean>;
   
   constructor() { 
-    // Maps the state to button asynchronously. This is a trick to ensure navigator view
-    // updates consistently although children pages are responsible for action bar update
-    // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
-    this.buttons$ = this.state$.pipe( delay(0), map( state => !!state ? state.buttons : [] ));
+    // Maps the buttons to the current state's ones
+    this.buttons$ = this.state$.pipe( switchMap( state => !!state ? state.buttons$ : of([]) ));
     // Maps the buttons to a boolean reporting actions are available or not
     this.some$ = this.buttons$.pipe( map( buttons => buttons.length > 0));
   }
 
-  ngOnDestroy() { this.clearActions();}
-
+  ngOnDestroy() { this.clearActions(); }
   /**
    * Activtes toolbar actions
    * @param buttons the array of action buttons or links ot display
@@ -118,7 +90,6 @@ export class ToolbarService implements OnDestroy {
     // Returns the state event osrevable for the observe to subscribe on actions
     return state.events$;
   }
-
   /**
    * Emits an action code to the observer identifying the action to be performed
    * @param code the action code identifying the action to be performed
@@ -126,16 +97,14 @@ export class ToolbarService implements OnDestroy {
   public performAction(code: string) {
     !!this.state$.value && this.state$.value.events$.next(code);
   }
-
   /**
-   * Creates an action enabler for the observer to enable/disable the corresponding action button
+   * Enables/disables the specified action
    * @param code the code identifying the action
-   * @param value (default: true) to init the enable state
+   * @param enable the enable state
    */
-  public actionEnabler(code: string, value = true): ActionEnabler {
-    return !!this.state$.value ? this.state$.value.actionEnabler(code, value) : undefined;
+  public enableAction(code: string, enable: boolean) {
+    !!this.state$.value && this.state$.value.enable(code, enable);
   }
-  
   /**
    * Restores the previously saved action bar
    */
@@ -145,7 +114,6 @@ export class ToolbarService implements OnDestroy {
       this.state$.next( this.savedStates.pop() );
     }
   }
-
   /**
    * Clears the action bar
    */

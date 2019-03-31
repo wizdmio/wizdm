@@ -23,7 +23,10 @@
       <div fxLayout="row" fxLayoutAlign="end center">
 
         <!-- Action toolbar -->
-        <wm-toolbar  *ngIf="someActions$ | async" [buttons]="actionButtons$ | async"></wm-toolbar>
+        <wm-toolbar *ngIf="someActions$ | async" 
+                    [buttons]="actionButtons$ | async" 
+                    (action)="performAction($event)">
+        </wm-toolbar>
 
         <!-- Sign-in / User profile button -->
         <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">

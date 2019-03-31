@@ -18,7 +18,7 @@
     </ng-container>
 
     <!-- ACTION BUTTON, LINK or MENU-ITEM-->
-    <wm-toolbar-action [menu]="menuItem" [action]="button" (activate)="performAction($event)">
+    <wm-toolbar-action [menu]="menuItem" [action]="button" (activate)="action.emit($event)">
     </wm-toolbar-action>
 
   </ng-container> 

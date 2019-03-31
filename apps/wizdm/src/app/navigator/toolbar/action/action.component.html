@@ -5,14 +5,14 @@
   <!-- TEXT BUTTON (DESKTOP) -->
   <button mat-button color="primary" [fxHide.lt-sm]="action.icon" [fxHide]="!action.caption"
     (click)="activate.emit(action.code)"
-    [disabled]="!!action.enabler ? !(action.enabler | async) : false" @fadeIn>
+    [disabled]="!!action.disabled" @fadeIn>
     {{ action.caption }}
   </button>
 
   <!-- ICON BUTTON (MOBILE) -->
   <button mat-icon-button color="primary" [fxHide]="!!action.caption || !action.icon" [fxShow.lt-sm]="action.icon" 
     (click)="activate.emit(action.code)" 
-    [disabled]="!!action.enabler ? !(action.enabler | async) : false" @fadeIn>
+    [disabled]="!!action.disabled" @fadeIn>
     <wm-icon [icon]="action.icon"></wm-icon>
   </button>
 
@@ -41,7 +41,7 @@
   <ng-container *ngIf="action.code">
     <button mat-menu-item color="primary"
       (click)="activate.emit(action.code)"
-      [disabled]="!!action.enabler ? !(action.enabler | async) : false">
+      [disabled]="!!action.disabled">
       <wm-icon *ngIf="action.icon" [icon]="action.icon"></wm-icon>
       <span>{{ action.caption }}</span>
     </button>

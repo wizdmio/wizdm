@@ -8,7 +8,7 @@
 
 ## Navigator
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
-* Refactor the action bar getting rid of the action enabler leveraging on the `buttons$` observable instead, so, that enableAction() can be implemented simlarly to performAction() and eventually other functions to dynamically change labels as well. 
+* ~~Refactor the action bar getting rid of the action enabler leveraging on the `buttons$` observable instead, so, that enableAction() can be implemented simlarly to performAction() and eventually other functions to dynamically change labels as well.~~ 
 * ~~Improve ToolbarService with:~~
   * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
   * ~~Add an `isEnabled()` funciton to the ActionEnabler class ( returning BehaviourSubject().value )~~

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from
 import { MatStepper } from '@angular/material';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
-import { ToolbarService, ActionEnabler } from '../../navigator';
+import { ToolbarService } from '../../navigator';
 import { CanPageDeactivate, 
          ContentResolver, 
          ProjectService, 
@@ -44,8 +44,6 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   // Returns the content manager as if it was injected in the contructor instead of the resolver
   private get content() { return this.resolver.content; }
 
-  private cleared$: ActionEnabler;
-
   ngOnInit() {
 
     // Checks if the application was previously saved
@@ -59,7 +57,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       .subscribe( code => this.disclaimerAction(code) );
 
     // Gets the action enabler for 'clear' action code
-    this.cleared$ = this.toolbar.actionEnabler('clear', this.welcomeBack);
+    this.toolbar.enableAction('clear', this.welcomeBack);
   }
 
   ngAfterViewInit() {
@@ -88,7 +86,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
     
     return this.profile.update({ lastApplication })
       // Enables/Disables the 'clear' action button accordingly
-      .then(() => this.cleared$.enable( value != null ) )
+      .then(() => this.toolbar.enableAction('clear', value != null ) )
       // Catches errors
       .catch(error => console.log("something wrong: " + error.code) );
   }

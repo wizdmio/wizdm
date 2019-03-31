@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentManager } from '@wizdm/content';
 import { PopupService } from '@wizdm/elements';
 import { wmDocument } from '@wizdm/editable';
-import { ToolbarService, ActionEnabler } from '../../navigator';
+import { ToolbarService } from '../../navigator';
 import { ProjectService, Project, wmProject } from '../../utils';
 import { Observable, Subject } from 'rxjs';
 import { switchMap, takeUntil, debounceTime, map } from 'rxjs/operators';
@@ -33,8 +33,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   private saveDocument$ = new Subject<wmDocument>();
   private dispose$ = new Subject<void>();
-  public saved$: ActionEnabler;
-
+  
   ngOnInit() {
 
     // Load the project once
@@ -51,7 +50,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.onSave().subscribe( data => {
 
       this.project.update( data )
-        .then( () => !!this.saved$ && this.saved$.enable(false) );
+        .then( () => this.toolbar.enableAction('save', false) );
     });
 
   }
@@ -66,7 +65,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.toolbar.activateActions( this.msgs.editActions, true)
       .subscribe( code => this.doAction(code) );
 
-    this.saved$ = this.toolbar.actionEnabler('save', false);
+    // Disables the save button
+    this.toolbar.enableAction('save', false);
 
     // Turns edit mode on 
     this.editMode = true;
@@ -88,10 +88,10 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public save(document: wmDocument) {
-
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
-    this.saved$.enable(true);
+    // Enables the save button
+    this.toolbar.enableAction('save', true);
   }
 
   private onLoad(): Observable<Project> {
