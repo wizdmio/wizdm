@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { wmMessage } from '../../../core';
-
+import { wmMessage } from '../../../utils';
 import * as moment from 'moment';
 
 @Component({

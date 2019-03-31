@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } f
 import { ContentManager } from '@wizdm/content';
 //import { wmFile } from '@wizdm/connect';
 import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
-import { Project, wmProject  } from '../../../core';
+import { Project, wmProject  } from '../../../utils';
 
 import * as moment from 'moment';
 

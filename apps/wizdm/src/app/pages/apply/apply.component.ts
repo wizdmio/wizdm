@@ -3,9 +3,12 @@ import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from
 import { MatStepper } from '@angular/material';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
-import { ProjectService, wmApplication, wmProject } from '../../core';
 import { ToolbarService, ActionEnabler } from '../../navigator';
-import { CanPageDeactivate, ContentResolver } from '../../utils';
+import { CanPageDeactivate, 
+         ContentResolver, 
+         ProjectService, 
+         wmApplication, 
+         wmProject } from '../../utils';
 import { $animations } from './apply.animations';
 
 interface userApply extends wmUser {

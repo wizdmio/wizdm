@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ContentManager } from '@wizdm/content';
 import { DatabaseService, wmUser } from '@wizdm/connect';
 import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
-import { wmProject } from '../../core';
+import { wmProject } from '../../utils';
 
 @Component({
   selector: 'wm-user-info',
