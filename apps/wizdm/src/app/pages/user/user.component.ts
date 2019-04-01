@@ -19,8 +19,8 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   @ViewChildren(UserItemComponent) profileItems: QueryList<UserItemComponent>;
   @ViewChildren(MatExpansionPanel) profilePanels: QueryList<MatExpansionPanel>;
 
-  private msgs = null;
-  private langOptions: LanguageOption[]; 
+  readonly langOptions: LanguageOption[]; 
+  readonly msgs;
 
   // Returns the content manager as if it was injected in the contructor instead of the resolver
   private get content() { return this.resolver.content;}
@@ -36,7 +36,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
     // WARNING: we buffers languageOptions into a local variable to prevent
     // the *ngFor on mat-select to run over an infinite loop due to an issue
     // it seems they still can't fix
-    this.langOptions = this.content.languageOptions;
+    this.langOptions = this.content.languageOptions();
   }
 
   ngOnInit() {

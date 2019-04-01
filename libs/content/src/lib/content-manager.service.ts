@@ -32,7 +32,9 @@ export interface ContentConfig {
   modules   : Modules;
 };
 
-export type LanguageOption = { value: string, label: string };
+export interface LanguageOption extends LanguageData { 
+  value: string 
+};
 
 /** ContentEvent describes the ContentService event 
  * @param reason type of event among 
@@ -73,7 +75,8 @@ export class ContentManager {
 
   /** Resturns the current language as a two letter code such 'en' for English */
   public get language(): string {
-    return this.lang; }
+    return this.lang; 
+  }
 
   /** Resturns the current language as a label suitable to be used in dropdowns and menues */
   public get languageLabel(): string {
@@ -91,34 +94,27 @@ export class ContentManager {
   }
 
   /** Returns an array of supported language codes */
-  public get supportedLanguages(): string[] {
+  public supportedLanguages(): string[] {
     return Object.keys(this.languages);
   }
 
   /** Returns the default language, if specified */
-  public get defaultLanguage(): string {
-    return this.supportedLanguages.find( key => {
+  public defaultLanguage(): string {
+    return this.supportedLanguages().find( key => {
       return this.languages[key].default;
     });
   }
 
   /** Returns the default language modules' path */
-  private get defaultPath(): string {
-    return this.languages[this.defaultLanguage].path;
+  private defaultPath(): string {
+    const def = this.defaultLanguage();
+    return !!def && this.languages[def].path;
   }
 
-  /** Returns an array of supported language codes */
-  public get supportedLanguageLabels(): string[] {
-    return this.supportedLanguages.map( key => {
-      return this.languages[key].label;
-    });
-  }
-
-  /** Returns an array of language options (pairs of code/labels) */
-  public get languageOptions(): LanguageOption[] {
-    return this.supportedLanguages.map( value => {
-      const label = this.languages[value].label;
-      return { value, label };
+  /** Returns an array of language options */
+  public languageOptions(): LanguageOption[] {
+    return this.supportedLanguages().map( value => {
+      return { ...this.languages[value], value };
     });
   }
 
@@ -126,17 +122,7 @@ export class ContentManager {
    * @param lang two digit language code (es: 'en')
   */
   public isLanguageSupported(lang: string): boolean {
-    return this.supportedLanguages.some( key => key == lang );
-  }
-
-  /** Return the language two letter code corresponding to the given label 
-   * @param label text label associated to an available language
-   * @returns a two digit language code associated with the given label or null
-  */
-  public matchLanguageLabel(label: string): string {
-    return this.supportedLanguages.find( key => {
-      return this.languages[key].label == label;
-    });
+    return this.supportedLanguages().some( key => key == lang );
   }
 
   /** 
@@ -149,7 +135,7 @@ export class ContentManager {
     return !!this.config ? of<ContentConfig>( this.config ) 
       // Gets the config via http and saves it in this.config
       : this.http.get<ContentConfig>(this.path + 'init.json')
-        .pipe(tap( cfg => this.config = cfg ));          
+        .pipe(tap( cfg => this.config = cfg ));
   }
 
   private merge(localModule: any, defaultModule?: any): any {
@@ -181,10 +167,10 @@ export class ContentManager {
     
     console.log('Loading module: ', moduleFile);
     // Starts by loading the default language module
-    return this.http.get<Object>(this.defaultPath + moduleFile).pipe( 
+    return this.http.get<Object>(this.defaultPath() + moduleFile).pipe( 
       switchMap( defaultData => {
         // Stops if the requested language corresponds to the default one
-        if( this.language == this.defaultLanguage ){
+        if( this.language == this.defaultLanguage() ){
           return of(defaultData);
         }
         // Loads the requested language otherwise
@@ -234,7 +220,7 @@ export class ContentManager {
 
           console.log('Requested language [' + lang + '] is not supported...');
           
-          lang = this.defaultLanguage;
+          lang = this.defaultLanguage();
           console.log('Reverting to default:', lang);
         }
 

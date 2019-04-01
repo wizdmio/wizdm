@@ -1,17 +1,22 @@
 
-$wm-fake-min-width   : 88px !default;
-$wm-fake-line-height : 36px !default;
-$wm-fake-padding     : 16px !default;
+:host {
 
-.fake-button {
-  display: inline-block;
-  position: relative;
-  padding: 0 $wm-fake-padding;
-  min-width: $wm-fake-min-width;
-  line-height: $wm-fake-line-height;
-  box-sizing: border-box;
-  text-align: center;
-  vertical-align: baseline;
-  white-space: nowrap;
-  & > * { vertical-align: middle;}
+  // Resets default mat-button padding and width
+  //button { padding: 0; min-width: 48px; }
+
+  .fake-button {
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+  
+    //padding: 0 16px;
+    min-width: 56px;//88px;
+    line-height: 36px;
+    
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    & > * { vertical-align: middle;}
+  }
 }
+

@@ -1,39 +1,46 @@
 
-<!-- Project name on the cover  -->
-<div fxLayout="column" fxLayoutAlign="center center" class="content">
-  <h1>{{ project.data.name }}</h1>
-</div>
-
-<div fxLayout="column" fxLayoutAlign="space-between center" class="content" *ngIf="project?.author$ | async as author" [routerLink]="[ project.id ]">
+<ng-container *ngIf="project?.author$ | async as author">
 
   <!-- top bar -->
-  <div fxLayout="row" fxLayoutAlign="end center" class="wide">
+  <div fxLayout="row" fxLayoutAlign="space-between start" class="wide">
+
+    <!-- Project title on the right -->
+    <div>
+      <h1>{{ project.data.name }}</h1>
+      <p>{{ project.data.pitch }}</p>
+    </div>
+
+    <!-- Details button on the right -->
+    <button mat-flat-button color="accent" [routerLink]="[ project.id ]">
+      {{ msgs.details }}
+    </button>
+  </div>
+
+  <!-- bottom bar -->
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="wide">
+    
+    <!-- Author on the left -->
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <!-- User picture with info -->
+      <button mat-icon-button [wmUserInfoTrigger]="userInfo">
+        <wm-avatar color="accent" [src]="author?.img"></wm-avatar>
+        <wm-user-info [author]="project.data" #userInfo></wm-user-info>
+      </button>
+      
+      <div fxLayout="column">
+        <span>{{ author?.name || msgs.unnamed }}</span>
+        <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
+      </div>
+
+    </div>
+
     <!-- Likes on the right -->
     <wm-likes [readonly]="project.isMine"
               [counter]="project.likes.counter$ | async"
               (changeFavorite)="project.likes.update($event ? 1 : -1)">
     </wm-likes>
+
   </div>
 
-  <!-- bottom bar -->
-  <div fxLayout="row" fxLayoutAlign="start center" class="wide">
-    
-      <!-- Author on the left -->
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <!-- User picture with info -->
-        <button mat-icon-button [wmUserInfoTrigger]="userInfo">
-          <wm-avatar color="accent" [src]="author?.img"></wm-avatar>
-          <wm-user-info [author]="project.data" #userInfo></wm-user-info>
-        </button>
-        
-        <div fxLayout="column">
-          <span>{{ author?.name || msgs.unnamed }}</span>
-          <span class="mat-small">{{ msgs.modifiedOn.interpolate( { modified: modifiedOn(project) } )}}</span>
-        </div>
-  
-      </div>
-  
-    </div>
-
-</div>
+</ng-container>
 

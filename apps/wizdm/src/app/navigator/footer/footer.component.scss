@@ -10,6 +10,12 @@ footer {
   background-color: map-get($wm-theme-background, status-bar);
 }
 
+.flag {
+  width: 16px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
 .social {
   font-size: mat-font-size($wm-typography, social);
 }

@@ -22,6 +22,7 @@
   "item": {
     "unnamed": "Unnamed",
     "createdOn": "First submitted on {{ created }}",
-    "modifiedOn": "Last modified on {{ modified }}"
+    "modifiedOn": "Last modified on {{ modified }}",
+    "details": "View project details"
   }
 }
