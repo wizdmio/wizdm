@@ -4,19 +4,6 @@ import { Observable, BehaviorSubject, of, from, merge } from 'rxjs';
 import { tap, map, take, filter, debounceTime } from 'rxjs/operators';
 import { Project, wmProject } from './project';
 
-export interface wmApplication {
-
-  name?          : string, // Application name
-  pitch?         : string, // Elevator pitch
-  description?   : string, // Background description
-  revenues?      : string, // Revenue streams
-  players?       : string, // Other similar players
-  differences?   : string, // Uniquenesses
-  users?         : string, // Target users
-  target?        : string, // Target market (geo, ...)
-  comments?      : string  // Additional comments
-}
-
 @Injectable({
   providedIn: 'root'
 })

@@ -7,12 +7,24 @@ import { ToolbarService } from '../../navigator';
 import { CanPageDeactivate, 
          ContentResolver, 
          ProjectService, 
-         wmApplication, 
          wmProject } from '../../utils';
 import { $animations } from './apply.animations';
 
+export interface wmApplication {
+
+  name?          : string, // Application name
+  pitch?         : string, // Elevator pitch
+  description?   : string, // Background description
+  revenues?      : string, // Revenue streams
+  players?       : string, // Other similar players
+  differences?   : string, // Uniquenesses
+  users?         : string, // Target users
+  target?        : string, // Target market (geo, ...)
+  comments?      : string  // Additional comments
+}
+
 interface userApply extends wmUser {
-  lastApplication?: any,
+  lastApplication?: wmApplication,
 }
 
 @Component({
@@ -215,7 +227,9 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       // Overwrite the name from the application
       name: application.name,
       // Adds the elevator pitch
-      pitch: application.pitch
+      pitch: application.pitch,
+      // Adds the descrption
+      description: application.description
   
     } as wmProject );
   }

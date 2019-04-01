@@ -11,13 +11,14 @@ export interface wmProject extends wmDocument, dbCommon {
   name         : string,
   author?      : string,
   pitch?       : string,
+  description? : string,
   status?      : wmProjectStatus,
   //cover?       : string,
   //color?       : string,
-  //document?    : string, 
   //team?        : string[] | wmUser[], collection of users
   //development? : wmDevelopment,
 }
+
 /*
 export interface wmDevelopment {
 

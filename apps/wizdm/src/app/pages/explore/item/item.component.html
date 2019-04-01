@@ -2,7 +2,7 @@
 <ng-container *ngIf="project?.author$ | async as author">
 
   <!-- top bar -->
-  <div fxLayout="row" fxLayoutAlign="space-between start" class="wide">
+  <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="space-between start" class="wide">
 
     <!-- Project title on the right -->
     <div>
@@ -10,14 +10,21 @@
       <p>{{ project.data.pitch }}</p>
     </div>
 
-    <!-- Details button on the right -->
-    <button mat-flat-button color="accent" [routerLink]="[ project.id ]">
+    <!-- Details button on the right (DESKTOP) -->
+    <button mat-flat-button color="accent" [routerLink]="[ project.id ]" fxHide.lt-sm>
       {{ msgs.details }}
+    </button>
+
+    <!-- Details button on the right (MOBILE) -->
+    <button mat-icon-button [routerLink]="[ project.id ]" fxHide fxShow.lt-sm>
+      <mat-icon>exit_to_app</mat-icon>
     </button>
   </div>
 
+  <p fxFlex="1 1 auto" class="wide">{{ project.data.description }}</p>
+
   <!-- bottom bar -->
-  <div fxLayout="row" fxLayoutAlign="space-between center" class="wide">
+  <div fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="space-between center" class="wide">
     
     <!-- Author on the left -->
     <div fxLayout="row" fxLayoutAlign="start center">
