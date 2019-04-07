@@ -1,0 +1,5 @@
+[
+  { "value": "en", "label": "English", "image": "assets/img/gb.svg" },
+  { "value": "it", "label": "Italiano", "image": "assets/img/it.svg" },
+  { "value": "ru", "label": "Русский","image": "assets/img/ru.svg" }
+]

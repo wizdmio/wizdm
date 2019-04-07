@@ -49,12 +49,9 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
               private toolbar  : ToolbarService,
               private popup    : PopupService) { 
 
-    // Gets the localized user messages from content manager
-    this.msgs = this.content.select('apply');
+    // Gets the localized content resolved during routing
+    this.msgs = resolver.select('apply'); 
   }
-
-  // Returns the content manager as if it was injected in the contructor instead of the resolver
-  private get content() { return this.resolver.content; }
 
   ngOnInit() {
 
@@ -211,7 +208,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   // Creates a project instance starting from the given application
   private applyProject(application: wmApplication) {
     // Gets the localized template
-    const template = this.content.select('template');
+    const template = this.resolver.select('template');
     // Stringifies it to replace selectors
     const document = JSON.stringify(template).replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
       // Replaces the <comma.separated.selectors> found into the template 
@@ -268,11 +265,6 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   public disclaimerAction(action: string) {
 
     switch(action) {
-
-      // Pops up the terms-privacy conditions without leaving the page
-      case 'terms':
-      //this.terms && this.terms.popup();
-      break;
 
       // Clears the forrm and the previously saved application to start from 
       case 'clear':

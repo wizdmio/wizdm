@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
-import { ContentManager } from '@wizdm/content';
 
 const $timing = '400ms cubic-bezier(0.5,0.5,0.5,1.0)';
 
@@ -30,17 +29,10 @@ const $timing = '400ms cubic-bezier(0.5,0.5,0.5,1.0)';
 })
 export class ErrorsComponent {
 
-  private msgs = null;
   private timer: any;
   public error: string;
-  
-  constructor(private content: ContentManager) {
 
-    // Gets the localized error messages
-    this.msgs = this.content.select("errors");
-  }
-
-  @Input() timeout = 5000;
+  @Input() msgs: any = null;
 
   @Input('error') set showError(error: string | any) {
 
@@ -62,6 +54,8 @@ export class ErrorsComponent {
   }
 
   @Output() clear = new EventEmitter<void>();
+
+  @Input() timeout = 5000;
 
   public clearError(): void {
     clearTimeout(this.timer);

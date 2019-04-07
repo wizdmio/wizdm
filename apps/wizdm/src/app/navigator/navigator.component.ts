@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, Scroll } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd, Scroll } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
-import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
 import { Observable, Subscription } from 'rxjs';
@@ -19,15 +18,14 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly msgs: any = null;
   readonly scrolled$: Observable<boolean>;
   
-  constructor(private  router  : Router,
-              private  content : ContentManager,
+  constructor(private  router  : Router, route: ActivatedRoute,
               private  profile : UserProfile,
               readonly nav     : NavigatorService,
               private  title   : Title,
               private  meta    : Meta) {
 
-    // Gets the localized content
-    this.msgs = this.content.select("navigator"); 
+    // Gets the localized content pre-fetched by the resolver during routing
+    this.msgs = route.snapshot.data.content.navigator || {};
 
     // Creates and observable to monitor the scroll status
     this.scrolled$ = this.nav.viewport.scroll$.pipe(

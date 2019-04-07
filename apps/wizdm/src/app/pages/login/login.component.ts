@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit  {
               private profile   : UserProfile) {
 
     // Gets the localized contents
-    this.msgs = this.content.select("login");
+    this.msgs = this.resolver.select("login");
 
     // Creates the loging form controls
     this.name = new FormControl(null, Validators.required);
@@ -59,9 +59,6 @@ export class LoginComponent implements OnInit  {
     // Group the controls
     this.form = new FormGroup({});
   }
-
-  // Returns the content manager as if it was injected in the contructor instead of the resolver
-  private get content() { return this.resolver.content; }
 
   // Returns the Auth service instance
   private get auth() { return this.profile.auth; }
@@ -207,8 +204,8 @@ export class LoginComponent implements OnInit  {
   // Execute the form requested action
   public loginAction() {
 
-    // Makes sure ti apply the current preferred language
-    this.auth.language = this.content.language;
+    // Makes sure to apply the current preferred language
+    this.auth.language = this.resolver.language;
     
     // Perform the requested action
     switch(this.page) {
@@ -286,7 +283,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
 
     // Send an action code link to the registerred email to reset a forgotten password
-    this.auth.forgotPassword(email, this.content.language )
+    this.auth.forgotPassword(email, this.resolver.language )
       .catch( error => this.showError(error.code) );
   }
 

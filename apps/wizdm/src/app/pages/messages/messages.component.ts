@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
+import { ActivatedRoute } from '@angular/router'; 
 import { PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
 import { ChatService, wmConversation, wmMessage } from '../../utils';
@@ -26,16 +26,16 @@ export class MessagesComponent implements OnInit {
   @ViewChild(MatSelectionList) msgList: MatSelectionList;
 
   public messages$: Observable<wmConversation[]>;
-  public msgs;
+  readonly msgs;
 
-  constructor(private content : ContentManager, 
+  constructor(route : ActivatedRoute, 
               private toolbar : ToolbarService,
               //private auth    : AuthService,
               private chat    : ChatService,
               private popup   : PopupService) {
 
-    // Gets the localized content
-    this.msgs = this.content.select('messages');
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.messages || {};
   }
 
   ngOnInit() {

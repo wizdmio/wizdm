@@ -1,5 +1,4 @@
 import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
 //import { wmFile } from '@wizdm/connect';
 import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
 import { Project, wmProject  } from '../../../utils';
@@ -13,17 +12,12 @@ import * as moment from 'moment';
 })
 export class ExploreItemComponent {
 
-  public msgs;
   public favorite = false;
   public notifications = false;
 
-  @Input() project: Project;
+  @Input() msgs: any = {};
 
-  constructor(private content: ContentManager) { 
-    
-    // Initialize the localized content
-    this.msgs = this.content.select('explore.item');
-  }
+  @Input() project: Project;
 /*
   @HostBinding('style.background-image') get urlCoverImage(): string{
     return !!this.project && !!this.project.data.cover ? `url(${this.project.data.cover})` : '';

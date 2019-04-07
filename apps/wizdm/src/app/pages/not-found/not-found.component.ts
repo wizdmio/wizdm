@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { ContentManager } from '@wizdm/content';
+import { Router, ActivatedRoute } from '@angular/router';
 import { $defaultMsgs } from './not-found-defaults';
 
 @Component({
@@ -14,13 +13,10 @@ export class NotFoundComponent implements OnInit, OnDestroy {
   public msgs: any;
   public countdown = 5;
 
-  constructor(private content: ContentManager,
-              private router: Router) { 
-
-
-    // Gets the messages from the content manager or use defaults
-    // in case we have been redirected after content loading failure
-    this.msgs = this.content.select('notFound', $defaultMsgs);
+  constructor(private router: Router, route: ActivatedRoute) {     
+    // Gets the localized content pre-fetched during routing resolving or use 
+    // defaults in case we have been redirected after content loading failure
+    this.msgs = route.snapshot.data.content.notFound || $defaultMsgs;
   }
 
   ngOnInit() {

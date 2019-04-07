@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContentManager } from '@wizdm/content';
 import { PopupService } from '@wizdm/elements';
 import { wmDocument } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
@@ -21,14 +20,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   public editMode = false;
   readonly msgs;
 
-  constructor(private content  : ContentManager,
-              private projects : ProjectService,
+  constructor(private projects : ProjectService,
               private route    : ActivatedRoute,
               private toolbar  : ToolbarService,
               private popup    : PopupService) { 
 
-    // Gets the localized content
-    this.msgs = this.content.select('editor');
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.editor;
   }
 
   private saveDocument$ = new Subject<wmDocument>();

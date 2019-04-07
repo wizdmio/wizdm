@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
 import { DatabaseService, wmUser } from '@wizdm/connect';
 import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
 import { wmProject } from '../../utils';
@@ -21,17 +20,12 @@ export class UserInfoComponent {
     //data: this
   };
 
-  public msgs: any;  
+  @Input() msgs: any = {};  
 
   constructor(@Inject(COLOR_MAP) 
               private colorMap: wmColorMap, 
               private dialog: MatDialog,
-              private content: ContentManager,
-              private database: DatabaseService) {
-
-    // Gets the localized content
-    this.msgs = this.content.select('info');
-  }
+              private database: DatabaseService) { }
 
   // Loads the user profile from the database
   private loadUser(userId: string): Promise<wmUser> {

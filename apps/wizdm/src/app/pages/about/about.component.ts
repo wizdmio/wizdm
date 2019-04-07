@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'wm-about',
@@ -8,11 +8,11 @@ import { ContentManager } from '@wizdm/content';
 })
 export class AboutComponent implements OnInit {
 
-  public msgs = null;
+  readonly msgs = null;
   
-  constructor(private content: ContentManager) {
-    // Gets the localized content
-    this.msgs = this.content.select('about');
+  constructor(route: ActivatedRoute) {
+    // Gets the localized content resolved during routing
+    this.msgs = route.snapshot.data.content.about; 
   }
 
   ngOnInit() {}

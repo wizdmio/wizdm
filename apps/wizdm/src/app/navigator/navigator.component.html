@@ -57,7 +57,7 @@
   </mat-toolbar>
 
   <!-- Global error message displayer -->
-  <wm-errors [error]="nav.error" (clear)="nav.clearError()"></wm-errors>
+  <wm-errors [msgs]="msgs?.errors" [error]="nav.error" (clear)="nav.clearError()"></wm-errors>
   
 </header>
 

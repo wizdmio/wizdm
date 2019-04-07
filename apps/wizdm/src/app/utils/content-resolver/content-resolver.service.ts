@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router, 
          UrlTree,
          Resolve, 
@@ -8,10 +9,9 @@ import { Router,
          RouterStateSnapshot,
          NavigationEnd,
          NavigationExtras } from '@angular/router';
-import { ContentManager } from '@wizdm/content';
 import { UserProfile } from '@wizdm/connect';
-import { Observable, of } from 'rxjs';
-import { switchMap, filter, first, map, tap } from 'rxjs/operators';
+import { Observable, of, forkJoin } from 'rxjs';
+import { switchMap, filter, first, map, tap, zip, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
 
 export interface CanPageDeactivate {
@@ -23,24 +23,108 @@ export interface CanPageDeactivate {
 })
 export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate<CanPageDeactivate> {
 
-  constructor(readonly content : ContentManager,
-              readonly user    : UserProfile,
-              readonly router  : Router) { }
+  private data: any = {};
 
-  // Implements routint pre-fetch data resolving
+  /** Returns the current language */
+  public get language(): string { return this.lang; }
+  // Keeps track of the currenlty selected language
+  private lang = 'en';
+
+  constructor(private  http  : HttpClient,
+              readonly user  : UserProfile,
+              readonly router: Router) { }
+
+  private merge(localModule: any, defaultModule?: any): any {
+    // Skips recurring when no default module is available
+    if(!!defaultModule) {
+      // Loops on the keys of the default object
+      Object.keys(defaultModule).forEach( key => {
+        // Add the property when undefined
+        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
+        // Override the property on array length mismatch
+        else if(defaultModule[key] instanceof Array && 
+               (!(localModule[key] instanceof Array) || 
+               localModule[key].length !== defaultModule[key].length)) {
+          localModule[key] = defaultModule[key]; 
+        }
+        // Recurs down the inner objects when needed
+        else if(typeof localModule[key] === 'object') {
+          localModule[key] = this.merge(localModule[key], defaultModule[key]);
+        }
+      });
+    }
+    // Returns the merged object
+    return localModule;
+  }
+
+  private loadModule(moduleName: string): Observable<any> {
+
+    if(!!this.data && !!this.data[moduleName]) {
+      console.log('Skipping reloading module: ', moduleName);
+      return of(this.data[moduleName]);
+    }
+
+    console.log('Loading module: ', moduleName);
+
+    // Starts by loading the default language module
+    return this.http.get<Object>(`assets/i18n/en/${moduleName}.json`).pipe( 
+      switchMap( defaultData => {
+        // Stops if the requested language corresponds to the default one
+        if( this.language === 'en' ) { return of(defaultData); }
+        // Loads the requested language otherwise
+        return this.http.get<Object>(`assets/i18n/${this.lang}/${moduleName}.json`).pipe(
+          // Reverts to the default language in case of errors (basically it pass an empty object 
+          // since default content will be merged in the next map() )
+          catchError( () => of({}) ),
+          // Merges the requested language data with the default one to make sure covering missing translations
+          map( requestedData => this.merge(requestedData, defaultData) )
+        );
+      }),
+      // Maps the loaded content into a name/data pair for further use
+      map(data => { return { name: moduleName, data }; })
+    );
+  }
+
+  // Load the modules of the specified language
+  private loadModules(modules: string[]): Observable<any> { 
+    // Uses forkJoin to load the modules in parallel
+    return forkJoin<any>(
+
+      modules.map( module => this.loadModule(module) ) 
+
+    // Zips the array of resulting emissions into a single object of objects
+    ).pipe( zip( objs => {
+
+      objs.forEach(module => { 
+        this.data[module.name] = module.data;
+      });
+
+      return this.data;
+    }));
+  }
+
+  // Implements routing pre-fetch data resolving
   resolve(route: ActivatedRouteSnapshot): Observable<any> | any {
 
-    // When lang params is specified we are loading the navigator or switching language. Defaulting to the current language if already loaded
-    let lang = route.params['lang'] || this.content.language;
+    // Let's see which is the requested language
+    const lang = route.params['lang'] || this.lang || 'en';
+    
     // Detects the browser language on request and re-route to it
     if(lang === 'auto') {
       
-      lang = this.detectLanguage().split('-')[0];
+      const lang = this.detectLanguage().split('-')[0];
       console.log('Using browser language: ' + lang);
       // Switch to the detected language
-      this.router.navigate([lang || 'en']);
+      this.router.navigate([lang]);
       return null;
     }
+
+    // Empties the cached content when switching language
+    if(lang !== this.lang) { this.data = {}; }
+
+    // Keeps track of the currently requested language and sets the moment locale accordingly
+    moment.locale(this.lang = lang);
+
     // Implements a basic language resolver returning the user preferred language
     // captured from the user profile stored in the database. Since this observable
     // pipes from the AuthService this resolver grants the page won't show up before
@@ -49,20 +133,22 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
       first(), 
       switchMap( profile => {
 
-        const language = !!profile ? profile.lang : lang;
-          // Switch to the user profile language when needed
-        if(language !== lang) {
+        // Switch to the user profile language when needed
+        if(!!profile && !!profile.lang && profile.lang !== this.lang) {
           
-          console.log('Resolving to profile language: ', language);
-
-          this.router.navigate([language]);
-          return of(null);
+          console.log('Resolving to profile language: ', profile.lang);
+          // Jumps to the home page loading the profile language content
+          this.router.navigate([profile.lang]);
+          return of({});
         }
-        // Sets the moment locale globally
-        moment.locale(lang);
-        
-        // Load the localized content in the requested language
-        return this.content.use( lang, route.data.modules );
+
+        // Loads he requested modules
+        return this.loadModules(route.data.modules)
+          // Jumps to the not found page when the requested content is missing
+          .pipe( catchError( () => {
+            this.router.navigate['not-found'];
+            return of({});
+          }));
       }));
   }
 
@@ -77,9 +163,9 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
           console.log('canActivate: Authentication required');
           // Gets the current language when possible
-          const lang = this.content.language || 'en';
+          //const lang = this.content.language || 'en';
           // Returns an UrlTree pointing to the login page
-          return this.router.createUrlTree([lang, 'login']); 
+          return this.router.createUrlTree([this.lang, 'login']); 
         }
         // Allows navigation otherwise
         console.log('canActivate: Access granted');
@@ -102,7 +188,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
   // Routing helper to easily jump on a specified page keeping the current language
   public goTo(to: string, extras?: NavigationExtras): Promise<boolean> {
-    return this.router.navigate([ this.content.language || 'en', to ], extras );
+    return this.router.navigate([ this.lang, to ], extras );
   }
 
   public detectLanguage(): string {
@@ -124,7 +210,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
   public switchLanguage(lang: string, url?: string): Promise<boolean> {
 
     // Checks if a language change is requested
-    if(lang !== this.content.language) {
+    if(lang !== this.lang) {
 
       // Force reloading component strategy backing-up the current reuse strategy function
       const strategy = this.router.routeReuseStrategy.shouldReuseRoute;
@@ -138,7 +224,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
         });
     }
 
-    const re = new RegExp(`^\/${this.content.language}`);
+    const re = new RegExp(`^\/${this.lang}`);
 
     // Computes the target path....
     const target = url ? 
@@ -149,5 +235,13 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
     // Navigate to the target page (switching language if necessary)
     return this.router.navigateByUrl(target);
+  }
+
+  /** Selects statically the requested portion of content data from the content
+   * @param select a string delimiter to select the requested portion of the content
+   * @param default (optional) an optional object to be returned in the eventuality the required content is not present
+   */
+  public select(select: string, defaults?: any): any {
+    return select.select(this.data, defaults);
   }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material';
-import { LanguageOption } from '@wizdm/content';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
 import { CanPageDeactivate, ContentResolver } from '../../utils';
@@ -19,24 +18,15 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   @ViewChildren(UserItemComponent) profileItems: QueryList<UserItemComponent>;
   @ViewChildren(MatExpansionPanel) profilePanels: QueryList<MatExpansionPanel>;
 
-  readonly langOptions: LanguageOption[]; 
   readonly msgs;
 
-  // Returns the content manager as if it was injected in the contructor instead of the resolver
-  private get content() { return this.resolver.content;}
+  constructor(readonly resolver : ContentResolver,
+              private  profile  : UserProfile,
+              private  toolbar  : ToolbarService,
+              private  popup    : PopupService) { 
 
-  constructor(private resolver : ContentResolver,
-              private profile  : UserProfile,
-              private toolbar  : ToolbarService,
-              private popup    : PopupService) { 
-
-    // Gets the localized content
-    this.msgs = this.content.select('profile');
-
-    // WARNING: we buffers languageOptions into a local variable to prevent
-    // the *ngFor on mat-select to run over an infinite loop due to an issue
-    // it seems they still can't fix
-    this.langOptions = this.content.languageOptions();
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = this.resolver.select('profile');
   }
 
   ngOnInit() {
@@ -93,7 +83,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
       return this.msgs.genders;
 
       case 'profile:lang':
-      return this.langOptions;
+      return this.msgs.languages;
 
       case 'user:emailVerified':
       return this.msgs.identity;

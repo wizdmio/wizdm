@@ -20,7 +20,7 @@ const routes: Routes = [
     path: '',
     component: ApplyComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['apply', 'terms', 'template'] },
+    data: { modules: ['apply', 'template'] },
     canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

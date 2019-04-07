@@ -1,14 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { LanguageOption } from '@wizdm/content';
 import { ContentResolver } from '../../utils';
 
-export interface LanguageData {
+interface LanguageData {
 
-  lang: string,
-  path: string,
+  value: string,
   label: string,
-  image: string,
-  default?: boolean;
+  image: string
 };
 
 @Component({
@@ -18,30 +15,24 @@ export interface LanguageData {
 })
 export class FooterComponent {
   
-  readonly options: LanguageOption[];
+  readonly options: LanguageData[];
+  readonly language: LanguageData;
   readonly msgs;
-
-  // Returns the content manager as if it was injected in the contructor instead of the resolver
-  private get content() { return this.resolver.content; }
-
-  constructor(private resolver: ContentResolver) {
-
-    // Gets the localized user messages from content service
-    this.msgs = this.content.select('navigator.footer');
-  
-    // Local copy of the available language options to prevent the infinite loop bug to occur
-    this.options = this.content.languageOptions();
-  }
 
   // Flag enabling the multiple language selection
   @Input('language') multiLanguage: boolean = false;
 
-  public get language(): string {
-    return this.content.language;
+  constructor(private resolver: ContentResolver) {
+
+    // Gets the localized content pre-fetched by the resolver
+    this.msgs = resolver.select('navigator.footer');
+    // Gets a shortcut to the list of supported languages
+    this.options = this.msgs.languages;
+    // Seeks for the current language within the list
+    this.language = this.options.find( opt => opt.value === resolver.language );
   }
 
   public changeLanguage(lang: string) {
-
     // Switch to the selected language
     this.resolver.switchLanguage(lang);
   }

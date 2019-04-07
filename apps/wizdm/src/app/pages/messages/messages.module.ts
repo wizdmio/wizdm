@@ -14,7 +14,7 @@ const routes: Routes = [
     path: '',
     component: MessagesComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['messages', 'info'] },
+    data: { modules: ['messages'] },
     canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

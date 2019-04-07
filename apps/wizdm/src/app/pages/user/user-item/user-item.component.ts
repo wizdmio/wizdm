@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding,
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { MediaChange, ObservableMedia } from '@angular/flex-layout';
 import { DateAdapter } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
 import { Subscription } from 'rxjs';
 import { $itemAnimations } from './user-item-animations';
 import * as moment from 'moment';
@@ -42,8 +41,7 @@ export class UserItemComponent implements OnInit, OnDestroy {
   public  mobile = false;
   public edit = false;// Switch between view/edit mode
 
-  constructor(private content : ContentManager,
-              private media   : ObservableMedia,
+  constructor(private media   : ObservableMedia,
               private adapter : DateAdapter<any>) { 
 
     this.control = new FormControl( '', null );
@@ -59,6 +57,8 @@ export class UserItemComponent implements OnInit, OnDestroy {
   @Input() hint: string;
 
   @Input() options: string[] | UserItemOption[];
+
+  @Input() locale: string;
 
   @Input('validators') set setValidators(validators: UserItemValidators) {
     
@@ -77,8 +77,7 @@ export class UserItemComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     // Makes sure the datepicker will use the current locale
-    const lang = this.content.language;
-    this.adapter.setLocale(lang);
+    this.adapter.setLocale(this.locale);
 
     // Use observble media to track for small screens enabling 'touchUi' version of datepicker
     this.subMedia = this.media.subscribe((change: MediaChange) => {

@@ -3,7 +3,7 @@
 <header fxLayout="column" fxLayoutAlign="center center">
 
   <!-- Select the image among the uploads -->
-  <wm-uploads (file)="selectImage($event)" #uploads>
+  <wm-uploads [msgs]="msgs.uploadImage" (file)="selectImage($event)" #uploads>
     <!-- Open the selection on click -->
     <button mat-button class="user" (click)="uploads.chooseFile(userImage)">
       <!-- Displays the image as an Avatar -->
@@ -38,6 +38,7 @@
                        [options]="profileOptions(field.key)"
                        [validators]="profileValidators(field.key)"
                        [editable]="profileEditable(field.key)"
+                       [locale]="resolver.language"
                        (editDone)="updateUserProfile(field.key, $event)">
       </wm-user-item>
 

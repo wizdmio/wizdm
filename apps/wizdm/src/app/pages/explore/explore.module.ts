@@ -16,7 +16,7 @@ const routes: Routes = [
     path: '',
     component: ExploreComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['explore', 'info'] },
+    data: { modules: ['explore'] },
     //canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

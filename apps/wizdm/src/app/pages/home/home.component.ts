@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router'; 
 import { NavigatorService } from '../../navigator';
 import { $animations } from './home.animations';
 
@@ -11,10 +11,10 @@ import { $animations } from './home.animations';
 })
 export class HomeComponent {
 
-  public msgs = null;
+  readonly msgs = null;
   
-  constructor(private content: ContentManager, readonly nav: NavigatorService) {
-    // Gets the localized content
-    this.msgs = this.content.select('home');
+  constructor(route: ActivatedRoute, readonly nav: NavigatorService) {
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.home || {};
   }
 }

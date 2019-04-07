@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
-import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'wm-consent',
@@ -10,13 +9,11 @@ import { Observable } from 'rxjs';
 })
 export class ConsentComponent implements OnInit {
 
-  public msgs;
+  readonly msgs;
 
-  constructor(private content : ContentManager, 
-              private dialog  : MatDialog) { 
-
+  constructor(route: ActivatedRoute, private dialog: MatDialog) { 
     // Gets the localized content
-    this.msgs = this.content.select('navigator.consent');
+    this.msgs = 'navigator.consent'.select(route.snapshot.data.content);
   }
 
   ngOnInit() { }

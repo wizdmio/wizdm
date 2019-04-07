@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
 import { UserProfile, UploaderService, wmFile } from '@wizdm/connect';
 import { Observable, of } from 'rxjs';
 import { filter, take, tap, switchMap } from 'rxjs/operators';
@@ -14,15 +13,10 @@ export class UploadsComponent implements OnInit {
 
   public uploads: Observable<any[]>;
   public loading: string;
-  public msgs;
 
-  constructor(private content : ContentManager,
-              private profile : UserProfile,
-              private dialog  : MatDialog) {
+  constructor(private profile : UserProfile, private dialog  : MatDialog) {}
 
-    // Gets the localized content
-    this.msgs = this.content.select('uploads');
-  }
+  @Input() msgs: any = {};
 
   // Displays the selection 'none' option
   @Input() none: boolean = true;

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
+import { ActivatedRoute } from '@angular/router';
 import { ToolbarService, ViewportService } from '../../navigator';
 import { ProjectService, Project } from '../../utils';
 import { Observable, Subject, of } from 'rxjs';
@@ -16,18 +16,17 @@ export class ExploreComponent implements OnInit, OnDestroy {
 
   private dispose$: Subject<void> = new Subject();
   public projects$: Observable<Project[]>;
-  
-  readonly msgs = null;
+  readonly msgs;
 
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
-  constructor(private content  : ContentManager,
+  constructor(route: ActivatedRoute,
               private toolbar  : ToolbarService,
               private scroll   : ViewportService,
               private projects : ProjectService) {
 
-    // Gets the localized content
-    this.msgs = this.content.select('explore');
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.explore || {};
   }
 
   ngOnInit() {

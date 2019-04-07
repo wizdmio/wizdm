@@ -15,12 +15,12 @@
   <div fxLayout="row" fxFlexOrder.lt-sm="1" *ngIf="multiLanguage">
     <mat-form-field>
       
-      <mat-select [value]="language" (valueChange)=changeLanguage($event)>
+      <mat-select [value]="language?.value" (valueChange)=changeLanguage($event)>
         
         <mat-select-trigger>
           <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="padding: 0 16px">
-            <img [src]="content.languageImage" class="flag"/>
-            <span>{{ content.languageLabel }}</span>
+            <img [src]="language?.image" class="flag"/>
+            <span>{{ language?.label }}</span>
           </div>
         </mat-select-trigger>
         

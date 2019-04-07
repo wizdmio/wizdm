@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentManager } from '@wizdm/content';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'wm-dashboard',
@@ -8,11 +8,11 @@ import { ContentManager } from '@wizdm/content';
 })
 export class DashboardComponent implements OnInit {
 
-  public msgs = null;
+  readonly msgs = null;
   
-  constructor(private content: ContentManager) {
-    // Gets the localized content
-    this.msgs = this.content.select('dashboard');
+  constructor(route: ActivatedRoute) {
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.dashboard;
   }
 
   ngOnInit() {

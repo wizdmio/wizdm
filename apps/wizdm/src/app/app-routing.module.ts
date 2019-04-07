@@ -15,8 +15,8 @@ const routes: Routes = [
   { path: ':lang', component: NavComponent,
     // Install a resolver to pre-fetch localized data dynamically according to the user preferences
     resolve: { content: ContentResolver },
-    // Uses static data to instructs the resolver about the modules to be loaded
-    data: { modules: ['navigator', 'errors'] },
+    // Uses static data to instructs the resolver about the content to be loaded
+    data: { modules: ['navigator'] },
     // Localized lazily loaded pages
     children: [
       { path: '',            loadChildren: './pages/home/home.module#HomeModule' },

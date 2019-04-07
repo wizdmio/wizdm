@@ -3,6 +3,21 @@
   "tableOfContents": "Table of contents",
   "footnotes": "Footnotes",
 
+  "header": {
+    "unnamed": "Unnamed",
+    "createdOn": "First submitted on {{ created }}",
+    "modifiedOn": "Last modified on {{ modified }}"
+  },
+
+  "userInfo": {
+    "title": "About me",
+    "close": "Close",
+    "menu": {
+      "cover": "Cover picture",
+      "color": "Theme color"
+    }
+  },
+
   "guestActions": [
     { "caption": "Back", "icon": "arrow_back", "link": "./explore" },
     { "caption": "Contact the owner", "icon": "envelope", "code": "contact"}
@@ -28,12 +43,6 @@
       ]
     }
   ],
-
-  "header": {
-    "unnamed": "Unnamed",
-    "createdOn": "First submitted on {{ created }}",
-    "modifiedOn": "Last modified on {{ modified }}"
-  },
 
   "tools": {
     "edit": {

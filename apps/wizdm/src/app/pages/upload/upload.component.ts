@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ContentManager } from '@wizdm/content';
+import { ActivatedRoute } from '@angular/router'; 
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { FileOpenComponent, PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
@@ -27,13 +27,13 @@ export class UploadComponent implements OnInit {
   public tasks: UploadTask[] = [];
   public msgs;
   
-  constructor(private content  : ContentManager, 
+  constructor(route            : ActivatedRoute,
               private toolbar  : ToolbarService,
               private profile  : UserProfile,
               private popup    : PopupService) {
 
-    // Gets the localized content
-    this.msgs = this.content.select('upload');
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.upload || {};
   }
 
   ngOnInit() {

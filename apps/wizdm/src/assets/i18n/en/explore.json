@@ -23,6 +23,14 @@
     "unnamed": "Unnamed",
     "createdOn": "First submitted on {{ created }}",
     "modifiedOn": "Last modified on {{ modified }}",
-    "details": "View project details"
+    "details": "View project details",
+    "userInfo": {
+      "title": "About me",
+      "close": "Close",
+      "menu": {
+        "cover": "Cover picture",
+        "color": "Theme color"
+      }
+    }
   }
 }

@@ -37,6 +37,11 @@
     "footer": {
         "terms": "Terms and Privacy",
         "language": "Language",
+        "languages": [
+            { "value": "en", "label": "English", "image": "assets/img/gb.svg" },
+            { "value": "it", "label": "Italiano", "image": "assets/img/it.svg" },
+            { "value": "ru", "label": "Русский","image": "assets/img/ru.svg" }
+        ],
         "items": [
             { "icon": "fa:fa-envelope", "link": "mailto:hello@wizdm.io" },
             { "icon": "fab:fa-twitter", "link": "http://twitter.com" },
@@ -50,5 +55,31 @@
         "title": "Cookie and Privacy Policy",
         "description": "Wizdm uses cookies to improve your user experience. To continue, please accept our cookie use and privacy policy.",
         "accept": "Accept"
+    },
+
+    "errors": {
+        "auth": {
+          "wrongPassword": "This password seems wrong",
+          "userNotFound": "This user doesn't exist",
+          "emailAlreadyInUse": "This email is already registered",
+          "invalidEmail": "This is not a valid email",
+          "weakPassword": "This password looks too weak",
+          "networkRequestFailed": "There's some trouble with the network",
+          "invalidActionCode": "The action code provided is no longer valid",
+          "unsupportedProvider": "The requestes provider is not supported"
+        },
+      
+        "firestore": {
+      
+        },
+      
+        "storage": {
+          "unhautorized": "You're not authorized to access this storage area"
+        },
+      
+        "project": {
+          "invalidId": "The provided project ID is null or invalid",
+          "missingTemplate": "The document template seems missing or corrupted"
+        }  
     }
 }

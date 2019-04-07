@@ -6,7 +6,7 @@
 
 <div fxLayout="column" fxLayoutAlign="start center" *ngIf="projects$ | async as items" [@list]="items?.length">
 
-  <wm-explore-item *ngFor="let project of items" [project]=project @item>
+  <wm-explore-item *ngFor="let project of items" [msgs]="msgs.item" [project]=project @item>
   </wm-explore-item>
 
   <mat-spinner *ngIf="projects.loading$ | async" diameter="60" strokeWidth="2">

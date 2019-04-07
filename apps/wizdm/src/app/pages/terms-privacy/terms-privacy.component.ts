@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ContentManager } from '@wizdm/content';
+import { ActivatedRoute } from '@angular/router'; 
 import { ViewportService } from '../../navigator';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators'
@@ -18,12 +18,12 @@ export class TermsPrivacyComponent implements OnInit {
   @Input() display: displayMode = 'page';
   public msgs;
   
-  constructor(private content : ContentManager,
+  constructor(route           : ActivatedRoute, 
               private http    : HttpClient,
               private scroll  : ViewportService) {
 
-    // Gets the localized content
-    this.msgs = this.content.select('terms');
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs = route.snapshot.data.content.terms || {};
   }
 
   public document = "";
