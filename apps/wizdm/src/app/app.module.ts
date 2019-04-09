@@ -24,7 +24,7 @@ import { environment } from '../environments/environment';
     BrowserAnimationsModule,
     HttpClientModule,
     // Initialize the database connection modules
-    ConnectModule.forRoot(environment),
+    ConnectModule.init(environment),
     AuthModule,
     DatabaseModule,
     UploaderModule,
