@@ -4,7 +4,7 @@ import { MatExpansionPanel } from '@angular/material';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
 import { CanPageDeactivate, ContentResolver } from '../../utils';
-import { ToolbarService } from '../../navigator';
+import { NavigatorService } from '../../navigator';
 import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
 import * as moment from 'moment';
 
@@ -21,8 +21,8 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   readonly msgs;
 
   constructor(readonly resolver : ContentResolver,
+              readonly nav      : NavigatorService,          
               private  profile  : UserProfile,
-              private  toolbar  : ToolbarService,
               private  popup    : PopupService) { 
 
     // Gets the localized content pre-fetched during routing resolving
@@ -32,7 +32,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   ngOnInit() {
   
     // Activates the toolbar actions
-    this.toolbar.activateActions(this.msgs.actions);
+    this.nav.toolbar.activateActions(this.msgs.actions);
   }
 
   public get userImage(): string {

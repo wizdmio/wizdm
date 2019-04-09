@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DateAdapter } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { Router, 
          UrlTree,
@@ -30,78 +31,10 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
   // Keeps track of the currenlty selected language
   private lang = 'en';
 
-  constructor(private  http  : HttpClient,
-              readonly user  : UserProfile,
-              readonly router: Router) { }
-
-  private merge(localModule: any, defaultModule?: any): any {
-    // Skips recurring when no default module is available
-    if(!!defaultModule) {
-      // Loops on the keys of the default object
-      Object.keys(defaultModule).forEach( key => {
-        // Add the property when undefined
-        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
-        // Override the property on array length mismatch
-        else if(defaultModule[key] instanceof Array && 
-               (!(localModule[key] instanceof Array) || 
-               localModule[key].length !== defaultModule[key].length)) {
-          localModule[key] = defaultModule[key]; 
-        }
-        // Recurs down the inner objects when needed
-        else if(typeof localModule[key] === 'object') {
-          localModule[key] = this.merge(localModule[key], defaultModule[key]);
-        }
-      });
-    }
-    // Returns the merged object
-    return localModule;
-  }
-
-  private loadModule(moduleName: string): Observable<any> {
-
-    if(!!this.data && !!this.data[moduleName]) {
-      console.log('Skipping reloading module: ', moduleName);
-      return of(this.data[moduleName]);
-    }
-
-    console.log('Loading module: ', moduleName);
-
-    // Starts by loading the default language module
-    return this.http.get<Object>(`assets/i18n/en/${moduleName}.json`).pipe( 
-      switchMap( defaultData => {
-        // Stops if the requested language corresponds to the default one
-        if( this.language === 'en' ) { return of(defaultData); }
-        // Loads the requested language otherwise
-        return this.http.get<Object>(`assets/i18n/${this.lang}/${moduleName}.json`).pipe(
-          // Reverts to the default language in case of errors (basically it pass an empty object 
-          // since default content will be merged in the next map() )
-          catchError( () => of({}) ),
-          // Merges the requested language data with the default one to make sure covering missing translations
-          map( requestedData => this.merge(requestedData, defaultData) )
-        );
-      }),
-      // Maps the loaded content into a name/data pair for further use
-      map(data => { return { name: moduleName, data }; })
-    );
-  }
-
-  // Load the modules of the specified language
-  private loadModules(modules: string[]): Observable<any> { 
-    // Uses forkJoin to load the modules in parallel
-    return forkJoin<any>(
-
-      modules.map( module => this.loadModule(module) ) 
-
-    // Zips the array of resulting emissions into a single object of objects
-    ).pipe( zip( objs => {
-
-      objs.forEach(module => { 
-        this.data[module.name] = module.data;
-      });
-
-      return this.data;
-    }));
-  }
+  constructor(readonly user    : UserProfile,
+              readonly router  : Router,
+              private  http    : HttpClient,  
+              private  adapter : DateAdapter<any>) { }
 
   // Implements routing pre-fetch data resolving
   resolve(route: ActivatedRouteSnapshot): Observable<any> | any {
@@ -119,11 +52,17 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
       return null;
     }
 
-    // Empties the cached content when switching language
-    if(lang !== this.lang) { this.data = {}; }
-
-    // Keeps track of the currently requested language and sets the moment locale accordingly
-    moment.locale(this.lang = lang);
+    // Whenever the language changes...
+    if(lang !== this.lang) { 
+      // Empties the cached content when switching language
+      this.data = {}; 
+      // Applies the new locale to the auth instance
+      this.user.auth.language = lang;
+      // Sets the DataAdapter/moment locale accordingly
+      this.adapter.setLocale( moment.locale(lang) );
+      // Keeps track of the currently requested language
+      this.lang = lang
+    }
 
     // Implements a basic language resolver returning the user preferred language
     // captured from the user profile stored in the database. Since this observable
@@ -243,5 +182,74 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
    */
   public select(select: string, defaults?: any): any {
     return select.select(this.data, defaults);
+  }
+
+  private merge(localModule: any, defaultModule?: any): any {
+    // Skips recurring when no default module is available
+    if(!!defaultModule) {
+      // Loops on the keys of the default object
+      Object.keys(defaultModule).forEach( key => {
+        // Add the property when undefined
+        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
+        // Override the property on array length mismatch
+        else if(defaultModule[key] instanceof Array && 
+               (!(localModule[key] instanceof Array) || 
+               localModule[key].length !== defaultModule[key].length)) {
+          localModule[key] = defaultModule[key]; 
+        }
+        // Recurs down the inner objects when needed
+        else if(typeof localModule[key] === 'object') {
+          localModule[key] = this.merge(localModule[key], defaultModule[key]);
+        }
+      });
+    }
+    // Returns the merged object
+    return localModule;
+  }
+
+  private loadModule(moduleName: string): Observable<any> {
+
+    if(!!this.data && !!this.data[moduleName]) {
+      console.log('Skipping reloading module: ', moduleName);
+      return of(this.data[moduleName]);
+    }
+
+    console.log('Loading module: ', moduleName);
+
+    // Starts by loading the default language module
+    return this.http.get<Object>(`assets/i18n/en/${moduleName}.json`).pipe( 
+      switchMap( defaultData => {
+        // Stops if the requested language corresponds to the default one
+        if( this.language === 'en' ) { return of(defaultData); }
+        // Loads the requested language otherwise
+        return this.http.get<Object>(`assets/i18n/${this.lang}/${moduleName}.json`).pipe(
+          // Reverts to the default language in case of errors (basically it pass an empty object 
+          // since default content will be merged in the next map() )
+          catchError( () => of({}) ),
+          // Merges the requested language data with the default one to make sure covering missing translations
+          map( requestedData => this.merge(requestedData, defaultData) )
+        );
+      }),
+      // Maps the loaded content into a name/data pair for further use
+      map(data => { return { name: moduleName, data }; })
+    );
+  }
+
+  // Load the modules of the specified language
+  private loadModules(modules: string[]): Observable<any> { 
+    // Uses forkJoin to load the modules in parallel
+    return forkJoin<any>(
+
+      modules.map( module => this.loadModule(module) ) 
+
+    // Zips the array of resulting emissions into a single object of objects
+    ).pipe( zip( objs => {
+
+      objs.forEach(module => { 
+        this.data[module.name] = module.data;
+      });
+
+      return this.data;
+    }));
   }
 }

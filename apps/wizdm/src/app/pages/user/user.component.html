@@ -38,7 +38,7 @@
                        [options]="profileOptions(field.key)"
                        [validators]="profileValidators(field.key)"
                        [editable]="profileEditable(field.key)"
-                       [locale]="resolver.language"
+                       [mobile]="nav.mobile"
                        (editDone)="updateUserProfile(field.key, $event)">
       </wm-user-item>
 

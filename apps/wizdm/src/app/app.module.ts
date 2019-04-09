@@ -9,7 +9,6 @@ import { ConnectModule,
          DatabaseModule, 
          UploaderModule, 
          UserProfileModule } from '@wizdm/connect';
-import { PopupModule } from '@wizdm/elements';
 import { AppComponent } from './app.component';
 import { NavigatorModule } from './navigator';
 import { AppRoutingModule } from './app-routing.module';
@@ -30,8 +29,6 @@ import { environment } from '../environments/environment';
     UploaderModule,
     UserProfileModule,
     NavigatorModule,
-    // Register popup module here so for the popup service to work app-wise
-    //PopupModule,
     AppRoutingModule
   ],
   providers: [

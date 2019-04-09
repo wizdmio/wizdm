@@ -40,11 +40,11 @@ export class LoginComponent implements OnInit  {
   public password: FormControl;
   public newEmail: FormControl;
   public newPassword: FormControl;
-  
+
   constructor(private resolver  : ContentResolver,
+              private profile   : UserProfile, 
               private navigator : NavigatorService,
-              private route     : ActivatedRoute,
-              private profile   : UserProfile) {
+              private route     : ActivatedRoute) {
 
     // Gets the localized contents
     this.msgs = this.resolver.select("login");
@@ -204,9 +204,6 @@ export class LoginComponent implements OnInit  {
   // Execute the form requested action
   public loginAction() {
 
-    // Makes sure to apply the current preferred language
-    this.auth.language = this.resolver.language;
-    
     // Perform the requested action
     switch(this.page) {
 

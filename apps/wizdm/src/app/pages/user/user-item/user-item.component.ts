@@ -1,8 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
-import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-import { DateAdapter } from '@angular/material';
-import { Subscription } from 'rxjs';
 import { $itemAnimations } from './user-item-animations';
 import * as moment from 'moment';
 
@@ -28,21 +25,18 @@ export interface UserItemValidators {
   styleUrls: ['./user-item.component.scss'],
   animations: $itemAnimations
 })
-export class UserItemComponent implements OnInit, OnDestroy {
+export class UserItemComponent {
 
   // This is a dummy animation to prevent @slideout kicking in during page rendering
   @HostBinding('@halt') halt = true;
 
-  private form: FormGroup;
-  private control: FormControl;
+  readonly form: FormGroup;
+  readonly control: FormControl;
   private errors: any = {};
 
-  private subMedia: Subscription;
-  public  mobile = false;
   public edit = false;// Switch between view/edit mode
 
-  constructor(private media   : ObservableMedia,
-              private adapter : DateAdapter<any>) { 
+  constructor() { 
 
     this.control = new FormControl( '', null );
     this.form = new FormGroup({control: this.control});
@@ -58,8 +52,6 @@ export class UserItemComponent implements OnInit, OnDestroy {
 
   @Input() options: string[] | UserItemOption[];
 
-  @Input() locale: string;
-
   @Input('validators') set setValidators(validators: UserItemValidators) {
     
     // Saves the error messages in the errors object
@@ -71,23 +63,10 @@ export class UserItemComponent implements OnInit, OnDestroy {
     }
   }
 
+  @Input() mobile: boolean = false;
+
   @Output() editStart  = new EventEmitter<string>();
   @Output() editDone   = new EventEmitter<string>();
-
-  ngOnInit() {
-
-    // Makes sure the datepicker will use the current locale
-    this.adapter.setLocale(this.locale);
-
-    // Use observble media to track for small screens enabling 'touchUi' version of datepicker
-    this.subMedia = this.media.subscribe((change: MediaChange) => {
-      this.mobile = change.mqAlias == 'xs';
-    });    
-  }
-
-  ngOnDestroy() {
-    this.subMedia.unsubscribe();
-  }
 
   public get errorMessage() {
     
