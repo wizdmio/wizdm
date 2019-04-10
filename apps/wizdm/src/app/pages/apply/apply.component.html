@@ -119,10 +119,9 @@
     <div fxLayout="row" fxLayoutAlign="center center" fxFill>
       <div class="disclaimer">
         <p>{{msgs?.appSubmit.description}}</p>
-        <p class="mat-small">
-          <wm-disclaimer [source]="msgs?.appSubmit.disclaimer"
-                         (action)="disclaimerAction($event)">
-          </wm-disclaimer>
+        <p wm-disclaimer class="mat-small"
+          [source]="msgs?.appSubmit.disclaimer"
+          (action)="disclaimerAction($event)">
         </p>
 
         <!-- Agree checkbox -->

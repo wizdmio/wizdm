@@ -10,7 +10,6 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatListModule,
-  MatDialogModule,
   MatToolbarModule,
   MatSelectModule
 } from '@angular/material';
@@ -20,9 +19,7 @@ import {
   IconModule, 
   FlipModule,
   AvatarModule,
-  InkbarModule,
-  RouterInkbarModule,
-  DisclaimerModule
+  RouterInkbarModule
 } from '@wizdm/elements';
 //-------
 import { NavComponent } from './navigator.component';
@@ -33,7 +30,6 @@ import { ActionComponent } from './toolbar/action/action.component';
 import { MenuComponent } from './menu/menu.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { FooterComponent } from './footer/footer.component';
-import { ConsentComponent } from './consent/consent.component';
 
 @NgModule({
   imports: [
@@ -46,16 +42,13 @@ import { ConsentComponent } from './consent/consent.component';
     MatFormFieldModule,
     MatInputModule,
     MatListModule,
-    MatDialogModule,
     MatToolbarModule,
     MatSelectModule,
     TogglerModule,
     IconModule, 
     FlipModule,
     AvatarModule,
-    InkbarModule,
-    RouterInkbarModule,
-    DisclaimerModule
+    RouterInkbarModule
   ],
   declarations: [
     NavComponent,
@@ -65,8 +58,7 @@ import { ConsentComponent } from './consent/consent.component';
     ActionComponent,
     MenuComponent,
     FooterComponent,
-    ConsentComponent,
-    ErrorsComponent,
+    ErrorsComponent
   ],
   providers: []
 })

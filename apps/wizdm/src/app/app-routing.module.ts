@@ -20,6 +20,9 @@ const routes: Routes = [
     // Localized lazily loaded pages
     children: [
       { path: '',            loadChildren: './pages/home/home.module#HomeModule' },
+      
+      { path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
+      
       { path: 'apply',       loadChildren: './pages/apply/apply.module#ApplyModule' },
       { path: 'explore',     loadChildren: './pages/explore/explore.module#ExploreModule' },
       { path: 'explore/:id', loadChildren: './pages/editor/editor.module#EditorModule' },
@@ -31,6 +34,7 @@ const routes: Routes = [
       { path: 'messages',    loadChildren: './pages/messages/messages.module#MessagesModule' },
       { path: 'terms',       loadChildren: './pages/terms-privacy/terms-privacy.module#TermsPrivacyModule' },
       { path: 'not-found',   loadChildren: './pages/not-found/not-found.module#NotFoundModule' },
+      { path: 'coming-soon', loadChildren: './pages/coming-soon/coming-soon.module#ComingSoonModule' },
       // Redirections
       { path: 'home',        redirectTo:   '', pathMatch: 'full' },
       { path: '**',          redirectTo:   'not-found', pathMatch: 'full' }

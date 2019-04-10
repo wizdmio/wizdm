@@ -51,12 +51,6 @@
         ]
     },
 
-    "consent": {
-        "title": "Cookie and Privacy Policy",
-        "description": "Wizdm uses cookies to improve your user experience. To continue, please accept our cookie use and privacy policy.",
-        "accept": "Accept"
-    },
-
     "errors": {
         "auth": {
           "wrongPassword": "This password seems wrong",

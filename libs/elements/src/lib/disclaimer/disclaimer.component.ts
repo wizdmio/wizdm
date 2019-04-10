@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'wm-disclaimer',
+  selector: 'wm-disclaimer, [wm-disclaimer]',
   templateUrl: './disclaimer.component.html',
   styles: []
 })

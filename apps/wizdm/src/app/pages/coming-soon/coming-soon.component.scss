@@ -1,0 +1,40 @@
+
+@import "variables";
+@import "theme";
+
+:host {
+  display: block;
+  width: 100%;
+
+  .background {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 480px;
+    height: 80vh;
+    max-height: 560px;
+    box-sizing: border-box;
+    transform: skewY(-10deg);
+    transform-origin: 0 100%;
+    background-color: rgba(mat-color($wm-accent), 0.1);
+    background: linear-gradient(145deg, rgba(mat-color($wm-accent), 0.15), rgba(mat-color($wm-accent), 0));
+  }
+
+  .banner {
+    position: relative;
+    min-height: 350px;
+
+    @include wm-padding-top();
+
+    h1 {
+      //@include mat-typography-level-to-styles($wm-typography, display-1);
+      font-family: mat-font-family($wm-typography, display-1);
+      font-size  : mat-font-size($wm-typography, display-1);
+      font-weight: 800;
+    }
+
+    p { text-align: justify; }
+  }
+}
