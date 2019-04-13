@@ -21,7 +21,7 @@ const routes: Routes = [
     children: [
       { path: '',            loadChildren: './pages/home/home.module#HomeModule' },
       
-      { path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
+      //{ path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
       
       { path: 'apply',       loadChildren: './pages/apply/apply.module#ApplyModule' },
       { path: 'explore',     loadChildren: './pages/explore/explore.module#ExploreModule' },

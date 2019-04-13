@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ObservableMedia } from '@angular/flex-layout';
+import { MediaObserver } from '@angular/flex-layout';
 import { ToolbarService, wmAction } from './toolbar/toolbar.service';
 import { ViewportService } from './viewport/viewport.service';
 export { wmAction };
@@ -12,7 +12,7 @@ export class NavigatorService {
   // Global error object
   private errorObj: any;
 
-  constructor(readonly media    : ObservableMedia,
+  constructor(readonly media    : MediaObserver,
               readonly toolbar  : ToolbarService, 
               readonly viewport : ViewportService) {}
 
