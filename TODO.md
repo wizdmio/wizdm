@@ -6,6 +6,9 @@
 * ~~Review the overall color styling, so, to use a darker default text color to be mitigated by a global opacity level on `p` elements~~
 * ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
+## Utils
+* Upgrade the ContentResolver using `router.routerState.root` (aka ActivatedRoot) to provide a data content observable out of the `select()` instead of the latest snapshot
+
 ## Navigator
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
 * ~~Refactor the action bar getting rid of the action enabler leveraging on the `buttons$` observable instead, so, that enableAction() can be implemented simlarly to performAction() and eventually other functions to dynamically change labels as well.~~ 
