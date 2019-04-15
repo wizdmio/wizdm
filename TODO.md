@@ -29,6 +29,7 @@
 
 ## Pages
 * ~~Turn every page into a module to be eventually lazely loaded~~
+* Rename `user` into `profile` for the sake of clarity
 
 ## Elements
 * ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
