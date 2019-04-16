@@ -7,7 +7,13 @@
 * ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
 ## Utils
-* Upgrade the ContentResolver using `router.routerState.root` (aka ActivatedRoot) to provide a data content observable out of the `select()` instead of the latest snapshot
+* ~~Upgrade the ContentResolver using `router.routerState.root` (aka ActivatedRoot) to provide a data content observable out of the `select()` instead of the latest snapshot~~
+* Refactor the `ContetResolver` to push the `data` snapshot into a `data$` observable so to implement asynchronous content update independenlty from `ActivatedRoot` (since it can't be sucessfully injected into services by design). Implements an `asObservable(select, defaults)` function for piping.
+* Refactor the redirect-handler into a canActivate guard for better performances.
+* Implement an action-handler as a canActivate guard responding to /action path to perform application wide actions:
+  * switching language (keeping the same page)
+  * redirecting to external links
+  * ...
 
 ## Navigator
 * Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
