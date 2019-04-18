@@ -1,4 +1,4 @@
-![wizdm](wizdm/apps/wizdm/app/src/assets/img/wmlogo.svg?raw=true "wizdm")
+![wizdm](apps/wizdm/app/src/assets/img/wmlogo.svg?raw=true "wizdm")
 
 
 
