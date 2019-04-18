@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/wizdmio/wizdm/raw/master/apps/wizdm/src/assets/img/wmlogo.png" alt="wizdm" width="50" height="50" /> Wizdm - project's notes
+# Wizdm - project's notes
 
 Wizdm uses a minimal clean interface based on Angular Material and FlexLayout to fit both desktop and mobile.
 
