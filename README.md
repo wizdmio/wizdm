@@ -1,4 +1,4 @@
-![wizdm](https://github.com/wizdmio/wizdm/raw/master/apps/wizdm/src/assets/img/wmlogo.png "wizdm")
+-> ![wizdm](https://github.com/wizdmio/wizdm/raw/master/apps/wizdm/src/assets/img/wmlogo.png "wizdm") <-
 
 
 
