@@ -1,7 +1,7 @@
 
 
 <p align="center">
-    <img src="https://github.com/wizdmio/wizdm/raw/master/apps/wizdm/src/assets/img/wmlogo.svg" alt="Image" width="100" height="100" />
+    <img src="https://github.com/wizdmio/wizdm/raw/master/apps/wizdm/src/assets/img/wmlogo.png" alt="Image" width="100" height="100" />
 </p>
 
 # Wizdm - project's notes
