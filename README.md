@@ -1,3 +1,4 @@
+
 # Wizdm - project's notes
 
 Wizdm uses a minimal clean interface based on Angular Material and FlexLayout to fit both desktop and mobile.

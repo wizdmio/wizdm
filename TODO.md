@@ -7,7 +7,17 @@
 * ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
 ## Utils
+<<<<<<< HEAD
 * Implements an externalUrl redirector using angular Router (see: https://medium.com/@adrianfaciu/using-the-angular-router-to-navigate-to-external-links-15cc585b7b88)
+=======
+* ~~Upgrade the ContentResolver using `router.routerState.root` (aka ActivatedRoot) to provide a data content observable out of the `select()` instead of the latest snapshot~~
+* Refactor the `ContetResolver` to push the `data` snapshot into a `data$` observable so to implement asynchronous content update independenlty from `ActivatedRoot` (since it can't be sucessfully injected into services by design). Implements an `asObservable(select, defaults)` function for piping.
+* Refactor the redirect-handler into a canActivate guard for better performances.
+* Implement an action-handler as a canActivate guard responding to /action path to perform application wide actions:
+  * switching language (keeping the same page)
+  * redirecting to external links
+  * ...
+>>>>>>> d2cd10bc937693b44ee49bb6282b18824952c524
 
 ## Navigator
 * ~~Refactor the `wm-footer` to automatically show/hide the language seleciton based on `resolver.user.language` property (so removing the input)~~
@@ -38,7 +48,11 @@
 
 ## Pages
 * ~~Turn every page into a module to be eventually lazely loaded~~
+<<<<<<< HEAD
 * ~~Uploads: improve thumbnails so to have a fixed size while picture is loading~~
+=======
+* Rename `user` into `profile` for the sake of clarity
+>>>>>>> d2cd10bc937693b44ee49bb6282b18824952c524
 
 ## Elements
 * ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
