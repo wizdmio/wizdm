@@ -6,7 +6,6 @@ import { Router,
          Resolve, 
          CanActivate,
          CanDeactivate,
-         ActivatedRoute,
          ActivatedRouteSnapshot, 
          RouterStateSnapshot,
          NavigationEnd,
@@ -45,9 +44,13 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
    */
   public stream(select: string, defaults?: any): Observable<any> {
 
-    return this._data$.pipe( map( data => {
-      return select.select(data, defaults);
-    }));
+    return this._data$.pipe( 
+      // Selects the data portion of interst
+      map( data => select.select(data, defaults) ),
+      // Filters empty data stream. This may happen while switching languages since
+      // the router is resolving the route sequencially
+      filter( data => !!data ) 
+    );
   }
 
   public snapshot(select: string, defaults?: any): any {
@@ -82,6 +85,13 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
               return of({});
             }
 
+            if(lang !== this.language) {
+              // Applies the new locale to the auth instance
+              this.user.auth.language = lang;
+              // Sets the DataAdapter/moment locale accordingly
+              this.adapter.setLocale( moment.locale(lang) );
+            }
+
             // Loads he requested modules
             return this.loadModules(lang, route.data.modules)
               .pipe( 
@@ -93,55 +103,6 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
           })
         );
       }));
-/*
-    // Let's see which is the requested language
-    const lang = route.params['lang'] || this.language || 'en';
-    
-    // Detects the browser language on request and re-route to it
-    if(lang === 'auto') {
-      
-      const lang = this.detectLanguage().split('-')[0];
-      console.log('Using browser language: ' + lang);
-      // Switch to the detected language
-      this.router.navigate([lang]);
-      return null;
-    }
-
-    // Whenever the language changes...
-    if(lang !== this.language) { 
-      // Empties the cached content when switching language
-      this.data = { lang }; 
-      // Applies the new locale to the auth instance
-      this.user.auth.language = lang;
-      // Sets the DataAdapter/moment locale accordingly
-      this.adapter.setLocale( moment.locale(lang) );
-    }
-
-    // Implements a basic language resolver returning the user preferred language
-    // captured from the user profile stored in the database. Since this observable
-    // pipes from the AuthService this resolver grants the page won't show up before
-    // the user authentication has been checked preventing page flickering 
-    return this.user.asObservable().pipe( 
-      first(), 
-      switchMap( profile => {
-
-        // Switch to the user profile language when needed
-        if(!!profile && !!profile.lang && profile.lang !== this.language) {
-          
-          console.log('Resolving to profile language: ', profile.lang);
-          // Jumps to the home page loading the profile language content
-          this.router.navigate([profile.lang]);
-          return of({});
-        }
-
-        // Loads he requested modules
-        return this.loadModules(route.data.modules)
-          // Jumps to the not found page when the requested content is missing
-          .pipe( catchError( () => {
-            this.router.navigate['not-found'];
-            return of({});
-          }));
-      }));*/
   }
 
   // Load the modules of the specified language
@@ -230,7 +191,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
   // Routing helper to easily jump on a specified page keeping the current language
   public goTo(to: string, extras?: NavigationExtras): Promise<boolean> {
-    return this.router.navigate([ this.language, to ], extras );
+    return this.router.navigate([ '/', this.language, to ], extras );
   }
 
   public detectLanguage(): string {
@@ -255,12 +216,16 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
   }
   
   /**
-   * Helper function to force reloading the content while navigating to the new language
+   * Helper function to navigate to a given url switching to the specified language
    * @param lang the new language code to switch to
-   * @param url the optional relative url to navigate to. The function navigates tothe current position if not specified.
+   * @param url the optional relative url to navigate to. The function navigates to the current position if not specified.
    */
   public switchLanguage(lang: string, url?: string): Promise<boolean> {
 
+    const link = !!url ? ['/', lang, url] : this.routerLink(lang);
+
+    return this.router.navigate(link);
+/*
     // Checks if a language change is requested
     if(lang !== this.language) {
 
@@ -287,6 +252,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
     // Navigate to the target page (switching language if necessary)
     return this.router.navigateByUrl(target);
+  */
   }
 
   private merge(localModule: any, defaultModule?: any): any {

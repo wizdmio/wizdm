@@ -28,17 +28,17 @@
     <mat-list>
 
       <wm-user-item *ngFor="let field of panel.fields"
-                      [name]="field.key"
-                      [label]="field.label"
-                      [icon]="field.icon"
-                      [hint]="field.hint"
-                      [type]="field.type"
-                      [value]="profileValue(field.key)"
-                      [options]="profileOptions(field.key)"
-                      [validators]="profileValidators(field.key)"
-                      [editable]="profileEditable(field.key)"
-                      [mobile]="nav.mobile"
-                      (editDone)="updateUserProfile(field.key, $event)">
+                    [name]="field.key"
+                    [label]="field.label"
+                    [icon]="field.icon"
+                    [hint]="field.hint"
+                    [type]="field.type"
+                    [value]="profileValue(field.key)"
+                    [options]="profileOptions(field.key)"
+                    [validators]="profileValidators(field.key)"
+                    [editable]="profileEditable(field.key)"
+                    [mobile]="nav.mobile"
+                    (editDone)="updateUserProfile(field.key, $event)">
       </wm-user-item>
 
     </mat-list>
@@ -51,9 +51,7 @@
         <button *ngIf="btn.action" 
                 mat-button color="primary" 
                 (click)="action(btn.action)"
-                [disabled]="disabled(btn.action)">
-          {{ btn.caption }}
-        </button>
+                [disabled]="disabled(btn.action)">{{ btn.caption }}</button>
 
       </ng-container>
 
@@ -61,9 +59,7 @@
       <button mat-button *ngIf="panel.applyChanges"
                           color="primary" 
                         [disabled]="!itemChanges"
-                        (click)="applyAllItemChanges()">
-        {{ panel.applyChanges }}
-      </button>
+                        (click)="applyAllItemChanges()">{{ panel.applyChanges }}</button>
 
     </mat-action-row>
 

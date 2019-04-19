@@ -1,0 +1,101 @@
+{
+  "title": "Il mio profilo",
+  
+  "uploadImage": {
+    "title": "Choose an image",
+    "noFiles": "There's no files uploaded yet",
+    "none": "None",
+    "cancel": "Cancel",
+    "select": "Select",
+    "browse": "Browse..."
+  },
+
+  "actions": [
+    { "caption": "Disconnetti" },
+    { "menu": [
+      { "caption": "I miei file" }
+    ]}
+  ],
+
+  "panels": [
+    {
+      "title": "Informazioni personali",
+      "icon": "account_box",
+      "fields": [
+        { "label": "Name", "hint": "Your name goes here" },
+        { "label": "About me" },
+        { "label": "Email", "hint": "This is how you'll be contacted"},
+        { "label": "Phone", "hint": "This is how you'll be contacted"},
+        { "label": "Birthday", "hint": "We'll wish you happy birthday"},
+        { "label": "Gender" },
+        { "label": "Language" }
+      ],
+      "applyChanges": "Applica le modifiche"
+    },
+    {
+      "title": "Accesso e sicurezza",
+      "icon": "lock",
+      "fields": [
+        { "label": "Account created" },
+        { "label": "Sign-in provider" },
+        { "label": "Account email" },
+        { "label": "Identity" }
+      ],
+      "buttons": [
+        { "caption": "Verifica email" },
+        { "caption": "Cambia email" },
+        { "caption": "Cambia password" },
+        { "caption": "Elimina account" },
+        { "caption": "Esci" }
+      ]
+    }
+  ],
+
+  "genders": [
+    { "label": "Indifferente" },
+    { "label": "Maschile" },
+    { "label": "Femminile" },
+    { "label": "Oltre" }
+  ],
+
+  "identity": [
+    { "label": "Verificato" },
+    { "label": "Non verificato" }
+  ],
+  
+  "errors": {
+    "required": "This is a mandatory field",
+    "email": "There's something wrong with this email"
+  },
+
+  "popups": {
+
+    "changeEmail": {
+      "title": "Changing account email",
+      "message": "You'll be asked to confirm your identity by re-authenticating.",
+      "cancel": "Cancel",
+      "ok": "Proceed"
+    },
+  
+    "changePassword": {
+      "title": "Changing account password",
+      "message": "You'll be asked to confirm your identity by re-authenticating.",
+      "cancel": "Cancel",
+      "ok": "Proceed"
+    },
+
+    "delete": {
+      "title": "Deleting account",
+      "message": "WARNING, by proceeding you'll permanently delete your account and all the related data. You'll be asked to confirm your identity by re-authenticating.",
+      "cancel": "Cancel",
+      "ok": "Proceed"
+    },
+
+    "canLeave": {
+      "title": "Unsaved changes",
+      "message": "If you leave now, changes won't be saved",
+      "cancel": "Cancel",
+      "ok": "Ok"
+    }
+  }
+}

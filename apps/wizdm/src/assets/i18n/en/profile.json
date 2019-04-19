@@ -1,7 +1,6 @@
 {
   "title": "My profile",
-  "description": "Here you'll find all the information about you",
-
+  
   "uploadImage": {
     "title": "Choose an image",
     "noFiles": "There's no files uploaded yet",

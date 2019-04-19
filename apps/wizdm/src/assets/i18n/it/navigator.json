@@ -35,7 +35,14 @@
     },
 
     "footer": {
-        "terms": "Termini e Privacy",
-        "language": "Lingua"
+
+        "copyright": "Condiviso con amore dal pianeta terra. wizdm ©{{ year }}",
+
+        "links": [
+            { "label": "A proposito di noi" },
+            { "label": "Il progetto" },
+            { "label": "Contattaci" },
+            { "label": "Termini e privacy" }
+        ]
     }
 }

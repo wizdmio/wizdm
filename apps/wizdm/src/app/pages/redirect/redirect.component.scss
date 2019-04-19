@@ -1,10 +1,14 @@
+@import "variables";
+@import "theme";
 
 :host {
   display: flex;
   flex-direction: column;
-  //justify-content: center;
+  box-sizing: border-box;
   align-items: center;
- 
-  position: relative;
-  padding-top: 50px; 
+
+  padding: $wm-content-padding 0;
+  margin: 0 $wm-content-margin;
+
+  @include wm-padding-top($wm-content-padding);
 }

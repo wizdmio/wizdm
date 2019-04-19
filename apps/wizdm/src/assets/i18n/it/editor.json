@@ -10,7 +10,7 @@
 
   "userInfo": {
     "title": "About me",
-    "close": "Close",
+    "close": "Chiudi",
     "menu": {
       "cover": "Cover picture",
       "color": "Theme color"
@@ -18,27 +18,27 @@
   },
 
   "guestActions": [
-    { "caption": "Back", "icon": "arrow_back", "link": "./explore" },
-    { "caption": "Contact the owner", "icon": "envelope", "code": "contact"}
+    { "caption": "Indietro" },
+    { "caption": "Contatta l'autore" }
   ],
 
   "authorActions": [
-    { "caption": "Back", "icon": "arrow_back", "link": "./explore" },
-    { "caption": "Edit", "icon": "edit", "code": "edit" },
+    { "caption": "Indietro" },
+    { "caption": "Modifica" },
     { "menu": [
-        { "caption": "Change cover", "icon": "insert_photo", "code": "cover" },
-        { "caption": "Upload file", "icon": "cloud_upload", "link": "upload" },
-        { "caption": "Export as PDF", "icon": "save_alt", "code": "export" },
-        { "caption": "Delete", "icon": "delete", "code": "delete" }
+        { "caption": "Change cover" },
+        { "caption": "Upload file" },
+        { "caption": "Export as PDF" },
+        { "caption": "Delete" }
       ]
     }
   ],
 
   "editActions": [ 
-    { "caption": "Save", "icon": "save", "code": "save" },
-    { "caption": "Done", "icon": "done", "code": "done" },
+    { "caption": "Salva" },
+    { "caption": "Completato" },
     { "menu": [
-      { "caption": "Help", "icon": "help", "code": "help" }
+      { "caption": "Aiuto" }
       ]
     }
   ],

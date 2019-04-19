@@ -22,10 +22,9 @@ import { filter, map } from 'rxjs/operators';
 export class AppComponent implements OnInit, OnDestroy { 
   
   public loading: boolean = true;
+  private sub: Subscription;
 
   constructor(private router: Router, private icon: MatIconRegistry) {}
-
-  private sub: Subscription;
   
   ngOnInit() {
 
@@ -39,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // Filters Resolve events only
         filter( e => e instanceof ResolveStart || e instanceof ResolveEnd), 
         // Maps the event into true/false
-        map( e => e instanceof ResolveStart)
+        map( e => e instanceof ResolveStart )
         // Shows the loader spinner while resolving the route content
       ).subscribe( e => this.loading = e );
   }

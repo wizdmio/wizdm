@@ -17,10 +17,12 @@ import { $animations } from './editor.animations';
 export class EditorComponent implements OnInit, OnDestroy {
 
   private msgs$: Observable<any>;
+  public msgs: any = {};
+
   private activateActions$ = new BehaviorSubject<boolean>(false);
   private saveDocument$ = new Subject<wmDocument>();
   private dispose$ = new Subject<void>();
-  public msgs: any = {};
+
   public project: Project;
   public editMode = false;
 
@@ -60,12 +62,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     return this.route.paramMap.pipe(
       takeUntil( this.dispose$ ),
       // Gets the routing param id
-      switchMap( param => param.get('id') ),
+      map( param => param.get('id') ),
       // Turns the id into a project instance
       map( id => this.projects.project( id ) ),
       // Loads the project
       switchMap( prj => prj.getProject() )
-      // Keeps the project snapshop in sync
     );
   }
 
@@ -95,7 +96,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         // Loads the localized content next
         switchMap( isMine => this.msgs$.pipe(
           // Maps the actions accordingly
-          map( msgs => isMine ? (editMode ? msgs.authorActions : msgs.editActions) : msgs.guestActions )
+          map( msgs => {
+            return isMine ? (editMode ? msgs.editActions : msgs.authorActions) : msgs.guestActions; 
+          } )
         ))
       )),
       // Finally activates the relevant actions
