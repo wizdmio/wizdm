@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { NavComponent } from './navigator';
-import { ContentResolver, RedirectHandler } from './utils';
+import { ContentResolver, FirebaseHandler } from './utils';
 
 // Define navigation routes
 const routes: Routes = [
   // Redirection handler (for firebase password confirmation/reset and stuff)
-  { path: 'handler', component: RedirectHandler },
+  { path: 'handler', component: FirebaseHandler },
   // Global NotFound page using default language content
   { path: 'not-found', loadChildren: './pages/not-found/not-found.module#NotFoundModule' },
   // Redirect to the language resolver asking for auto detection of the explore language
@@ -20,7 +20,7 @@ const routes: Routes = [
     // Localized lazily loaded pages
     children: [
       { path: '',            loadChildren: './pages/home/home.module#HomeModule' },
-      
+
       //{ path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
       
       { path: 'apply',       loadChildren: './pages/apply/apply.module#ApplyModule' },
@@ -28,12 +28,13 @@ const routes: Routes = [
       { path: 'explore/:id', loadChildren: './pages/editor/editor.module#EditorModule' },
       { path: 'about',       loadChildren: './pages/about/about.module#AboutModule' },
       { path: 'login',       loadChildren: './pages/login/login.module#LoginModule' },
-      { path: 'profile',     loadChildren: './pages/user/user.module#UserModule' },
+      { path: 'profile',     loadChildren: './pages/profile/profile.module#ProfileModule' },
       { path: 'upload',      loadChildren: './pages/upload/upload.module#UploadModule' },
       { path: 'dashboard',   loadChildren: './pages/dashboard/dashboard.module#DashboardModule' },
       { path: 'messages',    loadChildren: './pages/messages/messages.module#MessagesModule' },
       { path: 'terms',       loadChildren: './pages/terms-privacy/terms-privacy.module#TermsPrivacyModule' },
       { path: 'not-found',   loadChildren: './pages/not-found/not-found.module#NotFoundModule' },
+      { path: 'redirect',    loadChildren: './pages/redirect/redirect.module#RedirectModule' },
       { path: 'coming-soon', loadChildren: './pages/coming-soon/coming-soon.module#ComingSoonModule' },
       // Redirections
       { path: 'home',        redirectTo:   '', pathMatch: 'full' },
@@ -45,8 +46,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ RedirectHandler ],
-  imports: [ RouterModule.forRoot(routes) ],
+  declarations: [ FirebaseHandler ],
+  imports: [ RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }) ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

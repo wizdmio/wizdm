@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ActivatedRoute } from '@angular/router'; 
+import { MatSelectionList } from '@angular/material';
 import { PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
-import { ChatService, wmConversation, wmMessage } from '../../utils';
+import { ContentResolver, ChatService, wmConversation, wmMessage } from '../../utils';
 import { Observable, of } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
 
@@ -25,17 +24,16 @@ export class MessagesComponent implements OnInit {
 
   @ViewChild(MatSelectionList) msgList: MatSelectionList;
 
-  public messages$: Observable<wmConversation[]>;
-  readonly msgs;
+  readonly msgs$: Observable<any>;
+  readonly messages$: Observable<wmConversation[]>;
 
-  constructor(route : ActivatedRoute, 
-              private toolbar : ToolbarService,
-              //private auth    : AuthService,
+  constructor(private toolbar : ToolbarService,
               private chat    : ChatService,
-              private popup   : PopupService) {
+              private popup   : PopupService,
+                      content : ContentResolver) {
 
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.messages || {};
+    this.msgs$ = content.stream('messages');
   }
 
   ngOnInit() {

@@ -1,47 +1,5 @@
 
 <mat-divider></mat-divider>
-<footer fxLayout="column" fxLayoutAlign="center center" *ngIf="msgs$ | async as msgs">
-
-  <!-- Top section with links -->
-  <section fxLayout="column" fxLayoutGap="16px">
-
-    <!-- Mini fab with social links -->
-    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
-
-      <a mat-mini-fab [routerLink]="item.link" [queryParams]="item.params" *ngFor="let item of msgs.socials">
-        <wm-icon [icon]="item.icon"></wm-icon>
-      </a>
-
-    </div>
-
-    <!-- Links to internal key topics -->
-    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center center">
-
-      <a mat-button [routerLink]="item.link" *ngFor="let item of msgs.links">{{ item.label }}</a>
-      
-    </div>
-
-    <!-- Languages -->
-    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
-
-      <a class="mat-small" 
-         [routerLink]="content.routerLink(item.value)" 
-         routerLinkActive="link-disabled"
-         *ngFor="let item of msgs.languages">{{ item.label }}</a>
-      
-    </div>
-
-  </section>
-
-  <section fxLayout="row" fxLayoutAlign="center center" contrast>
-
-    <span class="mat-small">{{ copyright(msgs.copyright) }}</span>
-  
-  </section>
-
-</footer> 
-
-<!--mat-divider></mat-divider>
 <footer fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
 
   <div fxFlexOrder.lt-sm="3">
@@ -76,4 +34,4 @@
       </mat-select>
     </mat-form-field>
   </div>
-</footer-->
+</footer>

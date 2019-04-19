@@ -1,0 +1,34 @@
+@import "variables";
+@import "theme";
+
+$wm-footer-height: 64px !default;
+
+footer {
+  min-height: $wm-footer-height;
+  width: 100%;
+  padding: 32px;
+  
+  color: map-get($wm-theme-foreground,text);
+  background-color: rgba(mat-color($wm-accent), 0.15);
+}
+
+ h4 { 
+   text-transform: uppercase;
+   padding: 0 16px;
+   margin: 0;
+};
+
+ ul {
+   list-style: none;
+   padding-left: 0;
+ }
+
+.flag {
+  width: 16px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.social {
+  font-size: mat-font-size($wm-typography, social);
+}

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RedirectHandler } from './redirect-handler.component';
+import { FirebaseHandler } from './firebase-handler.component';
 
-describe('RedirectHandler', () => {
-  let component: RedirectHandler;
-  let fixture: ComponentFixture<RedirectHandler>;
+describe('FirebaseHandler', () => {
+  let component: FirebaseHandler;
+  let fixture: ComponentFixture<FirebaseHandler>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RedirectHandler ]
+      declarations: [ FirebaseHandler ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RedirectHandler);
+    fixture = TestBed.createComponent(FirebaseHandler);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

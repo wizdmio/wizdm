@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ToolbarService, ViewportService } from '../../navigator';
-import { ProjectService, Project } from '../../utils';
+import { ContentResolver, ProjectService, Project } from '../../utils';
 import { Observable, Subject, of } from 'rxjs';
 import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './explore.animations';
@@ -14,28 +13,24 @@ import { $animations } from './explore.animations';
 })
 export class ExploreComponent implements OnInit, OnDestroy {
 
+  readonly msgs$: Observable<any>;
   private dispose$: Subject<void> = new Subject();
   public projects$: Observable<Project[]>;
-  readonly msgs;
-
+  
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
-  constructor(route: ActivatedRoute,
-              private toolbar  : ToolbarService,
-              private scroll   : ViewportService,
-              private projects : ProjectService) {
+  constructor(private  scroll   : ViewportService,
+              readonly projects : ProjectService,
+                       content  : ContentResolver) {
 
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.explore || {};
+    this.msgs$ = content.stream('explore');
   }
 
   ngOnInit() {
 
     // Listing all projects (using pagination)
     this.projects$ = this.projects.browseAll({ limit: 10 });
-
-    // Enables the toolbar actions only when dealing with personal projects
-    //this.toolbar.activateActions(this.msgs.actions);
     
     // Subscribes to scrollY$ to load new projects when approaching the bottom of the page
     this.scroll.scrollY$.pipe(
@@ -55,14 +50,3 @@ export class ExploreComponent implements OnInit, OnDestroy {
     this.dispose$.complete();
   }
 }
-
-/*
-    import { MediaChange, ObservableMedia } from '@angular/flex-layout';
-
-    private media: ObservableMedia
-
-    this.media.asObservable()
-      .pipe( takeUntil( this.dispose$ ) )
-      .subscribe((change: MediaChange) => {
-        this.cols = this.colsBreakpoint[change.mqAlias];
-      });*/

@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, ViewChild, TemplateRef, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router'; 
 import { ViewportService } from '../../navigator';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators'
@@ -16,21 +15,16 @@ export class TermsPrivacyComponent implements OnInit {
 
   // Display mode defaults to 'page'
   @Input() display: displayMode = 'page';
-  public msgs;
   
-  constructor(route           : ActivatedRoute, 
-              private http    : HttpClient,
-              private scroll  : ViewportService) {
-
-    // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.terms || {};
+  constructor(private http   : HttpClient,
+              private scroll : ViewportService) {
   }
 
   public document = "";
 
   ngOnInit() {
     // Loads the document from assets
-    this.loadDocument(this.msgs.document)
+    this.loadDocument('assets/doc/terms.md')
       .subscribe( doc => {
         this.document = doc;
       });

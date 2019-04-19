@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { ActivatedRoute } from '@angular/router'; 
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { FileOpenComponent, PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { ContentResolver } from '../../utils';
+import { Observable, Subscription } from 'rxjs';
+import { tap, switchMap } from 'rxjs/operators';
 
 interface UploadTask {
   snapshot: Observable<any>;
@@ -18,38 +18,48 @@ interface UploadTask {
   templateUrl: './upload.component.html',
   styleUrls: ['./upload.component.scss']
 })
-export class UploadComponent implements OnInit {
+export class UploadComponent implements OnInit, OnDestroy {
 
   @ViewChild(FileOpenComponent) openFile: FileOpenComponent;
   @ViewChild(MatSelectionList) fileList: MatSelectionList;
 
+  private msgs$: Observable<any>;
+  private sub: Subscription;
+  public msgs: any = {};
+  
   public uploads$: Observable<any[]>;
   public tasks: UploadTask[] = [];
-  public msgs;
   
-  constructor(route            : ActivatedRoute,
-              private toolbar  : ToolbarService,
+  constructor(private toolbar  : ToolbarService,
               private profile  : UserProfile,
-              private popup    : PopupService) {
+              private popup    : PopupService,
+                      content  : ContentResolver) {
 
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.upload || {};
+    this.msgs$ = content.stream('upload');
   }
 
   ngOnInit() {
 
+    // Initialize the page content
+    this.sub = this.msgs$.pipe( switchMap( msgs => {
+        // Keeps a snapshot of the localized content for internal use
+        this.msgs = msgs;
+        // Activates the toolbar actions
+        return this.toolbar.activateActions(this.msgs.actions);
+      }),
+      // Disables the delete action
+      tap( () => this.toolbar.enableAction('delete', false) )
+    // Subscrbes to execute the actions
+    ).subscribe( code => this.executeAction(code) );
+  
     // Gets the user uploads observable
     this.uploads$ = this.profile.uploads.stream( ref => ref.orderBy('created') )
       // Disposes completed upload tasks on list change
       .pipe( tap( files => this.disposeTasks() ));
-
-    // Activates the toolbar actions
-    this.toolbar.activateActions(this.msgs.actions)
-      .subscribe( code => this.executeAction(code) );
-
-    // Disables the delete action
-    this.toolbar.enableAction('delete', false);
   }
+
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
   public selectionChange(change: MatSelectionListChange): void {
 

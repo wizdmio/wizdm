@@ -1,4 +1,3 @@
-
 <!-- USER IMAGE -->
 <header fxLayout="column" fxLayoutAlign="center center">
 
@@ -29,17 +28,17 @@
     <mat-list>
 
       <wm-user-item *ngFor="let field of panel.fields"
-                       [name]="field.key"
-                       [label]="field.label"
-                       [icon]="field.icon"
-                       [hint]="field.hint"
-                       [type]="field.type"
-                       [value]="profileValue(field.key)"
-                       [options]="profileOptions(field.key)"
-                       [validators]="profileValidators(field.key)"
-                       [editable]="profileEditable(field.key)"
-                       [mobile]="nav.mobile"
-                       (editDone)="updateUserProfile(field.key, $event)">
+                      [name]="field.key"
+                      [label]="field.label"
+                      [icon]="field.icon"
+                      [hint]="field.hint"
+                      [type]="field.type"
+                      [value]="profileValue(field.key)"
+                      [options]="profileOptions(field.key)"
+                      [validators]="profileValidators(field.key)"
+                      [editable]="profileEditable(field.key)"
+                      [mobile]="nav.mobile"
+                      (editDone)="updateUserProfile(field.key, $event)">
       </wm-user-item>
 
     </mat-list>
@@ -50,9 +49,9 @@
       <ng-container *ngFor="let btn of panel.buttons">
 
         <button *ngIf="btn.action" 
-                 mat-button color="primary" 
-                 (click)="action(btn.action)"
-                 [disabled]="disabled(btn.action)">
+                mat-button color="primary" 
+                (click)="action(btn.action)"
+                [disabled]="disabled(btn.action)">
           {{ btn.caption }}
         </button>
 
@@ -61,8 +60,8 @@
       <!-- APPLY CHANGES BUTTON -->
       <button mat-button *ngIf="panel.applyChanges"
                           color="primary" 
-                         [disabled]="!itemChanges"
-                         (click)="applyAllItemChanges()">
+                        [disabled]="!itemChanges"
+                        (click)="applyAllItemChanges()">
         {{ panel.applyChanges }}
       </button>
 

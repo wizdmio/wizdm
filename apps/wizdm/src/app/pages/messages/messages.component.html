@@ -1,19 +1,24 @@
-<header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
-</header>
 
-<mat-divider></mat-divider>
+<ng-container *ngIf="msgs$ | async as msgs">
 
-<!-- Message list -->
-<mat-list *ngIf="messages$ | async as messages">
+  <header fxLayout="column">
+    <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
+    <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
+  </header>
 
-  <!-- No message's message -->
-  <p *ngIf="!messages.length">{{ msgs?.noMessages }}</p>
+  <mat-divider></mat-divider>
 
-  <!-- Message items -->
-  <wm-message *ngFor="let msg of messages; last as isLast" [message]="msg">
-    <mat-divider *ngIf="!isLast"></mat-divider>
-  </wm-message>
+  <!-- Message list -->
+  <mat-list *ngIf="messages$ | async as messages">
 
-</mat-list>
+    <!-- No message's message -->
+    <p *ngIf="!messages.length">{{ msgs?.noMessages }}</p>
+
+    <!-- Message items -->
+    <wm-message *ngFor="let msg of messages; last as isLast" [message]="msg">
+      <mat-divider *ngIf="!isLast"></mat-divider>
+    </wm-message>
+
+  </mat-list>
+
+</ng-container>

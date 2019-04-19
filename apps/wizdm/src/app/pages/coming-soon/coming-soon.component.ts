@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ContentResolver } from '../../utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-coming-soon',
@@ -8,10 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ComingSoonComponent {
 
-  readonly msgs;
+  readonly msgs$: Observable<any>;
 
-  constructor(route: ActivatedRoute) { 
+  constructor(content: ContentResolver) { 
     // Gets the localized content
-    this.msgs = route.snapshot.data.content.comingSoon;
+    this.msgs$ = content.stream('comingSoon');
   }
 }

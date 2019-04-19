@@ -10,7 +10,7 @@
 * Implements an externalUrl redirector using angular Router (see: https://medium.com/@adrianfaciu/using-the-angular-router-to-navigate-to-external-links-15cc585b7b88)
 
 ## Navigator
-* Refactor the `wm-footer` to automatically show/hide the language seleciton based on `resolver.user.language` property (so removing the input)
+* ~~Refactor the `wm-footer` to automatically show/hide the language seleciton based on `resolver.user.language` property (so removing the input)~~
 * Restyle the footer to have social links on the left, terms and language on the right.
 * Refactor the footer social link to use the externalUrl redirector
 * Restyle the footer to a taller version with accent-like background and reacher informations

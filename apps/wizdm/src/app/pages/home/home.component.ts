@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router'; 
 import { NavigatorService } from '../../navigator';
+import { ContentResolver } from '../../utils';
+import { Observable } from 'rxjs';
 import { $animations } from './home.animations';
 
 @Component({
@@ -11,10 +12,10 @@ import { $animations } from './home.animations';
 })
 export class HomeComponent {
 
-  readonly msgs = null;
+  readonly msgs$: Observable<any>;
   
-  constructor(route: ActivatedRoute, readonly nav: NavigatorService) {
+  constructor(content: ContentResolver, readonly nav: NavigatorService) {
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.home || {};
+    this.msgs$ = content.stream('home');
   }
 }

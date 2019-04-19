@@ -1,152 +1,157 @@
-<header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
-  <div fxHide.lt-sm>
-    <p *ngIf="welcomeBack" @fadeIn>{{ msgs?.welcomeBack }}</p>
-    <p *ngIf="!welcomeBack" @fadeIn>{{ msgs?.description }}</p>
-    <p *ngIf="application" @fadeIn>
-      <wm-disclaimer [source]="msgs?.clearForm" 
-                     (action)="disclaimerAction($event)"
-                     actionClass="mat-link">
-      </wm-disclaimer>
-    </p>
-  </div>
-</header> 
 
-<mat-vertical-stepper [selectedIndex]="stepIndex" linear #stepper>
+<ng-container *ngIf="msgs$ | async as msgs">
 
-  <mat-step [stepControl]="headerForm">
+  <header fxLayout="column">
+    <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+    <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+    <div fxHide.lt-sm>
+      <p *ngIf="welcomeBack" @fadeIn>{{ msgs.welcomeBack }}</p>
+      <p *ngIf="!welcomeBack" @fadeIn>{{ msgs.description }}</p>
+      <p *ngIf="application" @fadeIn>
+        <wm-disclaimer [source]="msgs.clearForm" 
+                      (action)="disclaimerAction($event)"
+                      actionClass="mat-link">
+        </wm-disclaimer>
+      </p>
+    </div>
+  </header> 
 
-    <!-- NAME step: here we create a new project -->
-    <form [formGroup]="headerForm" (ngSubmit)="draftApplication()">
+  <mat-vertical-stepper [selectedIndex]="stepIndex" linear #stepper>
 
-      <ng-template matStepLabel>{{msgs?.header.title}}</ng-template>
-      
-      <p class="mat-small">{{msgs?.header.description}}</p>
+    <mat-step [stepControl]="headerForm">
 
-      <!-- NAME INPUT -->
-      <mat-form-field appearance="legacy" fxFill>
+      <!-- NAME step: here we create a new project -->
+      <form [formGroup]="headerForm" (ngSubmit)="draftApplication()">
 
-        <mat-label>{{msgs?.header.name.label}}</mat-label>
-        <input matInput formControlName="name">
+        <ng-template matStepLabel>{{ msgs.header?.title }}</ng-template>
         
-        <mat-hint>{{msgs?.header.name.hint}}</mat-hint>
-        <mat-error *ngIf="headerForm.controls.name.errors" >
-          {{ errorMessage(headerForm.controls.name.errors, msgs?.header.name.errors) }}
-        </mat-error>
-      </mat-form-field>
+        <p class="mat-small">{{ msgs.header?.description }}</p>
 
-      <div class="bit-of-space"></div>
+        <!-- NAME INPUT -->
+        <mat-form-field appearance="legacy" fxFill>
 
-      <!-- ELEVETOR PITCH TEXT -->
-      <mat-form-field appearance="legacy" fxFill>
+          <mat-label>{{ msgs.header?.name?.label }}</mat-label>
+          <input matInput formControlName="name">
+          
+          <mat-hint>{{ msgs.header?.name?.hint }}</mat-hint>
+          <mat-error *ngIf="headerForm.controls['name']?.errors" >
+            {{ errorMessage(headerForm.controls['name'].errors, msgs.header?.name?.errors) }}
+          </mat-error>
+        </mat-form-field>
 
-        <mat-label>{{msgs?.header.pitch.label}}</mat-label>
-        <textarea matInput formControlName="pitch" [rows]="msgs?.header.pitch.rows || 3" 
-                                                   [maxlength]="msgs?.header.pitch.max || 180">
-        </textarea>
+        <div class="bit-of-space"></div>
+
+        <!-- ELEVETOR PITCH TEXT -->
+        <mat-form-field appearance="legacy" fxFill>
+
+          <mat-label>{{ msgs.header?.pitch?.label }}</mat-label>
+          <textarea matInput formControlName="pitch" [rows]="msgs.header?.pitch?.rows || 3" 
+                                                    [maxlength]="msgs.header?.pitch?.max || 180">
+          </textarea>
+          
+          <mat-hint>{{ msgs.header?.pitch?.hint }}</mat-hint>
+          <mat-error *ngIf="headerForm.controls['pitch']?.errors" >
+            {{ errorMessage(headerForm.controls['pitch'].errors, msgs.header?.pitch?.errors) }}
+          </mat-error>
+        </mat-form-field>
+
+        <div class="bit-of-space">
+          <button mat-button matStepperNext type="submit">{{ msgs.buttons?.next }}</button>
+        </div>
+      </form>
         
-        <mat-hint>{{msgs?.header.pitch?.hint}}</mat-hint>
-        <mat-error *ngIf="headerForm.controls.pitch.errors" >
-          {{ errorMessage(headerForm.controls.pitch.errors, msgs?.header.pitch.errors) }}
-        </mat-error>
-      </mat-form-field>
+    </mat-step>
 
-      <div class="bit-of-space">
-        <button mat-button matStepperNext type="submit">{{msgs?.buttons.next}}</button>
-      </div>
-    </form>
-      
-  </mat-step>
-
-  <!-- QUESTION steps: here the list of questions dynamically build into the stepper  -->
-  <mat-step *ngFor="let question of msgs?.questions; let i=index" [stepControl]="stepForms[i]">
-  
-    <form [formGroup]="stepForms[i]" (ngSubmit)="updateApplication(i)">
-
-      <ng-template matStepLabel>{{question.title}}</ng-template>
-        
-      <p class="mat-small">{{question.description}}</p>
-
-      <ng-container *ngFor="let field of question.fields; let j=index">
-
-        <ng-container [ngSwitch]="field.type">
-
-          <!-- INPUT -->
-          <mat-form-field *ngSwitchDefault appearance="legacy" fxFill>
-            
-            <mat-label>{{field.label}}</mat-label>
-            <input matInput [formControlName]="field.name">
-            
-            <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
-            <mat-error *ngIf="stepForms[i].controls[field.name].errors">
-              {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
-            </mat-error>
-          </mat-form-field>
-
-          <!-- TEXTAREA -->
-          <mat-form-field *ngSwitchCase="'textarea'" appearance="legacy" fxFill>
-            
-            <mat-label>{{field.label}}</mat-label>
-            <textarea matInput [formControlName]="field.name" [rows]="field.rows || 5" >
-            </textarea>
-
-            <mat-hint *ngIf="field.hint">{{field.hint}}</mat-hint>
-            <mat-error *ngIf="stepForms[i].controls[field.name].errors">
-              {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
-            </mat-error>
-          </mat-form-field>
-
-          <div class="bit-of-space" *ngIf="j < question.fields.length - 1">
-          </div>
-
-        </ng-container>
-      </ng-container>
-
-      <div class="bit-of-space">
-        <button mat-button matStepperPrevious type="button">{{msgs?.buttons.back}}</button>
-        <button mat-button matStepperNext type="submit">
-          {{msgs?.buttons.next}}
-        </button>
-      </div>
-    </form>
-  </mat-step>
-
-  <!-- SUBMIT w/ DISCLAIMER -->
-  <mat-step>
-    <ng-template matStepLabel>{{msgs?.appSubmit.title}}</ng-template>
+    <!-- QUESTION steps: here the list of questions dynamically build into the stepper  -->
+    <mat-step *ngFor="let question of msgs.questions; let i=index" [stepControl]="stepForms[i]">
     
-    <div fxLayout="row" fxLayoutAlign="center center" fxFill>
-      <div class="disclaimer">
-        <p>{{msgs?.appSubmit.description}}</p>
-        <p wm-disclaimer class="mat-small"
-          [source]="msgs?.appSubmit.disclaimer"
-          (action)="disclaimerAction($event)">
-        </p>
+      <form [formGroup]="stepForms[i]" (ngSubmit)="updateApplication(i)">
 
-        <!-- Agree checkbox -->
-        <div fxLayout="row" fxLayoutAlign="center center" fxFill>
-          <mat-checkbox labelPosition="before" color="primary" #agree>
-            <wm-disclaimer [source]="msgs?.appSubmit.agree"
-                           (action)="disclaimerAction($event)">
-            </wm-disclaimer>
-          </mat-checkbox>
+        <ng-template matStepLabel>{{ question.title }}</ng-template>
+          
+        <p class="mat-small">{{ question.description }}</p>
+
+        <ng-container *ngFor="let field of question.fields; let j=index">
+
+          <ng-container [ngSwitch]="field.type">
+
+            <!-- INPUT -->
+            <mat-form-field *ngSwitchDefault appearance="legacy" fxFill>
+              
+              <mat-label>{{ field.label }}</mat-label>
+              <input matInput [formControlName]="field.name">
+              
+              <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+              <mat-error *ngIf="stepForms[i].controls[field.name]?.errors">
+                {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- TEXTAREA -->
+            <mat-form-field *ngSwitchCase="'textarea'" appearance="legacy" fxFill>
+              
+              <mat-label>{{ field.label }}</mat-label>
+              <textarea matInput [formControlName]="field.name" [rows]="field.rows || 5" >
+              </textarea>
+
+              <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
+              <mat-error *ngIf="stepForms[i].controls[field.name]?.errors">
+                {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
+              </mat-error>
+            </mat-form-field>
+
+            <div class="bit-of-space" *ngIf="j < question.fields.length - 1">
+            </div>
+
+          </ng-container>
+        </ng-container>
+
+        <div class="bit-of-space">
+          <button mat-button matStepperPrevious type="button">{{ msgs.buttons?.back }}</button>
+          <button mat-button matStepperNext type="submit">
+            {{ msgs.buttons?.next }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- SUBMIT w/ DISCLAIMER -->
+    <mat-step>
+      <ng-template matStepLabel>{{ msgs.appSubmit?.title }}</ng-template>
+      
+      <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+        <div class="disclaimer">
+          <p>{{ msgs.appSubmit?.description }}</p>
+          <p wm-disclaimer class="mat-small"
+            [source]="msgs.appSubmit?.disclaimer"
+            (action)="disclaimerAction($event)">
+          </p>
+
+          <!-- Agree checkbox -->
+          <div fxLayout="row" fxLayoutAlign="center center" fxFill>
+            <mat-checkbox labelPosition="before" color="primary" #agree>
+              <wm-disclaimer [source]="msgs.appSubmit?.agree"
+                            (action)="disclaimerAction($event)">
+              </wm-disclaimer>
+            </mat-checkbox>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Progress bar -->
-    <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>
+      <!-- Progress bar -->
+      <mat-progress-bar *ngIf="progress" class="bit-of-space" mode="indeterminate"></mat-progress-bar>
 
-    <!-- Apply button -->
-    <div *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
-      <button mat-flat-button color="primary" type="button" 
-              [disabled]="!agree.checked" 
-              (click)="submitProject()">
-        {{ msgs?.buttons.apply }}
-      </button>
-    </div>
+      <!-- Apply button -->
+      <div *ngIf="!progress" class="bit-of-space" fxLayout="row" fxLayoutAlign="center center">
+        <button mat-flat-button color="primary" type="button" 
+                [disabled]="!agree.checked" 
+                (click)="submitProject()">
+          {{ msgs.buttons?.apply }}
+        </button>
+      </div>
 
-  </mat-step>
-      
-</mat-vertical-stepper>
+    </mat-step>
+        
+  </mat-vertical-stepper>
+
+</ng-container>

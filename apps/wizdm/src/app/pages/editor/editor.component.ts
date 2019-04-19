@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PopupService } from '@wizdm/elements';
 import { wmDocument } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
-import { ProjectService, Project, wmProject } from '../../utils';
-import { Observable, Subject } from 'rxjs';
+import { ContentResolver, ProjectService, Project, wmProject } from '../../utils';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { switchMap, takeUntil, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';
 
@@ -16,40 +16,38 @@ import { $animations } from './editor.animations';
 })
 export class EditorComponent implements OnInit, OnDestroy {
 
+  private msgs$: Observable<any>;
+  private activateActions$ = new BehaviorSubject<boolean>(false);
+  private saveDocument$ = new Subject<wmDocument>();
+  private dispose$ = new Subject<void>();
+  public msgs: any = {};
   public project: Project;
   public editMode = false;
-  readonly msgs;
 
   constructor(private projects : ProjectService,
               private route    : ActivatedRoute,
               private toolbar  : ToolbarService,
-              private popup    : PopupService) { 
+              private popup    : PopupService,
+              private content  : ContentResolver) { 
 
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.editor;
+    this.msgs$ = this.content.stream('editor');
   }
-
-  private saveDocument$ = new Subject<wmDocument>();
-  private dispose$ = new Subject<void>();
   
   ngOnInit() {
 
-    // Load the project once
-    this.onLoad().subscribe( project => {
+    // Gets a snapshot of the current localized content for internal use
+    this.msgs$.pipe( takeUntil(this.dispose$) )
+      .subscribe( msgs => this.msgs = msgs );
 
-      this.project = project;
+    // Loads the project and keeps it in sync
+    this.loadProject().subscribe( prj => this.project = prj );
+  
+    // Enables automatic save routine
+    this.saveAutomatically();
 
-      // Enable actions on the navigation bar depending on the type of user (author or guest)
-      this.toolbar.activateActions(project.isMine ? this.msgs.authorActions : this.msgs.guestActions )
-        .subscribe( code => this.doAction(code) );
-    });
-
-    // Save the modified project automatically
-    this.onSave().subscribe( data => {
-
-      this.project.update( data )
-        .then( () => this.toolbar.enableAction('save', false) );
-    });
+    // Activates the toolbar actions
+    this.activateActions();
   }
 
   ngOnDestroy() {
@@ -57,26 +55,65 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.dispose$.complete();
   }
 
+  private loadProject(): Observable<Project> {
+
+    return this.route.paramMap.pipe(
+      takeUntil( this.dispose$ ),
+      // Gets the routing param id
+      switchMap( param => param.get('id') ),
+      // Turns the id into a project instance
+      map( id => this.projects.project( id ) ),
+      // Loads the project
+      switchMap( prj => prj.getProject() )
+      // Keeps the project snapshop in sync
+    );
+  }
+
+  private saveAutomatically() {
+
+    return this.saveDocument$.pipe(
+      takeUntil( this.dispose$ ),
+      // Enables the save button every update request
+      tap( () => this.toolbar.enableAction('save', true) ),
+      // Filters multiple requests
+      debounceTime( 1000 ),
+      // Saves the updated project data
+      switchMap( data => this.project.update(data as wmProject) ),
+      // Disables the save button when done
+      tap( () => this.toolbar.enableAction('save', false) )
+    ).subscribe();
+  }
+
+  private activateActions() {
+
+    this.activateActions$.pipe(
+      takeUntil(this.dispose$),
+      // Loads the project first
+      switchMap( editMode => this.loadProject().pipe(
+        // Checks if the current user is the author
+        map( prj => prj.isMine ),
+        // Loads the localized content next
+        switchMap( isMine => this.msgs$.pipe(
+          // Maps the actions accordingly
+          map( msgs => isMine ? (editMode ? msgs.authorActions : msgs.editActions) : msgs.guestActions )
+        ))
+      )),
+      // Finally activates the relevant actions
+      switchMap( actions => this.toolbar.activateActions(actions) )
+      // Subscribes to perform the requested actions
+    ).subscribe( code => this.doAction(code) );
+  }
+
   public enterEditMode(): void {
-    // Enables the edit mode actions saving the previous state
-    this.toolbar.activateActions( this.msgs.editActions, true)
-      .subscribe( code => this.doAction(code) );
-
-    // Disables the save button
-    this.toolbar.enableAction('save', false);
-
-    // Turns edit mode on 
-    this.editMode = true;
+    // Turns edit mode on enabling the relevant actions
+    this.activateActions$.next(this.editMode = true );
   }
 
   public leaveEditMode(): void {
-    // Reload the project and turns editMode off
+    // Reload the project... 
     this.project.reload().toPromise()
-      .then( () => {
-        // Restores the previous actions
-        this.toolbar.restoreActions();
-        this.editMode = false;
-      });
+      // ...then turns the editMode off
+      .then( () => this.activateActions$.next(this.editMode = false) );
   }
 
   public get document(): wmDocument {
@@ -87,29 +124,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public save(document: wmDocument) {
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
-  }
-
-  private onLoad(): Observable<Project> {
-
-    return this.route.paramMap.pipe(
-      takeUntil( this.dispose$ ),
-      switchMap( param => {
-        return this.projects
-          .project( param.get('id') )
-          .getProject();
-      }));
-  }
-
-  private onSave(): Observable<wmProject> {
-    return this.saveDocument$.pipe(
-      takeUntil( this.dispose$ ),
-      //
-      tap( () => this.toolbar.enableAction('save', true) ),
-      
-      debounceTime( 1000 ),
-      
-      map( document => document as wmProject )
-    );
   }
 
   private deleteProject(): void {

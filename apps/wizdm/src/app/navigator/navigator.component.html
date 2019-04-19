@@ -1,4 +1,4 @@
-<header fxFlex="0 0 auto">
+<header fxFlex="0 0 auto" *ngIf="msgs$ | async as msgs">
 
   <mat-toolbar>
 
@@ -15,7 +15,7 @@
         <wm-logo routerLink="."></wm-logo>  
     
         <!-- Desktop navigation links -->
-        <wm-navbar [menuItems]="desktopMenu" *ngIf="nav.desktop"></wm-navbar>
+        <wm-navbar [menuItems]="desktopMenu(msgs)" *ngIf="nav.desktop"></wm-navbar>
       
       </nav>
 
@@ -50,14 +50,14 @@
     <!-- Mobile menu -->
     <mat-toolbar-row auto *ngIf="nav.mobile">
       
-      <wm-menu [menuItems]="mobileMenu" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
+      <wm-menu [menuItems]="mobileMenu(msgs)" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
     
     </mat-toolbar-row>
 
   </mat-toolbar>
 
   <!-- Global error message displayer -->
-  <wm-errors [msgs]="msgs?.errors" [error]="nav.error" (clear)="nav.clearError()"></wm-errors>
+  <wm-errors [msgs]="msgs.errors" [error]="nav.error" (clear)="nav.clearError()"></wm-errors>
   
 </header>
 
@@ -71,5 +71,5 @@
   </div>
   
   <!-- Footer always on the bottom -->
-  <wm-footer fxFlex="0 0 auto" [language]="!signedIn"></wm-footer>
+  <wm-footer fxFlex="0 0 auto"></wm-footer>
 </main>

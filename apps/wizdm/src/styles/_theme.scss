@@ -137,7 +137,7 @@ $wm-theme-background: map-get($wm-theme, background);
   // from the strict rules of material design for the sake of clarity
   .mat-link {
     cursor: pointer;
-    color: mat-color($wm-accent) !important;
+    color: mat-color($wm-accent);
     text-decoration: underline;
   }
  

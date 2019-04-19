@@ -16,7 +16,11 @@ using their Nx Angular Extension [@nrwl/schematics](https://nrwl.io/nx/guide-get
 
 ## Multi-language
 
-We use a content manager service to dynamically load contents in different languages by use of a resolver to pre-fetch localilzed content from 'assets/i18n' prior to load the navigator component. 
+We use a content manager service to dynamically load contents in different languages by use of a resolver to pre-fetch localilzed content from 'assets/i18n' prior to load the navigator component.
+
+The resolver checks the authenticated user language preferences when available too.
+
+The same resolver is used as a guard for both activating/deactivating pages while routing.
 
 We use the navigation system to switch among languages, so, from the user perspective, it looks like having multiple apps in different languages (e.g. https://wizdm.io/en/home for English or https://wizdm.io/it/home for Italian).
 
@@ -53,9 +57,9 @@ The project is currently hosted on [Firebase](https://firebase.google.com/) and 
 
 Run `firebase deploy` to upload the last build.
 
-## GitLab
+## Repository
 
-Source code is currently mantained on [GitLab](https://gitlab.com).
+Source code is now mantained on [GitHub](https://github.com/wizdmio/wizdm).
 
 ## Further help
 

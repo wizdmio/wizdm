@@ -1,12 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NavigationEnd } from '@angular/router';
 import { ContentResolver } from '../../utils';
-
-interface LanguageData {
-
-  value: string,
-  label: string,
-  image: string
-};
+import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-footer',
@@ -15,25 +11,19 @@ interface LanguageData {
 })
 export class FooterComponent {
   
-  readonly options: LanguageData[];
-  readonly language: LanguageData;
-  readonly msgs;
+  readonly msgs$: Observable<any>;
+  
+  constructor(readonly content: ContentResolver) {
 
-  // Flag enabling the multiple language selection
-  @Input('language') multiLanguage: boolean = false;
-
-  constructor(private resolver: ContentResolver) {
-
-    // Gets the localized content pre-fetched by the resolver
-    this.msgs = resolver.select('navigator.footer');
-    // Gets a shortcut to the list of supported languages
-    this.options = this.msgs.languages;
-    // Seeks for the current language within the list
-    this.language = this.options.find( opt => opt.value === resolver.language );
+    // Gets the localized content pre-fetched by the resolver during routing
+    this.msgs$ = content.stream("navigator.footer");
   }
 
-  public changeLanguage(lang: string) {
-    // Switch to the selected language
-    this.resolver.switchLanguage(lang);
+  readonly year = (new Date()).getFullYear();
+
+  copyright(msg: string): string {
+
+    // Interpolates the copyright message to dynamically change the current year
+    return msg.interpolate(this);
   }
 }

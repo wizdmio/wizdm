@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
-import { $itemAnimations } from './user-item-animations';
+import { $itemAnimations } from './item-animations';
 import * as moment from 'moment';
 
 export type UserItemOption = {
@@ -21,8 +21,8 @@ export interface UserItemValidators {
 
 @Component({
   selector: 'wm-user-item',
-  templateUrl: './user-item.component.html',
-  styleUrls: ['./user-item.component.scss'],
+  templateUrl: './item.component.html',
+  styleUrls: ['./item.component.scss'],
   animations: $itemAnimations
 })
 export class UserItemComponent {

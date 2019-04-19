@@ -5,6 +5,7 @@ import { UserProfile } from '@wizdm/connect';
 import { NavigatorService } from '../../navigator';
 import { ContentResolver } from '../../utils';
 import { $animations } from './login-animations';
+import { Observable, Subscription } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 
 type pageTypes = 'register' | 
@@ -26,10 +27,11 @@ type pageTypes = 'register' |
 })
 export class LoginComponent implements OnInit  {
 
+  readonly msgs$: Observable<any>;
+
   public page: pageTypes;
   public error: string = null;
   public progress = false;
-  public msgs = null;
   public hide = true;
 
   private code: string;
@@ -41,13 +43,13 @@ export class LoginComponent implements OnInit  {
   public newEmail: FormControl;
   public newPassword: FormControl;
 
-  constructor(private resolver  : ContentResolver,
+  constructor(private content   : ContentResolver,
               private profile   : UserProfile, 
               private navigator : NavigatorService,
               private route     : ActivatedRoute) {
 
-    // Gets the localized contents
-    this.msgs = this.resolver.select("login");
+    // Gets the localized content pre-fetched during routing resolving
+    this.msgs$ = content.stream('login');
 
     // Creates the loging form controls
     this.name = new FormControl(null, Validators.required);
@@ -104,7 +106,7 @@ export class LoginComponent implements OnInit  {
       // Switches to the relevant page
       this.switchPage(mode as pageTypes);
     });
-   }
+  }
 
   // Loggin-in helper to navigate to the project page after successfully signing-in by 
   // applying the user preferred language
@@ -124,7 +126,7 @@ export class LoginComponent implements OnInit  {
           const userLang = user.lang || 'en';
   
           // Jump to the projects explore switching to the user language if needed
-          this.resolver.switchLanguage(userLang, 'explore');
+          this.content.switchLanguage(userLang, 'explore');
         }
       })
     ).subscribe();
@@ -185,10 +187,6 @@ export class LoginComponent implements OnInit  {
       this.form.addControl('password', this.password);      
       break;
     }
-  }
-
-  public get pageData() {
-    return this.msgs.pages[this.page];
   }
 
   /**
@@ -271,7 +269,7 @@ export class LoginComponent implements OnInit  {
     // Signing-in with a email/password using the current language than send a verification email befor jumping to the profile page
     this.auth.registerNew(email, password, name )
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.resolver.goTo('profile') )
+      .then( () => this.content.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -280,7 +278,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
 
     // Send an action code link to the registerred email to reset a forgotten password
-    this.auth.forgotPassword(email, this.resolver.language )
+    this.auth.forgotPassword(email, this.content.language )
       .catch( error => this.showError(error.code) );
   }
 
@@ -290,7 +288,7 @@ export class LoginComponent implements OnInit  {
 
     // Resets the forgotten password by applying the action code received than jumps to the profile page
     this.auth.resetPassword(code, newPassword)
-      .then( () => this.resolver.goTo('profile') )
+      .then( () => this.content.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -301,7 +299,7 @@ export class LoginComponent implements OnInit  {
     // Update the account email by re-authenticating than send a verification request and jumps to the profile page
     this.auth.updateEmail(password, newEmail)
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.resolver.goTo('profile') )
+      .then( () => this.content.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -311,7 +309,7 @@ export class LoginComponent implements OnInit  {
 
     // Updte the account password by re-authenticating than jumps to the profile page
     this.auth.updatePassword(password, newPassword)
-      .then( () => this.resolver.goTo('profile') )
+      .then( () => this.content.goTo('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -320,7 +318,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
   
     this.auth.deleteUser(password)
-      .then( () => this.resolver.goTo('home') )
+      .then( () => this.content.goTo('home') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -330,6 +328,6 @@ export class LoginComponent implements OnInit  {
     this.auth.signOut();
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
-    this.resolver.goTo('home', { replaceUrl: true });
+    this.content.goTo('home', { replaceUrl: true });
   }
 }  

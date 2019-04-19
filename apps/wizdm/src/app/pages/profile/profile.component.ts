@@ -1,39 +1,51 @@
-import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
-import { CanPageDeactivate, ContentResolver } from '../../utils';
+import { ContentResolver, CanPageDeactivate } from '../../utils';
 import { NavigatorService } from '../../navigator';
-import { UserItemComponent, UserItemValidators } from './user-item/user-item.component';
+import { UserItemComponent, UserItemValidators } from './item/item.component';
+import { Observable, Subscription } from 'rxjs';
 import * as moment from 'moment';
 
 @Component({
   selector: 'wm-user-profile',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
-export class UserComponent implements OnInit, CanPageDeactivate  {
+export class UserComponent implements OnInit, OnDestroy, CanPageDeactivate  {
 
   @ViewChildren(UserItemComponent) profileItems: QueryList<UserItemComponent>;
   @ViewChildren(MatExpansionPanel) profilePanels: QueryList<MatExpansionPanel>;
 
-  readonly msgs;
+  private msgs$: Observable<any>;
+  private sub: Subscription;
+  public msgs: any = {};
 
-  constructor(readonly resolver : ContentResolver,
-              readonly nav      : NavigatorService,          
-              private  profile  : UserProfile,
-              private  popup    : PopupService) { 
+  constructor(readonly content : ContentResolver,
+              readonly nav     : NavigatorService,          
+              private  profile : UserProfile,
+              private  popup   : PopupService) { 
 
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = this.resolver.select('profile');
+    this.msgs$ = content.stream('profile');
   }
 
   ngOnInit() {
-  
-    // Activates the toolbar actions
-    this.nav.toolbar.activateActions(this.msgs.actions);
+
+    // Gets a snapshot of the localized content for internal use
+    this.sub = this.msgs$.subscribe( msgs => {
+    
+      // Keeps a snapshot of the localized content for internal use
+      this.msgs = msgs;
+
+      // Activates the relevant toolbar actions
+      this.nav.toolbar.activateActions(this.msgs.actions);
+    });
   }
+
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
   public get userImage(): string {
     return this.profile.data.img;
@@ -115,7 +127,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
       if(key === 'profile:lang') {
 
         // Switch to the selected language
-        this.resolver.switchLanguage(value);
+        this.content.switchLanguage(value);
       }
     }
   }
@@ -157,14 +169,14 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
   public action(code: string) {
 
     // Prepare the right popup according to the action code
-    let popup = this.msgs.popups[code];
+    const popup = this.msgs.popups[code];
 
     // Ask for confirmation prior to initiate the requested action
     // Note: the function resolves to of(true) in case popup is null
     this.popup.confirmPopup(popup).subscribe( () => {
 
       // If we can proceed, navigates to the login page applying the requested action code
-      this.resolver.goTo('login', { queryParams: { 
+      this.content.goTo('login', { queryParams: { 
         mode: code 
       }});
     });
@@ -180,7 +192,7 @@ export class UserComponent implements OnInit, CanPageDeactivate  {
 
   public canDeactivate() {
 
-    let popup = this.msgs.popups.canLeave;
+    const popup = this.msgs.popups.canLeave;
 
     // Ask the user to proceed in case there are unsaved changes
     if(popup && this.itemChanges) { 

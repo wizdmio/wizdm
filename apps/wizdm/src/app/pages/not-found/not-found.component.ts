@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { ContentResolver } from '../../utils';
+import { Observable } from 'rxjs';
 import { $defaultMsgs } from './not-found-defaults';
 
 @Component({
@@ -9,14 +11,18 @@ import { $defaultMsgs } from './not-found-defaults';
 })
 export class NotFoundComponent implements OnInit, OnDestroy {
 
+  readonly msgs$: Observable<any>;
   private timeout = null; 
-  public msgs: any;
-  public countdown = 5;
+  private countdown = 5;
 
-  constructor(private router: Router, route: ActivatedRoute) {     
+  constructor(private router: Router, content: ContentResolver) {     
     // Gets the localized content pre-fetched during routing resolving or use 
     // defaults in case we have been redirected after content loading failure
-    this.msgs = route.snapshot.data.content.notFound || $defaultMsgs;
+    this.msgs$ = content.stream('notFound', $defaultMsgs);
+  }
+
+  interpolate(msg: string): string {
+    return !!msg && msg.interpolate(this);
   }
 
   ngOnInit() {

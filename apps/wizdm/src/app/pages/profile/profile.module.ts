@@ -17,8 +17,8 @@ import {
 import { IconModule, AvatarModule, PopupModule } from '@wizdm/elements';
 import { ContentResolver } from '../../utils';
 import { UploadsModule } from '../uploads/uploads.module';
-import { UserComponent } from './user.component';
-import { UserItemComponent } from './user-item/user-item.component';
+import { UserComponent } from './profile.component';
+import { UserItemComponent } from './item/item.component';
 
 const routes: Routes = [
   {
@@ -57,4 +57,4 @@ const routes: Routes = [
   ],
   exports: [ RouterModule ]
 })
-export class UserModule { }
+export class ProfileModule { }

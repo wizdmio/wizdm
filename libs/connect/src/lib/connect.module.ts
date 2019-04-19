@@ -24,7 +24,7 @@ export class ConnectModule {
       ngModule: ConnectModule,
       providers: [
         { provide: FirebaseOptionsToken, useValue: config.firebase },
-        { provide: FirebaseNameOrConfigToken, useValue: config.appname }
+        { provide: FirebaseNameOrConfigToken, useValue: config.appname || '' }
       ]
     }
   }

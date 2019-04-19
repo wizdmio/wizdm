@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd, Scroll } from '@angular/router';
+import { Router, NavigationEnd, Scroll, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
+import { ContentResolver } from '../utils';
 import { Observable, Subscription } from 'rxjs';
 import { map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './navigator.animations';
@@ -15,17 +16,19 @@ import { $animations } from './navigator.animations';
 })
 export class NavComponent implements OnInit, OnDestroy {
 
-  readonly msgs: any = null;
+  readonly msgs$: Observable<any>;
   readonly scrolled$: Observable<boolean>;
   
-  constructor(private  router  : Router, route: ActivatedRoute,
+  constructor(private  router  : Router,
               private  profile : UserProfile,
               readonly nav     : NavigatorService,
               private  title   : Title,
-              private  meta    : Meta) {
+              private  meta    : Meta,
+              private  content : ContentResolver,
+                        route  : ActivatedRoute) {
 
     // Gets the localized content pre-fetched by the resolver during routing
-    this.msgs = route.snapshot.data.content.navigator || {};
+    this.msgs$ = this.content.stream("navigator");
 
     // Creates and observable to monitor the scroll status
     this.scrolled$ = this.nav.viewport.scroll$.pipe(
@@ -38,21 +41,19 @@ export class NavComponent implements OnInit, OnDestroy {
 
   ngOnInit() { 
 
-    // Sets the app title when defined 
-    if(this.msgs.title) {
-      this.title.setTitle(this.msgs.title);}
-
-    // Update the description meta-tag
-    if(this.msgs.description) {
-      this.meta.updateTag({content: this.msgs.description}, "name='description'");
-    }
+    this.sub = this.msgs$.subscribe( msgs => {
+      // Sets the app title when defined 
+      !!msgs && !!msgs.title && this.title.setTitle(msgs.title);
+      // Update the description meta-tag
+      !!msgs && !!msgs.description && this.meta.updateTag({content: msgs.description}, "name='description'");
+    });
 
     // Intercepts the NavigationEnd events
-    this.sub = this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
+    this.sub.add( this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
       .subscribe(() => {
         // Closes the nav menu at the end of each navigation
         this.toggler = false;
-      });
+      }));
 
     // Intercepts non null router scrolling events
     this.sub.add( this.router.events.pipe( filter(e => e instanceof Scroll && !!e.anchor) )
@@ -62,9 +63,7 @@ export class NavComponent implements OnInit, OnDestroy {
       }));
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
   // Menu toggle
   public toggler = false;
@@ -80,13 +79,13 @@ export class NavComponent implements OnInit, OnDestroy {
     return this.profile.authenticated || false;
   }
 
-  public get desktopMenu(): any[] {
-    const menu = this.msgs.toolbar || {};
+  public desktopMenu(msgs: any): any[] {
+    const menu = !!msgs && msgs.toolbar || {};
     return this.signedIn ? menu.private : menu.public;
   }
 
-  public get mobileMenu(): any[] {
-    const menu = this.msgs.menu || {};
+  public mobileMenu(msgs: any): any[] {
+    const menu = !!msgs && msgs.menu || {};
     return this.signedIn ? menu.private : menu.public;
   }
 

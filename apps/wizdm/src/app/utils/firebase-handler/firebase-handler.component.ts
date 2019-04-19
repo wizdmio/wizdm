@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
-  selector: 'wm-redirect-handler',
+  selector: 'wm-firebase-handler',
   template: '',
   styles: []
 })
-export class RedirectHandler implements OnInit {
+export class FirebaseHandler implements OnInit {
 
   constructor(private router : Router, 
               private route  : ActivatedRoute) { }

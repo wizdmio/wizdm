@@ -10,8 +10,7 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatListModule,
-  MatToolbarModule,
-  MatSelectModule
+  MatToolbarModule
 } from '@angular/material';
 // Wizdm elements (wizdm material extension)
 import { 
@@ -43,7 +42,6 @@ import { FooterComponent } from './footer/footer.component';
     MatInputModule,
     MatListModule,
     MatToolbarModule,
-    MatSelectModule,
     TogglerModule,
     IconModule, 
     FlipModule,

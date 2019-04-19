@@ -1,19 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { ContentResolver } from '../../utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent {
 
-  readonly msgs = null;
+  readonly msgs$: Observable<any>;
   
-  constructor(route: ActivatedRoute) {
+  constructor(content: ContentResolver) {
     // Gets the localized content resolved during routing
-    this.msgs = route.snapshot.data.content.about; 
+    this.msgs$ = content.stream('about'); 
   }
-
-  ngOnInit() {}
 }

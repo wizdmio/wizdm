@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component } from '@angular/core';
+import { ContentResolver } from '../../utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
-  readonly msgs = null;
+  readonly msgs$: Observable<any>;
   
-  constructor(route: ActivatedRoute) {
+  constructor(content: ContentResolver) {
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs = route.snapshot.data.content.dashboard;
+    this.msgs$ = content.stream('dashboard');
   }
-
-  ngOnInit() {
-  }
-
 }

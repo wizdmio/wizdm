@@ -1,15 +1,17 @@
-<!--header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
-  <p fxHide.lt-sm [@fade]="activeTab">{{ tabDescription || msgs.description }}</p>
-</header-->
+<ng-container *ngIf="msgs$ | async as msgs">
+  <!--header fxLayout="column">
+    <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
+    <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
+    <p fxHide.lt-sm [@fade]="activeTab">{{ tabDescription || msgs.description }}</p>
+  </header-->
 
-<div fxLayout="column" fxLayoutAlign="start center" *ngIf="projects$ | async as items" [@list]="items?.length">
+  <div fxLayout="column" fxLayoutAlign="start center" *ngIf="projects$ | async as items" [@list]="items?.length">
 
-  <wm-explore-item *ngFor="let project of items" [msgs]="msgs.item" [project]=project @item>
-  </wm-explore-item>
+    <wm-explore-item *ngFor="let project of items" [msgs]="msgs.item" [project]=project @item>
+    </wm-explore-item>
 
-  <mat-spinner *ngIf="projects.loading$ | async" diameter="60" strokeWidth="2">
-  </mat-spinner>
+    <mat-spinner *ngIf="projects.loading$ | async" diameter="60" strokeWidth="2">
+    </mat-spinner>
 
-</div>
+  </div>
+</ng-container>

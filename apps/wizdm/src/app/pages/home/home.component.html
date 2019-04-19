@@ -1,23 +1,24 @@
 
-<div class="background"></div>
+<ng-container *ngIf="msgs$ | async as msgs">
+  
+  <div class="background"></div>
 
-<section fxLayout="row" fxLayoutAlign="center center" class="banner">
+  <section fxLayout="row" fxLayoutAlign="center center" class="banner">
 
-  <div fxFlexOffset.gt-sm="10" fxFlex.gt-sm="450px" fxLayout="column" fxLayoutAlign="center center" @landing>
+    <div fxFlexOffset.gt-sm="10" fxFlex.gt-sm="450px" fxLayout="column" fxLayoutAlign="center center" @landing>
 
-    <h1>{{ msgs?.title }}</h1>
-    
-    <p>{{ msgs?.pitch }}</p>
-    
-    <button mat-raised-button color="accent" routerLink="apply">{{ msgs?.start }}</button>
-    
-    <p wm-disclaimer [source]="msgs?.join" class="mat-small"></p>
- 
-  </div>
+      <h1>{{ msgs?.title }}</h1>
+      
+      <p>{{ msgs?.pitch }}</p>
+      
+      <button mat-raised-button color="accent" routerLink="apply">{{ msgs?.start }}</button>
+      
+      <p wm-disclaimer [source]="msgs?.join" class="mat-small"></p>
+  
+    </div>
 
-  <img fxHide.lt-sm fxFlex="40" src="assets/img/blue-buddha.svg" alt="wizdm">
+    <img fxHide.lt-sm fxFlex="40" src="assets/img/blue-buddha.svg" alt="wizdm">
 
-</section>
+  </section>
 
-
-
+</ng-container>

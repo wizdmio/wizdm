@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material';
 import { UserProfile, wmUser } from '@wizdm/connect';
@@ -9,6 +9,8 @@ import { CanPageDeactivate,
          ProjectService, 
          wmProject } from '../../utils';
 import { $animations } from './apply.animations';
+import { Observable, Subscription } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 
 export interface wmApplication {
 
@@ -33,40 +35,50 @@ interface userApply extends wmUser {
   styleUrls: ['./apply.component.scss'],
   animations: $animations
 })
-export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate {
+export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate, OnDestroy {
+
+  public msgs$: Observable<any>;
+  private sub: Subscription;
+  private msgs: any = {};
 
   public headerForm: FormGroup;
   public stepForms : FormGroup[] = [];
   public stepIndex = 0;
   public welcomeBack = false;
   public progress = false;
-  public msgs;
-
+  
   constructor(private builder  : FormBuilder, 
-              private resolver : ContentResolver,
+              private content : ContentResolver,
               private profile  : UserProfile<userApply>,
               private project  : ProjectService,
               private toolbar  : ToolbarService,
               private popup    : PopupService) { 
 
     // Gets the localized content resolved during routing
-    this.msgs = resolver.select('apply'); 
+    this.msgs$ = content.stream('apply'); 
   }
 
   ngOnInit() {
 
     // Checks if the application was previously saved
-    this.welcomeBack = this.application !== null;
+    this.welcomeBack = !!this.application;
 
-    // Build the stepper forms initializing the field values with the last application eventually saved
-    this.buildForm(this.application || {});
+    // Resolves the localized content
+    this.sub = this.msgs$.subscribe( msgs => {
+      // Keeps a snapshot of the localized content for internal use
+      this.msgs = msgs;
+      // Build the stepper forms initializing the field values with the last application eventually saved
+      this.buildForm(this.application || {});
+    });
 
     // Enable actions on the navigation bar
-    this.toolbar.activateActions(this.msgs.actions)
-      .subscribe( code => this.disclaimerAction(code) );
-
-    // Gets the action enabler for 'clear' action code
-    this.toolbar.enableAction('clear', this.welcomeBack);
+    this.sub.add( this.msgs$.pipe( 
+      // Enables the action buttons
+      switchMap( msgs => this.toolbar.activateActions(msgs.actions) ),
+      // Initialize the button status
+      tap(() => this.toolbar.enableAction('clear', this.welcomeBack) )
+      // Subscribes to the actions
+    ).subscribe( code => this.disclaimerAction(code) ));
   }
 
   ngAfterViewInit() {
@@ -76,8 +88,10 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
 
   }
 
+  ngOnDestroy() { this.sub.unsubscribe(); }
+
   // Helpers to deal with the temporary application 
-  private get application(): wmApplication {
+  public get application(): wmApplication {
     return this.profile.data.lastApplication || null;
   }
 
@@ -157,8 +171,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       question.fields.forEach( field => {
 
         // Only required validator is supported
-        let required = field.errors && field.errors.required;
-
+        const required = field.errors && field.errors.required;
         group[field.name] = new FormControl( value[field.name], required ? Validators.required : null);
       });
 
@@ -208,7 +221,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
   // Creates a project instance starting from the given application
   private applyProject(application: wmApplication) {
     // Gets the localized template
-    const template = this.resolver.select('template');
+    const template = this.content.snapshot('template');
     // Stringifies it to replace selectors
     const document = JSON.stringify(template).replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
       // Replaces the <comma.separated.selectors> found into the template 
@@ -251,7 +264,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate 
       .then( () => { 
 
         // Navigate back to the project explore reporting the creation of a new project
-        this.resolver.goTo('explore', { queryParams: {
+        this.content.goTo('explore', { queryParams: {
           project: 'new'
         }});
       })

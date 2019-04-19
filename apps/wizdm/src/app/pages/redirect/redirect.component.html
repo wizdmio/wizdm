@@ -1,0 +1,13 @@
+
+<ng-container *ngIf="msgs$ | async as msgs">
+
+  <h1>{{ msgs.description }}</h1> 
+  
+  <h2><b>{{ externalUrl }}</b></h2>
+  
+  <div>
+    <mat-progress-bar mode="determinate" [value]="progress$ | async"></mat-progress-bar>
+    <button mat-button color="primary" (click)="back()">{{ msgs.abort }}</button>
+  </div>
+
+</ng-container>

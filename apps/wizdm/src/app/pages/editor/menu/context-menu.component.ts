@@ -14,12 +14,9 @@ export class ContextMenuComponent {
   readonly alignements = ['left', 'center', 'right', 'justify'];
   readonly formats = ['bold', 'italic', 'underline', 'strikethrough'];
 
-  @Input() msgs: { [key: string]: string };
+  @Input() msgs: any = {};
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private sel: EditableSelection
-  ) {}
+  constructor(@Inject(DOCUMENT) private document: Document, readonly sel: EditableSelection) {}
 
   public get align() {
     return this.sel.align;

@@ -11,12 +11,12 @@ import { $animations } from './toolbox.animations';
 export class ToolboxComponent {
   @HostBinding('@slide') slide = true;
 
-  constructor(private sel: EditableSelection) {}
+  constructor(readonly sel: EditableSelection) {}
 
   readonly styles = ['bold', 'italic', 'underline', 'strikethrough'];
   readonly alignements = ['left', 'center', 'right', 'justify'];
 
-  @Input() msgs: { [key: string]: string };
+  @Input() msgs: any = {};
   @Input() tooltipDelay = 1000;
 
   public hasStyle(style: wmTextStyle): boolean {
