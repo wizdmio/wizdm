@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
-import { map, switchMap, delay } from 'rxjs/operators';
+import { map, switchMap, delay, take, filter } from 'rxjs/operators';
 
 export type wmAction = {
   caption?:  string,
@@ -9,16 +9,19 @@ export type wmAction = {
   link?:     string,
   params?:   any,
   menu?:     wmAction[],
-
+  disabled?: boolean,
   enabler?:  Observable<boolean>
 };
 
 /** Defines the toolbar action button */
 class ActionButton {
 
-  private enabler$ = new BehaviorSubject<boolean>(true);
+  private enabler$: BehaviorSubject<boolean>;
 
-  constructor(public data: wmAction) { 
+  constructor(public data: wmAction) {
+
+    // Creates the enabler observable with the given initial state
+    this.enabler$ = new BehaviorSubject<boolean>(!data.disabled);
     // Maps the action button enabler asynchronously. This is a trick to ensure navigator view
     // updates consistently although children pages are responsible for action bar update
     // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
@@ -34,11 +37,8 @@ class ActionButton {
 class ActionState {
 
   private actions$: BehaviorSubject<ActionButton[]>;
-
-  private get actions(): ActionButton[] { return this.actions$.value;}
-
   public buttons$: Observable<wmAction[]>;
-  public events$: Subject<string> = new Subject();
+  private events$: Subject<string> = new Subject();
 
   constructor(buttons: wmAction[]) {
     // Wraps the wmAction into ActioButton for internal use
@@ -46,15 +46,27 @@ class ActionState {
     // Maps the action buttons array asynchronously. This is a trick to ensure navigator view
     // updates consistently although children pages are responsible for action bar update
     // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
-    this.buttons$ = this.actions$.pipe( delay(0), map( actions => actions.map( act => act.data ) ));
+    this.buttons$ = this.actions$.pipe( map( actions => actions.map( act => act.data ), delay(0) ));
+  }
+
+  public get handler(): Observable<string> {
+    return this.events$.asObservable();
+  }
+
+  public emit(code: string) {
+    this.events$.next(code);
   }
 
   /** Enables/disables the specified action button  */
   public enable(code: string, enable: boolean) {
+
     // Seeks the requested action by code
-    const action = this.actions.find( action => action.data.code === code );
-    // Pushes the new enable state
-    !!action && action.enable(enable);
+    this.actions$.pipe( 
+      take(1), 
+      map( actions => actions.find( action => action.data.code === code ) ),
+      filter( action => !!action ) 
+      // Pushes the new enable state
+    ).subscribe( action => action.enable(enable) );
   }
 
   public dispose() { this.events$.complete(); }
@@ -75,7 +87,7 @@ export class ToolbarService implements OnDestroy {
     // Maps the buttons to the current state's ones
     this.buttons$ = this.state$.pipe( switchMap( state => !!state ? state.buttons$ : of([]) ));
     // Maps the buttons to a boolean reporting actions are available or not
-    this.some$ = this.buttons$.pipe( map( buttons => buttons.length > 0));
+    this.some$ = this.buttons$.pipe( map( buttons => buttons.length > 0 ));
   }
 
   ngOnDestroy() { this.clearActions(); }
@@ -93,14 +105,16 @@ export class ToolbarService implements OnDestroy {
     // Pushes the state into the observable
     this.state$.next( state );
     // Returns the state event osrevable for the observe to subscribe on actions
-    return state.events$;
+    return state.handler;
   }
   /**
    * Emits an action code to the observer identifying the action to be performed
    * @param code the action code identifying the action to be performed
    */
   public performAction(code: string) {
-    !!this.state$.value && this.state$.value.events$.next(code);
+    
+    this.state$.pipe( take(1), filter( state => !!state ) )
+      .subscribe( state => state.emit( code ));
   }
   /**
    * Enables/disables the specified action
@@ -108,7 +122,9 @@ export class ToolbarService implements OnDestroy {
    * @param enable the enable state
    */
   public enableAction(code: string, enable: boolean) {
-    !!this.state$.value && this.state$.value.enable(code, enable);
+
+    this.state$.pipe( take(1), filter( state => !!state ) )
+      .subscribe( state => state.enable( code, enable ));
   }
   /**
    * Restores the previously saved action bar

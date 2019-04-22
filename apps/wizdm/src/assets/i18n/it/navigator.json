@@ -36,7 +36,7 @@
 
     "footer": {
 
-        "copyright": "Condiviso con amore dal pianeta terra. wizdm ©{{ year }}",
+        "copyright": "Condiviso con amore dal pianeta Terra. wizdm ©{{ year }}",
 
         "links": [
             { "label": "A proposito di noi" },

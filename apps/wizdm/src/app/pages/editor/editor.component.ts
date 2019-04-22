@@ -102,14 +102,15 @@ export class EditorComponent implements OnInit, OnDestroy {
         ))
       )),
       // Finally activates the relevant actions
-      switchMap( actions => this.toolbar.activateActions(actions) )
+      switchMap( actions => this.toolbar.activateActions(actions) ),
+      
       // Subscribes to perform the requested actions
     ).subscribe( code => this.doAction(code) );
   }
 
   public enterEditMode(): void {
     // Turns edit mode on enabling the relevant actions
-    this.activateActions$.next(this.editMode = true );
+    this.activateActions$.next(this.editMode = true);
   }
 
   public leaveEditMode(): void {

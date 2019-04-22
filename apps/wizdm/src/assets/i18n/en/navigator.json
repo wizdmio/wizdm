@@ -43,7 +43,7 @@
             { "label": "Facebook", "icon": "fab:fa-facebook", "link": "redirect", "params": { "url": "https://facebook.com" } },
             { "label": "Twitter", "icon": "fab:fa-twitter", "link": "redirect", "params": { "url": "https://twitter.com" } },
             { "label": "LinkedIn", "icon": "fab:fa-linkedin", "link": "redirect", "params": { "url": "https://linkedin.com" } },
-            { "label": "Github", "icon": "fab:fa-github", "link": "redirect", "params": { "url": "https://github.com" } }
+            { "label": "Github", "icon": "fab:fa-github", "link": "redirect", "params": { "url": "https://github.com/wizdmio/wizdm" } }
         ],
 
         "links": [

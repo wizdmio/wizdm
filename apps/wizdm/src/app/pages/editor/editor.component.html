@@ -1,18 +1,54 @@
 
+<mat-drawer-container>
+  
+  <mat-drawer mode="side" position="end" opened>
+    <h2>{{ msgs.tableOfContents }}</h2>
+
+    <!--ng-container *ngFor="let node of document?.content">
+
+        <span *ngIf="node.type === 'item'" 
+              [attr.toc]="node.level" 
+              routerLink="." 
+              [fragment]="node.id">{{ render(node) }}</span>
+      
+      </ng-container-->
+        
+  </mat-drawer>
+  
+  <mat-drawer-content fxFlex="1 1 auto" class="desk">
+  
+      <!-- Renders the documetn body -->
+      <wm-editable-document 
+        class="page" 
+        (contextmenu)="editMode ? menu.open($event) : true" 
+        (change)="save($event)"
+        [source]="document"
+        [edit]="editMode" 
+        [@editing]="editMode" #doc>
+      </wm-editable-document>
+
+      <!-- Context menu -->
+      <wm-context-menu #menu [msgs]="msgs.tools"></wm-context-menu>
+
+      <!-- Editing tools -->
+      <wm-toolbox *ngIf="editMode" [msgs]="msgs.tools"></wm-toolbox>
+  
+  </mat-drawer-content>
+
+</mat-drawer-container>
+
+
 <!-- Document body -->
-<div fxLayout="row" fxLayoutAlign="space-between strech">
+<!--div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto" class="desk">
 
-    <!--div fxLayout="column" fxLayoutAlign="start start" class="page" [@editing]="editMode"-->
     <div class="page" [@editing]="editMode">
 
-      <!-- Renders the table of contents on top on small screens -->
-      <!--wm-editable-toc class="table-of-contents" [source]="doc" fxHide fxShow.lt-sm>
-        <h2>{{ msgs.tableOfContents }}</h2>
-      </wm-editable-toc-->
+        <wm-editable-toc class="table-of-contents" [source]="doc" fxHide fxShow.lt-sm>
+          <h2>{{ msgs.tableOfContents }}</h2>
+        </wm-editable-toc>
 
-      <!-- Renders the documetn body -->
       <wm-editable-document
         (contextmenu)="editMode ? menu.open($event) : true" 
         (change)="save($event)"
@@ -24,17 +60,4 @@
   
   </div>
 
-  <!-- Renders the table of contents by side on big screens -->
-  <!--div fxFlex="0 0 auto" fxHide.lt-sm>
-    <wm-editable-toc class="table-of-contents sticky" [source]="doc">
-      <h3>{{ msgs.tableOfContents }}</h3>
-    </wm-editable-toc>
-  </div-->
-
-</div>
-
-<!-- Context menu -->
-<wm-context-menu #menu [msgs]="msgs.tools"></wm-context-menu>
-
-<!-- Editing tools -->
-<wm-toolbox *ngIf="editMode" [msgs]="msgs.tools"></wm-toolbox>
+</div-->

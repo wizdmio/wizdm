@@ -74,9 +74,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
     // Enable actions on the navigation bar
     this.sub.add( this.msgs$.pipe( 
       // Enables the action buttons
-      switchMap( msgs => this.toolbar.activateActions(msgs.actions) ),
-      // Initialize the button status
-      tap(() => this.toolbar.enableAction('clear', this.welcomeBack) )
+      switchMap( msgs => {
+        
+        const exec = this.toolbar.activateActions(msgs.actions);
+        this.toolbar.enableAction('clear', this.welcomeBack);
+        return exec;
+
+      } ),
       // Subscribes to the actions
     ).subscribe( code => this.disclaimerAction(code) ));
   }

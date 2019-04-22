@@ -8,7 +8,8 @@ import {
   MatIconModule,
   MatMenuModule,
   MatTooltipModule,
-  MatDividerModule
+  MatDividerModule,
+  MatSidenavModule
 } from '@angular/material';
 import { PopupModule } from '@wizdm/elements';
 import { EditableModule } from '@wizdm/editable';
@@ -38,6 +39,7 @@ const routes: Routes = [
     MatMenuModule,
     MatTooltipModule,
     MatDividerModule,
+    MatSidenavModule,
     PopupModule,
     EditableModule,
     RouterModule.forChild(routes)

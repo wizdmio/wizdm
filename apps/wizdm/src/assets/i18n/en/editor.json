@@ -35,7 +35,7 @@
   ],
 
   "editActions": [ 
-    { "caption": "Save", "icon": "save", "code": "save" },
+    { "caption": "Save", "icon": "save", "code": "save", "disabled": true },
     { "caption": "Done", "icon": "done", "code": "done" },
     { "menu": [
       { "caption": "Help", "icon": "help", "code": "help" }
