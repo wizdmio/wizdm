@@ -8,6 +8,21 @@
   //margin: 0 $wm-content-margin;
 
   @include wm-padding-top($wm-content-padding);
+
+  // Table of content
+  span[toc] {
+    
+    display: block;
+    //outline: unset;
+    cursor: pointer;
+    
+    &[toc='1']{ font-size: 100%; }
+    &[toc='2']{ font-size: 95%; }
+    &[toc='3']{ font-size: 90%; }
+    &[toc='4']{ font-size: 85%; }
+    &[toc='5']{ font-size: 80%; }
+    &[toc='6']{ font-size: 75%; }
+  }
 }
 
 .desk {

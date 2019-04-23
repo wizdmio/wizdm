@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PopupService } from '@wizdm/elements';
-import { wmDocument } from '@wizdm/editable';
+import { wmDocument, wmItem, wmText } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
 import { ContentResolver, ProjectService, Project, wmProject } from '../../utils';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
@@ -128,6 +128,13 @@ export class EditorComponent implements OnInit, OnDestroy {
   public save(document: wmDocument) {
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
+  }
+
+  public renderTOC(node: wmItem): string {
+
+    return (node.content || []).reduce( (acc, val) => {
+      return val.type === 'text' ? acc + val.value : acc;
+    }, '');
   }
 
   private deleteProject(): void {

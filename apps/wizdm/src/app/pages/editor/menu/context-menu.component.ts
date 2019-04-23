@@ -64,9 +64,7 @@ export class ContextMenuComponent {
     return false;
   }
 
-  public content(cmd: 'copy' | 'cut' | 'paste') {
-    //debugger;
-    //this.sel.apply(this.document);
-    //this.document.execCommand(cmd);
+  public edit(cmd: 'copy' | 'cut' | 'paste') {
+    this.document.execCommand(cmd);
   }
 }

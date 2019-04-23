@@ -25,10 +25,11 @@ export class EditableText extends EditableContent<wmText> {
   set value(text: string) { this.node.value = text; }
   set style(style: wmTextStyle[]) { this.data.style = [...style]; }
   get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
+  get url(): string { return this.node.url || ''; }
   get pad(): string { return ''; }
   get empty(): boolean { return this.length <= 0;}
   // Redirects to the parent container
-  set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align;} }
+  set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align; } }
   get align(): wmAlignType { return !!this.parent ? this.parent.align : 'left'; }
   set level(level: number) { if(!!this.parent) { this.parent.level = level;} }
   get level(): number { return !!this.parent ? this.parent.level : 0; }

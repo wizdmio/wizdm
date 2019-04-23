@@ -7,7 +7,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   protected node: T;
   protected parent: EditableContent;
   protected index: number = -1; 
-  protected pos: EditablePosition = [];
+  protected position: EditablePosition = [];
   protected children: EditableContent[] = [];
 
   constructor(readonly create: EditableFactory, data: T) { this.node = data || {} as T; }
@@ -22,15 +22,15 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   get align(): wmAlignType { return this.node.align || 'left'; }
   /** Sets/gets the node level */
   set level(level: number) { if(level >= 0 && level <= 6) { this.data.level = level; } }
-  get level(): number { return this.data.level || 0;}
+  get level(): number { return this.data.level || 0; }
   /** Returns the array of children */
   get content(): EditableContent[] { return this.children || (this.children = []); }
   /** Returns the number of child nodes */
   get count(): number { return this.content.length; }
   /** Return the node depth within the tree */
-  get depth(): number { return !!this.pos ? this.pos.length : 0; }
+  get depth(): number { return (this.position || []).length; }
   /** Returns the node unique ID based on node absolute position in the tree */
-  get id(): string { return this.pos ? 'N'+this.pos.join('.') : '' ; }
+  get id(): string { return 'N'+(this.position || []).join('.'); }
   /** Returns true wheneer this node has no content */
   get empty(): boolean { return this.count <= 0; }
   /** Returns true whenever this node has been removed from the tree */
@@ -53,6 +53,8 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   set style(style: wmTextStyle[]) { this.content.forEach( node => node.style = style ); }
   /** Returns the content's style array */
   get style(): wmTextStyle[] { return this.count > 0 ? this.firstChild().style : []; } 
+  /** Return the associated irl, if any */
+  get url(): string { return ''; }
   /** Initializes the node data */
   public init(data: T): this { return (this.node = data), this; }
   /** Sets the text value of the contained nodes returning this for chaining */
@@ -66,7 +68,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public cut(till: number, from?: number): string { return ''; }
   public edges(index: number): [number, number] { return [0,0]; }
   public split(from: number, to?: number): this { return this; }
-  public link(url: string): this { return this;}
+  public link(url: string): this { return this; }
   public break(): this { return this; }
   // Recursively apply or unapply text formatting to the content 
   public format(style: wmTextStyle[]): this { return this.content.forEach( node => node.format(style) ), this;}
@@ -102,7 +104,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
       // Recurs on children
       this.children = this.node.content.map( (node, i) => {
         // Creates the children nodes of the requested type
-        return this.create.node(node.type as any)
+        return this.create.node(node as any)
           // Links it to the parent
           .inherit(this, i)
           // Recurs down the tree
@@ -125,7 +127,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Position index -  Equivalent to the value of the last element in pos
     this.index = index;
     // Node absolute position within the tree
-    this.pos = (parent.pos || []).concat(index);
+    this.position = (parent.position || []).concat(index);
     // Return this to support chaining
     return this;
   }
@@ -157,7 +159,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Compare by base positions (up to min depth)
     const len = Math.min(this.depth, node.depth);
     for(let i = 0; i < len;i++) {
-      const value = this.pos[i] - node.pos[i];
+      const value = this.position[i] - node.position[i];
       if(value < 0) { return -1; }
       if(value > 0) { return +1; }
     }
@@ -263,7 +265,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Wraps the node with the specified container updating the hierarchy, if any*/
   public wrap(type: wmNodeType): EditableContent {
     // Creates a new node to wrap this node with
-    const wrap = this.create.node(type as any);
+    const wrap = this.create.node({ type } as any);
     // Replaces the current node with the new wrapper within the parent content 
     if(!this.removed) { this.parent.splice(this, 1, wrap); }
     // Appends the node to the wrapper
@@ -402,9 +404,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     return !!sibling ? sibling.firstDescendant() : this.parent.next();
   }
 
-  private position(id: string): EditablePosition {
-    return !!id ? id.replace(/[^0-9\.]+/g, '').split('.').map( n => +n ) : [];
-  }
   /** Returns the value's length from the very first node up to the preceding sibling */
   get offset(): number {
     // Done when no more parents
@@ -454,7 +453,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Traverse the tree till the node requested by id */
   public walkTree(id: string): EditableContent {
     // Turns the element id into the node absolute position
-    const pos = this.position(id);
+    const pos = !!id ? id.replace(/[^0-9\.]+/g, '').split('.').map( n => +n ) : [];
     // Walks the tree
     let node: EditableContent = this;
     for(let i = this.depth || 0; i < pos.length && !!node; i++) {
@@ -475,8 +474,8 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     const root = this.common(node);
     if(!!root) {
       // Computes the node relative positions
-      const left = this.pos.slice(root.depth);
-      const right = node.pos.slice(root.depth);
+      const left = this.position.slice(root.depth);
+      const right = node.position.slice(root.depth);
       // Starts traversing by calling the callback function on the root node
       return callbackfn.call(root, left, right);
     }

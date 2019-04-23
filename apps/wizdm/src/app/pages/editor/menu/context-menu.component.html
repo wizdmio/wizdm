@@ -3,19 +3,19 @@
 <mat-menu #menu="matMenu">
 
   <!-- Content copy -->
-  <button mat-menu-item (click)="content('copy')">
+  <button mat-menu-item (click)="edit('copy')">
     <mat-icon>content_copy</mat-icon>
     <span>{{ label(msgs?.edit?.copy) }}</span>
   </button>
 
   <!-- Content cut -->
-  <button mat-menu-item (click)="content('cut')">
+  <button mat-menu-item (click)="edit('cut')">
     <mat-icon>content_cut</mat-icon>
     <span>{{ label(msgs?.edit?.cut) }}</span>
   </button>
 
   <!-- Content paste -->
-  <button mat-menu-item (click)="content('paste')">
+  <button mat-menu-item (click)="edit('paste')">
     <mat-icon>content_paste</mat-icon>
     <span>{{ label(msgs?.edit?.paste) }}</span>
   </button>

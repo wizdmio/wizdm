@@ -68,7 +68,7 @@ export interface wmFrame extends wmEditable {
 
 export interface wmImage extends wmEditable {
   type: 'image',
-  url: string,
+  url?: string,
   alt?: string,
   title?: string
 }

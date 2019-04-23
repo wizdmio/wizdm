@@ -2,16 +2,19 @@
 <mat-drawer-container>
   
   <mat-drawer mode="side" position="end" opened>
+    
     <h2>{{ msgs.tableOfContents }}</h2>
 
-    <!--ng-container *ngFor="let node of document?.content">
+    <nav *ngFor="let node of document?.content; index as index">
 
-        <span *ngIf="node.type === 'item'" 
+        <span *ngIf="node.level > 0" 
               [attr.toc]="node.level" 
               routerLink="." 
-              [fragment]="node.id">{{ render(node) }}</span>
+              [fragment]="'N'+index">
+                {{ renderTOC(node) }}
+        </span>
       
-      </ng-container-->
+    </nav>
         
   </mat-drawer>
   
@@ -24,7 +27,7 @@
         (change)="save($event)"
         [source]="document"
         [edit]="editMode" 
-        [@editing]="editMode" #doc>
+        [@editing]="editMode">
       </wm-editable-document>
 
       <!-- Context menu -->
