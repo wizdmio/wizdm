@@ -113,11 +113,10 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   @HostListener('cut', ['$event']) editCut(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-    // Reverts the cut request to a native copy...
-    if( this.document.execCommand('copy') ) {
-      // Deletes the selection when succeeded
-      this.sel.delete();
-    }
+    // Reverts the cut request to copy the content first...
+    this.editCopy(ev);
+    // Deletes the selection when succeeded
+    this.sel.delete();
     // Always prevent default
     return false;
   } 
