@@ -84,7 +84,7 @@ export class EditableFactory {
   /** Clones a node with or whithout its children */
   public clone(node: EditableTypes, withChildren: boolean = true): EditableTypes {
     // Creates a new node/tree mirroring this one 
-    return this.node(node.type as any).load( this.sanitize(node, withChildren) ) as EditableTypes;
+    return this.node(node as any).load( this.sanitize(node, withChildren) ) as EditableTypes;
   }
 
   private sanitize(node: EditableTypes, withChildren: boolean) {
