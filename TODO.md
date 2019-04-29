@@ -7,6 +7,8 @@
 * ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
 ## Utils
+* Rename '/utils' folder into '/core' for the aske of clarity
+* Implement a custom module preloader (see https://coryrylan.com/blog/custom-preloading-and-lazy-loading-strategies-with-angular)
 * ~~Implements an externalUrl redirector using angular Router (see: https://medium.com/@adrianfaciu/using-the-angular-router-to-navigate-to-external-links-15cc585b7b88)~~
 * ~~Upgrade the ContentResolver using `router.routerState.root` (aka ActivatedRoot) to provide a data content observable out of the `select()` instead of the latest snapshot~~
 * ~~Refactor the `ContetResolver` to push the `data` snapshot into a `data$` observable so to implement asynchronous content update independenlty from `ActivatedRoot` (since it can't be sucessfully injected into services by design). Implements an `asObservable(select, defaults)` function for piping~~
