@@ -37,6 +37,7 @@
 
 ## Editor
 * Refactor the document toc, so, to become with dark background and reacher informations a side bar with author properties and toc using `mat-drawer-container`
+* Implement a message popup to instruct the user about using native paste functions due to security restrictions 
 * Create a popup version of the editor to be used in messaging
 * ~~Implements a responsive version of the editing bottombar so to accomodate for undo/redo buttons~~
 * Redirects cut/copy/past bottombar or contextmenu calls to the document using [`execCommand()`](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand)
