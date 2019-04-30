@@ -1,10 +1,11 @@
 
 <!--img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" /-->
 
-<h1 align="center">
-  
-  <a href="https://wizdm.io"><img src="apps/wizdm/src/assets/img/wmlogo.png" alt="Wizdm" width="76">Wizdm</a>
-  
+<h1 align="center">  
+  <span>
+    <a href="https://wizdm.io"><img src="apps/wizdm/src/assets/img/wmlogo.png" alt="Wizdm" width="76"></a>
+    Wizdm
+  </span>
 </h1>
 
 Wizdm
