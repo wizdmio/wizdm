@@ -1,5 +1,5 @@
 
-<img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="92" />
+<img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" />
 
 Wizdm
 =====
