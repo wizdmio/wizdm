@@ -4,7 +4,7 @@
 
   <span>
     <a href="https://wizdm.io"><img src="apps/wizdm/src/assets/img/wmlogo.png" alt="Wizdm" width="76"></a>
-    Wizdm
+    <h1>Wizdm</h1>
   </span>
 
 
