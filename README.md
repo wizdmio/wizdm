@@ -4,17 +4,15 @@
 Wizdm
 =====
 
-
-Wizdm uses a minimal clean interface based on [Angular Material][angular-material] and [FlexLayout][flexlayout] to fit both desktop and mobile.
-
+Wizdm is a web application meant to connect aspiring startuppers with compassionate developers sharing the common goal of turning a valuable business idea into a functioning prototype. That's the stage when the idea can be actually tested, refined and seek for investors.
 
 
 ## Developers' notes
 
-The app runs on Angular 6 + Material + FlexLayout.
-Icon set comes from both Material and Font awesome.
-Including hammerjs (https://hammerjs.github.io) to handle gestures for material components
-Using moment (https://momentjs.com) for time and locale management
+The app runs on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile.
+Icon set comes from both [Material][material] and [FontAwesome][fontawesome].
+Including [Hammerjs][hammerjs] to handle gestures for material components
+Using [Moment][momentjs] for time and locale management
 
 ## Monorepo
 
@@ -74,5 +72,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 [wizdm]: https://wizdm.io
 [angular]: https://angular.io
+[material]: https://material.io
 [angular-material]: https://material.angular.io
 [flexlayout]: https://github.com/angular/flex-layout/wiki
+[fontawesome]: https://fontawesome.com
+[hammerjs]: https://hammerjs.github.io
+[momentjs]: https://momentjs.com
