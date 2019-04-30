@@ -1,11 +1,13 @@
 
 <img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" />
 
-[Wizdm](https://wizdm.io)
-=======
+Wizdm
+=====
 
 
-Wizdm uses a minimal clean interface based on Angular Material and FlexLayout to fit both desktop and mobile.
+Wizdm uses a minimal clean interface based on [Angular Material][angular-material] and [FlexLayout][flexlayout] to fit both desktop and mobile.
+
+
 
 ## Developers' notes
 
@@ -69,3 +71,8 @@ Source code is now mantained on [GitHub](https://github.com/wizdmio/wizdm).
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+[wizdm]: https://wizdm.io
+[angular]: https://angular.io
+[angular-material]: https://material.angular.io
+[flexlayout]: https://github.com/angular/flex-layout/wiki
