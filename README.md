@@ -12,8 +12,7 @@ The project revolves around a web-app running on [Angular][angular] + [Angular M
 
 ## Monorepo
 
-The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl](https://nrwl.io/)
-using their Nx Angular Extension [@nrwl/schematics](https://nrwl.io/nx/guide-getting-started)
+The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl][nrwl] using their Nx Angular Extension [@nrwl/schematics][nrwl-schematics]. This means both the source code of the web application(s) and the external potentially shared libraries are stored in the same single repository under the `/apps` and `/libs` folders respectively.
 
 ## Multi-language
 
@@ -74,3 +73,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 [fontawesome]: https://fontawesome.com
 [hammerjs]: https://hammerjs.github.io
 [momentjs]: https://momentjs.com
+[nrwl]: https://nrwl.io
+[nrwl-schematics]: https://nrwl.io/nx/guide-getting-started
