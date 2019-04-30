@@ -54,7 +54,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ## Firebase
 
-The project is currently hosted on [Firebase](https://firebase.google.com/) and the last deploied version is available at https://TBD.
+The project is currently hosted on [Firebase](https://firebase.google.com/) and the last deploied version is available at https://wizdm.io
 
 Run `firebase deploy` to upload the last build.
 
