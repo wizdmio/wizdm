@@ -10,10 +10,12 @@ Wizdm is a web application meant to connect aspiring startuppers with compassion
 
 ## Developers' notes
 
+<p align="justify">
 The app runs on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile.
 Icon set comes from both [Material][material] and [FontAwesome][fontawesome].
 Including [Hammerjs][hammerjs] to handle gestures for material components
 Using [Moment][momentjs] for time and locale management
+</p>
 
 ## Monorepo
 
