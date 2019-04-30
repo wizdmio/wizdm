@@ -4,8 +4,9 @@
 Wizdm
 =====
 
+<p align="justify">
 Wizdm is a web application meant to connect aspiring startuppers with compassionate developers sharing the common goal of turning a valuable business idea into a functioning prototype. That's the stage when the idea can be actually tested, refined and seek for investors.
-
+</p>
 
 ## Developers' notes
 
