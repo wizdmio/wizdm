@@ -1,8 +1,9 @@
 
 <img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" />
 
-Wizdm
-=====
+[Wizdm](https://wizdm.io)
+=======
+
 
 Wizdm uses a minimal clean interface based on Angular Material and FlexLayout to fit both desktop and mobile.
 
