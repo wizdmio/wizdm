@@ -1,5 +1,13 @@
 
-<img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" />
+<!--img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" /-->
+
+<h1 align="center">
+ <br>
+  <a href="https://wizdm.io"><img src="apps/wizdm/src/assets/img/wmlogo.png" alt="Wizdm" width="200"></a>
+ <br>
+  Wizdm
+ <br>
+</h1>
 
 Wizdm
 =====
