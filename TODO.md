@@ -65,6 +65,7 @@
 * Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
 * ~~Replace the AngularFirestoreModule with DatabaseModule dependency in UploaderModule~~
 * ~~Overwrites AngularFirestoreConfiguraiton in DatabaseModule so to remove the latest firebase error (see: https://github.com/angular/angularfire2/issues/1993)~~
+* Add an authenticated$ observable mapping the asObservable()
 
 ## libs/various
 * ~~Move out elements creating libs/elements (@wizdm/elements)~~
