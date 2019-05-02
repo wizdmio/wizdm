@@ -17,7 +17,8 @@
 
 ## Navigator
 * Turn `desktopMenu(...)` and `mobileMenu(...)` helpers into observables flatmapping auth -> msgs.
-* Add a "medium" extenral link to the footer directling to wizdm pubblication on medium  
+* Add a "medium" extenral link to the footer directling to wizdm pubblication on medium.
+* Add mobile$ and desktop$ observables mapping MediaObserver.media$
 * ~~Refactor the `wm-footer` to automatically show/hide the language seleciton based on `resolver.user.language` property (so removing the input)~~
 * ~~Restyle the footer to have social links on the left, terms and language on the right.~~
 * ~~Refactor the footer social link to use the externalUrl redirector~~
