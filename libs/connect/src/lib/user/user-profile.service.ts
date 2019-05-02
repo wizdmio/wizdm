@@ -93,6 +93,10 @@ export class UserProfile<T extends wmUser = wmUser> extends DatabaseDocument<T> 
     );
   }
 
+  get authenticated$(): Observable<boolean> {
+    return this.asObservable().pipe( map( profile => !!profile ) );
+  }
+
   // Returns true if user is logged in and profile data are available
   get authenticated(): boolean {
     return !!this.user && !!this.data;

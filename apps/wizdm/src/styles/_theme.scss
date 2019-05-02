@@ -175,7 +175,7 @@ $wm-theme-background: map-get($wm-theme, background);
     a { @extend .mat-link; }
 
     // Smoothen the text color on content
-    p, li, td { color: rgba(map-get($wm-theme-foreground, text), 0.6); }
+    p, li, td { color: rgba(map-get($wm-theme-foreground, text), 0.8); }
 
     // Defines a global style for blockquotes
     blockquote {

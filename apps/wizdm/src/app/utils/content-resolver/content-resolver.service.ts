@@ -8,7 +8,6 @@ import { Router,
          CanDeactivate,
          ActivatedRouteSnapshot, 
          RouterStateSnapshot,
-         NavigationEnd,
          NavigationExtras } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
 import { Observable, of, forkJoin, BehaviorSubject } from 'rxjs';
@@ -221,38 +220,10 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
    * @param url the optional relative url to navigate to. The function navigates to the current position if not specified.
    */
   public switchLanguage(lang: string, url?: string): Promise<boolean> {
-
+    // Computes the new commands
     const link = !!url ? ['/', lang, url] : this.routerLink(lang);
-
+    //...and navigates
     return this.router.navigate(link);
-/*
-    // Checks if a language change is requested
-    if(lang !== this.language) {
-
-      // Force reloading component strategy backing-up the current reuse strategy function
-      const strategy = this.router.routeReuseStrategy.shouldReuseRoute;
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
-      // Subscribe to the next NavigationEnd event
-      this.router.events.pipe( filter( e => e instanceof NavigationEnd), first() )
-        .subscribe( () => {  
-          // Restores the original reusing strategy function after navigation completed
-          this.router.routeReuseStrategy.shouldReuseRoute = strategy;
-        });
-    }
-
-    const re = new RegExp(`^\/${this.language}`);
-
-    // Computes the target path....
-    const target = url ? 
-      // ...to the requested url when specified
-      `/${lang}/${url}` : 
-      // ...or to the exact same page as the current one
-      this.router.url.replace(re, `/${lang}`);
-
-    // Navigate to the target page (switching language if necessary)
-    return this.router.navigateByUrl(target);
-  */
   }
 
   private merge(localModule: any, defaultModule?: any): any {

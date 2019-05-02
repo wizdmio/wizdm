@@ -32,14 +32,13 @@
 
       <!-- Context menu -->
       <wm-context-menu #menu [msgs]="msgs.tools"></wm-context-menu>
-
-      <!-- Editing tools -->
-      <wm-toolbox *ngIf="editMode" [msgs]="msgs.tools"></wm-toolbox>
   
   </mat-drawer-content>
 
 </mat-drawer-container>
 
+<!-- Editing tools -->
+<wm-toolbox *ngIf="editMode" [msgs]="msgs.tools"></wm-toolbox>
 
 <!-- Document body -->
 <!--div fxLayout="row" fxLayoutAlign="space-between strech">

@@ -3,6 +3,7 @@
 
 :host {
   display: flex;
+  position: relative;
   flex-direction: column;
   box-sizing: border-box;
   //margin: 0 $wm-content-margin;

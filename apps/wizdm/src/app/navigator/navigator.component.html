@@ -15,7 +15,7 @@
         <wm-logo routerLink="."></wm-logo>  
     
         <!-- Desktop navigation links -->
-        <wm-navbar [menuItems]="desktopMenu(msgs)" *ngIf="nav.desktop"></wm-navbar>
+        <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="nav.desktop"></wm-navbar>
       
       </nav>
 
@@ -50,14 +50,14 @@
     <!-- Mobile menu -->
     <mat-toolbar-row auto *ngIf="nav.mobile">
       
-      <wm-menu [menuItems]="mobileMenu(msgs)" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
+      <wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
     
     </mat-toolbar-row>
 
   </mat-toolbar>
 
   <!-- Global error message displayer -->
-  <wm-errors [msgs]="msgs.errors" [error]="nav.error" (clear)="nav.clearError()"></wm-errors>
+  <wm-errors [msgs]="msgs.errors" [error]="nav.error$ | async" (clear)="nav.clearError()"></wm-errors>
   
 </header>
 

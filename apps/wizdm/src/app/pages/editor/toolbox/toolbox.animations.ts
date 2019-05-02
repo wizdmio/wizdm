@@ -16,7 +16,7 @@ export const $animations = [
     transition(':enter', [
       style({
         //transform: 'rotateY(90deg)',
-        marginBottom: '-150px'
+        marginTop: '-150px'
       }),
       animate($timing)
     ]),
@@ -25,7 +25,7 @@ export const $animations = [
         $timing,
         style({
           //transform: 'rotateY(90deg)',
-          marginBottom: '-150px'
+          marginTop: '-150px'
         })
       )
     ])

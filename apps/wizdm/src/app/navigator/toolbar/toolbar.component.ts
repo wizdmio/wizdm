@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { wmAction } from './toolbar.service';
-import { $animations } from './toolbar-animations';
+import { $animations } from './toolbar.animations';
 
 @Component({
   selector: 'wm-toolbar',

@@ -1,23 +1,51 @@
-:host {
+@import "variables";
+@import "theme";
+
+:host {  
   display: block;
   position: fixed;
   left: 0;
-  bottom: 20px;
+  top: 0;
   width: 100%;
+
+  @include wm-padding-top(20px);
+
+  z-index: 1;
+
   pointer-events: none;
 
   .wrapper {
     pointer-events: all;
-    box-shadow: 0 0 6px 3px rgba(0, 0, 0, 0.125);
+    box-shadow: 0 0 6px 3px rgba(0,0,0,0.125);
     background-color: white;
+    border-radius: 5px;
+    padding: 4px;
   }
 
-  button {
-    border-radius: unset;
-    //color: rgba( black, 0.7 );
+  button { 
+    $size: 24px;    
+    position: relative;
+    width: auto;
+    height: auto;
+    line-height: $size;
+    padding: 2px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+    
     &.selected {
-      //color: black;
-      background-color: rgba(black, 0.1);
+      background-color: rgba( black, 0.1 );
+    } 
+
+    // Tweaks the mat-icon-button related classes to shrink the button size down to 28px
+    .mat-icon, .mat-icon-button i { line-height: $size; }
+    .mat-icon {
+      width: $size;
+      height: $size;
+      margin: 0;
+      // Shrinks the second icon expecting to be the drop-down arrow
+      &:nth-child(2) { width: 16px; margin-left: -4px; }
     }
+    .material-icons { font-size: $size; }
   }
 }

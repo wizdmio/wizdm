@@ -5,7 +5,7 @@ import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
 import { ContentResolver } from '../utils';
 import { Observable, Subscription } from 'rxjs';
-import { map, filter, distinctUntilChanged } from 'rxjs/operators';
+import { map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { $animations } from './navigator.animations';
 
 @Component({
@@ -16,8 +16,10 @@ import { $animations } from './navigator.animations';
 })
 export class NavComponent implements OnInit, OnDestroy {
 
-  readonly msgs$: Observable<any>;
   readonly scrolled$: Observable<boolean>;
+  readonly msgs$: Observable<any>;
+  readonly menuDesktop$: Observable<any>;
+  readonly menuMobile$: Observable<any>; 
   
   constructor(private  router  : Router,
               private  profile : UserProfile,
@@ -29,6 +31,12 @@ export class NavComponent implements OnInit, OnDestroy {
 
     // Gets the localized content pre-fetched by the resolver during routing
     this.msgs$ = this.content.stream("navigator");
+
+    // Creates the observable streaming the linkbar menu items (desktop)
+    this.menuDesktop$ = this.menuObservable('toolbar');
+
+    // Creates the observable streaming the drop menu items (mobile)
+    this.menuMobile$ = this.menuObservable('menu');
 
     // Creates and observable to monitor the scroll status
     this.scrolled$ = this.nav.viewport.scroll$.pipe(
@@ -79,6 +87,18 @@ export class NavComponent implements OnInit, OnDestroy {
     return this.profile.authenticated || false;
   }
 
+  private menuObservable(key: string): Observable<any[]> {
+
+    return this.profile.authenticated$.pipe(
+      switchMap( authenticated => this.msgs$.pipe( 
+        map( msgs => {
+          const menu = !!msgs && msgs[key] || {};
+          return authenticated ? menu.private : menu.public;
+        })
+      ))
+    );
+  }/*
+
   public desktopMenu(msgs: any): any[] {
     const menu = !!msgs && msgs.toolbar || {};
     return this.signedIn ? menu.private : menu.public;
@@ -88,7 +108,7 @@ export class NavComponent implements OnInit, OnDestroy {
     const menu = !!msgs && msgs.menu || {};
     return this.signedIn ? menu.private : menu.public;
   }
-
+*/
   public get userImage(): string {
     return this.profile.data.img;
   }
