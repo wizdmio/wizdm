@@ -5,6 +5,7 @@ Wizdm
 =====
 
 [![status](https://img.shields.io/badge/status-stealth-000.svg)](https://wizdm.io)
+[![code-size](https://img.shields.io/github/languages/code-size/wizdmio/wizdm.svg)](https://github.com/wizdmio/wizdm)
 [![angular](https://img.shields.io/badge/angular-v7.2+-success.svg)](https://angular.io)
 [![stability](https://img.shields.io/badge/stability-experimental-yellow.svg)](https://wizdm.io)
 [![issues](https://img.shields.io/github/issues/wizdmio/wizdm.svg)](https://github.com/wizdmio/wizdm/issues)
