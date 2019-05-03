@@ -7,6 +7,7 @@ Wizdm
 [![angular](https://img.shields.io/badge/angular-v7.2+-success.svg)](https://angular.io)
 [![license](https://img.shields.io/badge/license-MIT-informational.svg)](LICENSE.md)
 [![stability](https://img.shields.io/badge/stability-experimental-yellow.svg)](https://wizdm.io)
+[![issues](https://img.shields.io/github/issues/badges/shields.svg)](https://github.com/wizdmio/wizdm/issues)
 [![contribution](https://img.shields.io/badge/contributions-welcome-important.svg)](mailto:hello@wizdm.io)
 [![status](https://img.shields.io/badge/status-stealth-000.svg)](https://wizdm.io)
 
