@@ -6,7 +6,7 @@ Wizdm
 
 Wizdm is an online community meant to connect aspiring startuppers with compassionate developers sharing the common goal of turning a valuable business ideas into functioning prototypes. That's the stage when the idea can be actually tested, refined and seek for investors.
 
-![stability](https://img.shields.io/badge/stability-experimental-orange.svg)
+[![wizdm stability](https://img.shields.io/badge/stability-experimental-orange.svg)](https://wizdm.io)
 
 ## Developers' notes
 
