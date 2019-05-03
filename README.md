@@ -4,11 +4,11 @@
 Wizdm
 =====
 
-[![status](https://img.shields.io/badge/status-stealth-000.svg)](https://wizdm.io)
-[![stability](https://img.shields.io/badge/stability-experimental-yellow.svg)](https://wizdm.io)
 [![angular](https://img.shields.io/badge/angular-v7+-success.svg)](https://angular.io)
+[![stability](https://img.shields.io/badge/stability-experimental-yellow.svg)](https://wizdm.io)
 [![contribution](https://img.shields.io/badge/contributions-welcome-important.svg)](mailto:hello@wizdm.io)
 [![license](https://img.shields.io/badge/license-MIT-informational.svg)](LICENSE.md)
+[![status](https://img.shields.io/badge/status-stealth-000.svg)](https://wizdm.io)
 
 Wizdm is an online community meant to connect aspiring startuppers with compassionate developers sharing the common goal of turning a valuable business ideas into functioning prototypes. That's the stage when the idea can be actually tested, refined and seek for investors.
 
