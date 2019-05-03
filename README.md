@@ -5,7 +5,7 @@ Wizdm
 =====
 
 [![angular](https://img.shields.io/badge/angular-v7.2+-success.svg)](https://angular.io)
-[![license](https://img.shields.io/badge/license-MIT-informational.svg)](LICENSE.md)
+[![license](https://img.shields.io/github/license/wizdmio/wizdm.svg)](LICENSE.md)
 [![stability](https://img.shields.io/badge/stability-experimental-yellow.svg)](https://wizdm.io)
 [![issues](https://img.shields.io/github/issues/wizdmio/wizdm.svg)](https://github.com/wizdmio/wizdm/issues)
 [![contribution](https://img.shields.io/badge/contributions-welcome-important.svg)](mailto:hello@wizdm.io)
