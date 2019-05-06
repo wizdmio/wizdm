@@ -1,0 +1,47 @@
+
+<ng-container *ngFor="let child of node?.children">
+
+  <ng-container [ngSwitch]="child.type">
+    
+    <!-- Emphasis -->
+    <em *ngSwitchCase="'emphasis'" [wm-inline]="child"></em>
+    
+    <!-- Strong -->
+    <strong *ngSwitchCase="'strong'" [wm-inline]="child"></strong>
+    
+    <!-- Delete -->
+    <del *ngSwitchCase="'delete'"[wm-inline]="child"></del>
+    
+    <!-- Link -->
+    <a *ngSwitchCase="'link'" [href]="child.url" (click)="navigateUrl($event, child.url)" [wm-inline]="child"></a>
+
+    <!-- Link Reference -->
+    <a *ngSwitchCase="'linkReference'" [href]="definition(child.identifier)" (click)="navigateDef($event, child.identifier)" [wm-inline]="child"></a>
+
+    <!-- Inlide Code -->
+    <code *ngSwitchCase="'inlineCode'">{{ child.value }}</code>
+    
+    <!-- Sub-script Super-script plugin -->
+    <sub *ngSwitchCase="'sub'" [wm-inline]="child"></sub>
+    
+    <!-- Super-script Super-script plugin -->
+    <sup *ngSwitchCase="'sup'" [wm-inline]="child"></sup>
+    
+    <!-- Footnote Reference -->
+    <sup *ngSwitchCase="'footnoteReference'">[{{ footnote(child.identifier) }}]</sup>
+    
+    <!-- Plain text -->
+    <ng-container *ngSwitchCase="'text'">{{ child.value }}</ng-container>
+
+    <!-- Image -->
+    <img *ngSwitchCase="'image'" [src]="child.url" [title]="child.title" [alt]="child.alt" [wm-inline]="child" />
+
+    <!-- Image Reference -->
+    <img *ngSwitchCase="'imageReference'" [src]="definition(child.identifier)" [title]="child.title" [alt]="child.alt" [wm-inline]="child" />
+    
+    <!-- Recurs to next level -->
+    <!--ng-container *ngSwitchDefault [wm-inline]="child"></ng-container-->
+
+  </ng-container>
+
+</ng-container>

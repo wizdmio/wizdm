@@ -1,23 +1,18 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-
-import * as reparse from './reparse.module';
-
-export type displayType = 'document' | 'toc' | 'footnotes';
+import * as reparse from './reparse/reparse.module';
 
 @Component({
-  selector: 'wm-markdown, [wm-markdown]',
-  templateUrl: './markdown-renderer.component.html',
-  styleUrls: ['./markdown-renderer.component.scss'],
-  host: {
-    '[class.wm-markdown-theme]': 'true'
-  }
+  selector: '[wm-markdown]',
+  templateUrl: './markdown.component.html',
+  //styleUrls: ['./markdown.component.scss']
+  styles: [] 
 })
 /** Renders a markdown text into HTML using angular recursive template injection 
  * Using Remark as the input parser @see {https://github.com/remarkjs/remark}
 */
-export class MarkdownRendererComponent implements OnInit, OnDestroy {
+export class MarkdownRenderer implements OnInit, OnDestroy {
   
   private data$: BehaviorSubject<string> = new BehaviorSubject('');
   private sub$: Subscription;
@@ -26,9 +21,8 @@ export class MarkdownRendererComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  @Input() display: displayType = "document";
   @Input() delay: 500;
-  @Input('data') set parseData(data: string) {
+  @Input('wm-markdown') set parseData(data: string) {
 
     // Resets notes
     this.notes = [];

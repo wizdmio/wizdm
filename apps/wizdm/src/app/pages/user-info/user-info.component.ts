@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angul
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DatabaseService, wmUser } from '@wizdm/connect';
 import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
-import { wmProject } from '../../utils';
+import { wmProject } from '../../core';
 
 @Component({
   selector: 'wm-user-info',

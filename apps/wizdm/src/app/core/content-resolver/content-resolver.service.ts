@@ -29,8 +29,11 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
   // Data observer
   private _data$ = new BehaviorSubject<any>(this.data);
 
-  /** Returns the current language */
-  public get language(): string { return this.data.lang || 'en'; }
+  /** Returns the current language as a two digit code */
+  get language(): string { return this.data.lang || 'en'; }
+
+  /** Returns an observable streaming the current language code  */
+  get language$(): Observable<string> { return this._data$.pipe( map(data => data.lang || 'en') ); }
 
   constructor(readonly user    : UserProfile,
               readonly router  : Router,
@@ -38,14 +41,14 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
               private  adapter : DateAdapter<any>) { }
 
   /** Selects the requested portion of data from the content
-   * @param select a string delimiter to select the requested portion of the content
+   * @param select (optional) a string delimiter to select the requested portion of the content; returns the full content when undefined
    * @param default (optional) an optional object to be returned in the eventuality the required content is not present
    */
-  public stream(select: string, defaults?: any): Observable<any> {
+  public stream(select?: string, defaults?: any): Observable<any> {
 
     return this._data$.pipe( 
       // Selects the data portion of interst
-      map( data => select.select(data, defaults) ),
+      map( data => !!select ? select.select(data, defaults) : (data || defaults) ),
       // Filters empty data stream. This may happen while switching languages since
       // the router is resolving the route sequencially
       filter( data => !!data ) 
@@ -69,17 +72,10 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
             if(lang === 'auto') {
 
-              if(!!profile && profile.lang && profile.lang) {
-
-                console.log('Resolving to profile language: ', profile.lang);
-                // Jumps to the home page loading the profile language content
-                this.router.navigate([profile.lang]);
-                return of({});
-              }
-
-              const lang = this.detectLanguage().split('-')[0];
-              console.log('Using browser language: ' + lang);
-              // Switch to the detected language
+              // Gets the user preferred language or detects tht browsers
+              const lang = !!profile && profile.lang || this.detectLanguage().split('-')[0];
+              console.log('Resolving to profile or browser language: ', lang);
+              // Switch to the language
               this.router.navigate([lang]);
               return of({});
             }

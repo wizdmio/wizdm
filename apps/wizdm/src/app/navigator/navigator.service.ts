@@ -30,6 +30,8 @@ export class NavigatorService {
   public get mobile(): boolean { return this.media.isActive('xs');/*|| this.media.isActive('sm');*/ }
   public get desktop(): boolean { return !this.mobile; }
 
+  //public
+
   // Global error reporting
   public reportError(error: any): void { this._error$.next(error); }
   public clearError(): void { this._error$.next(null); }

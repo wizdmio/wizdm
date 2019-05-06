@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { Observable, Subscription, timer, interval } from 'rxjs';
 import { map, take, switchMap, takeWhile } from 'rxjs/operators';
 

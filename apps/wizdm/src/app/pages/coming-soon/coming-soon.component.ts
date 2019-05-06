@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
 
 @Component({

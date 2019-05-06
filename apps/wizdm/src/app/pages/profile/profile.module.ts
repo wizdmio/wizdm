@@ -15,7 +15,7 @@ import {
   MatDatepickerModule
 } from '@angular/material';
 import { IconModule, AvatarModule, PopupModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { UploadsModule } from '../uploads/uploads.module';
 import { UserComponent } from './profile.component';
 import { UserItemComponent } from './item/item.component';

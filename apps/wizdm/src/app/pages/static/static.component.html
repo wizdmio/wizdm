@@ -1,0 +1,11 @@
+
+<ng-container *ngIf="document$ | async as document">
+  
+  <div class="background"></div>
+
+  <!-- Renders the markdown document -->
+  <section class="content" [wm-markdown]="document" (navigate)="navigatePage($event)">
+  </section>
+
+</ng-container>
+

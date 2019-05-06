@@ -12,7 +12,7 @@ import {
   MatProgressBarModule
 } from '@angular/material';
 import { DisclaimerModule, PopupModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { ApplyComponent } from './apply.component';
 
 const routes: Routes = [

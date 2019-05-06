@@ -3,7 +3,7 @@ import { Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { PopupService } from '@wizdm/elements';
-import { ContentResolver, CanPageDeactivate } from '../../utils';
+import { ContentResolver, CanPageDeactivate } from '../../core';
 import { NavigatorService } from '../../navigator';
 import { UserItemComponent, UserItemValidators } from './item/item.component';
 import { Observable, Subscription } from 'rxjs';

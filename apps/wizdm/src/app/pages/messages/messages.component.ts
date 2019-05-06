@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSelectionList } from '@angular/material';
 import { PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
-import { ContentResolver, ChatService, wmConversation, wmMessage } from '../../utils';
+import { ContentResolver, ChatService, wmConversation, wmMessage } from '../../core';
 import { Observable, of } from 'rxjs';
 import { filter, take, map, tap } from 'rxjs/operators';
 

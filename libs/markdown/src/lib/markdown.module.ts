@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MarkdownRendererComponent } from './markdown-renderer/markdown-renderer.component';
-import { CodeHighlighterComponent } from './code-highlighter/code-highlighter.component';
+import { MarkdownRenderer } from './markdown.component';
+import { CodeHighlighter } from './highlight/highlight.component';
+import { InlineComponent } from './inline/inline.component';
 
 @NgModule({
   imports: [
@@ -10,11 +11,12 @@ import { CodeHighlighterComponent } from './code-highlighter/code-highlighter.co
     RouterModule
   ],
   declarations: [
-    MarkdownRendererComponent,
-    CodeHighlighterComponent
+    MarkdownRenderer,
+    CodeHighlighter,
+    InlineComponent
   ],
   exports: [
-    MarkdownRendererComponent
+    MarkdownRenderer
   ]
 })
 export class MarkdownModule { }

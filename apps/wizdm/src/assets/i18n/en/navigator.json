@@ -50,7 +50,7 @@
             { "label": "About", "link": "about" },
             { "label": "The project", "link": "explore/6bw5ZNpQClMzydtAAYzO" },
             { "label": "Contact us", "link": "contactUs" },
-            { "label": "Terms and privacy", "link": "terms" }
+            { "label": "Terms and privacy", "link": "docs/terms" }
         ],
 
         "languages": [

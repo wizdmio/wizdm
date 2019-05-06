@@ -3,22 +3,22 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MarkdownModule } from '@wizdm/markdown';
-import { ContentResolver } from '../../utils';
-import { TermsPrivacyComponent } from './terms-privacy.component';
+import { ContentResolver } from '../../core';
+import { StaticComponent } from './static.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: TermsPrivacyComponent,
-    resolve: { content: ContentResolver }, 
-    data: { modules: ['terms'] },
+    component: StaticComponent,
+    //resolve: { content: ContentResolver }, 
+    //data: { modules: ['static'] },
     //canActivate: [ ContentResolver ],
-    canDeactivate: [ ContentResolver ]
+    //canDeactivate: [ ContentResolver ]
   }
 ];
 
 @NgModule({
-  declarations: [ TermsPrivacyComponent ],
+  declarations: [ StaticComponent ],
   imports: [
     CommonModule,
     //FlexLayoutModule,
@@ -27,4 +27,4 @@ const routes: Routes = [
   ],
   exports: [ RouterModule ]
 })
-export class TermsPrivacyModule { }
+export class StaticModule { }

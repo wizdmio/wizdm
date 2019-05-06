@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MarkdownRendererComponent } from './markdown-renderer.component';
+import { CodeHighlighter } from './highlight.component';
 
-describe('MarkdownRendererComponent', () => {
-  let component: MarkdownRendererComponent;
-  let fixture: ComponentFixture<MarkdownRendererComponent>;
+describe('CodeHighlighter', () => {
+  let component: CodeHighlighter;
+  let fixture: ComponentFixture<CodeHighlighter>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MarkdownRendererComponent ]
+      declarations: [ CodeHighlighter ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MarkdownRendererComponent);
+    fixture = TestBed.createComponent(CodeHighlighter);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

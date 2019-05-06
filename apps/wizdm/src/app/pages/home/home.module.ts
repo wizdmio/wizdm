@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material';
 import { DisclaimerModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [

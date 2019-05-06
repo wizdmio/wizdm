@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TermsPrivacyComponent } from './terms-privacy.component';
+import { MarkdownRenderer } from './markdown.component';
 
-describe('TermsPrivacyComponent', () => {
-  let component: TermsPrivacyComponent;
-  let fixture: ComponentFixture<TermsPrivacyComponent>;
+describe('MarkdownRenderer', () => {
+  let component: MarkdownRenderer;
+  let fixture: ComponentFixture<MarkdownRenderer>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TermsPrivacyComponent ]
+      declarations: [ MarkdownRenderer ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TermsPrivacyComponent);
+    fixture = TestBed.createComponent(MarkdownRenderer);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

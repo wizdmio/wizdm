@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatListModule, MatDividerModule } from '@angular/material';
 import { AvatarModule, PopupModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { UserInfoModule } from '../user-info/user-info.module';
 import { MessagesComponent } from './messages.component';
 import { MessageComponent } from './message/message.component';

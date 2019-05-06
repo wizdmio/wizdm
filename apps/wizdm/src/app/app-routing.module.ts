@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { NavComponent } from './navigator';
-import { ContentResolver, FirebaseHandler } from './utils';
+import { ContentResolver, FirebaseHandler } from './core';
 
 // Define navigation routes
 const routes: Routes = [
@@ -26,13 +26,12 @@ const routes: Routes = [
       { path: 'apply',       loadChildren: './pages/apply/apply.module#ApplyModule' },
       { path: 'explore',     loadChildren: './pages/explore/explore.module#ExploreModule' },
       { path: 'explore/:id', loadChildren: './pages/editor/editor.module#EditorModule' },
-      { path: 'about',       loadChildren: './pages/about/about.module#AboutModule' },
       { path: 'login',       loadChildren: './pages/login/login.module#LoginModule' },
       { path: 'profile',     loadChildren: './pages/profile/profile.module#ProfileModule' },
       { path: 'upload',      loadChildren: './pages/upload/upload.module#UploadModule' },
       { path: 'dashboard',   loadChildren: './pages/dashboard/dashboard.module#DashboardModule' },
       { path: 'messages',    loadChildren: './pages/messages/messages.module#MessagesModule' },
-      { path: 'terms',       loadChildren: './pages/terms-privacy/terms-privacy.module#TermsPrivacyModule' },
+      { path: 'docs/:name',  loadChildren: './pages/static/static.module#StaticModule' },
       { path: 'not-found',   loadChildren: './pages/not-found/not-found.module#NotFoundModule' },
       { path: 'redirect',    loadChildren: './pages/redirect/redirect.module#RedirectModule' },
       { path: 'coming-soon', loadChildren: './pages/coming-soon/coming-soon.module#ComingSoonModule' },

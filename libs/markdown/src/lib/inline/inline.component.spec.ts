@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CodeHighlighterComponent } from './code-highlighter.component';
+import { InlineComponent } from './inline.component';
 
-describe('CodeHighlighterComponent', () => {
-  let component: CodeHighlighterComponent;
-  let fixture: ComponentFixture<CodeHighlighterComponent>;
+describe('InlineComponent', () => {
+  let component: InlineComponent;
+  let fixture: ComponentFixture<InlineComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CodeHighlighterComponent ]
+      declarations: [ InlineComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CodeHighlighterComponent);
+    fixture = TestBed.createComponent(InlineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

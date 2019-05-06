@@ -13,7 +13,7 @@ import {
 } from '@angular/material';
 import { PopupModule } from '@wizdm/elements';
 import { EditableModule } from '@wizdm/editable';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { EditorComponent } from './editor.component';
 import { ContextMenuComponent } from './menu/context-menu.component';
 import { ToolboxComponent } from './toolbox/toolbox.component';

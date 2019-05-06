@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule, MatProgressBarModule } from '@angular/material';
 import { IconModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { RedirectComponent } from './redirect.component';
 
 const routes: Routes = [

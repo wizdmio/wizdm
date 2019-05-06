@@ -3,7 +3,7 @@ import { Router, NavigationEnd, Scroll, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
-import { ContentResolver } from '../utils';
+import { ContentResolver } from '../core';
 import { Observable, Subscription } from 'rxjs';
 import { map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { $animations } from './navigator.animations';

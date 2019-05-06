@@ -1,4 +1,4 @@
 
-export * from './lib/code-highlighter/code-highlighter.component';
-export * from './lib/markdown-renderer/markdown-renderer.component';
+export * from './lib/highlight/highlight.component';
+export * from './lib/markdown.component';
 export * from './lib/markdown.module';

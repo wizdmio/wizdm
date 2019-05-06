@@ -6,7 +6,7 @@ import { MatIconModule,
          MatButtonModule, 
          MatProgressSpinnerModule } from '@angular/material';
 import { IconModule, AvatarModule, LikesModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { UserInfoModule } from '../user-info/user-info.module';
 import { ExploreComponent } from './explore.component';
 import { ExploreItemComponent } from './item/item.component';

@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService } from '../../navigator';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { $animations } from './login-animations';
 import { Observable, Subscription } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit  {
         this.progress = false;    
     
         // Jumps to the projects explore on successful login
-        if(user) {
+        if(!!user) {
           console.log('logged in successfully as: ' + user.email);
     
           // Checks for user preferrend language

@@ -10,7 +10,7 @@ import {
   MatProgressBarModule
 } from '@angular/material';
 import { IconModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { LoginComponent } from './login.component';
 
 const routes: Routes = [

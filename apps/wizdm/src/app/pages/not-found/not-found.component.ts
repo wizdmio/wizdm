@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
 import { $defaultMsgs } from './not-found-defaults';
 

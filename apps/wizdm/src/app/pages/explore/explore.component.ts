@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToolbarService, ViewportService } from '../../navigator';
-import { ContentResolver, ProjectService, Project } from '../../utils';
+import { ContentResolver, ProjectService, Project } from '../../core';
 import { Observable, Subject, of } from 'rxjs';
 import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './explore.animations';

@@ -7,7 +7,7 @@ import { MatDividerModule,
          MatListModule,
          MatProgressBarModule } from '@angular/material';
 import { FileOpenModule,PopupModule } from '@wizdm/elements';
-import { ContentResolver } from '../../utils';
+import { ContentResolver } from '../../core';
 import { UploadComponent } from './upload.component';
 
 const routes: Routes = [

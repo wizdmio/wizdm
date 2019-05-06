@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PopupService } from '@wizdm/elements';
 import { wmDocument, wmItem, wmText } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
-import { ContentResolver, ProjectService, Project, wmProject } from '../../utils';
+import { ContentResolver, ProjectService, Project, wmProject } from '../../core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { switchMap, takeUntil, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';

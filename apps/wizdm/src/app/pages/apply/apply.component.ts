@@ -7,7 +7,7 @@ import { ToolbarService } from '../../navigator';
 import { CanPageDeactivate, 
          ContentResolver, 
          ProjectService, 
-         wmProject } from '../../utils';
+         wmProject } from '../../core';
 import { $animations } from './apply.animations';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
