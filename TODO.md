@@ -76,3 +76,6 @@
 * ~~Refactors the `use()` function to support incremental module loading~~
 * ~~Implement recursive content copy function to better merge loaded content with the default one~~
 * ~~Tweak the recursive content copy to overwrite the full array content on length mismatch (so preventing shifted translations)~~
+
+## ng tools and config
+* Enable preserve symlinks (as described here https://github.com/angular/angular-cli/issues/10896) option so to use symbolic links whenever needed.
