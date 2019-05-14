@@ -1,7 +1,8 @@
 
 <ng-container *ngFor="let token of tokens">
-  <ng-container *ngIf="isString(token);else spanToken">{{token}}</ng-container>
+  <ng-container *ngIf="isString(token);else spanToken">{{ token }}</ng-container>
   <ng-template #spanToken>
-    <span [class]="'token '+token.type">{{token?.content}}</span>
+    <span [class]="'token '+token.type">{{ token?.content }}</span>
   </ng-template>
 </ng-container>
+  

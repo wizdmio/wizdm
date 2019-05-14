@@ -21,10 +21,16 @@
     background: linear-gradient(145deg, rgba(mat-color($wm-accent), 0.15), rgba(mat-color($wm-accent), 0));
   }
 
-  .content {
+  section.content {
     position: relative;
     min-height: 350px;
 
-    @include wm-padding-top();
+    padding: 32px;
+    @include wm-padding-top(32px);
+  }
+
+  section.footnotes {
+    position: relative;
+    border-top: solid 1px map-get($wm-theme-foreground, divider);
   }
 }

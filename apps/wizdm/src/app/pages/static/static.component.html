@@ -1,10 +1,17 @@
 
 <ng-container *ngIf="document$ | async as document">
-  
+
   <div class="background"></div>
 
   <!-- Renders the markdown document -->
-  <section class="content" [wm-markdown]="document" (navigate)="navigatePage($event)">
+  <section class="content" [wm-markdown]="document" (navigate)="navigate($event)" #content>
+  </section>
+
+  <!-- Renders the footnotes -->
+  <section *ngIf="content.notes.length > 0" class="footnotes">
+    <div *ngFor="let note of content.notes; index as i">
+      {{ i + 1 }} - <span [wm-markdown]="note" inline></span>
+    </div>
   </section>
 
 </ng-container>

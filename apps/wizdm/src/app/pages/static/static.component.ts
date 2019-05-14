@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ViewportService } from '../../navigator';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators'
+import { map, switchMap, catchError, retry } from 'rxjs/operators'
 
 @Component({
   selector: 'wm-static',
@@ -20,69 +20,42 @@ export class StaticComponent {
               private scroll  : ViewportService,
               private content : ContentResolver) {
 
-
+    // Streams the requested document
     this.document$ = this.streamDocument();
   }
 
   private streamDocument(): Observable<string> {
-
-    // Resolves the requested document name
-    return this.route.paramMap.pipe( 
-      // Resolves the current language
-      switchMap( param => this.content.language$.pipe(
-        map( lang => {
-          const name = `${param.get('name')}-${lang}`;
-          console.log(name);
-          return name;
-        } )
-      )),
-      // Loads the file from the assets
-      switchMap( name => this.http.get(`assets/docs/${name}.md`, { responseType: 'text' } )),
-      // Catches errors
-      //catchError( e => "# Something wrong" ) 
-    );
 
     // Resolves the current language first
     return this.content.language$.pipe(
       // Resolves the requested document name
       switchMap( lang => this.route.paramMap.pipe(
         // Maps the full name appending the language code
-        map( param => {
-          const name = `${param.get('name')}-${lang}`;
-          console.log(name);
-          return name;
-        } )
-      )),
-      // Loads the file from the assets
-      switchMap( name => this.http.get(`assets/docs/${name}.md`, { responseType: 'text' } )),
-      // Catches errors
-      catchError( e => "# Something wrong" ) 
+        map( param => `${param.get('name')}-${lang}`),
+            // Loads the file from the assets
+          switchMap( name => this.http.get(`assets/docs/${name}.md`, { responseType: 'text' })
+            // Catches the possible error
+            .pipe( catchError( (e: HttpErrorResponse) => {
+              // On file not found (404) of localized content...
+              if(lang !== 'en' && e.status === 404) { 
+                // Reverts to the default language
+                lang = 'en';
+                // Trow the error down forcing a retry
+                throw e;
+               }
+              // Returns a dummy content avoiding retrys
+              return "# Something wrong";
+            })
+          )
+        ), 
+        // Retries the at the router level mapping the updated file name
+        retry(1)
+      ))
     );
   }
 
-
-/*
-  public document = "";
-
-  ngOnInit() {
-    // Loads the document from assets
-    this.loadDocument('assets/doc/terms.md')
-      .subscribe( doc => {
-        this.document = doc;
-      });
-  }
-
-  private loadDocument(path: string): Observable<string> {
-    // Loads the MD document file from the given path
-    return this.http.get(path, { responseType: 'text' } )
-      .pipe( catchError( e => {
-        console.error(e);
-        return "# Something wrong"; 
-      }));
-  }
-*/
-  public navigatePage(anchor: string) {
+  public navigate(url: string) {
     // Scroll the main view at the anchor position
-    this.scroll.scrollToElement(anchor);
+    //this.scroll.scrollToElement(anchor);
   }
 }

@@ -1,68 +1,72 @@
-<ng-container *ngFor="let child of root?.children">
+<ng-container *ngFor="let child of node?.children">
 
-  <ng-container [ngSwitch]="child.type">
-
-    <!-- Headings -->
-    <ng-container *ngSwitchCase="'heading'">
-      <h1 *ngIf="child.depth === 1" [wm-inline]="child"></h1>
-      <h2 *ngIf="child.depth === 2" [wm-inline]="child"></h2>
-      <h3 *ngIf="child.depth === 3" [wm-inline]="child"></h3>
-      <h4 *ngIf="child.depth === 4" [wm-inline]="child"></h4>
-      <h5 *ngIf="child.depth === 5" [wm-inline]="child"></h5>
-      <h6 *ngIf="child.depth === 6" [wm-inline]="child"></h6>
+    <ng-container [ngSwitch]="child.type"> 
+  
+      <!-- Headings -->
+      <ng-container *ngSwitchCase="'heading'">
+        <h1 *ngIf="child.depth === 1" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h1>
+        <h2 *ngIf="child.depth === 2" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h2>
+        <h3 *ngIf="child.depth === 3" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h3>
+        <h4 *ngIf="child.depth === 4" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h4>
+        <h5 *ngIf="child.depth === 5" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h5>
+        <h6 *ngIf="child.depth === 6" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h6>
+      </ng-container>
+  
+      <!-- Paragraph -->
+      <p *ngSwitchCase="'paragraph'" [attr.data-line]="pos(child)" [wm-inline]="child"></p>
+  
+      <!-- Lists -->
+      <ng-container *ngSwitchCase="'list'">
+        <ol *ngIf="child.ordered" [start]="child.start">
+          <li *ngFor="let item of child.children" 
+              [wm-markdown]="item" 
+              (navigate)="navigate.emit($event)">
+                {{ item | json }}
+          </li>
+        </ol>
+        <ul *ngIf="!child.ordered">
+          <li *ngFor="let item of child.children" 
+              [wm-markdown]="item" 
+              (navigate)="navigate.emit($event)">
+          </li>
+        </ul> 
+      </ng-container>
+  
+      <!-- Tables -->
+      <table *ngSwitchCase="'table'" [attr.data-line]="pos(child)">
+        <tbody>
+          <tr *ngFor="let row of child.children">
+            <td *ngFor="let cell of row.children; index as i" 
+                [attr.align]="child.align[i] || ''"
+                [wm-inline]="cell">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- Code -->
+      <pre *ngSwitchCase="'code'" [attr.data-line]="pos(child)">
+        <code [wm-highlight]="child.value" [language]="child.lang"></code>
+      </pre>
+  
+      <!-- Thematic Break -->
+      <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="pos(child)"/>
+  
+      <!-- Line Break -->
+      <br *ngSwitchCase="'break'" />
+  
+      <!-- Blockquotes -->
+      <blockquote *ngSwitchCase="'blockquote'" [wm-markdown]="child" (navigate)="navigate.emit($event)"></blockquote>
+  
+      <!-- Left aligned block - Align plugin -->
+      <span *ngSwitchCase="'leftAligned'" align="left" [wm-markdown]="child" (navigate)="navigate.emit($event)"></span>
+  
+      <!-- Center aligned block - Align plugin -->
+      <span *ngSwitchCase="'centerAligned'" align="center" [wm-markdown]="child" (navigate)="navigate.emit($event)"></span>
+  
+      <!-- Right aligned block - Align plugin -->
+      <span *ngSwitchCase="'rightAligned'" align="right" [wm-markdown]="child" (navigate)="navigate.emit($event)"></span>
+  
     </ng-container>
-
-    <!-- Paragraph -->
-    <p *ngSwitchCase="'paragraph'" [wm-inline]="child"></p>
-
-    <!-- Lists -->
-    <ng-container *ngSwitchCase="'list'">
-      <ol *ngIf="child.ordered" [start]="child.start">
-        <li *ngFor="let item of child.children" [wm-markdown]="child"></li>
-      </ol>
-      <ul *ngIf="!child.ordered">
-        <li *ngFor="let item of child.children" [wm-markdown]="child"></li>
-      </ul>
-    </ng-container>
-
-    <!-- Tables -->
-    <table *ngSwitchCase="'table'">
-      <tbody>
-        <tr *ngFor="let row of child.children">
-          <td *ngFor="let cell of row?.children; index as i" 
-              [style.text-align]="child.align[i]"
-              [wm-inline]="child">
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Code -->
-    <pre *ngSwitchCase="'code'">
-      <code [wm-highlight]="child.value" [language]="child.lang"></code>
-    </pre>
-
-    <!-- Thematic Break -->
-    <hr *ngSwitchCase="'thematicBreak'" />
-
-    <!-- Line Break -->
-    <br *ngSwitchCase="'break'" />
-
-    <!-- Image -->
-    <img *ngSwitchCase="'image'" [src]="child.url" [title]="child.title" [alt]="child.alt" />
-
-    <!-- Blockquotes -->
-    <blockquote *ngSwitchCase="'blockquote'" [wm-markdown]="child"></blockquote>
-
-    <!-- Left aligned block - Align plugin -->
-    <span *ngSwitchCase="'leftAligned'" [style.text-align]="'left'" [wm-markdown]="child"></span>
-
-    <!-- Center aligned block - Align plugin -->
-    <span *ngSwitchCase="'centerAligned'" [style.text.align]="'center'" [wm-markdown]="child"></span>
-
-    <!-- Right aligned block - Align plugin -->
-    <span *ngSwitchCase="'rightAligned'" [style.text-align]="'right'" [wm-markdown]="child"></span>
-
+      
   </ng-container>
-    
-</ng-container>
