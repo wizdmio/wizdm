@@ -1,8 +1,8 @@
-import { EditableDoc, EditableBlock, EditableList, EditableItem, EditableText, EditableTable, EditableRow, EditableCell, EditableFrame, EditableImage } from '../model';
-import { wmEditableTypes, wmDocument, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmFrame, wmImage } from '../model';
+import { EditableDoc, EditableBlock, EditableList, EditableItem, EditableText, EditableTable, EditableRow, EditableCell, EditableImage } from '../model';
+import { wmEditableTypes, wmDocument, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmImage } from '../model';
 import { Injectable } from '@angular/core';
 
-export type EditableTypes = EditableDoc|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableFrame|EditableImage;
+export type EditableTypes = EditableDoc|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableImage;
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,6 @@ export class EditableFactory {
   node(data: wmRow): EditableRow;
   node(data: wmCell): EditableCell;
   node(data: wmText): EditableText;
-  node(data: wmFrame): EditableFrame;
   node(data: wmImage): EditableImage;
 
   /** Creates a new empty node of the specified type */
@@ -46,9 +45,6 @@ export class EditableFactory {
       case 'text': case 'link':
       return new EditableText(this, data as wmText);
 
-      case 'frame':
-      return new EditableFrame(this, data as wmFrame);
-
       case 'image':
       return new EditableImage(this, data as wmImage);
     }
@@ -76,8 +72,6 @@ export class EditableFactory {
   get text() { return this.node({ type: 'text' }); }
   /** Creates a new empty link node */
   get link() { return this.node({ type: 'link' }); }
-  /** Creates a new empty image node */
-  get frame() { return this.node({ type: 'frame' }); }
   /** Creates a new empty image node */
   get image() { return this.node({ type: 'image' }); }
   

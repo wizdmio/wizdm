@@ -4,8 +4,7 @@ import { EditableSelection } from '../selection/editable-selection.service';
 
 @Component({
   selector: 'table[wm-table]',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  templateUrl: './table.component.html'
 })
 export class TableComponent {
 
@@ -13,7 +12,7 @@ export class TableComponent {
 
   @Input('wm-table') table: EditableTable;
   // Applies the node id to the element
-  @HostBinding('id') get id() { return !!this.table && this.table.id;}
+  @HostBinding('id') get id() { return !!this.table && this.table.id; }
   // Applies table margins according to node alignement
   @HostBinding('style.margin-left') get mleft() { 
     return !!this.table && !!this.table.align && this.table.align !== 'left' ? 'auto' : null; 
@@ -23,16 +22,4 @@ export class TableComponent {
   }
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { return this.sel.selected(this.table) ? '' : undefined; }
-
-  public selectColumn(col: number) {
-    debugger;
-  }
-
-  public selectRow(row: number) {
-    debugger;
-  }
-
-  public selectTable() {
-    this.sel.setCursor(this.table, 0);
-  }
 }

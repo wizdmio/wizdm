@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../model';
-import { EditableDoc, EditableText, EditableTable, EditableRow, EditableCell, EditableImage } from '../model';
+import { EditableDoc, EditableText, EditableTable, EditableRow, EditableCell } from '../model';
 import { EditableContent } from '../model/editable-content';
 import { timeInterval, map, filter } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
@@ -39,9 +39,6 @@ export class EditableSelection implements OnDestroy {
   get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
   /** Returns true then the selection fully belongs to a single container  */
   get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
-  /** Returns true whenever the start/end are text nodes */
-  //get textsafe(): boolean { return this.valid && this.start instanceof EditableText && this.end instanceof EditableText; }
-  
   /** Returns true whenever the selection has been modified */
   get marked(): boolean { return this.modified; }
 
@@ -210,47 +207,10 @@ export class EditableSelection implements OnDestroy {
     return this.mark();
   }
 
-  // Maps a given DOM node into the internal tree data node
-  /*private fromDom(node: Node, offset: number): [EditableContent, number]{
-    // Skips null nodes
-    if(!node) { return [null, 0]; }
-    // If node is a text node we look for the node parent assuming 
-    // its ID correctly maps the corresponding tree data editable
-    if(node.nodeType === Node.TEXT_NODE) {
-      // Gets the text node parent elements
-      // note: since IE supports parentElement only on Elements, we cast the parentNode instead
-      const element = node.parentNode as Element;
-      // Walks the tree searching for the node to return
-      const txt = this.root.walkTree(!!element && element.id);
-      // Returns null when nodes are of unexpected types
-      //return txt instanceof EditableText ? [txt, txt.empty ? 0 : offset] : [null, 0];    
-      return [txt, txt.empty ? 0 : offset];    
-    }
-    // If not, selection is likely falling on a parent element, so, 
-    // we search for the child element relative to the parent offset 
-    if(!node.hasChildNodes()) { return [null, 0]; }
-    // Let's search for text nodes or element (so basically skipping comments)
-    let child = node.firstChild as Node;
-    while(!!child) {
-      // Recurs on both elements and text nodes. This way will keep going till we reach
-      // the element or text node the offset falls within
-      if(child.nodeType === Node.ELEMENT_NODE || child.nodeType === Node.TEXT_NODE) {
-        if(offset <= child.textContent.length) {
-          return this.fromDom(child, offset);
-        }
-        // Adjust the offset
-        offset -= child.textContent.length;
-      }
-      // Goes next
-      child = child.nextSibling;
-    }
-    // Something wrong
-    return [null, offset];
-  }*/
   private fromDom(node: Node, offset: number): [EditableContent, number]{
     // Skips null nodes
     if(!node) { return [null, 0]; }
-    // If node is a text node we look for the node parent assuming 
+    // If node is a text node we look for the parent span element assuming 
     // its ID correctly maps the corresponding tree data editable
     if(node.nodeType === Node.TEXT_NODE) {
       // Gets the text node parent elements (a span or an anchor)
@@ -258,10 +218,14 @@ export class EditableSelection implements OnDestroy {
       const element = node.parentNode as Element;
       // Walks the tree searching for the node to return
       const txt = this.root.walkTree(!!element && element.id);
-      // Returns null when nodes are of unexpected types
-      //return txt instanceof EditableText ? [txt, txt.empty ? 0 : offset] : [null, 0];    
+      // Zeroes the offset on empty texts 
       return [txt, txt.empty ? 0 : offset];    
     }
+
+    // Returns the parent element and the child offset otherwise
+    return[this.root.walkTree(!!node && (node as Element).id), offset];
+
+    /*
     // If not, selection is likely falling on a parent element, so, 
     // searches for the child element relative to the parent offset 
     let child = node.childNodes[offset] as Node;
@@ -271,6 +235,7 @@ export class EditableSelection implements OnDestroy {
     }
     // Walks the tree returning the matching child node with 0 offset
     return[ this.root.walkTree(!!child && (child as Element).id), 0];
+    */
   }
   /** Queries the document for the current selection */
   public query(from: Document): EditableSelection {
@@ -282,6 +247,9 @@ export class EditableSelection implements OnDestroy {
       const sel = from.getSelection();
       const range = (!!sel && sel.rangeCount > 0) && sel.getRangeAt(0);
       if(!!range) {
+
+        console.log(range);
+
         // Cut it short on a collapsed range
         if(range.collapsed) { 
           // Maps the cursor position at once
@@ -299,43 +267,32 @@ export class EditableSelection implements OnDestroy {
       }
       // Resets the values in case the range is undefined or null
       else { this.setCursor(undefined, 0); }
+
+      console.log(this);
   
     } catch(e) {}
 
     // Resets the modified flag
     return this.mark(false);
   }
-/*
+
   private toDom(node: EditableContent, document: Document): Node {
-    // Gets the node container element
+    // Seeks for the dom element matching the internal node id
     const el = !!node ? document.getElementById(node.id) : null;
-    if(!el.hasChildNodes()) { return null; }
-    // Let's search for the first element (so basically skipping comments)
-    let child = el.firstChild as Node;
-    while(!!child) {
-      // Returns the very first text node
-      if(child.nodeType === Node.TEXT_NODE) { return child; }
-      // Goes next
-      child = child.nextSibling;
+    if(!el) { return null; }// No element found
+    // Text nodes are rendered as span elements...
+    if(node instanceof EditableText) {
+      // Seeks for the very first text node within the element children 
+      let child = !!el && el.firstChild as Node;
+      while(!!child) {
+        // Basically skips comments
+        if(child.nodeType === Node.TEXT_NODE) { return child; }
+        // Goes next
+        child = child.nextSibling;
+      }
     }
-    // No text nodes found
-    return null;
-  }
-*/
-  private toDom(node: EditableContent, document: Document): Node {
-    // Gets the node container element
-    const el = !!node ? document.getElementById(node.id) : null;
-    if(!el.hasChildNodes()) { return null; }
-    // Let's search for the first element (so basically skipping comments)
-    let child = el.firstChild as Node;
-    while(!!child) {
-      // Returns the very first text node
-      if(child.nodeType === Node.ELEMENT_NODE || child.nodeType === Node.TEXT_NODE) { return child; }
-      // Goes next
-      child = child.nextSibling;
-    }
-    // No text nodes found
-    return null;
+    // Return the element otherwise
+    return el;
   }
   /** Applies the current selection to the document */
   public apply(to: Document): EditableSelection {
@@ -368,10 +325,10 @@ export class EditableSelection implements OnDestroy {
     if(!this.valid || !char) { return this; }
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
-    // Do nothing on images
+    // Store a snapshot for undo history
     this.store();
     // In case the selection is on the end edge of a link...
-    if(this.start.type === 'link' && this.startOfs === this.start.length) {
+    if(this.start.type !== 'text' && this.startOfs === this.start.length) {
       // Jumps on the following text, if any or create a new text node otherwise
       const next = this.next(this.start) || this.start.insertNext(this.start.create.text.set(''));
       // Updates the new position
@@ -419,39 +376,27 @@ export class EditableSelection implements OnDestroy {
   public break(newline: boolean = false): EditableSelection {
     // Deletes the selection, if any
     if(!this.collapsed) { this.delete(); }
-    // Breaks the text content
-    //if(this.textsafe) {
-      // Store a snapshot for undo history
-      this.store();
-      // Just insert a new line on request forcing it always on links and table cells
-      if(newline || this.belongsTo('link') || this.belongsTo('cell')) {
-        this.start.insert('\n', this.startOfs);
-        return this.move(1);
-      }
-      // Inserts an extra empty text on the start edge preserving the same style
-      if(this.start.first && this.startOfs === 0) { 
-        this.start.insertPrevious(this.start.clone().set('')); 
-      }
-      // Inserts an extra empty text node on the end edge preserving the same style
-      if(this.start.last && this.startOfs === this.start.length) { 
-        this.start.insertNext(this.start.clone().set('')); 
-      }
-      // Makes sure the cursor is on the right side of node's edges 
-      if(this.startOfs === this.start.length) { this.setCursor(this.next(this.start), 0);}
-      // Breaks the content from this node foreward in a new editable container
-      const node = this.start.split(this.startOfs).break();
-      // Updates the cursor position
-      return this.setCursor(node, 0);
-/*    }
-
-    // TODO: Complkete this addition to work with tables
-    const paragraph = this.start.create.item;  
-    
-    const next = paragraph.appendChild( this.start.create.text.set('') );
-
-    this.start.insertNext(paragraph);
-    
-    return this.setCursor(next, 0);*/
+    // Store a snapshot for undo history
+    this.store();
+    // Just insert a new line on request forcing it always on links and table cells
+    if(newline || this.belongsTo('link') || this.belongsTo('cell')) {
+      this.start.insert('\n', this.startOfs);
+      return this.move(1);
+    }
+    // Inserts an extra empty text on the start edge preserving the same style
+    if(this.start.first && this.startOfs === 0) { 
+      this.start.insertPrevious(this.start.clone().set('')); 
+    }
+    // Inserts an extra empty text node on the end edge preserving the same style
+    if(this.start.last && this.startOfs === this.start.length) { 
+      this.start.insertNext(this.start.clone().set('')); 
+    }
+    // Makes sure the cursor is on the right side of node's edges 
+    if(this.startOfs === this.start.length) { this.setCursor(this.next(this.start), 0);}
+    // Breaks the content from this node foreward in a new editable container
+    const node = this.start.split(this.startOfs).break();
+    // Updates the cursor position
+    return this.setCursor(node, 0);
   }
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
   public split(): EditableSelection {
@@ -492,16 +437,9 @@ export class EditableSelection implements OnDestroy {
   }
   /** Applies the given alignemnt to the selection */
   public set align(align: wmAlignType) {
-    // Applies the alignement on the text containers within the selection
-    //if(this.textsafe) { 
-      this.store().containers( container => container.align = align ).mark();
-    /*}
-    // Align the start node otherwise (could be an image or a table)
-    else if(this.valid) { 
-      this.store();
-      this.start.align = align; 
-      this.mark(); 
-    }*/
+
+    this.store().containers( container => container.align = align ).mark();
+
   }
   /** Returns the current selection level (corresponding to the start node container's) */
   public get level(): number { 
@@ -524,18 +462,10 @@ export class EditableSelection implements OnDestroy {
     if(this.valid) {
       // Store a snapshot for undo history
       this.store();
-      // Applies style on the selected text
-      //if(this.textsafe) {
-        // Forces wordwrapping when collapsed 
-        if(this.collapsed) { this.wordWrap(); }
-        // Applies the given style to all the nodes within the selection
-        this.trim().split().nodes( node => node.style = style ).defrag();
-      /*}
-      // Styles the start node otherwise (could be a table, a row or a column)
-      else {
-        this.start.style = style; 
-        this.mark(); 
-      }*/
+      // Forces wordwrapping when collapsed 
+      if(this.collapsed) { this.wordWrap(); }
+      // Applies the given style to all the nodes within the selection
+      this.trim().split().nodes( node => node.style = style ).defrag();
     }
   }
   /** Resets the selection style removing all formatting */
@@ -611,7 +541,7 @@ export class EditableSelection implements OnDestroy {
   }
 
   /** Removes an indentation level when applicable */
-  public unindent(): EditableSelection {
+  public outdent(): EditableSelection {
     // Guesses which indentation the selection belongs to
     const indent = this.pick('blockquote', 'bulleted', 'numbered'); 
     if(!indent) { return this; }

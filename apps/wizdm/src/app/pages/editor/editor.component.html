@@ -21,14 +21,14 @@
   <mat-drawer-content fxFlex="1 1 auto" class="desk">
   
       <!-- Renders the documetn body -->
-      <wm-editable-document 
-        class="page" 
-        (contextmenu)="editMode ? menu.open($event) : true" 
-        (change)="save($event)"
-        [source]="document"
-        [edit]="editMode" 
-        [@editing]="editMode">
-      </wm-editable-document>
+      <div class="page" 
+           [wm-editable-document]="document"
+           [edit]="editMode" 
+           [@editing]="editMode"
+           (contextmenu)="editMode ? menu.open($event) : true" 
+           (change)="save($event)"
+           (navigate)="navigate($event)">
+      </div>
 
       <!-- Context menu -->
       <wm-context-menu #menu [msgs]="msgs.tools"></wm-context-menu>

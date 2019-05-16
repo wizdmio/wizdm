@@ -25,6 +25,9 @@
       
       <!-- Plain text -->
       <ng-container *ngSwitchCase="'text'">{{ child.value }}</ng-container>
+
+      <!-- Line Break -->
+      <br *ngSwitchCase="'break'" />
   
       <!-- Link -->
       <a *ngSwitchCase="'link'" [href]="child.url" (click)="navigate(child)" [wm-inline]="child"></a>

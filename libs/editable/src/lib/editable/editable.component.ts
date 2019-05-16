@@ -1,15 +1,15 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableItem, EditableCell, EditableText } from '../model';
+import { EditableItem, EditableCell, EditableText, EditableImage } from '../model';
 import { EditableSelection } from '../selection/editable-selection.service';
+import { EditableDocument } from '../editable-document.component';
 
 @Component({
   selector: '[wm-editable]',
-  templateUrl: './editable.component.html',
-  styleUrls: ['./editable.component.scss']
+  templateUrl: './editable.component.html'
 })
 export class EditableComponent {
 
-  constructor(private sel: EditableSelection) {}
+  constructor(readonly document: EditableDocument, private sel: EditableSelection) {}
 
   @Input('wm-editable') node: EditableItem | EditableCell;
   // Applies the node id to the element
@@ -26,44 +26,83 @@ export class EditableComponent {
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { return this.sel.selected(this.node) ? '' : undefined; }
 
+  // Helper function computing the max-size style for images
+  size(img: EditableImage): string {
+
+    switch(!!img && img.size) { 
+
+      case '25': case '33': case '50': case '66': case '75':
+      return `${img.size}%`;
+      
+      case 'icon':
+      return '48px';
+
+      case 'thumb':
+      return '150px';
+
+      case 'small':
+      return '400px';
+
+      case 'regular':
+      return '1024px';
+    }
+
+    return '100%';
+  }
+
   // Helper function computing the text node style
-  style(node: EditableText): any {
+  style(text: EditableText): any {
 
-    return !!node && node.style.reduce( (obj, style) => {
+    return !!text && text.style.reduce( (style, add) => {
 
-      switch(style) {
+      switch(add) {
         case 'bold': 
-        obj['font-weight'] = '700'; 
+        style['font-weight'] = '700'; 
         break;
         
         case 'italic': 
-        obj['font-style'] = 'italic';
+        style['font-style'] = 'italic';
         break;
 
         case 'underline':
-        obj['text-decoration'] = 'underline';
+        style['text-decoration'] = 'underline';
         break;
 
         case 'overline':
-        obj['text-decoration'] = 'overline';
+        style['text-decoration'] = 'overline';
         break;
 
         case 'strikethrough':
-        obj['text-decoration'] = 'line-through';
+        style['text-decoration'] = 'line-through';
         break;
 
         case 'super':
-        obj['vertical-align'] = 'super';
-        obj['font-size'] = '70%';
+        style['vertical-align'] = 'super';
+        style['font-size'] = '70%';
         break;
     
         case 'sub': 
-        obj['vertical-align'] = 'sub';
-        obj['font-size'] = '60%';
+        style['vertical-align'] = 'sub';
+        style['font-size'] = '60%';
         break;
       }
 
-      return obj;
-    }, {});
+      return style;
+    }, 
+    { // Default styles
+      'font-weight': 'unset',
+      'font-style': 'unset',
+      'text-decoration': 'unset',
+      'vertical-align': 'unset',
+      'white-space': 'pre-wrap'
+    });
+  }
+
+  navigate(url: string): boolean {
+
+    // Reverts to the parent document navigation event 
+    this.document.navigate.emit(url);
+    // Prevents the default behavior, so, [href] can be filled in for both clarity and debug purposes
+    return false;
   }
 }

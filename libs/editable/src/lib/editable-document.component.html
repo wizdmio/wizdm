@@ -4,13 +4,15 @@
 
     <!-- Renders document items as paragraphs or headings -->
     <ng-container *ngSwitchCase="'item'">
-      <p  *ngIf="node.level === 0" [wm-editable]="node"></p>
+      <!-- Headings -->
       <h1 *ngIf="node.level === 1" [wm-editable]="node"></h1>
       <h2 *ngIf="node.level === 2" [wm-editable]="node"></h2>
       <h3 *ngIf="node.level === 3" [wm-editable]="node"></h3>
       <h4 *ngIf="node.level === 4" [wm-editable]="node"></h4>
       <h5 *ngIf="node.level === 5" [wm-editable]="node"></h5>
       <h6 *ngIf="node.level === 6" [wm-editable]="node"></h6>
+      <!-- Paragraphs -->
+      <p *ngIf="node.level === 0" [wm-editable]="node"></p>
     </ng-container>
 
     <!-- Numbered lists with nesting -->
@@ -25,9 +27,7 @@
     <!-- Tables at root level only -->
     <table *ngSwitchCase="'table'" [wm-table]="node"></table>
 
-    <!-- Images at root level only -->
-    <div *ngSwitchCase="'frame'" [wm-image]="node"></div>
-
   </ng-container>
   
 </ng-container>
+  

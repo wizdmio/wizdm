@@ -46,7 +46,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [ FirebaseHandler ],
-  imports: [ RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }) ],
+  imports: [ RouterModule.forRoot(routes)],//, { preloadingStrategy: PreloadAllModules }) ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

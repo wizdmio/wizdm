@@ -130,6 +130,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.saveDocument$.next( document );
   }
 
+  public navigate(url: string) {
+    
+  }
+
   public renderTOC(node: wmItem): string {
 
     return (node.content || []).reduce( (acc, val) => {

@@ -5,9 +5,8 @@ import { EditableSelection } from './selection/editable-selection.service';
 import { EditableDoc, wmDocument } from './model';
 
 @Component({
-  selector: 'wm-editable-document, [wm-editable-document]',
+  selector: '[wm-editable-document]',
   templateUrl: './editable-document.component.html',
-  styleUrls: ['./editable-document.component.scss'],
   host: { 'class': 'wm-editable-document' }
 })
 export class EditableDocument extends EditableDoc implements AfterViewChecked {
@@ -23,7 +22,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   }
 
   /** Document source */
-  @Input() set source(source: wmDocument) {
+  @Input('wm-editable-document') set source(source: wmDocument) {
     // Loads the source data building the tree
     this.load(source).defrag();
   }
@@ -44,6 +43,8 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   }
   /** change event notifying for document changes */
   @Output() change = new EventEmitter<wmDocument>();
+  /** Navigation event triggered when a link is clicked */
+  @Output() navigate = new EventEmitter<string>();
 
   ngAfterViewChecked() {
     // Applies the current selection to the document when needed. This is essential even when the selection
@@ -57,12 +58,10 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     }
   }
 
-  @HostListener('mouseup', ['$event'])
+  @HostListener('mouseup', ['$event']) 
   @HostListener('keyup', ['$event']) up(ev: Event) {
     // Query the selection, so, it's always up to date
     if(this.editMode) { this.sel.query(this.document); }
-
-    console.log(this.sel.start);
   }
 
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
@@ -134,10 +133,10 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     try {
       // Text format first, this should always work 
       cp.setData('text', copied.value );
-      // JSON format 
+      // JSON format next
       cp.setData('application/json', JSON.stringify( copied.data ) );
     }
-    catch(e) { /*console.error(e);*/}
+    catch(e) { /*console.error(e);*/ }
     // Prevents default
     return false;
   }

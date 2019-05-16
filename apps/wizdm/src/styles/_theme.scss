@@ -184,5 +184,20 @@ $wm-theme-background: map-get($wm-theme, background);
       border-left: 0.25em solid rgba(black, 0.11);
       p, li, td { color: inherit; }
     }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+
+      tr:nth-child(2n) {
+        background-color: rgba(0,0,0,0.03); 
+      }
+      td {
+        position: relative;
+        padding: 6px 13px;
+        border: 1px solid #ddd;
+      }
+}
   }
 }
