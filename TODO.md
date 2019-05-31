@@ -1,5 +1,9 @@
 # **apps/wizdm**
 
+## Changelog
+* Migrate to v8 https://update.angular.io/#7.0:8.0
+* Enable Ivy https://angular.io/guide/ivy
+
 ## Styling
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
 * Get inspired from [fanvestory](https://fanvestory.com) and [dovetail](https://dovetailapp.com/)
