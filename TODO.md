@@ -2,6 +2,7 @@
 
 ## Changelog
 * Migrate to v8 https://update.angular.io/#7.0:8.0
+* Upgrade nx schematics to v8 https://github.com/nrwl/nx/releases
 * Switch to Bazel https://angular.io/guide/bazel
 * Enable Ivy https://angular.io/guide/ivy
 
