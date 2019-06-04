@@ -20,8 +20,8 @@ interface UploadTask {
 })
 export class UploadComponent implements OnInit, OnDestroy {
 
-  @ViewChild(FileOpenComponent) openFile: FileOpenComponent;
-  @ViewChild(MatSelectionList) fileList: MatSelectionList;
+  @ViewChild(FileOpenComponent, { static: true }) openFile: FileOpenComponent;
+  @ViewChild(MatSelectionList, { static: false }) fileList: MatSelectionList;
 
   private msgs$: Observable<any>;
   private sub: Subscription;

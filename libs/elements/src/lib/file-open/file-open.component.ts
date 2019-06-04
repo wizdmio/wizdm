@@ -19,7 +19,7 @@ import {
  * Simple component wrapping a file input to help managing the file dialog window
  */
 export class FileOpenComponent implements OnInit {
-  @ViewChild('input', { read: ElementRef })
+  @ViewChild('input', { read: ElementRef, static: true })
   input: ElementRef;
 
   @Input() accept = 'image/*';

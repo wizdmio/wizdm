@@ -46,7 +46,7 @@ class ActionState {
     // Maps the action buttons array asynchronously. This is a trick to ensure navigator view
     // updates consistently although children pages are responsible for action bar update
     // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
-    this.buttons$ = this.actions$.pipe( map( actions => actions.map( act => act.data ), delay(0) ));
+    this.buttons$ = this.actions$.pipe( map( actions => actions.map( act => act.data ) ));
   }
 
   public get handler(): Observable<string> {
@@ -85,7 +85,7 @@ export class ToolbarService implements OnDestroy {
   
   constructor() { 
     // Maps the buttons to the current state's ones
-    this.buttons$ = this.state$.pipe( switchMap( state => !!state ? state.buttons$ : of([]) ));
+    this.buttons$ = this.state$.pipe( switchMap( state => !!state ? state.buttons$ : of([]) ), delay(0));
     // Maps the buttons to a boolean reporting actions are available or not
     this.some$ = this.buttons$.pipe( map( buttons => buttons.length > 0 ));
   }

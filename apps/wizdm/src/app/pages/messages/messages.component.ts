@@ -22,7 +22,7 @@ const $messages: wmMessage[] = [
 })
 export class MessagesComponent implements OnInit {
 
-  @ViewChild(MatSelectionList) msgList: MatSelectionList;
+  @ViewChild(MatSelectionList, { static: false }) msgList: MatSelectionList;
 
   readonly msgs$: Observable<any>;
   readonly messages$: Observable<wmConversation[]>;

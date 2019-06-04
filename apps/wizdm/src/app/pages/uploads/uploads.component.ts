@@ -55,7 +55,7 @@ export class UploadsComponent implements OnInit {
       }).catch( () => this.loading = null );
   }
 
-  @ViewChild('dialog') 
+  @ViewChild('dialog', { static: true }) 
   private template : TemplateRef<UploadsComponent>;
   private config   : MatDialogConfig = { 
     width: '80vw'//,

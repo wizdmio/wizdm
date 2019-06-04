@@ -22,5 +22,5 @@ export class ColorPickerComponent {
   @Input() color: wmcolor;
 
   // Export the menu property to be used as a sub-menu item when needed
-  @ViewChild('menuColors') menu;
+  @ViewChild('menuColors', { static: true }) menu;
 }

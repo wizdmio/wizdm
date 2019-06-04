@@ -107,7 +107,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     if(lang !== this.language) { this.data = { lang }; }
 
     // Uses forkJoin to load the modules in parallel
-    return forkJoin<any>(
+    return forkJoin(
 
       modules.map( module => this.loadModule(module) ) 
 
@@ -122,7 +122,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     }));
   }
 
-  private loadModule(moduleName: string): Observable<any> {
+  private loadModule(moduleName: string): Observable<{name: string, data: any}> {
 
     if(!!this.data && !!this.data[moduleName]) {
       console.log('Skipping reloading module: ', moduleName);

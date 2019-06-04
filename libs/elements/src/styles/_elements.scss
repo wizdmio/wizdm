@@ -30,21 +30,21 @@ $wm-elements-default: (
 
 @mixin wm-avatar-theme($theme) {
 
-  $background: map-get($theme, background);
+  $backgnd: map-get($theme, background);
   $primary: map-get($theme, primary);
   $accent : map-get($theme, accent);
   $warn   : map-get($theme, warn);
 
   wm-avatar {
 
-    svg, img { border: 2px solid mat-get($background, background) !important; }
+    svg, img { border: 2px solid map-get($backgnd, background) !important; }
     svg {
 
       fill: mat-color($primary) !important;
       &[color="accent"] { fill: mat-color($accent) !important; }
       &[color="warn"]   { fill: mat-color($warn) !important; }
 
-      background-color: mat-get($background, background) !important;
+      background-color: map-get($backgnd, background) !important;
     }
   }
 }

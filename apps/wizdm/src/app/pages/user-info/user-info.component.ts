@@ -11,7 +11,7 @@ import { wmProject } from '../../core';
 })
 export class UserInfoComponent {
 
-  @ViewChild('template') template: TemplateRef<UserInfoComponent>;
+  @ViewChild('template', { static: true }) template: TemplateRef<UserInfoComponent>;
 
   private config: MatDialogConfig = { 
     panelClass:  'mat-dialog-reset',

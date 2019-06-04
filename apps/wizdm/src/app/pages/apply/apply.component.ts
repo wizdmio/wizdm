@@ -118,7 +118,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
       .catch(error => console.log("something wrong: " + error.code) );
   }
 
-  @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild('stepper', { static: false }) stepper: MatStepper;
 
   public clearApplication() {
 
