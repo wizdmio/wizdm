@@ -1,8 +1,16 @@
 import { EditableContent } from './editable-content';
-import { wmDocument } from './editable-types';
+import { wmRoot, wmNodeType } from './editable-types';
 
-export class EditableDoc extends EditableContent<wmDocument> {
-  
+export class EditableRoot extends EditableContent<wmRoot> {
+  // Makes sure always returning the appropiate type since EditableDoc is the default node type
+  get type(): wmNodeType { return 'document'; }
+  get range(): [number, number] { return this.data.range; }
+
+  public setRange(start: number, end: number): this {
+    this.data.range = [start, end];
+    return this;
+  }
+
   /** Creates a new empty document */
   public new(info?: { title?: string, author?: string, version?: string }): this {
     // Creates a new tree made of a document containing 

@@ -1,28 +1,36 @@
 import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { wmRoot } from './model/editable-types';
+import { EditableRoot } from './model/editable-root';
+import { EditableText } from './model/editable-text';
+import { EditableContent } from './model/editable-content';
+import { EditableSelection } from './model/editable-selection';
 import { EditableFactory } from './factory/editable-factory.service';
-import { EditableSelection } from './selection/editable-selection.service';
-import { EditableDoc, wmDocument } from './model';
 
 @Component({
   selector: '[wm-editable-document]',
   templateUrl: './editable-document.component.html',
-  host: { 'class': 'wm-editable-document' }
+  host: { 'class': 'wm-editable-document' },
+  providers: [ EditableFactory ]
 })
-export class EditableDocument extends EditableDoc implements AfterViewChecked {
+export class EditableDocument extends EditableRoot implements AfterViewChecked {
+
+  readonly selection = new EditableSelection(this);
 
   @HostBinding('attr.contenteditable') get editable() {
     return this.editMode ? 'true' : 'false';
   }
 
-  constructor(@Inject(DOCUMENT) private document: Document, private sel: EditableSelection, factory: EditableFactory) { 
+  private get window(): Window { return this.document.defaultView; }
+
+  constructor(@Inject(DOCUMENT) private document: Document, factory: EditableFactory) { 
     super(factory, null); 
-    // Makes sure a minimal document exists prior to attach the selection
-    this.new().sel.attach(this);
+    // Makes sure a minimal document always exists
+    this.new();
   }
 
   /** Document source */
-  @Input('wm-editable-document') set source(source: wmDocument) {
+  @Input('wm-editable-document') set source(source: wmRoot) {
     // Loads the source data building the tree
     this.load(source).defrag();
   }
@@ -34,41 +42,41 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     // Switches to/from edit mode
     if(this.editMode = mode) {
       // Queries for the current selection
-      this.sel.query(this.document)
+      this.query()
         // Initializes the history buffer
         .enableHistory()
     }
     // Resets the seelction and clears the history buffer while exiting edit mode
-    else { this.sel.reset().clearHistory(); }
+    else { this.selection.reset().clearHistory(); }
   }
   /** change event notifying for document changes */
-  @Output() change = new EventEmitter<wmDocument>();
+  @Output() change = new EventEmitter<wmRoot>();
   /** Navigation event triggered when a link is clicked */
   @Output() navigate = new EventEmitter<string>();
 
   ngAfterViewChecked() {
     // Applies the current selection to the document when needed. This is essential even when the selection
     // isn't modified since view changes (aka rendering) affects the selection that requires to be restored
-    if(this.editMode && this.sel.marked) {
+    if(this.editMode && this.selection.marked) {
       // Notifies listeners for document change saving the current selection
-      this.change.emit( this.sel.save(this).data );
+      this.change.emit( this.selection.save(this).data );
       // Makes sure to restore the selection after the view has been rendered but anyhow well before
       // the next change will be applied to the data tree (such as while typing) 
-      Promise.resolve().then( () => this.sel.apply(this.document) ); 
+      Promise.resolve().then( () => this.apply() ); 
     }
   }
 
   @HostListener('mouseup', ['$event']) 
   @HostListener('keyup', ['$event']) up(ev: Event) {
     // Query the selection, so, it's always up to date
-    if(this.editMode) { this.sel.query(this.document); }
+    if(this.editMode) { this.query(); }
   }
 
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     // Query the selection, so, it's always up to date. 
-    this.sel.query(this.document);
+    const sel = this.query();
     // Runs key accellerators on CTRL hold 
     if(ev.ctrlKey || ev.metaKey) { return this.keyAccellerators(ev); }
     // Edits the content otherwise
@@ -82,31 +90,27 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
       // Merging foreward
       case 'Delete':
       // Extends the selection one char forward when collapsed
-      if(this.sel.collapsed) { this.sel.move(0, 1); }
+      if(sel.collapsed) { sel.move(0, 1); }
       // Deletes the selection
-      return this.sel.delete(), false;
+      return sel.delete(), false;
       // Merging backward
       case 'Backspace':
       // extends the selection one char backward when collapsed
-      if(this.sel.collapsed) { this.sel.move(-1, 0); }
+      if(sel.collapsed) { sel.move(-1, 0); }
       // Deletes the selection
-      return this.sel.delete(), false;
+      return sel.delete(), false;
       // Splitting
       case 'Enter':
       // Breaks the current selection on enter
-      return this.sel.break(ev.shiftKey), false;
+      return sel.break(ev.shiftKey), false;
       // Editing
       default: if(ev.key.length === 1) {
         // Inserts new content
-        return this.sel.insert(ev.key), false;
+        return sel.insert(ev.key), false;
       }
     }
     // Fallback to default
     return true;
-  }
-
-  private get window(): Window {
-    return this.document.defaultView;
   }
 
   @HostListener('cut', ['$event']) editCut(ev: ClipboardEvent) {
@@ -115,7 +119,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     // Reverts the cut request to copy the content first...
     this.editCopy(ev);
     // Deletes the selection when succeeded
-    this.sel.delete();
+    this.selection.delete();
     // Always prevent default
     return false;
   } 
@@ -123,12 +127,12 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   @HostListener('copy', ['$event']) editCopy(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-    if(!this.sel.valid) { return false; }
+    if(!this.selection.valid) { return false; }
     // Gets the clipboard
     const cp = ev.clipboardData || (this.window as any).clipboardData;
     if(!cp) { return true; }
     // Copies the selected tree branch
-    const copied = this.sel.copy();
+    const copied = this.selection.copy();
     // Copies the data to the clipboard
     try {
       // Text format first, this should always work 
@@ -144,7 +148,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
   @HostListener('paste', ['$event']) editPaste(ev: ClipboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-    if(!this.sel.valid) { return false; }
+    if(!this.selection.valid) { return false; }
     // Gets the clipboard
     const cp = (ev.clipboardData || (window as any).clipboardData);
     if(!cp) { return false; }
@@ -154,11 +158,11 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
       const json = cp.getData('application/json');
       if(!!json) {
         // Parse the json data into a document fragment
-        const fragment = JSON.parse( json ) as wmDocument;
+        const fragment = JSON.parse( json ) as wmRoot;
         // Checks for document fragment consistency
         if(fragment.type === 'document' && !!fragment.content) {
           // Pastes the fragment
-          this.sel.paste(fragment);
+          this.selection.paste(fragment);
           // Prevents default
           return false;
         }
@@ -167,7 +171,7 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
     }
     catch(e) { /*console.error(e);*/ }
     // When everything else fails, text should always work
-    this.sel.insert( cp.getData('text') );
+    this.selection.insert( cp.getData('text') );
     // Prevents default
     return false;
   }
@@ -178,31 +182,149 @@ export class EditableDocument extends EditableDoc implements AfterViewChecked {
       // Size
       case '0': case '1': case '2': case '3':
       // Change the selection size
-      return this.sel.level = +ev.key, false;
+      return this.selection.level = +ev.key, false;
   
       // Italic format
       case 'i': case 'I':
       // Toggles the selection format
-      return this.sel.toggleFormat('italic'), false;
+      return this.selection.toggleFormat('italic'), false;
       
       // Bold format
       case 'b': case 'B':
       // Toggles the selection format
-      return this.sel.toggleFormat('bold'), false;
+      return this.selection.toggleFormat('bold'), false;
       
       // Underline format
       case 'u': case 'U':
       // Toggles the selection format
-      return this.sel.toggleFormat('underline'), false;
+      return this.selection.toggleFormat('underline'), false;
 
       case 'z': case 'Z':
-      if(!ev.shiftKey) { return this.sel.undo(), false };
+      if(!ev.shiftKey) { return this.selection.undo(), false };
 
       case 'y': case 'Y':
-      return this.sel.redo(), false;
+      return this.selection.redo(), false;
 
     }
     // Reverts to default
     return true;
   }
+
+  /** Queries the document for the current selection */
+  public query(): EditableSelection {
+
+    // Query for the document selection range
+    const sel = this.document.getSelection();
+    const range = (!!sel && sel.rangeCount > 0) && sel.getRangeAt(0);
+    if(!!range) {
+
+      // DEBUG
+      console.log(range);
+
+      // Cut it short on a collapsed range
+      if(range.collapsed) {
+        // Maps the cursor position at once
+        this.selection.setCursor(...this.map(range.startContainer, range.startOffset));
+      }
+      // Maps the full range otherwise
+      else {
+        // Maps the selection start node to the data node
+        this.selection.setStart(...this.map(range.startContainer, range.startOffset));
+        // Maps the selection end node to the data node
+        this.selection.setEnd(...this.map(range.endContainer, range.endOffset));
+        // Makes sure start node comes always first
+        this.selection.sort();
+      }
+    }
+    // Resets the values in case the range is undefined or null
+    else { this.selection.setCursor(undefined, 0); }
+
+    // DEBUG
+    console.log(this.selection);
+
+    // Resets the modified flag
+    return this.selection.mark(false);
+  }
+
+  private map(node: Node, offset: number): [EditableContent, number]{
+    // Skips null nodes
+    if(!node) { return [null, 0]; }
+    // If node is a text node we look for the parent span element assuming 
+    // its ID correctly maps the corresponding tree data editable
+    if(node.nodeType === Node.TEXT_NODE) {
+      // Gets the text node parent elements (a span or an anchor)
+      // note: since IE supports parentElement only on Elements, we cast the parentNode instead
+      const element = node.parentNode as Element;
+      // Walks the tree searching for the node to return
+      const txt = this.walkTree(!!element && element.id);
+      // Zeroes the offset on empty texts 
+      return [txt, txt.empty ? 0 : offset];    
+    }
+
+    const child = node.childNodes[offset] as Node;
+    if(!!child && child.nodeType === Node.ELEMENT_NODE) { 
+      return [this.walkTree((child as Element).id), 0]; 
+    }
+
+    const prev = !!child && child.previousSibling;
+    if(!!prev && prev.nodeType === Node.ELEMENT_NODE) { 
+      return [this.walkTree((prev as Element).id), -1]; 
+    }
+
+    if(node.nodeType === Node.ELEMENT_NODE) { 
+      const container = this.walkTree((node as Element).id);
+      return [!!container && container.firstDescendant(), 0]; 
+    }
+
+    return [null, 0];
+  }
+
+  /** Applies the current selection to the document */
+  public apply(): EditableSelection {
+    // Skips on invalid selections
+    if(!this.selection.valid) { return this.selection; }
+
+    try {
+      // Gets the current selection
+      const sel = this.document.getSelection();
+      // Removes all ranges (aka empty the selection)
+      sel.removeAllRanges();
+      // Creates a new range
+      const range = this.document.createRange();
+      // Maps the start data nopde to the relevant dom node
+      const start = this.dom(this.selection.start, this.selection.startOfs);
+      const end = this.selection.collapsed ? start : this.dom(this.selection.end, this.selection.endOfs);
+      // Apply the new range to the document
+      range.setStart(...start);
+      range.setEnd(...end);
+      sel.addRange(range);
+    }
+    catch(e) {}
+
+    // Resets the modified flag
+    return this.selection.mark(false);
+  }
+
+  private dom(node: EditableContent, offset: number): [Node, number] {
+    // Seeks for the dom element matching the internal node id
+    const el = !!node ? this.document.getElementById(node.id) : null;
+    if(!el) { return null; }// No element found
+    // Text nodes are rendered as span elements...
+    if(node instanceof EditableText) {
+      //...so seeks for the very first text node within the element children 
+      let child = el.firstChild as Node;
+      while(!!child) {
+        // Basically skips comments
+        if(child.nodeType === Node.TEXT_NODE) { return [child, offset]; }
+        // Goes next
+        child = child.nextSibling;
+      }
+    }
+
+    // Seeks for the element index position within the parent container
+    let child = el as Node; let count = 0;
+    while(!!child) { child = child.previousSibling; count++; }
+    // Return the parent element with the relative offset otherwise
+    return [el.parentNode, count + offset > 0 ? 1 : 0];
+  } 
 }

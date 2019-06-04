@@ -32,7 +32,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns the node unique ID based on node absolute position in the tree */
   get id(): string { return 'N'+(this.position || []).join('.'); }
   /** Returns true wheneer this node has no content */
-  get empty(): boolean { return this.count <= 0; }
+  get empty(): boolean { return this.content.every( child => child.empty ); }
   /** Returns true whenever this node has been removed from the tree */
   get removed(): boolean { return !this.parent || !this.parent.childOfMine(this);}
   /** Returns true wheneve this node is the only child within its parent */
@@ -151,22 +151,20 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
    * @param node the node to be compared with
    * @return +1 when this comes first, -1 when node come first, 0 when they are the same node
    */
-  public compare(node: EditableContent): number {
+  public compare(node: EditableContent): -1|0|1 {
     // Short circuit on undedined node
     if(!node) { return undefined; }
     // Short circuit by node reference 
     if(this === node) { return 0; }
     // Compare by base positions (up to min depth)
-    const len = Math.min(this.depth, node.depth);
-    for(let i = 0; i < len;i++) {
+    for(let i = 0; i < Math.min(this.depth, node.depth); i++) {
       const value = this.position[i] - node.position[i];
       if(value < 0) { return -1; }
       if(value > 0) { return +1; }
     }
     // In case the share the same base position, compares by depth since the parent comes first
-    const dep = this.depth - node.depth;
-    if(dep < 0) { return -1;}
-    if(dep > 0) { return +1;}
+    if(this.depth < node.depth) { return -1;}
+    if(this.depth > node.depth) { return +1;}
     // We should never come down here unless two different nodes have the same position
     return 0;
   }

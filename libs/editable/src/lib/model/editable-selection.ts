@@ -1,30 +1,22 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from '../model';
-import { EditableDoc, EditableText, EditableTable, EditableRow, EditableCell } from '../model';
-import { EditableContent } from '../model/editable-content';
+import { wmRoot, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from './editable-types';
+import { EditableTable, EditableRow, EditableCell } from './editable-table';
+import { EditableText } from './editable-text';
+import { EditableRoot } from './editable-root';
+import { EditableContent } from './editable-content';
 import { timeInterval, map, filter } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
 /** Virtual document selection mapping browser range selection to the internal document data tree */
-export class EditableSelection implements OnDestroy {
+export class EditableSelection {
 
-  private root: EditableDoc;
   private modified = false;
-
   public start: EditableContent;
   public startOfs: number;
   public end: EditableContent;
   public endOfs: number;
 
-  constructor() { /*this.enableHistory(2000, 128);*/ }
-  ngOnDestroy() { this.clearHistory(); }
+  constructor(private root: EditableRoot) { }
 
-  public attach(document: EditableDoc): EditableSelection { 
-    return (this.root = document), this; 
-  }
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
   /** Returns true when the selection belongs within a single text node */
@@ -37,23 +29,23 @@ export class EditableSelection implements OnDestroy {
   get partial(): boolean { return !this.whole; }
   /** Returns true when the selection is collpased in a cursor */
   get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
-  /** Returns true then the selection fully belongs to a single container  */
+  /** Returns true when the selection fully belongs to a single container  */
   get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
   /** Returns true whenever the selection has been modified */
-  get marked(): boolean { return this.modified; }
+  get marked(): boolean { return this.valid && this.modified; }
 
   public mark(modified = true): EditableSelection {
     this.modified = this.valid && modified;
     return this;
   }
 
-  private setStart(node: EditableContent, ofs: number) {
+  public setStart(node: EditableContent, ofs: number) {
     this.start = node;
     this.startOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
 
-  private setEnd(node: EditableContent, ofs: number) {
+  public setEnd(node: EditableContent, ofs: number) {
     this.end = node;
     this.endOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
@@ -105,22 +97,19 @@ export class EditableSelection implements OnDestroy {
     return next;
   }
   /** Saves the current selection into the document data to be eventually restored by calling @see restore() */
-  public save(document: EditableDoc): EditableDoc {
+  public save(document: EditableRoot): EditableRoot {
     // Skips on invalid selection
     if(!document || !this.valid) { return document; }
     // Computes the absolute start offset
     const start = this.start.offset;
     // Saves the selection range in the root data
-    document.data.range = [
-      start + this.startOfs, 
-      (this.single ? start : this.end.offset) + this.endOfs
-    ];
+    document.setRange(start + this.startOfs, (this.single ? start : this.end.offset) + this.endOfs );
     return document;
   }
   /** Restores the selection range from the documenta data. @see save() */
-  public restore(document: EditableDoc): EditableSelection {
+  public restore(document: EditableRoot): EditableSelection {
     // Gets the range from the root data
-    const range = !!document && document.data.range;
+    const range = !!document && document.range;
     // Updates the selection to reflect the absolute range
     return !!range ? this.reset().move(range[0], range[0] !== range[1] ? range[1] : undefined) : this;
   }
@@ -207,118 +196,6 @@ export class EditableSelection implements OnDestroy {
     return this.mark();
   }
 
-  private fromDom(node: Node, offset: number): [EditableContent, number]{
-    // Skips null nodes
-    if(!node) { return [null, 0]; }
-    // If node is a text node we look for the parent span element assuming 
-    // its ID correctly maps the corresponding tree data editable
-    if(node.nodeType === Node.TEXT_NODE) {
-      // Gets the text node parent elements (a span or an anchor)
-      // note: since IE supports parentElement only on Elements, we cast the parentNode instead
-      const element = node.parentNode as Element;
-      // Walks the tree searching for the node to return
-      const txt = this.root.walkTree(!!element && element.id);
-      // Zeroes the offset on empty texts 
-      return [txt, txt.empty ? 0 : offset];    
-    }
-
-    // Returns the parent element and the child offset otherwise
-    return[this.root.walkTree(!!node && (node as Element).id), offset];
-
-    /*
-    // If not, selection is likely falling on a parent element, so, 
-    // searches for the child element relative to the parent offset 
-    let child = node.childNodes[offset] as Node;
-    // Than seeks the first element (so basically skipping comments)
-    while(!!child && child.nodeType !== Node.ELEMENT_NODE) {
-      child = child.nextSibling;
-    }
-    // Walks the tree returning the matching child node with 0 offset
-    return[ this.root.walkTree(!!child && (child as Element).id), 0];
-    */
-  }
-  /** Queries the document for the current selection */
-  public query(from: Document): EditableSelection {
-
-    if(!from) { return null; }
-
-    try {
-      // Query for the document selection range
-      const sel = from.getSelection();
-      const range = (!!sel && sel.rangeCount > 0) && sel.getRangeAt(0);
-      if(!!range) {
-
-        console.log(range);
-
-        // Cut it short on a collapsed range
-        if(range.collapsed) { 
-          // Maps the cursor position at once
-          this.setCursor(...this.fromDom(range.startContainer, range.startOffset));
-        }
-        // Maps the full range otherwise
-        else {
-          // Maps the selection start node to the data node
-          this.setStart(...this.fromDom(range.startContainer, range.startOffset));
-          // Maps the selection end node to the data node
-          this.setEnd(...this.fromDom(range.endContainer, range.endOffset));
-          // Makes sure start node comes always first
-          this.sort();
-        }
-      }
-      // Resets the values in case the range is undefined or null
-      else { this.setCursor(undefined, 0); }
-
-      console.log(this);
-  
-    } catch(e) {}
-
-    // Resets the modified flag
-    return this.mark(false);
-  }
-
-  private toDom(node: EditableContent, document: Document): Node {
-    // Seeks for the dom element matching the internal node id
-    const el = !!node ? document.getElementById(node.id) : null;
-    if(!el) { return null; }// No element found
-    // Text nodes are rendered as span elements...
-    if(node instanceof EditableText) {
-      // Seeks for the very first text node within the element children 
-      let child = !!el && el.firstChild as Node;
-      while(!!child) {
-        // Basically skips comments
-        if(child.nodeType === Node.TEXT_NODE) { return child; }
-        // Goes next
-        child = child.nextSibling;
-      }
-    }
-    // Return the element otherwise
-    return el;
-  }
-  /** Applies the current selection to the document */
-  public apply(to: Document): EditableSelection {
-    // Skips on invalid selections
-    if(!to || !this.valid) { return this; }
-
-    try {
-      // Gets the current selection
-      const sel = to.getSelection();
-      // Removes all ranges (aka empty the selection)
-      sel.removeAllRanges();
-      // Creates a new range
-      const range = to.createRange();
-      // Maps the selection to the relevant dom nodes
-      const start = this.toDom(this.start, to);
-      const end = this.single ? start : this.toDom(this.end, to);
-      // Apply the new range to the document
-      range.setStart(start, this.startOfs);
-      range.setEnd(end, this.endOfs);
-      sel.addRange(range);
-    }
-    catch(e) {}
-
-    // Resets the modified flag
-    return this.mark(false);
-  }
   /** Insert new text at the cursor position */
   public insert(char: string): EditableSelection {
     // Skips on invalid selection or null string
@@ -632,7 +509,7 @@ export class EditableSelection implements OnDestroy {
     return false;
   }
   /** Returns true whenever the inspected node falls within the current selection  */
-  public selected(node: EditableContent): boolean {
+  public includes(node: EditableContent): boolean {
     // Skips on invalid selection
     return this.valid && !!node && (
       // Node matches the selection itself
@@ -671,7 +548,7 @@ export class EditableSelection implements OnDestroy {
   }
 
    /** Pastes a data fragment to the current selection */
-  public paste(source: wmDocument): EditableSelection {
+  public paste(source: wmRoot): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Builds the fragment to paste from
@@ -768,8 +645,8 @@ export class EditableSelection implements OnDestroy {
 
   /***** HISTORY UNDO/REDO *****/
 
-  private store$ = new Subject<EditableDoc>();
-  private history: wmDocument[];
+  private store$ = new Subject<EditableRoot>();
+  private history: wmRoot[];
   private timeIndex: number;
   private sub$: Subscription;
 
@@ -844,7 +721,7 @@ export class EditableSelection implements OnDestroy {
     // Gets the latest snapshot from the history
     const snapshot = this.history[++this.timeIndex];
     // Reloads the snapshot's content restoring the selection too
-    return this.restore( this.root.load(snapshot) as EditableDoc);
+    return this.restore( this.root.load(snapshot) as EditableRoot );
   }
 
   /** Returns true whenever the last undone modifications can be redone */
@@ -859,6 +736,6 @@ export class EditableSelection implements OnDestroy {
     // Removes the newest snapshot when back to the present
     if(this.timeIndex === 0) { this.history.shift(); }
     // Reloads the snapshot's content restoring the selection too
-    return this.restore( this.root.load(snapshot) as EditableDoc);
+    return this.restore( this.root.load(snapshot) as EditableRoot );
   }
 }

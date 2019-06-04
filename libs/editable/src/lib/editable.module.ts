@@ -6,7 +6,6 @@ import { EditableComponent } from './editable/editable.component';
 import { ListComponent } from './list/list.component';
 import { BlockComponent } from './block/block.component';
 import { TableComponent } from './table/table.component';
-import { EditableToc } from './toc/editable-toc.component';
 
 @NgModule({
   imports: [
@@ -18,12 +17,10 @@ import { EditableToc } from './toc/editable-toc.component';
     EditableComponent,
     ListComponent, 
     BlockComponent,
-    TableComponent, 
-    EditableToc
+    TableComponent
   ],
   exports: [
-    EditableDocument,
-    EditableToc
+    EditableDocument
   ]
 })
 export class EditableModule {}

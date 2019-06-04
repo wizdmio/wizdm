@@ -27,18 +27,18 @@
            [@editing]="editMode"
            (contextmenu)="editMode ? menu.open($event) : true" 
            (change)="save($event)"
-           (navigate)="navigate($event)">
+           (navigate)="navigate($event)" #doc>
       </div>
 
       <!-- Context menu -->
-      <wm-context-menu #menu [msgs]="msgs.tools"></wm-context-menu>
+      <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
   
   </mat-drawer-content>
 
 </mat-drawer-container>
 
 <!-- Editing tools -->
-<wm-toolbox *ngIf="editMode" [msgs]="msgs.tools"></wm-toolbox>
+<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>
 
 <!-- Document body -->
 <!--div fxLayout="row" fxLayoutAlign="space-between strech">

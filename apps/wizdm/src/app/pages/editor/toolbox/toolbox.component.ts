@@ -11,11 +11,12 @@ import { $animations } from './toolbox.animations';
 export class ToolboxComponent {
   @HostBinding('@slide') slide = true;
 
-  constructor(readonly sel: EditableSelection) {}
+  constructor() {}
 
   readonly styles = ['bold', 'italic', 'underline', 'strikethrough'];
   readonly alignements = ['left', 'center', 'right', 'justify'];
 
+  @Input() sel: EditableSelection;
   @Input() msgs: any = {};
   @Input() tooltipDelay = 1000;
 

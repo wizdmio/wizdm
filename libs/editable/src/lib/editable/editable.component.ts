@@ -1,15 +1,17 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableItem, EditableCell, EditableText, EditableImage } from '../model';
-import { EditableSelection } from '../selection/editable-selection.service';
 import { EditableDocument } from '../editable-document.component';
+import { EditableText, EditableItem } from '../model/editable-text';
+import { EditableCell } from '../model/editable-table';
+import { EditableImage } from '../model/editable-image';
 
 @Component({
   selector: '[wm-editable]',
-  templateUrl: './editable.component.html'
+  templateUrl: './editable.component.html',
+  host: { 'style': 'white-space: pre-wrap' }
 })
 export class EditableComponent {
 
-  constructor(readonly document: EditableDocument, private sel: EditableSelection) {}
+  constructor(readonly document: EditableDocument) {}
 
   @Input('wm-editable') node: EditableItem | EditableCell;
   // Applies the node id to the element
@@ -24,7 +26,9 @@ export class EditableComponent {
   @HostBinding('class.mat-h5') get h5() { return !!this.node && this.node.level === 5; }
   @HostBinding('class.mat-h6') get h6() { return !!this.node && this.node.level === 6; }
   // Applies the 'selected' attribute for selection styling
-  @HostBinding('attr.selected') get selected() { return this.sel.selected(this.node) ? '' : undefined; }
+  @HostBinding('attr.selected') get selected() { 
+    return this.document.selection.includes(this.node) ? '' : undefined; 
+  }
 
   // Helper function computing the max-size style for images
   size(img: EditableImage): string {
@@ -93,8 +97,7 @@ export class EditableComponent {
       'font-weight': 'unset',
       'font-style': 'unset',
       'text-decoration': 'unset',
-      'vertical-align': 'unset',
-      'white-space': 'pre-wrap'
+      'vertical-align': 'unset'
     });
   }
 

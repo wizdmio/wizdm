@@ -1,4 +1,4 @@
-<!-- Loops on text/link elements -->
+<!-- Loops on text/link/image inline children -->
 <ng-container *ngFor="let child of node?.content">
 
     <ng-container [ngSwitch]="child.type">
@@ -7,14 +7,14 @@
       <span *ngSwitchCase="'text'" 
             [id]="child.id" 
             [ngStyle]="style(child)"
-            [attr.selected]="sel.selected(child) ? '' : undefined">{{ child.value || '\u200B' }}</span>
+            [attr.selected]="document.selection.includes(child) ? '' : undefined">{{ child.value || '\n' }}</span>
   
       <!-- Renders a link node -->
       <a *ngSwitchCase="'link'" 
          [id]="child.id" 
          [href]="child.url"
-         [attr.selected]="sel.selected(child) ? '' : undefined"
-         (click)="navigate(child.url)">{{ child.value || '\u200B' }}</a>
+         [attr.selected]="document.selection.includes(child) ? '' : undefined"
+         (click)="navigate(child.url)">{{ child.value }}</a>
   
       <!-- Renders an image node -->
       <img *ngSwitchCase="'image'" 
@@ -23,7 +23,7 @@
            [alt]="child.alt" 
            [title]="child.title" 
            [style.max-width]="size(child)" 
-           [attr.selected]="sel.selected(child) ? '' : undefined"/>
+           [attr.selected]="document.selection.includes(child) ? '' : undefined"/>
   
     </ng-container>
   

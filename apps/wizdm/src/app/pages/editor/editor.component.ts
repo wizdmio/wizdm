@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PopupService } from '@wizdm/elements';
-import { wmDocument, wmItem, wmText } from '@wizdm/editable';
+import { wmRoot, wmItem } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
 import { ContentResolver, ProjectService, Project, wmProject } from '../../core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
@@ -20,7 +20,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   public msgs: any = {};
 
   private activateActions$ = new BehaviorSubject<boolean>(false);
-  private saveDocument$ = new Subject<wmDocument>();
+  private saveDocument$ = new Subject<wmRoot>();
   private dispose$ = new Subject<void>();
 
   public project: Project;
@@ -120,18 +120,18 @@ export class EditorComponent implements OnInit, OnDestroy {
       .then( () => this.activateActions$.next(this.editMode = false) );
   }
 
-  public get document(): wmDocument {
+  public get document(): wmRoot {
     // Returns the project content
     return !!this.project && this.project.data;
   }
 
-  public save(document: wmDocument) {
+  public save(document: wmRoot) {
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
   }
 
   public navigate(url: string) {
-    
+
   }
 
   public renderTOC(node: wmItem): string {

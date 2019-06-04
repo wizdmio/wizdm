@@ -1,12 +1,12 @@
 import { DatabaseDocument, DistributedCounter, dbCommon, wmUser } from '@wizdm/connect';
-import { wmDocument } from '@wizdm/editable';
+import { wmRoot } from '@wizdm/editable';
 import { ProjectService } from './project.service';
 import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 export type wmProjectStatus = 'submitted' | 'evaluation' | 'accepted' | 'rejected' | 'completed' | 'draft' | 'deleted';
 
-export interface wmProject extends wmDocument, dbCommon {
+export interface wmProject extends wmRoot, dbCommon {
   
   name         : string,
   author?      : string,

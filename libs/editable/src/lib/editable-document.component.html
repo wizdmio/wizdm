@@ -15,14 +15,14 @@
       <p *ngIf="node.level === 0" [wm-editable]="node"></p>
     </ng-container>
 
+    <!-- Blockquotes supporting paragraph and list indentation -->
+    <blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote>
+
     <!-- Numbered lists with nesting -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
 
     <!-- Bulleted lists with nesting -->
     <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
-
-    <!-- Blockquotes supporting paragraph and list indentation -->
-    <blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote>
 
     <!-- Tables at root level only -->
     <table *ngSwitchCase="'table'" [wm-table]="node"></table>

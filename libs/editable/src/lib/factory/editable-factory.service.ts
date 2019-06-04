@@ -1,15 +1,17 @@
-import { EditableDoc, EditableBlock, EditableList, EditableItem, EditableText, EditableTable, EditableRow, EditableCell, EditableImage } from '../model';
-import { wmEditableTypes, wmDocument, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmImage } from '../model';
+import { wmEditableTypes, wmRoot, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmImage } from '../model/editable-types';
+import { EditableBlock, EditableList, EditableItem, EditableText } from '../model/editable-text';
+import { EditableTable, EditableRow, EditableCell } from '../model/editable-table';
+import { EditableImage } from '../model/editable-image';
+import { EditableRoot } from '../model/editable-root';
+
 import { Injectable } from '@angular/core';
 
-export type EditableTypes = EditableDoc|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableImage;
+export type EditableTypes = EditableRoot|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableImage;
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class EditableFactory {
 
-  node(data: wmDocument): EditableDoc;
+  node(data: wmRoot): EditableRoot;
   node(data: wmBlock): EditableBlock;
   node(data: wmList): EditableList;
   node(data: wmItem): EditableItem;
@@ -49,7 +51,7 @@ export class EditableFactory {
       return new EditableImage(this, data as wmImage);
     }
     // Returns a document node by default
-    return new EditableDoc(this, data as wmDocument);
+    return new EditableRoot(this, data as wmRoot);
   }
 
   /** Creates a new empty document node */

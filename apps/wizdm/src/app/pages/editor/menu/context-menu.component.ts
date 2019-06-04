@@ -14,9 +14,10 @@ export class ContextMenuComponent {
   readonly alignements = ['left', 'center', 'right', 'justify'];
   readonly formats = ['bold', 'italic', 'underline', 'strikethrough'];
 
+  @Input() sel: EditableSelection;
   @Input() msgs: any = {};
 
-  constructor(@Inject(DOCUMENT) private document: Document, readonly sel: EditableSelection) {}
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   public get align() {
     return this.sel.align;
@@ -46,11 +47,6 @@ export class ContextMenuComponent {
 
   // Opens the menu at the specified position
   public open({ x, y }: MouseEvent, data?: any) {
-    // Makes sure the selection is up to date
-    this.sel
-      .query(this.document)
-      .trim()
-      .apply(this.document);
     // Pass along the context data to support lazily-rendered content
     if (!!data) {
       this.trigger.menuData = data;
