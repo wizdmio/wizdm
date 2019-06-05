@@ -13,7 +13,7 @@
       </mat-menu>
       
       <button mat-icon-button color="primary" [matMenuTriggerFor]="menu" @fadeIn>
-        <wm-icon icon="more_vert"></wm-icon>
+        <wm-icon [icon]="button.icon || 'more_vert'"></wm-icon>
       </button>
     </ng-container>
 
