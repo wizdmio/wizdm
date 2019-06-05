@@ -13,6 +13,7 @@
 * ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
 ## Core
+* Consider to switch the docs content from `*.json` to editable documents
 * ~~Rename '/utils' folder into '/core' for the aske of clarity~~
 * Implement a mac vs win platform detection based on `window.navigator.platform` (or userAgent) for the editor to display Ctrl or Command keys accellerators (see https://stackoverflow.com/questions/10527983/best-way-to-detect-mac-os-x-or-windows-computers-with-javascript-or-jquery).
 * Implement a custom module preloader (see https://coryrylan.com/blog/custom-preloading-and-lazy-loading-strategies-with-angular)
