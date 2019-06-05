@@ -15,7 +15,18 @@ Wizdm is an online community meant to connect aspiring startuppers with compassi
 
 ## Developers' notes
 
-The project revolves around a web-app running on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile and using [Angularfire 2][angularfire] to connect with [firebase][firebase] services. Icon set comes from both [Material][material] and [FontAwesome][fontawesome]. Including [Hammerjs][hammerjs] to handle gestures for material components. Using [Moment][momentjs] for time and locale management.
+The project revolves around a web-app running on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile. Icon set comes from both [Material][material] and [FontAwesome][fontawesome]. Including [Hammerjs][hammerjs] to handle gestures for material components. Using [Moment][momentjs] for time and locale management.
+
+## Firebase
+
+The app relies on several [firebase][firebase] services using [Angularfire 2][angularfire] to connect with:
+
+* Firebase Hosting to host the production app 
+* Firebase Auth for user authentication 
+* Cloud Firestore realtime database for user's profile and content
+* Cloud Storage for user's images and files
+
+Take a look on [@wizdm/connect](libs/connect) library abstracting the communication layer with all the firebase services. 
 
 ## Monorepo
 
