@@ -15,7 +15,7 @@ Wizdm is an online community meant to connect aspiring startuppers with compassi
 
 ## Developers' notes
 
-The project revolves around a web-app running on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile and using [Angularfire 2][angularfire] to connect with firebase services. Icon set comes from both [Material][material] and [FontAwesome][fontawesome]. Including [Hammerjs][hammerjs] to handle gestures for material components. Using [Moment][momentjs] for time and locale management.
+The project revolves around a web-app running on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile and using [Angularfire 2][angularfire] to connect with [firebase][firebase] services. Icon set comes from both [Material][material] and [FontAwesome][fontawesome]. Including [Hammerjs][hammerjs] to handle gestures for material components. Using [Moment][momentjs] for time and locale management.
 
 ## Monorepo
 
@@ -73,6 +73,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 [angular-material]: https://material.angular.io
 [angularfire]: https://github.com/angular/angularfire2
 [flexlayout]: https://github.com/angular/flex-layout/wiki
+[firebase]: https://firebase.google.com
 [fontawesome]: https://fontawesome.com
 [hammerjs]: https://hammerjs.github.io
 [momentjs]: https://momentjs.com
