@@ -1,8 +1,8 @@
 # **apps/wizdm**
 
 ## Changelog
-* Migrate to v8 https://update.angular.io/#7.0:8.0
-* Upgrade nx schematics to v8 https://github.com/nrwl/nx/releases
+* ~~Migrate to v8 https://update.angular.io/#7.0:8.0~~
+* ~~Upgrade nx schematics to v8 https://github.com/nrwl/nx/releases~~
 * Switch to Bazel https://angular.io/guide/bazel
 * Enable Ivy https://angular.io/guide/ivy
 
@@ -22,6 +22,7 @@
 * ~~Refactor the redirect-handler into a canActivate guard for better performances.~~
 
 ## Navigator
+* Review (again) the logic behind the toolbar to simplify the architecture (can we move the observable out ot wmAction?)
 * ~~Turn `desktopMenu(...)` and `mobileMenu(...)` helpers into observables flatmapping auth -> msgs~~
 * Add a "medium" extenral link to the footer directling to wizdm pubblication on medium.
 * Add mobile$ and desktop$ observables mapping MediaObserver.media$
