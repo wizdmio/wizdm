@@ -19,7 +19,6 @@ class ActionButton {
   private enabler$: BehaviorSubject<boolean>;
 
   constructor(public data: wmAction) {
-
     // Creates the enabler observable with the given initial state
     this.enabler$ = new BehaviorSubject<boolean>(!data.disabled);
     // Maps the action button enabler asynchronously. This is a trick to ensure navigator view
@@ -37,15 +36,13 @@ class ActionButton {
 class ActionState {
 
   private actions$: BehaviorSubject<ActionButton[]>;
-  public buttons$: Observable<wmAction[]>;
   private events$: Subject<string> = new Subject();
-
+  readonly buttons$: Observable<wmAction[]>;
+  
   constructor(buttons: wmAction[]) {
     // Wraps the wmAction into ActioButton for internal use
     this.actions$ = new BehaviorSubject<ActionButton[]>( buttons.map( btn => new ActionButton(btn) ));
-    // Maps the action buttons array asynchronously. This is a trick to ensure navigator view
-    // updates consistently although children pages are responsible for action bar update
-    // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
+    // Maps the action buttons array out of actions
     this.buttons$ = this.actions$.pipe( map( actions => actions.map( act => act.data ) ));
   }
 
@@ -59,7 +56,6 @@ class ActionState {
 
   /** Enables/disables the specified action button  */
   public enable(code: string, enable: boolean) {
-
     // Seeks the requested action by code
     this.actions$.pipe( 
       take(1), 
@@ -84,7 +80,9 @@ export class ToolbarService implements OnDestroy {
   public some$: Observable<boolean>;
   
   constructor() { 
-    // Maps the buttons to the current state's ones
+    // Maps the buttons to the current state's ones asynchronously. This is a trick to ensure navigator view
+    // updates consistently although children pages are responsible for action bar update
+    // (so preventing ExpressionChangedAfterItHasBeenCheckedError to occur)
     this.buttons$ = this.state$.pipe( switchMap( state => !!state ? state.buttons$ : of([]) ), delay(0));
     // Maps the buttons to a boolean reporting actions are available or not
     this.some$ = this.buttons$.pipe( map( buttons => buttons.length > 0 ));
