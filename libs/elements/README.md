@@ -6,6 +6,7 @@ Elements are shareable UI components based on [Angular Material](https://materia
 * [Theming](#theming)
 * [Avatar](#avatar)
 * [Icon](#icon)
+* [Flip](#flip)
 * [Toggler](#toggler)
 
 ## Avatar
@@ -52,6 +53,25 @@ export class AppComponent implements OnInit {
     this.icon.registerFontClassAlias('fontawesome', 'fa');
   }
 }
+```
+
+## Flip
+
+Yet another icon-like element letting you define the content of the two sides, fore and back, to be alternatevely displayed upon its status. Whenever the status change, the current face animates to the other flipping like a coin. 
+
+``` html
+<button mat-icon-button (click)="flip = !flip">
+
+  <wm-flip [flip]="flip">
+
+    <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
+
+    <wm-avatar back src="https://octodex.github.com/images/ironcat.jpg">
+    </wm-avatar>
+
+  </wm-flip>
+
+</button>
 ```
 
 ## Toggler
