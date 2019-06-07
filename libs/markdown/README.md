@@ -7,6 +7,10 @@ An angular powered markdown rendering library based on [remarkjs](https://github
 
 The source md file is parsed with remarkjs to build an [MDAST](https://github.com/syntax-tree/mdast) syntax tree. The `MarkdownRenderer` component renders its view recursing down the tree. Few extensions are included by default such as alignement and sub/super script. The renderer may be furhter improved thanks to the extensive availability of [plugins](https://github.com/remarkjs/remark/blob/master/doc/plugins.md)
 
+## Links redirection
+
+Links are rendered as anchors with the relevan href. When clicked, the default behavior is prevented to fire the `(navigate)` event instead. The url fragment will be passes as a string argument of the event, so, for the receiver to act upon it.
+
 ## Features
 The renderer implements all the basic capabilities plus few additions such as alignemnt, subscript and superscript and code syntax highlighting thanks to [prismjs](https://github.com/PrismJS/prism).
 
