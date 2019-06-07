@@ -6,6 +6,10 @@
 * Switch to Bazel https://angular.io/guide/bazel
 * Enable Ivy https://angular.io/guide/ivy
 
+## Elements
+
+Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file
+
 ## Styling
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
 * Get inspired from [fanvestory](https://fanvestory.com) and [dovetail](https://dovetailapp.com/)
