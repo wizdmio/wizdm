@@ -16,8 +16,8 @@ Use `<- content <-` arrows to align the content left, `-> content <-` to center 
 ### Subscript and Superscript
 Another extended feature enabled by the [remark-sub-super](https://github.com/zestedesavoir/zmarkdown/tree/master/packages/remark-sub-super) plugin.
 
-- `19^th^` turns into 19^th^
-- `H~2~O` turns into H~2~O
+- Use a syntax like `19^th^` for superscripting the 'th'
+- Use a syntaxt like `H~2~O` for subscripting the '2'
 
 ## Images
 Images are automatically limited to a maximum size of 100%. Eventually, the maximum size can be limited to 25, 33, 50, 66 and 75% by simply appending a corresponding segment to the image link such as: `https://octodex.github.com/images/minion.png#33`.
