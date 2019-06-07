@@ -11,6 +11,7 @@
 * Rename `router-inkbar` in `nav-inkbar`
 * Implement `filter` component as a list of buttons with a bottom inkbar
 * Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file.
+* Consider how to make `likes` more general purpose or move it within the app as a shared component better
 * Empower every component host with a class going with the very same name of the component itself to be used for global styling and revert the theming mixin to use classes instead.
 
 ## Styling
