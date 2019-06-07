@@ -15,7 +15,7 @@ Wizdm is an online community meant to connect aspiring startuppers with compassi
 
 ## Developers' notes
 
-The project revolves around a web-app running on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile. Icon set comes from both [Material][material] and [FontAwesome][fontawesome]. Including [Hammerjs][hammerjs] to handle gestures for material components. Using [Moment][momentjs] for time and locale management.
+The project revolves around a [web-app](apps/wizdm) running on [Angular][angular] + [Angular Material][angular-material] + [FlexLayout][flexlayout] with a minimal clean interface to fit both desktop and mobile. Icon set comes from both [Material][material] and [FontAwesome][fontawesome]. Including [Hammerjs][hammerjs] to handle gestures for material components. Using [Moment][momentjs] for time and locale management.
 
 ## Firebase
 
@@ -34,7 +34,8 @@ The workspace has been converted from the original angular-cli to the monorepo f
 
 ## Multiple language content
 
-The project uses a content manager service to dynamically load contents in different languages by use of a resolver to pre-fetch localilzed content from 'assets/i18n' prior to load the navigator component. The service is then injected into the components (pages) needing to get localized contents making sure the content is always fully loaded and available to the target container prior to get initialized.
+The project uses a [content resolver](apps/wizdm/src/app/core/content-resolver) service to dynamically load contents in different languages by pre-fetching localilzed content from 'assets/i18n'. The service is then injected into the components (pages) needing 
+to get localized contents making sure it is always fully loaded and available to the target container prior to get initialized.
 
 At first start, the resolver checks the authenticated user language preferences falling back detecting the browser language when unavailable (aka the user is not logged in). This provides the useful side effect of preventing the initial page from flickering between unlogged and logged-in statuses while an already logged-in user is loading the app from scratch.
 
