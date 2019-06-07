@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
 
 ## Flip
 
-Yet another icon-like element letting you define the content of the two sides, fore and back, to be alternatevely displayed upon its status. Whenever the status change, the current face animates to the other flipping like a coin. 
+An icon-like element letting you define the content of the two sides, fore and back, to be alternatevely displayed upon its status. Whenever the status change, the current face animates to the other flipping like a coin. 
 
 ``` html
 <button mat-icon-button (click)="flip = !flip">
