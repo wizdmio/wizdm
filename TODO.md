@@ -8,7 +8,9 @@
 
 ## Elements
 
-Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file
+Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file.
+
+Empower every component host with a class going with the very same name of the component itself to be used for global styling and revert the theming mixin to use classes instead.
 
 ## Styling
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
