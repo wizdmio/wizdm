@@ -56,6 +56,19 @@ export class AppComponent implements OnInit {
 
 ## Toggler
 
+The toggler implements an icon-like element, to be used in conjunction with mat-button and other material components, displaying the typical menu toggler and animating to/from the 'x' shaped symbol representing the close/cancel function. 
+
+``` html
+<button mat-icon-button (click)="opened = !opened">
+  <wm-toggler toggler-style="menu" [status]="opened"></wm-toggler>
+</button>
+```
+
+The icon style can be selected among:
+* `menu` to display the three horizontal lines (hamburger)
+* `more_vert` to display the three vertical dots
+* `more_horiz` to display the three horizontal dots
+
 ## Theming
 
 Working as an extension of Angular Material the library requires the very same kind of theming:
