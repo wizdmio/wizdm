@@ -15,7 +15,7 @@ $wm-elements-default: (
 @mixin wm-icon-theme($theme) {
   // Restores the same $mat-menu-icon-margin value
   .mat-menu-item {
-    wm-icon { padding-right: 16px;}
+    .wm-icon { padding-right: 16px;}
   }
 }
 
@@ -23,7 +23,7 @@ $wm-elements-default: (
 
   $foreground: map-get($theme, foreground);
 
-  wm-toggler div {
+  .wm-toggler div {
     background-color: map-get($foreground, toggler);
   }
 }
@@ -35,14 +35,14 @@ $wm-elements-default: (
   $accent : map-get($theme, accent);
   $warn   : map-get($theme, warn);
 
-  wm-avatar {
+  .wm-avatar {
 
     svg, img { border: 2px solid map-get($backgnd, background) !important; }
     svg {
 
-      fill: mat-color($primary) !important;
-      &[color="accent"] { fill: mat-color($accent) !important; }
-      &[color="warn"]   { fill: mat-color($warn) !important; }
+      &[color="primary"] { fill: mat-color($primary) !important; }
+      &[color="accent"]  { fill: mat-color($accent) !important; }
+      &[color="warn"]    { fill: mat-color($warn) !important; }
 
       background-color: map-get($backgnd, background) !important;
     }
@@ -55,9 +55,10 @@ $wm-elements-default: (
   $accent : map-get($theme, accent);
   $warn   : map-get($theme, warn);
 
-  wm-inkbar {
+  .wm-inkbar {
 
-    .wm-inkbar-theme {
+    .wm-inkbar-line {
+ 
       background-color: mat-color($primary);
 
       &[color="accent"] {
@@ -75,7 +76,7 @@ $wm-elements-default: (
 
   $foreground: map-get($theme, foreground);
 
-  wm-disclaimer {
+  .wm-disclaimer {
     a { color: map-get($foreground, link); }
     span { color: map-get($foreground, action); }
   }

@@ -5,7 +5,8 @@ import { $animations } from './likes.animations';
   selector: 'wm-likes',
   templateUrl: './likes.component.html',
   styleUrls: ['./likes.component.scss'],
-  animations: $animations
+  animations: $animations,
+  host: { class: 'wm-likes' }
 })
 export class LikesComponent implements OnInit {
 

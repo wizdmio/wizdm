@@ -6,7 +6,8 @@ import { $animations } from './avatar.animations';
   selector: 'wm-avatar',
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss'],
-  animations: $animations
+  animations: $animations,
+  host: { class: 'wm-avatar' }
 })
 export class AvatarComponent {
 

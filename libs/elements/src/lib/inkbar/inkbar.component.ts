@@ -11,8 +11,8 @@ export interface inkbarPosition {
   selector: 'wm-inkbar',
   templateUrl: './inkbar.component.html',
   styleUrls: ['./inkbar.component.scss'],
-  //host: {'class': 'wm-inkbar-theme'},
-  animations: $animations
+  animations: $animations,
+  host: { class: 'wm-inkbar' }
 })
 export class InkbarComponent {
 

@@ -1,12 +1,12 @@
-import { Directive, Optional, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { Directive, Optional, ElementRef, Renderer2 } from '@angular/core';
 import { Router, RouterLinkActive, RouterLink, RouterLinkWithHref } from '@angular/router';
 
 import { inkbarPosition } from '../inkbar/inkbar.component';
 
 @Directive({
-  selector: '[wmRouterInkbar]'
+  selector: '[wmNavInkbar]'
 })
-export class RouterInkbarDirective extends RouterLinkActive {
+export class NavInkbarDirective extends RouterLinkActive {
 
   // Extends routerLinkActive directive
   constructor(

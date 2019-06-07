@@ -5,7 +5,8 @@ import { $animations } from './flip.animations';
   selector: 'wm-flip',
   templateUrl: './flip.component.html',
   styleUrls: ['./flip.component.scss'],
-  animations: $animations
+  animations: $animations,
+  host: { class: 'wm-flip' }
 })
 export class FlipComponent {
 

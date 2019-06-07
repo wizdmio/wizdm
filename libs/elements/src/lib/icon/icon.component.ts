@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
   selector: 'wm-icon',
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
-  
+  host: { class: 'wm-icon' }
 })
 export class IconComponent {
 

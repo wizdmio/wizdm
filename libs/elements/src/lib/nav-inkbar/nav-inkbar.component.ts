@@ -1,22 +1,25 @@
 import { Component, AfterContentInit, AfterViewInit, OnDestroy, ContentChildren, QueryList, HostListener, Input } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { ThemePalette } from '@angular/material/core'
-import { RouterInkbarDirective } from '../router-inkbar/router-inkbar.directive';
+import { NavInkbarDirective } from './nav-inkbar.directive';
 import { Subscription } from 'rxjs';
 import { filter, delay } from 'rxjs/operators';
 
 import { inkbarPosition } from '../inkbar/inkbar.component';
 
 @Component({
-  selector: 'wm-router-inkbar',
-  templateUrl: './router-inkbar.component.html',
-  styleUrls: ['./router-inkbar.component.scss']
+  selector: 'wm-nav-inkbar',
+  templateUrl: './nav-inkbar.component.html',
+  host: { 
+    display: 'block', 
+    class: 'wm-nav-inkbar' 
+  }
 })
-export class RouterInkbarComponent implements AfterViewInit, AfterContentInit, OnDestroy {
+export class NavInkbarComponent implements AfterViewInit, AfterContentInit, OnDestroy {
 
-  // Query for RouterInkbarDirective children
-  @ContentChildren(RouterInkbarDirective, {descendants: true})
-  readonly links: QueryList<RouterInkbarDirective>;
+  // Query for NavInkbarDirective children
+  @ContentChildren(NavInkbarDirective, {descendants: true})
+  readonly links: QueryList<NavInkbarDirective>;
 
   @Input() height = 2;
 

@@ -7,7 +7,8 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
   selector: 'wm-toggler',
   templateUrl: './toggler.component.html',
   styleUrls: ['./toggler.component.scss'],
-  animations: $animations 
+  animations: $animations,
+  host: { class: 'wm-toggler' } 
 })
 export class TogglerComponent {
 

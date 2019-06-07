@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RouterInkbarComponent } from './router-inkbar.component';
+import { NavInkbarComponent } from './nav-inkbar.component';
 
-describe('RouterInkbarComponent', () => {
-  let component: RouterInkbarComponent;
-  let fixture: ComponentFixture<RouterInkbarComponent>;
+describe('NavInkbarComponent', () => {
+  let component: NavInkbarComponent;
+  let fixture: ComponentFixture<NavInkbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RouterInkbarComponent ]
+      declarations: [ NavInkbarComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RouterInkbarComponent);
+    fixture = TestBed.createComponent(NavInkbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

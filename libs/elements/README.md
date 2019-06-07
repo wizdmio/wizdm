@@ -19,6 +19,8 @@ Avatar is a round shaped image automatically fitting the size of its container. 
 </button>
 ```
 
+The avatar color defaults to gray when not specify.
+
 ## Icon
 
 The icon element extends the `mat-icon` component so you can freely mix up [material icons](https://material.io/tools/icons) and other registered collections such as [FontAwesome](https://fontawesome.com/icons):

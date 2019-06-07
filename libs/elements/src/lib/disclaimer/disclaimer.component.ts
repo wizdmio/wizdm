@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'wm-disclaimer, [wm-disclaimer]',
   templateUrl: './disclaimer.component.html',
-  styles: []
+  host: { class: 'wm-disclaimer' }
 })
 export class DisclaimerComponent {
 

@@ -17,7 +17,8 @@ export interface PopupData {
 @Component({
   selector: 'wm-popup',
   templateUrl: './popup.component.html',
-  styleUrls: ['./popup.component.scss']
+  styleUrls: ['./popup.component.scss'],
+  host: { class: 'wm-popup' }
 })
 /** PopupComponent implements the popup dialog standard appearance */
 export class PopupComponent {

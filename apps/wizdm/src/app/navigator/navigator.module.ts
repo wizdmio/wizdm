@@ -18,7 +18,7 @@ import {
   IconModule, 
   FlipModule,
   AvatarModule,
-  RouterInkbarModule
+  NavInkbarModule
 } from '@wizdm/elements';
 //-------
 import { NavComponent } from './navigator.component';
@@ -46,7 +46,7 @@ import { FooterComponent } from './footer/footer.component';
     IconModule, 
     FlipModule,
     AvatarModule,
-    RouterInkbarModule
+    NavInkbarModule
   ],
   declarations: [
     NavComponent,
