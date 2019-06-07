@@ -4,7 +4,9 @@
 Elements are shareable UI components based on [Angular Material](https://material.angular.io). 
 
 * [Theming](#theming)
-
+* [Avatar](#avatar)
+* [Icon](#icon)
+* [Toggler](#toggler)
 
 ## Avatar
 
@@ -16,14 +18,47 @@ Avatar is a round shaped image automatically fitting the size of its container. 
 </button>
 ```
 
-
 ## Icon
+
+The icon element extends the `mat-icon` component so you can freely mix up [material icons](https://material.io/tools/icons) and other registered collections such as [FontAwesome](https://fontawesome.com/icons):
+
+``` typescript
+import { Component, OnInit } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+
+@Component({
+  selector: 'body',
+  template: '<a mat-mini-fab *ngFor="let icon of icons"><wm-icon [icon]="icon"></wm-icon></a>',
+  styles: [],
+  host: { 'class': 'mat-typography' }
+})
+export class AppComponent implements OnInit { 
+
+  private icons = [
+      'account_circle',
+      'far:fa-user',
+      'email',
+      'far:fa-envelope',
+      'language',
+      'fas:fa-language',
+      'fas:fa-phone'
+  ];
+
+  constructor(private icon: MatIconRegistry) {}
+
+  ngOnInit() {
+
+    // Registers font awesome among the available sets of icons for mat-icon component
+    this.icon.registerFontClassAlias('fontawesome', 'fa');
+  }
+}
+```
 
 ## Toggler
 
 ## Theming
 
-Working as an extension of Angular Material they require the very same kind of theming:
+Working as an extension of Angular Material the library requires the very same kind of theming:
 
 ``` scss
 @import '~@angular/material/theming';
@@ -72,3 +107,4 @@ $wm-theme: extend-material-theme($wm-theme,
 @include wm-elements-theme($wm-theme) {
 ```
 
+As a side effect, by using the `extend-material-theme` mixin you can actually overwrite some of the angular material standard foreground/background values for your convenience.
