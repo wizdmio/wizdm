@@ -21,7 +21,7 @@ The project revolves around a web-app running on [Angular][angular] + [Angular M
 
 The app relies on several [firebase][firebase] services using [Angularfire 2][angularfire] to connect with:
 
-* Firebase Hosting to host the production app 
+* Firebase Hosting to host the production app at https://wizdm.io
 * Firebase Auth for user authentication 
 * Cloud Firestore realtime database for user's profile and content
 * Cloud Storage for user's images and files
@@ -63,10 +63,6 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Firebase
-
-The project is currently hosted on [Firebase](https://firebase.google.com/) and the last deploied version is available at https://wizdm.io
 
 Run `firebase deploy` to upload the last build.
 
