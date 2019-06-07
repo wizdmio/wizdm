@@ -9,7 +9,7 @@ The source md file is parsed with remarkjs to build an [MDAST](https://github.co
 
 ## Links redirection
 
-Links are rendered as anchors with the relevan href. When clicked, the default behavior is prevented to fire the `(navigate)` event instead. The url fragment will be passes as a string argument of the event, so, for the receiver to act upon it.
+Links are rendered as anchors with the relevant `[href]` filled in. When clicked, the default behavior is prevented to fire the `(navigate)` event instead. The url fragment will be passed as a string argument of the event, so, for the receiver to act upon it.
 
 ## Features
 The renderer implements all the basic capabilities plus few additions such as alignemnt, subscript and superscript and code syntax highlighting thanks to [prismjs](https://github.com/PrismJS/prism).
