@@ -26,11 +26,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   public project: Project;
   public editMode = false;
 
-  constructor(private projects : ProjectService,
-              private route    : ActivatedRoute,
-              private toolbar  : ToolbarService,
-              private popup    : PopupService,
-              private content  : ContentResolver) { 
+  constructor(private  projects : ProjectService,
+              private  route    : ActivatedRoute,
+              private  toolbar  : ToolbarService,
+              private  popup    : PopupService,
+              readonly content  : ContentResolver) { 
 
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = this.content.stream('editor');
@@ -128,10 +128,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public save(document: wmRoot) {
     // Update the preview and pushes the modified document for async saving
     this.saveDocument$.next( document );
-  }
-
-  public navigate(url: string) {
-
   }
 
   public renderTOC(node: wmItem): string {

@@ -76,11 +76,11 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
       // Enables the action buttons
       switchMap( msgs => {
         
-        const exec = this.toolbar.activateActions(msgs.actions);
+        const actions = this.toolbar.activateActions(msgs.actions);
         this.toolbar.enableAction('clear', this.welcomeBack);
-        return exec;
+        return actions;
 
-      } ),
+      } )
       // Subscribes to the actions
     ).subscribe( code => this.disclaimerAction(code) ));
   }

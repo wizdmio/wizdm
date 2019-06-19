@@ -27,7 +27,7 @@
            [@editing]="editMode"
            (contextmenu)="editMode ? menu.open($event) : true" 
            (change)="save($event)"
-           (navigate)="navigate($event)" #doc>
+           (navigate)="content.navigateByUrl($event)" #doc>
       </div>
 
       <!-- Context menu -->

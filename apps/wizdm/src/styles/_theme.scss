@@ -158,6 +158,9 @@ $wm-theme-background: map-get($wm-theme, background);
   // to be used in MatDialogConfig.panelClass when needed
   .mat-dialog-reset { mat-dialog-container { padding: 0;} }
 
+  // Applies a smooth scroll behaviour whenever supported
+  html { scroll-behavior: smooth; }
+
   // Styles the body
   body {
     // Applies material typography rules globally
@@ -165,9 +168,6 @@ $wm-theme-background: map-get($wm-theme, background);
     // Applies material theme general colors
     @extend .mat-app-background;
     
-    // Applies a smooth scroll behaviour to all elements whenever supported
-    * { scroll-behavior: smooth; }
-
     // Disables outline on all elements
     * { outline: none; }
 

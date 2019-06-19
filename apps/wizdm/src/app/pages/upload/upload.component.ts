@@ -30,10 +30,10 @@ export class UploadComponent implements OnInit, OnDestroy {
   public uploads$: Observable<any[]>;
   public tasks: UploadTask[] = [];
   
-  constructor(private toolbar  : ToolbarService,
-              private profile  : UserProfile,
-              private popup    : PopupService,
-                      content  : ContentResolver) {
+  constructor(private  toolbar  : ToolbarService,
+              private  profile  : UserProfile,
+              private  popup    : PopupService,
+              readonly content  : ContentResolver) {
 
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = content.stream('upload');
@@ -46,10 +46,12 @@ export class UploadComponent implements OnInit, OnDestroy {
         // Keeps a snapshot of the localized content for internal use
         this.msgs = msgs;
         // Activates the toolbar actions
-        return this.toolbar.activateActions(this.msgs.actions);
-      }),
-      // Disables the delete action
-      tap( () => this.toolbar.enableAction('delete', false) )
+        const actions = this.toolbar.activateActions(msgs.actions);
+        // Disables the delete action
+        this.toolbar.enableAction('delete', false);
+
+        return actions;
+      })
     // Subscrbes to execute the actions
     ).subscribe( code => this.executeAction(code) );
   
