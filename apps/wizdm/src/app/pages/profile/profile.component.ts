@@ -176,7 +176,7 @@ export class UserComponent implements OnInit, OnDestroy, CanPageDeactivate  {
     this.popup.confirmPopup(popup).subscribe( () => {
 
       // If we can proceed, navigates to the login page applying the requested action code
-      this.content.goTo('login', { queryParams: { 
+      this.content.navigate('login', { queryParams: { 
         mode: code 
       }});
     });

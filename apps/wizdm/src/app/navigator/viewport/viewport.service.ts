@@ -102,11 +102,11 @@ export class ViewportService implements OnDestroy {
     
     const element = this.document.querySelector(selector);
     if(element) {
-      let e = this.body.getBoundingClientRect();
-      let r = element.getBoundingClientRect();
-      this.window.scrollTo(this.scrollX + r.left - e.left, this.scrollY + r.top - e.top);
+      //let e = this.body.getBoundingClientRect();
+      //let r = element.getBoundingClientRect();
+      //this.window.scrollTo(this.scrollX + r.left - e.left, this.scrollY + r.top - e.top);
       //this.native.scrollBy(r.left - e.left, r.top - e.top);
-      //element.scrollIntoView();
+      element.scrollIntoView();
     }
   }
 

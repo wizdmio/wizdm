@@ -26,7 +26,7 @@ export class MarkdownRenderer {
 
   // Table of content anchor helper
   public toc(heading: mdAST): string {
-
+    // Gets the plain text version of the heading
     return this.tree.text(heading)
       // Removes any non alphanumerical characters (keeps spaces)
       .replace(/[^a-zA-Z0-9 ]/g, '')

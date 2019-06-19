@@ -30,7 +30,7 @@ In order to understand how your personal data is collected, be sure to read the 
 
 # Terms & Conditions - *Full*
 
-These are meant to be the full terms and conditions of wizdm... 
+These are meant to be the full terms and conditions of wizdm... [short version](#terms-conditions-summary).
      
 ## Liability
 

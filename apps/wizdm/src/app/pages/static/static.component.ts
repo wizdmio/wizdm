@@ -1,30 +1,32 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ViewportService } from '../../navigator';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
 import { map, switchMap, catchError, retry } from 'rxjs/operators'
+import { $animations } from './static.animations';
 
 @Component({
   selector: 'wm-static',
   templateUrl: './static.component.html',
-  styleUrls: ['./static.component.scss']
+  styleUrls: ['./static.component.scss'],
+  animations: $animations
 })
 export class StaticComponent {
 
   readonly document$: Observable<string>;
   
-  constructor(private route   : ActivatedRoute,
-              private http    : HttpClient,
-              private scroll  : ViewportService,
-              private content : ContentResolver) {
+  constructor(private  route   : ActivatedRoute,
+              private  http    : HttpClient,
+              readonly content : ContentResolver) {
 
     // Streams the requested document
     this.document$ = this.streamDocument();
   }
 
   private streamDocument(): Observable<string> {
+
+    const defaultLang = 'en';
 
     // Resolves the current language first
     return this.content.language$.pipe(
@@ -37,25 +39,21 @@ export class StaticComponent {
             // Catches the possible error
             .pipe( catchError( (e: HttpErrorResponse) => {
               // On file not found (404) of localized content...
-              if(lang !== 'en' && e.status === 404) { 
+              if(lang !== defaultLang && e.status === 404) { 
                 // Reverts to the default language
-                lang = 'en';
+                lang = defaultLang;
                 // Trow the error down forcing a retry
                 throw e;
                }
-              // Returns a dummy content avoiding retrys
-              return "# Something wrong";
+              // Redirects to NotFound when no content is found
+              return this.content.navigate('not-found')
+                .then( () => ''); 
             })
           )
         ), 
-        // Retries the at the router level mapping the updated file name
+        // Retries once to attemp the default language, eventually
         retry(1)
       ))
-    );
-  }
-
-  public navigate(url: string) {
-    // Scroll the main view at the anchor position
-    //this.scroll.scrollToElement(anchor);
+    )
   }
 }

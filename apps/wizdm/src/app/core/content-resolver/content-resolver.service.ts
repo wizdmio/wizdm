@@ -184,9 +184,42 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     return page.canDeactivate();
   }
 
+  /** 
+   * Navigates to the requested location according to different strategies 
+   * @param url the target location. When starting with 'http' will route to the redirection page;
+   *  When starting with '#' will route to the current page applying ulr as the anchor to scroll to;
+   *  Otherwise, will jump to the specified page making sure to keep the current language 
+   */ 
+  public navigateByUrl(url: string): Promise<boolean> {
+    
+    // Intercepts external links
+    if(url.indexOf("http") === 0) {
+      // Goes to the external rediraction page
+      return this.navigate('redirect', { queryParams: { url } });
+    }
+    
+    // Intercepts anchors
+    if(url.indexOf("#") === 0) {
+      // Stays in the current page scrolling to the anchor
+      return this.navigate('.', { fragment: url.replace('#', '') });
+    }
+
+    // Routes to the requested page otherwise
+    return this.navigate(url);
+  }
+
   // Routing helper to easily jump on a specified page keeping the current language
-  public goTo(to: string, extras?: NavigationExtras): Promise<boolean> {
-    return this.router.navigate([ '/', this.language, to ], extras );
+  public navigate(to: string, extras?: NavigationExtras): Promise<boolean> {
+
+    // Traslates the input string into an absolute target route keeping the current language
+    const target = (to === '.') ? 
+      
+      this.router.url.replace(/#.*/,'').split('/') : 
+      
+      [ '/', this.language, to ];
+
+    // Navigates to the target 
+    return this.router.navigate( target, extras );
   }
 
   public detectLanguage(): string {
@@ -195,7 +228,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
     // Detects the preferred language according to the browser, whenever possible
     return (navigator.languages ? navigator.languages[0] : null) || 
-            navigator.language || 
+            navigator.language ||                                                                                                   
             navigator.browserLanguage || 
             navigator.userLanguage;
   }

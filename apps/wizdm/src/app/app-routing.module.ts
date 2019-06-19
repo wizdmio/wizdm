@@ -19,10 +19,15 @@ const routes: Routes = [
     data: { modules: ['navigator'] },
     // Localized lazily loaded pages
     children: [
+      // Home page
       { path: '',            loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
+      { path: 'home',        redirectTo:   '', pathMatch: 'full' },
 
+      // Coming soon page
+      { path: 'coming-soon', loadChildren: () => import('./pages/coming-soon/coming-soon.module').then(m => m.ComingSoonModule) },
       //{ path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
       
+      // Active pages
       { path: 'apply',       loadChildren: () => import('./pages/apply/apply.module').then(m => m.ApplyModule) },
       { path: 'explore',     loadChildren: () => import('./pages/explore/explore.module').then(m => m.ExploreModule) },
       { path: 'explore/:id', loadChildren: () => import('./pages/editor/editor.module').then(m => m.EditorModule) },
@@ -31,16 +36,19 @@ const routes: Routes = [
       { path: 'upload',      loadChildren: () => import('./pages/upload/upload.module').then(m => m.UploadModule) },
       { path: 'dashboard',   loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
       { path: 'messages',    loadChildren: () => import('./pages/messages/messages.module').then(m => m.MessagesModule) },
-      { path: 'docs/:name',  loadChildren: () => import('./pages/static/static.module').then(m => m.StaticModule) },
-      { path: 'not-found',   loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule) },
+
+      // External links redirection page
       { path: 'redirect',    loadChildren: () => import('./pages/redirect/redirect.module').then(m => m.RedirectModule) },
-      { path: 'coming-soon', loadChildren: () => import('./pages/coming-soon/coming-soon.module').then(m => m.ComingSoonModule) },
-      // Redirections
-      { path: 'home',        redirectTo:   '', pathMatch: 'full' },
-      { path: '**',          redirectTo:   'not-found', pathMatch: 'full' }
+      
+      // Not found page
+      { path: 'not-found',   loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundModule) },      
+
+      // Static content pages, redirecting to NotFound when no content is available
+      { path: ':name',       loadChildren: () => import('./pages/static/static.module').then(m => m.StaticModule) },      
+      //{ path: '**', redirectTo:   'not-found', pathMatch: 'full' }
     ]
   },
-  // Global redirector to missing pages
+  // Global redirector to missing languages
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
 ];
 

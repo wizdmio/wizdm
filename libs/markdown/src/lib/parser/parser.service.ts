@@ -74,7 +74,7 @@ export class MarkdownParser {
 
     return node.children.reduce((txt: string, child: mdAST) => {
 
-      return txt + child.type === 'text' ? child.value : '' + this.text(child);
+      return txt + ( child.type === 'text' ? child.value : '') + this.text(child);
 
     }, '');
   }

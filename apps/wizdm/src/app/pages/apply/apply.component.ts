@@ -268,7 +268,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
       .then( () => { 
 
         // Navigate back to the project explore reporting the creation of a new project
-        this.content.goTo('explore', { queryParams: {
+        this.content.navigate('explore', { queryParams: {
           project: 'new'
         }});
       })

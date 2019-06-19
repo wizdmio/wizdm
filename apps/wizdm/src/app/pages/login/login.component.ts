@@ -269,7 +269,7 @@ export class LoginComponent implements OnInit  {
     // Signing-in with a email/password using the current language than send a verification email befor jumping to the profile page
     this.auth.registerNew(email, password, name )
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.content.goTo('profile') )
+      .then( () => this.content.navigate('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -288,7 +288,7 @@ export class LoginComponent implements OnInit  {
 
     // Resets the forgotten password by applying the action code received than jumps to the profile page
     this.auth.resetPassword(code, newPassword)
-      .then( () => this.content.goTo('profile') )
+      .then( () => this.content.navigate('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -299,7 +299,7 @@ export class LoginComponent implements OnInit  {
     // Update the account email by re-authenticating than send a verification request and jumps to the profile page
     this.auth.updateEmail(password, newEmail)
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.content.goTo('profile') )
+      .then( () => this.content.navigate('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -309,7 +309,7 @@ export class LoginComponent implements OnInit  {
 
     // Updte the account password by re-authenticating than jumps to the profile page
     this.auth.updatePassword(password, newPassword)
-      .then( () => this.content.goTo('profile') )
+      .then( () => this.content.navigate('profile') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -318,7 +318,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
   
     this.auth.deleteUser(password)
-      .then( () => this.content.goTo('home') )
+      .then( () => this.content.navigate('home') )
       .catch( error => this.showError(error.code) );
   }
 
@@ -328,6 +328,6 @@ export class LoginComponent implements OnInit  {
     this.auth.signOut();
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
-    this.content.goTo('home', { replaceUrl: true });
+    this.content.navigate('home', { replaceUrl: true });
   }
 }  
