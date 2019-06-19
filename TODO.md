@@ -7,7 +7,6 @@
 * Enable Ivy https://angular.io/guide/ivy
 
 ## Elements
-
 * ~~Rename `router-inkbar` in `nav-inkbar`~~
 * Implement `filter` component as a list of buttons with a bottom inkbar
 * Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file.
@@ -64,6 +63,7 @@
 * Implements a press-and-hold tool for extended akphabet support. See [press and hold](https://github.com/kasperpeulen/PressAndHold) and [long press](https://github.com/quentint/long-press)
 
 ## Pages
+* Implement a fadeIn animation in StaticComponent on content change
 * ~~Turn every page into a module to be eventually lazely loaded~~
 * ~~Uploads: improve thumbnails so to have a fixed size while picture is loading~~
 * ~~Rename `user` into `profile` for the sake of clarity~~
@@ -82,6 +82,9 @@
 * ~~Replace the AngularFirestoreModule with DatabaseModule dependency in UploaderModule~~
 * ~~Overwrites AngularFirestoreConfiguraiton in DatabaseModule so to remove the latest firebase error (see: https://github.com/angular/angularfire2/issues/1993)~~
 * ~~Add an authenticated$ observable mapping the asObservable()~~
+
+## libs/editable
+* Consider to improve picture rendering by using `<figure>` and optionally `<figcaption>`
 
 ## libs/various
 * ~~Move out elements creating libs/elements (@wizdm/elements)~~
