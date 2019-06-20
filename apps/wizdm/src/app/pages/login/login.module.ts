@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatProgressBarModule
-} from '@angular/material';
-import { IconModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { IconModule } from '../../elements/icon';
 import { ContentResolver } from '../../core';
 import { LoginComponent } from './login.component';
 
@@ -34,7 +32,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
-    IconModule, 
+    IconModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

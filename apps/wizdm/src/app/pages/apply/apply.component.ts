@@ -1,13 +1,13 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
 import { UserProfile, wmUser } from '@wizdm/connect';
-import { PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
 import { CanPageDeactivate, 
          ContentResolver, 
          ProjectService, 
          wmProject } from '../../core';
+import { PopupService } from '../../elements/popup';
 import { $animations } from './apply.animations';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';

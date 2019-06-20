@@ -1,7 +1,5 @@
 @import '~@angular/material/theming';
 @import 'material';
-@import 'elements';
-//@import 'markdown';
 
 // This file is actually extending the standard Angular Material theme
 // with customized application specific colors and typography styles
@@ -87,7 +85,7 @@ $wm-theme: extend-material-theme($wm-theme,
     text:              mat-color($wm-primary, 900),
     
     // Adds Elements/Markdown specific foreground extensions
-    toggler:           mat-color($wm-primary, 900),
+    //toggler:           mat-color($wm-primary, 900),
     //action:            mat-color($wm-accent),
     //link:              mat-color($wm-accent)
   ),
@@ -105,8 +103,8 @@ $wm-theme: extend-material-theme($wm-theme,
 );
 
 // Extracts global fore/background palettes to simplify value comsumption across the app
-$wm-theme-foreground: map-get($wm-theme, foreground);
-$wm-theme-background: map-get($wm-theme, background);
+$wm-foregnd: map-get($wm-theme, foreground);
+$wm-backgnd: map-get($wm-theme, background);
 
 // Padding top helper
 @mixin wm-padding-top($offset: 0) {
@@ -124,15 +122,9 @@ $wm-theme-background: map-get($wm-theme, background);
   @include mat-core($typography);
   
   // Include a selection of material theme styles matching the list of $components
-  @include custom-material-theme($theme, $material);//@include angular-material-theme($theme);
+  @include custom-material-theme($theme, $material);
+  //@include angular-material-theme($theme);
   
-  // Init the wizdm elements theme styles, extending material components. 
-  // NOTE: This tweaks some of the global material styles to better blend the components in
-  @include wm-elements-theme($theme);
-  
-  // Let the global styling being applied. Uncomment to customize the theme
-  // @include wm-markdown-theme($theme);
-
   // Defines an additional mat-link class to decorate links diviating
   // from the strict rules of material design for the sake of clarity
   .mat-link {
@@ -141,19 +133,20 @@ $wm-theme-background: map-get($wm-theme, background);
     text-decoration: underline;
   }
  
-  // Resets the default mat-menu padding
+  // Tweaks Material Elements
   .mat-menu-content { padding: 0 !important;}
   .mat-menu-panel { min-width: unset !important;}
-
-  // Resets the default menu typography to buttons
   .mat-menu-item {
+    // Resets the default menu typography to buttons
     font: {
       family: mat-font-family($wm-typography, button);
       size:   mat-font-size($wm-typography, button);
       weight: mat-font-weight($wm-typography, button);
     }
+    // Restores the same $mat-menu-icon-margin value
+    .wm-icon { padding-right: 16px;}
   }
-
+  
   // Defines a global class to resets dialog container's padding on request
   // to be used in MatDialogConfig.panelClass when needed
   .mat-dialog-reset { mat-dialog-container { padding: 0;} }
@@ -175,7 +168,7 @@ $wm-theme-background: map-get($wm-theme, background);
     a { @extend .mat-link; }
 
     // Smoothen the text color on content
-    p, li, td { color: rgba(map-get($wm-theme-foreground, text), 0.8); }
+    p, li, td { color: rgba(map-get($wm-foregnd, text), 0.8); }
 
     // Defines a global style for blockquotes
     blockquote {

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatIconModule, 
-         MatButtonModule, 
-         MatMenuModule, 
-         MatDialogModule } from '@angular/material';
-import { ColorsModule, 
-         ColorPickerModule,
-        AvatarModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { AvatarModule } from '../../elements/avatar';
+import { ColorsModule } from '../../elements/colors';
+import { ColorPickerModule } from '../../elements/color-picker';
 import { UserInfoComponent } from './user-info.component';
 import { UserInfoDirective } from './user-info.directive';
 
@@ -19,9 +19,9 @@ import { UserInfoDirective } from './user-info.directive';
     MatButtonModule, 
     MatMenuModule, 
     MatDialogModule,
+    AvatarModule, 
     ColorsModule,
-    ColorPickerModule,
-    AvatarModule
+    ColorPickerModule
   ],
   declarations: [
     UserInfoComponent,

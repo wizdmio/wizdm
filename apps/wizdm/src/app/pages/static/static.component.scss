@@ -28,7 +28,7 @@
     @include wm-padding-top(32px);
 
     .footnotes {
-      border-top: solid 1px map-get($wm-theme-foreground, divider);
+      border-top: solid 1px map-get($wm-foregnd, divider);
     }
   }
 }

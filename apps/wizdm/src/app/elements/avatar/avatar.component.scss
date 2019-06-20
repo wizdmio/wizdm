@@ -1,3 +1,5 @@
+@import 'variables';
+@import 'theme';
 
 :host {
   position: relative;
@@ -17,6 +19,8 @@
     border-radius: 50%;
     box-sizing: border-box;
     background-color: white;
+
+    border: 2px solid map-get($wm-backgnd, background)
   }
 
   svg {
@@ -24,5 +28,11 @@
     #background, #foreground { opacity: 0.25; }
     // Both background and foreground are semi-transparent due to the previous opacity rules
     fill: grey;
+
+    &[color="primary"] { fill: mat-color($wm-primary); }
+    &[color="accent"]  { fill: mat-color($wm-accent); }
+    &[color="warn"]    { fill: mat-color($wm-warn); }
+
+    background-color: map-get($wm-backgnd, background);
   }
 }

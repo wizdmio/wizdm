@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { UserProfile, wmFile } from '@wizdm/connect';
-import { FileOpenComponent, PopupService } from '@wizdm/elements';
 import { ToolbarService } from '../../navigator';
+import { FileOpenComponent } from '../../elements/file-open';
+import { PopupService } from '../../elements/popup';
 import { ContentResolver } from '../../core';
 import { Observable, Subscription } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';

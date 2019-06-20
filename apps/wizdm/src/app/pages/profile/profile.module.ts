@@ -3,18 +3,18 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  MatIconModule,
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatExpansionModule,
-  MatListModule,
-  MatCheckboxModule,
-  MatSelectModule,
-  MatDatepickerModule
-} from '@angular/material';
-import { IconModule, AvatarModule, PopupModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AvatarModule } from '../../elements/avatar';
+import { IconModule } from '../../elements/icon';
+import { PopupModule } from '../../elements/popup';
 import { ContentResolver } from '../../core';
 import { UploadsModule } from '../uploads/uploads.module';
 import { UserComponent } from './profile.component';

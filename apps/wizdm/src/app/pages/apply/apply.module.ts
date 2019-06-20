@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {
-  MatButtonModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatCheckboxModule,
-  MatStepperModule,
-  MatProgressBarModule
-} from '@angular/material';
-import { DisclaimerModule, PopupModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DisclaimerModule } from '../../elements/disclaimer';
+import { PopupModule } from '../../elements/popup';
 import { ContentResolver } from '../../core';
 import { ApplyComponent } from './apply.component';
 

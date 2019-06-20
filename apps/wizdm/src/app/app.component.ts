@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
 import { Router, ResolveStart, ResolveEnd } from '@angular/router';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 

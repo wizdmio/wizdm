@@ -1,6 +1,6 @@
 import { Component, Inject, ViewChild, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { wmTextStyle, EditableSelection } from '@wizdm/editable';
 
 @Component({

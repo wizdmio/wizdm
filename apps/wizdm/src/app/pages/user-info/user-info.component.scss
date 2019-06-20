@@ -1,8 +1,9 @@
 @import "variables";
 @import "theme";
+@import "colors";
 
-$light: map-get($wm-theme-foreground, contrast);
-$dark : map-get($wm-theme-foreground, text);
+$light: map-get($wm-foregnd, contrast);
+$dark : map-get($wm-foregnd, text);
 
 @include wm-theme-colors($light, $dark);
 
@@ -25,13 +26,13 @@ mat-dialog-content {
   .menu { float: right; }
 
   &[wm-theme-contrast="light"] { 
-    //color: map-get($wm-theme-foreground, text);
+    //color: map-get($wm-foregnd, text);
     .shade { opacity: 0.5; }
     .cover { background-color: rgba(white, 0.33);}
   }
 
   &[wm-theme-contrast="dark"] { 
-    //color: map-get($wm-theme-foreground, contrast);
+    //color: map-get($wm-foregnd, contrast);
     .shade { opacity: 0.25; }
     .cover { background-color: rgba(black, 0.1);}
   } 

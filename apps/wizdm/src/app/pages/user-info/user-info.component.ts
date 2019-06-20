@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatabaseService, wmUser } from '@wizdm/connect';
-import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
+import { wmColor, wmColorMap, COLOR_MAP } from '../../elements/colors';
 import { wmProject } from '../../core';
 
 @Component({

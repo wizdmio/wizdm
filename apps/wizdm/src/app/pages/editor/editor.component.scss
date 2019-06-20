@@ -33,7 +33,7 @@
 }
 
 .page {
-  background-color: map-get($wm-theme-background, background);
+  background-color: map-get($wm-backgnd, background);
   padding: $wm-content-margin;
   wm-document {
     width: 100%;
@@ -53,14 +53,14 @@
 }
 
 .table-of-contents {
-  border-left: 3px solid map-get($wm-theme-foreground, toc-delimiter);
+  border-left: 3px solid map-get($wm-foregnd, toc-delimiter);
   //margin: 10px 0 10px 10px;
   padding: 5px 0 10px 10px;
   box-sizing: border-box;
 }
 
 .footnotes {
-  border-top: 1px solid map-get($wm-theme-foreground, toc-delimiter);
+  border-top: 1px solid map-get($wm-foregnd, toc-delimiter);
   margin-bottom: 10px;
   padding: 5px 0 10px 0;
   box-sizing: border-box;

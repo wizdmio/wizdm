@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material';
-import { DisclaimerModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { DisclaimerModule } from '../../elements/disclaimer';
 import { ContentResolver } from '../../core';
 import { HomeComponent } from './home.component';
 
@@ -23,8 +23,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MatButtonModule,
-    DisclaimerModule, 
+    MatButtonModule, 
+    DisclaimerModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

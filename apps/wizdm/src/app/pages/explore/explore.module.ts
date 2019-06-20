@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatIconModule, 
-         MatButtonModule, 
-         MatProgressSpinnerModule } from '@angular/material';
-import { IconModule, AvatarModule, LikesModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';        
+import { AvatarModule } from '../../elements/avatar';
+import { LikesModule } from '../../elements/likes';
 import { ContentResolver } from '../../core';
 import { UserInfoModule } from '../user-info/user-info.module';
 import { ExploreComponent } from './explore.component';
@@ -25,7 +26,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [ 
     ExploreComponent, 
-    ExploreItemComponent 
+    ExploreItemComponent
   ],
   imports: [
     CommonModule,

@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatProgressBarModule } from '@angular/material';
-import { IconModule } from '@wizdm/elements';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { IconModule } from '../../elements/icon';
 import { ContentResolver } from '../../core';
 import { RedirectComponent } from './redirect.component';
 
@@ -19,13 +20,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [RedirectComponent],
+  declarations: [ RedirectComponent ],
   imports: [
     CommonModule,
     FlexLayoutModule,
     MatButtonModule,
     MatProgressBarModule,
-    IconModule, 
+    IconModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

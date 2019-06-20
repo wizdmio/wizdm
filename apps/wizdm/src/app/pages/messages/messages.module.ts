@@ -2,8 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatListModule, MatDividerModule } from '@angular/material';
-import { AvatarModule, PopupModule } from '@wizdm/elements';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { AvatarModule } from '../../elements/avatar';
+import { PopupModule } from '../../elements/popup';
 import { ContentResolver } from '../../core';
 import { UserInfoModule } from '../user-info/user-info.module';
 import { MessagesComponent } from './messages.component';
@@ -21,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ 
+  declarations: [
     MessagesComponent, 
     MessageComponent 
   ],

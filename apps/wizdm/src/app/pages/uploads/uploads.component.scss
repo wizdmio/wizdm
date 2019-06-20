@@ -23,7 +23,7 @@ $thumb-size:      60px;
 }
 
 .none {
-  border: 1px dashed map-get($wm-theme-foreground, divider);
+  border: 1px dashed map-get($wm-foregnd, divider);
 }
 
 mat-dialog-content {

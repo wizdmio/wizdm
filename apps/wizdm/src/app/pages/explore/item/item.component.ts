@@ -1,8 +1,7 @@
 import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } from '@angular/core';
 //import { wmFile } from '@wizdm/connect';
-import { wmColor, wmColorMap, COLOR_MAP } from '@wizdm/elements';
+import { wmColor, wmColorMap, COLOR_MAP } from '../../../elements/colors';
 import { Project, wmProject  } from '../../../core';
-
 import * as moment from 'moment';
 
 @Component({

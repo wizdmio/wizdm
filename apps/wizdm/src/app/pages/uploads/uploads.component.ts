@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UserProfile, UploaderService, wmFile } from '@wizdm/connect';
 import { Observable, of } from 'rxjs';
 import { filter, take, tap, switchMap } from 'rxjs/operators';

@@ -24,12 +24,6 @@
       "@wizdm/connect": [
         "libs/connect/src/index.ts"
       ],
-      "@wizdm/elements": [
-        "libs/elements/src/index.ts"
-      ],
-      "@wizdm/elements/*": [
-        "libs/elements/src/llib/*"
-      ],
       "@wizdm/markdown": [
         "libs/markdown/src/index.ts"
       ],

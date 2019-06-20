@@ -25,10 +25,7 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "apps/wizdm/src/styles",
-                "libs/elements/src/styles",
-                "libs/markdown/src/styles",
-                "libs/editable/src/styles"
+                "apps/wizdm/src/styles"
               ]
             },
             "scripts": []
