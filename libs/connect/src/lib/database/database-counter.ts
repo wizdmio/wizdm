@@ -12,26 +12,21 @@ interface CounterShard {
  * Implements a DistributedCounter extending a DatabaseCollection
  */
 export class DistributedCounter extends DatabaseCollection<CounterShard> {
-
-  /**
-   * Observable streaming the counter value
-   */
-  public counter$: Observable<number>;
+  
+  /** Observable streaming the counter value */
+  readonly counter$: Observable<number>;
 
   constructor(db: DatabaseService, path: string, public readonly shards) {
     super(db, path);
-    // Streams the counter value by accumulating the shard's values
-    this.counter$ = this.accumulate();
-  }
-
-  // Implements the shard accumulation
-  private accumulate(): Observable<number>{
-    return this.stream()
-      .pipe( map( counters => {
-        return !!counters ? counters.reduce( (sum, shard) => 
-          sum + shard.count, 0
-        ) : 0;
-      }));
+    
+    // Streams the current counter value accumulating the shards
+    this.counter$ = this.stream().pipe( 
+      map( counters => {
+        return !!counters ? counters.reduce( (sum, shard) => {
+          return sum + shard.count;
+        }, 0) : 0;
+      })
+    );
   }
 
   // Creates the shards in a batch initializing the counter value
@@ -73,7 +68,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
       // Check for counter existance
       if(counter && counter.length > 0) {
         // Select a single shard randomly
-        let rnd = Math.floor(Math.random() * counter.length);
+        const rnd = Math.floor(Math.random() * counter.length);
         // Updates the shard
         return this.updateShard(rnd.toString(), increment);
       }
