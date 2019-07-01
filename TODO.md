@@ -7,7 +7,7 @@
 * Enable Ivy https://angular.io/guide/ivy
 
 ## Elements
-* Bringing back elements as shared components into the main app getting rid of the library
+* ~~Bringing back elements as shared components into the main app getting rid of the library~~
 * ~~Rename `router-inkbar` in `nav-inkbar`~~
 * ~~Implement `filter` component as a list of buttons with a bottom inkbar~~
 * ~~Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file.~~
@@ -34,7 +34,8 @@
 * Review (again) the logic behind the toolbar to simplify the architecture (can we move the observable out ot wmAction?)
 * ~~Turn `desktopMenu(...)` and `mobileMenu(...)` helpers into observables flatmapping auth -> msgs~~
 * Add a "medium" extenral link to the footer directling to wizdm pubblication on medium.
-* Add mobile$ and desktop$ observables mapping MediaObserver.media$
+* Add a "made with wisdom on planet Earth" tag line
+* ~~Add mobile$ and desktop$ observables mapping MediaObserver.media$~~
 * ~~Refactor the `wm-footer` to automatically show/hide the language seleciton based on `resolver.user.language` property (so removing the input)~~
 * ~~Restyle the footer to have social links on the left, terms and language on the right.~~
 * ~~Refactor the footer social link to use the externalUrl redirector~~
@@ -64,7 +65,7 @@
 * Implements a press-and-hold tool for extended akphabet support. See [press and hold](https://github.com/kasperpeulen/PressAndHold) and [long press](https://github.com/quentint/long-press)
 
 ## Pages
-* Implement a fadeIn animation in StaticComponent on content change
+* ~~Implement a fadeIn animation in StaticComponent on content change~~
 * ~~Turn every page into a module to be eventually lazely loaded~~
 * ~~Uploads: improve thumbnails so to have a fixed size while picture is loading~~
 * ~~Rename `user` into `profile` for the sake of clarity~~
