@@ -69,6 +69,10 @@
 * ~~Turn every page into a module to be eventually lazely loaded~~
 * ~~Uploads: improve thumbnails so to have a fixed size while picture is loading~~
 * ~~Rename `user` into `profile` for the sake of clarity~~
+### Login
+* Force the input background color to match the theme
+* Set the cursor pointer on the password visibility icon
+* Work on the third parties auth provider to make them work
 
 ## Elements
 * ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
