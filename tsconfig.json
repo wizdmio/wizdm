@@ -9,6 +9,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
@@ -18,9 +20,6 @@
       "dom"
     ],
     "paths": {
-      "@wizdm/augment/*": [
-        "libs/augment/*"
-      ],
       "@wizdm/connect": [
         "libs/connect/src/index.ts"
       ],

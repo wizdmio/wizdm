@@ -3,7 +3,6 @@
 # compiled output
 /dist
 /tmp
-/out-tsc
 
 # dependencies
 /node_modules
@@ -23,6 +22,9 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Tools and services
+.firebase
 
 # misc
 /.sass-cache

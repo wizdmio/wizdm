@@ -4,32 +4,35 @@
   
       <!-- Headings -->
       <ng-container *ngSwitchCase="'heading'">
-        <h1 *ngIf="child.depth === 1" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h1>
-        <h2 *ngIf="child.depth === 2" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h2>
-        <h3 *ngIf="child.depth === 3" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h3>
-        <h4 *ngIf="child.depth === 4" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h4>
-        <h5 *ngIf="child.depth === 5" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h5>
-        <h6 *ngIf="child.depth === 6" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h6>
+        <ng-container [ngSwitch]="child.depth">
+          <h1 *ngSwitchCase="1" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h1>
+          <h2 *ngSwitchCase="2" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h2>
+          <h3 *ngSwitchCase="3" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h3>
+          <h4 *ngSwitchCase="4" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h4>
+          <h5 *ngSwitchCase="5" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h5>
+          <h6 *ngSwitchCase="6" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h6>
+        </ng-container> 
       </ng-container>
-  
       <!-- Paragraph -->
       <p *ngSwitchCase="'paragraph'" [attr.data-line]="pos(child)" [wm-inline]="child"></p>
   
       <!-- Lists -->
       <ng-container *ngSwitchCase="'list'">
-        <ol *ngIf="child.ordered" [start]="child.start">
+        <ol *ngIf="child.ordered; else unordered" [start]="child.start">
           <li *ngFor="let item of child.children" 
               [wm-markdown]="item" 
               (navigate)="navigate.emit($event)">
                 {{ item | json }}
           </li>
         </ol>
-        <ul *ngIf="!child.ordered">
-          <li *ngFor="let item of child.children" 
-              [wm-markdown]="item" 
-              (navigate)="navigate.emit($event)">
-          </li>
-        </ul> 
+        <ng-template #unordered>
+          <ul>
+            <li *ngFor="let item of child.children" 
+                [wm-markdown]="item" 
+                (navigate)="navigate.emit($event)">
+            </li>
+          </ul>
+        </ng-template> 
       </ng-container>
   
       <!-- Tables -->

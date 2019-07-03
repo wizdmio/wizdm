@@ -9,7 +9,7 @@
       <strong *ngSwitchCase="'strong'" [wm-inline]="child"></strong>
       
       <!-- Delete -->
-      <del *ngSwitchCase="'delete'"[wm-inline]="child"></del> 
+      <del *ngSwitchCase="'delete'" [wm-inline]="child"></del> 
   
       <!-- Inlide Code -->
       <code *ngSwitchCase="'inlineCode'">{{ child.value }}</code>
@@ -46,9 +46,6 @@
                                             [alt]="child.alt || ''" 
                                             [wm-inline]="child" />
       
-      <!-- Recurs to next level -->
-      <!--ng-container *ngSwitchDefault [wm-inline]="child"></ng-container-->
-  
     </ng-container>
   
   </ng-container>

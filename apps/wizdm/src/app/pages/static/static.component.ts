@@ -34,22 +34,21 @@ export class StaticComponent {
       switchMap( lang => this.route.paramMap.pipe(
         // Maps the full name appending the language code
         map( param => `${param.get('name')}-${lang}`),
-            // Loads the file from the assets
-          switchMap( name => this.http.get(`assets/docs/${name}.md`, { responseType: 'text' })
-            // Catches the possible error
-            .pipe( catchError( (e: HttpErrorResponse) => {
-              // On file not found (404) of localized content...
-              if(lang !== defaultLang && e.status === 404) { 
-                // Reverts to the default language
-                lang = defaultLang;
-                // Trow the error down forcing a retry
-                throw e;
-               }
-              // Redirects to NotFound when no content is found
-              return this.content.navigate('not-found')
-                .then( () => ''); 
-            })
-          )
+        // Loads the file from the assets
+        switchMap( name => this.http.get(`assets/docs/${name}.md`, { responseType: 'text' })
+          // Catches the possible error
+          .pipe( catchError( (e: HttpErrorResponse) => {
+            // On file not found (404) of localized content...
+            if(lang !== defaultLang && e.status === 404) { 
+              // Reverts to the default language
+              lang = defaultLang;
+              // Trow the error down forcing a retry
+              throw e;
+            }
+            // Redirects to NotFound when no content is found
+            return this.content.navigate('not-found')
+              .then( () => ''); 
+          }))
         ), 
         // Retries once to attemp the default language, eventually
         retry(1)

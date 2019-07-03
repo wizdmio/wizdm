@@ -4,13 +4,13 @@ import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 // Augment global objects with useful functions
-import '@wizdm/augment/string/camelize';
-import '@wizdm/augment/string/hyphenize';
-import '@wizdm/augment/string/interpolate';
-import '@wizdm/augment/string/select'
-//import '@wizdm/augment/string/printf';
-//import '@wizdm/augment/math/normal';
-//import '@wizdm/augment/array//shuffle';
+import './app/core/augment/string/camelize';
+import './app/core/augment/string/hyphenize';
+import './app/core/augment/string/interpolate';
+import './app/core/augment/string/select'
+//import './app/core/augment/string/printf';
+//import './app/core/augment/math/normal';
+//import './app/core/augment/array//shuffle';
 
 // Include HammerJS to support gestures (used by Material)
 import 'hammerjs';

@@ -7,3 +7,7 @@ Here an external link for testing purposes:
 And here an internal one instead:
 
 [Go profile](profile)
+
+1. one
+1. two
+1. three
