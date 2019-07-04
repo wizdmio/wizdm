@@ -1,75 +1,80 @@
-<header fxFlex="0 0 auto" *ngIf="msgs$ | async as msgs">
 
-  <mat-toolbar>
+<ng-container  *ngIf="msgs$ | async as msgs">
 
-    <!-- Background w/ shadow to fade while blending in -->
-    <div class="background" [@blendin]="!menu && !(scrolled$ | async)"></div>
+  <header fxFlex="0 0 auto">
 
-    <!-- Navigation bar -->
-    <mat-toolbar-row fxLayoutAlign="space-between center">
+    <mat-toolbar>
 
-      <!-- Left pane -->
-      <nav fxLayout="row" fxLayoutAlign="start center">
+      <!-- Background w/ shadow to fade while blending in -->
+      <div class="background" [@blendin]="!menu && !(scrolled$ | async)"></div>
 
-        <!-- Wizdm logo routing to home -->
-        <wm-logo routerLink="."></wm-logo>  
-    
-        <!-- Desktop navigation links -->
-        <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="nav.desktop"></wm-navbar>
+      <!-- Navigation bar -->
+      <mat-toolbar-row fxLayoutAlign="space-between center">
+
+        <!-- Left pane -->
+        <nav fxLayout="row" fxLayoutAlign="start center">
+
+          <!-- Wizdm logo routing to home -->
+          <wm-logo routerLink="."></wm-logo>  
       
-      </nav>
+          <!-- Desktop navigation links -->
+          <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="nav.desktop"></wm-navbar>
+        
+        </nav>
 
-      <!-- Right pane -->
-      <div fxLayout="row" fxLayoutAlign="end center">
+        <!-- Right pane -->
+        <div fxLayout="row" fxLayoutAlign="end center">
 
-        <!-- Action toolbar -->
-        <wm-toolbar *ngIf="someActions$ | async" 
-                    [buttons]="actionButtons$ | async" 
-                    (action)="performAction($event)">
-        </wm-toolbar>
+          <!-- Action toolbar -->
+          <wm-toolbar *ngIf="someActions$ | async" [buttons]="actionButtons$ | async" (action)="performAction($event)">
+          </wm-toolbar>
 
-        <!-- Sign-in / User profile button -->
-        <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
-          <!-- Flip button -->
-          <wm-flip [flip]="signedIn">
-            <!-- Shows a generic signIn icon on the front -->
-            <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
-            <!-- Shows the loggedIn avatar on the back -->
-            <wm-avatar back color="accent" [src]="userImage"></wm-avatar>
-          </wm-flip>
-        </button>
+          <!-- Sign-in / User profile button -->
+          <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
+            <!-- Flip button -->
+            <wm-flip [flip]="signedIn">
+              <!-- Shows a generic signIn icon on the front -->
+              <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
+              <!-- Shows the loggedIn avatar on the back -->
+              <wm-avatar back color="accent" [src]="userImage"></wm-avatar>
+            </wm-flip>
+          </button>
 
-        <!-- Mobile menu toggler -->
-        <button mat-icon-button (click)="toggleMenu()" *ngIf="nav.mobile">
-          <wm-toggler toggler-style="menu" [status]="toggler"></wm-toggler>
-        </button>
+          <!-- Mobile menu toggler -->
+          <button mat-icon-button (click)="toggleMenu()" *ngIf="nav.mobile">
+            <wm-toggler toggler-style="menu" [status]="toggler"></wm-toggler>
+          </button>
 
-      </div>
-    </mat-toolbar-row>
+        </div>
+      </mat-toolbar-row>
 
-    <!-- Mobile menu -->
-    <mat-toolbar-row auto *ngIf="nav.mobile">
+      <!-- Mobile menu -->
+      <mat-toolbar-row auto *ngIf="nav.mobile">
+        
+        <wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
       
-      <wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
+      </mat-toolbar-row>
+
+    </mat-toolbar>
+
+    <!-- Global error message displayer -->
+    <wm-errors [msgs]="msgs.errors" [error]="nav.error$ | async" (clear)="nav.clearError()"></wm-errors>
     
-    </mat-toolbar-row>
+  </header>
 
-  </mat-toolbar>
+  <!-- Viewport container -->
+  <main fxFlex="1 1 auto" fxLayout="column">
 
-  <!-- Global error message displayer -->
-  <wm-errors [msgs]="msgs.errors" [error]="nav.error$ | async" (clear)="nav.clearError()"></wm-errors>
-  
-</header>
+    <!-- Router Outlet stretched to fit -->
+    <div fxFlex="1 1 auto">
+      <router-outlet (deactivate)="clearActions()">
+      </router-outlet>
+    </div>
+    
+    <!-- Footer always on the bottom -->
+    <wm-footer fxFlex="0 0 auto"></wm-footer>
+  </main>
 
-<!-- Viewport container -->
-<main fxFlex="1 1 auto" fxLayout="column">
+  <wm-feedback>{{ msgs.feedback.caption }}</wm-feedback>
 
-  <!-- Router Outlet stretched to fit -->
-  <div fxFlex="1 1 auto">
-    <router-outlet (deactivate)="clearActions()">
-    </router-outlet>
-  </div>
-  
-  <!-- Footer always on the bottom -->
-  <wm-footer fxFlex="0 0 auto"></wm-footer>
-</main>
+</ng-container>

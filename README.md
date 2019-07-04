@@ -53,6 +53,8 @@ Run `ng serve` for a dev server. Navigate to `https://localhost:4200/`. The app 
 
 Run `ng generate component component-name` to generate a new component to be added to the default project (apps/widm) or specify `--project=project-name` otherwise. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
+To generate a new library, run `ng generate lib library-name` that will be automatically added to libs.
+
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.

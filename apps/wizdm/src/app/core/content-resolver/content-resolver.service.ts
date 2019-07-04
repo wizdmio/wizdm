@@ -12,7 +12,7 @@ import { Router,
 import { UserProfile } from '@wizdm/connect';
 import { Observable, of, forkJoin, BehaviorSubject } from 'rxjs';
 import { switchMap, filter, first, map, tap, zip, catchError } from 'rxjs/operators';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export interface CanPageDeactivate {
   canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;

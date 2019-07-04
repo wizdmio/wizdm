@@ -14,7 +14,7 @@ export class UploadsComponent implements OnInit {
   public uploads: Observable<any[]>;
   public loading: string;
 
-  constructor(private profile : UserProfile, private dialog  : MatDialog) {}
+  constructor(private profile: UserProfile, private dialog: MatDialog) {}
 
   @Input() msgs: any = {};
 

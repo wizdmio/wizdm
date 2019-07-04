@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavigationEnd } from '@angular/router';
+import { Component } from '@angular/core';
 import { ContentResolver } from '../../core';
 import { Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-footer',

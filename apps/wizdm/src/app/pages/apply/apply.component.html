@@ -80,7 +80,6 @@
               
               <mat-label>{{ field.label }}</mat-label>
               <input matInput [formControlName]="field.name">
-              
               <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
               <mat-error *ngIf="stepForms[i].controls[field.name]?.errors">
                 {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}
@@ -91,9 +90,7 @@
             <mat-form-field *ngSwitchCase="'textarea'" appearance="legacy" fxFill>
               
               <mat-label>{{ field.label }}</mat-label>
-              <textarea matInput [formControlName]="field.name" [rows]="field.rows || 5" >
-              </textarea>
-
+              <textarea matInput [formControlName]="field.name" [rows]="field.rows || 5" ></textarea>
               <mat-hint *ngIf="field.hint">{{ field.hint }}</mat-hint>
               <mat-error *ngIf="stepForms[i].controls[field.name]?.errors">
                 {{ errorMessage(stepForms[i].controls[field.name].errors, field.errors) }}

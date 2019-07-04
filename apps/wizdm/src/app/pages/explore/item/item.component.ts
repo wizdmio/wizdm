@@ -2,7 +2,7 @@ import { Component, OnInit, HostBinding, Input, Output, EventEmitter, Inject } f
 //import { wmFile } from '@wizdm/connect';
 import { wmColor, wmColorMap, COLOR_MAP } from '../../../elements/colors';
 import { Project, wmProject  } from '../../../core';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'wm-explore-item',

@@ -7,7 +7,5 @@ import { Component } from '@angular/core';
 })
 export class LogoComponent {
 
-  public loading = false;
- 
   //@Input() caption: string;
 }

@@ -10,6 +10,7 @@ import { ConnectModule,
          DatabaseModule, 
          UploaderModule, 
          UserProfileModule } from '@wizdm/connect';
+import { DoorbellModule } from '@wizdm/doorbell';
 import { AppComponent } from './app.component';
 import { NavigatorModule } from './navigator';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ import { environment } from '../environments/environment';
     DatabaseModule,
     UploaderModule,
     UserProfileModule,
+    DoorbellModule.init(environment.doorbell),
     NavigatorModule,
     AppRoutingModule
   ],

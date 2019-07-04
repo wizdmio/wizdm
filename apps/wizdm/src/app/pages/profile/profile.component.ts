@@ -7,7 +7,7 @@ import { ContentResolver, CanPageDeactivate } from '../../core';
 import { NavigatorService } from '../../navigator';
 import { UserItemComponent, UserItemValidators } from './item/item.component';
 import { Observable, Subscription } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'wm-user-profile',

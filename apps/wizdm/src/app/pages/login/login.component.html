@@ -3,9 +3,6 @@
 
   <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 
-  <!-- INFO MESSAGE -->
-  <p *ngIf="!error && msgs.pages[page]?.message" @inflate>{{ msgs.pages[page].message }}</p>
-
   <form [formGroup]="form" fxLayout="column" 
                            fxLayoutAlign="space-around stretch" 
                            fxLayoutGap="10px" 

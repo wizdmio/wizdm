@@ -12,33 +12,17 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "@wizdm/connect": [
-        "libs/connect/src/index.ts"
-      ],
-      "@wizdm/markdown": [
-        "libs/markdown/src/index.ts"
-      ],
-      "@wizdm/markdown/*": [
-        "libs/markdown/src/lib/*"
-      ],
-      "@wizdm/editable": [
-        "libs/editable/src/index.ts"
-      ],
-      "@wizdm/editable/*": [
-        "libs/editable/src/lib/*"
-      ]
+      "@wizdm/connect": ["libs/connect/src/index.ts"],
+      "@wizdm/markdown": ["libs/markdown/src/index.ts"],
+      "@wizdm/markdown/*": ["libs/markdown/src/lib/*"],
+      "@wizdm/editable": ["libs/editable/src/index.ts"],
+      "@wizdm/editable/*": ["libs/editable/src/lib/*"],
+      "@wizdm/doorbell": ["libs/doorbell/src/index.ts"],
+      "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

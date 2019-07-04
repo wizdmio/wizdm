@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
-import { NavComponent } from './navigator';
 import { ContentResolver, FirebaseHandler } from './core';
+import { NavigatorComponent } from './navigator';
 
 // Define navigation routes
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
   // Redirect to the language resolver asking for auto detection of the explore language
   { path: '', redirectTo: 'auto', pathMatch: 'full' },
   // Load the navigation with the selected language
-  { path: ':lang', component: NavComponent,
+  { path: ':lang', component: NavigatorComponent,
     // Install a resolver to pre-fetch localized data dynamically according to the user preferences
     resolve: { content: ContentResolver },
     // Uses static data to instructs the resolver about the content to be loaded

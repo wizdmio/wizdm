@@ -4,12 +4,12 @@
 
     "toolbar": {
         "public": [
-            { "label": "Wizdm", "link": ".", "highlight": true },
+            { "label": "Wizdm", "link": "." },
             { "label": "Explore", "link": "explore" },
             { "label": "Manifesto", "link": "about" }
         ],
         "private": [
-            { "label": "Wizdm", "link": ".", "highlight": true },
+            { "label": "Wizdm", "link": "." },
             { "label": "Explore", "link": "explore" },
             { "label": "Board", "link": "messages" },
             { "label": "Apply", "link": "apply"  }
@@ -36,7 +36,7 @@
 
     "footer": {
 
-        "copyright": "Shared with love from planet Earth by wizdm ©{{ year }}",
+        "copyright": "Shared with wisdom from planet Earth ©{{ year }}",
 
         "socials": [
             
@@ -58,6 +58,31 @@
             { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
             { "label": "Русский", "image": "assets/img/ru.svg", "value": "ru" }
         ]
+    },
+
+    "feedback": {
+        "caption": "Feedback",
+        "title": "Let's talk",
+        "send": "Send",
+        "name": {
+            "label": "Name",
+            "hint": "How do we call you"
+        },
+        "email": {
+            "label": "Email",
+            "hint": "We'll keep you posted here",
+            "errors": {
+                "required": "Please specify an email address",
+                "invalid": "Oooops! It looks like this is not a valid email "
+            }
+        },
+        "message": {
+            "label": "Message",
+            "hint": "Let us know your opinion",
+            "errors": {
+                "required": "Please explain yourself here"
+            }
+        }
     },
 
     "errors": {

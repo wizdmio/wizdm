@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { $itemAnimations } from './item-animations';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export type UserItemOption = {
   

@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit  {
   readonly msgs$: Observable<any>;
 
   public page: pageTypes;
-  public error: string = null;
   public progress = false;
   public hide = true;
 
@@ -70,7 +69,7 @@ export class LoginComponent implements OnInit  {
     // Discrimnate among the login option using the queryParameters
     this.route.queryParamMap.subscribe( (params: ParamMap) => {
 
-      let  mode = params.get('mode') || 'signIn';
+      const mode = params.get('mode') || 'signIn';
       this.code = params.get('code');
 
       console.log('login mode: ', mode);
@@ -194,9 +193,8 @@ export class LoginComponent implements OnInit  {
    * @param error code of the error
    */
   private showError(error: string): void {
-    //this.error = error;
-    this.progress = false;
     this.navigator.reportError(error);
+    this.progress = false;
   }
 
   // Execute the form requested action

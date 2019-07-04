@@ -68,9 +68,7 @@ class ActionState {
   public dispose() { this.events$.complete(); }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ToolbarService implements OnDestroy {
 
   private state$ = new BehaviorSubject<ActionState>(null);

@@ -17,16 +17,10 @@
             "main": "apps/wizdm/src/main.ts",
             "polyfills": "apps/wizdm/src/polyfills.ts",
             "tsConfig": "apps/wizdm/tsconfig.app.json",
-            "assets": [
-              "apps/wizdm/src/assets"
-            ],
-            "styles": [
-              "apps/wizdm/src/styles.scss"
-            ],
+            "assets": ["apps/wizdm/src/assets"],
+            "styles": ["apps/wizdm/src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "apps/wizdm/src/styles"
-              ]
+              "includePaths": ["apps/wizdm/src/styles"]
             },
             "scripts": []
           },
@@ -77,14 +71,9 @@
             "polyfills": "apps/wizdm/src/polyfills.ts",
             "tsConfig": "apps/wizdm/tsconfig.spec.json",
             "karmaConfig": "apps/wizdm/karma.conf.js",
-            "styles": [
-              "apps/wizdm/src/styles.scss"
-            ],
+            "styles": ["apps/wizdm/src/styles.scss"],
             "scripts": [],
-            "assets": [
-              "apps/wizdm/src/favicon.ico",
-              "apps/wizdm/src/assets"
-            ]
+            "assets": ["apps/wizdm/src/favicon.ico", "apps/wizdm/src/assets"]
           }
         },
         "lint": {
@@ -94,9 +83,7 @@
               "apps/wizdm/tsconfig.app.json",
               "apps/wizdm/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -121,9 +108,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/wizdm-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -156,9 +141,7 @@
               "libs/connect/tsconfig.lib.json",
               "libs/connect/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -191,9 +174,7 @@
               "libs/content/tsconfig.lib.json",
               "libs/content/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -226,9 +207,7 @@
               "libs/markdown/tsconfig.lib.json",
               "libs/markdown/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -254,9 +233,7 @@
               "libs/elements/tsconfig.lib.json",
               "libs/elements/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -282,10 +259,39 @@
               "libs/editable/tsconfig.lib.json",
               "libs/editable/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
+        }
+      }
+    },
+    "doorbell": {
+      "projectType": "library",
+      "root": "libs/doorbell",
+      "sourceRoot": "libs/doorbell/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/doorbell/tsconfig.lib.json",
+              "libs/doorbell/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/doorbell/src/test.ts",
+            "tsConfig": "libs/doorbell/tsconfig.spec.json",
+            "karmaConfig": "libs/doorbell/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
         }
       }
     }

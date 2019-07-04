@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, Scroll, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, Scroll } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { UserProfile } from '@wizdm/connect';
 import { NavigatorService, wmAction } from './navigator.service';
@@ -14,7 +14,7 @@ import { $animations } from './navigator.animations';
   styleUrls: ['./navigator.component.scss'],
   animations: $animations
 })
-export class NavComponent implements OnInit, OnDestroy {
+export class NavigatorComponent implements OnInit, OnDestroy {
 
   readonly scrolled$: Observable<boolean>;
   readonly msgs$: Observable<any>;
@@ -26,8 +26,7 @@ export class NavComponent implements OnInit, OnDestroy {
               readonly nav     : NavigatorService,
               private  title   : Title,
               private  meta    : Meta,
-              private  content : ContentResolver,
-                        route  : ActivatedRoute) {
+              private  content : ContentResolver) {
 
     // Gets the localized content pre-fetched by the resolver during routing
     this.msgs$ = this.content.stream("navigator");
@@ -49,6 +48,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   ngOnInit() { 
 
+    // Applies localized Title and Description meta tag
     this.sub = this.msgs$.subscribe( msgs => {
       // Sets the app title when defined 
       !!msgs && !!msgs.title && this.title.setTitle(msgs.title);

@@ -6,9 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 export { wmAction };
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NavigatorService {
 
   // Global error stream

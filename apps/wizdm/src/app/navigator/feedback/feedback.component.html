@@ -1,0 +1,57 @@
+
+<!-- Feedback button -->
+<button mat-raised-button class="feedback" (click)="open()">
+  <ng-content></ng-content>
+</button>
+
+<!-- Feedback Popup Dialog -->
+<ng-template #formTemplate>
+
+  <ng-container *ngIf="msgs$ | async as msgs">
+
+    <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
+      {{ msgs.title }}
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
+
+        <!-- NAME -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ msgs.name.label }}</mat-label>
+          <input matInput formControlName="name" cdkFocusInitial>
+          <mat-hint>{{ msgs.name.hint }}</mat-hint>
+        </mat-form-field>
+    
+        <!-- EMAIL -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ msgs.email.label }}</mat-label>
+          <input matInput formControlName="email">
+          <mat-hint>{{ msgs.email.hint }}</mat-hint>
+          <mat-error *ngIf="form.controls['email'].errors?.required">{{ msgs.email.errors?.required }}</mat-error>
+          <mat-error *ngIf="form.controls['email'].errors?.email">{{ msgs.email.errors?.invalid }}</mat-error>
+        </mat-form-field>
+
+        <!-- MESSAGE -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ msgs.message.label }}</mat-label>
+          <textarea matInput formControlName="message" rows="5" ></textarea>
+          <mat-hint>{{ msgs.message.hint }}</mat-hint>
+          <mat-error *ngIf="form.controls['message'].errors?.required">{{ msgs.message.errors?.required }}</mat-error>
+        </mat-form-field>
+        
+      </mat-dialog-content>
+
+      <mat-dialog-actions align="end">
+        <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">{{ msgs.send }}</button>
+      </mat-dialog-actions>
+
+    </form>
+
+  </ng-container>
+
+</ng-template>
