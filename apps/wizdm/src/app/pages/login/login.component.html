@@ -6,7 +6,8 @@
   <!-- INFO MESSAGE -->
   <p *ngIf="!error && msgs.pages[page]?.message" @inflate>{{ msgs.pages[page].message }}</p>
 
-  <form [formGroup]="form" fxLayout="column" 
+  <form autocomplete="off" [formGroup]="form" 
+                           fxLayout="column" 
                            fxLayoutAlign="space-around stretch" 
                            fxLayoutGap="10px" 
                            (ngSubmit)="loginAction()"
