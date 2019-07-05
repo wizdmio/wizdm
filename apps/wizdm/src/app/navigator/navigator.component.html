@@ -75,6 +75,14 @@
     <wm-footer fxFlex="0 0 auto"></wm-footer>
   </main>
 
-  <wm-feedback>{{ msgs.feedback.caption }}</wm-feedback>
+  <!-- Feedback button -->
+  <wm-feedback (sent)="feedbackSent($event)" #doorbell>
+    <button mat-raised-button class="feedback" (click)="doorbell.open()">
+      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+        <span>{{ msgs.feedback.caption }}</span>
+        <wm-icon [icon]="msgs.feedback.icon"></wm-icon>
+      </div>
+    </button>
+  </wm-feedback>
 
 </ng-container>

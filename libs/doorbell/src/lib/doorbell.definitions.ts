@@ -1,9 +1,8 @@
 export interface DoorbellConfig {
-  
-  url : string,
-  id  : string,
-  key : string
-}
+  url : string,//'https://doorbell.io/api/applications'
+  id  : string,//'your id here',
+  key : string,//'your key here'
+};
 
 export interface DorbellSubmit {
   email        : string,
@@ -13,7 +12,7 @@ export interface DorbellSubmit {
   sentiment?   : 'positive'|'neutral'|'negative',
   tags?        : string|string[],
   properties?  : { [key: string]: string },
-  attachments? : number[],
+  //attachments? : number[], Automatically filled up by the uploader()
   nps?         : number,
   language?    : string
 };

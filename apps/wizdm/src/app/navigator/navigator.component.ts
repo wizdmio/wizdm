@@ -129,4 +129,8 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   public clearActions(): void {
     this.nav.toolbar.clearActions();
   }
+
+  public feedbackSent(success: boolean) {
+    //this.nav.reportError();
+  }
 }

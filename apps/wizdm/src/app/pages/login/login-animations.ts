@@ -4,6 +4,13 @@ const $timing = '400ms cubic-bezier(0.5,0.5,0.5,1.0)';
 
 export let $animations = [
 
+  trigger('vanish', [
+    transition('* => *', [
+      style({ opacity: '0'}),
+      animate($timing, style('*'))  
+    ])
+  ]),
+
   trigger('inflate', [
     transition(':enter', [
       style({ 

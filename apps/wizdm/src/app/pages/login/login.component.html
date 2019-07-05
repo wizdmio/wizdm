@@ -3,7 +3,7 @@
 
   <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 
-  <form [formGroup]="form" fxLayout="column" 
+  <form [formGroup]="form" fxLayout="column"
                            fxLayoutAlign="space-around stretch" 
                            fxLayoutGap="10px" 
                            (ngSubmit)="loginAction()"
