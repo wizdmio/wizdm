@@ -25,6 +25,8 @@
 
 # Tools and services
 .firebase
+.firebaserc
+.prettierrc
 
 # misc
 /.sass-cache
