@@ -23,9 +23,8 @@ const routes: Routes = [
       { path: '',            loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
       { path: 'home',        redirectTo:   '', pathMatch: 'full' },
 
-      // Coming soon page
-      { path: 'coming-soon', loadChildren: () => import('./pages/coming-soon/coming-soon.module').then(m => m.ComingSoonModule) },
-      //{ path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
+      // Redirecs to coming soon page
+      // { path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
       
       // Active pages
       { path: 'apply',       loadChildren: () => import('./pages/apply/apply.module').then(m => m.ApplyModule) },

@@ -24,7 +24,7 @@
 !.vscode/extensions.json
 
 # Tools and services
-.firebase/*
+/.firebase
 .firebaserc
 .prettierrc
 

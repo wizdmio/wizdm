@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +18,6 @@ import { FeedbackComponent } from './feedback.component';
     ReactiveFormsModule,
     FlexLayoutModule,
     MatDialogModule,
-    MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

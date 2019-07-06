@@ -21,7 +21,7 @@
 * ~~Setting up the color schemes to be applied to global elements (blockquotes, p, h1-6, ...) within `wm-init-application-theme()`~~
 
 ## Core
-* Consider to switch the docs content from `*.json` to editable documents
+* ~~Consider to switch the docs content from `*.json` to editable documents~~
 * ~~Rename '/utils' folder into '/core' for the aske of clarity~~
 * Implement a mac vs win platform detection based on `window.navigator.platform` (or userAgent) for the editor to display Ctrl or Command keys accellerators (see https://stackoverflow.com/questions/10527983/best-way-to-detect-mac-os-x-or-windows-computers-with-javascript-or-jquery).
 * Implement a custom module preloader (see https://coryrylan.com/blog/custom-preloading-and-lazy-loading-strategies-with-angular)
@@ -31,6 +31,8 @@
 * ~~Refactor the redirect-handler into a canActivate guard for better performances.~~
 
 ## Navigator
+* Extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
+* Implements feedback sent notification/error on the main page
 * Review (again) the logic behind the toolbar to simplify the architecture (can we move the observable out ot wmAction?)
 * ~~Turn `desktopMenu(...)` and `mobileMenu(...)` helpers into observables flatmapping auth -> msgs~~
 * Add a "medium" extenral link to the footer directling to wizdm pubblication on medium.
@@ -41,7 +43,6 @@
 * ~~Refactor the footer social link to use the externalUrl redirector~~
 * ~~Restyle the footer to a taller version with accent-like background and reacher informations~~
 * Refactor `wm-errors` so to push errors into a pipe allowing multiple error messages via delayed obsevable.
-* Consider to extend  `wm-errors` component into a `wm-notify` component including an informative message input as well
 * ~~Refactor the action bar getting rid of the action enabler leveraging on the `buttons$` observable instead, so, that enableAction() can be implemented simlarly to performAction() and eventually other functions to dynamically change labels as well.~~ 
 * ~~Improve ToolbarService with:~~
   * ~~Adding the default value to start with to the `actionEnabler()` funciton~~
@@ -70,13 +71,13 @@
 * ~~Uploads: improve thumbnails so to have a fixed size while picture is loading~~
 * ~~Rename `user` into `profile` for the sake of clarity~~
 ### Login
-* Force the input background color to match the theme
+* ~~Force the input background color to match the theme~~
 * Set the cursor pointer on the password visibility icon
 * Work on the third parties auth provider to make them work
 
 ## Elements
 * ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
-* Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default
+* ~~Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default~~
 * ~~Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`)~~
 
 ## Document
@@ -84,6 +85,7 @@
 * ~~Move the core editable-document component, editable-** classes and editable-selection service to libs/document and refactor the editor to use local version of toolbox and context menu~~
 
 ## libs/connect
+* Rename it to firebase
 * Adds a configuration token to UserModule, so, to let users configure database "paths" and upload "folders"
 * ~~Replace the AngularFirestoreModule with DatabaseModule dependency in UploaderModule~~
 * ~~Overwrites AngularFirestoreConfiguraiton in DatabaseModule so to remove the latest firebase error (see: https://github.com/angular/angularfire2/issues/1993)~~

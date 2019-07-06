@@ -1,5 +1,4 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AngularFireModule, 
          FirebaseOptions, 
          FirebaseOptionsToken, 
@@ -11,10 +10,7 @@ export interface ConnectConfig {
 }
 
 @NgModule({
-  imports: [
-    CommonModule, 
-    AngularFireModule
-  ],
+  imports: [ AngularFireModule ],
   declarations: []
 })
 export class ConnectModule { 
