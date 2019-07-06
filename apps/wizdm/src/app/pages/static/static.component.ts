@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
-import { map, switchMap, catchError, retry } from 'rxjs/operators'
+import { map, switchMap, catchError } from 'rxjs/operators'
 import { $animations } from './static.animations';
 
 @Component({
@@ -28,31 +28,42 @@ export class StaticComponent {
 
     const defaultLang = 'en';
 
-    // Resolves the current language first
-    return this.content.language$.pipe(
-      // Resolves the requested document name
-      switchMap( lang => this.route.paramMap.pipe(
-        // Maps the full name appending the language code
-        map( param => `${param.get('name')}-${lang}`),
+    // Resolves the requested document name first
+    return this.route.paramMap.pipe(
+      // Maps the name from the params map
+      map( param => param.get('name') ),
+       // Resolves the current language
+      switchMap( name => this.content.language$.pipe(
         // Loads the file from the assets
-        switchMap( name => this.http.get(`assets/docs/${name}.md`, { responseType: 'text' })
-          // Catches the possible error
-          .pipe( catchError( (e: HttpErrorResponse) => {
-            // On file not found (404) of localized content...
-            if(lang !== defaultLang && e.status === 404) { 
-              // Reverts to the default language
-              lang = defaultLang;
-              // Trow the error down forcing a retry
-              throw e;
-            }
-            // Redirects to NotFound when no content is found
-            return this.content.navigate('not-found')
-              .then( () => ''); 
-          }))
-        ), 
-        // Retries once to attemp the default language, eventually
-        retry(1)
+        switchMap( lang => {
+
+          const fullPath = `assets/docs/${lang}/${name}.md`;
+
+          console.log('Statically loading:', fullPath);
+          
+          // Loads the requested file first
+          return this.http.get(fullPath, { responseType: 'text' }).pipe( 
+            // Catches the possible error
+            catchError( (e: HttpErrorResponse) => {
+              // On file not found (404) of localized content...
+              if(lang !== defaultLang && e.status === 404) { 
+                
+                const defaultPath = `assets/docs/${defaultLang}/${name}.md`;
+                
+                console.log('404 File not found, reverting to default language:', defaultPath);
+                
+                // Loads the same document in the default language instead
+                return this.http.get(defaultPath, { responseType: 'text' });
+              }
+
+              console.log('404 File not found, redirecting to not-found');
+              
+              // Redirects to NotFound when no content is found
+              return this.content.navigate('not-found').then( () => ''); 
+            })
+          );
+        })
       ))
-    )
+    );
   }
 }
