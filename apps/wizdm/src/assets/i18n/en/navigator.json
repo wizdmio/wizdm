@@ -49,8 +49,8 @@
         "links": [
             { "label": "About", "link": "about" },
             { "label": "The project", "link": "explore/6bw5ZNpQClMzydtAAYzO" },
-            { "label": "Contact us", "link": "contactUs" },
-            { "label": "Terms and privacy", "link": "terms" }
+            { "label": "Terms of service", "link": "terms" },
+            { "label": "Privacy", "link": "privacy" }
         ],
 
         "languages": [
@@ -61,7 +61,7 @@
     },
 
     "feedback": {
-        "caption": "Feedback",
+        "caption": "Contact us",
         "icon": "far:fa-comment",
         "title": "Let's talk",
         "send": "Send",
@@ -99,7 +99,7 @@
         }
     },
 
-    "errors": {
+    "notifications": {
         "auth": {
           "wrongPassword": "This password seems wrong",
           "userNotFound": "This user doesn't exist",
@@ -122,6 +122,11 @@
         "project": {
           "invalidId": "The provided project ID is null or invalid",
           "missingTemplate": "The document template seems missing or corrupted"
-        }  
+        },
+
+        "feedback": {
+          "success": "Thank you for reaching us out!",
+          "error": "Seems the feedback didn't go through :/ Please retry in a minute"
+        }
     }
 }

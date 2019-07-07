@@ -131,6 +131,8 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   }
 
   public feedbackSent(success: boolean) {
-    //this.nav.reportError();
+    success ? 
+      this.nav.notifyMessage('feedback/success', 'info') : 
+        this.nav.notifyMessage('feedback/error');
   }
 }

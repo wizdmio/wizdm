@@ -12,7 +12,7 @@ import { LogoModule } from './logo/logo.module';
 import { NavbarModule } from './navbar/navbar.module'; 
 import { ToolbarModule } from './toolbar/toolbar.module'; 
 import { MenuModule } from './menu/menu.module'; 
-import { ErrorsModule } from './errors/errors.module'; 
+import { NotifyModule } from './notify/notify.module'; 
 import { FooterModule } from './footer/footer.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { NavigatorComponent } from './navigator.component';
@@ -33,7 +33,7 @@ import { NavigatorService } from './navigator.service';
     NavbarModule,
     ToolbarModule,
     MenuModule,
-    ErrorsModule,
+    NotifyModule,
     FooterModule,
     FeedbackModule
   ],

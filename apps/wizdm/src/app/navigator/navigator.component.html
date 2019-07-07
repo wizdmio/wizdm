@@ -57,9 +57,6 @@
 
     </mat-toolbar>
 
-    <!-- Global error message displayer -->
-    <wm-errors [msgs]="msgs.errors" [error]="nav.error$ | async" (clear)="nav.clearError()"></wm-errors>
-    
   </header>
 
   <!-- Viewport container -->
@@ -74,6 +71,9 @@
     <!-- Footer always on the bottom -->
     <wm-footer fxFlex="0 0 auto"></wm-footer>
   </main>
+
+  <!-- Global message notifier -->
+  <wm-notify [msgs]="msgs.notifications" [notify]="nav.notification$ | async" (cleared)="nav.clearMessage()"></wm-notify>
 
   <!-- Feedback button -->
   <wm-feedback (sent)="feedbackSent($event)" #doorbell>

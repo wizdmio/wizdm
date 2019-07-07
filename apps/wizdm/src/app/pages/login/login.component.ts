@@ -193,7 +193,7 @@ export class LoginComponent implements OnInit  {
    * @param error code of the error
    */
   private showError(error: string): void {
-    this.navigator.reportError(error);
+    this.navigator.notifyMessage(error);
     this.progress = false;
   }
 

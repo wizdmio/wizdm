@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { IconModule } from '../../elements/icon';
-import { ErrorsComponent } from './errors.component';
+import { NotifyComponent } from './notify.component';
 
 @NgModule({
   imports: [
@@ -13,10 +13,10 @@ import { ErrorsComponent } from './errors.component';
     IconModule,
   ],
   declarations: [
-    ErrorsComponent
+    NotifyComponent
   ],
   exports: [
-    ErrorsComponent
+    NotifyComponent
   ]
 })
-export class ErrorsModule { }
+export class NotifyModule { }

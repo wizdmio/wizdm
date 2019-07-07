@@ -1,0 +1,10 @@
+
+<div *ngIf="!!message" fxLayout="row" fxLayoutAlign="center center" [class]="type" @inflate>
+
+  <div fxFlex fxFlexOffset="40px" class="message">{{ message }}</div>
+
+  <button fxFlex="40px" mat-icon-button (click)="clear()">
+    <wm-icon inline="true" icon="close"></wm-icon>
+  </button>
+
+</div>
