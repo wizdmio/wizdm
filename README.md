@@ -11,7 +11,7 @@ Wizdm
 [![ngversion](https://img.shields.io/github/package-json/dependency-version/wizdmio/wizdm/@angular/core.svg?label=angular)](.)
 [![license](https://img.shields.io/github/license/wizdmio/wizdm.svg?color=blue)](LICENSE.md)
 
-Wizdm is an online community meant to connect aspiring startuppers with compassionate developers sharing the common goal of turning valuable business ideas into functioning prototypes. That's the stage when the idea can be actually tested, refined and seek for investors.
+Wizdm is an open source - serverless - single page application - project meant to help aspiring startuppers to bootstrap their ideas into functioning prototypes for launching and testing them.
 
 ## Developers' notes
 
