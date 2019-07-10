@@ -21,7 +21,7 @@ The project revolves around a [web-app](apps/wizdm) running on [Angular][angular
 
 The app relies on several [firebase][firebase] services using [Angularfire 2][angularfire] to connect with:
 
-* Firebase Hosting to host the production app at https://wizdm.io
+* Firebase Hosting to host the production demo app at https://wizdm.io
 * Firebase Auth for user authentication 
 * Cloud Firestore realtime database for user's profile and content
 * Cloud Storage for user's images and files
