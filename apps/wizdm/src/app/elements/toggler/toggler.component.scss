@@ -1,5 +1,5 @@
 @import 'variables';
-@import 'theme';
+//@import 'theme';
 
 $toggler-size: 20px !default;
 
@@ -10,10 +10,8 @@ $toggler-size: 20px !default;
     width: $toggler-size;
     height: $toggler-size;
 
-    div { 
-      // Applies the default text color to the toggler
-      background-color: map-get($wm-foregnd, text); 
-    }
+    // Applies the current text color to the toggler
+    div { background-color:currentColor; }
   
     //Use positios relative to behave exactly like a mat-icon/wm-icon/wm-flip 
     //position: absolute;
