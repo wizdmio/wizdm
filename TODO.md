@@ -7,12 +7,16 @@
 * Enable Ivy https://angular.io/guide/ivy
 
 ## Elements
+* Refactor wm-disclaimer to parse md-like links and removing routerLink dependency [see on Stackblitz](https://stackblitz.com/edit/wizdm-disclaimer)
 * ~~Bringing back elements as shared components into the main app getting rid of the library~~
 * ~~Rename `router-inkbar` in `nav-inkbar`~~
 * ~~Implement `filter` component as a list of buttons with a bottom inkbar~~
 * ~~Move the `extend-material-theme` and `extend-material-typography` mixins from the wizdm app \_material.scss file to the @wizdm/elements library theming scss file.~~
 * Consider how to make `likes` more general purpose or move it within the app as a shared component better
 * ~~Empower every component host with a class going with the very same name of the component itself to be used for global styling and revert the theming mixin to use classes instead.~~
+* ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
+* ~~Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default~~
+* ~~Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`)~~
 
 ## Styling
 * Turn the explorer into a list of cards without picture such as [appfutura](https://www.appfutura.com/app-projects)
@@ -75,12 +79,8 @@
 * Set the cursor pointer on the password visibility icon
 * Work on the third parties auth provider to make them work
 
-## Elements
-* ~~Move all the relevant material style tweaks from app/_theme.scss `wm-init-application-theme()` to _elements.scss `wm-elements-theme()`~~
-* ~~Change the default size of `wm-icon` / `wm-avatar` to 100%, so, to fit within the container by default~~
-* ~~Improve `wm-avatar` to always display the svg while loading the image and accept a color input based on theme palettes (same as `wm-inkbar`)~~
-
 ## Document
+* Turn to block image using <figure> elements disabling inline images for the time being [see on Stackbllitz](https://stackblitz.com/edit/wizdm-editable-figure)
 * Implements an HTML renderer to be used while copying to the clipboard and for PDF creation?
 * ~~Move the core editable-document component, editable-** classes and editable-selection service to libs/document and refactor the editor to use local version of toolbox and context menu~~
 
