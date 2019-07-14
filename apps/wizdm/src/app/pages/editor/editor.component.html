@@ -1,5 +1,5 @@
 
-<mat-drawer-container>
+<!--mat-drawer-container>
   
   <mat-drawer mode="side" position="end" opened>
     
@@ -20,7 +20,6 @@
   
   <mat-drawer-content fxFlex="1 1 auto" class="desk">
   
-      <!-- Renders the documetn body -->
       <div class="page" 
            [wm-editable-document]="document"
            [edit]="editMode" 
@@ -30,36 +29,30 @@
            (navigate)="content.navigateByUrl($event)" #doc>
       </div>
 
-      <!-- Context menu -->
       <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
   
   </mat-drawer-content>
 
 </mat-drawer-container>
 
-<!-- Editing tools -->
-<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>
+<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox-->
 
 <!-- Document body -->
-<!--div fxLayout="row" fxLayoutAlign="space-between strech">
+<div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto" class="desk">
 
-    <div class="page" [@editing]="editMode">
-
-        <wm-editable-toc class="table-of-contents" [source]="doc" fxHide fxShow.lt-sm>
-          <h2>{{ msgs.tableOfContents }}</h2>
-        </wm-editable-toc>
-
-      <wm-editable-document
-        (contextmenu)="editMode ? menu.open($event) : true" 
-        (change)="save($event)"
-        [source]="document"
-        [edit]="editMode" #doc>
-      </wm-editable-document>
-
+    <div class="page" [@editing]="editMode"
+      (contextmenu)="editMode ? menu.open($event) : true" 
+      (change)="save($event)"
+      [wm-editable-document]="document"
+      [edit]="editMode" #doc>
     </div>
+
+    <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
   
   </div>
 
-</div-->
+</div>
+
+<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>

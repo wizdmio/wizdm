@@ -24,4 +24,9 @@ export class FooterComponent {
     // Interpolates the copyright message to dynamically change the current year
     return msg.interpolate(this);
   }
+
+  public redirect(url: string): boolean {
+    
+    return this.content.navigateByUrl(url), false;
+  }
 }

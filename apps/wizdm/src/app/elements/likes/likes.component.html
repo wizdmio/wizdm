@@ -1,5 +1,7 @@
+<span class="mat-small" *ngIf="counter > 0">{{ counter }}</span>
+<wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'" [@beat]="counter"></wm-icon>
 
-<button mat-button (click)="toggle()" *ngIf="!readonly">
+<!--button mat-button (click)="toggle()" *ngIf="!readonly">
   <span class="mat-small">{{ likes }}</span>
   <wm-icon [icon]="icon" [@beat]="counter">
   </wm-icon>
@@ -9,4 +11,4 @@
   <span class="mat-small">{{ likes }}</span>
   <wm-icon [icon]="icon" [@beat]="counter">
   </wm-icon>
-</div>
+</div-->

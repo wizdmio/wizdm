@@ -1,6 +1,6 @@
-export * from './firebase-handler/firebase-handler.component';
-export * from './content-resolver/content-resolver.service';
-export * from './project-service/project.service';
-export * from './project-service/project';
-export * from './chat-service/chat.service';
+export * from './content/content.service';
+export * from './content/content.directive';
+export * from './content/content.module';
+export * from './project/project.service';
+export * from './project/project';
 

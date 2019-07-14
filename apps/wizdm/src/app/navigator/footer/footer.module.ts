@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { IconModule } from '../../elements/icon';
 import { FooterComponent } from './footer.component';
 
+
 @NgModule({
   
   imports: [

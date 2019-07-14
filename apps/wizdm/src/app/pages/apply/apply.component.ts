@@ -47,12 +47,12 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
   public welcomeBack = false;
   public progress = false;
   
-  constructor(private builder  : FormBuilder, 
+  constructor(private builder : FormBuilder, 
               private content : ContentResolver,
-              private profile  : UserProfile<userApply>,
-              private project  : ProjectService,
-              private toolbar  : ToolbarService,
-              private popup    : PopupService) { 
+              private profile : UserProfile<userApply>,
+              private project : ProjectService,
+              private toolbar : ToolbarService,
+              private popup   : PopupService) { 
 
     // Gets the localized content resolved during routing
     this.msgs$ = content.stream('apply'); 
@@ -289,8 +289,9 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
         .subscribe( () => this.clearApplication() );
       break;
 
+      // Navigates to the requested page otherwise
       default:
-      console.error('Unexpected action code', action);
+      this.content.navigate(action);
       break;
     }
   }

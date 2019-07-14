@@ -1,8 +1,11 @@
 
 :host {
-
-  // Resets default mat-button padding and width
-  //button { padding: 0; min-width: 48px; }
+  display: block;
+  position: relative;
+  * { vertical-align: middle; }
+}
+/*
+:host {
 
   .fake-button {
     display: inline-block;
@@ -19,4 +22,4 @@
     & > * { vertical-align: middle;}
   }
 }
-
+*/

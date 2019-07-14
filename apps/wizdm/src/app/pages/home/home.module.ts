@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
+//import { NavigatorModule } from '../../navigator/navigator.module';
+import { IconModule } from '../../elements/icon';
 import { DisclaimerModule } from '../../elements/disclaimer';
 import { ContentResolver } from '../../core';
 import { HomeComponent } from './home.component';
@@ -23,7 +25,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MatButtonModule, 
+    MatButtonModule,
+    IconModule, 
     DisclaimerModule,
     RouterModule.forChild(routes)
   ],

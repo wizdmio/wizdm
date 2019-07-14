@@ -134,4 +134,14 @@ export class FeedbackComponent {
   }
 
   @Output() sent = new EventEmitter<boolean>();
+
+  // Credits redirection helper
+  public redirect(url: string): boolean {
+    // Closes the dialogs
+    this.dialog.closeAll();
+    // Navigates to the destination redirecting when necessary
+    this.content.navigateByUrl(url);
+    // Prevents default
+    return false;
+  }
 }

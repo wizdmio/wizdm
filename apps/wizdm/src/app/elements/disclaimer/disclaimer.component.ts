@@ -1,118 +1,50 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+export interface DisclaimerLink {
+
+  type    : 'link';
+  content : string;
+  url     : string;
+  target  : string; 
+  params  : { [key: string]: string }; 
+}
+
+export interface DisclaimerText {
+
+  type    : 'text';
+  content : string;
+}
+
+export type DisclaimerSegment = DisclaimerText|DisclaimerLink;
+
 @Component({
-  selector: 'wm-disclaimer, [wm-disclaimer]',
+  selector: '[wm-disclaimer]',
   templateUrl: './disclaimer.component.html',
   host: { class: 'wm-disclaimer' }
 })
 export class DisclaimerComponent {
 
-  public segments: any[];
-  
+  private segments: DisclaimerSegment[];
   // Classes for links/actions - works only for global defined class due to ViewEncapsulation
   // Supports the same syntax as 'ngClass'
   @Input() linkClass: string | string[] | Set<string> | {[key: string]: any};
-  @Input() actionClass: string | string[] | Set<string> | {[key: string]: any};
-
   // Styles to apply on links/actions. Supports the same syntax as 'ngStyle'
   @Input() linkStyle: {[key: string]: string};
-  @Input() actionStyle: {[key: string]: string};
+  // Source input
+  @Input('wm-disclaimer') set compileSegments(source: string) {
 
-  // Action event
-  @Output() action = new EventEmitter<string>();
-
-  private pushText(content: string){
-    
-    // Pushes the text segment into the array
-    this.segments.push({
-      type: "text",
-      content
-    });
-  }
-
-  private pushAction(code: string, content: string){
-   
-    // Pushes the action segment
-    this.segments.push({
-      type: "action",
-      code,
-      content
-    });
-  }
-
-  // Build a link object including:
-  // {
-  //   link: string, // the link to jump to
-  //   params?: any // the optional queryParams to pass along with the link
-  // }
-  //
-  private pushLink(link: string, content: string) {
-    
-    // Check for parameters ( ex: ../jump-here?mode=set&value=max )
-    let parts = link.split('?');
-
-    // Parses the query parameters
-    let params = parts.length > 1 ? this.parseLinkParams(parts[1]) : null;
-
-    // Pushes the link segment
-    this.segments.push({
-      type: "link",
-      link: parts[0],
-      params,
-      content
-    });
-  }
-
-  private parseLinkParams(input: string) {
-
-    // Match for parameter pattern
-    const re = /(\w+)=(\w*)\&*/g;
-    let params = {};
-
-    // Build the parameter object
-    input.replace(re, (match: string, param: string, value: string) => {
-
-      params[param] = value;
-      return '';
-    });
-
-    return params;
-  }
-
-  @Input('source') 
-  set compileSegments(source: string) {
-
-    // Matches the fields looking like <text:[@link]> where 'text' is the label to display and 'link' is the static
-    // link towards the router is pointing to. When the @ flag is omitted, the mach is treated as a click action
-    // instead 
-    const re = /<([^<>]+):\s*\[(@)*([\w\.\-/\?\&=]+)\]\s*>/g;
+    // Matches the markdown-like links looking like [text](url) where 'text' is the label to display and 'url' is the target to navigate to.
+    const re = /\[([^\[\]]*)\]\(([^\(\)]+)\)/g;
     let start = 0;
-
     // Resets the segments array
     this.segments = [];
-  
     // Uses the string.replace() parsing capabilities to evaluate the content of the input source 
     // turnint it into an array of segments (objects describing how to render the output)
-    source.replace(re, (match: string, content: string, flag: string, actionOrLink: string, offset: number) => {
-
-      // Isolate the plain text preceding the match 
-      if(offset > start){
-        this.pushText( source.substring(start, offset) );
-      }
-
-      // Discrimitates between click action (default) or routerLink
-      if(flag == '@') {
-
-        // Pushes the link segment
-        this.pushLink(actionOrLink, content);
-    
-      } else {
-
-        // Pushes the action object
-        this.pushAction(actionOrLink, content);
-      }
-      
-
+    source.replace(re, (match: string, content: string, url: string, offset: number) => {
+      // Pushes the plain text preceeding the match 
+      if(offset > start){ this.pushText( source.substring(start, offset) );}
+      // Pushes the matched link
+      if(!!url) { this.pushLink(url, content);}
       // Keeps track of the next beginning for the eventual plain text between this match and the next
       start = offset + match.length;
       return "";
@@ -123,7 +55,50 @@ export class DisclaimerComponent {
       this.pushText(source.substring(start, source.length));
     }
 
-    //console.log("disclaimer segments:");
-    //console.log(this.segments);
-  }  
+    //console.log("disclaimer segments:", this.segments);
+  } 
+
+  // Action event
+  @Output('navigate') nav = new EventEmitter<DisclaimerLink>();
+
+  public navigate(to: DisclaimerLink) {
+    return this.nav.emit(to), false; // Prevents default
+  }
+
+  private pushText(content: string){
+    // Pushes the text segment into the array
+    this.segments.push({
+      type: "text",
+      content
+    });
+  }
+
+  private pushLink(url: string, content: string) {
+    // Check for parameters ( ex: ../jump-here?mode=set&value=max )
+    const parts = url.split('?');
+    // Parses the query parameters
+    const params = parts.length > 1 ? this.parseParams(parts[1]) : undefined;
+    // Pushes the link segment
+    this.segments.push({
+      type: "link",
+      target: parts[0],
+      params,
+      content,
+      url
+    });
+  }
+
+  private parseParams(input: string): {[key: string]: string} {
+    // Match for parameter pattern
+    const re = /(\w+)=(\w*)\&*/g;
+    const params = {};
+    // Build the parameter object
+    input.replace(re, (match: string, param: string, value: string) => {
+
+      params[param] = value;
+      return '';
+    });
+
+    return params;
+  }
 }

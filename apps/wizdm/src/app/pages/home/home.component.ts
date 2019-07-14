@@ -14,7 +14,7 @@ export class HomeComponent {
 
   readonly msgs$: Observable<any>;
   
-  constructor(content: ContentResolver, readonly nav: NavigatorService) {
+  constructor(readonly content: ContentResolver, readonly nav: NavigatorService) {
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = content.stream('home');
   }

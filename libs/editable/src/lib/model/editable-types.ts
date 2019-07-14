@@ -67,5 +67,6 @@ export interface wmImage extends wmEditable {
   size?: wmImageSize,
   url?: string,
   alt?: string,
-  title?: string
+  title?: string,
+  content?: wmText[]
 }

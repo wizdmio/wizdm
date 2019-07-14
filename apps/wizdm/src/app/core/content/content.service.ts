@@ -150,6 +150,29 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     );
   }
 
+  private merge(localModule: any, defaultModule?: any): any {
+    // Skips recurring when no default module is available
+    if(!!defaultModule) {
+      // Loops on the keys of the default object
+      Object.keys(defaultModule).forEach( key => {
+        // Add the property when undefined
+        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
+        // Override the property on array length mismatch
+        else if(defaultModule[key] instanceof Array && 
+               (!(localModule[key] instanceof Array) || 
+               localModule[key].length !== defaultModule[key].length)) {
+          localModule[key] = defaultModule[key]; 
+        }
+        // Recurs down the inner objects when needed
+        else if(typeof localModule[key] === 'object') {
+          localModule[key] = this.merge(localModule[key], defaultModule[key]);
+        }
+      });
+    }
+    // Returns the merged object
+    return localModule;
+  }
+
   // Implements single route user authentication guarding
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean|UrlTree> {
 
@@ -205,7 +228,21 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     }
 
     // Routes to the requested page otherwise
-    return this.navigate(url);
+    return this.navigate(url, { queryParams: this.parseParams(url) });
+  }
+
+  private parseParams(input: string): {[key: string]: string} {
+    // Match for parameter pattern
+    const re = /(\w+)=(\w*)\&*/g;
+    const params = {};
+    // Build the parameter object
+    input.replace(re, (match: string, param: string, value: string) => {
+
+      params[param] = value;
+      return '';
+    });
+
+    return params;
   }
 
   // Routing helper to easily jump on a specified page keeping the current language
@@ -224,16 +261,16 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
 
   public detectLanguage(): string {
 
-    const navigator: any = window.navigator || {};
+    const navigator: any = !!window && window.navigator || {};
 
     // Detects the preferred language according to the browser, whenever possible
     return (navigator.languages ? navigator.languages[0] : null) || 
             navigator.language ||                                                                                                   
             navigator.browserLanguage || 
-            navigator.userLanguage;
+            navigator.userLanguage || '';
   }
 
-  public routerLink(lang: string): any[] {
+  public languageLink(lang: string): any[] {
     // Splits the current url
     const cmds = this.router.url.split('/');
     // Makes sure its absolute
@@ -241,6 +278,10 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     // Overwrites the language
     cmds[1] = lang;
     return cmds;
+  }
+
+  public isLanguage(lang: string): boolean {
+    return this.router.isActive(lang, false);
   }
   
   /**
@@ -250,31 +291,8 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
    */
   public switchLanguage(lang: string, url?: string): Promise<boolean> {
     // Computes the new commands
-    const link = !!url ? ['/', lang, url] : this.routerLink(lang);
+    const link = !!url ? ['/', lang, url] : this.languageLink(lang);
     //...and navigates
     return this.router.navigate(link);
-  }
-
-  private merge(localModule: any, defaultModule?: any): any {
-    // Skips recurring when no default module is available
-    if(!!defaultModule) {
-      // Loops on the keys of the default object
-      Object.keys(defaultModule).forEach( key => {
-        // Add the property when undefined
-        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
-        // Override the property on array length mismatch
-        else if(defaultModule[key] instanceof Array && 
-               (!(localModule[key] instanceof Array) || 
-               localModule[key].length !== defaultModule[key].length)) {
-          localModule[key] = defaultModule[key]; 
-        }
-        // Recurs down the inner objects when needed
-        else if(typeof localModule[key] === 'object') {
-          localModule[key] = this.merge(localModule[key], defaultModule[key]);
-        }
-      });
-    }
-    // Returns the merged object
-    return localModule;
   }
 }

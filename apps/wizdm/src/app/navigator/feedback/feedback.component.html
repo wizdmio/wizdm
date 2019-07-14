@@ -80,7 +80,7 @@
       </mat-dialog-actions>
 
       <!-- Credits -->
-      <!--span *ngIf="!!msgs.credits" class="mat-small mat-link">{{ msgs.credits.caption }}</span-->
+      <a *ngIf="!!msgs.credits" class="mat-small" [href]="msgs.credits.url" (click)="redirect(msgs.credits.url)">{{ msgs.credits.caption }}</a>
 
     </form>
 

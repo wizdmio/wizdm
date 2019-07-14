@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FirebaseHandler } from './firebase-handler.component';
+import { EditableComponent } from './editable.component';
 
-describe('FirebaseHandler', () => {
-  let component: FirebaseHandler;
-  let fixture: ComponentFixture<FirebaseHandler>;
+describe('EditableComponent', () => {
+  let component: EditableComponent;
+  let fixture: ComponentFixture<EditableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FirebaseHandler ]
+      declarations: [ EditableComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FirebaseHandler);
+    fixture = TestBed.createComponent(EditableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

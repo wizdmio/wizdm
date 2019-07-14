@@ -8,7 +8,7 @@
     <!-- Mini fab with social links -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
 
-      <a mat-mini-fab [routerLink]="item.link" [queryParams]="item.params" *ngFor="let item of msgs.socials">
+      <a mat-mini-fab [href]="item.link" (click)="redirect(item.link)" *ngFor="let item of msgs.socials">
         <wm-icon [icon]="item.icon"></wm-icon>
       </a>
 
@@ -25,8 +25,8 @@
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
 
       <a class="mat-small" 
-         routerLinkActive="link-disabled"
-         [routerLink]="content.routerLink(item.value)" 
+         [class.link-disabled]="content.isLanguage(item.value)"
+         [routerLink]="content.languageLink(item.value)" 
          *ngFor="let item of msgs.languages">{{ item.label }}</a>
       
     </div>

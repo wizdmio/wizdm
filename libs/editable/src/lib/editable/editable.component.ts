@@ -2,7 +2,7 @@ import { Component, Input, HostBinding } from '@angular/core';
 import { EditableDocument } from '../editable-document.component';
 import { EditableText, EditableItem } from '../model/editable-text';
 import { EditableCell } from '../model/editable-table';
-import { EditableImage } from '../model/editable-image';
+//import { EditableImage } from '../model/editable-image';
 
 @Component({
   selector: '[wm-editable]',
@@ -29,7 +29,7 @@ export class EditableComponent {
   @HostBinding('attr.selected') get selected() { 
     return this.document.selection.includes(this.node) ? '' : undefined; 
   }
-
+/*
   // Helper function computing the max-size style for images
   size(img: EditableImage): string {
 
@@ -53,7 +53,7 @@ export class EditableComponent {
 
     return '100%';
   }
-
+*/
   // Helper function computing the text node style
   style(text: EditableText): any {
 

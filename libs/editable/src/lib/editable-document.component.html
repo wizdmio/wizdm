@@ -27,6 +27,9 @@
     <!-- Tables at root level only -->
     <table *ngSwitchCase="'table'" [wm-table]="node"></table>
 
+    <!-- Figures with optional caption -->
+    <figure *ngSwitchCase="'image'" [wm-image]="node"></figure>
+
   </ng-container>
   
 </ng-container>

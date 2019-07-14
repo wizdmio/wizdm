@@ -42,10 +42,17 @@
     </div>
 
     <!-- Likes on the right -->
-    <wm-likes [readonly]="project.isMine"
+    <!--wm-likes [readonly]="project.isMine"
               [counter]="project.likes.counter$ | async"
               (changeFavorite)="project.likes.update($event ? 1 : -1)">
-    </wm-likes>
+    </wm-likes-->
+
+    <button mat-button (click)="project.likes.update($event ? 1 : -1)">
+
+      <wm-likes [counter]="project.likes.counter$ | async" [favorite]="favorite">
+      </wm-likes>
+    
+    </button>
 
   </div>
 

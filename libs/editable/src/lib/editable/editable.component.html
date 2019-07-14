@@ -16,14 +16,14 @@
          [attr.selected]="document.selection.includes(child) ? '' : undefined"
          (click)="navigate(child.url)">{{ child.value }}</a>
   
-      <!-- Renders an image node -->
-      <img *ngSwitchCase="'image'" 
+      <!-- Renders an image as inline: DISABLED -->
+      <!--img *ngSwitchCase="'image'" 
            [id]="child.id" 
            [src]="child.url" 
            [alt]="child.alt" 
            [title]="child.title" 
            [style.max-width]="size(child)" 
-           [attr.selected]="document.selection.includes(child) ? '' : undefined"/>
+           [attr.selected]="document.selection.includes(child) ? '' : undefined"/-->
   
     </ng-container>
   

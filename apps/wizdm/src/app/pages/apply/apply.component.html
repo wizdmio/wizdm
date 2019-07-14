@@ -7,12 +7,7 @@
     <div fxHide.lt-sm>
       <p *ngIf="welcomeBack" @fadeIn>{{ msgs.welcomeBack }}</p>
       <p *ngIf="!welcomeBack" @fadeIn>{{ msgs.description }}</p>
-      <p *ngIf="application" @fadeIn>
-        <wm-disclaimer [source]="msgs.clearForm" 
-                      (action)="disclaimerAction($event)"
-                      actionClass="mat-link">
-        </wm-disclaimer>
-      </p>
+      <p *ngIf="application" [wm-disclaimer]="msgs.clearForm" (navigate)="disclaimerAction($event.target)" @fadeIn></p>
     </div>
   </header> 
 
@@ -119,17 +114,12 @@
       <div fxLayout="row" fxLayoutAlign="center center" fxFill>
         <div class="disclaimer">
           <p>{{ msgs.appSubmit?.description }}</p>
-          <p wm-disclaimer class="mat-small"
-            [source]="msgs.appSubmit?.disclaimer"
-            (action)="disclaimerAction($event)">
-          </p>
+          <p class="mat-small" [wm-disclaimer]="msgs.appSubmit?.disclaimer" (navigate)="disclaimerAction($event.target)"></p>
 
           <!-- Agree checkbox -->
           <div fxLayout="row" fxLayoutAlign="center center" fxFill>
             <mat-checkbox labelPosition="before" color="primary" #agree>
-              <wm-disclaimer [source]="msgs.appSubmit?.agree"
-                            (action)="disclaimerAction($event)">
-              </wm-disclaimer>
+              <span [wm-disclaimer]="msgs.appSubmit?.agree" (navigate)="disclaimerAction($event.target)"></span>
             </mat-checkbox>
           </div>
         </div>

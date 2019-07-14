@@ -7,18 +7,42 @@
 
     <div fxFlexOffset.gt-sm="10" fxFlex.gt-sm="450px" fxLayout="column" fxLayoutAlign="center center" @landing>
 
-      <h1>{{ msgs?.title }}</h1>
+      <h1>{{ msgs.title }}</h1>
       
-      <p>{{ msgs?.pitch }}</p>
+      <p>{{ msgs.pitch }}</p>
       
-      <button mat-raised-button color="accent" routerLink="apply">{{ msgs?.start }}</button>
+      <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption }}</button>
       
-      <p wm-disclaimer [source]="msgs?.join" class="mat-small"></p>
+      <p [wm-disclaimer]="msgs.join" class="mat-small" (navigate)="content.navigate($event.target)"></p>
   
     </div>
 
     <img fxHide.lt-sm fxFlex="40" src="assets/img/blue-buddha.svg" alt="wizdm">
 
+  </section>
+
+  <section class="features" fxLayout="column" fxLayoutAlign="center center">
+
+    <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column">
+  
+      <ng-container *ngFor="let feat of msgs.features">
+    
+        <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
+  
+          <div class="content">
+  
+            <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
+            <h2><b>{{ feat.title }}</b></h2>
+            <p> {{ feat.description }}</p>
+  
+          </div>
+  
+        </div>
+  
+      </ng-container>
+      
+    </div>
+  
   </section>
 
 </ng-container>

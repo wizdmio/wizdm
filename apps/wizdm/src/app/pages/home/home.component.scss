@@ -40,4 +40,44 @@
 
     button { margin: 16px 0; }
   }
+
+  .features {
+
+    padding: 32px;
+
+    .row {
+
+      .cell {
+
+        padding: 8px;
+
+        .content {
+
+          width: 100%;
+          height: 100%;
+          padding: 16px;
+          text-align: center;
+          box-sizing: border-box;
+          border-radius: 5px;
+
+          @include mat-elevation-transition;
+          @include mat-elevation(2);
+          &:hover { @include mat-elevation(8);}
+
+          .icon {
+            $size: 32px;
+            font-size: $size;
+            width: $size * 1.5;// Makes sure having room to center larger icons
+            height: $size;
+            line-height: $size;
+            //border-radius: 50%;
+            //border: 1px solid currentColor;
+            //box-sizing: border-box;
+            //text-align: center;
+            //vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
 }

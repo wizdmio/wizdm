@@ -5,13 +5,12 @@
     "toolbar": {
         "public": [
             { "label": "Wizdm" },
-            { "label": "Esplora" },
-            { "label": "Manifesto" }
+            { "label": "Come funziona" },
+            { "label": "Esplora" }
         ],
         "private": [
             { "label": "Wizdm" },
             { "label": "Esplora" },
-            { "label": "Messaggi" },
             { "label": "Applica" }
         ]
     },
@@ -44,5 +43,9 @@
             { "label": "Contattaci" },
             { "label": "Termini e privacy" }
         ]
+    },
+
+    "feedback": {
+        "caption": "Contattaci"
     }
 }

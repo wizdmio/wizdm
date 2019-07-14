@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { ContentResolver } from './content-resolver.service';
+import { ContentResolver } from './content.service';
 
 describe('ContentResolver', () => {
   beforeEach(() => {
