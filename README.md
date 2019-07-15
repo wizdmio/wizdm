@@ -36,9 +36,9 @@ Take a look on [@wizdm/connect](libs/connect) library abstracting the communicat
 
 The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl][nrwl] using their Nx Angular Extension [@nrwl/schematics][nrwl-schematics]. This means both the source code of the web application(s) and the external potentially shared libraries are stored in the same single repository under the `/apps` and `/libs` folders respectively.
 
-## Multiple language content
+## Internationalization
 
-The project uses a [content resolver](apps/wizdm/src/app/core/content-resolver) service to dynamically load contents in different languages by pre-fetching localilzed content from 'assets/i18n'. The service is then injected into the components (pages) needing 
+The project uses a [content resolver](apps/wizdm/src/app/core/content-resolver) to dynamically load contents in different languages by pre-fetching localilzed content from 'assets/i18n'. The service is then injected into the components (pages) needing 
 to get localized contents making sure it is always fully loaded and available to the target container prior to get initialized.
 
 At first start, the resolver checks the authenticated user language preferences falling back detecting the browser language when unavailable (aka the user is not logged in). This provides the useful side effect of preventing the initial page from flickering between unlogged and logged-in statuses while an already logged-in user is loading the app from scratch.
