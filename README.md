@@ -11,7 +11,11 @@ Wizdm
 [![ngversion](https://img.shields.io/github/package-json/dependency-version/wizdmio/wizdm/@angular/core.svg?label=angular)](.)
 [![license](https://img.shields.io/github/license/wizdmio/wizdm.svg?color=blue)](LICENSE.md)
 
-Wizdm is an open source - serverless - single page application - project meant to help aspiring startuppers to bootstrap their ideas into functioning prototypes for launching and testing them.
+**Live demo:** https://wizdm.io 
+
+A boilerplate to kickstart serverless single page applications based on Angular and Firebase.
+
+Wizdm is an open source project meant to help aspiring startuppers to bootstrap their side projects into functioning prototypes ready for launch.
 
 ## Developers' notes
 
