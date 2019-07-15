@@ -13,9 +13,7 @@ Wizdm
 
 **Live demo:** https://wizdm.io 
 
-A boilerplate to kickstart serverless single page applications based on Angular and Firebase.
-
-Wizdm is an open source project meant to help aspiring startuppers to bootstrap their side projects into functioning prototypes ready for launch.
+Wizdm is a boilerplate to kickstart serverless single page applications based on Angular and Firebase. Designed to help aspiring startuppers to bootstrap their side projects into functioning prototypes ready for launch.
 
 ## Developers' notes
 
