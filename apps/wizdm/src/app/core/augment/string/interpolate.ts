@@ -25,7 +25,7 @@ if(typeof String.prototype.interpolate === 'undefined') {
         .split(".")
         .reduce( (obj, token) => { 
           return obj && obj[token];
-        }, context) || match;
+        }, context);
       });
   };
 }

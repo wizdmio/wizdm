@@ -1,0 +1,5 @@
+
+<div *ngIf="!!svg; else loading" [innerHTML]="svg" @fadeIn></div>
+<ng-template #loading>
+  <ng-content></ng-content>
+</ng-template>

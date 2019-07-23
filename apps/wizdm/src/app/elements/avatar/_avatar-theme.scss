@@ -1,0 +1,22 @@
+
+@mixin wm-avatar-theme($theme) {
+
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  
+  .wm-avatar {
+    
+    border: 2px solid map-get($background, background);
+
+    background-color: map-get($background, background);
+    
+    &[color="primary"] { fill: mat-color($primary); }
+    
+    &[color="accent"] { fill: mat-color($accent); }
+    
+    &[color="warn"] { fill: mat-color($warn); }
+  }
+}

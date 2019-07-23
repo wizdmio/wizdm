@@ -1,0 +1,19 @@
+
+@mixin wm-thumbnail-theme($theme) {
+ 
+  .wm-thumbnail { 
+
+    @each $color in ('primary', 'accent', 'warn') {
+
+      $palette: map-get($theme, #{$color});
+
+      &[color=#{$color}][selected=true] { 
+
+        .seleciton {
+          border: 1px solid mat-color($palette);
+          background-color: mat-color($palette, lighter, 0.25);
+        }
+      }
+    }
+  }
+}

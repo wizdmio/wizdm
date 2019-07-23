@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core'
 import { $animations } from './avatar.animations';
 
@@ -6,8 +6,9 @@ import { $animations } from './avatar.animations';
   selector: 'wm-avatar',
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss'],
-  animations: $animations,
-  host: { class: 'wm-avatar' }
+  host: { class: 'wm-avatar' },
+  encapsulation: ViewEncapsulation.None,
+  animations: $animations
 })
 export class AvatarComponent {
 
@@ -21,5 +22,7 @@ export class AvatarComponent {
 
   @Input() alt: string;
 
+  // Avatar color customization 
+  @HostBinding('attr.color')
   @Input() color: ThemePalette;
 }

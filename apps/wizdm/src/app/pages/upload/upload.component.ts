@@ -1,194 +1,93 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { UserProfile, wmFile } from '@wizdm/connect';
-import { ToolbarService } from '../../navigator';
-import { FileOpenComponent } from '../../elements/file-open';
-import { PopupService } from '../../elements/popup';
-import { ContentResolver } from '../../core';
-import { Observable, Subscription } from 'rxjs';
-import { tap, switchMap } from 'rxjs/operators';
-
-interface UploadTask {
-  snapshot: Observable<any>;
-  done:     boolean;
-  id:       number;
-}
+import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { UserProfile, UploaderService, wmFile } from '@wizdm/connect';
+import { Observable, of } from 'rxjs';
+import { filter, take, tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-upload',
   templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.scss']
+  styleUrls: ['./upload.component.scss'],
+  host: { 'class': 'wm-page' }
 })
-export class UploadComponent implements OnInit, OnDestroy {
+export class UploadComponent implements OnInit {
 
-  @ViewChild(FileOpenComponent, { static: true }) openFile: FileOpenComponent;
-  @ViewChild(MatSelectionList, { static: false }) fileList: MatSelectionList;
+  public uploads: Observable<any[]>;
+  public loading: string;
 
-  private msgs$: Observable<any>;
-  private sub: Subscription;
-  public msgs: any = {};
-  
-  public uploads$: Observable<any[]>;
-  public tasks: UploadTask[] = [];
-  
-  constructor(private  toolbar  : ToolbarService,
-              private  profile  : UserProfile,
-              private  popup    : PopupService,
-              readonly content  : ContentResolver) {
+  constructor(private profile: UserProfile, private dialog: MatDialog) {}
 
-    // Gets the localized content pre-fetched during routing resolving
-    this.msgs$ = content.stream('upload');
+  @Input() msgs: any = {};
+
+  // Displays the selection 'none' option
+  @Input() none: boolean = true;
+
+  private get uploader(): UploaderService {
+    return this.profile.uploads;
   }
 
   ngOnInit() {
 
-    // Initialize the page content
-    this.sub = this.msgs$.pipe( switchMap( msgs => {
-        // Keeps a snapshot of the localized content for internal use
-        this.msgs = msgs;
-        // Activates the toolbar actions
-        const actions = this.toolbar.activateActions(msgs.actions);
-        // Disables the delete action
-        this.toolbar.enableAction('delete', false);
-
-        return actions;
-      })
-    // Subscrbes to execute the actions
-    ).subscribe( code => this.executeAction(code) );
-  
-    // Gets the user uploads observable
-    this.uploads$ = this.profile.uploads.stream( ref => ref.orderBy('created') )
-      // Disposes completed upload tasks on list change
-      .pipe( tap( files => this.disposeTasks() ));
+    // Gets the user uploads ob  servable
+    this.uploads = this.uploader.stream( ref => ref.orderBy('created') )
+      // Resets the uploading progress eventually running when the list updates
+      .pipe( tap( () => this.loading = null ));
   }
 
-  ngOnDestroy() { this.sub.unsubscribe(); }
+  public selectedFile: wmFile = {};
 
-  public selectionChange(change: MatSelectionListChange): void {
-
-    // Enables / disables the delete action upon list selection
-    const hasValue = change.source.selectedOptions.hasValue();
-    this.toolbar.enableAction('delete', hasValue );
+  public select(file: wmFile): void {
+    this.selectedFile = file;
   }
 
-  private executeAction(code: string): void {
+  public upload(files: FileList): void {
+
+    // Gets the first file
+    const file = files.item(0);
     
-    switch(code) {
+    // Shows the uploading progress for the selected file
+    // it'll be resetted when the uploads list updates
+    this.loading = file.name;
 
-      case 'upload':
-      this.openFile.show();
-      break;
-
-      case 'delete':
-      // Ask for confirmation prior to start deleting
-      this.popup.confirmPopup(this.msgs.canDelete)
-        .subscribe( () => this.deleteSelection() );
-      break;
-    }
+    // Uploads t  he file and selects it when done
+    this.uploader.uploadOnce(file)
+      .then( file => {
+        this.selectedFile = file;
+      }).catch( () => this.loading = null );
   }
 
-  // Disposes all the tasks marked as done
-  private disposeTasks(): void {
+  @ViewChild('dialog', { static: true }) 
+  private template : TemplateRef<UploadComponent>;
+  private config   : MatDialogConfig = { 
+    width: '80vw'//,
+    //data: this
+  };
 
-    this.tasks = this.tasks.filter( task => {
+  @Output() file = new EventEmitter<wmFile>();
 
-      if(task.done){
-        delete task.snapshot;
-        return false;
-      }
-      return true;
-    });
-  }
+  /**
+   * Displays the dialog to select the file among the uploads
+   * @param an optional url of the currently selected file, if any 
+   * @returns a Promise resolving to the selcted file
+   */
+  public chooseFile(url?: string): Promise<wmFile> {
 
-  // Marks a task as completed
-  private completeTask(id: number): void {
-    let index = this.tasks.findIndex( value => value.id === id );
-    if( index >= 0 ) {
-      this.tasks[index].done = true;
-    }
-  }
-
-  // Helper to computes snapshot progression
-  public progress(s: wmFile): number {
-    return s.xfer / s.size * 100;
-  }
- 
-  public upload(list: FileList, start: number = 0): void {
-    
-    // The File object
-    const file = list.item(start);
-    
-    // Check for file type
-    if(file.type.split('/')[0] !== 'image') { 
-      console.error('Unsupported file type')
-      return;
-    }
-
-    // Recurs with the next file in the list when needed
-    if(start < list.length - 1) {
-      this.upload(list, start + 1);
-    }
-
-    // Gets the next task id
-    let id = this.tasks.length;
-
-     // Snapshot (subscription happens in the view and triggers the transfer)
-    let snapshot = this.profile.uploads.upload(file).pipe( 
-      tap( file => {
-        // Intercepts the upload completion and mark the task for disposal
-        if( file.xfer === file.size ) {
-          this.completeTask(id);
-        }
-      })
-    );
-
-    // Pushes the task into the stack for upload execution
-    this.tasks.push({ snapshot, id, done: false });
-  }
-
-  // Files deletion list
-  private deletingFiles: wmFile[] = [];
-
-  // Helper to check if a file is in the deletion list
-  public isFileDeleting(file: wmFile): boolean {
-    return this.deletingFiles.findIndex( f => f.fullName === file.fullName) >=0;
-  }
-
-  // Helper to remove a file from the deletion list 
-  public fileDeleted(file: wmFile): void {
-    this.deletingFiles = this.deletingFiles.filter( f => f.fullName !== file.fullName );
-  }
-
-  private clearWhenUserImage(file: wmFile): void {
-
-    // Resets the img url in user profile when deleting the releted image
-    if(file.url === this.profile.data.img) {
-      this.profile.update({ img: null });
-    }
-  }
-
-  private deleteSelection(): void {
-
-    if(this.fileList && this.fileList.selectedOptions.hasValue()) {
-
-      // Gets the list of selected files, the list will be used to mark the list item as disabled
-      // while deletion is in progress
-      this.deletingFiles = this.fileList.selectedOptions.selected
-        .map( option => option.value );
-
-      // Deletes the selected files
-      this.deletingFiles.forEach( file => {
-
-        // Check if the specified file was used as user image and clears it
-        this.clearWhenUserImage(file);
+    // Starts by getting the already selected file if the url is specified
+    return ( url ? this.uploader.streamByUrl(url).pipe( take(1) ) : of<wmFile>({}) )
+      .pipe(
+        switchMap( file => {
+          // Keeps the previous selection
+          this.selectedFile = file;
+          // Shows the dialog for the user to select
+          return this.dialog.open(this.template, this.config)
+            // Returns an obbservable making sure it completes
+            .afterClosed();
+        }),
+        // Filters unefined values (such as user pressing cancel)
+        filter( file => typeof file !== 'undefined' && file !== null),
+        // Emits the selection event
+        tap( file => { this.file.emit(file); })
         
-        // Once deleted, removes the file from the deletion list 
-        this.profile.uploads.delete(file.id)
-          .then( () => this.fileDeleted(file) );
-      });
-
-      // Disables the delete action
-      this.toolbar.enableAction('delete', false);
-    }
+      ).toPromise();
   }
 }

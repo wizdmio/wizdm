@@ -1,17 +1,18 @@
 <ng-content></ng-content>
 
 <ng-template #template>
-  <mat-dialog-content *ngIf="user" [wmThemeColor]="themeColor">
+  <!--mat-dialog-content *ngIf="user" [wmThemeColor]="themeColor"-->
+  <mat-dialog-content *ngIf="user">
 
     <!-- Cover -->
-    <div class="cover">
+    <div class="cover wm-theme primary background-color-default">
       <!-- Cover picture -->
       <img *ngIf="user.cover" [src]="user.cover" (error)="user.cover = null" />
 
       <!-- Options menu -->
-      <button mat-icon-button class="menu" [matMenuTriggerFor]="options">
+      <!--button mat-icon-button class="menu" [matMenuTriggerFor]="options">
         <mat-icon class="shade">more_horiz</mat-icon>
-      </button>
+      </button-->
     </div>
 
     <!-- Content --> 
@@ -21,8 +22,8 @@
         <wm-avatar [src]="user.img" [color]="avatarColor"></wm-avatar>
       </div>
       <!-- User info -->
-      <div class="name">{{ user.name }}</div>
-      <div class="motto">{{ user.motto }}</div>
+      <div class="name mat-subheading-2">{{ user.name }}</div>
+      <div class="motto mat-small">{{ user.motto }}</div>
 
       <!-- Buttons -->
       <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -38,8 +39,8 @@
       </div>      
     </div>
 
-    <!-- Options menu-->
-    <mat-menu #options>
+    <!-- Options menu -->
+    <!--mat-menu #options>
       <button mat-menu-item>
         <mat-icon>photo</mat-icon>
         <span>{{ msgs?.menu?.cover }}</span>
@@ -50,8 +51,7 @@
       </button>
     </mat-menu>
 
-    <wm-color-picker [color]="user.color || 'none'" (pick)="setColor($event)" #picker>
-    </wm-color-picker>  
+    <wm-color-picker [color]="user.color || 'none'" (pick)="setColor($event)" #picker></wm-color-picker-->  
 
  </mat-dialog-content>
 </ng-template>

@@ -21,7 +21,8 @@ export interface DorbellSubmit {
 @Component({
   selector: 'wm-feedback',
   templateUrl: './feedback.component.html',
-  styleUrls: ['./feedback.component.scss']
+  styleUrls: ['./feedback.component.scss'],
+  host: { 'class': 'wm-feedback' }
 })
 export class FeedbackComponent {
 
@@ -47,10 +48,10 @@ export class FeedbackComponent {
     return false;
   }
   
-  constructor(private content   : ContentResolver, 
-              private builder   : FormBuilder, 
-              private dialog    : MatDialog, 
-              private doorbell  : DoorbellService) { 
+  constructor(private content  : ContentResolver, 
+              private builder  : FormBuilder, 
+              private dialog   : MatDialog, 
+              private doorbell : DoorbellService) { 
 
     // Gets the localized content pre-fetched by the resolver during routing
     this.msgs$ = content.stream("navigator.feedback");

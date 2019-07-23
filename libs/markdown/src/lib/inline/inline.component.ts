@@ -1,11 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { MarkdownParser, mdAST } from '../parser/parser.service';
 import { MarkdownRenderer } from '../markdown.component';
 
 @Component({
   selector: '[wm-inline]',
   templateUrl: './inline.component.html',
-  styleUrls: ['./inline.component.scss']
+  styleUrls: ['./inline.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  host: { 'class': 'wm-markdown-inline' }
 })
 export class InlineComponent {
 

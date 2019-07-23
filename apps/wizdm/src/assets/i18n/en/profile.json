@@ -13,7 +13,7 @@
   "actions": [
     { "caption": "Sign-out", "icon": "exit_to_app", "link": "login", "params": { "mode": "signOut" }},
     { "menu": [
-      { "caption": "My Uploads", "icon": "cloud_upload", "link": "upload" }
+      { "caption": "My Files", "icon": "cloud_upload", "link": "folder" }
     ]}
   ],
 

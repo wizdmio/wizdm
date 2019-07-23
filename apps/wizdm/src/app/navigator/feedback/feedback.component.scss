@@ -1,4 +1,17 @@
 
+// Component
+:host {
+
+  .feedback-btn {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    border-radius: 500px;
+  }
+}
+
+// Dialog
+
 .mat-dialog-content { 
   max-width: 100%;
   width: 350px;

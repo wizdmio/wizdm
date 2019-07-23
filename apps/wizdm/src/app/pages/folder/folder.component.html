@@ -1,0 +1,47 @@
+
+<header fxLayout="column">
+  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
+  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
+</header>
+
+<mat-divider></mat-divider>
+
+<!-- Hidden OpenFile component -->
+<wm-openfile accept="image/*" (files)="upload($event)" multiple="true"></wm-openfile>
+
+<!-- File list -->
+<mat-selection-list *ngIf="uploads$ | async as files" (selectionChange)="selectionChange($event)">
+
+  <!-- No files message -->
+  <p *ngIf="!files.length && !tasks.length">{{ msgs?.description }}</p>
+
+  <!-- Uploaded file items -->
+  <mat-list-option *ngFor="let file of files" [value]="file" [disabled]="isFileDeleting(file)">
+    <img matListAvatar [src]="file.url">
+    <h4 matLine>{{ file.name }}</h4>
+    <p matLine>
+      {{ file.size | wmFileSize }}
+      <span class="mat-small">&nbsp;({{ file.fullName }})</span>
+    </p>
+  </mat-list-option>
+
+  <!-- Uploading progress fake item(s) -->
+  <ng-container *ngFor="let task of tasks">
+    <mat-list-item *ngIf="task.snapshot | async as snapshot">
+      <svg matListAvatar><use xlink:href="#upload"></use></svg>
+      <h4 matLine>{{ snapshot.fileName }}</h4>
+      <p matLine>
+        <mat-progress-bar [value]="progress(snapshot)"></mat-progress-bar>
+        <span>{{ snapshot.xfer | wmFileSize }} / {{ snapshot.size | wmFileSize }}</span>
+      </p>
+    </mat-list-item>
+  </ng-container>
+
+</mat-selection-list>
+
+<!-- Cloud upload image for progress  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" display="none">
+  <symbol id="upload" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+  </symbol>
+</svg>

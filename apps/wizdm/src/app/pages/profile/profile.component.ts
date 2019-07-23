@@ -12,7 +12,8 @@ import moment from 'moment';
 @Component({
   selector: 'wm-user-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
+  host: { 'class': 'wm-page adjust-top content-padding' }
 })
 export class UserComponent implements OnInit, OnDestroy, CanPageDeactivate  {
 

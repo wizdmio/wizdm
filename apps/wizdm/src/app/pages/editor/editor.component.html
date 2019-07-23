@@ -1,4 +1,27 @@
 
+<!-- Document body -->
+<div fxLayout="row" fxLayoutAlign="space-between strech">
+
+  <div fxFlex="1 1 auto" class="desk">
+
+    <div class="page background-color" 
+      [wm-editable-document]="document"
+      [edit]="editMode" 
+      [@editing]="editMode"
+      (contextmenu)="editMode ? menu.open($event) : true" 
+      (change)="save($event)"
+      #doc>
+    </div>
+
+    <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
+  
+  </div>
+
+</div>
+
+<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>
+
+
 <!--mat-drawer-container>
   
   <mat-drawer mode="side" position="end" opened>
@@ -36,23 +59,3 @@
 </mat-drawer-container>
 
 <wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox-->
-
-<!-- Document body -->
-<div fxLayout="row" fxLayoutAlign="space-between strech">
-
-  <div fxFlex="1 1 auto" class="desk">
-
-    <div class="page" [@editing]="editMode"
-      (contextmenu)="editMode ? menu.open($event) : true" 
-      (change)="save($event)"
-      [wm-editable-document]="document"
-      [edit]="editMode" #doc>
-    </div>
-
-    <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
-  
-  </div>
-
-</div>
-
-<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>

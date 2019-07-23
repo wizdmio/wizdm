@@ -8,7 +8,7 @@
     <!-- Mini fab with social links -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
 
-      <a mat-mini-fab [href]="item.link" (click)="redirect(item.link)" *ngFor="let item of msgs.socials">
+      <a mat-mini-fab color="primary" [href]="item.link" (click)="redirect(item.link)" *ngFor="let item of msgs.socials">
         <wm-icon [icon]="item.icon"></wm-icon>
       </a>
 
@@ -24,8 +24,8 @@
     <!-- Languages -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
 
-      <a class="mat-small" 
-         [class.link-disabled]="content.isLanguage(item.value)"
+      <a wm-link class="mat-small" 
+         [disabled]="content.isLanguage(item.value)"
          [routerLink]="content.languageLink(item.value)" 
          *ngFor="let item of msgs.languages">{{ item.label }}</a>
       
@@ -33,47 +33,10 @@
 
   </section>
 
-  <section fxLayout="row" fxLayoutAlign="center center" contrast>
+  <section fxLayout="row" fxLayoutAlign="center center" class="tag-line">
 
     <span class="mat-small">{{ copyright(msgs.copyright) }}</span>
   
   </section>
 
 </footer> 
-
-<!--mat-divider></mat-divider>
-<footer fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
-
-  <div fxFlexOrder.lt-sm="3">
-    <button mat-button routerLink="terms">{{msgs?.terms}}</button>
-  </div>
-  
-  <div fxFlexOrder.lt-sm="2">
-    <a mat-icon-button *ngFor="let item of msgs.items" [href]="item.link" target="_blank">
-      <wm-icon class="social" [icon]="item.icon"></wm-icon>
-    </a>
-  </div>
-  
-  <div fxLayout="row" fxFlexOrder.lt-sm="1" *ngIf="multiLanguage">
-    <mat-form-field>
-      
-      <mat-select [value]="language?.value" (valueChange)=changeLanguage($event)>
-        
-        <mat-select-trigger>
-          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" style="padding: 0 16px">
-            <img [src]="language?.image" class="flag"/>
-            <span>{{ language?.label }}</span>
-          </div>
-        </mat-select-trigger>
-        
-        <mat-option *ngFor="let opt of options" [value]="opt.value">
-          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <img [src]="opt.image" class="flag" /> 
-            <span>{{ opt.label }}</span>
-          </div>
-        </mat-option>
-      
-      </mat-select>
-    </mat-form-field>
-  </div>
-</footer-->

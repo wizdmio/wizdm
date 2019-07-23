@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { $animations } from './notify.animations';
 
 export type notifyType = 'info'|'error';
@@ -13,6 +13,7 @@ export interface notifyMsg {
   selector: 'wm-notify',
   templateUrl: './notify.component.html',
   styleUrls: ['./notify.component.scss'],
+  host: { 'class': 'wm-notify' },
   animations: $animations
 })
 export class NotifyComponent {

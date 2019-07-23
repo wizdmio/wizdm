@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { wmAction } from './toolbar.service';
 import { $animations } from './toolbar.animations';
 
@@ -6,6 +6,7 @@ import { $animations } from './toolbar.animations';
   selector: 'wm-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
+  host: { 'class': 'wm-toolbar' },
   animations: $animations
 })
 export class ToolbarComponent {

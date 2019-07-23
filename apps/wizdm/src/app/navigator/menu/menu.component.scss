@@ -1,9 +1,7 @@
-@import 'variables';
-@import 'theme';
 
 :host {
+
   display: block;
-  //position: absolute;
   position: relative;
   left: 0;
   top: 0;
@@ -11,14 +9,5 @@
   height: auto;
   box-sizing: border-box;
   overflow: hidden;
-
-  //background-color: map-get($wm-backgnd, app-bar);
-  //box-shadow: 0 6px 12px rgba(black, 0.125);
-
-  //nav { margin-bottom: $wm-menu-margin;}
-}
-
-.link-active {
-  border-left: 2px solid mat-color($wm-primary);
-  border-right: 2px solid mat-color($wm-primary);
+  
 }

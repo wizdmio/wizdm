@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { $animations } from './likes.animations';
 
 @Component({
   selector: 'wm-likes',
   templateUrl: './likes.component.html',
   styleUrls: ['./likes.component.scss'],
-  animations: $animations,
-  host: { class: 'wm-likes' }
+  host: { class: 'wm-likes' },
+  encapsulation: ViewEncapsulation.None,
+  animations: $animations
 })
 export class LikesComponent {
 

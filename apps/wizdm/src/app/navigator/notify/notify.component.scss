@@ -1,12 +1,12 @@
-@import 'variables';
-@import 'theme';
+//@import 'variables';
+//@import 'theme';
 
-$wm-message-padding: 16px !default;
+//$wm-message-padding: 16px !default;
 
 :host {
   display: block;
   position: fixed;
-
+/*
   top: $wm-content-top-desktop + 16px;
   left: 10vw;
   width: 80vw;
@@ -33,7 +33,7 @@ $wm-message-padding: 16px !default;
     border: 1px solid mat-color($wm-warn, 600);
     border-radius: 5px;
   }
-  
+  */
   .message {
     text-align: center;
   }

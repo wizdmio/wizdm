@@ -1,19 +1,22 @@
 
-img {
-  // Limits image size to 100%
-  max-width: 100%;
-  box-sizing: border-box; 
+wm-markdown-inline {
+  
+  img {
+    // Limits image size to 100%
+    max-width: 100%;
+    box-sizing: border-box; 
 
-  // % resizeing shortcuts
-  &[src*="#25"] { max-width: 25%; } 
-  &[src*="#33"] { max-width: 33%; } 
-  &[src*="#50"] { max-width: 50%; }
-  &[src*="#66"] { max-width: 66%; }
-  &[src*="#75"] { max-width: 75%; } 
+    // % resizeing shortcuts
+    &[src*="#25"] { max-width: 25%; } 
+    &[src*="#33"] { max-width: 33%; } 
+    &[src*="#50"] { max-width: 50%; }
+    &[src*="#66"] { max-width: 66%; }
+    &[src*="#75"] { max-width: 75%; } 
 
-  // px resizing shortcuts
-  &[src*="#regular"] { max-width: 1024px; }
-  &[src*="#small"] { max-width: 400px; }
-  &[src*="#thumb"] { max-width: 150px; }
-  &[src*="#icon"] { max-width: 48px; }
+    // px resizing shortcuts
+    &[src*="#regular"] { max-width: 1024px; }
+    &[src*="#small"] { max-width: 400px; }
+    &[src*="#thumb"] { max-width: 150px; }
+    &[src*="#icon"] { max-width: 48px; }
+  }
 }

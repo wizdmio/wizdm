@@ -1,25 +1,17 @@
-@import "variables";
-@import "theme";
 
 :host {
-  display: block;
-  position: relative;
-  //display: flex;
-  //flex-direction: column;
-  //justify-content: flex-start;
-  //align-content: center;
-  //align-items: center;
-  box-sizing: border-box;
-  margin: 0 $wm-content-margin;
+  //display: block;
+  //position: relative;
+  //box-sizing: border-box;
+  
+  //@include wm-padding-top($wm-content-padding);
 
-  @include wm-padding-top($wm-content-padding);
-}
+  wm-explore-item {
+    margin-bottom: 32px;
+  }
 
-wm-explore-item {
-  margin-bottom: 32px;
-}
-
-.spinner {
-  width: 210px;
-  height: 260px;
+  .spinner {
+    width: 210px;
+    height: 260px;
+  }
 }

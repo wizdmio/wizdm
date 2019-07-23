@@ -1,25 +1,13 @@
-@import "variables";
-@import "theme";
 
-$wm-footer-height: 64px !default;
+:host {
 
-footer {
-  min-height: $wm-footer-height;
-  width: 100%;
+  footer {
+    min-height: 64px;
+    width: 100%;
 
-  section { 
-    padding: 32px;
-    width: 100%; 
-  }
-  
-  *[contrast] {
-    background-color: mat-color($wm-accent);
-    color: mat-color($wm-accent, 100);
-  }
-
-  a.link-disabled {
-    text-decoration: dotted underline;
-    pointer-events: none;
-    color: map-get($mat-gray, 600);
+    section { 
+      padding: 32px;
+      width: 100%; 
+    }
   }
 }

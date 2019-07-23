@@ -1,0 +1,20 @@
+
+
+@mixin wm-logo-theme($theme) {
+  
+  .wm-logo {
+
+    @each $color in ('primary', 'accent', 'warn') {
+
+      &[color=#{$color}] {
+
+        $palette: map-get($theme, #{$color});
+        $hue: mat-color($palette);
+
+        .base  { fill: $hue; }
+        .light { fill: lighten($hue, 20%); }
+        .dark  { fill: darken($hue, 20%); }
+      }
+    }
+  }
+}

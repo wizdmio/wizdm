@@ -50,7 +50,7 @@ $wm-warn:    mat-palette($mat-red);
 // Creates a standard material light theme first...
 $wm-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
 
-//... than extends the theme with customized fore/backgrounds
+//... than overrides with customized fore/background values
 $wm-theme: extend-material-theme($wm-theme, 
 
   $foreground: (
@@ -66,12 +66,7 @@ $wm-theme: extend-material-theme($wm-theme,
 
     // Adds extra application specific foreground extension
     contrast:          white,
-    edit-box:          rgba(white, 0.8),
-  
-    // Adds Elements/Markdown specific foreground extensions
-    toggler:           mat-color($mat-grey, 500),
-    action:            mat-color($wm-primary),
-    link:              mat-color($wm-primary)
+    edit-box:          rgba(white, 0.8)
   ),
 
   $background: (
@@ -86,16 +81,79 @@ $wm-theme: extend-material-theme($wm-theme,
 );
 */
 
-@function extend-material-theme($mat-theme, $foreground, $background) {
+// Overrides standard theme foreground and background values with customized ones
+@function override-material-theme($theme, $foreground, $background) {
+  
   // Gets the standard material maps of fore/background
-  $mat-fore: map-get($mat-theme, foreground);
-  $mat-back: map-get($mat-theme, background);
+  $fore: map-get($theme, foreground);
+  $back: map-get($theme, background);
 
-  // Merges the standard values with the extensions
-  @return map-merge($mat-theme, (
-    foreground: map-merge($mat-fore, $foreground),
-    background: map-merge($mat-back, $background)
+  // Merges the standard values with the override
+  $result: map-merge($theme, (
+    foreground: map-merge($fore, $foreground),
+    background: map-merge($back, $background)
   ));
+
+  // Picks the text/contrast colors from the theme to be used as palette contrasts
+  $is-dark : map-get($theme, is-dark);
+  $dark    : map-get($foreground, if(is-dark == true, contrast, text));
+  $light   : map-get($foreground, if(is-dark == true, text, contrast));
+  
+  // Overrides the default contrast values to reflect the new foreground
+  @return map-merge($result, override-material-contrast($result, $dark, $light));
+}
+
+// Overrides standard theme palette contrasts with customized values
+@function override-material-contrast($theme, $dark: $dark-primary-text, $light: $light-primary-text) {
+
+  @each $pal in ('primary', 'accent', 'warn') {
+
+    $palette: map-get($theme, $pal);
+
+    @each $cnt in ('default', 'lighter', 'darker') {
+
+      $contrast: map-get($palette, #{$cnt}-contrast);
+
+      @if $contrast == $dark-primary-text {
+        $palette: map-merge($palette, (#{$cnt}-contrast: $dark));
+        $theme: map-merge($theme, (#{$pal}: $palette ));
+      }
+
+      @else if $contrast == $light-primary-text {
+        $palette: map-merge($palette, (#{$cnt}-contrast: $light));
+        $theme: map-merge($theme, (#{$pal}: $palette ));
+      }
+    }
+  }
+
+  @return $theme;
+}
+
+@mixin override-material-typo-margins(
+
+  $display-4:    24,
+  $display-3:    24,
+  $display-2:    24,
+  $display-1:    24,
+  $headline:     16,
+  $title:        16,
+  $subheading-2: 16,
+  $subheading-1: 16,
+  $body:         12
+
+) { 
+
+  .mat-h1, .mat-headline, .mat-typography h1 { margin: 0 0 #{$headline}px; }
+  .mat-h2, .mat-title, .mat-typography h2 { margin: 0 0 #{$title}px; }
+  .mat-h3, .mat-subheading-2, .mat-typography h3 { margin: 0 0 #{$subheading-2}px; }
+  .mat-h4, .mat-subheading-1, .mat-typography h4 { margin: 0 0 #{$subheading-1}px; }
+  .mat-h5, .mat-typography h5 { margin: 0 0 #{$body}px; }
+  .mat-h6, .mat-typography h6 { margin: 0 0 #{$body}px; }
+  .mat-body, .mat-body-1, .mat-typography { p { margin: 0 0 #{$body}px; }}
+  .mat-display-4, .mat-typography .mat-display-4 { margin: 0 0 #{$display-4}px; }
+  .mat-display-3, .mat-typography .mat-display-3 { margin: 0 0 #{$display-3}px; }
+  .mat-display-2, .mat-typography .mat-display-2 { margin: 0 0 #{$display-2}px; }
+  .mat-display-1, .mat-typography .mat-display-1 { margin: 0 0 #{$display-1}px; }
 }
 
 // Create the theme styles for selected component only.

@@ -1,0 +1,18 @@
+
+@mixin wm-spinner-theme($theme) {
+ 
+  .wm-spinner { 
+
+    @each $color in ('primary', 'accent', 'warn') {
+
+      $palette: map-get($theme, #{$color});
+
+      &[color=#{$color}] { 
+
+        .path { 
+          stroke: mat-color($palette);
+        }
+      }
+    }
+  }
+}

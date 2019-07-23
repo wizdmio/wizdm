@@ -4,8 +4,8 @@ import { MatIconModule } from '@angular/material';
 import { IconComponent } from './icon.component';
 
 @NgModule({
-  declarations: [IconComponent],
   imports: [CommonModule, MatIconModule],
+  declarations: [IconComponent],
   exports: [IconComponent]
 })
 export class IconModule {}

@@ -122,6 +122,9 @@ export class UserItemComponent {
 
   public editMode() {
 
+    // No action
+    if(!this.editable) { return; }
+
     // Makes sure to properly convert the value into a moment object whenever it's undefined or null
     const value = this.type === 'date' ? this.value ? moment(this.value, moment.defaultFormat) : moment() : this.value;
 

@@ -1,4 +1,6 @@
-:host {
+
+wm-markdown {
+  
   // Forces all the elements to inline 
   &[inline] { * { display: inline; } }
 

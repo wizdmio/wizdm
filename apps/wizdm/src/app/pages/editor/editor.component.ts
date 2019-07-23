@@ -12,6 +12,7 @@ import { $animations } from './editor.animations';
   selector: 'wm-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
+  host: { 'class': 'wm-page adjust-top' },
   animations: $animations
 })
 export class EditorComponent implements OnInit, OnDestroy {

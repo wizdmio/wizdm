@@ -1,21 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { ThemePalette } from '@angular/material/core'
 
 @Component({
   selector: 'wm-icon',
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
-  host: { class: 'wm-icon' }
+  host: { class: 'wm-icon' },
+  encapsulation: ViewEncapsulation.None
 })
 export class IconComponent {
 
-  public fontSet: string  = undefined;
-  public fontIcon: string = undefined;
+  public fontSet: string;
+  public fontIcon: string;
   public matIcon = "code";
 
-  constructor() { }
+  @Input() inline: boolean;
 
-  @Input() color: string = undefined;
-  @Input() inline: boolean = undefined;
+  @Input() color: ThemePalette;
 
   @Input('icon') set setIcon(descriptor: string) {
    

@@ -1,7 +1,6 @@
-@import 'variables';
-@import 'theme';
 
 :host {
+  
   display: block;
   position: absolute;
   width: 100%;
@@ -12,7 +11,7 @@
   // Settle a lower general zindex (1)
   z-index: 1;
 
-  header { 
+  & > header { 
     display: block;
     position: fixed;
     width: 100%;
@@ -23,14 +22,11 @@
     z-index: 2;
     & * { z-index: 2; }
 
-    mat-toolbar {
+    .mat-toolbar {
     
-      background-color: transparent !important;
+      //background-color: transparent !important;
 
-      mat-toolbar-row {
-        // Reduces the standard 16px left/right padding to 8px on mobile
-        @media ($mat-xsmall) { padding: 0 8px; }
-        // Adjusts the height based on the specified attribute
+      .mat-toolbar-row {
         &[compact] { height: 40px; }
         &[auto] { height: auto; }
       }
@@ -43,18 +39,8 @@
         top: 0;
         
         pointer-events: none;
-    
-        background-color: map-get($wm-backgnd, app-bar);
-        box-shadow: 0 6px 12px rgba(black, 0.125);
       }
     }
-  }
-
-  .feedback {
-    position: fixed;
-    right: 14px;
-    bottom: 14px;
-    border-radius: 500px;
   }
 }
 

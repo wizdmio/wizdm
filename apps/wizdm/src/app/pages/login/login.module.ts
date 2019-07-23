@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { IconModule } from '../../elements/icon';
+import { LinkModule } from '../../elements/link';
 import { ContentResolver } from '../../core';
 import { LoginComponent } from './login.component';
 
@@ -33,6 +34,7 @@ const routes: Routes = [
     MatInputModule,
     MatProgressBarModule,
     IconModule,
+    LinkModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

@@ -1,13 +1,13 @@
 
 <ng-container *ngIf="msgs$ | async as msgs">
   
-  <div class="background"></div>
+  <div class="background primary color-default"></div>
 
   <section fxLayout="row" fxLayoutAlign="center center" class="banner">
 
-    <div fxFlexOffset.gt-sm="10" fxFlex.gt-sm="450px" fxLayout="column" fxLayoutAlign="center center" @landing>
+    <div fxFlex.gt-sm="50" fxLayout="column" fxLayoutAlign="center center" class="textbox" wmAnimate="landing" speed="slow">
 
-      <h1>{{ msgs.title }}</h1>
+      <h1 class="mat-display-1"><b>{{ msgs.title }}</b></h1>
       
       <p>{{ msgs.pitch }}</p>
       
@@ -17,7 +17,7 @@
   
     </div>
 
-    <img fxHide.lt-sm fxFlex="40" src="assets/img/blue-buddha.svg" alt="wizdm">
+    <wm-illustration fxHide.lt-sm fxFlex="50" [src]="msgs.illustration" color="primary"></wm-illustration>
 
   </section>
 
@@ -29,11 +29,13 @@
     
         <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
   
-          <div class="content">
+          <div class="content mat-elevation-z2">
+
+            <div *ngIf="feat.comingSoon" class="coming-soon accent background-color-default mat-small">{{ msgs.comingSoon }}</div>
   
             <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
             <h2><b>{{ feat.title }}</b></h2>
-            <p> {{ feat.description }}</p>
+            <p [wm-disclaimer]="feat.description"></p>
   
           </div>
   

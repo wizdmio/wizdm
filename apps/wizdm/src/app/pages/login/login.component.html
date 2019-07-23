@@ -1,5 +1,5 @@
 
-<div fxLayout="column" fxLayoutAlign="space-around center" class="panel" *ngIf="msgs$ | async as msgs">
+<div fxLayout="column" fxLayoutAlign="start center" class="panel" *ngIf="msgs$ | async as msgs">
 
   <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 
@@ -41,9 +41,9 @@
       <mat-error *ngIf="form.controls['password'].errors?.required">
         {{ msgs.errors?.passwordRequired }}
       </mat-error>
-      <mat-hint class="mat-link" align="end" 
-              (click)="switchPage('forgotPassword')" *ngIf="page === 'signIn'" 
-              @inflate>{{ msgs.forgotPassword }}</mat-hint>
+      <mat-hint *ngIf="page === 'signIn'" align="end" @inflate>
+        <wm-link (click)="switchPage('forgotPassword')">{{ msgs.forgotPassword }}</wm-link>
+      </mat-hint>
     </mat-form-field>
 
     <!-- NEW EMAIL -->
@@ -77,12 +77,12 @@
 
   <!-- REGISTER LINK -->
   <p class="mat-small bit-of-space" *ngIf="page === 'signIn'">
-    {{ msgs.newUser }}&nbsp;<span class="mat-link" (click)="switchPage('register')">{{ msgs.register }}</span>
+    {{ msgs.newUser }}&nbsp;<wm-link (click)="switchPage('register')">{{ msgs.register }}</wm-link>
   </p>
 
   <!-- BACK TO SIGN-IN LINK -->
   <p class="mat-small bit-of-space" *ngIf="page === 'register' || page === 'forgotPassword'">
-    {{ msgs.registeredUser }}&nbsp;<span class="mat-link" (click)="switchPage('signIn')">{{ msgs.signIn }}</span>
+    {{ msgs.registeredUser }}&nbsp;<wm-link (click)="switchPage('signIn')">{{ msgs.signIn }}</wm-link>
   </p>
 
   <!-- SIGN IN WITH OPTION LINKS -->

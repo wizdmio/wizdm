@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ThemePalette } from '@angular/material/core'
 
 export interface DisclaimerLink {
 
@@ -25,11 +26,10 @@ export type DisclaimerSegment = DisclaimerText|DisclaimerLink;
 export class DisclaimerComponent {
 
   private segments: DisclaimerSegment[];
-  // Classes for links/actions - works only for global defined class due to ViewEncapsulation
-  // Supports the same syntax as 'ngClass'
-  @Input() linkClass: string | string[] | Set<string> | {[key: string]: any};
-  // Styles to apply on links/actions. Supports the same syntax as 'ngStyle'
-  @Input() linkStyle: {[key: string]: string};
+  
+  @Input() color: ThemePalette = 'primary';
+  @Input() disabled: boolean;
+
   // Source input
   @Input('wm-disclaimer') set compileSegments(source: string) {
 

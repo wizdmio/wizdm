@@ -1,5 +1,3 @@
-@import "variables";
-@import "theme";
 
 $wm-item-height: 250px;
 
@@ -13,7 +11,7 @@ $wm-item-height: 250px;
   width: 100%;
   height: $wm-item-height;
   
-  border: 1px solid mat-color($wm-primary);
+  //border: 1px solid mat-color($wm-primary);
   border-radius: 2px;
 
   box-shadow: 0 2px 2px rgba(50,50,50,0.15);

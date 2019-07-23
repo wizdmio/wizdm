@@ -7,7 +7,8 @@ import { $defaultMsgs } from './not-found-defaults';
 @Component({
   selector: 'wm-not-found',
   templateUrl: './not-found.component.html',
-  styleUrls: ['./not-found.component.scss']
+  styleUrls: ['./not-found.component.scss'],
+  host: { 'class': 'wm-page adjust-top content-padding' }
 })
 export class NotFoundComponent implements OnInit, OnDestroy {
 
@@ -22,7 +23,7 @@ export class NotFoundComponent implements OnInit, OnDestroy {
   }
 
   interpolate(msg: string): string {
-    return !!msg && msg.interpolate(this);
+    return msg.interpolate(this);
   }
 
   ngOnInit() {

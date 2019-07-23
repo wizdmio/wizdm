@@ -1,67 +1,35 @@
-@import "variables";
-@import "theme";
 
 :host {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  box-sizing: border-box;
-  //margin: 0 $wm-content-margin;
-
-  @include wm-padding-top($wm-content-padding);
-
-  // Table of content
-  span[toc] {
-    
-    display: block;
-    //outline: unset;
-    cursor: pointer;
-    
-    &[toc='1']{ font-size: 100%; }
-    &[toc='2']{ font-size: 95%; }
-    &[toc='3']{ font-size: 90%; }
-    &[toc='4']{ font-size: 85%; }
-    &[toc='5']{ font-size: 80%; }
-    &[toc='6']{ font-size: 75%; }
+  
+  .desk {
+    perspective: 1500px;
+    background-color: rgb(200, 200, 220);
+    box-shadow: inset 0 0 6px 3px rgba(0,0,0,0.125);
   }
-}
-
-.desk {
-  perspective: 1500px;
-  background-color: rgb(200, 200, 220);
-  box-shadow: inset 0 0 6px 3px rgba(0,0,0,0.125);
-}
-
-.page {
-  background-color: map-get($wm-backgnd, background);
-  padding: $wm-content-margin;
-  wm-document {
-    width: 100%;
+  
+  .page { 
+    box-sizing: border-box;
+    width: 100%; 
+    padding: 5vw;
   }
+  
+  .tools {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+  }
+ /* 
+  .sticky {
+    margin: 10px 10px;
+    position: sticky;
+    top: 72px;
+  }
+  
+  .table-of-contents {
+    border-left: 3px solid map-get($wm-foregnd, toc-delimiter);
+    //margin: 10px 0 10px 10px;
+    padding: 5px 0 10px 10px;
+    box-sizing: border-box;
+  } */
 }
 
-.tools {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-}
-
-.sticky {
-  margin: 10px 10px;
-  position: sticky;
-  top: 72px;
-}
-
-.table-of-contents {
-  border-left: 3px solid map-get($wm-foregnd, toc-delimiter);
-  //margin: 10px 0 10px 10px;
-  padding: 5px 0 10px 10px;
-  box-sizing: border-box;
-}
-
-.footnotes {
-  border-top: 1px solid map-get($wm-foregnd, toc-delimiter);
-  margin-bottom: 10px;
-  padding: 5px 0 10px 0;
-  box-sizing: border-box;
-}

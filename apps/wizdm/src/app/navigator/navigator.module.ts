@@ -4,11 +4,11 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { LogoModule } from '../elements/logo';
 import { TogglerModule } from '../elements/toggler';
 import { IconModule } from '../elements/icon';
-import { FlipModule } from '../elements/flip';
 import { AvatarModule } from '../elements/avatar';
-import { LogoModule } from './logo/logo.module';
+import { FlipModule } from '../elements/flip';
 import { NavbarModule } from './navbar/navbar.module'; 
 import { ToolbarModule } from './toolbar/toolbar.module'; 
 import { MenuModule } from './menu/menu.module'; 
@@ -26,10 +26,10 @@ import { NavigatorService } from './navigator.service';
     MatToolbarModule,
     MatButtonModule,
     TogglerModule,
+    LogoModule,
     IconModule, 
     FlipModule,
     AvatarModule,
-    LogoModule,
     NavbarModule,
     ToolbarModule,
     MenuModule,

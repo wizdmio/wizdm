@@ -1,10 +1,6 @@
-@import "variables";
-@import "theme";
 
 :host {
-  display: block;
-  width: 100%;
-
+/*
   .background {
     display: flex;
     position: absolute;
@@ -20,15 +16,13 @@
     background-color: rgba(mat-color($wm-accent), 0.1);
     background: linear-gradient(145deg, rgba(mat-color($wm-accent), 0.15), rgba(mat-color($wm-accent), 0));
   }
-
+*/
   .foreground {
+    display: block;
     position: relative;
+    width: 100%;
     min-height: 350px;
-    padding: 32px;
-    @include wm-padding-top(32px);
-
-    .footnotes {
-      border-top: solid 1px map-get($wm-foregnd, divider);
-    }
+    box-sizing: border-box;
+    padding: 5vw;
   }
 }

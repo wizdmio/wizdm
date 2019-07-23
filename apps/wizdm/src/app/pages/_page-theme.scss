@@ -1,0 +1,84 @@
+//@import '../../styles//variables';
+
+$wm-content-top-desktop  : 64px !default;
+$wm-content-top-mobile   : 56px !default;
+$wm-content-padding      : 16px  !default;
+$wm-content-margin       : 32px !default;
+
+@mixin wm-adjust-top($offset: 0) {
+  // Adapts the top padding according to the mat-toolbar height + offset  
+  padding-top: $wm-content-top-desktop + $offset;
+  @media ($mat-xsmall) { padding-top: $wm-content-top-mobile + $offset; }
+}
+
+@mixin wm-page-theme($theme, $props: ('color', 'background-color', 'stroke', 'fill')) {
+ 
+  .wm-page { 
+    
+    display: block;
+    position: relative;
+    //box-sizing: border-box;
+    //width: 100%;
+    /*
+    // Flexbox helper
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: column;
+    justify-content: start;
+    align-items: center;
+    box-sizing: border-box;
+*/
+    // Defines top padding helpers
+    &.adjust-top, .adjust-top { @include wm-adjust-top(); }
+
+    // Defines content padding helpers
+    &.content-padding, .content-padding { 
+      
+      padding: $wm-content-padding; 
+      &.adjust-top { @include wm-adjust-top($wm-content-padding); }
+    }
+
+    // Applies the theme colors
+    @include wm-theme-colors($theme, $props);
+  }
+}
+
+@mixin wm-theme-colors($theme, $props) {
+
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  // Styles the text color
+  &.text-color, .text-color { color: map-get($foreground, text); }
+
+  // Styles the background color
+  &.background-color, .background-color { background-color: map-get($background, background); }
+
+  // Styles the theme palettes
+  @each $color in ('primary', 'accent', 'warn') {
+
+    $palette: map-get($theme, #{$color});
+
+    // Loops on each palette
+    &[color=#{$color}], &.#{$color}, .#{$color} { 
+
+      @each $prop in $props {
+
+        // Palette default color
+        &.#{$prop}-default, .#{$prop}-default { #{$prop}: mat-color($palette); }
+
+        // Palette lighter color
+        &.#{$prop}-lighter, .#{$prop}-lighter { #{$prop}: mat-color($palette, 'lighter'); }
+
+        // Palette darker color
+        &.#{$prop}-darker, .#{$prop}-darker { #{$prop}: mat-color($palette, 'darker'); }
+
+        // All palette hues
+        @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
+          
+          &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat-color($palette, $hue); }
+        }
+      }
+    }
+  }
+}

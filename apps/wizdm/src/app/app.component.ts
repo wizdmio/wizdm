@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
 import { Router, ResolveStart, ResolveEnd } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import { filter, map } from 'rxjs/operators';
   selector: 'body',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('fade', [
       transition(':leave', [

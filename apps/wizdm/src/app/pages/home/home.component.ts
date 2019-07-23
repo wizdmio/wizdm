@@ -2,13 +2,12 @@ import { Component } from '@angular/core';
 import { NavigatorService } from '../../navigator';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
-import { $animations } from './home.animations';
 
 @Component({
   selector: 'wm-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  animations: $animations
+  host: { 'class': 'wm-page adjust-top' }
 })
 export class HomeComponent {
 

@@ -1,7 +1,7 @@
 
 $wm-icon-size: 24px !default;
 
-:host {
+.wm-icon {
   position: relative;
   display: inline-block;
   width: $wm-icon-size;
@@ -14,4 +14,11 @@ $wm-icon-size: 24px !default;
     height: 100%;
     line-height: inherit;
   }
+}
+
+// Tweaks material styles to better blend in the elements
+.mat-menu-item {
+    
+  // Restores the same $mat-menu-icon-margin value
+  .wm-icon { padding-right: 16px; }
 }

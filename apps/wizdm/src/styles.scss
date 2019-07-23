@@ -1,36 +1,71 @@
 // Resets styles with Normalize.css for browser behaviour consistency
 @import '~normalize.css/normalize.css';
+@import '~@angular/material/theming';
 
-// Host material design icons
-//@import '~material-design-icons/iconfont/material-icons.css';
-
-// Uncomment this option to load material icons from the web
+// Load material icons from the web
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-// Host fontawesome free icons
-//@import '~@fortawesome/fontawesome-free/css/all.css';
-//$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-//@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-//@import "~@fortawesome/fontawesome-free/scss/regular";
-//@import "~@fortawesome/fontawesome-free/scss/solid";
-//@import "~@fortawesome/fontawesome-free/scss/brands";
-
-// Uncomment this option to load fontawsome icons from the web
+// Load fontawsome icons from the web
 @import url('https://use.fontawesome.com/releases/v5.9.0/css/all.css');
 
 // Load the main Ubuntu google font from the web
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
 
 // Import local partials
-@import 'preloader';
 @import 'variables';
-@import 'theme';
+@import 'preloader';
+@import 'material';
+@import 'theming';  
+
+// Define the main font family 
+$wm-font-family: 'Ubuntu, sans-serif';
+
+// Creates a customized material typography first...
+$wm-typography: mat-typography-config(
+  $font-family:   $wm-font-family,
+  $display-4:     mat-typography-level(112px, 112px, 300),
+  $display-3:     mat-typography-level(72px, 72px, 400),
+  $display-2:     mat-typography-level(56px, 56px, 400),
+  $display-1:     mat-typography-level(45px, 48px, 400),
+  $headline:      mat-typography-level(36px, 48px, 400),
+  $title:         mat-typography-level(24px, 32px, 400),
+  $subheading-2:  mat-typography-level(22px, 28px, 400),
+  $subheading-1:  mat-typography-level(20px, 24px, 400),
+  $body-2:        mat-typography-level(18px, 24px, 400),
+  $body-1:        mat-typography-level(16px, 20px, 400),
+  $button:        mat-typography-level(16px, 20px, 400)
+);
+
+// Define the main theme colors palettes.
+$wm-primary: mat-palette($mat-blue);
+$wm-accent:  mat-palette($mat-amber, 400, 600, 800);
+$wm-warn:    mat-palette($mat-red);
+
+// Creates a standard material light theme first...
+$wm-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
+//... than overrides with customized fore/background values
+$wm-theme: override-material-theme($wm-theme, 
+
+  $foreground: ( // Overrides Material foreground colors
+
+    base:              mat-color($wm-primary, 900),
+    disabled-button:   rgba(mat-color($wm-primary, 900), 0.26),
+    icon:              mat-color($wm-primary),
+    icons:             mat-color($wm-primary),
+    text:              mat-color($wm-primary, 900),
+    contrast:        #f0f0f0
+  ),
+
+  $background: ( // Overrides Material background colors
+
+    app-bar:          white,
+    status-bar:       white, 
+    background:       white,
+  )
+);
 
 // Creates the .preloader spinner class applying the theme color
-@include preloader($wm-loader-size, 
-                   $wm-loader-thick, 
-                   mat-color($wm-accent, A400),
-                   transparent);
+@include preloader($wm-loader-size, $wm-loader-thickness, mat-color($wm-primary), transparent);
 
 // Initialze the global application theme, make sure to call this only once
-@include wm-init-application-theme();
+@include wm-init-application-theme($wm-theme, $wm-typography);

@@ -3,6 +3,8 @@
   "pitch": "Wizdm provides all the key features of a modern single page application ready to use, so, for you to focus on launching your idea the quickest!",
   "action": { "caption": "Get started", "link": "apply" },
   "join": "Join us and become part of the revolution of [Wizdm](about)>",
+  "illustration": "assets/img/blue-buddha.svg",
+  "comingSoon": "Coming soon",
   "features": [
     { 
       "icon": "fas:fa-mobile-alt",
@@ -22,7 +24,13 @@
     { 
       "icon": "fas:fa-icons",
       "title": "Icon sets",
-      "description": "Both Material icons font and FontAwesome icon set are natively supported to enrich you user interface."
+      "description": "Both [Material]() icons font and [FontAwesome]() icon set are natively supported to enrich you user interface."
+    },
+    { 
+      "icon": "fas:fa-swatchbook",
+      "title": "Theming",
+      "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)",
+      "comingSoon": true  
     },
     { 
       "icon": "fas:fa-globe-europe",
@@ -37,7 +45,7 @@
     { 
       "icon": "fas:fa-user-circle",
       "title": "Account management",
-      "description": "User authetication, email verification and recovery, rich user profile data and account cancelletion."
+      "description": "User authetication, email verification and recovery, rich user profile data and account cancellation."
     },
     { 
       "icon": "fas:fa-sync-alt",
@@ -57,12 +65,30 @@
     { 
       "icon": "far:fa-comment",
       "title": "Feedback form",
-      "description": "Direct feedback support to immediately collect user's suggestions."
+      "description": "Direct feedback support powered by [Doorbell.io](https://doorbell.io) to immediately collect user's suggestions."
     },
     { 
       "icon": "fas:fa-directions",
       "title": "Smart redirection",
       "description": "Prevents unwanted external redirections to keep the user engaged."
+    },
+    { 
+      "icon": "fas:fa-search",
+      "title": "Simple search",
+      "description": "Simple data search performed server side with no need of expensive third party serivces.",
+      "comingSoon": true  
+    },
+    { 
+      "icon": "fab:fa-algolia",
+      "title": "Full text search",
+      "description": "Full text search powered by [Algolia]() for the time your app get traction.",
+      "comingSoon": true  
+    },
+    { 
+      "icon": "fab:fa-stripe-s",
+      "title": "Payments",
+      "description": "Payment processing powered by [Stripe]().",
+      "comingSoon": true  
     },
     { 
       "icon": "fab:fa-angular",

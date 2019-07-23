@@ -9,6 +9,7 @@ import { $animations } from './explore.animations';
   selector: 'wm-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
+  host: { 'class': 'wm-page adjust-top side margins' },
   animations: $animations
 })
 export class ExploreComponent implements OnInit, OnDestroy {

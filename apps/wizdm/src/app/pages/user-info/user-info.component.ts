@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatabaseService, wmUser } from '@wizdm/connect';
-import { wmColor, wmColorMap, COLOR_MAP } from '../../elements/colors';
+import { wmColor, wmColorMap, COLOR_MAP } from '../../../../../../.tmp/colors';
 import { wmProject } from '../../core';
 
 @Component({
   selector: 'wm-user-info',
   templateUrl: './user-info.component.html',
-  styleUrls: ['./user-info.component.scss']
+  styleUrls: ['./user-info.component.scss'],
+  host: { 'class': 'wm-page' }
 })
 export class UserInfoComponent {
 

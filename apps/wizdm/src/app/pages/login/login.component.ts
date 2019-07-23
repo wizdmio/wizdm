@@ -23,6 +23,7 @@ type pageTypes = 'register' |
   selector : 'wm-login',
   templateUrl : './login.component.html',
   styleUrls : ['./login.component.scss'],
+  host: { 'class': 'wm-page adjust-top content-padding' },
   animations: $animations
 })
 export class LoginComponent implements OnInit  {

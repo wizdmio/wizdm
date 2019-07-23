@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /** PopupData describes the popup dialog content
@@ -18,7 +18,8 @@ export interface PopupData {
   selector: 'wm-popup',
   templateUrl: './popup.component.html',
   styleUrls: ['./popup.component.scss'],
-  host: { class: 'wm-popup' }
+  host: { class: 'wm-popup' },
+  encapsulation: ViewEncapsulation.None
 })
 /** PopupComponent implements the popup dialog standard appearance */
 export class PopupComponent {

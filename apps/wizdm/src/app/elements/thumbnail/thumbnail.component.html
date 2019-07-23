@@ -1,0 +1,14 @@
+
+<span class="thumbnail"> 
+
+  <img *ngIf="!!src; else transclude" [src]=src (error)="src = null" />
+
+  <ng-template #transclude>
+    <ng-content></ng-content>
+  </ng-template>
+
+</span>
+
+<span class="mat-small">{{ name }}</span>
+
+<span class="seleciton"></span>

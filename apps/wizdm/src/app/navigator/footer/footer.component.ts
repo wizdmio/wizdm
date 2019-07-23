@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ContentResolver } from '../../core';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'wm-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
+  host: { 'class': 'wm-footer' }
 })
 export class FooterComponent {
   

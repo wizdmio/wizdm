@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding, ViewEncapsulation } from '@angular/core';
 import { ThemePalette } from '@angular/material/core'
 import { $animations } from './inkbar.animations';
 
@@ -11,8 +11,9 @@ export interface inkbarPosition {
   selector: 'wm-inkbar',
   templateUrl: './inkbar.component.html',
   styleUrls: ['./inkbar.component.scss'],
-  animations: $animations,
-  host: { class: 'wm-inkbar' }
+  host: { class: 'wm-inkbar' },
+  encapsulation: ViewEncapsulation.None,
+  animations: $animations
 })
 export class InkbarComponent {
 
@@ -22,7 +23,9 @@ export class InkbarComponent {
 
   @Input() height = 2;
 
-  @Input() color: ThemePalette;
+  // Color customization 
+  @HostBinding('attr.color')
+  @Input() color: ThemePalette = 'primary';
   
   @Input() set position(pos: inkbarPosition) {
     this.pos = { ...this.pos, ...pos };

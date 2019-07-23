@@ -1,5 +1,3 @@
-@import "variables";
-@import "theme";
 
 :host {
   display: flex;
@@ -7,8 +5,5 @@
   box-sizing: border-box;
   align-items: center;
 
-  padding: $wm-content-padding 0;
-  margin: 0 $wm-content-margin;
-
-  @include wm-padding-top($wm-content-padding);
+  .padding-top { padding-top: 64px; }
 }

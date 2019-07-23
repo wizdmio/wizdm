@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, NavigationEnd, Scroll } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { UserProfile } from '@wizdm/connect';
@@ -12,7 +12,9 @@ import { $animations } from './navigator.animations';
   selector: 'wm-navigator',
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss'],
-  animations: $animations
+  animations: $animations,
+  //encapsulation: ViewEncapsulation.None,
+  host: { 'class': 'wm-navigator' }
 })
 export class NavigatorComponent implements OnInit, OnDestroy {
 

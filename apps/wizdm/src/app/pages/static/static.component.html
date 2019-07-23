@@ -2,20 +2,23 @@
 <ng-container *ngIf="document$ | async as document">
 
   <!-- Background gradient -->
-  <div class="background"></div>
+  <!--div class="background"></div-->
 
   <!-- Foreground content -->
-  <div class="foreground" [@fadeIn]="document">
+  <div class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document">
 
     <!-- Renders the markdown document -->
-    <section [wm-markdown]="document" (navigate)="content.navigateByUrl($event)" #body>
-    </section>
+    <section [wm-markdown]="document" (navigate)="content.navigateByUrl($event)" #body></section>
 
     <!-- Renders the footnotes -->
-    <section *ngIf="body.notes.length > 0" class="footnotes">
+    <section *ngIf="body.notes.length > 0">
+
+      <mat-divider></mat-divider>
+      
       <div *ngFor="let note of body.notes; index as i">
         {{ i + 1 }} - <span [wm-markdown]="note" inline></span>
       </div>
+    
     </section>
   
   </div>

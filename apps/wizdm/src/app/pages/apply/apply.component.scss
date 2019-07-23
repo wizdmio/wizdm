@@ -1,26 +1,20 @@
-@import 'variables';
-@import 'theme';
 
 :host {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  //display: flex;
+  //flex-direction: column;
+  //box-sizing: border-box;
   justify-content: center;
   align-items: center;
   
-  @include wm-padding-top($wm-content-padding);
-  
-  & > header {
-    margin: 0 $wm-content-margin;
-    text-align: center;  
+  header { 
+    position: relative;
+    text-align: center; 
   }
-}
 
-.bit-of-space {
-  margin-top: 20px;
-}
-
-.disclaimer {
-  max-width: 500px;
-  text-align: justify;
+  .bit-of-space { margin-top: 20px; }
+  
+  .disclaimer {
+    max-width: 500px;
+    text-align: justify;
+  }
 }

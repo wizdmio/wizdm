@@ -1,0 +1,17 @@
+
+@mixin wm-inkbar-theme($theme) {
+
+  .wm-inkbar {
+
+    @each $color in ('primary', 'accent', 'warn') {
+
+      &[color=#{$color}] {
+
+        $palette: map-get($theme, #{$color});
+
+        .wm-inkbar-line { background-color: mat-color($palette); }
+        
+      }
+    }
+  }
+}

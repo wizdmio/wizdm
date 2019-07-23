@@ -1,13 +1,6 @@
-@import "variables";
-@import "theme";
 
 :host {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  
+  .padding-top { padding-top: 64px; }
 
-  padding: $wm-content-padding 0;
-  margin: 0 $wm-content-margin;
-
-  @include wm-padding-top($wm-content-padding);
 }

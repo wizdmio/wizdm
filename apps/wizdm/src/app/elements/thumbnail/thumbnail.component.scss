@@ -1,0 +1,51 @@
+
+$thumb-sizes: ( xs: 48, sm: 64, md: 96, lg: 150 );
+
+.wm-thumbnail {
+
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width:  128px;
+  height: 128px;
+
+  .thumbnail { 
+    position: relative;
+    box-sizing: border-box;
+    width:  64px;
+    height: 64px;
+
+    img { width: 100%; height: 100%; }
+  }
+
+  @each $size, $value in $thumb-sizes {
+
+    &[size=#{$size}] {
+
+      width: #{64 + $value}px;
+      height: #{64 + $value}px;
+
+      .thumbnail {
+        width:  #{$value}px;
+        height: #{$value}px;
+      }
+    }
+  }
+
+  .seleciton {
+
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    border: unset;
+    background-color: transparent;
+  }
+}

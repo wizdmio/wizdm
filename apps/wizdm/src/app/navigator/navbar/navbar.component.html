@@ -1,5 +1,5 @@
 
-<wm-nav-inkbar #inkbar color="accent">
+<wm-router-inkbar #inkbar color="primary">
 
   <span [@menu]="menuItems" (@menu.start)="inkbar.clear()" (@menu.done)="inkbar.update()">
     
@@ -7,10 +7,10 @@
       [routerLink]="item.link"
       [queryParams]="item.params"
       [ngClass]="{ 'highlight': item.highlight }"
-      wmNavInkbar>
+      wmRouterInkbar>
       {{ item.label }}
    </button>
    
   </span>
 
-</wm-nav-inkbar>
+</wm-router-inkbar>

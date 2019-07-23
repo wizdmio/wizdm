@@ -1,17 +1,13 @@
 
 <ng-container *ngFor="let segment of segments">
 
-      <ng-template #plainText>{{ segment.content }}</ng-template>
+  <ng-template #plainText>{{ segment.content }}</ng-template>
 
-      <a *ngIf="segment.type ==='link'; else plainText" 
-            [ngClass]="linkClass" 
-            [ngStyle]="linkStyle"
-            (click)="navigate(segment)">{{ segment.content }}</a>
-
-      <!--a *ngIf="segment.type ==='link'; else plainText" 
-            [ngClass]="linkClass" 
-            [ngStyle]="linkStyle"
-            [href]="segment.url"
-            (click)="navigate(segment)">{{ segment.content }}</a-->
+    <a wm-link 
+       [color]="color"
+       [disabled]="disabled" 
+       [href]="segment.url" 
+       (click)="navigate(segment)"
+       *ngIf="segment.type ==='link'; else plainText">{{ segment.content }}</a>
 
 </ng-container>

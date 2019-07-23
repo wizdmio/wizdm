@@ -1,0 +1,91 @@
+@import '../app/elements/elements-theme';
+@import '../app/navigator/navigator-theme';
+@import '../app/pages/page-theme';
+//@import './colors';
+
+// Initilize the global application theme
+@mixin wm-init-application-theme($theme, $typography) {
+
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  
+  // Includes the material core component independent theme styles w/ typography
+  @include mat-core($typography);
+  
+  // Includes a material component specifics theme styles
+  @include angular-material-theme($theme);
+
+  // Ovverrides standard material typo margins
+  @include override-material-typo-margins();
+
+  // Styles the elements according to the theme
+  @include wm-elements-theme($theme);
+
+  // Styles the navigator according to the theme
+  @include wm-navigator-theme($theme);
+
+  // Includes general purpose styles for page theming
+  @include wm-page-theme($theme);
+ 
+  // Tweaks material styles
+  .mat-menu-content { padding: 0 !important;}
+  .mat-menu-panel { min-width: unset !important; min-height: unset !important; }
+  /*.mat-menu-item {
+    // Resets the default menu typography to buttons
+    font: {
+      family: mat-font-family($typography, button);
+      size:   mat-font-size($typography, button);
+      weight: mat-font-weight($typography, button);
+    }
+  }*/
+  
+  // Defines a global class to resets dialog container's padding on request
+  // to be used in MatDialogConfig.panelClass when needed
+  .mat-dialog-reset { mat-dialog-container { padding: 0;} }
+
+  // Applies a smooth scroll behaviour whenever supported
+  html { scroll-behavior: smooth; }
+
+  // Styles the body
+  body {
+    // Applies material typography rules globally
+    @extend .mat-typography;
+    // Applies material theme general colors
+    @extend .mat-app-background;
+    
+    // Disables outline on all elements
+    * { outline: none; }
+
+    // Makes sure all the anchors emulates wm-link styles
+    a { text-decoration: underline; color: mat-color($primary); }
+
+    // Smoothen the text color on content
+    p, li, td { color: rgba(map-get($foreground, text), 0.8); }
+
+    // Defines a global style for blockquotes
+    blockquote {
+      padding: 0 1em;
+      color: rgba(black, 0.4);
+      border-left: 0.25em solid rgba(black, 0.11);
+      p, li, td { color: inherit; }
+    }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+
+      tr:nth-child(2n) {
+        background-color: rgba(0,0,0,0.03); 
+      }
+      td {
+        position: relative;
+        padding: 6px 13px;
+        border: 1px solid #ddd;
+      }
+    }
+  }
+}

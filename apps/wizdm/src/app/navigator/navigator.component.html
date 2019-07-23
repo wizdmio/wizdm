@@ -1,5 +1,5 @@
 
-<ng-container  *ngIf="msgs$ | async as msgs">
+<ng-container *ngIf="msgs$ | async as msgs">
 
   <header fxFlex="0 0 auto">
 
@@ -15,7 +15,7 @@
         <nav fxLayout="row" fxLayoutAlign="start center">
 
           <!-- Wizdm logo routing to home -->
-          <wm-logo routerLink="."></wm-logo>  
+          <wm-logo color="primary" routerLink="."></wm-logo>  
       
           <!-- Desktop navigation links -->
           <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="nav.desktop"></wm-navbar>
@@ -36,7 +36,7 @@
               <!-- Shows a generic signIn icon on the front -->
               <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
               <!-- Shows the loggedIn avatar on the back -->
-              <wm-avatar back color="accent" [src]="userImage"></wm-avatar>
+              <wm-avatar back color="primary" [src]="userImage"></wm-avatar>
             </wm-flip>
           </button>
 
@@ -64,8 +64,7 @@
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
-      <router-outlet (deactivate)="clearActions()">
-      </router-outlet>
+      <router-outlet (deactivate)="clearActions()"></router-outlet>
     </div>
     
     <!-- Footer always on the bottom -->
@@ -75,14 +74,7 @@
   <!-- Global message notifier -->
   <wm-notify [msgs]="msgs.notifications" [notify]="nav.notification$ | async" (cleared)="nav.clearMessage()"></wm-notify>
 
-  <!-- Feedback button -->
-  <wm-feedback (sent)="feedbackSent($event)" #doorbell>
-    <button mat-raised-button class="feedback" (click)="doorbell.open()">
-      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-        <span>{{ msgs.feedback.caption }}</span>
-        <wm-icon [icon]="msgs.feedback.icon"></wm-icon>
-      </div>
-    </button>
-  </wm-feedback>
+  <!-- Feedback form -->
+  <wm-feedback (sent)="feedbackSent($event)"></wm-feedback>
 
 </ng-container>

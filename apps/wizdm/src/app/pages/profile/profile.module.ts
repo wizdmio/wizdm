@@ -16,7 +16,7 @@ import { AvatarModule } from '../../elements/avatar';
 import { IconModule } from '../../elements/icon';
 import { PopupModule } from '../../elements/popup';
 import { ContentResolver } from '../../core';
-import { UploadsModule } from '../uploads/uploads.module';
+import { UploadModule } from '../upload/upload.module';
 import { UserComponent } from './profile.component';
 import { UserItemComponent } from './item/item.component';
 
@@ -52,7 +52,7 @@ const routes: Routes = [
     IconModule, 
     AvatarModule,
     PopupModule,
-    UploadsModule,
+    UploadModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

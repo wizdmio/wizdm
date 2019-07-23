@@ -270,6 +270,10 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
             navigator.userLanguage || '';
   }
 
+  /**
+   * Returns a router command list redirecting to the current page in a different language
+   * @param lang language code you want the link for
+   */
   public languageLink(lang: string): any[] {
     // Splits the current url
     const cmds = this.router.url.split('/');
@@ -280,6 +284,10 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
     return cmds;
   }
 
+  /**
+   * Returns true whenever the current content belongs to the requested language
+   * @param lang language code
+   */
   public isLanguage(lang: string): boolean {
     return this.router.isActive(lang, false);
   }

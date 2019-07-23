@@ -33,6 +33,7 @@ interface userApply extends wmUser {
   selector: 'wm-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
+  host: { 'class': 'wm-page adjust-top content-padding' },
   animations: $animations
 })
 export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate, OnDestroy {

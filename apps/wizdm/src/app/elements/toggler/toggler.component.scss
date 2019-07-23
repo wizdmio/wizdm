@@ -1,75 +1,74 @@
-@import 'variables';
-//@import 'theme';
+//@import 'variables';
 
 $toggler-size: 20px !default;
 
-:host {
-    display: inline-block;
-    position: relative;
-    
-    width: $toggler-size;
-    height: $toggler-size;
-
-    // Applies the current text color to the toggler
-    div { background-color:currentColor; }
+wm-toggler {
+  display: inline-block;
+  position: relative;
   
-    //Use positios relative to behave exactly like a mat-icon/wm-icon/wm-flip 
-    //position: absolute;
-    //margin-top: -$toggler-size / 2;
-    //margin-left: -$toggler-size / 2;
+  width: $toggler-size;
+  height: $toggler-size;
 
-    // Style 'menu'
-    &[toggler-style='menu'] {
+  // Applies the current text color to the toggler
+  div { background-color:currentColor; }
 
-      $element-size: 2px;
+  //Use positios relative to behave exactly like a mat-icon/wm-icon/wm-flip 
+  //position: absolute;
+  //margin-top: -$toggler-size / 2;
+  //margin-left: -$toggler-size / 2;
 
-      div {
-        position: absolute;
-        height: $element-size;
-        width: $toggler-size;
-        border-radius: $element-size / 2;
+  // Style 'menu'
+  &[toggler-style='menu'] {
 
-        &[top]    { top: $toggler-size / 10 - $element-size / 2;}
-        &[middle] { top: ($toggler-size - $element-size) / 2;}
-        &[bottom] { bottom: $toggler-size / 10 - $element-size / 2;}
-      }
+    $element-size: 2px;
+
+    div {
+      position: absolute;
+      height: $element-size;
+      width: $toggler-size;
+      border-radius: $element-size / 2;
+
+      &[top]    { top: $toggler-size / 10 - $element-size / 2;}
+      &[middle] { top: ($toggler-size - $element-size) / 2;}
+      &[bottom] { bottom: $toggler-size / 10 - $element-size / 2;}
     }
+  }
 
-    // Style 'more' vertical
-    &[toggler-style='more_vert'] {
+  // Style 'more' vertical
+  &[toggler-style='more_vert'] {
 
-      $element-size: 4px;
-    
-      div {
-        position: absolute;          
-        height: $element-size;
-        width: $element-size;
-        left: ($toggler-size - $element-size) / 2;
-        border-radius: $element-size / 2;
+    $element-size: 4px;
+  
+    div {
+      position: absolute;          
+      height: $element-size;
+      width: $element-size;
+      left: ($toggler-size - $element-size) / 2;
+      border-radius: $element-size / 2;
 
-        &[top]    { top: 0;}
-        &[middle] { top: ($toggler-size - $element-size) / 2;}
-        &[bottom] { bottom: 0;}
-      }
+      &[top]    { top: 0;}
+      &[middle] { top: ($toggler-size - $element-size) / 2;}
+      &[bottom] { bottom: 0;}
     }
+  }
 
-    // Style 'more' horizontal
-    &[toggler-style='more_horiz'] {
+  // Style 'more' horizontal
+  &[toggler-style='more_horiz'] {
 
-      $element-size: 4px;
-    
-      div {
-        position: absolute;    
-        height: $element-size;
-        width: $element-size;
-        top: ($toggler-size - $element-size) / 2;
-        border-radius: $element-size / 2;
+    $element-size: 4px;
+  
+    div {
+      position: absolute;    
+      height: $element-size;
+      width: $element-size;
+      top: ($toggler-size - $element-size) / 2;
+      border-radius: $element-size / 2;
 
-        &[top]    { left: 0; }
-        &[middle] { left: ($toggler-size - $element-size) / 2; }
-        &[bottom] { right: 0; }
-      }
+      &[top]    { left: 0; }
+      &[middle] { left: ($toggler-size - $element-size) / 2; }
+      &[bottom] { right: 0; }
     }
+  }
 }
 
 

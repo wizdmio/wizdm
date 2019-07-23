@@ -1,10 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import * as prism from 'prismjs';
 
 @Component({
   selector: 'code[wm-highlight]',
   templateUrl: './highlight.component.html',
-  styleUrls: ['./highlight.component.scss']
+  styleUrls: ['./highlight.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  host: { 'class' : 'wm-markdown-highlight' }
 })
 /** Perform code hilighting by processing an input text to be rendered into an angular template 
  * Using prism as tokenizer @see {https://github.com/PrismJS/prism}

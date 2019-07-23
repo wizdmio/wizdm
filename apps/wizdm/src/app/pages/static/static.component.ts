@@ -4,13 +4,12 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators'
-import { $animations } from './static.animations';
 
 @Component({
   selector: 'wm-static',
   templateUrl: './static.component.html',
   styleUrls: ['./static.component.scss'],
-  animations: $animations
+  host: { 'class': 'wm-page adjust-top content-padding' }
 })
 export class StaticComponent {
 

@@ -1,12 +1,13 @@
 
-:host {
+.wm-flip {
+
   position: relative;
   display: inline-block;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
 
-  & > span {
+  span {
     position: absolute;
     display: inline-block;
     left: 0;

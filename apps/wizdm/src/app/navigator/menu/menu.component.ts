@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { $animations } from './menu.animations';
 
 @Component({
   selector: 'wm-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
+  host: { 'class': 'wm-menu' },
   animations: $animations
 })
 export class MenuComponent {

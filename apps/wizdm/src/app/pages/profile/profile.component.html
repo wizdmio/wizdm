@@ -2,19 +2,19 @@
 <header fxLayout="column" fxLayoutAlign="center center">
 
   <!-- Select the image among the uploads -->
-  <wm-uploads [msgs]="msgs.uploadImage" (file)="selectImage($event)" #uploads>
+  <wm-upload [msgs]="msgs.uploadImage" (file)="selectImage($event)" #uploads>
     <!-- Open the selection on click -->
     <button mat-button class="user" (click)="uploads.chooseFile(userImage)">
       <!-- Displays the image as an Avatar -->
-      <wm-avatar color="accent" [src]="userImage"></wm-avatar>
+      <wm-avatar color="primary" [src]="userImage"></wm-avatar>
     </button>
-  </wm-uploads>
+  </wm-upload>
 
 </header>
 
 <!-- PROFILE PANELS -->
-<mat-accordion>
-  <mat-expansion-panel *ngFor="let panel of msgs.panels; let i = index" (closed)=panelClose(i)>
+<mat-accordion displayMode="flat" fxFill>
+  <mat-expansion-panel class="mat-elevation-z0" *ngFor="let panel of msgs.panels; let i = index" (closed)=panelClose(i)>
 
     <!-- PANEL HEADER -->
     <mat-expansion-panel-header fxLayoutAlign="space-between center">
@@ -25,7 +25,7 @@
     </mat-expansion-panel-header>
 
     <!-- PANEL ITEM LIST -->
-    <mat-list>
+    <mat-action-list>
 
       <wm-user-item *ngFor="let field of panel.fields"
                     [name]="field.key"
@@ -41,7 +41,7 @@
                     (editDone)="updateUserProfile(field.key, $event)">
       </wm-user-item>
 
-    </mat-list>
+    </mat-action-list>
 
     <!-- ACTION BUTTONS or LINKS -->
     <mat-action-row fxLayout="row" fxLayout.lt-sm="column" *ngIf="panel.buttons || panel.applyChanges">

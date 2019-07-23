@@ -5,7 +5,6 @@ import { $animations } from './action.animations';
 @Component({
   selector: 'wm-toolbar-action',
   templateUrl: './action.component.html',
-  styleUrls: ['./action.component.scss'],
   animations: $animations
 })
 export class ActionComponent {

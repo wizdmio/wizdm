@@ -1,11 +1,8 @@
-@import "variables";
-@import "theme";
-@import "colors";
 
-$light: map-get($wm-foregnd, contrast);
-$dark : map-get($wm-foregnd, text);
+//$light: map-get($wm-foregnd, contrast);
+//$dark : map-get($wm-foregnd, text);
 
-@include wm-theme-colors($light, $dark);
+//@include wm-theme-colors($light, $dark);
 
 $wm-info-width     : 300px !default;
 $wm-info-height    : 350px !default; 
@@ -24,7 +21,7 @@ mat-dialog-content {
   margin: 0;
 
   .menu { float: right; }
-
+/*
   &[wm-theme-contrast="light"] { 
     //color: map-get($wm-foregnd, text);
     .shade { opacity: 0.5; }
@@ -36,6 +33,7 @@ mat-dialog-content {
     .shade { opacity: 0.25; }
     .cover { background-color: rgba(black, 0.1);}
   } 
+  */
 }
 
 .cover {
@@ -69,19 +67,19 @@ mat-dialog-content {
     height: $wm-avatar-size;
     margin-top: -$wm-avatar-size/2;
 
-    wm-avatar {
+    .wm-avatar {
       width: $wm-avatar-size;
       height: $wm-avatar-size;
       line-height: $wm-avatar-size;
     }
   }
 
-  .name {
-    @include mat-typography-level-to-styles($wm-typography, subheading-2);
-  }
+  /*.name {
+    //@include mat-typography-level-to-styles($wm-typography, subheading-2);
+  }*/
 
   .motto {
-    @include mat-typography-level-to-styles($wm-typography, caption);
+    //@include mat-typography-level-to-styles($wm-typography, caption);
     opacity: 0.5;
   }
 }

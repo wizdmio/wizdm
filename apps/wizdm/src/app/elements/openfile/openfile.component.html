@@ -1,0 +1,10 @@
+
+<span class="trigger-wrapper" (click)="open()">
+  <ng-content></ng-content>
+</span>
+
+<input type="file" style="display: none"   
+        [accept]="accept" 
+        [multiple]="!!multiple" 
+        (change)="files.emit($event.target?.files)" #input />
+  

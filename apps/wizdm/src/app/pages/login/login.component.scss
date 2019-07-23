@@ -1,5 +1,6 @@
-@import "variables";
-@import "theme";
+
+$wm-login-width: 300px;
+$wm-login-height: 400px;
 
 :host {
   display: flex;
@@ -8,30 +9,24 @@
   justify-content: space-around;
   align-items: center;
 
-  padding: $wm-content-padding 0;
-  margin: 0 $wm-content-margin;
-
-  @include wm-padding-top($wm-content-padding);
-}
-
-.panel {
-  width: $wm-login-width;
-  text-align: center;
-
-  & > form {
+  .panel {
+    min-height: $wm-login-height;
     width: $wm-login-width;
+    text-align: center;
+  
+    & > form {
+      width: $wm-login-width;
+    }
   }
+  
+  .bit-of-space { margin: 12px 0; }
+  
+  .btn {
+    margin-top: 10px;
+    min-height: 48px;
+  }
+
+  .providers { font-size: 1.5em; }
 }
 
-.bit-of-space { 
-  margin: 12px 0; 
-}
-
-.btn {
-  margin-top: 10px;
-  min-height: 48px;
-}
-.providers {
-  font-size: 1.5em;
-}
 

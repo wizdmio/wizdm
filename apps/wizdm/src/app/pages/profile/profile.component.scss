@@ -1,24 +1,26 @@
-@import "variables";
-@import "theme";
 
 $wm-user-size: 128px;
 
 :host {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  //display: flex;
+  //flex-direction: column;
+  //box-sizing: border-box;
   //padding: 2vh 5vw;
-  margin: 0 $wm-content-margin;
+  //margin: 0 $wm-content-margin;
 
-  @include wm-padding-top($wm-content-padding);
-}
+  //@include wm-padding-top($wm-content-padding);
 
-.user {
-  padding: 0;
-  margin: 10px 0;
+  //align-items: center;
 
-  wm-avatar {
-    width:  $wm-user-size;
-    height: $wm-user-size;
+  header { text-align: center; }
+
+  .user {
+    padding: 0;
+    margin: 10px 0;
+  
+    .wm-avatar {
+      width:  $wm-user-size;
+      height: $wm-user-size;
+    }
   }
 }

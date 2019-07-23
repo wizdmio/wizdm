@@ -1,11 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { MarkdownParser, mdAST } from './parser/parser.service';
 
 @Component({
   selector: '[wm-markdown]',
   templateUrl: './markdown.component.html',
   styleUrls: ['./markdown.component.scss'],
-  providers: [ MarkdownParser ]
+  encapsulation: ViewEncapsulation.None,
+  providers: [ MarkdownParser ],
+  host: { 'class': 'wm-markdown' }
 })
 /** Renders a markdown text into an angular view */
 export class MarkdownRenderer {

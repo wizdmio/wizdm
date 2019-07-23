@@ -40,7 +40,7 @@ const routes: Routes = [
       { path: 'explore/:id', loadChildren: () => import('./pages/editor/editor.module').then(m => m.EditorModule) },
       { path: 'login',       loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule) },
       { path: 'profile',     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule) },
-      { path: 'upload',      loadChildren: () => import('./pages/upload/upload.module').then(m => m.UploadModule) },
+      { path: 'folder',      loadChildren: () => import('./pages/folder/folder.module').then(m => m.FolderModule) },
 
       // External links redirection page
       { path: 'redirect',    loadChildren: () => import('./pages/redirect/redirect.module').then(m => m.RedirectModule) },

@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, ViewEncapsulation } from '@angular/core';
 import { $animations } from './toggler.animations';
 
 export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
@@ -7,8 +7,9 @@ export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
   selector: 'wm-toggler',
   templateUrl: './toggler.component.html',
   styleUrls: ['./toggler.component.scss'],
-  animations: $animations,
-  host: { class: 'wm-toggler' } 
+  host: { class: 'wm-toggler' },
+  encapsulation: ViewEncapsulation.None,
+  animations: $animations
 })
 export class TogglerComponent {
 

@@ -8,7 +8,8 @@ import { map, take, switchMap, takeWhile } from 'rxjs/operators';
 @Component({
   selector: 'wm-redirect',
   templateUrl: './redirect.component.html',
-  styleUrls: ['./redirect.component.scss']
+  styleUrls: ['./redirect.component.scss'],
+  host: { 'class': 'wm-page adjust-top content-padding' }
 })
 export class RedirectComponent implements OnDestroy {
 

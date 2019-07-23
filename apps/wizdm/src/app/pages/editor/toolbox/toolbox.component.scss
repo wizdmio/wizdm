@@ -1,14 +1,10 @@
-@import "variables";
-@import "theme";
 
 :host {  
   display: block;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 72px;
   width: 100%;
-
-  @include wm-padding-top(20px);
 
   z-index: 1;
 
