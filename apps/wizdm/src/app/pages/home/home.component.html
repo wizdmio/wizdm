@@ -35,7 +35,7 @@
   
             <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
             <h2><b>{{ feat.title }}</b></h2>
-            <p [wm-disclaimer]="feat.description"></p>
+            <p [wm-disclaimer]="feat.description" (navigate)="content.navigateByUrl($event.target)"></p>
   
           </div>
   

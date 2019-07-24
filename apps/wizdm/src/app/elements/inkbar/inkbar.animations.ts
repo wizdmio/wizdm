@@ -1,4 +1,4 @@
-import { trigger, state, animate, style, transition } from '@angular/animations';
+import { trigger, state, animate, style, transition, keyframes } from '@angular/animations';
 
 const $timing = '500ms cubic-bezier(0.2, 1, 0.3, 1)';
 
@@ -8,9 +8,10 @@ export let $animations = [
     state('*',
       style({
         left: '{{ left }}',
+        top: '{{ top }}',
         width: '{{ width }}' 
-      }), { params: { left: '*', width: 0 } }
+      }), { params: { left: '*', top: '*', width: 0 } }
     ),
     transition('* => *', animate($timing))
   ])
-]
+];

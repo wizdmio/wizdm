@@ -24,7 +24,13 @@
     { 
       "icon": "fas:fa-icons",
       "title": "Icon sets",
-      "description": "Both [Material]() icons font and [FontAwesome]() icon set are natively supported to enrich you user interface."
+      "description": "Both [Material](https://material.io/icons) icons font and [FontAwesome](https://fontawesome.com) icon set are natively supported to enrich you user interface."
+    },
+    { 
+      "icon": "fas:fa-box-open",
+      "title": "Animations",
+      "description": "Ready to use animation set to enrich your contents with catching-eye motion",
+      "comingSoon": true  
     },
     { 
       "icon": "fas:fa-swatchbook",

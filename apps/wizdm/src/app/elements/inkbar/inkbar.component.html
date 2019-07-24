@@ -3,8 +3,8 @@
 <ng-content></ng-content>
 
 <!-- inkbar -->
-<div class="wm-inkbar-line" 
-     [attr.color]="color" 
+<div class="inkbar"
      [style.height.px]="height" 
-     [@slide]="trigger">
+     [@slide]="animate"
+     (@slide.done)="done.emit(pos)">
 </div>

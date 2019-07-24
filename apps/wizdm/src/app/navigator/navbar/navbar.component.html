@@ -4,10 +4,10 @@
   <span [@menu]="menuItems" (@menu.start)="inkbar.clear()" (@menu.done)="inkbar.update()">
     
     <button mat-button *ngFor="let item of menuItems" 
+      [routerLinkActiveOptions] = "{ exact: true }"  
       [routerLink]="item.link"
       [queryParams]="item.params"
-      [ngClass]="{ 'highlight': item.highlight }"
-      wmRouterInkbar>
+      wmInkbarLink>
       {{ item.label }}
    </button>
    

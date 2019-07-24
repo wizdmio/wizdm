@@ -1,12 +1,11 @@
 
-wm-inkbar {
+.wm-inkbar {
   
   display: block;
+  overflow: hidden;
 
-  .wm-inkbar-line {
- 
+  .inkbar {
     position: absolute;
-    
     background-color: currentColor;
   }
 }
