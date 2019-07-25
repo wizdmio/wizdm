@@ -10,31 +10,34 @@ export const $animations = [
       style({
         transform: 'scale(1.2)',
         opacity: 0
-      }),
+      }), 
       animate('{{timing}} ease', style('*'))
     ], { params: { timing: '2s'}}),
 
-    transition('* => pulse', 
+    transition('* => pulse', [
+      style('*'),
       animate('{{timing}} ease-in-out', 
         keyframes([
           style({ transform: 'scale(1)' }),
           style({ transform: 'scale(1.05)' }),
           style({ transform: 'scale(1)' })
         ])
-      ), { params: { timing: '1s'}}
+      )], { params: { timing: '1s'}}
     ),
 
-    transition('* => beat', 
+    transition('* => beat', [
+      style('*'),
       animate('{{timing}} cubic-bezier(.8, -0.6, 0.2, 1.5)', 
         keyframes([
           style({ transform: 'scale(0.8)' }),
           style({ transform: 'scale(1.5)' }),
           style({ transform: 'scale(1)' })
         ])
-      ), { params: { timing: '500ms'}}
+      )], { params: { timing: '500ms'}}
     ),
 
-    transition('* => heartBeat', 
+    transition('* => heartBeat', [
+      style('*'),
       animate('{{timing}} ease-in-out', 
         keyframes([
           style({ transform: 'scale(1)', offset: 0 }),
@@ -43,7 +46,7 @@ export const $animations = [
           style({ transform: 'scale(1.3)', offset: 0.42 }),
           style({ transform: 'scale(1)', offset: 0.70 })
         ])
-      ), { params: { timing: '1s'}}
+      )], { params: { timing: '1s'}}
     ),
 
     transition('* => fadeIn', [

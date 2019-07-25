@@ -29,9 +29,9 @@
     
         <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
   
-          <div class="content mat-elevation-z2">
+          <div class="content mat-elevation-z2" wmAnimate="pulse" speed="fast" aos>
 
-            <div *ngIf="feat.comingSoon" class="coming-soon accent background-color-default mat-small">{{ msgs.comingSoon }}</div>
+            <div *ngIf="feat.comingSoon" class="coming-soon accent background-color-default contrast-default mat-small">{{ msgs.comingSoon }}</div>
   
             <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
             <h2><b>{{ feat.title }}</b></h2>
