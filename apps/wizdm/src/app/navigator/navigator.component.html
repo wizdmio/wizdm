@@ -32,7 +32,7 @@
           <!-- Sign-in / User profile button -->
           <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
             <!-- Flip button -->
-            <wm-flip [flip]="signedIn">
+            <wm-flip [flipped]="signedIn">
               <!-- Shows a generic signIn icon on the front -->
               <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
               <!-- Shows the loggedIn avatar on the back -->

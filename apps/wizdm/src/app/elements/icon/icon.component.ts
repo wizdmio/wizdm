@@ -1,4 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 
 @Component({
@@ -14,13 +15,14 @@ export class IconComponent {
   public fontIcon: string;
   public matIcon = "code";
 
-  @Input() inline: boolean;
+  @Input('inline') set inlining(value: boolean) { this.inline = coerceBooleanProperty(value); }
+  public inline: boolean = false;
 
   @Input() color: ThemePalette;
 
   @Input('icon') set setIcon(descriptor: string) {
    
-    let segments = descriptor ? descriptor.split(':') : [];
+    const segments = descriptor ? descriptor.split(':') : [];
     
     if(segments.length > 1) {
       

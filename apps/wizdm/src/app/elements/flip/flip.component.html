@@ -1,8 +1,10 @@
 
-<span *ngIf="!flip">
+<span *ngIf="!flipped; else tmplBack" class="content-wrapper">
   <ng-content select="[front]"></ng-content>
 </span>
 
-<span *ngIf="flip">
-  <ng-content select="[back]"></ng-content>
-</span>
+<ng-template #tmplBack>
+  <span class="content-wrapper">
+    <ng-content select="[back]"></ng-content>
+  </span>
+</ng-template>

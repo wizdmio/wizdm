@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 
 export interface DisclaimerLink {
@@ -21,14 +22,16 @@ export type DisclaimerSegment = DisclaimerText|DisclaimerLink;
 @Component({
   selector: '[wm-disclaimer]',
   templateUrl: './disclaimer.component.html',
-  host: { class: 'wm-disclaimer' }
+  host: { 'class': 'wm-disclaimer' }
 })
 export class DisclaimerComponent {
 
   private segments: DisclaimerSegment[];
-  
-  @Input() color: ThemePalette = 'primary';
-  @Input() disabled: boolean;
+
+  @Input() color: ThemePalette;
+
+  @Input('disabled') set disabling(value: boolean) { this.disabled = coerceBooleanProperty(value); }
+  public disabled = false;
 
   // Source input
   @Input('wm-disclaimer') set compileSegments(source: string) {
@@ -55,7 +58,8 @@ export class DisclaimerComponent {
       this.pushText(source.substring(start, source.length));
     }
 
-    //console.log("disclaimer segments:", this.segments);
+    console.log("disclaimer segments:");
+    console.log(this.segments);
   } 
 
   // Action event
@@ -88,7 +92,7 @@ export class DisclaimerComponent {
     });
   }
 
-  private parseParams(input: string): {[key: string]: string} {
+  private parseParams(input: string) {
     // Match for parameter pattern
     const re = /(\w+)=(\w*)\&*/g;
     const params = {};

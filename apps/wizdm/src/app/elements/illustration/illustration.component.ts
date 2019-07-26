@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, HostBinding, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 import { HttpClient } from '@angular/common/http';
 import { $animations } from './illustration.animations';
@@ -24,8 +25,9 @@ export class IllustrationComponent {
   @HostBinding('attr.color')
   @Input() color: ThemePalette;
 
-  @HostBinding('@.disabled')
-  @Input() disableAnimations = false;
+  @Input('disableAnimations') set disableAnimation(value: boolean) { this.disabled = coerceBooleanProperty(value); }
+  @HostBinding('@.disabled') 
+  public disabled = false;
 
   @Input() set src(src: string) {
 

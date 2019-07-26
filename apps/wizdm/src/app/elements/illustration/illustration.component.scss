@@ -1,5 +1,14 @@
 
-.wm-illustration { 
+.wm-illustration {
+  
+  position: relative; 
 
-  display: block; 
+  .wrapper {
+    display: block;
+    position: inherit;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, HostBinding, ViewEncapsulation } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 
 export type ThumbnailSize = 'xs'|'sm'|'md'|'lg';
@@ -24,6 +25,7 @@ export class ThumbnailComponent {
   @HostBinding('attr.color')
   @Input() color: ThemePalette = 'accent';
 
+  @Input('selected') set selecting(value: boolean) { this.selected = coerceBooleanProperty(value); }
   @HostBinding('attr.selected')
-  @Input() selected: boolean;
+  public selected = false;
 }

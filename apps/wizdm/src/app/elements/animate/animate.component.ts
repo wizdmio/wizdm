@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, NgZone } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, NgZone } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { $animations } from './animate.animations';
@@ -8,6 +9,12 @@ import { map, startWith, distinctUntilChanged, delay, scan, takeUntil, takeWhile
 export type wmAnimations = 'landing'|'pulse'|'beat'|'heartBeat'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'zoomIn'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'zoomOut';
 export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
 
+export class wmRect { 
+  constructor(readonly left: number, readonly top: number, readonly right: number, readonly bottom: number) {}
+  get width(): number { return this.right - this.left; }
+  get height(): number { return this.bottom - this.top; } 
+};
+
 @Component({
  selector: '[wmAnimate]',
  template: '<ng-content></ng-content>',
@@ -15,12 +22,14 @@ export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
 })
 export class AnimateComponent implements OnInit, OnDestroy {
 
-  private replay$ = new Subject<boolean>();
-  private dispose$ = new Subject<void>();
-
   readonly timings = { slower: '3s', slow: '2s', normal: '1s', fast: '500ms', faster: '300ms' };
+  private  replay$ = new Subject<boolean>();
+  private  dispose$ = new Subject<void>();
+  private  scrollingArea: wmRect;  
 
-  constructor(private elm: ElementRef, private scroll: ScrollDispatcher, private zone: NgZone){}
+  get window(): Window { return this.document.defaultView; }
+
+  constructor(@Inject(DOCUMENT) private document: Document, private elm: ElementRef, private scroll: ScrollDispatcher, private zone: NgZone) {}
 
   private get idle() { return { value: 'idle' }; }
   private get play() { 
@@ -69,7 +78,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
   @Input('once') set aosOnce(value: boolean) { this.once = coerceBooleanProperty(value); }
   public once: boolean = false;
 
-    /** Specifies the amount of visibility triggering AOS */
+    /** Specifies the amout of visibility triggering AOS */
   @Input() threshold: number = 0.2;
   
   /** Replays the animation */
@@ -87,6 +96,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() { 
+
     // Triggers the animation based on the input flags
     this.animateTrigger().subscribe( trigger => {
       // Triggers the animation to play or to idle
@@ -116,11 +126,14 @@ export class AnimateComponent implements OnInit, OnDestroy {
   // Triggers the animation on scroll
   private animateOnScroll(): Observable<boolean> {
 
+    // Initialize the element's scrollilng container area whenever the AOS is requested
+    this.scrollingArea = this.getScrollingArea(this.elm);
+
     // Return an AOS observable
     return new Observable<boolean>( observer => {
       // Ask for a scroll observable from angular cdk/ScrollDispatcher with throttle
       // NOTE: ScrollDispatcher observables run out of NgZone, so, make sure to use NgZone.run() when needed
-      this.scroll.ancestorScrolled(this.elm, 100).pipe(
+      const sub = this.scroll.ancestorScrolled(this.elm, 100).pipe(
         // Makes sure to dispose on destroy
         takeUntil(this.dispose$),
         // Starts with initial element visibility 
@@ -135,32 +148,48 @@ export class AnimateComponent implements OnInit, OnDestroy {
         takeWhile(trigger => !trigger || !this.once, true)
         // Run NEXT within the angular zone to trigger change detection back on
       ).subscribe( trigger => this.zone.run(() => observer.next(trigger) ), null, () => observer.complete() );
+      
+      // Return the unsubscription handler
+      return () => sub.unsubscribe();
     });
   }
 
   // Computes the element visibility ratio
-  private get visibility(): number {
+  private get visibility() { 
+    return this.intersectRatio( this.clientRect(this.elm), this.scrollingArea );
+  }
 
-    // TODO: refactor to rely on the containing scroller rather than the window
-    const r = this.clientRect(this.elm);
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+  private intersectRatio(rect: wmRect, cont: wmRect): number {
 
-    // Return 1.0 when the element is within the screen constraints
-    if(r.left >= 0 && r.top  >= 0 && r.right < w && r.bottom < h) { return 1.0; }
+    // Return 1.0 when the element is fully within its scroller container
+    if(rect.left > cont.left && rect.top > cont.top && rect.right < cont.right && rect.bottom < cont.bottom) { 
+      return 1.0; 
+    }
 
     // Computes the intersection area otherwise
-    const a = Math.round(r.width * r.height);
-    const b = Math.max(0, Math.min(r.right, w) - Math.max(r.left, 0));
-    const c = Math.max(0, Math.min(r.bottom, h) - Math.max(r.top, 0));
+    const a = Math.round(rect.width * rect.height);
+    const b = Math.max(0, Math.min(rect.right, cont.right) - Math.max(rect.left, cont.left));
+    const c = Math.max(0, Math.min(rect.bottom, cont.bottom) - Math.max(rect.top, cont.top));
 
     // Returns the amount of visible area 
     return Math.round(b * c / a * 10) / 10;
   }
 
+  // Returns the rectangular surface area of the element's scrolling container
+  private getScrollingArea(elm: ElementRef<HTMLElement>): wmRect {
+    // Gets the cdkScolling container, if any
+    const scroller = this.scroll.getAncestorScrollContainers(elm).pop();
+    // Returns the element's most likely scrolling container area
+    return !!scroller ? this.clientRect( scroller.getElementRef() ) : this.windowRect();
+  }
+
   // Element client bounding rect helper
-  private clientRect(elm: ElementRef<HTMLElement>) {
+  private clientRect(elm: ElementRef<HTMLElement>): wmRect {
     const el = !!elm && elm.nativeElement;
     return !!el && el.getBoundingClientRect();
+  }
+
+  private windowRect(): wmRect {
+    return new wmRect(0,0, this.window.innerWidth, this.window.innerHeight);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { $animations } from './flip.animations';
 
 @Component({
@@ -11,12 +12,10 @@ import { $animations } from './flip.animations';
 })
 export class FlipComponent {
 
-  @HostBinding('@flip')
-  @Input() flip = false;
+  @Input('flipped') set flipping(value: boolean) { this.flipped = coerceBooleanProperty(value); }
+  @HostBinding('@flip') 
+  public flipped = false;
 
-  @Output() flipped = new EventEmitter<boolean>();
-
-  @HostListener('@flip.done') done() {
-    this.flipped.emit(this.flip);
-  }
+  @Output() flippedChange = new EventEmitter<boolean>();
+  @HostListener('@flip.done') done() { this.flippedChange.emit(this.flipped); }
 }

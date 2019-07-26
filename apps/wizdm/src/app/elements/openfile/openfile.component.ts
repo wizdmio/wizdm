@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'wm-openfile',
@@ -12,14 +13,16 @@ import { Component, OnInit, Input, Output, EventEmitter, HostBinding, ViewChild,
  */
 export class OpenFileComponent  {
 
-  @ViewChild('input', { read: ElementRef, static: true }) input: ElementRef;
-
-  @HostBinding('attr.disabled')
-  @Input() disabled: boolean;
+  @ViewChild('input', { static: true, read: ElementRef }) input: ElementRef;
 
   @Input() accept = 'image/*';
 
-  @Input() multiple = false;
+  @Input('multiple') set multipling(value: boolean) { this.multiple = coerceBooleanProperty(value); }
+  public multiple = false;
+
+  @Input('disabled') set disabling(value: boolean) { this.disabled = coerceBooleanProperty(value); }
+  @HostBinding('attr.disabled')
+  public disabled = false;
 
   @Output() files = new EventEmitter<FileList>();
 
@@ -29,3 +32,4 @@ export class OpenFileComponent  {
     this.input.nativeElement.click();
   }
 }
+
