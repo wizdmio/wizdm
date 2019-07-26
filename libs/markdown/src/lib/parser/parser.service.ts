@@ -44,8 +44,6 @@ export class MarkdownParser {
     this.defs = this.tops.filter(node => node.type === 'definition');
     // Extracts the footnote definitions
     this.notes = this.tops.filter(node => node.type === 'footnoteDefinition');
-
-    console.log(this.root);
     // Returns the root node
     return this.root;
   }

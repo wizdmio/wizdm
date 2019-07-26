@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MarkdownModule } from '@wizdm/markdown';
 import { AnimateModule } from '../../elements/animate';
+import { IllustrationModule } from '../../elements/illustration';
 //import { ContentResolver } from '../../core';
 import { StaticComponent } from './static.component';
 
@@ -27,6 +28,7 @@ const routes: Routes = [
     MatDividerModule,
     MarkdownModule,
     AnimateModule,
+    //IllustrationModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

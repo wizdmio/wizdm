@@ -57,9 +57,6 @@ export class DisclaimerComponent {
     if(start < source.length - 1) {
       this.pushText(source.substring(start, source.length));
     }
-
-    console.log("disclaimer segments:");
-    console.log(this.segments);
   } 
 
   // Action event

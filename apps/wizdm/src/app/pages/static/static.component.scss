@@ -1,6 +1,6 @@
 
 :host {
-/*
+
   .background {
     display: flex;
     position: absolute;
@@ -13,10 +13,8 @@
     box-sizing: border-box;
     transform: skewY(-10deg);
     transform-origin: 0 100%;
-    background-color: rgba(mat-color($wm-accent), 0.1);
-    background: linear-gradient(145deg, rgba(mat-color($wm-accent), 0.15), rgba(mat-color($wm-accent), 0));
   }
-*/
+
   .foreground {
     display: block;
     position: relative;

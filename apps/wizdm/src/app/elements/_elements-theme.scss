@@ -1,6 +1,7 @@
 
 @import './link//link-theme';
 @import './logo/logo-theme';
+@import './toggler/toggler-theme';
 @import './avatar/avatar-theme';
 @import './spinner/spinner-theme';
 @import './thumbnail/thumbnail-theme';
@@ -19,6 +20,7 @@
   // Includes element specifics theme styles
   @include wm-link-theme($theme);
   @include wm-logo-theme($theme);
+  @include wm-toggler-theme($theme);
   @include wm-avatar-theme($theme);
   @include wm-spinner-theme($theme);
   @include wm-thumbnail-theme($theme);

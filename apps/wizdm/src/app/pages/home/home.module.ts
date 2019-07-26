@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
-//import { NavigatorModule } from '../../navigator/navigator.module';
 import { AnimateModule } from '../../elements/animate';
 import { IconModule } from '../../elements/icon';
 import { DisclaimerModule } from '../../elements/disclaimer';

@@ -19,9 +19,9 @@ export interface inkbarPosition {
 export class InkbarComponent {
 
   private pos: inkbarPosition = { left: 0, top: 0, width: 0 };
-  private elm: ElementRef;
+  private elm: ElementRef<HTMLElement>;
 
-    // Triggers the inkbar animation with custom left/width parameters
+  // Triggers the inkbar animation with custom left/width parameters
   get animate() {
     return { 
       value: this.pos, 
@@ -33,21 +33,6 @@ export class InkbarComponent {
     };
   }
 
-  public clear() { this.pos = { ...this.pos, width: 0 }; } 
-
-  // Update the inkbarPosition based on the item element
-  public activate(elm: ElementRef<HTMLElement>) {
-
-    const el = (this.elm = elm).nativeElement;
-
-    this.pos = !!el ? { 
-      ...this.pos,
-      top: el.offsetTop + el.clientHeight, 
-      left: el.offsetLeft,
-      width: el.clientWidth 
-    } : this.pos;
-  }
-
   @HostListener('window:resize') 
   public update() { this.activate(this.elm); }
 
@@ -57,4 +42,19 @@ export class InkbarComponent {
   @Input() height = 2;
 
   @Output() done = new EventEmitter<inkbarPosition>();
+
+  public clear() { return this.pos = { ...this.pos, width: 0 }; } 
+
+  // Update the inkbarPosition based on the item element
+  public activate(elm: ElementRef<HTMLElement>) {
+
+    const el = (this.elm = elm).nativeElement;
+
+    return this.pos = !!el ? { 
+      ...this.pos,
+      top: el.offsetTop + el.clientHeight, 
+      left: el.offsetLeft,
+      width: el.clientWidth 
+    } : this.pos;
+  }
 }

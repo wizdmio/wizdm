@@ -1,8 +1,6 @@
-//@import 'variables';
-
 $toggler-size: 20px !default;
 
-wm-toggler {
+.wm-toggler {
   display: inline-block;
   position: relative;
   
@@ -10,19 +8,14 @@ wm-toggler {
   height: $toggler-size;
 
   // Applies the current text color to the toggler
-  div { background-color:currentColor; }
-
-  //Use positios relative to behave exactly like a mat-icon/wm-icon/wm-flip 
-  //position: absolute;
-  //margin-top: -$toggler-size / 2;
-  //margin-left: -$toggler-size / 2;
+  .toggler-line { background-color:currentColor; }
 
   // Style 'menu'
   &[toggler-style='menu'] {
 
     $element-size: 2px;
 
-    div {
+    .toggler-line {
       position: absolute;
       height: $element-size;
       width: $toggler-size;
@@ -39,7 +32,7 @@ wm-toggler {
 
     $element-size: 4px;
   
-    div {
+    .toggler-line {
       position: absolute;          
       height: $element-size;
       width: $element-size;
@@ -57,7 +50,7 @@ wm-toggler {
 
     $element-size: 4px;
   
-    div {
+    .toggler-line {
       position: absolute;    
       height: $element-size;
       width: $element-size;
@@ -70,5 +63,3 @@ wm-toggler {
     }
   }
 }
-
-

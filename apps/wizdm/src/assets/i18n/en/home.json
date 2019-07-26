@@ -4,6 +4,7 @@
   "action": { "caption": "Get started", "link": "apply" },
   "join": "Join us and become part of the revolution of [Wizdm](about)>",
   "illustration": "assets/img/blue-buddha.svg",
+  "banner": "assets/img/linear-gradient.svg",
   "comingSoon": "Coming soon",
   "features": [
     { 
@@ -29,8 +30,7 @@
     { 
       "icon": "fas:fa-box-open",
       "title": "Animate On Scroll",
-      "description": "Ready to use animation set with built-in \"Animate on Scroll\" trigger to enrich your contents with catching-eye motion",
-      "comingSoon": true  
+      "description": "Ready to use animation set with built-in \"Animate on Scroll\" trigger to enrich your contents with catching-eye motion"
     },
     { 
       "icon": "fas:fa-swatchbook",
@@ -87,13 +87,19 @@
     { 
       "icon": "fab:fa-algolia",
       "title": "Full text search",
-      "description": "Full text search powered by [Algolia]() for the time your app get traction.",
+      "description": "Full text search powered by [Algolia](https://www.algolia.com) for the time your app get traction.",
+      "comingSoon": true  
+    },
+    { 
+      "icon": "fab:fa-paypal",
+      "title": "Paypal",
+      "description": "Payment processing powered by [Paypal](https://www.paypal.com).",
       "comingSoon": true  
     },
     { 
       "icon": "fab:fa-stripe-s",
       "title": "Payments",
-      "description": "Payment processing powered by [Stripe]().",
+      "description": "Payment processing powered by [Stripe](https://stripe.com).",
       "comingSoon": true  
     },
     { 
