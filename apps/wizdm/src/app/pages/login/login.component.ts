@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
-import { NavigatorService } from '../../navigator';
 import { ContentResolver } from '../../core';
 import { $animations } from './login-animations';
 import { Observable, Subscription } from 'rxjs';
@@ -32,6 +31,7 @@ export class LoginComponent implements OnInit  {
 
   public page: pageTypes;
   public progress = false;
+  public error = '';
   public hide = true;
 
   private code: string;
@@ -43,10 +43,7 @@ export class LoginComponent implements OnInit  {
   public newEmail: FormControl;
   public newPassword: FormControl;
 
-  constructor(private content   : ContentResolver,
-              private profile   : UserProfile, 
-              private navigator : NavigatorService,
-              private route     : ActivatedRoute) {
+  constructor(private content: ContentResolver, private profile: UserProfile, private route: ActivatedRoute) {
 
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = content.stream('login');
@@ -190,12 +187,24 @@ export class LoginComponent implements OnInit  {
   }
 
   /**
-   * Shows the error message relying on the global error handler
+   * Shows the error message
    * @param error code of the error
    */
-  private showError(error: string): void {
-    this.navigator.notifyMessage(error);
+  private showError(error: string) {
+    // Stops the progress, if any
     this.progress = false;
+    // Sets the error code to be displayed
+    this.error = error;
+    // Makes sure to turn off the error message after 3s
+    setTimeout(() => this.error = '', 3000);
+  }
+
+  /** Turns the error code into the relevant error message */
+  public errorMessage(code: string, msgs: any = {}): void {    
+    // Turns the error code into camelCase
+    const key = code.camelize().replace('/','.');
+    // Look up the available error messages or return the error code itself if not found
+    return key.select(msgs, code);
   }
 
   // Execute the form requested action

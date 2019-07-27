@@ -28,8 +28,10 @@ export class FeedbackComponent {
 
   readonly msgs$: Observable<any>;
   readonly form : FormGroup;
-  public   files: FileList;
-  public   sending = false;
+  public files: FileList;
+  public success = false;
+  public sending = false;
+  public sent = false;
 
   get profile() { return this.content.user.data || {}; }
   get authenticated() { return this.content.user.authenticated; }
@@ -68,6 +70,8 @@ export class FeedbackComponent {
   
   public open() {
 
+    this.sending = this.sent = false;
+
     // Initializes the form with the authenticated user name/email when available
     this.form.setValue({
       name: this.profile.name || '',
@@ -76,7 +80,7 @@ export class FeedbackComponent {
     });
 
     // Opens the form dialog
-    const ref = this.dialog.open(this.template, {  disableClose: true });
+    const ref = this.dialog.open(this.template, { disableClose: true });
 
     // Rings the doorbell when opening the feedback form
     ref.afterOpened().subscribe( () => 
@@ -123,18 +127,16 @@ export class FeedbackComponent {
     
     }, this.files).then( success => {
 
+      // Keeps track of the submit's result
+      this.success = success;
+
       // Turns the sending flag off
       this.sending = false;
 
-      // Closes the dialog
-      this.dialog.closeAll();
-      
-      // Emits the sent result
-      this.sent.emit(success);
-    });  
+      // Flags as sent showing the resulting message
+      this.sent = true;
+    }); 
   }
-
-  @Output() sent = new EventEmitter<boolean>();
 
   // Credits redirection helper
   public redirect(url: string): boolean {

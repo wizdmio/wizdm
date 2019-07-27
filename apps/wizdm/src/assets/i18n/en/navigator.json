@@ -1,6 +1,6 @@
 {
-    "title": "Wizdm - Compassionate development",
-    "description": "A community of app givers",
+    "title": "Wizdm - Get your app done right",
+    "description": "The fully featured boilerplate to launch your web application quickly",
 
     "toolbar": {
         "public": [
@@ -90,6 +90,10 @@
                 "sizeExceeded": "File size exceeded"
             }
         },
+        "notifications": {
+            "success": "Thank you for reaching us out!\nWe'll get in touch very soon",
+            "error": "Seems the feedback didn't go through :/\nPlease retry in a minute"
+        },
         "credits": {
             "caption": "Powered by Doorbell.io",
             "url": "https://doorbell.io"
@@ -97,16 +101,7 @@
     },
 
     "notifications": {
-        "auth": {
-          "wrongPassword": "This password seems wrong",
-          "userNotFound": "This user doesn't exist",
-          "emailAlreadyInUse": "This email is already registered",
-          "invalidEmail": "This is not a valid email",
-          "weakPassword": "This password looks too weak",
-          "networkRequestFailed": "There's some trouble with the network",
-          "invalidActionCode": "The action code provided is no longer valid",
-          "unsupportedProvider": "The requestes provider is not supported"
-        },
+        
       
         "firestore": {
       

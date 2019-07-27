@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ToolbarService, ViewportService } from '../../navigator';
+//import { ToolbarService, ViewportService } from '../../navigator';
 import { ContentResolver, ProjectService, Project } from '../../core';
 import { Observable, Subject, of } from 'rxjs';
-import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+//import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './explore.animations';
 
 @Component({
@@ -20,7 +20,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
   
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
-  constructor(private  scroll   : ViewportService,
+  constructor(//private  scroll   : ViewportService,
               readonly projects : ProjectService,
                        content  : ContentResolver) {
 
@@ -32,7 +32,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
 
     // Listing all projects (using pagination)
     this.projects$ = this.projects.browseAll({ limit: 10 });
-    
+    /*
     // Subscribes to scrollY$ to load new projects when approaching the bottom of the page
     this.scroll.scrollY$.pipe(
       takeUntil(this.dispose$),
@@ -41,7 +41,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
       filter( bottom => bottom )
     ).subscribe( pos => {
       this.projects.more();
-    });
+    });*/
   }
 
   ngOnDestroy() {

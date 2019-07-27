@@ -18,7 +18,7 @@
           <wm-logo color="primary" routerLink="."></wm-logo>  
       
           <!-- Desktop navigation links -->
-          <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="nav.desktop"></wm-navbar>
+          <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="desktop"></wm-navbar>
         
         </nav>
 
@@ -26,8 +26,7 @@
         <div fxLayout="row" fxLayoutAlign="end center">
 
           <!-- Action toolbar -->
-          <wm-toolbar *ngIf="someActions$ | async" [buttons]="actionButtons$ | async" (action)="performAction($event)">
-          </wm-toolbar>
+          <wm-toolbar *ngIf="toolbar.some$ | async" [buttons]="toolbar.buttons$ | async" (action)="toolbar.performAction($event)"></wm-toolbar>
 
           <!-- Sign-in / User profile button -->
           <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
@@ -41,7 +40,7 @@
           </button>
 
           <!-- Mobile menu toggler -->
-          <button mat-icon-button (click)="toggleMenu()" *ngIf="nav.mobile">
+          <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
             <wm-toggler toggler-style="menu" [toggled]="toggler"></wm-toggler>
           </button>
 
@@ -49,7 +48,7 @@
       </mat-toolbar-row>
 
       <!-- Mobile menu -->
-      <mat-toolbar-row auto *ngIf="nav.mobile">
+      <mat-toolbar-row auto *ngIf="mobile">
         
         <wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
       
@@ -64,17 +63,14 @@
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
-      <router-outlet (deactivate)="clearActions()"></router-outlet>
+      <router-outlet (deactivate)="toolbar.clearActions()"></router-outlet>
     </div>
     
     <!-- Footer always on the bottom -->
     <wm-footer fxFlex="0 0 auto"></wm-footer>
   </main>
 
-  <!-- Global message notifier -->
-  <wm-notify [msgs]="msgs.notifications" [notify]="nav.notification$ | async" (cleared)="nav.clearMessage()"></wm-notify>
-
   <!-- Feedback form -->
-  <wm-feedback (sent)="feedbackSent($event)"></wm-feedback>
+  <wm-feedback></wm-feedback>
 
 </ng-container>

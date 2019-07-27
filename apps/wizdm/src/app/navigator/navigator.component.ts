@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Router, NavigationEnd, Scroll } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Title, Meta } from '@angular/platform-browser';
-import { UserProfile } from '@wizdm/connect';
-import { NavigatorService, wmAction } from './navigator.service';
+import { MediaObserver } from '@angular/flex-layout';
+import { ToolbarService } from './toolbar/toolbar.service';
 import { ContentResolver } from '../core';
-import { Observable, Subscription } from 'rxjs';
-import { map, filter, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable, Subscription, fromEvent } from 'rxjs';
+import { map, filter, distinctUntilChanged, flatMap, startWith } from 'rxjs/operators';
 import { $animations } from './navigator.animations';
 
 @Component({
@@ -13,22 +14,22 @@ import { $animations } from './navigator.animations';
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss'],
   animations: $animations,
-  //encapsulation: ViewEncapsulation.None,
   host: { 'class': 'wm-navigator' }
 })
 export class NavigatorComponent implements OnInit, OnDestroy {
 
-  readonly scrolled$: Observable<boolean>;
-  readonly msgs$: Observable<any>;
+  readonly scrolled$: Observable<boolean>;  
   readonly menuDesktop$: Observable<any>;
   readonly menuMobile$: Observable<any>; 
-  
-  constructor(private  router  : Router,
-              private  profile : UserProfile,
-              readonly nav     : NavigatorService,
-              private  title   : Title,
-              private  meta    : Meta,
-              private  content : ContentResolver) {
+  readonly msgs$: Observable<any>;
+  private sub: Subscription;
+
+  // Menu toggle
+  public toggler = false;
+  public menu = false;
+
+  constructor(private router: Router, private media: MediaObserver, private port: ViewportRuler,
+    private title: Title, private meta: Meta, private content: ContentResolver, readonly toolbar: ToolbarService) {
 
     // Gets the localized content pre-fetched by the resolver during routing
     this.msgs$ = this.content.stream("navigator");
@@ -39,14 +40,13 @@ export class NavigatorComponent implements OnInit, OnDestroy {
     // Creates the observable streaming the drop menu items (mobile)
     this.menuMobile$ = this.menuObservable('menu');
 
-    // Creates and observable to monitor the scroll status
-    this.scrolled$ = this.nav.viewport.scroll$.pipe(
-      map( pos => pos[1] > 0 ),
+    // Creates an observable to detect whenever the viewport is scrolled
+    this.scrolled$ = fromEvent(window, 'scroll').pipe(
+      startWith( this.port.getViewportScrollPosition().top > 5 ),
+      map( () => this.port.getViewportScrollPosition().top > 5 ),
       distinctUntilChanged()
     );
   }
-
-  private sub: Subscription;
 
   ngOnInit() { 
 
@@ -64,77 +64,41 @@ export class NavigatorComponent implements OnInit, OnDestroy {
         // Closes the nav menu at the end of each navigation
         this.toggler = false;
       }));
-
-    // Intercepts non null router scrolling events
-    this.sub.add( this.router.events.pipe( filter(e => e instanceof Scroll && !!e.anchor) )
-      .subscribe( (e: Scroll) => {
-        // Scroll to the routed anchor
-        this.nav.viewport.scrollToAnchor(e.anchor);
-      }));
   }
 
   ngOnDestroy() { this.sub.unsubscribe(); }
 
-  // Menu toggle
-  public toggler = false;
-  public menu = false;
-
-  public toggleMenu() {
-    this.toggler = !this.toggler;
-  }
-
-  //-- Signin status -------------
-
-  public get signedIn(): boolean {
-    return this.profile.authenticated || false;
-  }
-
   private menuObservable(key: string): Observable<any[]> {
 
-    return this.profile.authenticated$.pipe(
-      switchMap( authenticated => this.msgs$.pipe( 
+    return this.content.user.authenticated$.pipe(
+      flatMap( authenticated => this.msgs$.pipe( 
         map( msgs => {
           const menu = !!msgs && msgs[key] || {};
           return authenticated ? menu.private : menu.public;
         })
       ))
     );
-  }/*
-
-  public desktopMenu(msgs: any): any[] {
-    const menu = !!msgs && msgs.toolbar || {};
-    return this.signedIn ? menu.private : menu.public;
   }
 
-  public mobileMenu(msgs: any): any[] {
-    const menu = !!msgs && msgs.menu || {};
-    return this.signedIn ? menu.private : menu.public;
+  // Media queries to switch between desktop/mobile views
+  public get mobile(): boolean { return this.media.isActive('xs');/*|| this.media.isActive('sm');*/ }
+  public get desktop(): boolean { return !this.mobile; }
+
+  // Toggler satus helper (mobile)
+  public toggleMenu() { this.toggler = !this.toggler; }
+
+  // Signed In status
+  public get signedIn(): boolean {
+    return this.content.user.authenticated || false;
   }
-*/
+
   public get userImage(): string {
-    return this.profile.data.img;
-  }
-
-  // -- Toolbar Actions -------
-  public get actionButtons$(): Observable<wmAction[]> {
-    return this.nav.toolbar.buttons$;
-  }
-
-  public get someActions$(): Observable<boolean> {
-    return this.nav.toolbar.some$;
-  }
-
-  public performAction(code: string): void {
-    this.nav.toolbar.performAction(code);
-  }
-
-  public clearActions(): void {
-    this.nav.toolbar.clearActions();
+    return this.content.user.data.img;
   }
 
   public feedbackSent(success: boolean) {
-    success ? 
+    /*success ? 
       this.nav.notifyMessage('feedback/success', 'info') : 
-        this.nav.notifyMessage('feedback/error');
+        this.nav.notifyMessage('feedback/error');*/
   }
 }

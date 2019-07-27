@@ -54,7 +54,7 @@ $wm-theme: override-material-theme($wm-theme,
     icons:             mat-color($wm-primary),
     text:              mat-color($wm-primary, 900),
     contrast:        #f0f0f0
-  ),
+  ), 
 
   $background: ( // Overrides Material background colors
 

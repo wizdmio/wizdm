@@ -8,8 +8,6 @@
     </div>
   </button>
 
-  
-
 </ng-container>
 
 <!-- Feedback Popup Dialog -->
@@ -17,82 +15,97 @@
 
   <ng-container *ngIf="msgs$ | async as msgs">
 
-  <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
-    
-    <span>{{ msgs.title }}</span>
-    
-    <button mat-icon-button mat-dialog-close>
-      <wm-icon inline="true" icon="close"></wm-icon>
-    </button>
-
-  </header>
-
-  <form [formGroup]="form" (ngSubmit)="send()">
-
-    <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
-
-      <!-- Name -->
-      <mat-form-field appearance="outline" [fxHide]="authenticated">
-        <mat-label>{{ msgs.name.label }}</mat-label>
-        <input matInput formControlName="name" cdkFocusInitial>
-        <mat-hint>{{ msgs.name.hint }}</mat-hint>
-      </mat-form-field>
-  
-      <!-- Email -->
-      <mat-form-field appearance="outline" [fxHide]="authenticated">
-        <mat-label>{{ msgs.email.label }}</mat-label>
-        <input matInput formControlName="email">
-        <mat-hint>{{ msgs.email.hint }}</mat-hint>
-        <mat-error *ngIf="form.controls['email'].errors?.required">{{ msgs.email.errors?.required }}</mat-error>
-        <mat-error *ngIf="form.controls['email'].errors?.email">{{ msgs.email.errors?.invalid }}</mat-error>
-      </mat-form-field>
-
-      <!-- Message -->
-      <mat-form-field appearance="outline">
-        <mat-label>{{ msgs.message.label }}</mat-label>
-        <textarea matInput formControlName="message" rows="5"></textarea>
-        <mat-hint>{{ msgs.message.hint }}</mat-hint>
-        <mat-error *ngIf="form.controls['message'].errors?.required">{{ msgs.message.errors?.required }}</mat-error>
-      </mat-form-field>
-
-      <!-- Attachments -->
-      <ng-container *ngIf="!!msgs.attachments.enable">
-
-        <input style="display:none" type="file" multiple (change)="files = $event.target?.files" #openfile />
-        
-        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" (click)="openfile.click()" [attr.disabled]="sending">
-
-          <wm-icon [icon]="msgs.attachments.icon"></wm-icon>
-
-          <span class="mat-error" *ngIf="fileSizeExceeded; else filesOk">
-            {{ msgs.attachments.errors.sizeExceeded }}
-          </span>
-          <ng-template #filesOk>
-
-            <span>{{ msgs.attachments.label }}</span>
-            
-            <span *ngIf="files?.length > 0">&nbsp;({{ files.length }})</span>
-
-          </ng-template>
-        
-        </div>
-      </ng-container>
+    <!-- Common header with close button -->
+    <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
       
-    </mat-dialog-content>
+      <span>{{ msgs.title }}</span>
+      
+      <button mat-icon-button mat-dialog-close>
+        <wm-icon inline="true" icon="close"></wm-icon>
+      </button>
 
-    <!-- Submit button -->
-    <mat-dialog-actions align="end">
+    </header>
 
-      <mat-progress-bar *ngIf="sending" mode="indeterminate" color="primary"></mat-progress-bar>
+    <!-- Thank you message on feedback sent -->
+    <ng-template #thankYou>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid || sending">{{ msgs.send }}</button>
+      <mat-dialog-content [ngSwitch]="success" class="wm-feedback">
 
-    </mat-dialog-actions>
+        <p class="message info" *ngSwitchCase="true">{{ msgs.notifications.success }}</p>
+
+        <p class="message error" *ngSwitchCase="false">{{ msgs.notifications.error }}</p>
+      
+      </mat-dialog-content>
+
+    </ng-template>
+
+    <!-- Feedback form to fill-in -->
+    <form [formGroup]="form" (ngSubmit)="send()" *ngIf="!sent; else thankYou">
+
+      <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
+
+        <!-- Name -->
+        <mat-form-field appearance="outline" [fxHide]="authenticated">
+          <mat-label>{{ msgs.name.label }}</mat-label>
+          <input matInput formControlName="name">
+          <mat-hint>{{ msgs.name.hint }}</mat-hint>
+        </mat-form-field>
+    
+        <!-- Email -->
+        <mat-form-field appearance="outline" [fxHide]="authenticated">
+          <mat-label>{{ msgs.email.label }}</mat-label>
+          <input matInput formControlName="email">
+          <mat-hint>{{ msgs.email.hint }}</mat-hint>
+          <mat-error *ngIf="form.controls['email'].errors?.required">{{ msgs.email.errors?.required }}</mat-error>
+          <mat-error *ngIf="form.controls['email'].errors?.email">{{ msgs.email.errors?.invalid }}</mat-error>
+        </mat-form-field>
+
+        <!-- Message -->
+        <mat-form-field appearance="outline">
+          <mat-label>{{ msgs.message.label }}</mat-label>
+          <textarea matInput formControlName="message" rows="5" cdkFocusInitial></textarea>
+          <mat-hint>{{ msgs.message.hint }}</mat-hint>
+          <mat-error *ngIf="form.controls['message'].errors?.required">{{ msgs.message.errors?.required }}</mat-error>
+        </mat-form-field>
+
+        <!-- Attachments -->
+        <ng-container *ngIf="!!msgs.attachments.enable">
+
+          <input style="display:none" type="file" multiple (change)="files = $event.target?.files" #openfile />
+          
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" (click)="openfile.click()" [attr.disabled]="sending">
+
+            <wm-icon [icon]="msgs.attachments.icon"></wm-icon>
+
+            <span class="mat-error" *ngIf="fileSizeExceeded; else filesOk">
+              {{ msgs.attachments.errors.sizeExceeded }}
+            </span>
+            <ng-template #filesOk>
+
+              <span>{{ msgs.attachments.label }}</span>
+              
+              <span *ngIf="files?.length > 0">&nbsp;({{ files.length }})</span>
+
+            </ng-template>
+          
+          </div>
+        </ng-container>
+        
+      </mat-dialog-content>
+
+      <!-- Submit button -->
+      <mat-dialog-actions align="end">
+
+        <mat-progress-bar *ngIf="sending" mode="indeterminate" color="primary"></mat-progress-bar>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid || sending">{{ msgs.send }}</button>
+
+      </mat-dialog-actions>
+
+    </form>
 
     <!-- Credits -->
     <a *ngIf="!!msgs.credits" class="mat-small" [href]="msgs.credits.url" (click)="redirect(msgs.credits.url)">{{ msgs.credits.caption }}</a>
-
-  </form>
   
   </ng-container>
 

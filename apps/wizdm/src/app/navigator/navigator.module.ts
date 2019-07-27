@@ -12,11 +12,9 @@ import { FlipModule } from '../elements/flip';
 import { NavbarModule } from './navbar/navbar.module'; 
 import { ToolbarModule } from './toolbar/toolbar.module'; 
 import { MenuModule } from './menu/menu.module'; 
-import { NotifyModule } from './notify/notify.module'; 
 import { FooterModule } from './footer/footer.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { NavigatorComponent } from './navigator.component';
-import { NavigatorService } from './navigator.service';
 
 @NgModule({
   imports: [
@@ -33,7 +31,6 @@ import { NavigatorService } from './navigator.service';
     NavbarModule,
     ToolbarModule,
     MenuModule,
-    NotifyModule,
     FooterModule,
     FeedbackModule
   ],
@@ -42,9 +39,6 @@ import { NavigatorService } from './navigator.service';
   ],
   exports: [
     NavigatorComponent
-  ],
-  providers: [
-    NavigatorService
   ]
 })
 export class NavigatorModule { }

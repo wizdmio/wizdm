@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavigatorService } from '../../navigator';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
 
@@ -13,7 +12,7 @@ export class HomeComponent {
 
   readonly msgs$: Observable<any>;
   
-  constructor(readonly content: ContentResolver, readonly nav: NavigatorService) {
+  constructor(readonly content: ContentResolver) {
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = content.stream('home');
   }

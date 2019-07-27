@@ -1,13 +1,16 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { NotifyService, notifyType, notifyMsg } from './notify.service';
 import { $animations } from './notify.animations';
+import { Subscription } from 'rxjs';
 
+/*
 export type notifyType = 'info'|'error';
 
 export interface notifyMsg {
   type    : notifyType,
   message : string
 };
-
+*/
 
 @Component({
   selector: 'wm-notify',
@@ -16,15 +19,26 @@ export interface notifyMsg {
   host: { 'class': 'wm-notify' },
   animations: $animations
 })
-export class NotifyComponent {
+export class NotifyComponent implements OnDestroy {
 
+  private sub     : Subscription;
   public  type    : notifyType;
   public  message : string;
   private timer   : any;
+
+  constructor(private notify: NotifyService) {
+
+    this.sub = this.notify.notification$
+      .subscribe( data => this.showMessage(data) );
+  }
+
+  ngOnDestroy() { this.sub.unsubscribe(); }
   
   @Input() msgs = {};
 
-  @Input('notify') set showMessage(data: notifyMsg) {
+  @Input() timeout = 5000;
+
+  private showMessage(data: notifyMsg) {
 
     // Clears when null
     if(!data) { this.clear(); }
@@ -43,13 +57,11 @@ export class NotifyComponent {
     }
   }
 
-  @Output() cleared = new EventEmitter<void>();
-
-  @Input() timeout = 5000;
+  //@Output() cleared = new EventEmitter<void>();
 
   public clear() {
     clearTimeout(this.timer);
     this.message = '';
-    this.cleared.emit();
+    //this.cleared.emit();
   }
 }

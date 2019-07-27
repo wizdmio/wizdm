@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 import { FormGroup, FormControl, ValidatorFn } from '@angular/forms';
+import { MediaObserver } from '@angular/flex-layout';
 import { $itemAnimations } from './item-animations';
 import moment from 'moment';
 
@@ -36,7 +37,7 @@ export class UserItemComponent {
 
   public edit = false;// Switch between view/edit mode
 
-  constructor() { 
+  constructor(private media: MediaObserver) { 
 
     this.control = new FormControl( '', null );
     this.form = new FormGroup({control: this.control});
@@ -63,16 +64,16 @@ export class UserItemComponent {
     }
   }
 
-  @Input() mobile: boolean = false;
-
   @Output() editStart  = new EventEmitter<string>();
   @Output() editDone   = new EventEmitter<string>();
+
+  // Mobile-size screen detection handler
+  public get isMobile() { return this.media.isActive('xs'); }
 
   public get errorMessage() {
     
     // Evaluates the validation reported errors
-    let errors = Object.keys(this.control.errors);
-    
+    let errors = Object.keys(this.control.errors);    
     // Returns the relevant error message
     return this.errors && errors ? this.errors[errors[0]] : '';
   }

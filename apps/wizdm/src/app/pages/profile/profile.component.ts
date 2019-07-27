@@ -4,7 +4,7 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { UserProfile, wmFile } from '@wizdm/connect';
 import { PopupService } from '../../elements/popup';
 import { ContentResolver, CanPageDeactivate } from '../../core';
-import { NavigatorService } from '../../navigator';
+import { ToolbarService } from '../../navigator';
 import { UserItemComponent, UserItemValidators } from './item/item.component';
 import { Observable, Subscription } from 'rxjs';
 import moment from 'moment';
@@ -25,7 +25,7 @@ export class UserComponent implements OnInit, OnDestroy, CanPageDeactivate  {
   public msgs: any = {};
 
   constructor(readonly content : ContentResolver,
-              readonly nav     : NavigatorService,          
+              readonly toolbar : ToolbarService,          
               private  profile : UserProfile,
               private  popup   : PopupService) { 
 
@@ -42,7 +42,7 @@ export class UserComponent implements OnInit, OnDestroy, CanPageDeactivate  {
       this.msgs = msgs;
 
       // Activates the relevant toolbar actions
-      this.nav.toolbar.activateActions(this.msgs.actions);
+      this.toolbar.activateActions(this.msgs.actions);
     });
   }
 

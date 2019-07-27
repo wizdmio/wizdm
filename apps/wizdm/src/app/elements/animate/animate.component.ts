@@ -4,7 +4,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { $animations } from './animate.animations';
 import { Subject, Observable, of } from 'rxjs';
-import { map, startWith, distinctUntilChanged, delay, scan, takeUntil, takeWhile, switchMap } from 'rxjs/operators';
+import { map, startWith, distinctUntilChanged, delay, scan, takeUntil, takeWhile, flatMap } from 'rxjs/operators';
 
 export type wmAnimations = 'landing'|'pulse'|'beat'|'heartBeat'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'zoomIn'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'zoomOut';
 export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
@@ -98,7 +98,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
   ngOnInit() { 
 
     // Triggers the animation based on the input flags
-    this.animateTrigger().subscribe( trigger => {
+    this.animateTrigger(this.elm).subscribe( trigger => {
       // Triggers the animation to play or to idle
       this.trigger = trigger ? this.play : this.idle;
     });
@@ -112,9 +112,9 @@ export class AnimateComponent implements OnInit, OnDestroy {
   }
 
   // Triggers the animation
-  private animateTrigger(): Observable<boolean> {
+  private animateTrigger(elm: ElementRef<HTMLElement>): Observable<boolean> {
 
-    return this.animateReplay().pipe( switchMap( trigger => this.aos ? this.animateOnScroll() : of(trigger)) );
+    return this.animateReplay().pipe( flatMap( trigger => this.aos ? this.animateOnScroll(elm) : of(trigger)) );
   }
 
   // Triggers the animation deferred
@@ -124,16 +124,16 @@ export class AnimateComponent implements OnInit, OnDestroy {
   }
 
   // Triggers the animation on scroll
-  private animateOnScroll(): Observable<boolean> {
+  private animateOnScroll(elm: ElementRef<HTMLElement>): Observable<boolean> {
 
     // Initialize the element's scrollilng container area whenever the AOS is requested
-    this.scrollingArea = this.getScrollingArea(this.elm);
+    this.scrollingArea = this.getScrollingArea(elm);
 
     // Return an AOS observable
     return new Observable<boolean>( observer => {
       // Ask for a scroll observable from angular cdk/ScrollDispatcher with throttle
       // NOTE: ScrollDispatcher observables run out of NgZone, so, make sure to use NgZone.run() when needed
-      const sub = this.scroll.ancestorScrolled(this.elm, 100).pipe(
+      const sub = this.scroll.ancestorScrolled(elm, 100).pipe(
         // Makes sure to dispose on destroy
         takeUntil(this.dispose$),
         // Starts with initial element visibility 

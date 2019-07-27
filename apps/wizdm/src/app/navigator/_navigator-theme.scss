@@ -43,35 +43,24 @@
       background-color: mat-color($wm-primary, 'darker');
       color: mat-color($wm-primary, 100);
     }
+  }
 
-    .wm-notify {
-
-      top: $wm-content-top-desktop + 16px;
-      left: 10vw;
-      width: 80vw;
-      @media ($mat-xsmall) {
-        top: $wm-content-top-mobile + 8px;
-        left: 4px;
-        width: calc(100% - 8px);
-      }
+  .wm-feedback {
     
-      // Uses the "accent" color palette
-      .info {
-        @include mat-elevation(8);
-        background-color: mat-color($primary, 50);
-        color: mat-color($primary, 600);
-        border: 1px solid mat-color($primary, 600);
-        border-radius: 5px;
-      }
-    
-      // Uses the "warning" color palette
-      .error {
-        @include mat-elevation(8);
-        background-color: mat-color($warn, 50);
-        color: mat-color($warn, 600);
-        border: 1px solid mat-color($warn, 600);
-        border-radius: 5px;
-      }
-    }  
+    // Uses the "accent" color palette
+   .info {
+     background-color: mat-color($primary, 50);
+     color: mat-color($primary, 600);
+     border: 1px solid mat-color($primary, 600);
+     border-radius: 5px;
+   }
+ 
+   // Uses the "warning" color palette
+   .error {
+     background-color: mat-color($warn, 50);
+     color: mat-color($warn, 600);
+     border: 1px solid mat-color($warn, 600);
+     border-radius: 5px;
+   }
   }
 }
