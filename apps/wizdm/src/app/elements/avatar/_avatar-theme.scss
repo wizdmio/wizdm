@@ -12,5 +12,6 @@
 
       $palette: map-get($theme, #{$color});
       &[color=#{$color}] { fill: mat-color($palette); }
+    }
   }
 }
