@@ -9,4 +9,4 @@ export let $animations = [
       animate($timing, style({ opacity: 0 }))
     )
   ])
-]
+];
