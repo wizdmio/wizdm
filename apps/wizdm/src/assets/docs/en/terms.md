@@ -1,37 +1,12 @@
-# Terms & Conditions - *Summary*
+# Wizdm Terms of Service
 
-This page is a summary of the most important aspects of the terms of service of wizdm, but it does not replace the [full version](#terms-conditions-full).
-  
+Thank you for using Wizdm! We're happy you're here. Wizdm.io is a live demonstration of the Wizdm boilerplate for the development of serverless single page applications based on Angular and Firebase.
+
 ## The service
+Besides the purpose of demonstrating Wizdm functionalities there are no services provided here. 
 
-### About wizdm
-
-The service offered by wizdm...
-
-## The projects
-      
-### Creation of the projects
-
-The user...
-             
-### Use of the projects
-
-The user...
-        
+## About wizdm
+Wizdm is an open source project licensed under the [MIT License](license).
+  
 ## The privacy policy of wizdm
-
-### Data of users subscribing to wizdm
-
-In order to understand how your personal data is collected, be sure to read the complete wizdm privacy policy, part of these terms of service
-
-### Data collected by thid parties
-
-...
-
-# Terms & Conditions - *Full*
-
-These are meant to be the full terms and conditions of wizdm... [short version](#terms-conditions-summary).
-     
-## Liability
-
-The software, materials and assistance provided by wizdm have the only purpose...
+You may be willing to look at our [Privacy Statement](privacy). 
