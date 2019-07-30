@@ -9,5 +9,5 @@ We only require the minimum amount of personal information that is necessary to 
 ## Authentication
 User authentication is mediated by Google Firebase. You may want referring to the [Google Privacy Policies](https://policies.google.com/privacy).
 
-# Feedback
+## Feedback
 User feedbacks is powered by by Doorebell.io. You may want referring to [Doorbell Privacy Policy](https://doorbell.io/privacy-policy).
