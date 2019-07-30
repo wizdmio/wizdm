@@ -4,11 +4,15 @@ Wizdm is a boilerplate to kickstart serverless single page applications based on
 
 ## Feature rich
 
-Wizdm comes packed with all the essential features of a modern single page application ready to be used including account management and user authentication, cloud file storage and real-time data synchronization, internazionalization, theming and much more.
+Wizdm comes packed with all the essential features of a modern single page application ready to be used including account management and user authentication, cloud file storage and real-time data synchronization, user interface theming and intgernationalization and much more.
+
+## Tecnologies involved
+
+At the very core of this initiative there's the willing to provide a "zero starting cost" solution while granting performances, compatibility and top level support - meaning - all the technologies, paltforms and services involved in wizdm development have been selected by reputation and by the availability of generous freemium subscription options. 
 
 ## Contribution
 
-Wizdm is open source and open to contributors. Whoever decides to use this project to speedup their own developments is welcome to join the team. Get in touch [here](mailto:hello@wizdm.io). 
+Wizdm is open source and open to contributors. Whoever decides to use this project to speedup their own developments is welcome to join the team. Get in touch [with us](mailto:hello@wizdm.io). 
 
 ## Licensing
 
