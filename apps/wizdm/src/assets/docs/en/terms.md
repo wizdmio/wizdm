@@ -12,5 +12,6 @@ Wizdm is an open source project licensed under the [MIT License](license).
 You may be willing to look at our [Privacy Statement](privacy). 
 
 ## Contact Us
-If you have any questions about these Terms, please [contact us](mailto:hello@wizdm.io).
-
+If you have any questions about these Terms, please [contact us](mailto:hello@wizdm.io). 
+ 
+ [Back to Home](/)
