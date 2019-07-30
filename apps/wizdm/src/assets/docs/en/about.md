@@ -4,7 +4,7 @@ Wizdm is a boilerplate to kickstart serverless single page applications based on
 
 ## Feature rich
 
-Wizdm comes packed with all the essential features of a modern single page application ready to be used including account management and user authentication, cloud file storage and real-time data synchronization, user interface theming and intgernationalization and much more.
+Wizdm comes packed with all the essential features of a modern single page application ready to be used including account management and user authentication, cloud file storage and real-time data synchronization, user interface theming and internationalization and much more.
 
 ## Zero starting costs
 
