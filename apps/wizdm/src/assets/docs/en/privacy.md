@@ -11,3 +11,6 @@ User authentication is mediated by Google Firebase. You may want referring to th
 
 ## Feedback
 User feedbacks is powered by by Doorebell.io. You may want referring to [Doorbell Privacy Policy](https://doorbell.io/privacy-policy).
+
+## Contact Us
+If you have any questions about these Privacy Statement, please [contact us](mailto:hello@wizdm.io).
