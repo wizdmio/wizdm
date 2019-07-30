@@ -16,8 +16,10 @@ Wizdm is licensed under the [MIT-License](license).
 
 ## Resources
 
-[Angular](https://angular.io/docs)
+[Angular](https://angular.io/docs) 
+
 [Firebase](https://firebase.google.com/docs)
-[Github](https://github.com/wizdmio/wizdm)
+
+[Github](https://github.com/wizdmio/wizdm) 
  
 [Back to Home](/)
