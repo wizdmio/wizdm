@@ -12,7 +12,7 @@ At the very core of this initiative there's the willing to provide a "zero start
 
 ## Contribution
 
-Wizdm is open source and open to contributors. Whoever decides to use this project to speedup their own developments is welcome to join the team. Get in touch [with us](mailto:hello@wizdm.io). 
+Wizdm is open source and open to contributors. Whoever decides to use this project to speedup their own developments is welcome to join us. [Get in touch](mailto:hello@wizdm.io). 
 
 ## Licensing
 
