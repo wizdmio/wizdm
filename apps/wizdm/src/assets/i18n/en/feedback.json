@@ -1,0 +1,42 @@
+{
+  "caption": "Contact us",
+  "icon": "far:fa-comment",
+  "title": "Let's talk",
+  "send": "Send",
+  "name": {
+      "label": "Name",
+      "hint": "How do we call you"
+  },
+  "email": {
+      "label": "Email",
+      "hint": "We'll keep you posted here",
+      "errors": {
+          "required": "Please specify an email address",
+          "invalid": "Oooops! It looks like this is not a valid email "
+      }
+  },
+  "message": {
+      "label": "Message",
+      "hint": "Let us know your opinion",
+      "errors": {
+          "required": "Please explain yourself here"
+      }
+  },
+  "attachments": {
+      "enable": true,
+      "label": "Attachments",
+      "icon": "fas:fa-paperclip",
+      "hint": "Let us know your opinion",
+      "errors": {
+          "sizeExceeded": "File size exceeded"
+      }
+  },
+  "notifications": {
+      "success": "Thank you for reaching us out!\nWe'll get in touch very soon",
+      "error": "Seems the feedback didn't go through :/\nPlease retry in a minute"
+  },
+  "credits": {
+      "caption": "Powered by Doorbell.io",
+      "url": "https://doorbell.io"
+  }
+}

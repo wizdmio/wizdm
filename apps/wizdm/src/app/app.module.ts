@@ -1,9 +1,9 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { FirebaseOptionsToken, FirebaseNameOrConfigToken } from '@angular/fire';
-import { MatIconRegistry, MatDialogModule, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
+import { MatIconRegistry, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { ConnectModule, 
          AuthModule, 
@@ -11,7 +11,6 @@ import { ConnectModule,
          UploaderModule, 
          UserProfileModule } from '@wizdm/connect';
 import { DoorbellModule } from '@wizdm/doorbell';
-import { NavigatorModule } from './navigator';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -31,7 +30,6 @@ import { AppComponent } from './app.component';
     UploaderModule,
     UserProfileModule,
     DoorbellModule.init(environment.doorbell),
-    NavigatorModule,
     AppRoutingModule
   ],
   providers: [

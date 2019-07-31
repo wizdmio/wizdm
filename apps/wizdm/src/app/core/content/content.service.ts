@@ -71,7 +71,6 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
           switchMap( profile => {
 
             if(lang === 'auto') {
-
               // Gets the user preferred language or detects tht browsers
               const lang = !!profile && profile.lang || this.detectLanguage().split('-')[0];
               console.log('Resolving to profile or browser language: ', lang);
@@ -88,7 +87,7 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
             }
 
             // Loads he requested modules
-            return this.loadModules(lang, route.data.modules)
+            return this.loadModules(lang, route.data.i18n)
               .pipe( 
                 // Jumps to the not-found page when the requested content is missing
                 catchError( () => ( this.router.navigate['not-found'], of({}) ) ),
@@ -246,14 +245,14 @@ export class ContentResolver implements Resolve<any>, CanActivate, CanDeactivate
   }
 
   // Routing helper to easily jump on a specified page keeping the current language
-  public navigate(to: string, extras?: NavigationExtras): Promise<boolean> {
+  public navigate(to: string|any[], extras?: NavigationExtras): Promise<boolean> {
 
     // Traslates the input string into an absolute target route keeping the current language
     const target = (to === '.') ? 
       
       this.router.url.replace(/#.*/,'').split('/') : 
       
-      [ '/', this.language, to ];
+      [ '/', this.language ].concat( typeof to === 'string' ? to.split('/') : to);
 
     // Navigates to the target 
     return this.router.navigate( target, extras );

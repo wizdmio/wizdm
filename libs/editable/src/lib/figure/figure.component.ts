@@ -1,27 +1,29 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { EditableDocument } from '../editable-document.component';
-import { EditableImage } from '../model/editable-image';
+import { EditableFigure, EditableImage } from '../model/editable-figure';
 
 @Component({
-  selector: 'figure[wm-image]',
-  templateUrl: './image.component.html',
-  /*host: { 
+  selector: 'figure[wm-figure]',
+  templateUrl: './figure.component.html',
+  host: { 
     'contenteditable': 'false',
-    'user-select:'   : 'none'
-  }*/
+    'style': 'user-select: none' 
+  }
 })
-export class ImageComponent {
+export class FigureComponent {
 
   constructor(readonly document: EditableDocument) {}
   
-  @Input('wm-image') image: EditableImage;
+  @Input('wm-figure') figure: EditableFigure;
+  // Makes sure excluding the figure container from the editability
+  //@HostBinding('attr.contenteditable') editable = false;
    // Applies the node id to the element
-  @HostBinding('id') get id() { return !!this.image && this.image.id; }
+  @HostBinding('id') get id() { return !!this.figure && this.figure.id; }
   // Applies the requested alignement
-  @HostBinding('style.text-align') get align() { return this.image.align || 'left'; }
+  @HostBinding('style.text-align') get align() { return this.figure.align || 'left'; }
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
-    return this.document.selection.includes(this.image) ? '' : undefined; 
+    return this.document.selection.includes(this.figure) ? '' : undefined; 
   }
 
   // Helper function computing the max-size style for images

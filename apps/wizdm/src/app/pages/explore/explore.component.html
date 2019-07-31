@@ -5,13 +5,36 @@
     <p fxHide.lt-sm [@fade]="activeTab">{{ tabDescription || msgs.description }}</p>
   </header-->
 
-  <div fxLayout="column" fxLayoutAlign="start center" *ngIf="projects$ | async as items" [@list]="items?.length">
+  <!--div fxLayout="column" fxLayoutAlign="start center" *ngIf="projects$ | async as items" [@list]="items?.length">
 
-    <wm-explore-item *ngFor="let project of items" [msgs]="msgs.item" [project]=project @item>
-    </wm-explore-item>
+    <wm-project *ngFor="let project of items" [msgs]="msgs.item" [project]=project @item>
+    </wm-project>
 
     <mat-spinner *ngIf="projects.loading$ | async" diameter="60" strokeWidth="2">
     </mat-spinner>
 
-  </div>
+  </div-->
+
+  <section class="projects" fxLayout="column" fxLayoutAlign="center center" *ngIf="projects$ | async as items" [@list]="items?.length">
+
+    <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column" fxFill>
+  
+      <ng-container *ngFor="let project of items">
+  
+        <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
+  
+          <wm-project [project]="project" 
+                      [msgs]="msgs"
+                      (open)="content.navigate(['explore', $event])" 
+                      @bumpIn>
+          </wm-project>  
+  
+        </div>
+  
+      </ng-container>
+  
+    </div>
+  
+  </section>
+
 </ng-container>

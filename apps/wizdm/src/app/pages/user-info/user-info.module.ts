@@ -6,8 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { AvatarModule } from '../../elements/avatar';
-import { ColorsModule } from '../../../../../../.tmp/colors';
-import { ColorPickerModule } from '../../../../../../.tmp/color-picker';
 import { UserInfoComponent } from './user-info.component';
 import { UserInfoDirective } from './user-info.directive';
 
@@ -19,9 +17,7 @@ import { UserInfoDirective } from './user-info.directive';
     MatButtonModule, 
     MatMenuModule, 
     MatDialogModule,
-    AvatarModule, 
-    ColorsModule,
-    ColorPickerModule
+    AvatarModule
   ],
   declarations: [
     UserInfoComponent,

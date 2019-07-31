@@ -19,13 +19,13 @@ export class EditableSelection {
 
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
-  /** Returns true when the selection belongs within a single text node */
+  /** Returns true when the selection belongs within a single node */
   get single(): boolean { return this.valid && (this.start === this.end); }
-  /** Returns true when the selection spread across moltiple text nodes */
+  /** Returns true when the selection spread across moltiple nodes */
   get multi(): boolean { return !this.single; }
   /** Returns true when the selection includes the whole nodes */
   get whole(): boolean { return this.valid && (this.startOfs === 0) && (this.endOfs === this.end.length); }
-  /** Returns true when the selection falls in trhe middle of text nodes */
+  /** Returns true when the selection falls in the middle of node(s) */
   get partial(): boolean { return !this.whole; }
   /** Returns true when the selection is collpased in a cursor */
   get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
@@ -33,18 +33,18 @@ export class EditableSelection {
   get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
   /** Returns true whenever the selection has been modified */
   get marked(): boolean { return this.valid && this.modified; }
-
+  /** Marks a seleciotn as modified */
   public mark(modified = true): EditableSelection {
     this.modified = this.valid && modified;
     return this;
   }
-
+  /** Sets the selection's start node */
   public setStart(node: EditableContent, ofs: number) {
     this.start = node;
     this.startOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
-
+  /** Sets the selection's end node */
   public setEnd(node: EditableContent, ofs: number) {
     this.end = node;
     this.endOfs = (!!node && ofs < 0) ? node.length : ofs;
@@ -244,6 +244,50 @@ export class EditableSelection {
     // Updates the cursor position
     return this.setCursor(this.start, ofs);
   }
+  /** Deletes the selection, if any, or the following char when collapsed */
+  public del(): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // On collapsed...
+    if(this.collapsed) {
+      // Skips special cases when the cursor is at the edge...
+      if(this.start.length === this.startOfs) {
+        // Skips whenever the cursor falls within a cell or a caption
+        if(this.matchOne('cell', 'caption')){ return this; }
+         // Skips whenever the cusror would move within a cell or a caption
+        const next = this.next(this.start, true);
+        if(!next || !!next.climb('cell', 'caption')) { 
+          return this; 
+        }
+      } 
+      // Select the following char    
+      this.move(0, 1);  
+    }
+    // Deletes the selection
+    return this.delete();
+  }
+    /** Deletes the selection, if any, or the preceeding char when collapsed */
+  public back(): EditableSelection {
+    // Skips on invalid selection
+    if(!this.valid) { return this; }
+    // On collapsed...
+    if(this.collapsed) {
+      // Skips special cases when the cursor is at the edge...
+      if(this.startOfs === 0){
+        // Skips whenever the cursor falls within a cell or a caption
+        if(this.matchOne('cell', 'caption')) { return this; }
+        // Skips whenever the cusror would move within a cell or a caption
+        const prev = this.previous(this.start, true);
+        if(!prev || !!prev.climb('cell', 'caption')) { 
+          return this; 
+        }
+      } 
+      // Select the preceeding char    
+      this.move(-1, 0);  
+    }
+    // Deletes the selection
+    return this.delete();
+  }
   /**
    * Breaks the selection by inserting a new line char or an entire new editable block
    * @param newline when true, a new line charachter wil be used to break the selection,
@@ -255,8 +299,8 @@ export class EditableSelection {
     if(!this.collapsed) { this.delete(); }
     // Store a snapshot for undo history
     this.store();
-    // Just insert a new line on request forcing it always on links and table cells
-    if(newline || this.belongsTo('link') || this.belongsTo('cell')) {
+    // Just insert a new line on request forcing it always on links, table cells and figure's caption
+    if(newline || this.matchOne('link', 'cell', 'caption')) {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
@@ -492,10 +536,10 @@ export class EditableSelection {
       case 'text': case 'link':
       return this.single && this.start.type === type && this.startOfs < this.start.length;
       // Editable container types
-      case 'item': case 'cell':
+      case 'item': case 'cell': case 'caption':
       return this.contained && this.start.container.type === type;
-      // Block types
-      case 'blockquote': case 'bulleted': case 'numbered': case 'row': case 'table': case 'image':
+      // General case
+      default:
       // Climbs up to the specified ancestor
       const block = this.start.climb(type);
       // Returns false when not there
@@ -508,6 +552,11 @@ export class EditableSelection {
 
     return false;
   }
+
+  public matchOne(...types: wmNodeType[]): boolean {
+    return !!types && types.some( type => this.belongsTo(type) );
+  }
+
   /** Returns true whenever the inspected node falls within the current selection  */
   public includes(node: EditableContent): boolean {
     // Skips on invalid selection
@@ -555,7 +604,7 @@ export class EditableSelection {
     const fragment = this.root.create.document.load(source);
     if(!!fragment) {
       // Paste the content as text within links or table cells
-      if(this.belongsTo('link') || this.belongsTo('cell')) {
+      if(this.matchOne('link', 'cell', 'caption')) {
         return this.insert(fragment.value);
       }
       // Breaks the selection at the current position otherwise

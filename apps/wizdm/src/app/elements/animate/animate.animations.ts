@@ -83,6 +83,12 @@ export const $animations = [
         ])
       ), { params: { timing: '1s'}}
     ),
+    
+    transition('* => bumpIn', [
+      style({ transform: 'scale(0.5)', opacity: 0 }),
+      animate("{{timing}} cubic-bezier(.8, -0.6, 0.2, 1.5)", 
+        style({ transform: 'scale(1)', opacity: 1 }))
+    ], { params: { timing: '500ms'}}),
 
     transition('fadeOut => void', [
       animate('{{timing}} ease-in', style({ opacity: 0 }))

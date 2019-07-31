@@ -25,7 +25,7 @@ const routes: Routes = [
     path: '',
     component: UserComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['profile'] },
+    data: { i18n: ['profile'] },
     canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

@@ -1,0 +1,47 @@
+
+:host {
+
+  position: relative;
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+
+  .body {
+
+    width: 100%;
+    height: 100%;
+
+    .text {
+
+      h1, h2, h3, h4 { margin: 0; }
+      p { text-align: justify; }
+      
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    .tools {
+      width: 100%;
+      .mat-button {
+        min-width: unset; 
+        padding: 0 5px; 
+      }
+    }
+  }
+
+  .edit {
+    position: absolute;
+    opacity: 0.2;
+
+    &[left] { left: 0;}
+    &[top] { top: 0;}
+    &[right] { right: 0;}
+    &[bottom] { bottom: 0;}
+  }
+}

@@ -1,6 +1,6 @@
 {
-    "title": "Wizdm - Sviluppo compassionevole",
-    "description": "La communità degli sviluppatori illuminati",
+    "title": "Wizdm - La tua app pronta al lancio",
+    "description": "Realizza la tua app velocemente e lancia il tuo prodotto",
 
     "toolbar": {
         "public": [
@@ -43,9 +43,5 @@
             { "label": "Contattaci" },
             { "label": "Termini e privacy" }
         ]
-    },
-
-    "feedback": {
-        "caption": "Contattaci"
     }
 }

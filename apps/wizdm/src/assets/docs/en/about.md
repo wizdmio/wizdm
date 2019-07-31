@@ -26,4 +26,4 @@ Wizdm is licensed under the [MIT-License](license).
 
 [Github](https://github.com/wizdmio/wizdm) 
  
-[Back to Home](/)
+[Back to Home](home)

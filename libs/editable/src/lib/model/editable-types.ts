@@ -1,11 +1,12 @@
 export type wmInlineType = 'text'|'link'|'image';
 export type wmIndentType = 'blockquote'|'bulleted'|'numbered';
-export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmInlineType;
+export type wmFigureType = 'figure'|'image'|'caption';
+export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmInlineType|wmFigureType;
 export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
 export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
 export type wmImageSize = '25'|'33'|'50'|'66'|'75'|'icon'|'thumb'|'small'|'regular';
-export type wmEditableTypes = wmRoot | wmBlock | wmList | wmItem | wmTable | wmRow | wmCell | wmText | wmImage;
+export type wmEditableTypes = wmRoot|wmBlock|wmList|wmItem|wmTable|wmRow|wmCell|wmText|wmFigure|wmImage|wmCaption;
 
 export interface wmEditable {
   type: wmNodeType,
@@ -62,11 +63,20 @@ export interface wmText extends wmEditable {
   url?: string
 }
 
+export interface wmFigure extends wmEditable {
+  type: 'figure',
+  content?: (wmImage|wmCaption)[]
+}
+
 export interface wmImage extends wmEditable {
   type: 'image',
   size?: wmImageSize,
   url?: string,
   alt?: string,
-  title?: string,
+  title?: string
+}
+
+export interface wmCaption extends wmEditable {
+  type: 'caption',
   content?: wmText[]
 }

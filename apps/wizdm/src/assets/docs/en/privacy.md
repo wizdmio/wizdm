@@ -15,4 +15,4 @@ User feedbacks is powered by by Doorebell.io. You may want referring to [Doorbel
 ## Contact Us
 If you have any questions about these Privacy Statement, please [contact us](mailto:hello@wizdm.io). 
  
-[Back to Home](/)
+[Back to Home](home)

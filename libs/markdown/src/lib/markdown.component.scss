@@ -1,5 +1,7 @@
 
-wm-markdown {
+.wm-markdown {
+
+  p { text-align: justify; }
   
   // Forces all the elements to inline 
   &[inline] { * { display: inline; } }

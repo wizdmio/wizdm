@@ -12,22 +12,15 @@ $wm-content-margin       : 32px !default;
 }
 
 @mixin wm-page-theme($theme, $props: ('color', 'background-color', 'stroke', 'fill')) {
+
+  // Styles the theme colors globally
+  @include wm-theme-colors($theme, $props);
  
   .wm-page { 
     
     display: block;
     position: relative;
-    //box-sizing: border-box;
-    //width: 100%;
-    /*
-    // Flexbox helper
-    display: flex;
-    flex: 1 1 auto;
-    flex-flow: column;
-    justify-content: start;
-    align-items: center;
-    box-sizing: border-box;
-*/
+    
     // Defines top padding helpers
     &.adjust-top, .adjust-top { @include wm-adjust-top(); }
 
@@ -38,8 +31,8 @@ $wm-content-margin       : 32px !default;
       &.adjust-top { @include wm-adjust-top($wm-content-padding); }
     }
 
-    // Applies the theme colors
-    @include wm-theme-colors($theme, $props);
+    // Extends the wm-page including theme colors as well
+    @extend .wm-theme-colors;
   }
 }
 
@@ -48,35 +41,38 @@ $wm-content-margin       : 32px !default;
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  // Styles the text color
-  &.text-color, .text-color { color: map-get($foreground, text); }
+  .wm-theme-colors {
 
-  // Styles the background color
-  &.background-color, .background-color { background-color: map-get($background, background); }
+    // Styles the text color
+    &.text-color, .text-color { color: map-get($foreground, text); }
 
-  // Styles the theme palettes
-  @each $color in ('primary', 'accent', 'warn') {
+    // Styles the background color
+    &.background-color, .background-color { background-color: map-get($background, background); }
 
-    $palette: map-get($theme, #{$color});
+    // Styles the theme palettes
+    @each $color in ('primary', 'accent', 'warn') {
 
-    // Loops on each palette
-    &[color=#{$color}], &.#{$color}, .#{$color} { 
+      $palette: map-get($theme, #{$color});
 
-      // Loops on each palette's color tone
-      @each $tone in ('default', 'lighter', 'darker') {
+      // Loops on each palette
+      &[color=#{$color}], &.#{$color}, .#{$color} { 
 
-        // Styles the contrast color
-        &.contrast-#{$tone}, .contrast-#{$tone} { color: map-get($palette, #{$tone}-contrast); }
+        // Loops on each palette's color tone
+        @each $tone in ('default', 'lighter', 'darker') {
 
-        // Styles the desider properties each palette, each tone and the full hues
-        @each $prop in $props {
-        
-          &.#{$prop}-#{$tone}, .#{$prop}-#{$tone} { #{$prop}: mat-color($palette); }
+          // Styles the contrast color
+          &.contrast-#{$tone}, .contrast-#{$tone} { color: map-get($palette, #{$tone}-contrast); }
 
-          // All palette hues
-          @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
-            
-            &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat-color($palette, $hue); }
+          // Styles the desider properties each palette, each tone and the full hues
+          @each $prop in $props {
+          
+            &.#{$prop}-#{$tone}, .#{$prop}-#{$tone} { #{$prop}: mat-color($palette); }
+
+            // All palette hues
+            @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
+              
+              &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat-color($palette, $hue); }
+            }
           }
         }
       }

@@ -19,7 +19,7 @@ const routes: Routes = [
     path: '',
     component: ApplyComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['apply', 'template'] },
+    data: { i18n: ['apply', 'template'] },
     canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

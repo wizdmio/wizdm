@@ -1,13 +1,13 @@
 <ng-content></ng-content>
 
 <ng-template #template>
-  <!--mat-dialog-content *ngIf="user" [wmThemeColor]="themeColor"-->
+
   <mat-dialog-content *ngIf="user">
 
     <!-- Cover -->
-    <div class="cover wm-theme primary background-color-default">
+    <div class="cover primary background-color-lighter">
       <!-- Cover picture -->
-      <img *ngIf="user.cover" [src]="user.cover" (error)="user.cover = null" />
+      <!--img *ngIf="user.cover" [src]="user.cover" (error)="user.cover = null" /-->
 
       <!-- Options menu -->
       <!--button mat-icon-button class="menu" [matMenuTriggerFor]="options">
@@ -19,7 +19,7 @@
     <div fxLayout="column" fxLayoutAlign="start center" class="content">
       <!-- User picture -->
       <div class="overlap">
-        <wm-avatar [src]="user.img" [color]="avatarColor"></wm-avatar>
+        <wm-avatar [src]="user.img" color="primary"></wm-avatar>
       </div>
       <!-- User info -->
       <div class="name mat-subheading-2">{{ user.name }}</div>
@@ -39,19 +39,6 @@
       </div>      
     </div>
 
-    <!-- Options menu -->
-    <!--mat-menu #options>
-      <button mat-menu-item>
-        <mat-icon>photo</mat-icon>
-        <span>{{ msgs?.menu?.cover }}</span>
-      </button>
-      <button mat-menu-item [matMenuTriggerFor]="picker.menu">
-        <mat-icon>brush</mat-icon>
-        <span>{{ msgs?.menu?.color }}</span>
-      </button>
-    </mat-menu>
-
-    <wm-color-picker [color]="user.color || 'none'" (pick)="setColor($event)" #picker></wm-color-picker-->  
-
  </mat-dialog-content>
+
 </ng-template>

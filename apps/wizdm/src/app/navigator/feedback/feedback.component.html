@@ -29,7 +29,7 @@
     <!-- Thank you message on feedback sent -->
     <ng-template #thankYou>
 
-      <mat-dialog-content [ngSwitch]="success" class="wm-feedback">
+      <mat-dialog-content [ngSwitch]="success">
 
         <p class="message info" *ngSwitchCase="true">{{ msgs.notifications.success }}</p>
 

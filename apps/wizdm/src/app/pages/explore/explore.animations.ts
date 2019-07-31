@@ -1,6 +1,6 @@
 import { trigger, state, animate, style, transition, query, stagger, animateChild } from '@angular/animations';
 
-const $timing = '450ms cubic-bezier(.8, -0.6, 0.2, 1.5)';
+const $timing = '500ms cubic-bezier(.8, -0.6, 0.2, 1.5)';
 
 export let $animations = [
 
@@ -13,11 +13,11 @@ export let $animations = [
 
   trigger('list', [
     transition('* => *', [
-      query('@item', stagger(100, animateChild()), { optional: true })
+      query('@bumpIn', stagger(100, animateChild()), { optional: true })
     ]),
   ]),
 
-  trigger('item', [
+  trigger('bumpIn', [
     transition(':enter', [
       style({ transform: 'scale(0.5)', opacity: 0 }),
       animate($timing, 

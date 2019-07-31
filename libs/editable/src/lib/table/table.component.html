@@ -1,6 +1,7 @@
 
-<!-- Loops on rows -->
-<tr *ngFor="let row of table?.content; index as r; first as top" [id]="row.id">
+<table [id]="table?.id" [style.margin-left]="mleft" [style.margin-right]="mright" [attr.selected]="selected">
+  <!-- Loops on rows -->
+  <tr *ngFor="let row of table?.content; index as r; first as top" [id]="row.id">
     <!-- Cell content -->
     <td *ngFor="let cell of row.content; index as c"
         [style.vertical-align]="cell.data.valign"
@@ -9,4 +10,5 @@
         [wm-editable]="cell">
     </td>
   </tr>
+</table>
   

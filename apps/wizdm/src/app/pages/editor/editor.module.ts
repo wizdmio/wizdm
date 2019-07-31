@@ -20,7 +20,7 @@ const routes: Routes = [
     path: '',
     component: EditorComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['editor'] },
+    data: { i18n: ['editor'] },
     canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ],
   }

@@ -25,10 +25,10 @@
     <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
 
     <!-- Tables at root level only -->
-    <table *ngSwitchCase="'table'" [wm-table]="node"></table>
+    <div *ngSwitchCase="'table'" [wm-table]="node"></div>
 
-    <!-- Figures with optional caption -->
-    <figure *ngSwitchCase="'image'" [wm-image]="node"></figure>
+    <!-- Figures with caption -->
+    <figure *ngSwitchCase="'figure'" [wm-figure]="node"></figure>
 
   </ng-container>
   

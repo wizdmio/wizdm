@@ -5,7 +5,7 @@
 
   <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
 
-    <h2>{{ msgs?.title }}</h2>
+    <h2>{{ msgs?.title || 'Upload files' }}</h2>
 
     <!-- Thumbnail size selector -->
     <mat-button-toggle-group value="sm" #sizes="matButtonToggleGroup">
@@ -20,11 +20,11 @@
     <div fxFlex="1 1 auto" fxLayout="row wrap"  fxLayoutAlign="center center" *ngIf="uploads | async as files">
 
       <!-- No files message -->
-      <p *ngIf="!files.length">{{ msgs?.noFiles }}</p>
+      <p *ngIf="!files.length">{{ msgs?.noFiles || 'There are no files yet' }}</p>
 
       <!-- None selected item -->
       <button mat-button (click)="select({})" *ngIf="none">
-        <wm-thumbnail [name]="msgs?.none" [size]="sizes.value" [selected]="!selectedFile.id">
+        <wm-thumbnail [name]="msgs?.none || 'None'" [size]="sizes.value" [selected]="!selectedFile.id">
           <div class="none"></div>
         </wm-thumbnail>
       </button>
@@ -37,7 +37,7 @@
       </button>
 
       <!-- Fake uploading item -->
-      <wm-thumbnail [name]="msgs?.loading" [size]="sizes.value" *ngIf="loading">
+      <wm-thumbnail [name]="msgs?.loading || 'Loading'" [size]="sizes.value" *ngIf="loading">
         <wm-spinner></wm-spinner>
       </wm-thumbnail>
 
@@ -51,11 +51,11 @@
   <!-- Buttons -->
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center">
 
-    <button mat-button color="primary" [mat-dialog-close]="null">{{ msgs?.cancel }}</button>
+    <button mat-button color="primary" [mat-dialog-close]="null">{{ msgs?.cancel || 'Cancel' }}</button>
   
-    <button mat-button color="primary" [mat-dialog-close]="selectedFile" cdkFocusInitial>{{ msgs?.select }}</button>
+    <button mat-button color="primary" [mat-dialog-close]="selectedFile" cdkFocusInitial>{{ msgs?.select || 'Select' }}</button>
   
-    <button mat-button color="primary" type="button" (click)="openfile.open()">{{ msgs?.browse }}</button>
+    <button mat-button color="primary" type="button" (click)="openfile.open()">{{ msgs?.browse || 'Browse' }}</button>
   
   </mat-dialog-actions>
   

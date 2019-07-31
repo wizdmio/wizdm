@@ -15,7 +15,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['home'] },
+    data: { i18n: ['home'] },
     //canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '',
     component: NotFoundComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['notFound'] },
+    data: { i18n: ['notFound'] },
     //canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

@@ -6,4 +6,6 @@ Thank you for your interest in us. We are working to launch a fully functional t
 
 ## *Stay tuned!*
 
-<-
+<- 
+
+[Back to Home](home)

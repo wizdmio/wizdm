@@ -9,7 +9,7 @@ import { $animations } from './explore.animations';
   selector: 'wm-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
-  host: { 'class': 'wm-page adjust-top side margins' },
+  host: { 'class': 'wm-page adjust-top content-padding' },
   animations: $animations
 })
 export class ExploreComponent implements OnInit, OnDestroy {
@@ -20,9 +20,7 @@ export class ExploreComponent implements OnInit, OnDestroy {
   
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
-  constructor(//private  scroll   : ViewportService,
-              readonly projects : ProjectService,
-                       content  : ContentResolver) {
+  constructor(readonly content: ContentResolver, readonly projects: ProjectService ) {
 
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = content.stream('explore');

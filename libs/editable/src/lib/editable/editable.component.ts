@@ -2,7 +2,7 @@ import { Component, Input, HostBinding } from '@angular/core';
 import { EditableDocument } from '../editable-document.component';
 import { EditableText, EditableItem } from '../model/editable-text';
 import { EditableCell } from '../model/editable-table';
-//import { EditableImage } from '../model/editable-image';
+import { EditableCaption } from '../model/editable-figure';
 
 @Component({
   selector: '[wm-editable]',
@@ -13,11 +13,18 @@ export class EditableComponent {
 
   constructor(readonly document: EditableDocument) {}
 
-  @Input('wm-editable') node: EditableItem | EditableCell;
+  @Input('wm-editable') node: EditableItem|EditableCell|EditableCaption;
+
+  @HostBinding('attr.contenteditable') get editable() { 
+    return this.document.edit ? 'true' : 'false';
+  }
+
   // Applies the node id to the element
   @HostBinding('id') get id() { return !!this.node && this.node.id; }
+  
   // Applies text align style according to node alignement
   @HostBinding('style.text-align') get align() { return !!this.node && this.node.align; }
+  
   // Applies material typography classes based on node level
   @HostBinding('class.mat-h1') get h1() { return !!this.node && this.node.level === 1; }
   @HostBinding('class.mat-h2') get h2() { return !!this.node && this.node.level === 2; }
@@ -25,12 +32,14 @@ export class EditableComponent {
   @HostBinding('class.mat-h4') get h4() { return !!this.node && this.node.level === 4; }
   @HostBinding('class.mat-h5') get h5() { return !!this.node && this.node.level === 5; }
   @HostBinding('class.mat-h6') get h6() { return !!this.node && this.node.level === 6; }
+  
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
     return this.document.selection.includes(this.node) ? '' : undefined; 
   }
-/*
+
   // Helper function computing the max-size style for images
+  /*
   size(img: EditableImage): string {
 
     switch(!!img && img.size) { 
@@ -52,8 +61,8 @@ export class EditableComponent {
     }
 
     return '100%';
-  }
-*/
+  }*/
+
   // Helper function computing the text node style
   style(text: EditableText): any {
 

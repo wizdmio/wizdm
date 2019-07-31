@@ -1,12 +1,11 @@
-import { wmEditableTypes, wmRoot, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmImage } from '../model/editable-types';
+import { wmEditableTypes, wmRoot, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmFigure, wmImage, wmCaption } from '../model/editable-types';
 import { EditableBlock, EditableList, EditableItem, EditableText } from '../model/editable-text';
 import { EditableTable, EditableRow, EditableCell } from '../model/editable-table';
-import { EditableImage } from '../model/editable-image';
+import { EditableFigure, EditableImage, EditableCaption } from '../model/editable-figure';
 import { EditableRoot } from '../model/editable-root';
-
 import { Injectable } from '@angular/core';
 
-export type EditableTypes = EditableRoot|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableImage;
+export type EditableTypes = EditableRoot|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableFigure|EditableImage|EditableCaption;
 
 @Injectable()
 export class EditableFactory {
@@ -19,7 +18,9 @@ export class EditableFactory {
   node(data: wmRow): EditableRow;
   node(data: wmCell): EditableCell;
   node(data: wmText): EditableText;
+  node(data: wmFigure): EditableFigure;
   node(data: wmImage): EditableImage;
+  node(data: wmCaption): EditableCaption;
 
   /** Creates a new empty node of the specified type */
   public node(data: wmEditableTypes) { 
@@ -47,8 +48,14 @@ export class EditableFactory {
       case 'text': case 'link':
       return new EditableText(this, data as wmText);
 
+      case 'figure':
+      return new EditableFigure(this, data as wmFigure);
+
       case 'image':
       return new EditableImage(this, data as wmImage);
+
+      case 'caption':
+      return new EditableCaption(this, data as wmCaption);
     }
     // Returns a document node by default
     return new EditableRoot(this, data as wmRoot);
@@ -74,8 +81,12 @@ export class EditableFactory {
   get text() { return this.node({ type: 'text' }); }
   /** Creates a new empty link node */
   get link() { return this.node({ type: 'link' }); }
+  /** Creates a new empty figure node */
+  get figure() { return this.node({ type: 'figure' }); }
   /** Creates a new empty image node */
   get image() { return this.node({ type: 'image' }); }
+  /** Creates a new empty caption node */
+  get caption() { return this.node({ type: 'caption' }); }
   
   /** Clones a node with or whithout its children */
   public clone(node: EditableTypes, withChildren: boolean = true): EditableTypes {

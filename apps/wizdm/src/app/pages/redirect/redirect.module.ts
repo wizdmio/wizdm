@@ -13,7 +13,7 @@ const routes: Routes = [
     path: '',
     component: RedirectComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['redirect'] },
+    data: { i18n: ['redirect'] },
     //canActivate: [ ContentResolver ],
     //canDeactivate: [ ContentResolver ]
   }

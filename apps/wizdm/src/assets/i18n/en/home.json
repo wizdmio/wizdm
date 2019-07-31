@@ -35,18 +35,12 @@
     { 
       "icon": "fas:fa-swatchbook",
       "title": "Theming",
-      "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)",
-      "comingSoon": true  
+      "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)"
     },
     { 
       "icon": "fas:fa-globe-europe",
       "title": "Internationalization",
       "description": "Thanks to a flexible content manager at its core, wizdm handles as many lanuages as you need at once."
-    },
-    { 
-      "icon": "fab:fa-markdown",
-      "title": "Static content",
-      "description": "Markdown rendering to quickly set up static contents such as terms of service and privacy without extra coding."
     },
     { 
       "icon": "fas:fa-user-circle",
@@ -62,6 +56,11 @@
       "icon": "fas:fa-folder-open",
       "title": "File storage",
       "description": "File uploading capabilities for user profile image and more."
+    },
+    { 
+      "icon": "fab:fa-markdown",
+      "title": "Static content",
+      "description": "Markdown rendering to quickly set up static contents such as terms of service and privacy without extra coding."
     },
     { 
       "icon": "far:fa-edit",
@@ -88,6 +87,24 @@
       "icon": "fab:fa-algolia",
       "title": "Full text search",
       "description": "Full text search powered by [Algolia](https://www.algolia.com) for the time your app get traction.",
+      "comingSoon": true  
+    },
+    { 
+      "icon": "fas:fa-cookie-bite",
+      "title": "Cookie Consent",
+      "description": "Inform your user about the use your app is doing of cookies so to comform with regulations.",
+      "comingSoon": true  
+    },
+    { 
+      "icon": "fas:fa-chart-bar",
+      "title": "Google Analytics",
+      "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience.",
+      "comingSoon": true  
+    },
+    { 
+      "icon": "fas:fa-camera",
+      "title": "Unsplash",
+      "description": "Beautifull royaltiy free images from [Unsplash](https://unsplash.com/).",
       "comingSoon": true  
     },
     { 

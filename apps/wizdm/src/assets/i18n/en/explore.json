@@ -5,32 +5,13 @@
   "actions": [
     { "caption": "Apply for a new project", "icon": "add", "link": "./apply" }
   ],
-  
-  "tabs": [
-    {
-      "label": "All",
-      "value": "all",
-      "description": "Here's the list of all active projects the community is working on"
-    },
-    {
-      "label": "My projects",
-      "value": "mine",
-      "description": "Here's the list of your projects"
-    }
-  ],
 
-  "item": {
-    "unnamed": "Unnamed",
-    "createdOn": "First submitted on {{ created }}",
-    "modifiedOn": "Last modified on {{ modified }}",
-    "details": "View project details",
-    "userInfo": {
-      "title": "About me",
-      "close": "Close",
-      "menu": {
-        "cover": "Cover picture",
-        "color": "Theme color"
-      }
-    }
+  "uploadLogo": {
+    "title": "Choose a logo",
+    "noFiles": "There's no files uploaded yet",
+    "none": "None",
+    "cancel": "Cancel",
+    "select": "Select",
+    "browse": "Browse..."
   }
 }

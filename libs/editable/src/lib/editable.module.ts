@@ -6,7 +6,7 @@ import { EditableComponent } from './editable/editable.component';
 import { ListComponent } from './list/list.component';
 import { BlockComponent } from './block/block.component';
 import { TableComponent } from './table/table.component';
-import { ImageComponent } from './image/image.component';
+import { FigureComponent } from './figure/figure.component';
 
 @NgModule({
   imports: [
@@ -19,7 +19,7 @@ import { ImageComponent } from './image/image.component';
     ListComponent, 
     BlockComponent,
     TableComponent,
-    ImageComponent
+    FigureComponent
   ],
   exports: [
     EditableDocument

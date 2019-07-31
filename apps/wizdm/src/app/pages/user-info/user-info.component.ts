@@ -1,32 +1,20 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatabaseService, wmUser } from '@wizdm/connect';
-import { wmColor, wmColorMap, COLOR_MAP } from '../../../../../../.tmp/colors';
 import { wmProject } from '../../core';
 
 @Component({
   selector: 'wm-user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss'],
-  host: { 'class': 'wm-page' }
+  host: { 'class': 'wm-user-info' }
 })
 export class UserInfoComponent {
 
-  @ViewChild('template', { static: true }) template: TemplateRef<UserInfoComponent>;
+  @ViewChild('template', { static: true }) 
+  private template: TemplateRef<UserInfoComponent>;
 
-  private config: MatDialogConfig = { 
-    panelClass:  'mat-dialog-reset',
-    autoFocus: false
-    //disableClose: true,
-    //data: this
-  };
-
-  @Input() msgs: any = {};  
-
-  constructor(@Inject(COLOR_MAP) 
-              private colorMap: wmColorMap, 
-              private dialog: MatDialog,
-              private database: DatabaseService) { }
+  constructor(private dialog: MatDialog, private database: DatabaseService) { }
 
   // Loads the user profile from the database
   private loadUser(userId: string): Promise<wmUser> {
@@ -51,26 +39,10 @@ export class UserInfoComponent {
       .then( user => this.user = user );
   }
 
-  // Enable
-  //@Input() tools: boolean = false;
-
   public show(): Promise<void> {
-    return this.dialog.open(this.template, this.config)
-      .afterClosed()
-      .toPromise();
-  }
-
-  public get themeColor(): wmColor {
-    return this.colorMap[this.user.color || 'none'];
-  }
-
-  // Computes the color of the avatar based on the background
-  public get avatarColor(): string {
-    let color = this.user.color || 'none';
-    return this.colorMap[ color !== 'none' ? color : 'grey'].value;
-  }
-
-  public setColor(color: wmColor) {
-    this.user.color = color.color;
+    return this.dialog.open(this.template, { 
+      panelClass: ['mat-dialog-reset', 'wm-theme-colors'],
+      autoFocus: false
+    }).afterClosed().toPromise();
   }
 }

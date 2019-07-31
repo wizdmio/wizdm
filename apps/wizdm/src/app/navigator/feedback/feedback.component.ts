@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
 import { ContentResolver } from '../../core';
 import { Observable } from 'rxjs';
@@ -56,7 +56,7 @@ export class FeedbackComponent {
               private doorbell : DoorbellService) { 
 
     // Gets the localized content pre-fetched by the resolver during routing
-    this.msgs$ = content.stream("navigator.feedback");
+    this.msgs$ = content.stream("feedback");
 
     this.form = this.builder.group({
       'name'   : [ '' ],
@@ -66,7 +66,8 @@ export class FeedbackComponent {
   }
 
   @ViewChild('formTemplate', { static: true }) 
-  private template : TemplateRef<FeedbackComponent>;
+  private template: TemplateRef<FeedbackComponent>;
+  private refDialog: MatDialogRef<FeedbackComponent>;
   
   public open() {
 
@@ -80,16 +81,19 @@ export class FeedbackComponent {
     });
 
     // Opens the form dialog
-    const ref = this.dialog.open(this.template, { disableClose: true });
+    this.refDialog = this.dialog.open(this.template, { 
+      panelClass: 'wm-feedback',
+      disableClose: true
+    });
 
     // Rings the doorbell when opening the feedback form
-    ref.afterOpened().subscribe( () => 
-      // Call the Doorbell resful api and emit the result
-      this.doorbell.ring().then( success => this.rang.emit(success) ) 
+    this.refDialog.afterOpened().subscribe( () => 
+      // Call the Doorbell restful api and emit the result
+      this.doorbell.ring().then( success => this.feedbackOpen.emit(success) ) 
     );
 
     // Resets the form on closed
-    ref.afterClosed().subscribe( () => {
+    this.refDialog.afterClosed().subscribe( () => {
       
       // Resets the form fields
       this.form.reset();
@@ -103,7 +107,7 @@ export class FeedbackComponent {
     });
   }
 
-  @Output() rang = new EventEmitter<boolean>();
+  @Output('rang') feedbackOpen = new EventEmitter<boolean>();
 
   public send() {
 
@@ -127,23 +131,26 @@ export class FeedbackComponent {
     
     }, this.files).then( success => {
 
-      // Keeps track of the submit's result
-      this.success = success;
-
       // Turns the sending flag off
       this.sending = false;
 
       // Flags as sent showing the resulting message
       this.sent = true;
+
+      // Emits the result of submission while keeping track of it locally
+      this.feedbackSent.emit(this.success = success);
     }); 
   }
 
+  @Output('sent') feedbackSent = new EventEmitter<boolean>();
+
   // Credits redirection helper
   public redirect(url: string): boolean {
-    // Closes the dialogs
-    this.dialog.closeAll();
-    // Navigates to the destination redirecting when necessary
-    this.content.navigateByUrl(url);
+    
+    // Redirects to the external url closing the dialog
+    this.content.navigateByUrl(url)
+      .then( () => this.refDialog.close() );
+    
     // Prevents default
     return false;
   }

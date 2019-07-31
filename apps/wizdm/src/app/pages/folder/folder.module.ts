@@ -16,7 +16,7 @@ const routes: Routes = [
     path: '',
     component: FolderComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['folder'] },
+    data: { i18n: ['folder'] },
     canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

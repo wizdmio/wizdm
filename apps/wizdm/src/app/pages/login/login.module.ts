@@ -17,7 +17,7 @@ const routes: Routes = [
     path: '',
     component: LoginComponent,
     resolve: { content: ContentResolver }, 
-    data: { modules: ['login'] },
+    data: { i18n: ['login'] },
     //canActivate: [ ContentResolver ],
     canDeactivate: [ ContentResolver ]
   }

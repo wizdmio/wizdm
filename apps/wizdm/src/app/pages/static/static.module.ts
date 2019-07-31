@@ -14,7 +14,7 @@ const routes: Routes = [
     path: '',
     component: StaticComponent,
     //resolve: { content: ContentResolver }, 
-    //data: { modules: ['static'] },
+    //data: { i18n: ['static'] },
     //canActivate: [ ContentResolver ],
     //canDeactivate: [ ContentResolver ]
   }

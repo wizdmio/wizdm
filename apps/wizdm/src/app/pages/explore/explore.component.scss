@@ -6,8 +6,25 @@
   
   //@include wm-padding-top($wm-content-padding);
 
-  wm-explore-item {
-    margin-bottom: 32px;
+  .projects {
+
+    .row {
+
+      .cell {
+
+        padding: 8px;
+
+        .content {
+
+          width: 100%;
+          height: 100%;
+          padding: 16px;
+          text-align: center;
+          box-sizing: border-box;
+          //border-radius: 5px;
+        }
+      }
+    }
   }
 
   .spinner {

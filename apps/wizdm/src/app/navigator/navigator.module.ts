@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,12 +13,13 @@ import { ToolbarModule } from './toolbar/toolbar.module';
 import { MenuModule } from './menu/menu.module'; 
 import { FooterModule } from './footer/footer.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { NavRoutingModule } from './navigator-routing.module';
 import { NavigatorComponent } from './navigator.component';
 
 @NgModule({
+  declarations: [ NavigatorComponent ],
   imports: [
     CommonModule,
-    RouterModule,
     FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
@@ -32,13 +32,8 @@ import { NavigatorComponent } from './navigator.component';
     ToolbarModule,
     MenuModule,
     FooterModule,
-    FeedbackModule
-  ],
-  declarations: [ 
-    NavigatorComponent
-  ],
-  exports: [
-    NavigatorComponent
+    FeedbackModule,
+    NavRoutingModule
   ]
 })
 export class NavigatorModule { }

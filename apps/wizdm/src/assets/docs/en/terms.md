@@ -14,4 +14,4 @@ You may be willing to look at our [Privacy Statement](privacy).
 ## Contact Us
 If you have any questions about these Terms, please [contact us](mailto:hello@wizdm.io). 
  
- [Back to Home](/)
+ [Back to Home](home)

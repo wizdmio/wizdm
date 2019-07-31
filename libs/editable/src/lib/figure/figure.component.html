@@ -1,0 +1,20 @@
+
+<!-- Loops on text/link/image inline children -->
+<ng-container *ngFor="let child of figure?.content">
+
+    <ng-container [ngSwitch]="child.type">
+  
+      <!-- Renders the image -->
+      <img *ngSwitchCase="'image'"
+           [id]="child.id" 
+           [src]="child.url" 
+           [alt]="child.alt" 
+           [title]="child.title" 
+           [style.max-width]="size(child)" style="user-select: auto;"/>
+  
+      <!-- Renders the caption (actually the editable part) -->
+      <figcaption *ngSwitchCase="'caption'" [wm-editable]="child"></figcaption>
+  
+    </ng-container>
+  
+  </ng-container>

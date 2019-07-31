@@ -14,7 +14,9 @@
     <!-- Blockquotes nesting disabled -->
     <!--blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote-->
 
-    <table *ngSwitchCase="'table'" [wm-table]="node"></table>
+    <!-- Tables at root level only -->
+    <div *ngSwitchCase="'table'" [wm-table]="node"></div>
+
 
   </ng-container>
 

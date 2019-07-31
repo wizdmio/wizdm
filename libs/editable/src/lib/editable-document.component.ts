@@ -1,4 +1,4 @@
-import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { wmRoot } from './model/editable-types';
 import { EditableRoot } from './model/editable-root';
@@ -10,14 +10,16 @@ import { EditableFactory } from './factory/editable-factory.service';
 @Component({
   selector: '[wm-editable-document]',
   templateUrl: './editable-document.component.html',
+  styleUrls: [ './editable-document.component.scss' ],
   host: { 'class': 'wm-editable-document' },
-  providers: [ EditableFactory ]
+  providers: [ EditableFactory ],
+  encapsulation: ViewEncapsulation.None
 })
 export class EditableDocument extends EditableRoot implements AfterViewChecked {
 
   readonly selection = new EditableSelection(this);
 
-  @HostBinding('attr.contenteditable') get editable() {
+  @HostBinding('attr.contenteditable') get editable() { 
     return this.editMode ? 'true' : 'false';
   }
 
@@ -33,11 +35,14 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
   @Input('wm-editable-document') set source(source: wmRoot) {
     // Loads the source data building the tree
     this.load(source).defrag();
+
+    console.log(this.value);
   }
 
   private editMode = false;
 
   /** When true switches to edit mode */
+  get edit(): boolean { return this.editMode; }
   @Input() set edit(mode: boolean) { 
     // Switches to/from edit mode
     if(this.editMode = mode) {
@@ -89,16 +94,12 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
       case 'Tab':*/
       // Merging foreward
       case 'Delete':
-      // Extends the selection one char forward when collapsed
-      if(sel.collapsed) { sel.move(0, 1); }
-      // Deletes the selection
-      return sel.delete(), false;
+      // Deletes the following char
+      return sel.del(), false;
       // Merging backward
       case 'Backspace':
-      // extends the selection one char backward when collapsed
-      if(sel.collapsed) { sel.move(-1, 0); }
-      // Deletes the selection
-      return sel.delete(), false;
+      // Deletes the preceeding char
+      return sel.back(), false;
       // Splitting
       case 'Enter':
       // Breaks the current selection on enter
@@ -325,6 +326,16 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
     let child = el as Node; let count = 0;
     while(!!child) { child = child.previousSibling; count++; }
     // Return the parent element with the relative offset otherwise
-    return [el.parentNode, count + offset > 0 ? 1 : 0];
-  } 
+    return [el.parentNode, count + offset];
+  }
+/*
+  @HostListener('document:selectionchange') selchange() {
+    if(this.edit && this.selection.collapsed) {
+
+      if(!(this.selection.start instanceof EditableText)) {
+        this.selection.reset();
+      }
+
+    }
+  }*/
 }

@@ -4,7 +4,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 import { HttpClient } from '@angular/common/http';
 import { $animations } from './illustration.animations';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
@@ -29,11 +29,17 @@ export class IllustrationComponent {
   @HostBinding('@.disabled') 
   public disabled = false;
 
+  @Output() load = new EventEmitter<void>();
+
+  @Output() error = new EventEmitter<Error>();
+
   @Input() set src(src: string) {
 
-    this.http.get(src, { responseType: 'text'} )
-      .pipe( catchError( e => ( this.error.emit(e), of('') ) ))
-      .subscribe(svg => {
+    this.http.get(src, { responseType: 'text' })
+      .pipe( 
+        map( svg => this.parseUrls(svg) ),
+        catchError( e => ( this.error.emit(e), of('') ) )
+      ).subscribe(svg => {
 
         this.svg = this.sanitizer.bypassSecurityTrustHtml(svg);
 
@@ -41,7 +47,7 @@ export class IllustrationComponent {
     });
   }
 
-  @Output() load = new EventEmitter<void>();
-
-  @Output() error = new EventEmitter<Error>();
+  private parseUrls(svg: string): string {
+    return svg;
+  }
 }
