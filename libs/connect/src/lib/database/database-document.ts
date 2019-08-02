@@ -35,8 +35,8 @@ export class DatabaseDocument<T extends dbCommon> {
     return this.db.collection<T>(`${this.path}/${this.id}/${name}`);
   }
 
-  public counter(name: string): DistributedCounter {
-    return this.db.distributedCounter(`${this.path}/${this.id}/${name}`);
+  public counter(name: string, shards?: number): DistributedCounter {
+    return this.db.distributedCounter(`${this.path}/${this.id}/${name}`, shards);
   }
 
   private sanitize(data: T): any {
