@@ -3,10 +3,8 @@ import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from
 import { MatStepper } from '@angular/material/stepper';
 import { UserProfile, wmUser } from '@wizdm/connect';
 import { ToolbarService } from '../../navigator';
-import { CanPageDeactivate, 
-         ContentResolver, 
-         ProjectService, 
-         wmProject } from '../../core';
+import { ProjectService, wmProject } from '../../core/project';
+import { CanPageDeactivate, ContentResolver} from '../../core/content';
 import { PopupService } from '../../elements/popup';
 import { $animations } from './apply.animations';
 import { Observable, Subscription } from 'rxjs';
@@ -242,9 +240,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
       // Overwrite the name from the application
       name: application.name,
       // Adds the elevator pitch
-      pitch: application.pitch,
-      // Adds the descrption
-      description: application.description
+      pitch: application.pitch
   
     } as wmProject );
   }

@@ -32,8 +32,14 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
   }
 
   /** Document source */
-  @Input('wm-editable-document') set source(source: wmRoot) {
-    // Loads the source data building the tree
+  private source: wmRoot;
+  @Input('wm-editable-document') set _source(source: wmRoot) {
+
+    // Keeps track of the source
+    this.source = source;
+    // Skips loading during editing
+    if(this.edit) { return; }
+    // Loads the source data building the tree otherwise
     this.load(source).defrag();
 
     console.log(this.value);
@@ -44,15 +50,16 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
   /** When true switches to edit mode */
   get edit(): boolean { return this.editMode; }
   @Input() set edit(mode: boolean) { 
-    // Switches to/from edit mode
-    if(this.editMode = mode) {
-      // Queries for the current selection
-      this.query()
-        // Initializes the history buffer
-        .enableHistory()
+    // Entering edit mode queries for the current selection and initiaizes the history buffer
+    if(this.editMode = mode) { this.query().enableHistory(); }
+    else { 
+      // Resets the seelction and clears the history buffer while exiting edit mode...
+      this.selection.reset().clearHistory(); 
+      // ...and reloads the document whenever changed
+      if(this.node !== this.source) { 
+        this.load(this.source).defrag(); 
+      }
     }
-    // Resets the seelction and clears the history buffer while exiting edit mode
-    else { this.selection.reset().clearHistory(); }
   }
   /** change event notifying for document changes */
   @Output() change = new EventEmitter<wmRoot>();

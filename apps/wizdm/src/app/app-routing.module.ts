@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 // Define navigation routes
@@ -20,6 +21,9 @@ const routes: Routes = [
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes, { anchorScrolling: 'enabled' }) ],
-  exports: [ RouterModule ]
+  exports: [ RouterModule ],
+  providers: [
+    //{ provide: APP_BASE_HREF, useValue: '/' }
+  ]
 })
 export class AppRoutingModule {}

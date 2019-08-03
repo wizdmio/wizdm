@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 //import { ToolbarService, ViewportService } from '../../navigator';
-import { ContentResolver, ProjectService, Project } from '../../core';
+import { ProjectService, wmProject } from '../../core/project';
+import { ContentResolver } from '../../core/content';
 import { Observable, Subject, of } from 'rxjs';
 //import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { $animations } from './explore.animations';
@@ -15,8 +16,7 @@ import { $animations } from './explore.animations';
 export class ExploreComponent implements OnInit, OnDestroy {
 
   readonly msgs$: Observable<any>;
-  private dispose$: Subject<void> = new Subject();
-  public projects$: Observable<Project[]>;
+  public projects$: Observable<wmProject[]>;
   
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
   
@@ -24,28 +24,12 @@ export class ExploreComponent implements OnInit, OnDestroy {
 
     // Gets the localized content pre-fetched during routing resolving
     this.msgs$ = content.stream('explore');
-  }
-
-  ngOnInit() {
 
     // Listing all projects (using pagination)
-    this.projects$ = this.projects.browseAll({ limit: 10 });
-    /*
-    // Subscribes to scrollY$ to load new projects when approaching the bottom of the page
-    this.scroll.scrollY$.pipe(
-      takeUntil(this.dispose$),
-      map( pos => pos[1] < 500 ),
-      distinctUntilChanged(),
-      filter( bottom => bottom )
-    ).subscribe( pos => {
-      this.projects.more();
-    });*/
+    this.projects$ = this.projects.paging({ limit: 10 });
   }
 
-  ngOnDestroy() {
+  ngOnInit() {}
 
-    // Disposes all the observables. DO NOT FORGET to use takeUntil() operator
-    this.dispose$.next();
-    this.dispose$.complete();
-  }
+  ngOnDestroy() {}
 }

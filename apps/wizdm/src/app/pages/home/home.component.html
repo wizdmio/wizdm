@@ -1,7 +1,7 @@
 
 <ng-container *ngIf="msgs$ | async as msgs">
   
-  <wm-illustration *ngIf="!!msgs.banner" class="background" [src]="msgs.banner" color="primary"></wm-illustration> 
+  <wm-illustration *ngIf="!!msgs.banner" class="background" color="primary" [src]="msgs.banner" [baseHref]="baseHref$ | async"></wm-illustration> 
 
   <section fxLayout="row" fxLayoutAlign="center center" class="banner">
 

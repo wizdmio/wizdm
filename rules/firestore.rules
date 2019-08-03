@@ -7,8 +7,8 @@ service cloud.firestore {
     // Allows only the user herself to update or delete the profile
     match /users/{userId} {
       allow read: if true;
-      allow create: if isSignedIn();
-      allow update, delete: if isOwner(userId);
+      allow create: if authenticated();
+      allow update, delete: if itsMe(userId);
     }
     
     // Projects.
@@ -17,8 +17,8 @@ service cloud.firestore {
     // Allows only the project owner to update or delete them
     match /projects/{project} {
     	allow read: if true;
-    	allow create: if isSignedIn();
-      allow update, delete: if isOwner(resource.data.author);
+    	allow create: if authenticated();
+      allow update, delete: if itsMe(resource.data.author);
 		}
     
     // Project's likes.
@@ -27,8 +27,18 @@ service cloud.firestore {
     // Only the owner is allowed to delete it (deleting the user)
     match /projects/{project}/likes/{shards} {
     	allow read: if true;
-    	allow create, update: if isSignedIn();
-      allow delete: if isOwner(resource.data.author);
+    	allow create, update: if authenticated();
+      allow delete: if itsMe(resource.data.author);
+		}
+    
+    // Project's likedBy.
+    // Allows everyone to read project's likedBy 
+    // Allows every signed-in user to likes other's projects
+    // Only the owner is allowed to unlike it (deleting itelf from likers)
+    match /projects/{project}/likedBy/{likers} {
+    	allow read: if true;
+    	allow create, update: if authenticated();
+      allow delete: if itsMe(resource.id);
 		}
         
     // User' uploads.
@@ -37,32 +47,32 @@ service cloud.firestore {
     match /users/{userId}/uploads/{upload} {
     	allow read: if true;
       //allow read: if isSignedIn();
-      allow create, update, delete: if isOwner(userId);
+      allow create, update, delete: if itsMe(userId);
     }
     
     // Conversations.
     // Allows every signed-in user to read and create conversations
     // Allows only the sender to update or delete them
     match /conversations/{conversation} {
-    	allow read, create: if isSignedIn();
-      allow update, delete: if isOwner(resource.data.from);
+    	allow read, create: if authenticated();
+      allow update, delete: if itsMe(resource.data.from);
 		}
     
     // Messages.
     // Allows every signed-in user to read and create messages
     // Allows only the sender to update or delete them
     match /conversations/{conversation}/messages/{message} {
-    	allow read, create: if isSignedIn();
-      allow update, delete: if isOwner(resource.data.from);
+    	allow read, create: if authenticated();
+      allow update, delete: if itsMe(resource.data.from);
 		}
 
 		// Check if the requesting user is signed in
-    function isSignedIn() {
+    function authenticated() {
   		return request.auth.uid != null;
 		}
     
     // Check if the specified userId corresponds the the requesting user
-    function isOwner(userId) {
+    function itsMe(userId) {
   		return request.auth.uid == userId;
 		}
   }

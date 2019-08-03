@@ -12,7 +12,7 @@ import { ThumbnailModule } from '../../elements/thumbnail';
 import { AvatarModule } from '../../elements/avatar';
 import { LikesModule } from '../../elements/likes';
 import { IconModule } from '../../elements/icon';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { UserInfoModule } from '../user-info/user-info.module';
 import { UploadModule } from '../upload/upload.module';
 import { ExploreComponent } from './explore.component';

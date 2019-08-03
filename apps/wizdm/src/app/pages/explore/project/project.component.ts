@@ -1,16 +1,18 @@
-import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnDestroy, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Project, wmProject  } from '../../../core';
-import moment from 'moment';
+import { ProjectService, ProjectWrapper, wmProject  } from '../../../core/project';
+import { $animations } from './projects.animations';
+//import moment from 'moment';
 
 @Component({
   selector: 'wm-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss'],
-  host: { 'class': 'mat-elevation-z1' }
+  host: { 'class': 'mat-elevation-z1' },
+  animations: $animations
 })
-export class ProjectComponent {
+export class ProjectComponent extends ProjectWrapper implements OnDestroy {
 
   @ViewChild('formTemplate', { static: true }) 
   private tmplDialog: TemplateRef<ProjectComponent>;
@@ -18,7 +20,8 @@ export class ProjectComponent {
 
   readonly form: FormGroup;
 
-  constructor(private builder: FormBuilder, private dialog: MatDialog) { 
+  constructor(private builder: FormBuilder, private dialog: MatDialog, ps: ProjectService) { 
+    super(ps, '');
 
     this.form = this.builder.group({
       'name': ['', [ Validators.required, Validators.minLength(3) ] ],
@@ -26,19 +29,23 @@ export class ProjectComponent {
     });
   }
 
-  public favorite = false;
+  ngOnDestroy() { this.release(); }
 
   @Input() msgs: any = {};
 
-  @Input() project: Project;
+  @Input() set project(project: wmProject) { 
+
+    this.wrap(project); 
+  }
 
   @Output() open = new EventEmitter<string>();
+  
 
   public edit({ clientX, clientY }: MouseEvent) {
 
     this.form.setValue({ 
-      name: this.project.data.name,
-      pitch: this.project.data.pitch 
+      name: this.name,
+      pitch: this.pitch 
     });
 
     this.refDialog = this.dialog.open(this.tmplDialog, { 
@@ -59,14 +66,16 @@ export class ProjectComponent {
     //this.saveChange.emit(this.form.value);
     this.refDialog.close();
   }
-
+/*
   public modifiedOn(project: Project): string {
     const timestamp = project.data.updated || project.data.created;
     return moment(timestamp ? timestamp.toMillis() : undefined).format('lll');
   }
-
+*//*
   public toggleFavorite(): void {
     this.favorite != this.favorite;
-  }
+  }*/
+
+  
 
 }

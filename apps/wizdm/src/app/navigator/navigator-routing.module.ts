@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ContentResolver } from '../core';
+import { ContentResolver } from '../core/content';
 import { NavigatorComponent } from './navigator.component';
 
 const routes: Routes = [

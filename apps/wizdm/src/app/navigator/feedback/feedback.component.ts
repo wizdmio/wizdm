@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { Observable } from 'rxjs';
 
 export interface DorbellSubmit {

@@ -3,7 +3,6 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { DatabaseDocument } from './database-document'
 import { DatabaseCollection } from './database-collection';
 import { PagedCollection, PageConfig } from './database-paged';
-import { RealtimeCollection } from './database-realtime';
 import { DistributedCounter } from './database-counter';
 import { firestore } from 'firebase';
 //--
@@ -102,15 +101,11 @@ export class DatabaseService {
   }
 
   /**
-   * Creates and returns a collection paginating the stream of documents. The resulting collection
-   * may support realtime documents whenever page opts.realtime is set to true. 
+   * Creates and returns a collection paginating the stream of documents.
    * @param path the path to the collection
-   * @param opts optional page configuration
    */
-  public pagedCollection<T>(path: string, opts?: PageConfigRt): PagedCollection<T> {
-    return !!opts && opts.realtime ?
-      new RealtimeCollection<T>(this, path, opts)
-        : new PagedCollection<T>(this, path, opts);
+  public pagedCollection<T>(path: string): PagedCollection<T> {
+    return new PagedCollection<T>(this, path);
   }
 
   /**

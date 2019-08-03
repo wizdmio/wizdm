@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { $animations } from './login-animations';
 import { Observable, Subscription } from 'rxjs';
 import { take, tap } from 'rxjs/operators';

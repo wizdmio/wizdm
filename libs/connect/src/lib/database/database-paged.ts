@@ -34,11 +34,8 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   protected _done$ = new BehaviorSubject<boolean>(false);
   public done$: Observable<boolean> = this._done$.asObservable();
 
-  constructor(db: DatabaseService, path: string, opts?: PageConfig) { 
+  constructor(db: DatabaseService, path: string) { 
     super(db, path);
-
-    // Initzialize the page configuration
-    this.config = this.init(opts);
   }
 
   // Merges page configuration default values with the optional ones
@@ -65,9 +62,12 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
 
   /**
    * Streams the collection content as pages of documents array 
-   * @param postProcessOp the pipe operator to optionally map the paged document while streaming
+   * @param opts (optional) the page configuration
    */
-  public streamPage<O=T>(postProcessOp: PagePostProcessOp<T,O> = o => o): Observable<O[]> {
+  public paging<O=T>(opts?: PageConfig): Observable<O[]> {
+
+    // Initzialize the page configuration
+    this.config = this.init(opts);
     
     // Makes sure the page is empty
     this.reset();
@@ -84,9 +84,6 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
         return docs.map(doc => this.output(doc));
       }),
 
-      // Perform optional post processing before appending the data to the final array
-      postProcessOp,
-      
       // Reverse the array when prepending is requested
       map( values => { 
         return this.config.prepend ? values.reverse() : values;

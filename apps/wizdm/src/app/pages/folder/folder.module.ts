@@ -8,7 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FileOpenModule } from '../../elements/openfile';
 import { PopupModule } from '../../elements/popup';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { FolderComponent } from './folder.component';
 
 const routes: Routes = [

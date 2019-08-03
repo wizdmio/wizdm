@@ -7,7 +7,7 @@ import { AnimateModule } from '../../elements/animate';
 import { IconModule } from '../../elements/icon';
 import { DisclaimerModule } from '../../elements/disclaimer';
 import { IllustrationModule } from '../../elements/illustration';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [

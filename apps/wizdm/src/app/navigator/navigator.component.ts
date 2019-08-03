@@ -4,7 +4,7 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Title, Meta } from '@angular/platform-browser';
 import { MediaObserver } from '@angular/flex-layout';
 import { ToolbarService } from './toolbar/toolbar.service';
-import { ContentResolver } from '../core';
+import { ContentResolver } from '../core/content';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { map, filter, distinctUntilChanged, flatMap, startWith } from 'rxjs/operators';
 import { $animations } from './navigator.animations';

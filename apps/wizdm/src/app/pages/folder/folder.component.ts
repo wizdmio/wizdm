@@ -4,7 +4,7 @@ import { UserProfile, wmFile } from '@wizdm/connect';
 import { ToolbarService } from '../../navigator';
 import { OpenFileComponent } from '../../elements/openfile';
 import { PopupService } from '../../elements/popup';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { Observable, Subscription } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';
 

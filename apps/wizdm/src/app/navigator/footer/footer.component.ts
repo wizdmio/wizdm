@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({

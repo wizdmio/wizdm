@@ -1,7 +1,7 @@
 
-<ng-container *ngIf="project?.author$ | async as author">
+<ng-container *ngIf="author$ | async as author">
 
-  <wm-thumbnail class="logo" size="sm" [src]="project.data.logo">
+  <wm-thumbnail class="logo" size="sm" [src]="logo">
     <svg width="100%" height="100%" fill="currentColor" fill-opacity="0.2">
       <use xlink:href="#nologo"></use>
     </svg>
@@ -9,12 +9,12 @@
   
   <section class="body" fxLayout="column" fxLayoutAlign="space-between">
   
-    <div class="text" (click)="open.emit(project.id)">
+    <div class="text" (click)="open.emit(id)">
   
       <h3 fxLayout="row">
-        <b>{{ project.data.name }}</b>
+        <b>{{ name }}</b>
       </h3>
-      <p class="mat-small"> {{ project.data.pitch }}</p>
+      <p class="mat-small"> {{ pitch }}</p>
   
     </div>
   
@@ -22,8 +22,10 @@
   
       <div class="btns">
   
-        <button mat-button color="primary" (click)="project.likes.update(1)">
-          <wm-likes [counter]="project.likes.counter$ | async"></wm-likes>
+        <button mat-button color="primary" *ngIf="likes.counter$ | async as counter" (click)="toggleFavorite()">
+          <!--wm-likes [counter]="likes.counter$ | async" [favorite]="favorite"></wm-likes-->
+          <span class="mat-small" *ngIf="counter > 0">{{ counter }}</span>
+          <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'" [@beat]="counter"></wm-icon>
         </button>
   
         <button mat-button color="primary">
@@ -40,14 +42,14 @@
   </section> 
 
   <!-- User Information -->
-  <wm-user-info [author]="project.data" #userInfo></wm-user-info>
+  <wm-user-info [author]="author" #userInfo></wm-user-info>
 
   <!-- Editing tools -->
-  <ng-container *ngIf="project.isMine">
+  <ng-container *ngIf="isMine">
 
     <wm-upload [msgs]="msgs?.uploadLogo" (file)="changeLogo($event.url)" #upload></wm-upload>
   
-    <button mat-icon-button class="edit" left bottom (click)="upload.chooseFile(project.data.logo)">
+    <button mat-icon-button class="edit" left bottom (click)="upload.chooseFile(logo)">
       <wm-icon icon="fas:fa-camera"></wm-icon>
     </button>
   

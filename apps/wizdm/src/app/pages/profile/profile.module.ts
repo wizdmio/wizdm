@@ -15,7 +15,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AvatarModule } from '../../elements/avatar';
 import { IconModule } from '../../elements/icon';
 import { PopupModule } from '../../elements/popup';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { UploadModule } from '../upload/upload.module';
 import { UserComponent } from './profile.component';
 import { UserItemComponent } from './item/item.component';

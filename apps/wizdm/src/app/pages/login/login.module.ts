@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { IconModule } from '../../elements/icon';
 import { LinkModule } from '../../elements/link';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { LoginComponent } from './login.component';
 
 const routes: Routes = [

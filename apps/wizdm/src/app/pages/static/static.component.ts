@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { Observable } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators'
 

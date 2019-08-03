@@ -1,5 +1,6 @@
 
-<div class="wrapper" *ngIf="!!svg; else loading" [innerHTML]="svg" @fadeIn></div>
+<div class="wrapper" *ngIf="svg$ | async as svg; else loading" [innerHTML]="svg" @fadeIn></div>
 <ng-template #loading>
   <ng-content></ng-content>
 </ng-template> 
+  

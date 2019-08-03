@@ -11,7 +11,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DisclaimerModule } from '../../elements/disclaimer';
 import { PopupModule } from '../../elements/popup';
-import { ContentResolver } from '../../core';
+import { ContentResolver } from '../../core/content';
 import { ApplyComponent } from './apply.component';
 
 const routes: Routes = [
