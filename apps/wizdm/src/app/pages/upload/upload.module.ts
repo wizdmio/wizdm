@@ -8,6 +8,7 @@ import { IconModule } from '../../elements/icon';
 import { ThumbnailModule } from '../../elements/thumbnail';
 import { SpinnerModule } from '../../elements/spinner';
 import { FileOpenModule } from '../../elements/openfile';
+import { PopupModule } from '../../elements/popup';
 import { UploadComponent } from './upload.component';
 
 @NgModule({
@@ -21,7 +22,8 @@ import { UploadComponent } from './upload.component';
     IconModule,
     ThumbnailModule,
     SpinnerModule,
-    FileOpenModule
+    FileOpenModule,
+    PopupModule
   ],
   exports: [
     UploadComponent

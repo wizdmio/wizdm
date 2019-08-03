@@ -17,7 +17,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
   private _counter$: BehaviorSubject<number>; 
   readonly counter$: Observable<number>;
 
-  // Returns the latest counter value
+  /** Returns the latest counter value */
   get counter() { return this._counter$.value; }
 
   constructor(db: DatabaseService, path: string, public readonly shards) {

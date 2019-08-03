@@ -17,7 +17,9 @@
     <!-- Links to internal key topics -->
     <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center center">
 
-      <a mat-button [routerLink]="item.link" *ngFor="let item of msgs.links">{{ item.label }}</a>
+      <a mat-button *ngFor="let item of msgs.links" [routerLink]="item.link"> 
+        {{ item.label }}
+      </a>
       
     </div>
 

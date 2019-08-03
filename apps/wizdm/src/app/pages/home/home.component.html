@@ -7,11 +7,11 @@
 
     <div fxFlex.gt-sm="50" fxLayout="column" fxLayoutAlign="center center" class="textbox" wmAnimate="landing" speed="slow">
 
-      <h1 class="mat-display-1"><b>{{ msgs.title }}</b></h1>
+      <h1 class="mat-display-1"><b>{{ msgs.title || 'Get your app done right' }}</b></h1>
       
-      <p>{{ msgs.pitch }}</p>
+      <p>{{ msgs.pitch || 'Wizdm provides...' }}</p>
       
-      <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption }}</button>
+      <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption || 'Get started' }}</button>
       
       <p [wm-disclaimer]="msgs.join" class="mat-small" (navigate)="content.navigate($event.target)"></p>
   

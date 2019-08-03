@@ -13,7 +13,7 @@ import { $animations } from './explore.animations';
   host: { 'class': 'wm-page adjust-top content-padding' },
   animations: $animations
 })
-export class ExploreComponent implements OnInit, OnDestroy {
+export class ExploreComponent {
 
   readonly msgs$: Observable<any>;
   public projects$: Observable<wmProject[]>;
@@ -28,8 +28,4 @@ export class ExploreComponent implements OnInit, OnDestroy {
     // Listing all projects (using pagination)
     this.projects$ = this.projects.paging({ limit: 10 });
   }
-
-  ngOnInit() {}
-
-  ngOnDestroy() {}
 }

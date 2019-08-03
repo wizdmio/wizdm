@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { UserProfile, UploaderService, wmFile } from '@wizdm/connect';
+import { PopupService } from '../../elements/popup';
 import { Observable, of } from 'rxjs';
 import { filter, take, tap, switchMap } from 'rxjs/operators';
 
@@ -15,7 +16,7 @@ export class UploadComponent implements OnInit {
   public uploads: Observable<any[]>;
   public loading: string;
 
-  constructor(private profile: UserProfile, private dialog: MatDialog) {}
+  constructor(private profile: UserProfile, private dialog: MatDialog, private popup: PopupService) {}
 
   @Input() msgs: any = {};
 
@@ -89,5 +90,18 @@ export class UploadComponent implements OnInit {
         tap( file => { this.file.emit(file); })
         
       ).toPromise();
+  }
+
+  public deleteFile(fileId: string) {
+
+    // Ask for confirmation prior to delete the file
+    this.popup.confirmPopup(this.msgs.canDelete || { message: 'Please confirm' })
+      .subscribe( () => {
+        // DEletes the file...
+        this.uploader.delete(fileId);
+        // ...and select none
+        this.selectedFile = {};
+      });
+
   }
 }

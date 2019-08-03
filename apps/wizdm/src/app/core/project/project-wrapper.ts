@@ -10,6 +10,7 @@ export interface wmProject extends wmRoot, dbCommon {
   author   : string;
   pitch?   : string;
   logo?    : string;
+  web?     : string;
 }
 
 export class ProjectWrapper extends DatabaseDocument<wmProject> {
@@ -43,6 +44,7 @@ export class ProjectWrapper extends DatabaseDocument<wmProject> {
   get author() { return !!this.data && this.data.author || ''; }
   get pitch() { return !!this.data && this.data.pitch || ''; }
   get logo() { return !!this.data && this.data.logo || ''; }
+  get web() { return !!this.data && this.data.web || ''; }
 
   // This project as an editable document
   get document() { return this.data as wmRoot; }
@@ -114,7 +116,7 @@ export class ProjectWrapper extends DatabaseDocument<wmProject> {
       // The local copy
       this._favorite$,
       // Streams the collection selecting the very document matching the authenticated user 
-      likedBy.stream( ref => ref.where(this.ps.db.sentinelId, "==", this.me) ).pipe( 
+      likedBy.stream( ref => ref.where(this.ps.db.sentinelId, "==", this.me || 'anonymous') ).pipe( 
         // Returns true whenever there's a document
         map( docs => docs.length > 0 ), 
         // Updates the local copy
@@ -154,6 +156,9 @@ export class ProjectWrapper extends DatabaseDocument<wmProject> {
   }
 
   public toggleFavorite() {
+
+    // Skips when not authenticated
+    if(!this.me) { return; }
     // Gets the toggled value
     const favorite = !this.favorite; 
     // Pushes the new favorite flag value into the local copy to update the UI

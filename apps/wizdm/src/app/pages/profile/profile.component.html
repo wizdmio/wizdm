@@ -47,19 +47,17 @@
 
       <ng-container *ngFor="let btn of panel.buttons">
 
-        <button *ngIf="btn.action" 
-                mat-button color="primary" 
-                (click)="action(btn.action)"
-                [disabled]="disabled(btn.action)">{{ btn.caption }}</button>
-
+        <button mat-button *ngIf="btn.action" 
+                           color="primary" 
+                           (click)="action(btn.action)"
+                           [disabled]="disabled(btn.action)">{{ btn.caption }}</button>
       </ng-container>
 
       <!-- APPLY CHANGES BUTTON -->
       <button mat-button *ngIf="panel.applyChanges"
-                          color="primary" 
-                        [disabled]="!itemChanges"
-                        (click)="applyAllItemChanges()">{{ panel.applyChanges }}</button>
-
+                         color="primary" 
+                         [disabled]="!itemChanges"
+                         (click)="applyAllItemChanges()">{{ panel.applyChanges }}</button>
     </mat-action-row>
 
   </mat-expansion-panel>

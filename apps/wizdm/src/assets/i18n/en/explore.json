@@ -1,10 +1,7 @@
 {
   "title": "Explore projects",
   "description": "Here's where you can browse the community' projects",
-
-  "actions": [
-    { "caption": "Apply for a new project", "icon": "add", "link": "./apply" }
-  ],
+  "more": "More",
 
   "uploadLogo": {
     "title": "Choose a logo",
@@ -12,6 +9,34 @@
     "none": "None",
     "cancel": "Cancel",
     "select": "Select",
-    "browse": "Browse..."
+    "browse": "Browse...",
+    "canDelete": {
+      "title": "Deleting a file",
+      "message": "WARNING, by proceeding you'll permanently delete the selected file.",
+      "cancel": "Cancel",
+      "ok": "Proceed"
+    }
+  },
+
+  "editForm": {
+    "name": {
+      "label": "Name",
+      "hint": "Name your project",
+      "errors": {
+        "required": "Please pick a name for your project",
+        "exists": "Ooops this name is already taken"
+      }
+    },
+    "pitch": {
+      "label": "Pitch",
+      "hint": "A compelling sentence here",
+      "errors": {
+        "required": "Please briefly describe what your project is about"
+      }
+    },
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel"
+    }
   }
 }

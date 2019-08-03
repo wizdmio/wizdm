@@ -11,9 +11,7 @@
   
     <div class="text" (click)="open.emit(id)">
   
-      <h3 fxLayout="row">
-        <b>{{ name }}</b>
-      </h3>
+      <h3 fxLayout="row"><b>{{ name }}</b></h3>
       <p class="mat-small"> {{ pitch }}</p>
   
     </div>
@@ -23,19 +21,18 @@
       <div class="btns">
   
         <button mat-button color="primary" *ngIf="likes.counter$ | async as counter" (click)="toggleFavorite()">
-          <!--wm-likes [counter]="likes.counter$ | async" [favorite]="favorite"></wm-likes-->
           <span class="mat-small" *ngIf="counter > 0">{{ counter }}</span>
           <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'" [@beat]="counter"></wm-icon>
         </button>
   
-        <button mat-button color="primary">
+        <button mat-button color="primary" *ngIf="web" (click)="redirect.emit(web)">
           <wm-icon icon="fas:fa-external-link-alt"></wm-icon>
         </button>
   
       </div>
   
-      <button mat-icon-button>
-        <wm-avatar color="primary" [src]="author.img" (click)="userInfo.show()"></wm-avatar>
+      <button mat-icon-button (click)="userInfo.show()">
+        <wm-avatar color="primary" [src]="author.img"></wm-avatar>
       </button>
     </div>
   
@@ -68,27 +65,32 @@
 
     <!-- Name -->
     <mat-form-field>
-      <mat-label>Name</mat-label>
+      <mat-label>{{ msgs?.editForm?.name?.label || 'Name' }}</mat-label>
       <input matInput formControlName="name" cdkFocusInitial>
-      <mat-hint>Name your app</mat-hint>
-      <mat-error *ngIf="form.controls.name.errors?.required">
-        Please pick a name for your project 
+      <mat-hint>{{ msgs?.editForm?.name?.hint }}</mat-hint>
+      <mat-error *ngIf="form.controls['name'].errors?.required">
+        {{ msgs?.editForm?.name?.errors?.required || 'Name required' }}
+      </mat-error>
+      <mat-error *ngIf="form.controls['name'].errors?.exists">
+        {{ msgs?.editForm?.name?.errors?.exists || 'Already exists' }}
       </mat-error>
     </mat-form-field>
 
     <!-- Pitch -->
     <mat-form-field>
-      <mat-label>Pitch</mat-label>
+      <mat-label>{{ msgs?.editForm?.pitch?.label || 'Pitch' }}</mat-label>
       <textarea matInput formControlName="pitch" cdkTextareaAutosize></textarea>
-      <mat-hint>A compelling sentence here</mat-hint>
-      <mat-error *ngIf="form.controls.pitch.errors?.required">
-        Please briefly describe what your project is about
+      <mat-hint>{{ msgs?.editForm?.pitch?.hint }}</mat-hint>
+      <mat-error *ngIf="form.controls['pitch'].errors?.required">
+        {{ msgs?.editForm?.pitch?.errors?.required || 'Pitch required' }}
       </mat-error>
     </mat-form-field>
     
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Cancel</button>
-      <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+      <button mat-button mat-dialog-close>{{ msgs?.editForm?.buttons?.cancel || 'Cancel' }}</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">
+        {{ msgs?.editForm?.buttons?.save || 'Save' }}
+      </button>
     </mat-dialog-actions>
 
   </form>

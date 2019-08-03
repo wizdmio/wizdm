@@ -52,6 +52,8 @@
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center">
 
     <button mat-button color="primary" [mat-dialog-close]="null">{{ msgs?.cancel || 'Cancel' }}</button>
+
+    <button mat-button color="primary" type="button" (click)="deleteFile(selectedFile.id)" [disabled]="!selectedFile.id">{{ msgs?.delete || 'Delete' }}</button>
   
     <button mat-button color="primary" [mat-dialog-close]="selectedFile" cdkFocusInitial>{{ msgs?.select || 'Select' }}</button>
   

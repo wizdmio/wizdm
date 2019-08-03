@@ -8,7 +8,7 @@ Wizdm comes packed with all the essential features of a modern single page appli
 
 ## Zero starting costs
 
-At the very core of this initiative there's the willing to provide a "zero starting cost" solution while granting performances, compatibility and top level support - meaning - all the technologies, paltforms and services involved in wizdm development have been selected by reputation and by the availability of generous freemium subscription options. 
+At the very core of this initiative there's the willing to provide a "zero starting cost" solution while granting performances, compatibility and top level support - meaning - all the technologies, platforms and services involved in wizdm development have been selected by reputation and by the availability of generous freemium subscription options. 
 
 ## Contribution
 

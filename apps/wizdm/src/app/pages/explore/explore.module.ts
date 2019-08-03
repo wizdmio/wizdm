@@ -10,7 +10,6 @@ import { MatInputModule } from '@angular/material/input';
 //import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ThumbnailModule } from '../../elements/thumbnail';
 import { AvatarModule } from '../../elements/avatar';
-import { LikesModule } from '../../elements/likes';
 import { IconModule } from '../../elements/icon';
 import { ContentResolver } from '../../core/content';
 import { UserInfoModule } from '../user-info/user-info.module';
@@ -45,8 +44,7 @@ const routes: Routes = [
     //MatProgressSpinnerModule,
     ThumbnailModule,
     AvatarModule, 
-    IconModule, 
-    LikesModule,
+    IconModule,
     UserInfoModule,
     UploadModule,
     RouterModule.forChild(routes)
