@@ -2,16 +2,23 @@
   "title": "Il mio profilo",
   
   "uploadImage": {
-    "title": "Choose an image",
-    "noFiles": "There's no files uploaded yet",
-    "none": "None",
-    "cancel": "Cancel",
-    "select": "Select",
-    "browse": "Browse..."
+    "title": "Scegli una immagine",
+    "noFiles": "Non ci sono immagini",
+    "none": "Nessuna",
+    "cancel": "Annulla",
+    "select": "Imposta",
+    "delete": "Elimina",
+    "browse": "Scegli...",
+    "canDelete": {
+      "title": "Cancella l'immagine",
+      "message": "ATTENZIONE, se continui l'immagine verrà eliminata definitivamente dal server.",
+      "cancel": "Annulla",
+      "ok": "Procedi"
+    }
   },
 
   "actions": [
-    { "caption": "Disconnetti" },
+    { "caption": "Esci" },
     { "menu": [
       { "caption": "I miei file" }
     ]}
@@ -20,26 +27,24 @@
   "panels": [
     {
       "title": "Informazioni personali",
-      "icon": "account_box",
       "fields": [
-        { "label": "Name", "hint": "Your name goes here" },
-        { "label": "About me" },
-        { "label": "Email", "hint": "This is how you'll be contacted"},
-        { "label": "Phone", "hint": "This is how you'll be contacted"},
-        { "label": "Birthday", "hint": "We'll wish you happy birthday"},
-        { "label": "Gender" },
-        { "label": "Language" }
+        { "label": "Nome", "hint": "Qui va il tuo nome" },
+        { "label": "Su di me" },
+        { "label": "Email", "hint": "Cosi che ti possiamo contattare"},
+        { "label": "Telefono", "hint": "Cosi che ti possiamo contattare"},
+        { "label": "Compleanno", "hint": "Cosi che ti possiamo fare gli auguri"},
+        { "label": "Genere" },
+        { "label": "Lingua" }
       ],
       "applyChanges": "Applica le modifiche"
     },
     {
       "title": "Accesso e sicurezza",
-      "icon": "lock",
       "fields": [
-        { "label": "Account created" },
-        { "label": "Sign-in provider" },
-        { "label": "Account email" },
-        { "label": "Identity" }
+        { "label": "Account creato" },
+        { "label": "Provider d'accesso" },
+        { "label": "Email d'accesso" },
+        { "label": "Identità" }
       ],
       "buttons": [
         { "caption": "Verifica email" },
@@ -64,38 +69,38 @@
   ],
   
   "errors": {
-    "required": "This is a mandatory field",
-    "email": "There's something wrong with this email"
+    "required": "Questo campo è obbligatorio",
+    "email": "Qualcosa non va con questa emaill"
   },
 
   "popups": {
 
     "changeEmail": {
-      "title": "Changing account email",
-      "message": "You'll be asked to confirm your identity by re-authenticating.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
+      "title": "Cambio email dell'account",
+      "message": "Ti verrà richiesto di confermare la tua identità mediante password.",
+      "cancel": "Annulla",
+      "ok": "Procedi"
     },
   
     "changePassword": {
-      "title": "Changing account password",
-      "message": "You'll be asked to confirm your identity by re-authenticating.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
+      "title": "Cambio password",
+      "message": "Ti verrà richiesto di confermare la tua identità mediante password.",
+      "cancel": "Annulla",
+      "ok": "Procedi"
     },
 
     "delete": {
-      "title": "Deleting account",
-      "message": "WARNING, by proceeding you'll permanently delete your account and all the related data. You'll be asked to confirm your identity by re-authenticating.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
+      "title": "Eliminazione account",
+      "message": "ATTENZIONE, tutte le informazioni del tuo account verranno eliminate permanentemente dai nostri server. Ti verrà richiesto di confermare la tua identità mediante password.",
+      "cancel": "Annulla",
+      "ok": "Procedi"
     },
 
     "canLeave": {
-      "title": "Unsaved changes",
-      "message": "If you leave now, changes won't be saved",
-      "cancel": "Cancel",
-      "ok": "Ok"
+      "title": "Modifiche non salvate",
+      "message": "Ci sono cambiamenti che non verranno salvati",
+      "cancel": "Annulla",
+      "ok": "Procedi"
     }
   }
 }

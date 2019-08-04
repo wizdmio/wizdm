@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Title, Meta } from '@angular/platform-browser';
 import { MediaObserver } from '@angular/flex-layout';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { ContentResolver } from '../core/content';
+import { ActionLinkObserver } from '../core/action-link/action-link.service';
+import { FeedbackComponent } from './feedback/feedback.component';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { map, filter, distinctUntilChanged, flatMap, startWith } from 'rxjs/operators';
 import { $animations } from './navigator.animations';
@@ -18,6 +20,9 @@ import { $animations } from './navigator.animations';
 })
 export class NavigatorComponent implements OnInit, OnDestroy {
 
+  @ViewChild(FeedbackComponent, { static: false })
+  private feedbackDialog: FeedbackComponent;
+
   readonly scrolled$: Observable<boolean>;  
   readonly menuDesktop$: Observable<any>;
   readonly menuMobile$: Observable<any>; 
@@ -29,7 +34,8 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   public menu = false;
 
   constructor(private router: Router, private media: MediaObserver, private port: ViewportRuler,
-    private title: Title, private meta: Meta, private content: ContentResolver, readonly toolbar: ToolbarService) {
+    private title: Title, private meta: Meta, private content: ContentResolver, 
+    readonly toolbar: ToolbarService, private actionLink: ActionLinkObserver) {
 
     // Gets the localized content pre-fetched by the resolver during routing
     this.msgs$ = this.content.stream("navigator");
@@ -58,11 +64,14 @@ export class NavigatorComponent implements OnInit, OnDestroy {
       !!msgs && !!msgs.description && this.meta.updateTag({content: msgs.description}, "name='description'");
     });
 
-    // Intercepts the NavigationEnd events
+    // Intercepts the NavigationEnd events to close the mobile menu
     this.sub.add( this.router.events.pipe( filter(e => e instanceof NavigationEnd) )
-      .subscribe(() => {
-        // Closes the nav menu at the end of each navigation
-        this.toggler = false;
+      .subscribe(() => this.toggler = false ));
+
+      this.sub.add( this.actionLink.register('feedback').subscribe( () => {
+
+        !!this.feedbackDialog && this.feedbackDialog.open();
+
       }));
   }
 

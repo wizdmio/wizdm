@@ -9,9 +9,10 @@
     "none": "None",
     "cancel": "Cancel",
     "select": "Select",
+    "delete": "Delete",
     "browse": "Browse...",
     "canDelete": {
-      "title": "Deleting a file",
+      "title": "Deleting an image",
       "message": "WARNING, by proceeding you'll permanently delete the selected file.",
       "cancel": "Cancel",
       "ok": "Proceed"

@@ -78,7 +78,7 @@ export class UploadComponent implements OnInit {
       .pipe(
         switchMap( file => {
           // Keeps the previous selection
-          this.selectedFile = file;
+          this.selectedFile = file || {};
           // Shows the dialog for the user to select
           return this.dialog.open(this.template, this.config)
             // Returns an obbservable making sure it completes

@@ -5,7 +5,7 @@ import { ToolbarService } from '../../navigator';
 import { ProjectService, ProjectWrapper, wmProject } from '../../core/project';
 import { ContentResolver } from '../../core/content';
 import { PopupService } from '../../elements/popup';
-import { Observable, Subject, BehaviorSubject, combineLatest } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { switchMap, takeUntil, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';
 
@@ -20,8 +20,8 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
 
   private editMode$ = new BehaviorSubject<boolean>(false);
   private saveDocument$ = new Subject<wmRoot>();
-  private dispose$ = new Subject<void>();
   private msgs$: Observable<any>;
+  private subs: Subscription;
   public msgs: any = {};
 
   constructor(private  projects : ProjectService,
@@ -39,32 +39,26 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   ngOnInit() {
     
     // Builds the observable streams
-    combineLatest(
-
+    this.subs = combineLatest(
       // Gets a snapshot of the current localized content for internal use
       this.msgs$.pipe( tap( msgs => this.msgs = msgs ) ),
       // Loads the project and keeps it in sync
       this.loadProject().pipe( map( project => this.wrap(project) ) )
 
     ).pipe( 
-
       // Activates the relevant actions based on the previous
-      switchMap( ([msgs, project]) => this.activateActions(project.isMine, msgs) ),
-      // Makes sure to dispose the streams when done
-      takeUntil(this.dispose$)
-
+      switchMap( ([msgs, project]) => this.activateActions(project.isMine, msgs) )
       // Perform the action on request
     ).subscribe( code => this.doAction(code) );
 
     // Enables the auto-saving stream
-    this.saveAutomatically();
+    this.subs.add( this.saveAutomatically() );
   }
 
   ngOnDestroy() {
 
+    this.subs.unsubscribe();
     super.release();
-    this.dispose$.next(); 
-    this.dispose$.complete();
   }
 
   // Actions' handler
@@ -127,8 +121,6 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   private saveAutomatically() {
 
     return this.saveDocument$.pipe(
-      // Makes sure to dispose of the streams when done
-      takeUntil( this.dispose$ ),
       // Enables the save button every update request
       tap( () => this.toolbar.enableAction('save', true) ),
       // Filters multiple requests

@@ -1,24 +1,25 @@
 {
-    "title": "Wizdm - La tua app pronta al lancio",
+    "title": "Wizdm - La tua app pronta subito",
     "description": "Realizza la tua app velocemente e lancia il tuo prodotto",
 
     "toolbar": {
         "public": [
             { "label": "Wizdm" },
-            { "label": "Come funziona" },
+            { "label": "Chi siamo" },
             { "label": "Esplora" }
         ],
         "private": [
             { "label": "Wizdm" },
             { "label": "Esplora" },
-            { "label": "Applica" }
+            { "label": "I miei progetti" },
+            { "label": "Prova" }
         ]
     },
 
     "menu": {
         "public": [
             { "label": "Home" },
-            { "label": "Come funziona" },
+            { "label": "Chi siamo" },
             { "label": "Esplora" },
             { "label": "Entra/Registrati" }
         ],
@@ -26,7 +27,7 @@
             { "label": "Home" },
             { "label": "Esplora" },
             { "label": "Messaggi" },
-            { "label": "Applica" },
+            { "label": "Provami" },
             { "label": "Upload" },
             { "label": "Profilo" },
             { "label": "Esci" }
@@ -35,13 +36,13 @@
 
     "footer": {
 
-        "copyright": "Condiviso con amore dal pianeta Terra. wizdm ©{{ year }}",
+        "copyright": "Condiviso con saggezza dal pianeta Terra ©{{ year }}",
 
         "links": [
-            { "label": "A proposito di noi" },
+            { "label": "Chi siamo" },
             { "label": "Il progetto" },
-            { "label": "Contattaci" },
-            { "label": "Termini e privacy" }
+            { "label": "Termini" },
+            { "label": "Privacy" }
         ]
     }
 }

@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 //import { ToolbarService, ViewportService } from '../../navigator';
 import { ProjectService, wmProject } from '../../core/project';
 import { ContentResolver } from '../../core/content';
-import { Observable, Subject, of } from 'rxjs';
-//import { map, filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { $animations } from './explore.animations';
 
 @Component({
@@ -19,13 +20,37 @@ export class ExploreComponent {
   public projects$: Observable<wmProject[]>;
   
   //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
+
+  get me() { return this.content.user.id || ''; }
   
-  constructor(readonly content: ContentResolver, readonly projects: ProjectService ) {
+  constructor(private content  : ContentResolver, 
+              private projects : ProjectService,
+              private route    : ActivatedRoute ) {
 
     // Gets the localized content pre-fetched during routing resolving
-    this.msgs$ = content.stream('explore');
+    this.msgs$ = this.content.stream('explore');
+
+    
 
     // Listing all projects (using pagination)
-    this.projects$ = this.projects.paging({ limit: 10 });
+    //this.projects$ = this.projects.paging({ limit: 10 });
+
+    this.projects$ = this.streamProjects();
+  }
+
+  private streamProjects(): Observable<wmProject[]> {
+
+    return this.route.queryParamMap.pipe(
+      map( params => params.get('filter') ),
+      switchMap( filter => {
+
+        if(filter === 'mine') {
+          return this.projects.get( ref => ref.where('author', '==', this.me) );
+        }
+
+        return this.projects.paging({ limit: 10 });
+      })
+    );
+
   }
 }

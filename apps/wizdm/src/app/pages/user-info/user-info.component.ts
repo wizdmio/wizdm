@@ -25,17 +25,12 @@ export class UserInfoComponent {
   public user: wmUser;
 
   // Accepts user info in various forms
-  @Input('userId') set userId(id: string) { // As a user id
-    this.loadUser(id)
-      .then( user => this.user = user );
-  }   
-  
   @Input('user') set setUser(user: wmUser) { // as a user object
     this.user = user;
   }
 
-  @Input('author') set setOwner(project: wmProject) { // as a project's author
-    this.loadUser(project.author)
+  @Input('userId') set userId(id: string) { // As a user id
+    this.loadUser(id)
       .then( user => this.user = user );
   }
 

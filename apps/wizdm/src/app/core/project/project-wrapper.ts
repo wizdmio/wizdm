@@ -31,8 +31,6 @@ export class ProjectWrapper extends DatabaseDocument<wmProject> {
   private _favorite$: BehaviorSubject<boolean>;
   public favorite$: Observable<boolean>;
   
-  private sub: Subscription;
-  
   constructor(readonly ps: ProjectService, id: string) { 
     super(ps.db, '/projects', id); 
 
@@ -50,10 +48,12 @@ export class ProjectWrapper extends DatabaseDocument<wmProject> {
   get document() { return this.data as wmRoot; }
 
   // The current authenticate user's id
-  get me() { return this.ps.userId; }
+  get me() { return this.ps.userId || ''; }
 
   // The latest favorite flag value
   get favorite() { return this._favorite$.value; }
+
+  private sub: Subscription;
 
   // Wraps the given project 
   public wrap(source: wmProject): this {

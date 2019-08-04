@@ -48,8 +48,8 @@
       <ng-container *ngFor="let btn of panel.buttons">
 
         <button mat-button *ngIf="btn.action" 
-                           color="primary" 
                            (click)="action(btn.action)"
+                           [color]="btn.color || 'primary'" 
                            [disabled]="disabled(btn.action)">{{ btn.caption }}</button>
       </ng-container>
 

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ContentResolver } from '../core/content';
+import { ActionLinkObserver } from '../core/action-link/action-link.service';
 import { NavigatorComponent } from './navigator.component';
 
 const routes: Routes = [
@@ -29,6 +30,9 @@ const routes: Routes = [
 
       // External links redirection page
       { path: 'redirect',    loadChildren: () => import('../pages/redirect/redirect.module').then(m => m.RedirectModule) },
+
+      // Intercepts routing to contact to execute a non-routing action
+      { path: 'contact',     canActivate: [ ActionLinkObserver ], data: { action: 'feedback' } },
       
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      

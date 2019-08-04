@@ -3,11 +3,18 @@
   
   "uploadImage": {
     "title": "Choose an image",
-    "noFiles": "There's no files uploaded yet",
+    "noFiles": "There are no files uploaded yet",
     "none": "None",
     "cancel": "Cancel",
     "select": "Select",
-    "browse": "Browse..."
+    "delete": "Delete",
+    "browse": "Browse...",
+    "canDelete": {
+      "title": "Deleting a file",
+      "message": "WARNING, by proceeding you'll permanently delete the selected file.",
+      "cancel": "Cancel",
+      "ok": "Proceed"
+    }
   },
 
   "actions": [
@@ -36,16 +43,16 @@
       "title": "Sign-in & security",
       "icon": "lock",
       "fields": [
-        {"key": "profile:created", "label": "Account created", "icon": "far:fa-calendar", "type": "date"},
-        {"key": "user:providerId", "label": "Sign-in provider", "icon": "fas:fa-shield-alt", "type": "input"},
-        {"key": "user:email", "label": "Account email", "icon": "fas:fa-envelope", "type": "input"},
-        {"key": "user:emailVerified", "label": "Identity", "icon": "fas:fa-user-shield", "type": "select"}
+        { "key": "profile:created", "label": "Account created", "icon": "far:fa-calendar", "type": "date" },
+        { "key": "user:providerId", "label": "Sign-in provider", "icon": "fas:fa-shield-alt", "type": "input" },
+        { "key": "user:email", "label": "Account email", "icon": "fas:fa-envelope", "type": "input" },
+        { "key": "user:emailVerified", "label": "Identity", "icon": "fas:fa-user-shield", "type": "select" }
       ],
       "buttons": [
         { "caption": "Verify email", "action": "emailVerify" },
         { "caption": "Change email", "action": "changeEmail" },
         { "caption": "Change password", "action": "changePassword" },
-        { "caption": "Delete account", "action": "delete" },
+        { "caption": "Delete account", "action": "delete", "color": "warn" },
         { "caption": "Sign-out", "action": "signOut" }
       ]
     }

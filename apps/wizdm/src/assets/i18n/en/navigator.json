@@ -11,7 +11,8 @@
         "private": [
             { "label": "Wizdm", "link": "." },
             { "label": "Explore", "link": "explore" },
-            { "label": "Apply", "link": "apply"  }
+            { "label": "My projects", "link": "explore", "params": { "filter": "mine" } },
+            { "label": "Try me", "link": "apply"  }
         ]
     },
 
