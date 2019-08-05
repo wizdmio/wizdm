@@ -1,18 +1,18 @@
-# Wizdm Privacy Statement
+# La privacy di Wizdm
 
-Effective August the 1st, 2019
+In forza dal 1 Agosto 2019
 
-Wizdm.io is a live demonstration of wizdm single page application boilerplate.
-We only collect the information you choose to give us, and we process it with your consent, for the sole purpose of demonsrtating the project's functionalities.
-We only require the minimum amount of personal information that is necessary to fulfill the purpose of your interaction with us inclulding, but not limited to, user authentication and user feedback collection. 
+Wizdm.io è un dimostratore da vivo del modello di sviluppo per applicazioni su pagina singola di Wizdm.
+Raccogliamo le informazioni che decidi di inviarci e le processiamo con il tuo consenso al solo fine di dimostrare le funzionalità del progetto.
+Utilizziamo il minimo delle informazioni necessarie per completare correttamente le tue interazioni con noi compresi, ma non limitate a, l'autenticazione dell'utente e la raccolta dei feedback.
 
-## Authentication
-User authentication is mediated by Google Firebase. You may want referring to the [Google Privacy Policies](https://policies.google.com/privacy).
+## Autenticazione
+L'autenticazione avviene mediante Firebase di Google. Potrai approfondire le [Google Privacy Policies](https://policies.google.com/privacy).
 
 ## Feedback
-User feedbacks is powered by by Doorebell.io. You may want referring to [Doorbell Privacy Policy](https://doorbell.io/privacy-policy).
+Raccogliamo i feedback degli utenti mediante Doorebell.io. Potrai approfondire con la [Doorbell Privacy Policy](https://doorbell.io/privacy-policy).
 
-## Contact Us
-If you have any questions about these Privacy Statement, please [contact us](contact).
+## Contattaci
+Per ogni informazione aggiuntiva in merito alla nostra privacy [contattaci](contact).
  
-[Back to Home](home)
+[Home](home)
