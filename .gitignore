@@ -30,6 +30,7 @@ package-lock.json
 .prettierrc
 
 # misc
+/.tmp
 /.sass-cache
 /connect.lock
 /coverage
