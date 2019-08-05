@@ -1,6 +1,0 @@
-@import "../../../variables";
-@import "../../../theme";
-
-:not(.selected) {
-  color: map-get($wm-theme-foreground, disabled);
-}
