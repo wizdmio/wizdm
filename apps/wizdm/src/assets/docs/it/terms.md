@@ -1,17 +1,17 @@
-# Wizdm Terms of Service
+# Termini del servizio di Wizdm
 
-Thank you for using Wizdm! We're happy you're here. Wizdm.io is a live demonstration of the Wizdm boilerplate for the development of serverless single page applications based on Angular and Firebase.
+Grazie per utilizzare Wizdm! Siamo lieti di averti con noi. Wizdm.io è un la dimostrazione dal vivo del modello Wizdm per lo sviluppo di applicazioni su pagina singola e senza server basate su Angular e Firebase.
 
-## The service
-Besides the purpose of demonstrating Wizdm functionalities there are no services provided here. 
+## Il servizio
+Fatta salva la dimostrazione delle funzionalità di Wizdm, qui non vengono erogati servizi di alcun genere. 
 
-## About wizdm
-Wizdm is an open source project licensed under the [MIT License](license).
+## A proposito di Wizdm
+Wizdm è un progetto open source distribuito in accordo con la licenza [MIT License](license).
   
-## The privacy policy of wizdm
-You may be willing to look at our [Privacy Statement](privacy). 
+## La privacy
+Potresti voler approfondire [sulla privacy](privacy). 
 
-## Contact Us
-If you have any questions about these Terms, please [contact us](contact). 
+## Contattaci
+Per ogni dubbio o richiesta in merito a questi termini [contattaci](contact). 
  
- [Back to Home](home)
+ [Home](home)
