@@ -29,8 +29,12 @@ package-lock.json
 .firebaserc
 .prettierrc
 
+# Local stuffs
+.tmp/
+.idea/
+.experiments/
+
 # misc
-/.tmp
 /.sass-cache
 /connect.lock
 /coverage
