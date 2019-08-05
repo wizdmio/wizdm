@@ -30,8 +30,8 @@ package-lock.json
 .prettierrc
 
 # Local stuffs
-.tmp/
-.experiments/
+/.tmp
+/.experiments
 
 # misc
 /.sass-cache
