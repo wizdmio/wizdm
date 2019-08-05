@@ -31,7 +31,6 @@ package-lock.json
 
 # Local stuffs
 .tmp/
-.idea/
 .experiments/
 
 # misc
