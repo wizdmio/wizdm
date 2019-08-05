@@ -3,7 +3,7 @@
 Effective August the 1st, 2019
 
 Wizdm.io is a live demonstration of wizdm single page application boilerplate.
-We only collect the information you choose to give us, and we process it with your consent, for the sole purpose of demonsrtating the project's functionalities.
+We only collect the information you choose to give us, and we process it with your consent, for the sole purpose of demonstrating the project's functionalities.
 We only require the minimum amount of personal information that is necessary to fulfill the purpose of your interaction with us inclulding, but not limited to, user authentication and user feedback collection. 
 
 ## Authentication
