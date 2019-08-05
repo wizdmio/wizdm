@@ -24,5 +24,5 @@
       "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp", ".tmp", ".experiments" ]
 }
