@@ -2,6 +2,10 @@
 # **Business plan of _{{ name }})_**
 
 > Welcome to your business plan for {{ name }}. This is a draft automatically generated upon the information you provided during the application process. 
+> The purpose of this document is to: 
+> 
+> 1. Describe your idea to the community to better understand how Wizdm can be improved to support it
+> 1. Demonstrate the content editic functionality of Wizdm (press [Edit](edit) on the action bar to start editing)
 > 
 > -> 
 > **Enjoy** 
