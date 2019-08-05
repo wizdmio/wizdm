@@ -1,11 +1,11 @@
 ->
 
-# We are getting ready!
+# Siamo quasi pronti!
 
-Thank you for your interest in us. We are working to launch a fully functional technology preview the soonest
+Grazie per il vostro interessamento. Stiamom lavorando al lancio di una versione preliminare al più presto.
 
-## *Stay tuned!*
+## *Rimanete sintonizzati!* 
 
 <- 
 
-[Back to Home](home)
+[Home](home)
