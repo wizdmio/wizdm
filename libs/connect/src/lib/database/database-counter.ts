@@ -64,17 +64,19 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
 
   // Updates a given shard in an atomic transaction
   private updateShard(shard: string, increment: number): Promise<void> {
-
     // Uses firestore references directly
     const col = this.col().ref;
     const ref = col.doc(shard);
     // Runs a transaction to increment the given shard
-    return this.db.transaction( t => {
-      return t.get(ref)
-        .then( doc => {
-          const count = doc.data().count + increment;
-          t.update(ref, { count });
-        });
+    return this.db.transaction( trx => {
+      return trx.get(ref).then( doc => {
+        // Reads the shard, when existing, falling back to {}
+        const data = doc.data() || {};
+        // Computes the new count value
+        const count = (data.count || 0) + increment;
+        // Updates the existing shard or creates a new one
+        trx.set(ref, { count });
+      });
     })
   }
 
@@ -92,7 +94,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
       // Check for counter existance
       if(counter && counter.length > 0) {
         // Select a single shard randomly
-        const rnd = Math.floor(Math.random() * counter.length);
+        const rnd = Math.floor(Math.random() * this.shards);
         // Updates the shard
         return this.updateShard(rnd.toString(), increment);
       }
