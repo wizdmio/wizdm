@@ -22,7 +22,6 @@
           <li *ngFor="let item of child.children" 
               [wm-markdown]="item" 
               (navigate)="navigate.emit($event)">
-                {{ item | json }}
           </li>
         </ol>
         <ng-template #unordered>
