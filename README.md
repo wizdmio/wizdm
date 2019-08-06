@@ -4,10 +4,6 @@
 Wizdm
 =====
 
-<div>
-  Here an html test
-</div>
-
 [![status](https://img.shields.io/badge/status-stealth-000.svg)](https://wizdm.io)
 [![stability](https://img.shields.io/badge/stability-experimental-yellow.svg)](https://wizdm.io)
 [![contribution](https://img.shields.io/badge/contributions-welcome-important.svg)](mailto:hello@wizdm.io)
