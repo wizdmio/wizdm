@@ -1,5 +1,6 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { MarkdownParser, mdAST } from '../parser/parser.service';
+import { MarkdownParser } from '../parser/parser.service';
+import { mdPhrasingContent } from '../parser/parser-types';
 import { MarkdownRenderer } from '../markdown.component';
 
 @Component({
@@ -13,10 +14,10 @@ export class InlineComponent {
 
   constructor(readonly tree: MarkdownParser, private block: MarkdownRenderer) {}
 
-  @Input('wm-inline') node: mdAST;
+  @Input('wm-inline') node: mdPhrasingContent;
 
   // Navigation helper functions
-  private navigate(node: mdAST): boolean {
+  public navigate(node: mdPhrasingContent): boolean {
     // Resolves the node url directly or by reference
     const url = node.type === 'link' && node.url || node.type === 'linkReference' && this.tree.definition(node).url || '';
     // Relies on the block parent event to trigger the navigation by url

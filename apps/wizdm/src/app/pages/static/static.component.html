@@ -5,7 +5,7 @@
   <!--wm-illustration class="background" src="assets/img/linear-gradient.svg" color="primary"></wm-illustration-->
 
   <!-- Foreground content -->
-  <div class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document">
+  <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document">
 
     <!-- Renders the markdown document -->
     <section [wm-markdown]="document" (navigate)="content.navigateByUrl($event)" #body></section>
@@ -21,7 +21,7 @@
     
     </section>
   
-  </div>
+  </article>
 
 </ng-container>
 
