@@ -16,15 +16,14 @@ export class InlineComponent {
 
   @Input('wm-inline') node: mdPhrasingContent;
 
+  // Text rendering helper
+  public _T(value: string) { return value || ''; }
+
   // Navigation helper functions
-  public navigate(node: mdPhrasingContent): boolean {
-    // Resolves the node url directly or by reference
-    const url = node.type === 'link' && node.url || node.type === 'linkReference' && this.tree.definition(node).url || '';
-    // Relies on the block parent event to trigger the navigation by url
+  public navigate(url: string): boolean {
+    // Relies on the block parent navigation mechanism 
     this.block.navigate.emit(url);
-    // Prevents the default behaviour avoinding the browser to actually redirect to the [href] address
-    // This is crucial to avoid reloading the full app since the renderer fills [href] for both 
-    // debugging and clarity purposes
+    // Prevents default navigation towards href
     return false;
   }
 }

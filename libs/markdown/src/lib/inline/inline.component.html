@@ -12,7 +12,7 @@
       <del *ngSwitchCase="'delete'" [wm-inline]="child"></del> 
   
       <!-- Inlide Code -->
-      <code *ngSwitchCase="'inlineCode'">{{ child.value }}</code>
+      <code *ngSwitchCase="'inlineCode'">{{ _T(child.value) }}</code>
       
       <!-- Sub-script Super-script plugin -->
       <sub *ngSwitchCase="'sub'" [wm-inline]="child"></sub>
@@ -24,27 +24,26 @@
       <sup *ngSwitchCase="'footnoteReference'">[{{ tree.footnoteIndex(child) }}]</sup>
       
       <!-- Plain text -->
-      <ng-container *ngSwitchCase="'text'">{{ child.value }}</ng-container>
+      <ng-container *ngSwitchCase="'text'">{{ _T(child.value) }}</ng-container>
 
       <!-- Line Break -->
       <br *ngSwitchCase="'break'" />
   
       <!-- Link -->
-      <a *ngSwitchCase="'link'" [href]="child.url" (click)="navigate(child)" [wm-inline]="child"></a>
-  
+      <a *ngSwitchCase="'link'" [href]="child.url" (click)="navigate(child.url)" [wm-inline]="child"></a>
+      
       <!-- Link Reference --> 
-      <a *ngSwitchCase="'linkReference'" [href]="tree.definition(child).url" 
-                                         (click)="navigate(child)" 
-                                         [wm-inline]="child"></a>
-  
+      <ng-container *ngSwitchCase="'linkReference'">
+        <a *ngIf="tree.definition(child) as def" [href]="def.url" (click)="navigate(def.url)" [wm-inline]="child"></a>
+      </ng-container>
+
       <!-- Image -->
-      <img *ngSwitchCase="'image'" [src]="child.url" [title]="child.title || ''" [alt]="child.alt || ''" [wm-inline]="child" />
-  
+      <img *ngSwitchCase="'image'" [src]="child.url" [title]="_T(child.title)" [alt]="_T(child.alt)" />
+
       <!-- Image Reference -->
-      <img *ngSwitchCase="'imageReference'" [src]="tree.definition(child).url" 
-                                            [title]="tree.definition(child).title || ''" 
-                                            [alt]="child.alt || ''" 
-                                            [wm-inline]="child" />
+      <ng-container *ngSwitchCase="'imageReference'">
+        <img *ngIf="tree.definition(child) as def" [src]="def.url" [title]="_T(def.title)" [alt]="_T(def.alt)" />
+      </ng-container>
       
     </ng-container>
   
