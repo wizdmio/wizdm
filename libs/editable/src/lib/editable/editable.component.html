@@ -1,31 +1,30 @@
 <!-- Loops on text/link/image inline children -->
 <ng-container *ngFor="let child of node?.content">
 
-    <ng-container [ngSwitch]="child.type">
-  
-      <!-- Renders a text node -->
-      <span *ngSwitchCase="'text'" 
-            [id]="child.id" 
-            [ngStyle]="style(child)"
-            [attr.selected]="document.selection.includes(child) ? '' : undefined">{{ child.value || '\n' }}</span>
-  
-      <!-- Renders a link node -->
-      <a *ngSwitchCase="'link'" 
+  <ng-container [ngSwitch]="child.type">
+
+    <!-- Renders a text node -->
+    <span *ngSwitchCase="'text'" 
+          [id]="child.id" 
+          [ngStyle]="style(child)"
+          [attr.selected]="document.selection.includes(child) ? '' : undefined">{{ child.value || '\n' }}</span>
+
+    <!-- Renders a link node -->
+    <a *ngSwitchCase="'link'" 
+       [id]="child.id" 
+       [href]="child.url"
+       [attr.selected]="document.selection.includes(child) ? '' : undefined"
+       (click)="navigate(child.url)">{{ child.value }}</a>
+
+    <!-- Renders an image node -->
+    <!--img *ngSwitchCase="'image'" 
          [id]="child.id" 
-         [href]="child.url"
-         [attr.selected]="document.selection.includes(child) ? '' : undefined"
-         (click)="navigate(child.url)">{{ child.value }}</a>
-  
-      <!-- Renders an image as inline: DISABLED -->
-      <!--img *ngSwitchCase="'image'" 
-           [id]="child.id" 
-           [src]="child.url" 
-           [alt]="child.alt" 
-           [title]="child.title" 
-           [style.max-width]="size(child)" 
-           [attr.selected]="document.selection.includes(child) ? '' : undefined"/-->
-  
-    </ng-container>
-  
+         [src]="child.url" 
+         [alt]="child.alt" 
+         [title]="child.title" 
+         [style.max-width]="size(child)" 
+         [attr.selected]="document.selection.includes(child) ? '' : undefined"/-->
+
   </ng-container>
-  
+
+</ng-container>

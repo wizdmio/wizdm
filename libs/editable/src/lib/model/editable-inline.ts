@@ -1,40 +1,27 @@
-import { wmAlignType, wmText, wmTextStyle } from './editable-types';
-import { wmBlock, wmList, wmItem } from './editable-types';
+import { wmAlignType, wmText, wmTextStyle, wmLink,  wmInline, wmSizeLevel } from './editable-types';
 import { EditableContent } from './editable-content';
 
-export class EditableBlock extends EditableContent<wmBlock> {}
-export class EditableList extends EditableContent<wmList> {}
-export class EditableItem extends EditableContent<wmItem> {
-  // Overrides the default setter forcing a single node value 
-  public set(text: string): this {
-    // Wipes text nodes exceeding the fist
-    if(this.count > 1) { this.splice(1, -1); }
-    // Updates the first node value
-    if(this.count > 0) { this.firstChild().value = text };
-    // Insert a text node when missing
-    if(this.count === 0) { this.appendChild( this.create.text.set(text) ); };
-    // Return this for chaining
-    return this; 
-  }
-}
-
 /** Implements text nodes */
-export class EditableText extends EditableContent<wmText> {
-  // Overrides with text node specifics
+export class EditableInline extends EditableContent<wmInline> {
+  // Overrides with inline specifics
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
-  set style(style: wmTextStyle[]) { this.data.style = [...style]; }
-  get style(): wmTextStyle[] { return this.data.style || (this.data.style = []); } 
-  get url(): string { return this.node.url || ''; }
   get pad(): string { return ''; }
   get empty(): boolean { return this.length <= 0;}
+  // text specifics
+  set style(style: wmTextStyle[]) { if(this.type === 'text') { (this.data as wmText).style = [...style]; }}
+  get style(): wmTextStyle[] { return (this.type === 'text') ? (this.data as wmText).style || ((this.data as wmText).style = []) : []; } 
+  // link specifics
+  get url(): string { return (this.data as wmLink).url || ''; }
   // Redirects to the parent container
   set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align; } }
   get align(): wmAlignType { return !!this.parent ? this.parent.align : 'left'; }
-  set level(level: number) { if(!!this.parent) { this.parent.level = level;} }
-  get level(): number { return !!this.parent ? this.parent.level : 0; }
-  // Overrides the base class with text node specifics
+  set level(level: wmSizeLevel) { if(!!this.parent) { this.parent.level = level;} }
+  get level(): wmSizeLevel { return !!this.parent ? this.parent.level : 0; }
+  
+  // Overrides the parent classes with text node specifics
   public set(text: string): this { return (this.value = text), this; }
+  
   /** Appends a new text */
   public append(text: string): string { return this.value += text; }
   /** Returns the text content up to the marker */
@@ -110,19 +97,28 @@ export class EditableText extends EditableContent<wmText> {
   }
   /** Turns the text node into a link or back*/
   public link(url: string): this {
+
     // Turns the node into a link (if not already) or back to a plain text
-    this.data.type = !!url ? 'link' : 'text';
-    // Updates the url accordingly
-    this.data.url = !!url ? url : undefined;
-    // Resets the style
-    this.data.style = [];
+    if(!!url) {
+
+      this.data.type = 'link';
+      (this.data as wmLink).url = url;
+      delete (this.data as wmText).style;
+    }
+    else {
+
+      this.data.type = 'text';
+      (this.data as wmText).style = [];
+      delete (this.data as wmLink).url;
+    }
+    
     return this;
   }
   /** 
    * Joins the text values of node into this removing the former from the tree.
    * @return this node supoprting chaining.
    */
-  public join(node: EditableText): this {
+  public join(node: EditableInline): this {
     // Skips when null or unnecessary
     if(!node || node === this) { return this; }
     // Join the texts
@@ -131,7 +127,7 @@ export class EditableText extends EditableContent<wmText> {
     return node.remove(), this;
   }
   /** Enables merging of text nodes when sharing the same styles */
-  public same(node: EditableText): boolean {
+  public same(node: EditableInline): boolean {
     // Skips testing null or non text nodes (links are never the same)
     if(!node || node.type !== 'text' || this.type !== 'text') { return false; }
     // Short-circuit if style are of different lengths
@@ -159,13 +155,13 @@ export class EditableText extends EditableContent<wmText> {
    * from the tree. Text values are also joined when sharing the same styles.
    * @param node the node to be merged with
    */
-  public merge(node: EditableText): this {
+  public merge(node: EditableInline): this {
     // Skips when null or unnecessary
     if(!node || node === this) { return this; }
     // Merges the node branches first
     super.merge(node);
     // If target node is empty, make sure it'll be merged with the proper styles
-    if(this.empty) { this.data.style = [...node.style]; }
+    if(this.empty) { this.style = [...node.style]; }
     // Compares the node's styles to eventually join them
     if(this.same(node) || node.empty) { this.join(node); }
     // Return this for chaining

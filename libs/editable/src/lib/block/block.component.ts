@@ -1,14 +1,14 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableDocument } from '../editable-document.component';
-import { EditableBlock } from '../model/editable-text';
+import { DocumentComponent } from '../editable-document.component';
+import { EditableBlock } from '../model/editable-block';
 
 @Component({
-  selector: '[wm-block]',
+  selector: 'blockquote[wm-block]',
   templateUrl: './block.component.html'
 })
 export class BlockComponent {
 
-  constructor(private document: EditableDocument) {}
+  constructor(private document: DocumentComponent) {}
 
   @Input('wm-block') block: EditableBlock;
   // Applies the node id to the element

@@ -2,8 +2,18 @@
 
   <ng-container [ngSwitch]="node.type">
 
-    <!-- First level indentation --> 
-    <p *ngSwitchCase="'item'" [wm-editable]="node"></p>
+    <!-- Headings -->
+    <ng-container *ngSwitchCase="'heading'">
+      <h1 *ngIf="node.level === 1" [wm-editable]="node"></h1>
+      <h2 *ngIf="node.level === 2" [wm-editable]="node"></h2>
+      <h3 *ngIf="node.level === 3" [wm-editable]="node"></h3>
+      <h4 *ngIf="node.level === 4" [wm-editable]="node"></h4>
+      <h5 *ngIf="node.level === 5" [wm-editable]="node"></h5>
+      <h6 *ngIf="node.level === 6" [wm-editable]="node"></h6>
+    </ng-container>
+
+    <!-- Paragraphs -->
+    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
     
     <!-- Numbered lists with nesting -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
@@ -14,9 +24,7 @@
     <!-- Blockquotes nesting disabled -->
     <!--blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote-->
 
-    <!-- Tables at root level only -->
     <div *ngSwitchCase="'table'" [wm-table]="node"></div>
-
 
   </ng-container>
 

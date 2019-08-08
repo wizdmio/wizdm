@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableDocument } from '../editable-document.component';
+import { DocumentComponent } from '../editable-document.component';
 import { EditableFigure, EditableImage } from '../model/editable-figure';
 
 @Component({
@@ -12,7 +12,7 @@ import { EditableFigure, EditableImage } from '../model/editable-figure';
 })
 export class FigureComponent {
 
-  constructor(readonly document: EditableDocument) {}
+  constructor(readonly document: DocumentComponent) {}
   
   @Input('wm-figure') figure: EditableFigure;
   // Makes sure excluding the figure container from the editability

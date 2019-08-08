@@ -1,40 +1,51 @@
-import { wmEditableTypes, wmRoot, wmBlock, wmList, wmItem, wmTable, wmRow, wmCell, wmText, wmFigure, wmImage, wmCaption } from '../model/editable-types';
-import { EditableBlock, EditableList, EditableItem, EditableText } from '../model/editable-text';
+import { EditableDocument } from '../model/editable-document';
+import { EditableBlock } from '../model/editable-block';
+import { EditableList } from '../model/editable-list';
+import { EditableItem } from '../model/editable-item';
+import { EditableInline } from '../model/editable-inline';
 import { EditableTable, EditableRow, EditableCell } from '../model/editable-table';
 import { EditableFigure, EditableImage, EditableCaption } from '../model/editable-figure';
-import { EditableRoot } from '../model/editable-root';
+import { wmDocument, wmBlock, wmBulleted, wmNumbered, wmList, wmItem, wmHeading, wmParagraph, wmInline, wmText, wmLink, wmTable, wmRow, wmCell, wmFigure, wmImage, wmCaption, wmEditable } from '../model/editable-types';
 import { Injectable } from '@angular/core';
 
-export type EditableTypes = EditableRoot|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableText|EditableFigure|EditableImage|EditableCaption;
+export type EditableTypes = EditableDocument|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableInline|EditableFigure|EditableImage|EditableCaption;
 
-@Injectable()
+@Injectable({ 
+  providedIn: 'root' 
+})
 export class EditableFactory {
 
-  node(data: wmRoot): EditableRoot;
+  node(data: wmDocument): EditableDocument;
   node(data: wmBlock): EditableBlock;
   node(data: wmList): EditableList;
   node(data: wmItem): EditableItem;
   node(data: wmTable): EditableTable;
   node(data: wmRow): EditableRow;
   node(data: wmCell): EditableCell;
-  node(data: wmText): EditableText;
+  node(data: wmInline): EditableInline;
   node(data: wmFigure): EditableFigure;
   node(data: wmImage): EditableImage;
   node(data: wmCaption): EditableCaption;
 
   /** Creates a new empty node of the specified type */
-  public node(data: wmEditableTypes) { 
+  public node(data: wmEditable) { 
     
     switch(!!data && data.type) {
 
       case 'blockquote':
       return new EditableBlock(this, data as wmBlock);
 
-      case 'bulleted': case 'numbered':
-      return new EditableList(this, data as wmList);
+      case 'bulleted':
+      return new EditableList(this, data as wmBulleted);
 
-      case 'item':
-      return new EditableItem(this, data as wmItem);
+      case 'numbered':
+      return new EditableList(this, data as wmNumbered);
+
+      case 'heading':
+      return new EditableItem(this, data as wmHeading);
+
+      case 'paragraph':
+      return new EditableItem(this, data as wmParagraph);
 
       case 'table':
       return new EditableTable(this, data as wmTable);
@@ -45,8 +56,11 @@ export class EditableFactory {
       case 'cell':
       return new EditableCell(this, data as wmCell);
 
-      case 'text': case 'link':
-      return new EditableText(this, data as wmText);
+      case 'text': 
+      return new EditableInline(this, data as wmText);
+
+      case 'link':
+      return new EditableInline(this, data as wmLink);
 
       case 'figure':
       return new EditableFigure(this, data as wmFigure);
@@ -58,7 +72,7 @@ export class EditableFactory {
       return new EditableCaption(this, data as wmCaption);
     }
     // Returns a document node by default
-    return new EditableRoot(this, data as wmRoot);
+    return new EditableDocument(this, data as wmDocument);
   }
 
   /** Creates a new empty document node */
@@ -69,8 +83,10 @@ export class EditableFactory {
   get bulleted() { return this.node({ type: 'bulleted' }); }
   /** Creates a new empty numbered list node */
   get numbered() { return this.node({ type: 'numbered' }); }
+  /** Creates a new empty heading node */
+  get heading() { return this.node({ type: 'heading' }); }
   /** Creates a new empty item node */
-  get item() { return this.node({ type: 'item' }); }
+  get paragraph() { return this.node({ type: 'paragraph' }); }
   /** Creates a new empty table node */
   get table() { return this.node({ type: 'table' }); }
   /** Creates a new empty table row node */

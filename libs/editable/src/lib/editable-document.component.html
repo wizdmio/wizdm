@@ -2,8 +2,8 @@
 
   <ng-container [ngSwitch]="node.type">
 
-    <!-- Renders document items as paragraphs or headings -->
-    <ng-container *ngSwitchCase="'item'">
+    <!-- Renders document headings -->
+    <ng-container *ngSwitchCase="'heading'">
       <!-- Headings -->
       <h1 *ngIf="node.level === 1" [wm-editable]="node"></h1>
       <h2 *ngIf="node.level === 2" [wm-editable]="node"></h2>
@@ -11,9 +11,10 @@
       <h4 *ngIf="node.level === 4" [wm-editable]="node"></h4>
       <h5 *ngIf="node.level === 5" [wm-editable]="node"></h5>
       <h6 *ngIf="node.level === 6" [wm-editable]="node"></h6>
-      <!-- Paragraphs -->
-      <p *ngIf="node.level === 0" [wm-editable]="node"></p>
     </ng-container>
+
+    <!-- Paragraphs -->
+    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
 
     <!-- Blockquotes supporting paragraph and list indentation -->
     <blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote>
@@ -33,4 +34,6 @@
   </ng-container>
   
 </ng-container>
+
+
   

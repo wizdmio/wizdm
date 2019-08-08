@@ -1,7 +1,7 @@
-import { wmRoot, wmNodeType, wmIndentType, wmTextStyle, wmAlignType } from './editable-types';
+import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType, wmSizeLevel } from './editable-types';
 import { EditableTable, EditableRow, EditableCell } from './editable-table';
-import { EditableText } from './editable-text';
-import { EditableRoot } from './editable-root';
+import { EditableInline } from './editable-inline';
+import { EditableDocument } from './editable-document';
 import { EditableContent } from './editable-content';
 import { timeInterval, map, filter } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ export class EditableSelection {
   public end: EditableContent;
   public endOfs: number;
 
-  constructor(private root: EditableRoot) { }
+  constructor(private root: EditableDocument) { }
 
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
@@ -86,18 +86,18 @@ export class EditableSelection {
   private previous(node: EditableContent, traverse: boolean = false): EditableContent {
 
     let prev = node.previous(traverse) as any;
-    while(!!prev && !(prev instanceof EditableText)) { prev = prev.previous(traverse); }
+    while(!!prev && !(prev instanceof EditableInline)) { prev = prev.previous(traverse); }
     return prev;
   }
   /** Jumps to the next text node skipping non text ones*/
   private next(node: EditableContent, traverse: boolean = false): EditableContent {
 
     let next = node.next(traverse) as any;
-    while(!!next && !(next instanceof EditableText)) { next = next.next(traverse); }
+    while(!!next && !(next instanceof EditableInline)) { next = next.next(traverse); }
     return next;
   }
   /** Saves the current selection into the document data to be eventually restored by calling @see restore() */
-  public save(document: EditableRoot): EditableRoot {
+  public save(document: EditableDocument): EditableDocument {
     // Skips on invalid selection
     if(!document || !this.valid) { return document; }
     // Computes the absolute start offset
@@ -107,7 +107,7 @@ export class EditableSelection {
     return document;
   }
   /** Restores the selection range from the documenta data. @see save() */
-  public restore(document: EditableRoot): EditableSelection {
+  public restore(document: EditableDocument): EditableSelection {
     // Gets the range from the root data
     const range = !!document && document.range;
     // Updates the selection to reflect the absolute range
@@ -363,11 +363,11 @@ export class EditableSelection {
 
   }
   /** Returns the current selection level (corresponding to the start node container's) */
-  public get level(): number { 
+  public get level(): wmSizeLevel { 
     return this.valid ? this.start.level : 0;
   }
   /** Applies a new level to the selection */
-  public set level(level: number) {
+  public set level(level: wmSizeLevel) {
     // Skips on invalid selection
     if(!this.valid) { return; }
     // Applies the level on the containers within the selection
@@ -466,8 +466,8 @@ export class EditableSelection {
     // Guesses which indentation the selection belongs to
     const indent = this.pick('blockquote', 'bulleted', 'numbered'); 
     if(!indent) { return this; }
-    // Unindent all the containers within the selection
-    this.store().containers( container => container.unindent(indent.type as wmIndentType) );
+    // outdent all the containers within the selection
+    this.store().containers( container => container.outdent(indent.type as wmIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
@@ -493,8 +493,8 @@ export class EditableSelection {
     // Verifies if the selection already belongs to a list
     const list = this.start.climb('bulleted', 'numbered'); 
     if(!!list) {
-      // If so, unindent the list it belongs to
-      this.containers( item => item.unindent(list.type as wmIndentType) );
+      // If so, outdent the list it belongs to
+      this.containers( item => item.outdent(list.type as wmIndentType) );
       // Stop on toggle off
       if(list.type === type) { return this.mark(); }
     }
@@ -513,7 +513,7 @@ export class EditableSelection {
 
     const block = this.start.climb('blockquote'); 
     if(!!block) { 
-      return this.containers( item => item.unindent('blockquote') ).mark(); 
+      return this.containers( item => item.outdent('blockquote') ).mark(); 
     }
 
     let node = this.start.ancestor(1);
@@ -536,7 +536,7 @@ export class EditableSelection {
       case 'text': case 'link':
       return this.single && this.start.type === type && this.startOfs < this.start.length;
       // Editable container types
-      case 'item': case 'cell': case 'caption':
+      case 'heading': case 'paragraph': case 'cell': case 'caption':
       return this.contained && this.start.container.type === type;
       // General case
       default:
@@ -597,7 +597,7 @@ export class EditableSelection {
   }
 
    /** Pastes a data fragment to the current selection */
-  public paste(source: wmRoot): EditableSelection {
+  public paste(source: wmDocument): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Builds the fragment to paste from
@@ -694,8 +694,8 @@ export class EditableSelection {
 
   /***** HISTORY UNDO/REDO *****/
 
-  private store$ = new Subject<EditableRoot>();
-  private history: wmRoot[];
+  private store$ = new Subject<EditableDocument>();
+  private history: wmDocument[];
   private timeIndex: number;
   private sub$: Subscription;
 
@@ -770,7 +770,7 @@ export class EditableSelection {
     // Gets the latest snapshot from the history
     const snapshot = this.history[++this.timeIndex];
     // Reloads the snapshot's content restoring the selection too
-    return this.restore( this.root.load(snapshot) as EditableRoot );
+    return this.restore( this.root.load(snapshot) as EditableDocument );
   }
 
   /** Returns true whenever the last undone modifications can be redone */
@@ -785,6 +785,6 @@ export class EditableSelection {
     // Removes the newest snapshot when back to the present
     if(this.timeIndex === 0) { this.history.shift(); }
     // Reloads the snapshot's content restoring the selection too
-    return this.restore( this.root.load(snapshot) as EditableRoot );
+    return this.restore( this.root.load(snapshot) as EditableDocument );
   }
 }

@@ -1,4 +1,4 @@
-import { wmEditable, wmNodeType, wmIndentType, wmAlignType, wmTextStyle } from './editable-types';
+import { wmEditable, wmParent, wmNodeType, wmIndentType, wmSizeLevel, wmAlignType, wmTextStyle } from './editable-types';
 import { EditableFactory, EditableTypes } from '../factory/editable-factory.service';
 
 export type EditablePosition = number[];
@@ -11,6 +11,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   protected children: EditableContent[] = [];
 
   constructor(readonly create: EditableFactory, data: T) { this.node = data || {} as T; }
+
   /** Returns the parent container */
   get container(): EditableContent { return this.parent; }
   /** Returns the node private data */
@@ -18,11 +19,11 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns the node type */
   get type(): wmNodeType { return this.node.type; }
   /** Sets/gets the node alignement */
-  set align(align: wmAlignType) { this.node.align = align; }
-  get align(): wmAlignType { return this.node.align || 'left'; }
+  set align(align: wmAlignType) { }
+  get align(): wmAlignType { return null; }
   /** Sets/gets the node level */
-  set level(level: number) { if(level >= 0 && level <= 6) { this.data.level = level; } }
-  get level(): number { return this.data.level || 0; }
+  get level(): wmSizeLevel { return 0; }
+  set level(level: wmSizeLevel) { }
   /** Returns the array of children */
   get content(): EditableContent[] { return this.children || (this.children = []); }
   /** Returns the number of child nodes */
@@ -41,17 +42,15 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   get first(): boolean { return !this.removed && this.index === 0; }
   /** Returns true whenever the node is the last child within its parent */
   get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }  
-  /** Sets the text value of all the content nodes */
+  /** Sets/Gets the text value of all the content nodes */
   set value(text: string) { this.set(text); }
-  /** Returns the text content of a branch by appending text node values recursively */
   get value(): string { return this.content.reduce( (txt, node) => txt + node.value + node.pad, '');}
   /** Returns the appropriate pad character to terminate the node value */
   get pad(): string { return this.last ? '' : '\n'; }
   /** Returns the value's length */
   get length(): number { return this.value.length; }
-  /** Sets the style array for the content */
+  /** Sets/Fets the style array for the content */
   set style(style: wmTextStyle[]) { this.content.forEach( node => node.style = style ); }
-  /** Returns the content's style array */
   get style(): wmTextStyle[] { return this.count > 0 ? this.firstChild().style : []; } 
   /** Return the associated irl, if any */
   get url(): string { return ''; }
@@ -59,6 +58,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public init(data: T): this { return (this.node = data), this; }
   /** Sets the text value of the contained nodes returning this for chaining */
   public set(text: string): this { return this.content.forEach( node => node.value = text ), this; }
+
   // Text specifics passively implemented 
   public append(text: string): string { return ''; }
   public tip(till: number): string { return ''; }
@@ -100,9 +100,9 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Loads the source document building the data tree */
   public load(source: T): this {
     // Assigns the source to the node data
-    if(!!this.init(source).node && !!this.data.content) {
+    if(!!this.init(source).node && "content" in this.data) {
       // Recurs on children
-      this.children = this.node.content.map( (node, i) => {
+      this.children = (this.node as wmParent).content.map( (node, i) => {
         // Creates the children nodes of the requested type
         return this.create.node(node as any)
           // Links it to the parent
@@ -254,7 +254,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Insert/remove children nodes as requested
     const nodes = this.content.splice(index, count, ...items);
     // Syncs the data children accordingly
-    this.data.content = this.content.map( node => node.data );
+    if(this.count) { (this.data as wmParent).content = this.content.map( node => node.data ); }
     // Refreshes the added and shifted children inheritance
     this.refresh(index);
     // Return the removed nodes
@@ -520,18 +520,21 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     switch(fragment.type) {
       // When the root node is already a document, we are done
       case 'document': break;
-      // When the root node belongs to a table...
+      // Wraps cells/rows in tables
       case 'cell':
       fragment = fragment.wrap('row');
       case 'row':
       fragment = fragment.wrap('table').wrap('document');
       break;
-      // When the root node is a simple text/link...
+      // Wraps images in figures
+      case 'image': case 'caption':
+      fragment = fragment.wrap('figure').wrap('document');
+      break;
+      // Wraps literals in paragraphs
       case 'text': case 'link':
-      fragment = fragment.wrap('item');
+      fragment = fragment.wrap('paragraph').wrap('document');
       // Wraps everything else in a document
-      case 'item': case 'blockquote': case 'bulleted': 
-      case 'numbered': case 'table': case 'image':
+      default:
       fragment = fragment.wrap('document');
     }
     // Returns a consistent document fragment
@@ -612,7 +615,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     return block;
   }
 
-  public unindent(type: wmIndentType): EditableContent {
+  public outdent(type: wmIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
     // Performs unindentation when the parent node match the requested type
@@ -634,6 +637,6 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
       return this.parent.unwrap(), this; 
     }
     // Climbs up to the next level
-    return this.parent.unindent(type);
+    return this.parent.outdent(type);
   }
 }

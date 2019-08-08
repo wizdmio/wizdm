@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { wmRoot } from '@wizdm/editable';
+import { wmDocument } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
 import { ProjectService, ProjectWrapper, wmProject } from '../../core/project';
 import { ContentResolver } from '../../core/content';
 import { PopupService } from '../../elements/popup';
 import { Observable, Subject, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
-import { switchMap, takeUntil, debounceTime, map, tap } from 'rxjs/operators';
+import { switchMap, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';
 
 @Component({
@@ -19,7 +19,7 @@ import { $animations } from './editor.animations';
 export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy {
 
   private editMode$ = new BehaviorSubject<boolean>(false);
-  private saveDocument$ = new Subject<wmRoot>();
+  private saveDocument$ = new Subject<wmDocument>();
   private msgs$: Observable<any>;
   private subs: Subscription;
   public msgs: any = {};
@@ -115,7 +115,7 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   public leaveEditMode() { this.editMode$.next(false); }
 
   // Pushes the updated document to be saved
-  public save(document: wmRoot) { this.saveDocument$.next( document ); }
+  public save(document: wmDocument) { this.saveDocument$.next( document ); }
 
   // Enables auto-saving
   private saveAutomatically() {

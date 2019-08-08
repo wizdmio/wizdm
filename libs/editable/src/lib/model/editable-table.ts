@@ -1,10 +1,11 @@
-import { wmTable, wmRow, wmCell } from './editable-types';
 import { EditableContent } from './editable-content';
+import { EditableContainer } from './editable-container';
+import { wmTable, wmRow, wmCell } from './editable-types';
 
 export class EditableTable extends EditableContent<wmTable> {
 
   get rows(): number { return this.count; }
-  get cols(): number { return this.firstChild().count; }
+  get cols(): number { return !!this.rows && this.row(0).cols || 0; }
 
   public row(index: number): EditableRow {
     return this.childAt(index) as EditableRow;
@@ -67,6 +68,7 @@ export class EditableTable extends EditableContent<wmTable> {
 }
 
 export class EditableRow extends EditableContent<wmRow> {
+  get cols(): number { return this.count; }
 
   public col(index: number): EditableCell {
     return this.childAt(index) as EditableCell;
@@ -100,19 +102,9 @@ export class EditableRow extends EditableContent<wmRow> {
   }
 }
 
-export class EditableCell extends EditableContent<wmCell> {
-
+export class EditableCell extends EditableContainer<wmCell> {
   // Overrides with cell specific pad value
   get pad(): string { return this.last ? '' : '\t';}
-  // Overrides the default setter forcing a single node value 
-  public set(text: string): this {
-    // Wipes text nodes exceeding the fist
-    if(this.count > 1) { this.splice(1, -1); }
-    // Updates the first node value
-    if(this.count > 0) { this.firstChild().value = text };
-    // Return this for chaining
-    return this; 
-  }
 
   public initCell(): EditableCell {
     return this.appendChild(this.create.text).set('') as EditableCell;

@@ -3,7 +3,7 @@
   <ng-container [ngSwitch]="node.type">
 
     <!-- List items -->
-    <li *ngSwitchCase="'item'" [wm-editable]="node"></li>
+    <li *ngSwitchCase="'paragraph'" [wm-editable]="node"></li>
 
     <!-- Next level indentation ordered list -->
     <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>

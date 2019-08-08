@@ -1,8 +1,8 @@
 import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { wmRoot } from './model/editable-types';
-import { EditableRoot } from './model/editable-root';
-import { EditableText } from './model/editable-text';
+import { wmDocument, wmSizeLevel } from './model/editable-types';
+import { EditableDocument } from './model/editable-document';
+import { EditableInline } from './model/editable-inline';
 import { EditableContent } from './model/editable-content';
 import { EditableSelection } from './model/editable-selection';
 import { EditableFactory } from './factory/editable-factory.service';
@@ -12,10 +12,9 @@ import { EditableFactory } from './factory/editable-factory.service';
   templateUrl: './editable-document.component.html',
   styleUrls: [ './editable-document.component.scss' ],
   host: { 'class': 'wm-editable-document' },
-  providers: [ EditableFactory ],
   encapsulation: ViewEncapsulation.None
 })
-export class EditableDocument extends EditableRoot implements AfterViewChecked {
+export class DocumentComponent extends EditableDocument implements AfterViewChecked {
 
   readonly selection = new EditableSelection(this);
 
@@ -32,8 +31,8 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
   }
 
   /** Document source */
-  private source: wmRoot;
-  @Input('wm-editable-document') set _source(source: wmRoot) {
+  private source: wmDocument;
+  @Input('wm-editable-document') set _source(source: wmDocument) {
 
     // Keeps track of the source
     this.source = source;
@@ -62,7 +61,7 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
     }
   }
   /** change event notifying for document changes */
-  @Output() change = new EventEmitter<wmRoot>();
+  @Output() change = new EventEmitter<wmDocument>();
   /** Navigation event triggered when a link is clicked */
   @Output() navigate = new EventEmitter<string>();
 
@@ -166,7 +165,7 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
       const json = cp.getData('application/json');
       if(!!json) {
         // Parse the json data into a document fragment
-        const fragment = JSON.parse( json ) as wmRoot;
+        const fragment = JSON.parse( json ) as wmDocument;
         // Checks for document fragment consistency
         if(fragment.type === 'document' && !!fragment.content) {
           // Pastes the fragment
@@ -188,9 +187,9 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
 
     switch(ev.key) {
       // Size
-      case '0': case '1': case '2': case '3':
+      case '0': case '1': case '2': case '3': case '5': case '6':
       // Change the selection size
-      return this.selection.level = +ev.key, false;
+      return this.selection.level = (+ev.key as wmSizeLevel), false;
   
       // Italic format
       case 'i': case 'I':
@@ -318,7 +317,7 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
     const el = !!node ? this.document.getElementById(node.id) : null;
     if(!el) { return null; }// No element found
     // Text nodes are rendered as span elements...
-    if(node instanceof EditableText) {
+    if(node instanceof EditableInline) {
       //...so seeks for the very first text node within the element children 
       let child = el.firstChild as Node;
       while(!!child) {
@@ -339,7 +338,7 @@ export class EditableDocument extends EditableRoot implements AfterViewChecked {
   @HostListener('document:selectionchange') selchange() {
     if(this.edit && this.selection.collapsed) {
 
-      if(!(this.selection.start instanceof EditableText)) {
+      if(!(this.selection.start instanceof EditableInline)) {
         this.selection.reset();
       }
 

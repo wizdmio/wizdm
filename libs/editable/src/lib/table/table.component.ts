@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableDocument } from '../editable-document.component';
+import { DocumentComponent } from '../editable-document.component';
 import { EditableTable } from '../model/editable-table';
 
 @Component({
@@ -12,7 +12,7 @@ import { EditableTable } from '../model/editable-table';
 })
 export class TableComponent {
 
-  constructor(readonly document: EditableDocument) {}
+  constructor(readonly document: DocumentComponent) {}
 
   @Input('wm-table') table: EditableTable;
 

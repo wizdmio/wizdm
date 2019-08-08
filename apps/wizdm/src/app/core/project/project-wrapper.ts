@@ -1,10 +1,10 @@
 import { DatabaseDocument, DatabaseCollection, DistributedCounter, dbCommon, wmUser } from '@wizdm/connect';
-import { wmRoot } from '@wizdm/editable';
+import { wmDocument } from '@wizdm/editable';
 import { Observable, BehaviorSubject, Subscription, of, merge } from 'rxjs';
 import { map, tap, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { ProjectService } from './project.service';
 
-export interface wmProject extends wmRoot, dbCommon {
+export interface wmProject extends wmDocument, dbCommon {
   
   name     : string;
   author   : string;
@@ -45,7 +45,7 @@ export class ProjectWrapper extends DatabaseDocument<wmProject> {
   get web() { return !!this.data && this.data.web || ''; }
 
   // This project as an editable document
-  get document() { return this.data as wmRoot; }
+  get document() { return this.data as wmDocument; }
 
   // The current authenticate user's id
   get me() { return this.ps.userId || ''; }

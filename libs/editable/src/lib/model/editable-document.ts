@@ -1,7 +1,7 @@
 import { EditableContent } from './editable-content';
-import { wmRoot, wmNodeType } from './editable-types';
+import { wmDocument, wmNodeType } from './editable-types';
 
-export class EditableRoot extends EditableContent<wmRoot> {
+export class EditableDocument extends EditableContent<wmDocument> {
   // Makes sure always returning the appropiate type since EditableDoc is the default node type
   get type(): wmNodeType { return 'document'; }
   get range(): [number, number] { return this.data.range; }
@@ -17,7 +17,7 @@ export class EditableRoot extends EditableContent<wmRoot> {
     // a single paragraph with a signle empty text node
     return this.load({ ...info,
       type: 'document', content: [{ 
-        type: 'item', content: [{ 
+        type: 'paragraph', content: [{ 
           type: 'text', value: '' 
     }]}]} as any) as this;
   }

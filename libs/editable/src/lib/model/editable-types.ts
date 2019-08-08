@@ -1,82 +1,106 @@
-export type wmInlineType = 'text'|'link'|'image';
-export type wmIndentType = 'blockquote'|'bulleted'|'numbered';
-export type wmFigureType = 'figure'|'image'|'caption';
-export type wmNodeType = 'document'|wmIndentType|'item'|'table'|'row'|'cell'|wmInlineType|wmFigureType;
+export type wmEditable = wmDocument|wmRootContent|wmListContent|wmRow|wmCell|wmInline|wmFigureContent;
+export type wmRootContent = wmBlock|wmBlockContent|wmFigure;
+export type wmBlockContent =  wmHeading|wmParagraph|wmList|wmTable;
+export type wmList = wmBulleted | wmNumbered;
+export type wmListContent  = wmParagraph|wmList;
+export type wmIndentable = wmBlock|wmList;
+export type wmContainer = wmItem|wmCell|wmCaption;
+export type wmItem = wmHeading|wmParagraph;
+export type wmInline = wmText|wmLink;
+export type wmFigureContent = wmImage|wmCaption;
+export type wmSizeLevel = 0|1|2|3|4|5|6;
 export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
 export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
 export type wmImageSize = '25'|'33'|'50'|'66'|'75'|'icon'|'thumb'|'small'|'regular';
-export type wmEditableTypes = wmRoot|wmBlock|wmList|wmItem|wmTable|wmRow|wmCell|wmText|wmFigure|wmImage|wmCaption;
+export type wmNodeType = wmEditable['type'];
+export type wmIndentType = wmIndentable['type'];
 
-export interface wmEditable {
-  type: wmNodeType,
-  align?: wmAlignType,
-  level?: number,
-  content?: wmEditable[]
+export interface wmNode {
+  type: string;
 }
 
-export interface wmRoot extends wmEditable {
-  type: 'document',
-  name?: string,
-  author?: string,
-  version?: string,
-  range?: [ number, number ]
+export interface wmParent<T=wmEditable> extends wmNode {
+  content?: T[];
+} 
+
+export interface wmLiteral extends wmNode {
+  value?: string;
 }
 
-export interface wmBlock extends wmEditable {
-  type: 'blockquote'
+export interface wmAlignable {
+  align?: wmAlignType;
 }
 
-export interface wmList extends wmEditable {
-  type: 'numbered'|'bulleted',
-  start?: number,
-  content?: (wmItem|wmList)[]
+export interface wmResource {
+  url?: string;
 }
 
-export interface wmItem extends wmEditable {
-  type: 'item',
-  content?: wmText[]
+export interface wmDocument extends wmParent<wmRootContent> {
+  type: 'document';
+  name?: string;
+  author?: string;
+  version?: string;
+  range?: [ number, number ];
 }
 
-export interface wmTable extends wmEditable {
-  type: 'table',
-  content?: wmRow[]
+export interface wmBlock extends wmParent<wmBlockContent> {
+  type: 'blockquote';
 }
 
-export interface wmRow extends wmEditable {
-  type: 'row',
-  content?: wmCell[]
+export interface wmBulleted extends wmParent<wmListContent> {
+  type: 'bulleted';
 }
 
-export interface wmCell extends wmEditable {
-  type: 'cell',
-  valign?: wmVertAlignType,
-  rowspan?: number,
-  colspan?: number,
-  content?: wmText[]
+export interface wmNumbered extends wmParent<wmListContent> {
+  type: 'numbered';
+  start?: number;
 }
 
-export interface wmText extends wmEditable {
-  type: 'text'|'link',
-  style?: wmTextStyle[],
-  value?: string,
-  url?: string
+export interface wmHeading extends wmParent<wmInline>, wmAlignable {
+  type: 'heading';
+  level?: wmSizeLevel;
 }
 
-export interface wmFigure extends wmEditable {
-  type: 'figure',
-  content?: (wmImage|wmCaption)[]
+export interface wmParagraph extends wmParent<wmInline>, wmAlignable {
+  type: 'paragraph';
 }
 
-export interface wmImage extends wmEditable {
-  type: 'image',
-  size?: wmImageSize,
-  url?: string,
-  alt?: string,
-  title?: string
+export interface wmTable extends wmParent<wmRow> {
+  type: 'table';
 }
 
-export interface wmCaption extends wmEditable {
-  type: 'caption',
-  content?: wmText[]
+export interface wmRow extends wmParent<wmCell> {
+  type: 'row';
+}
+
+export interface wmCell extends wmParent<wmInline>, wmAlignable {
+  type: 'cell';
+  valign?: wmVertAlignType;
+  rowspan?: number;
+  colspan?: number;
+}
+
+export interface wmText extends wmLiteral {
+  type: 'text';
+  style?: wmTextStyle[];
+}
+
+export interface wmLink extends wmLiteral, wmResource {
+  type: 'link';
+}
+
+export interface wmFigure extends wmParent<wmFigureContent>, wmAlignable {
+  type: 'figure';
+}
+
+export interface wmImage extends wmNode, wmResource {
+  type: 'image';
+  size?: wmImageSize;
+  alt?: string;
+  title?: string;
+}
+
+export interface wmCaption extends wmParent<wmInline> {
+  type: 'caption';
 }

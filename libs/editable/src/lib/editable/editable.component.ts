@@ -1,8 +1,9 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { EditableDocument } from '../editable-document.component';
-import { EditableText, EditableItem } from '../model/editable-text';
+import { DocumentComponent } from '../editable-document.component';
+import { EditableItem } from '../model/editable-item';
 import { EditableCell } from '../model/editable-table';
 import { EditableCaption } from '../model/editable-figure';
+import { EditableInline } from '../model/editable-inline';
 
 @Component({
   selector: '[wm-editable]',
@@ -11,11 +12,11 @@ import { EditableCaption } from '../model/editable-figure';
 })
 export class EditableComponent {
 
-  constructor(readonly document: EditableDocument) {}
+  constructor(readonly document: DocumentComponent) {}
 
   @Input('wm-editable') node: EditableItem|EditableCell|EditableCaption;
 
-  @HostBinding('attr.contenteditable') get editable() { 
+   @HostBinding('attr.contenteditable') get editable() { 
     return this.document.edit ? 'true' : 'false';
   }
 
@@ -26,13 +27,14 @@ export class EditableComponent {
   @HostBinding('style.text-align') get align() { return !!this.node && this.node.align; }
   
   // Applies material typography classes based on node level
+  /*
   @HostBinding('class.mat-h1') get h1() { return !!this.node && this.node.level === 1; }
   @HostBinding('class.mat-h2') get h2() { return !!this.node && this.node.level === 2; }
   @HostBinding('class.mat-h3') get h3() { return !!this.node && this.node.level === 3; }
   @HostBinding('class.mat-h4') get h4() { return !!this.node && this.node.level === 4; }
   @HostBinding('class.mat-h5') get h5() { return !!this.node && this.node.level === 5; }
   @HostBinding('class.mat-h6') get h6() { return !!this.node && this.node.level === 6; }
-  
+  */
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
     return this.document.selection.includes(this.node) ? '' : undefined; 
@@ -64,7 +66,7 @@ export class EditableComponent {
   }*/
 
   // Helper function computing the text node style
-  style(text: EditableText): any {
+  style(text: EditableInline): any {
 
     return !!text && text.style.reduce( (style, add) => {
 

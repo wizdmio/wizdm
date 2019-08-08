@@ -1,7 +1,12 @@
 import { EditableContent } from './editable-content';
-import { wmFigure, wmImage, wmCaption } from './editable-types';
+import { EditableContainer } from './editable-container';
+import { wmFigure, wmImage, wmCaption, wmAlignType, wmAlignable } from './editable-types';
 
 export class EditableFigure extends EditableContent<wmFigure> {
+
+  /** Sets/gets the container alignement */
+  get align(): wmAlignType { return (this.node as wmAlignable).align || 'left'; }
+  set align(align: wmAlignType) { (this.node as wmAlignable).align = align; }
 
   // Overrides the default setter redirecting to the child caption node 
   public set(text: string): this {
@@ -35,17 +40,4 @@ export class EditableImage extends EditableContent<wmImage> {
   public link(url: string): this { return this.data.url = url, this ;}
 }
 
-export class EditableCaption extends EditableContent<wmCaption> {
- 
-  // Overrides the default setter forcing a single node value 
-  public set(text: string): this {
-    // Wipes text nodes exceeding the first
-    if(this.count > 1) { this.splice(1, -1); }
-    // Updates the first node value
-    if(this.count > 0) { this.firstChild().value = text };
-    // Insert a text node when missing
-    if(this.count === 0) { this.appendChild( this.create.text.set(text) ); };
-    // Return this for chaining
-    return this; 
-  }
-}
+export class EditableCaption extends EditableContainer<wmCaption> { }
