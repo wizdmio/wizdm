@@ -17,6 +17,7 @@ import { EditableFactory } from './factory/editable-factory.service';
 export class DocumentComponent extends EditableDocument implements AfterViewChecked {
 
   readonly selection = new EditableSelection(this);
+  public caret: ClientRect;
 
   @HostBinding('attr.contenteditable') get editable() { 
     return this.editMode ? 'true' : 'false';
@@ -95,7 +96,7 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
     // Prevents repeating chars whenever LongPress is enabled
-    if(ev.repeat && this.longpressEnabled) { return this.longpressDefer(ev, 300), false; }
+    if(ev.repeat && this.longpressEnabled) { return this.longpressDefer(ev, 0), false; }
     // Query the selection, so, it's always up to date. 
     const sel = this.query();
     // Runs key accellerators on CTRL hold 
@@ -231,8 +232,8 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     const range = (!!sel && sel.rangeCount > 0) && sel.getRangeAt(0);
     if(!!range) {
 
-      // DEBUG
-      console.log(range);
+      // Tracks the caret/selection position
+      this.caret = range.getBoundingClientRect();
 
       // Cut it short on a collapsed range
       if(range.collapsed) {
@@ -251,9 +252,6 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     }
     // Resets the values in case the range is undefined or null
     else { this.selection.setCursor(undefined, 0); }
-
-    // DEBUG
-    console.log(this.selection);
 
     // Resets the modified flag
     return this.selection.mark(false);

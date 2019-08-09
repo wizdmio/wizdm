@@ -1,0 +1,8 @@
+
+<ul *ngIf="enabled" class="background-color border-color-lighter mat-elevation-z1">
+
+  <li *ngFor="let key of keys; index as i" [class.selected]="i === pick" (click)="type(key)">
+    {{ key }}<span class="number color-default">{{ i }}</span>
+  </li>
+
+</ul>

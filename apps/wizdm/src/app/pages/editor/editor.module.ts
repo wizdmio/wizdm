@@ -12,8 +12,9 @@ import { EditableModule } from '@wizdm/editable';
 import { PopupModule } from '../../elements/popup';
 import { ContentResolver } from '../../core/content';
 import { EditorComponent } from './editor.component';
-import { ContextMenuComponent } from './menu/context-menu.component';
 import { ToolboxComponent } from './toolbox/toolbox.component';
+import { ContextMenuComponent } from './menu/context-menu.component';
+import { LongpressComponent } from './longpress/longpress.component';
 
 const routes: Routes = [
   {
@@ -43,8 +44,9 @@ const routes: Routes = [
   ],
   declarations: [ 
     EditorComponent, 
+    ToolboxComponent,
     ContextMenuComponent,
-    ToolboxComponent
+    LongpressComponent
   ]
 })
 export class EditorModule { }

@@ -6,20 +6,16 @@
   top: 72px;
   width: 100%;
 
-  z-index: 1;
-
   pointer-events: none;
 
   .wrapper {
     pointer-events: all;
-    box-shadow: 0 0 6px 3px rgba(0,0,0,0.125);
-    background-color: white;
     border-radius: 5px;
     padding: 4px;
   }
 
   button { 
-    $size: 24px;    
+    $size: 24px; 
     position: relative;
     width: auto;
     height: auto;
@@ -28,10 +24,6 @@
     border-radius: 5px;
     box-sizing: border-box;
     overflow: hidden;
-    
-    &.selected {
-      background-color: rgba( black, 0.1 );
-    } 
 
     // Tweaks the mat-icon-button related classes to shrink the button size down to 28px
     .mat-icon, .mat-icon-button i { line-height: $size; }

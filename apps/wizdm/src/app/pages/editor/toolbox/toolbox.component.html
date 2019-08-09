@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="center center">
 
-  <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" class="wrapper">
+  <span fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px" class="wrapper background-color mat-elevation-z3">
 
     <!-- Undo -->
     <button mat-icon-button 
@@ -30,7 +30,8 @@
     <button mat-icon-button *ngFor="let item of styles" 
             [matTooltip]="msgs?.format[item]"
             [matTooltipShowDelay]="tooltipDelay"
-            [style.backgroundColor]="hasStyle(item) ? 'rgba(0,0,0,0.1)' : 'unset'"
+            [attr.selected]="hasStyle(item)"
+            style="border-width:0;"
             (click)="sel.toggleFormat(item)" fxHide.lt-sm>
       <mat-icon>{{'format_' + item }}</mat-icon>
     </button>
@@ -51,7 +52,8 @@
     <button mat-icon-button
       [matTooltip]="msgs?.insert?.numbered"
       [matTooltipShowDelay]="tooltipDelay"
-      [style.backgroundColor]="sel.belongsTo('numbered') ? 'rgba(0,0,0,0.1)' : 'unset'"
+      [attr.selected]="sel.belongsTo('numbered')"
+      style="border-width:0;"
       (click)="sel.toggleList('numbered')" fxHide.lt-sm>
       <mat-icon>format_list_numbered</mat-icon>
     </button>
@@ -60,7 +62,8 @@
     <button mat-icon-button
       [matTooltip]="msgs?.insert?.bulleted"
       [matTooltipShowDelay]="tooltipDelay"
-      [style.backgroundColor]="sel.belongsTo('bulleted') ? 'rgba(0,0,0,0.1)' : 'unset'"
+      [attr.selected]="sel.belongsTo('bulleted')"
+      style="border-width:0;"
       (click)="sel.toggleList('bulleted')" fxHide.lt-sm>
       <mat-icon>format_list_bulleted</mat-icon>
     </button>
@@ -87,7 +90,8 @@
     <button mat-icon-button 
       [matTooltip]="msgs?.insert?.quote"
       [matTooltipShowDelay]="tooltipDelay"
-      [style.backgroundColor]="sel.belongsTo('blockquote') ? 'rgba(0,0,0,0.1)' : 'unset'"
+      [attr.selected]="sel.belongsTo('blockquote')"
+      style="border-width:0;"
       (click)="sel.toggleQuote()" fxHide.lt-sm>
       <mat-icon>format_quote</mat-icon>
     </button>
@@ -119,12 +123,13 @@
 
 </div>
 <!-- Size menu -->
-<mat-menu #sizeMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #sizeMenu="matMenu">
   <!-- Heading -->
   <button mat-menu-item *ngFor="let level of [1, 2, 3]"
           [matTooltip]="msgs?.size[level]"
           [matTooltipShowDelay]="tooltipDelay"
-          [style.backgroundColor]="sel.level === level ? 'rgba(0,0,0,0.1)' : 'unset'"
+          style="display: block; border-width:0; border-radius: 0;"
+          [attr.selected]="sel.level === level"
           (click)="sel.level = level">
           <span [ngClass]="'mat-h' + level">{{ label(msgs?.size[level]) }}</span>
   </button>
@@ -132,18 +137,19 @@
   <button mat-menu-item 
           [matTooltip]="msgs?.size[0]"
           [matTooltipShowDelay]="tooltipDelay"
-          [style.backgroundColor]="sel.level === 0 ? 'rgba(0,0,0,0.1)' : 'unset'"
+          style="display: block; border-width:0; border-radius: 0;"
+          [attr.selected]="sel.level === 0"
           (click)="sel.level = 0">{{ label(msgs?.size[0]) }}</button>
 
 </mat-menu>
 <!-- Format menu -->
-<mat-menu #formatMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #formatMenu="matMenu">
   <!-- Formatting -->
   <button mat-icon-button *ngFor="let item of styles" 
           [matTooltip]="msgs?.format[item]"
           [matTooltipShowDelay]="tooltipDelay"
-          style="display: block; border-radius: 0"
-          [style.backgroundColor]="hasStyle(item) ? 'rgba(0,0,0,0.1)' : 'unset'"
+          style="display: block; border-width:0; border-radius: 0;"
+          [attr.selected]="hasStyle(item)"
           (click)="sel.toggleFormat(item)">
     <mat-icon>{{'format_' + item }}</mat-icon>
   </button>
@@ -151,13 +157,13 @@
 </mat-menu>
 
 <!-- Alignement menu -->
-<mat-menu #alignMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #alignMenu="matMenu">
   <!-- Alignaments -->
   <button mat-icon-button *ngFor="let item of alignements" 
           [matTooltip]="msgs?.align[item]"
           [matTooltipShowDelay]="tooltipDelay"
-          style="display: block; border-radius: 0"
-          [style.backgroundColor]="item === sel.align ? 'rgba(0,0,0,0.1)' : 'unset'"
+          style="display: block; border-width:0; border-radius: 0;"
+          [attr.selected]="item === sel.align"
           (click)="sel.align = item">
     <mat-icon>{{'format_align_' + item }}</mat-icon>
   </button>
@@ -165,14 +171,14 @@
 </mat-menu>
 
 <!-- More menu -->
-<mat-menu #moreMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #moreMenu="matMenu">
 
    <!-- Numbered list -->
   <button mat-icon-button
     [matTooltip]="msgs?.insert?.numbered"
     [matTooltipShowDelay]="tooltipDelay"
-    [style.backgroundColor]="sel.belongsTo('numbered') ? 'rgba(0,0,0,0.1)' : 'unset'"
-    style="display: block; border-radius: 0" 
+    style="display: block; border-width:0; border-radius: 0;"
+    [attr.selected]="sel.belongsTo('numbered')"
     (click)="sel.toggleList('numbered')" fxHide fxShow.lt-sm>
     <mat-icon>format_list_numbered</mat-icon>
   </button>
@@ -181,8 +187,8 @@
   <button mat-icon-button
     [matTooltip]="msgs?.insert?.bulleted"
     [matTooltipShowDelay]="tooltipDelay"
-    [style.backgroundColor]="sel.belongsTo('bulleted') ? 'rgba(0,0,0,0.1)' : 'unset'"
-    style="display: block; border-radius: 0" 
+    style="display: block; border-width:0; border-radius: 0;"
+    [attr.selected]="sel.belongsTo('bulleted')"
     (click)="sel.toggleList('bulleted')" fxHide fxShow.lt-sm>
     <mat-icon>format_list_bulleted</mat-icon>
   </button>
@@ -211,8 +217,8 @@
   <button mat-icon-button 
     [matTooltip]="msgs?.insert?.quote"
     [matTooltipShowDelay]="tooltipDelay"
-    [style.backgroundColor]="sel.belongsTo('blockquote') ? 'rgba(0,0,0,0.1)' : 'unset'"
-    style="display: block; border-radius: 0" 
+    style="display: block; border-width:0; border-radius: 0;"
+    [attr.selected]="sel.belongsTo('blockquote')"
     (click)="sel.toggleQuote()" fxHide fxShow.lt-sm>
     <mat-icon>format_quote</mat-icon>
   </button>

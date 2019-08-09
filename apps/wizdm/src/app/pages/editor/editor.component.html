@@ -1,61 +1,30 @@
 
-<!-- Document body -->
+
 <div fxLayout="row" fxLayoutAlign="space-between strech">
 
   <div fxFlex="1 1 auto" class="desk">
 
+    <!-- Document body -->
     <div class="page background-color" 
       [wm-editable-document]="document"
       [edit]="editMode" 
       [@editing]="editMode"
       (contextmenu)="editMode ? menu.open($event) : true" 
+      (navigate)="content.navigateByUrl($event)"
+      (longpress)="longpress.lookup($event)"
       (change)="save($event)"
       #doc>
     </div>
 
-    <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
+    <!-- Context menu -->
+    <wm-context-menu [sel]="doc.selection" [msgs]="msgs.tools" #menu></wm-context-menu>
   
   </div>
 
 </div>
 
-<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>
+<!-- Toolbox bar -->
+<wm-toolbox *ngIf="editMode" color="primary" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox>
 
-
-<!--mat-drawer-container>
-  
-  <mat-drawer mode="side" position="end" opened>
-    
-    <h2>{{ msgs.tableOfContents }}</h2>
-
-    <nav *ngFor="let node of document?.content; index as index">
-
-        <span *ngIf="node.level > 0" 
-              [attr.toc]="node.level" 
-              routerLink="." 
-              [fragment]="'N'+index">
-                {{ renderTOC(node) }}
-        </span>
-      
-    </nav>
-        
-  </mat-drawer>
-  
-  <mat-drawer-content fxFlex="1 1 auto" class="desk">
-  
-      <div class="page" 
-           [wm-editable-document]="document"
-           [edit]="editMode" 
-           [@editing]="editMode"
-           (contextmenu)="editMode ? menu.open($event) : true" 
-           (change)="save($event)"
-           (navigate)="content.navigateByUrl($event)" #doc>
-      </div>
-
-      <wm-context-menu #menu [sel]="doc.selection" [msgs]="msgs.tools"></wm-context-menu>
-  
-  </mat-drawer-content>
-
-</mat-drawer-container>
-
-<wm-toolbox *ngIf="editMode" [sel]="doc.selection" [msgs]="msgs.tools"></wm-toolbox-->
+<!-- Longpress key char alternatives -->
+<wm-longpress color="primary" [style.left.px]="doc.caret?.x" [style.top.px]="doc.caret?.y" [sel]="doc.selection" #longpress></wm-longpress> 
