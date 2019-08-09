@@ -64,6 +64,8 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
   @Output() change = new EventEmitter<wmDocument>();
   /** Navigation event triggered when a link is clicked */
   @Output() navigate = new EventEmitter<string>();
+  /** Longpress event */
+  @Output() longpress = new EventEmitter<KeyboardEvent>();
 
   ngAfterViewChecked() {
     // Applies the current selection to the document when needed. This is essential even when the selection
@@ -77,27 +79,31 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     }
   }
 
-  @HostListener('mouseup', ['$event']) 
-  @HostListener('keyup', ['$event']) up(ev: Event) {
+  @HostListener('mouseup', ['$event']) mouseUp(ev: MouseEvent) { 
     // Query the selection, so, it's always up to date
     if(this.editMode) { this.query(); }
+  }
+  
+  @HostListener('keyup', ['$event']) KeyUp(ev: KeyboardEvent) {
+    // Query the selection, so, it's always up to date
+    if(this.editMode) { this.query(); }
+    // Abort longpress on keyUp
+    this.longpressClear();
   }
 
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
+    // Prevents repeating chars whenever LongPress is enabled
+    if(ev.repeat && this.longpressEnabled) { return this.longpressDefer(ev, 300), false; }
     // Query the selection, so, it's always up to date. 
     const sel = this.query();
     // Runs key accellerators on CTRL hold 
     if(ev.ctrlKey || ev.metaKey) { return this.keyAccellerators(ev); }
     // Edits the content otherwise
     switch(ev.key) {
-      /*// Navigating
-      case 'ArrowDown':
-      case 'ArrowLeft':
-      case 'ArrowRight':
-      case 'ArrowUp':
-      case 'Tab':*/
+      /* Navigating falling back to default
+      case 'ArrowDown': case 'ArrowLeft': case 'ArrowRight': case 'ArrowUp': case 'Tab':*/
       // Merging foreward
       case 'Delete':
       // Deletes the following char
@@ -333,5 +339,22 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     while(!!child) { child = child.previousSibling; count++; }
     // Return the parent element with the relative offset otherwise
     return [el.parentNode, count + offset];
+  }
+
+  private longpressTimer: number;
+
+  // Returns true whenever the LongPress event is subscribed by an observer
+  get longpressEnabled(): boolean { return this.longpress.observers.length > 0; }
+
+  private longpressDefer(ev: KeyboardEvent, delay: number) {
+    if(!this.longpressTimer) { 
+      setTimeout( ev => this.longpressTimer = (this.longpress.emit(ev), undefined), delay, ev); 
+    }
+  }
+
+  private longpressClear() {
+    if(this.longpressTimer) { 
+      this.longpressTimer = ( clearTimeout(this.longpressTimer), undefined ); 
+    }
   }
 }
