@@ -25,15 +25,9 @@
     <!-- Bulleted lists with nesting -->
     <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
 
-    <!-- Tables at root level only -->
-    <div *ngSwitchCase="'table'" [wm-table]="node"></div>
-
     <!-- Figures with caption -->
     <figure *ngSwitchCase="'figure'" [wm-figure]="node"></figure>
 
   </ng-container>
   
 </ng-container>
-
-
-  

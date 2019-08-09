@@ -47,15 +47,6 @@ export class EditableFactory {
       case 'paragraph':
       return new EditableItem(this, data as wmParagraph);
 
-      case 'table':
-      return new EditableTable(this, data as wmTable);
-
-      case 'row':
-      return new EditableRow(this, data as wmRow);
-
-      case 'cell':
-      return new EditableCell(this, data as wmCell);
-
       case 'text': 
       return new EditableInline(this, data as wmText);
 
@@ -68,6 +59,15 @@ export class EditableFactory {
       case 'image':
       return new EditableImage(this, data as wmImage);
 
+      case 'table':
+      return new EditableTable(this, data as wmTable);
+
+      case 'row':
+      return new EditableRow(this, data as wmRow);
+
+      case 'cell':
+      return new EditableCell(this, data as wmCell);
+
       case 'caption':
       return new EditableCaption(this, data as wmCaption);
     }
@@ -76,33 +76,33 @@ export class EditableFactory {
   }
 
   /** Creates a new empty document node */
-  get document() { return this.node({ type: 'document' }); }
+  get document() { return this.node({ type: 'document' } as wmDocument); }
   /** Creates a new empty blockquote node */
-  get blockquote() { return this.node({ type: 'blockquote' }); }
+  get blockquote() { return this.node({ type: 'blockquote' } as wmBlock); }
   /** Creates a new empty bullleted list node */
-  get bulleted() { return this.node({ type: 'bulleted' }); }
+  get bulleted() { return this.node({ type: 'bulleted' } as wmBulleted); }
   /** Creates a new empty numbered list node */
-  get numbered() { return this.node({ type: 'numbered' }); }
+  get numbered() { return this.node({ type: 'numbered' } as wmNumbered); }
   /** Creates a new empty heading node */
-  get heading() { return this.node({ type: 'heading' }); }
+  get heading() { return this.node({ type: 'heading' } as wmHeading); }
   /** Creates a new empty item node */
-  get paragraph() { return this.node({ type: 'paragraph' }); }
-  /** Creates a new empty table node */
-  get table() { return this.node({ type: 'table' }); }
+  get paragraph() { return this.node({ type: 'paragraph' } as wmParagraph); }
   /** Creates a new empty table row node */
-  get row() { return this.node({ type: 'row' }); }
+  get row() { return this.node({ type: 'row' } as wmRow); }
   /** Creates a new empty table cell node */
-  get cell() { return this.node({ type: 'cell' }); }
+  get cell() { return this.node({ type: 'cell' } as wmCell); }
   /** Creates a new empty text node */
-  get text() { return this.node({ type: 'text' }); }
+  get text() { return this.node({ type: 'text' } as wmText); }
   /** Creates a new empty link node */
-  get link() { return this.node({ type: 'link' }); }
+  get link() { return this.node({ type: 'link' } as wmLink); }
   /** Creates a new empty figure node */
-  get figure() { return this.node({ type: 'figure' }); }
+  get figure() { return this.node({ type: 'figure' } as wmFigure); }
   /** Creates a new empty image node */
-  get image() { return this.node({ type: 'image' }); }
+  get image() { return this.node({ type: 'image' } as wmImage); }
+  /** Creates a new empty table node */
+  get table() { return this.node({ type: 'table' } as wmTable); }
   /** Creates a new empty caption node */
-  get caption() { return this.node({ type: 'caption' }); }
+  get caption() { return this.node({ type: 'caption' } as wmCaption); }
   
   /** Clones a node with or whithout its children */
   public clone(node: EditableTypes, withChildren: boolean = true): EditableTypes {

@@ -626,21 +626,20 @@ export class EditableSelection {
     return this;
   }
 
-  /** Insert a new empty table
-   * @param rows number of rows
-   * @param cols number of columns
-   */
+  
+  /* TODO: Implement FIGURES edititng
   public tableNew(rows: number, cols: number): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
-    // Creates a new empty table
-    const table = this.root.create.table.initTable(rows, cols);
-    if(!!table) {
-      // Store the current snapshot in the history
-      this.store();
-      // Cleaves the tree and inserts the new table in between
-      this.start.cleave().insertNext(table);
-    }
+    
+    // Creates a new empty figure first
+    const figure = this.root.create.figure;
+    // Appends a table to the figure
+    figure.appendChild( this.root.create.table.initTable(rows, cols) );
+    // Store the current snapshot in the history
+    this.store();
+    // Cleaves the tree and inserts the new figure in between
+    this.start.cleave().insertNext(figure);
     // Done
     return this;
   }
@@ -691,6 +690,7 @@ export class EditableSelection {
     
     return this;
   }
+*/
 
   /***** HISTORY UNDO/REDO *****/
 

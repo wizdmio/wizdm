@@ -1,13 +1,13 @@
-export type wmEditable = wmDocument|wmRootContent|wmListContent|wmRow|wmCell|wmInline|wmFigureContent;
+export type wmEditable = wmDocument|wmRootContent|wmListContent|wmFigureContent|wmRow|wmCell|wmInline;
 export type wmRootContent = wmBlock|wmBlockContent|wmFigure;
-export type wmBlockContent =  wmHeading|wmParagraph|wmList|wmTable;
-export type wmList = wmBulleted | wmNumbered;
+export type wmBlockContent =  wmHeading|wmParagraph|wmList;
+export type wmList = wmBulleted|wmNumbered;
 export type wmListContent  = wmParagraph|wmList;
 export type wmIndentable = wmBlock|wmList;
 export type wmContainer = wmItem|wmCell|wmCaption;
 export type wmItem = wmHeading|wmParagraph;
 export type wmInline = wmText|wmLink;
-export type wmFigureContent = wmImage|wmCaption;
+export type wmFigureContent = wmImage|wmTable|wmCaption;
 export type wmSizeLevel = 0|1|2|3|4|5|6;
 export type wmAlignType = 'left'|'center'|'right'|'justify';
 export type wmVertAlignType = 'top'|'middle'|'bottom';
@@ -66,6 +66,27 @@ export interface wmParagraph extends wmParent<wmInline>, wmAlignable {
   type: 'paragraph';
 }
 
+export interface wmText extends wmLiteral {
+  type: 'text';
+  style?: wmTextStyle[];
+}
+
+export interface wmLink extends wmLiteral, wmResource {
+  type: 'link';
+}
+
+export interface wmFigure extends wmParent<wmFigureContent>, wmAlignable {
+  type: 'figure';
+  content: [wmImage|wmTable, wmCaption?]
+}
+
+export interface wmImage extends wmNode, wmResource {
+  type: 'image';
+  size?: wmImageSize;
+  alt?: string;
+  title?: string;
+}
+
 export interface wmTable extends wmParent<wmRow> {
   type: 'table';
 }
@@ -81,26 +102,6 @@ export interface wmCell extends wmParent<wmInline>, wmAlignable {
   colspan?: number;
 }
 
-export interface wmText extends wmLiteral {
-  type: 'text';
-  style?: wmTextStyle[];
-}
-
-export interface wmLink extends wmLiteral, wmResource {
-  type: 'link';
-}
-
-export interface wmFigure extends wmParent<wmFigureContent>, wmAlignable {
-  type: 'figure';
-}
-
-export interface wmImage extends wmNode, wmResource {
-  type: 'image';
-  size?: wmImageSize;
-  alt?: string;
-  title?: string;
-}
-
-export interface wmCaption extends wmParent<wmInline> {
+export interface wmCaption extends wmParent<wmInline>, wmAlignable {
   type: 'caption';
 }

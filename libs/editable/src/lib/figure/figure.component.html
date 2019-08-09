@@ -11,6 +11,9 @@
            [alt]="child.alt" 
            [title]="child.title" 
            [style.max-width]="size(child)" style="user-select: auto;"/>
+
+      <!-- Renders a table -->
+      <table *ngSwitchCase="'table'" [wm-table]="child"></table>
   
       <!-- Renders the caption (actually the editable part) -->
       <figcaption *ngSwitchCase="'caption'" [wm-editable]="child"></figcaption>

@@ -334,14 +334,4 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     // Return the parent element with the relative offset otherwise
     return [el.parentNode, count + offset];
   }
-/*
-  @HostListener('document:selectionchange') selchange() {
-    if(this.edit && this.selection.collapsed) {
-
-      if(!(this.selection.start instanceof EditableInline)) {
-        this.selection.reset();
-      }
-
-    }
-  }*/
 }

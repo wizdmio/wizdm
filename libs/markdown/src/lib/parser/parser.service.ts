@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { mdRoot, mdContent, mdParent, mdTopLevelContent, mdDefinition, mdReference, mdFootnoteDefinition, mdFootnoteReference, mdPoint, mdPosition } from './parser-types';
+import { mdRoot, mdContent, mdParent, mdTopLevelContent, mdDefinition, mdReference, mdFootnoteDefinition, mdFootnoteReference } from './parser-types';
 import reparse from './reparse';
 
 
@@ -49,12 +49,10 @@ export class MarkdownParser {
   /** Parses the tree branch returning a plain concatenated text */ 
   public text(node: mdContent): string {
 
-    const parent = ("children" in node) ? node as mdParent : null;
-
-    return !!parent && parent.children.reduce((txt: string, child: mdContent) => {
+    return ("children" in node) ? (node as mdParent).children.reduce((txt: string, child: mdContent) => {
 
       return txt + (child.type === 'text' ? child.value : '') + this.text(child);
 
-    }, '');
+    }, '') : '';
   }
 }
