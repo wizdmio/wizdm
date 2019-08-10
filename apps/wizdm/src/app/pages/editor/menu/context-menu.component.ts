@@ -1,5 +1,6 @@
-import { Component, Inject, ViewChild, Input } from '@angular/core';
+import { Component, Inject, ViewChild, Input, HostBinding } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { ThemePalette } from '@angular/material/core'
 import { MatMenuTrigger } from '@angular/material/menu';
 import { wmTextStyle, EditableSelection } from '@wizdm/editable';
 
@@ -16,6 +17,9 @@ export class ContextMenuComponent {
 
   @Input() sel: EditableSelection;
   @Input() msgs: any = {};
+
+  @HostBinding('attr.color')
+  @Input() color: ThemePalette;
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
 

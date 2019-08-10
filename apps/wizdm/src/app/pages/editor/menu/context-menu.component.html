@@ -67,25 +67,28 @@
 </mat-menu>
 
 <!-- Size menu -->
-<mat-menu #sizeMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #sizeMenu="matMenu">
 
   <button mat-menu-item *ngFor="let level of [1, 2, 3]"
-          [style.backgroundColor]="sel.level === level ? 'rgba(0,0,0,0.1)' : 'unset'"
+          [attr.selected]="sel.level === level"
+          [style.border-width]="0"
           (click)="sel.level = level">
     <span [ngClass]="'mat-h' + level">{{ label(msgs?.size[level]) }}</span>
   </button>
 
   <button mat-menu-item 
-          [style.backgroundColor]="sel.level === 0 ? 'rgba(0,0,0,0.1)' : 'unset'"
+          [attr.selected]="sel.level === 0"
+          [style.border-width]="0"
           (click)="sel.level = 0">{{ label(msgs?.size[0]) }}</button>
 
 </mat-menu>
 
 <!-- Format menu -->
-<mat-menu #formatMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #formatMenu="matMenu">
 
   <button mat-menu-item *ngFor="let item of formats"
-          [style.backgroundColor]="hasStyle(item) ? 'rgba(0,0,0,0.1)' : 'unset'"
+          [attr.selected]="hasStyle(item)"
+          [style.border-width]="0"
           (click)="sel.toggleFormat(item)">
     <mat-icon>{{'format_' + item }}</mat-icon>
     <span>{{ label(msgs?.format[item]) }}</span>
@@ -94,10 +97,11 @@
 </mat-menu>
 
 <!-- Alignement menu -->
-<mat-menu #alignMenu="matMenu">
+<mat-menu [class]="'wm-theme-colors '+color" #alignMenu="matMenu">
 
   <button mat-menu-item *ngFor="let item of alignements" 
-          [style.backgroundColor]="item === sel.align ? 'rgba(0,0,0,0.1)' : 'unset'"
+          [attr.selected]="item === sel.align"
+          [style.border-width]="0"
           (click)="sel.align = item">
     <mat-icon>{{'format_align_' + item }}</mat-icon>
     <span>{{ label(msgs?.align[item]) }}</span>
