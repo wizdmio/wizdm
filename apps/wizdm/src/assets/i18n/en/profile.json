@@ -28,14 +28,15 @@
     {
       "title": "Personal information",
       "icon": "account_box",
+      "expanded": true,
       "fields": [
-        {"key": "profile:name", "label": "Name", "icon": "far:fa-user", "type": "input", "hint": "Your name goes here"},
-        {"key": "profile:motto", "label": "About me", "icon": "far:fa-comment", "type": "input"},
-        {"key": "profile:email", "label": "Email", "icon": "far:fa-envelope", "type": "input", "hint": "This is how you'll be contacted"},
-        {"key": "profile:phone", "label": "Phone", "icon": "fas:fa-phone", "type": "input", "hint": "This is how you'll be contacted"},
-        {"key": "profile:birth", "label": "Birthday", "icon": "fas:fa-birthday-cake", "type": "date", "hint": "We'll wish you happy birthday"},
-        {"key": "profile:gender", "label": "Gender", "icon": "fas:fa-genderless", "type": "select"},
-        {"key": "profile:lang", "label": "Language", "icon": "fas:fa-language", "type": "select"}
+        { "label": "Name", "hint": "How you'd like to be called", "icon": "far:fa-user", "type": "input", "key": "profile:name" },
+        { "label": "About me", "icon": "far:fa-comment", "type": "input", "key": "profile:motto" },
+        { "label": "Email", "hint": "We wish to stay in touch", "icon": "far:fa-envelope", "type": "input", "key": "profile:email" },
+        { "label": "Phone", "hint": "It's not tht we are calling you every moment...", "icon": "fas:fa-phone", "type": "input", "key": "profile:phone" },
+        { "label": "Birthday", "hint": "We'll wish you happy birthday, eventually", "icon": "fas:fa-birthday-cake", "type": "date", "key": "profile:birth" },
+        { "label": "Gender", "icon": "fas:fa-genderless", "type": "select", "key": "profile:gender" },
+        { "label": "Language", "icon": "fas:fa-language", "type": "select", "key": "profile:lang" }
       ],
       "applyChanges": "Apply changes"
     },
@@ -43,10 +44,10 @@
       "title": "Sign-in & security",
       "icon": "lock",
       "fields": [
-        { "key": "profile:created", "label": "Account created", "icon": "far:fa-calendar", "type": "date" },
-        { "key": "user:providerId", "label": "Sign-in provider", "icon": "fas:fa-shield-alt", "type": "input" },
-        { "key": "user:email", "label": "Account email", "icon": "fas:fa-envelope", "type": "input" },
-        { "key": "user:emailVerified", "label": "Identity", "icon": "fas:fa-user-shield", "type": "select" }
+        { "label": "Account created", "icon": "far:fa-calendar", "type": "date", "key": "profile:created" },
+        { "label": "Sign-in provider", "icon": "fas:fa-shield-alt", "type": "input", "key": "user:providerId" },
+        { "label": "Account email", "icon": "fas:fa-envelope", "type": "input", "key": "user:email" },
+        { "label": "Identity", "icon": "fas:fa-user-shield", "type": "select", "key": "user:emailVerified" }
       ],
       "buttons": [
         { "caption": "Verify email", "action": "emailVerify" },

@@ -35,9 +35,21 @@
         "required": "Please briefly describe what your project is about"
       }
     },
+    "web": {
+      "label": "Url",
+      "hint": "The link to the app website when ready"
+    },
     "buttons": {
       "save": "Save",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "delete": "Delete"
     }
+  },
+
+  "canDelete": {
+    "title": "Deleting project",
+    "message": "WARNING, by proceeding you'll permanently delete this project.",
+    "cancel": "Cancel",
+    "ok": "Proceed"
   }
 }

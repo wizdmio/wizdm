@@ -1,25 +1,29 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material/stepper';
 import { UserProfile, wmUser } from '@wizdm/connect';
+import { wmDocument } from '@wizdm/editable';
+import { Observable, Subscription } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
 import { ToolbarService } from '../../navigator';
 import { ProjectService, wmProject } from '../../core/project';
 import { CanPageDeactivate, ContentResolver} from '../../core/content';
+import { EditableConverter } from '../../core/converter';
 import { PopupService } from '../../elements/popup';
 import { $animations } from './apply.animations';
-import { Observable, Subscription } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+
 
 export interface wmApplication {
 
   name?          : string, // Application name
   pitch?         : string, // Elevator pitch
   description?   : string, // Background description
-  revenues?      : string, // Revenue streams
   players?       : string, // Other similar players
   differences?   : string, // Uniquenesses
   users?         : string, // Target users
   target?        : string, // Target market (geo, ...)
+  revenues?      : string, // Revenue streams
   comments?      : string  // Additional comments
 }
 
@@ -46,12 +50,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
   public welcomeBack = false;
   public progress = false;
   
-  constructor(private builder : FormBuilder, 
-              private content : ContentResolver,
-              private profile : UserProfile<userApply>,
-              private project : ProjectService,
-              private toolbar : ToolbarService,
-              private popup   : PopupService) { 
+  constructor(private builder   : FormBuilder, 
+              private content   : ContentResolver,
+              private profile   : UserProfile<userApply>,
+              private converter : EditableConverter,
+              private project   : ProjectService,
+              private toolbar   : ToolbarService,
+              private popup     : PopupService) { 
 
     // Gets the localized content resolved during routing
     this.msgs$ = content.stream('apply'); 
@@ -221,28 +226,48 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
     this.saveApplication( value );
   }
 
+  private buildTemplate(lang: string, context: wmApplication): Observable<wmDocument> {
+
+    const defaultLang = 'en';
+
+    return this.converter.loadMarkdown(`assets/docs/${lang}/template.md`, context).pipe(
+      // Catches the possible error
+      catchError( (e: HttpErrorResponse) => {
+        // On file not found (404) of localized content...
+        if(lang !== defaultLang && e.status === 404) { 
+          
+          const defaultPath = `assets/docs/${defaultLang}/template.md`;
+          
+          console.log('404 File not found, reverting to default language:', defaultPath);
+          
+          // Loads the same document in the default language instead
+          return this.converter.loadMarkdown(defaultPath, context);
+        }
+      })
+    );
+  }
+
   // Creates a project instance starting from the given application
   private applyProject(application: wmApplication) {
-    // Gets the localized template
-    const template = this.content.snapshot('template');
-    // Stringifies it to replace selectors
-    const document = JSON.stringify(template).replace(/<\s*([\w.]+)\s*>/g, (_, selector) => {
-      // Replaces the <comma.separated.selectors> found into the template 
-      // with the content coming from the application object
-      return selector.select(application) || selector;
-    });
-    // Store the new project
-    return this.project.addProject( {
-      // Document content coming from the template
-      ...JSON.parse( document ),
-      // Sets the status as draft
-      status: 'draft',
-      // Overwrite the name from the application
-      name: application.name,
-      // Adds the elevator pitch
-      pitch: application.pitch
-  
-    } as wmProject );
+
+    // Builds the template in the current language with the given application
+    return this.buildTemplate(this.content.language, application).pipe(
+
+      switchMap( template => {
+
+        return this.project.addProject( {
+          // Document content coming from the template
+          ...template,
+          // Assigns the current user as the author
+          author: this.profile.id,
+          // Gets the project name from the application
+          name: application.name,
+          // Adds the elevator pitch
+          pitch: application.pitch
+        });
+      })
+
+    ).toPromise();
   }
 
   public submitProject() {

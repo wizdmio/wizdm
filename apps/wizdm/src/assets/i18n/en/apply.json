@@ -51,19 +51,6 @@
       ]
     },
     {
-      "name": "revenues",
-      "title": "Identify the potential revenue streams",
-      "description": "How you'd imagine this app/idea be generating revenues, eventually",
-      "fields": [
-        {
-          "name": "revenues",
-          "type": "textarea", 
-          "label": "Revenues", 
-          "hint": "This is one of the parts we might be able to suggest something about"
-        }
-      ]
-    },
-    {
       "name": "context",
       "title": "List the similar players",
       "description": "Who else do you know is providing a similar app/service already and how you'd think to be different",
@@ -102,6 +89,19 @@
           "rows": 2, 
           "label": "Geo coverage", 
           "hint": "Where do you want to start from and how do you see the possibilities world wide"
+        }
+      ]
+    },
+    {
+      "name": "revenues",
+      "title": "Identify the potential revenue streams",
+      "description": "How you'd imagine this app/idea be generating revenues, eventually",
+      "fields": [
+        {
+          "name": "revenues",
+          "type": "textarea", 
+          "label": "Revenues", 
+          "hint": "This is one of the parts we might be able to suggest something about"
         }
       ]
     },

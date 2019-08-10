@@ -31,15 +31,15 @@ const routes: Routes = [
       // External links redirection page
       { path: 'redirect',    loadChildren: () => import('../pages/redirect/redirect.module').then(m => m.RedirectModule) },
 
-      // Intercepts routing to contact to execute a non-routing action
+      // Intercepts routing "action-links" to execute a non-routing action
       { path: 'contact',     canActivate: [ ActionLinkObserver ], data: { action: 'feedback' } },
+      { path: 'edit',        canActivate: [ ActionLinkObserver ], data: { action: 'edit' } },
       
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      
 
       // Static content pages, redirecting to NotFound when no content is available
-      { path: ':name',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },      
-      //{ path: '**', redirectTo:   'not-found', pathMatch: 'full' }
+      { path: ':name',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) }
     ]
   }
 ];

@@ -14,7 +14,7 @@
 
 <!-- PROFILE PANELS -->
 <mat-accordion displayMode="flat" fxFill>
-  <mat-expansion-panel class="mat-elevation-z0" *ngFor="let panel of msgs.panels; let i = index" (closed)=panelClose(i)>
+  <mat-expansion-panel class="mat-elevation-z0" *ngFor="let panel of msgs.panels; let i = index" [expanded]="panel.expanded" (closed)=panelClose(i)>
 
     <!-- PANEL HEADER -->
     <mat-expansion-panel-header fxLayoutAlign="space-between center">

@@ -22,9 +22,9 @@
     <div class="btns">
 
       <!-- Likes button -->
-      <button mat-button color="primary" *ngIf="likes.counter$ | async as counter" (click)="toggleFavorite()">
-        <span class="mat-small" *ngIf="counter > 0">{{ counter }}</span>
-        <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'" [@beat]="counter"></wm-icon>
+      <button mat-button color="primary" (click)="toggleFavorite()">
+        <span class="mat-small" *ngIf="likes.counter$ | async as counter">{{ counter }}</span>
+        <wm-icon [icon]="favorite ? 'favorite' : 'favorite_border'" [@beat]="likes.counter$ | async"></wm-icon>
       </button>
 
       <!-- Web page redirection  -->
@@ -58,7 +58,7 @@
   <button mat-icon-button class="edit" right top (click)="edit($event)">
     <wm-icon icon="fas:fa-edit"></wm-icon>
   </button>
-  
+
 </ng-container>
 
 <!-- Edit dialog -->
@@ -88,12 +88,26 @@
         {{ msgs?.editForm?.pitch?.errors?.required || 'Pitch required' }}
       </mat-error>
     </mat-form-field>
+
+    <!-- Web url -->
+    <mat-form-field>
+      <mat-label>{{ msgs?.editForm?.web?.label || 'Url' }}</mat-label>
+      <input matInput formControlName="web">
+      <mat-hint>{{ msgs?.editForm?.web?.hint }}</mat-hint>
+    </mat-form-field>
     
     <mat-dialog-actions align="end">
+
+      <button mat-button color="warn" type="button" (click)="deleteProject()">
+        {{ msgs?.editForm?.buttons?.delete || 'Delete' }}
+      </button>
+
       <button mat-button mat-dialog-close>{{ msgs?.editForm?.buttons?.cancel || 'Cancel' }}</button>
+      
       <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">
         {{ msgs?.editForm?.buttons?.save || 'Save' }}
       </button>
+    
     </mat-dialog-actions>
 
   </form>

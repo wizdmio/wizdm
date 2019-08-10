@@ -1,41 +1,35 @@
 
-# **Business plan of _{{ name }})_**
+# **Business plan of _{{ name }}_**
 
 > Welcome to your business plan for {{ name }}. This is a draft automatically generated upon the information you provided during the application process. 
 > The purpose of this document is to: 
 > 
-> 1. Describe your idea to the community to better understand how Wizdm can be improved to support it
-> 1. Demonstrate the content editic functionality of Wizdm (press [Edit](edit) on the action bar to start editing)
+> * Describe your idea to help understanding how Wizdm can be improved to support it
+> * Demonstrate the content editing functionality of Wizdm (press [Edit](edit) on the action bar to start editing)
 > 
 > -> 
-> **Enjoy** 
+> ### **Enjoy** 
 > <-
  
 ## **Project name {{ name }}**
 
+> Here's the 'pitch' you provided during the application. The same has been used to describe your idea in the card appearing
+> in the project explorer. To change that just click on the edit button top right of the card itself.
+ 
 {{ pitch }} 
 
 ## **Background**
 
 {{ description }} 
-
-## **Revenues stream**
-
-> Here to describe how do you plan the generate revenues, if any. It could be by premium or freemium accounts, donations, transaction fees, advertising and more. 
-> 
-> Be clear and specific. 
- 
-{{ revenues }} 
  
 ## **Context**
 
-> Here where to describe how the area you are going to work in looks like. The main topics we recommend clarifying here are: 
+> Here where to describe how the area you are going to work in looks like: 
 > 
-> 1. Who are the players providing similar products or services
-> 1. What's unique in your offering compared to them
-> 
-> So, basically, how you're going to better solve your future customers' needs.
-
+> * Who are the players providing similar products or services
+> * What's unique in your offering compared to them
+> So, basically, how you're going to better solve your future customers' needs. 
+ 
 ### **Players**
 
 {{ players }} 
@@ -48,10 +42,10 @@
 
 > Here is where we recommend focusing on:
 > 
-> 1. The kind of people you want to address
-> 1. The geographical areas you are thinking to start from
+> * The kind of people you want to address
+> * The geographical areas you are thinking to start from
 > 
-> An example could be addressing students of all nationality willing to travel to Italy. 
+> An example could be addressing students of all nationality willing to travel to Italy. You may want to address a peculiar niche of users to start small. This will help to grow organically. 
  
 ### **User profile**
 
@@ -60,8 +54,16 @@
 ### **Geographical coverage**
 
 {{ target }} 
+
+## **Revenues stream**
+
+> Here to describe how do you plan the generate revenues, if any. It could be by premium or freemium accounts, donations, transaction fees, advertising and more. 
+ 
+{{ revenues }} 
  
 ## **Conclusions**
 
+> We recommend focusing on a problem you know, something you experienced yourself, so to say, something you are an expert about. 
+ 
 {{ comments }} 
  

@@ -5,7 +5,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { MediaObserver } from '@angular/flex-layout';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { ContentResolver } from '../core/content';
-import { ActionLinkObserver } from '../core/action-link/action-link.service';
+import { ActionLinkObserver } from '../core/action-link';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { map, filter, distinctUntilChanged, flatMap, startWith } from 'rxjs/operators';

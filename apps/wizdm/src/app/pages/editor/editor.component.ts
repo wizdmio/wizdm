@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { wmDocument } from '@wizdm/editable';
 import { ToolbarService } from '../../navigator';
 import { ProjectService, ProjectWrapper, wmProject } from '../../core/project';
+import { ActionLinkObserver } from '../../core/action-link';
 import { ContentResolver } from '../../core/content';
 import { PopupService } from '../../elements/popup';
 import { Observable, Subject, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
@@ -28,6 +29,7 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
               private  route    : ActivatedRoute,
               private  toolbar  : ToolbarService,
               private  popup    : PopupService,
+              private  link     : ActionLinkObserver,
               readonly content  : ContentResolver) { 
 
     super(projects, '');
@@ -38,26 +40,36 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   
   ngOnInit() {
     
-    // Builds the observable streams
+    // Combines the observables to better handle the page needs
     this.subs = combineLatest(
+
       // Gets a snapshot of the current localized content for internal use
       this.msgs$.pipe( tap( msgs => this.msgs = msgs ) ),
-      // Loads the project and keeps it in sync
+      
+      // Loads the project upon the routed 'id' and activates the wrapper to keep it in sync
       this.loadProject().pipe( map( project => this.wrap(project) ) )
 
     ).pipe( 
-      // Activates the relevant actions based on the previous
+
+      // Activates the relevant toolbar actions based on the previous
       switchMap( ([msgs, project]) => this.activateActions(project.isMine, msgs) )
-      // Perform the action on request
+      
+      // Performs the action on request
     ).subscribe( code => this.doAction(code) );
 
-    // Enables the auto-saving stream
+    // Registers to support the 'edit' action link 
+    this.subs.add( this.link.register('edit')
+      .subscribe( action => this.doAction(action) ) 
+    );
+
+    // Enables the auto-saving
     this.subs.add( this.saveAutomatically() );
   }
 
   ngOnDestroy() {
-
+    // Unsubscribes local observalbles
     this.subs.unsubscribe();
+    // Releases the project wrapper observables
     super.release();
   }
 
@@ -75,10 +87,6 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
 
       case 'done':
       this.leaveEditMode();
-      break;
-
-      case 'delete':
-      this.deleteProject();
       break;
     }
   }
@@ -131,12 +139,6 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
       tap( () => this.toolbar.enableAction('save', false) )
 
     ).subscribe();
-  }
-
-  // Ask for confirmation prior to delete the project
-  private deleteProject() {
-    this.popup.confirmPopup(this.msgs.canDelete)
-      .subscribe( () => this.delete() );
   }
 
   public canDeactivate() {
