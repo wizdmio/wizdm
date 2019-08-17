@@ -5,7 +5,7 @@
 > The purpose of this document is to: 
 > 
 > * Describe your idea to help understanding how Wizdm can be improved to support it
-> * Demonstrate the content editing functionality of Wizdm (press [Edit](edit) on the action bar to start editing)
+> * Demonstrate the content editing functionality of Wizdm (press [Edit](edit) here or on the action bar on top to start editing)
 > 
 > -> 
 > ### **Enjoy** 

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ContentResolver } from '../../core/content';
 import { Observable } from 'rxjs';
-import { map, switchMap, catchError } from 'rxjs/operators'
+import { map, switchMap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-static',

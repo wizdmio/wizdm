@@ -26,7 +26,7 @@ export type DisclaimerSegment = DisclaimerText|DisclaimerLink;
 })
 export class DisclaimerComponent {
 
-  private segments: DisclaimerSegment[];
+  public segments: DisclaimerSegment[];
 
   @Input() color: ThemePalette;
 

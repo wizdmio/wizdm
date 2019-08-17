@@ -95,8 +95,6 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
     // Fallback to default while not in edit mode
     if(!this.editMode) { return true; }
-    // Prevents repeating chars whenever LongPress is enabled
-    if(ev.repeat && this.longpressEnabled) { return this.longpressDefer(ev, 0), false; }
     // Query the selection, so, it's always up to date. 
     const sel = this.query();
     // Runs key accellerators on CTRL hold 
@@ -119,6 +117,8 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
       return sel.break(ev.shiftKey), false;
       // Editing
       default: if(ev.key.length === 1) {
+        // Prevents repeating chars whenever LongPress is enabled
+        if(ev.repeat && this.longpressEnabled) { return this.longpressDefer(ev, 0), false; }
         // Inserts new content
         return sel.insert(ev.key), false;
       }

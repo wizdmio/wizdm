@@ -12,7 +12,8 @@ import { mdContent, mdHeading, mdFootnoteDefinition } from './parser/parser-type
 /** Renders a markdown text into an angular view */
 export class MarkdownRenderer {
   
-  public node: mdContent;
+  private node: mdContent;
+  get children() { return ("children" in this.node) ? this.node.children : [] }
 
   constructor(private tree: MarkdownParser) {}
 

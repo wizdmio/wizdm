@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
-  selector: 'wm-firebase-handler'
+  selector: 'wm-firebase-handler',
+  template: ''
 })
 export class FirebaseHandler implements OnInit {
 

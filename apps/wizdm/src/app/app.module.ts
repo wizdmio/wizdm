@@ -10,7 +10,7 @@ import { ConnectModule,
          DatabaseModule, 
          UploaderModule, 
          UserProfileModule } from '@wizdm/connect';
-import { DoorbellModule } from '@wizdm/doorbell';
+import { DoorbellModule, DoorbellConfigToken } from '@wizdm/doorbell';
 import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -29,7 +29,7 @@ import { AppComponent } from './app.component';
     DatabaseModule,
     UploaderModule,
     UserProfileModule,
-    DoorbellModule.init(environment.doorbell),
+    DoorbellModule,//.init(environment.doorbell),
     AppRoutingModule
   ],
   providers: [
@@ -38,7 +38,8 @@ import { AppComponent } from './app.component';
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     // Workaround to make sure initialization works while using --aot
     { provide: FirebaseOptionsToken, useValue: environment.firebase },
-    { provide: FirebaseNameOrConfigToken, useValue: environment.appname || '' }
+    { provide: FirebaseNameOrConfigToken, useValue: environment.appname || '' },
+    { provide: DoorbellConfigToken, useValue: environment.doorbell }
   ],
   entryComponents: [],
   bootstrap: [AppComponent]

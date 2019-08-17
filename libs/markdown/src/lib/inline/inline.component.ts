@@ -14,7 +14,9 @@ export class InlineComponent {
 
   constructor(readonly tree: MarkdownParser, private block: MarkdownRenderer) {}
 
-  @Input('wm-inline') node: mdPhrasingContent;
+  @Input('wm-inline') private node: mdPhrasingContent;
+
+  get children() { return ("children" in this.node) ? this.node.children : [] }
 
   // Text rendering helper
   public _T(value: string) { return value || ''; }

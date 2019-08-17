@@ -1,24 +1,24 @@
-# About Wizdm
+# О Wizdm
 
-Wizdm is a boilerplate to kickstart serverless single page applications based on [Angular](https://angular.io) and [Firebase](https://firebase.google.com). Designed to help aspiring startuppers bootstrapping their side projects into functioning prototypes ready to launch in the shortest possible time.
+Wizdm - это шаблон для запуска безсерверных одностраничных приложений на основе [Angular](https://angular.io) и [Firebase](https://firebase.google.com). Разработанный, чтобы помочь начинающим стартаперам запустить их сторонние проекты в действующие прототипы, готовые к запуску в кратчайшие сроки.
 
-## Feature rich
+## Многофункциональный
 
-Wizdm comes packed with all the essential features of a modern single page application ready to be used including account management and user authentication, cloud file storage and real-time data synchronization, user interface theming and internationalization and much more.
+Wizdm поставляется со всеми необходимыми функциями современного одностраничного приложения, готового к использованию, включая управление учетными записями и аутентификацию пользователей, облачное хранение файлов и синхронизацию данных в реальном времени, тематизацию и интернационализацию пользовательского интерфейса и многое другое.
 
-## Zero starting costs
+## Нулевые стартовые затраты
 
-At the very core of this initiative there's the willing to provide a "zero starting cost" solution while granting performances, compatibility and top level support - meaning - all the technologies, platforms and services involved in wizdm development have been selected by reputation and by the availability of generous freemium subscription options. 
+В основе этой инициативы лежит желание предоставить решение с «нулевой начальной стоимостью», в то же время предоставляя производительность, совместимость и поддержку высшего уровня, то есть все технологии, платформы и сервисы, участвующие в разработке wizdm, были отобраны репутацией и наличие щедрых бесплатных подписок.
+ 
+## Вклад
 
-## Contribution
+Wizdm с открытым исходным кодом и открыт для участников. Любой, кто решит использовать этот проект для ускорения собственных разработок, может присоединиться к нам. [Связаться](contact).
+ 
+## Лицензирование
 
-Wizdm is open source and open to contributors. Whoever decides to use this project to speedup their own developments is welcome to join us. [Get in touch](contact). 
-
-## Licensing
-
-Wizdm is licensed under the [MIT-License](license).
-
-## Resources
+Wizdm лицензируется в соответствии с [MIT-License](license).
+ 
+## Ресурсы
 
 [Angular](https://angular.io/docs) 
 
