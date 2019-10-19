@@ -1,21 +1,16 @@
 import { Injectable } from '@angular/core';
-import { mdRoot, mdContent, mdParent, mdTopLevelContent, mdDefinition, mdReference, mdFootnoteDefinition, mdFootnoteReference } from './parser-types';
+import { mdRoot, mdContent, mdParent, mdTopLevelContent, mdDefinition, mdReference, mdFootnoteDefinition, mdFootnoteReference } from './tree-types';
 import reparse from './reparse';
 
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 /** Parses a markdown text into an 'mdContent' syntax tree using Remark @see {https://github.com/remarkjs/remark} */
-export class MarkdownParser {
+export class MarkdownTree {
 
   public root: mdRoot;
   public defs: mdDefinition[];
   public notes: mdFootnoteDefinition[]; 
-    
-  constructor() { }
-
-  private get tops(): mdTopLevelContent[] { return !!this.root && this.root.children || [];}
+  
+  public get tops(): mdTopLevelContent[] { return !!this.root && this.root.children || [];}
 
   /** Parses the markdown source into an mdContent tree */
   public parse(source: string): mdRoot {
@@ -32,13 +27,13 @@ export class MarkdownParser {
   /** Seeks for the definition's node of the matching reference  */
   public definition(ref: mdReference): mdDefinition {
     // Seeks the referred definition node
-    return this.defs.find(def => def.identifier === ref.identifier) || {} as mdDefinition;
+    return this.defs.find(def => def.identifier === ref.identifier);
   }
 
   /** Seeks for the footnode definition's node of the matching reference */
   public footnote(ref: mdFootnoteReference): mdFootnoteDefinition {
     // Seeks the referred definition node
-    return this.notes.find(def => def.identifier === ref.identifier) || {} as mdFootnoteDefinition;
+    return this.notes.find(def => def.identifier === ref.identifier);
   }
 
   /** Seeks for the footnote definition index of the matching reference */

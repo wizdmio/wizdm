@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MarkdownRenderer } from './markdown.component';
+import { MarkdownRoot } from './markdown.component';
+import { MarkdownBlock } from './block/block.component';
+import { MarkdownInline } from './inline/inline.component';
 import { CodeHighlighter } from './highlight/highlight.component';
-import { InlineComponent } from './inline/inline.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
+  imports: [ 
+    CommonModule
   ],
   declarations: [
-    MarkdownRenderer,
+    MarkdownRoot,
+    MarkdownInline,
+    MarkdownBlock,
     CodeHighlighter,
-    InlineComponent
   ],
   exports: [
-    MarkdownRenderer
+    MarkdownRoot
   ]
 })
 export class MarkdownModule { }

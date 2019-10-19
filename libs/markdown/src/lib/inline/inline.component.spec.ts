@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InlineComponent } from './inline.component';
+import { MarkdownInline } from './inline.component';
 
-describe('InlineComponent', () => {
-  let component: InlineComponent;
-  let fixture: ComponentFixture<InlineComponent>;
+describe('MarkdownInline', () => {
+  let component: MarkdownInline;
+  let fixture: ComponentFixture<MarkdownInline>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InlineComponent ]
+      declarations: [ MarkdownInline ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InlineComponent);
+    fixture = TestBed.createComponent(MarkdownInline);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MarkdownParser, mdContent, mdRoot, mdParent, mdTable, mdTableRow, mdTableCell } from '@wizdm/markdown';
+import { MarkdownTree, mdContent, mdRoot, mdParent, mdTable, mdTableRow, mdTableCell } from '@wizdm/markdown';
 import { wmEditable, wmDocument, wmAlignType, wmRow, wmCell } from '@wizdm/editable';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,16 +8,16 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class EditableConverter {
+export class EditableConverter extends MarkdownTree {
 
-  constructor(private http: HttpClient, private parser: MarkdownParser) { }
+  constructor(private http: HttpClient) { super(); }
 
   loadMarkdown(path: string, context?: any): Observable<any> {
 
     return this.http.get(path, { responseType: 'text' })
       .pipe(
         map( md => md.interpolate(context) ), 
-        map( md => this.parser.parse(md) ),
+        map( md => this.parse(md) ),
         map( root => this.editable(root) ) 
       );
   }
@@ -123,10 +123,10 @@ export class EditableConverter {
         });
 
         case 'linkReference':
-        child.url = this.parser.definition(child).url;
+        child.url = this.definition(child).url;
 
         case 'link':
-        const value = this.parser.text(child);
+        const value = this.text(child);
 
         return !!value ? out.concat({ 
           type: 'link',

@@ -1,0 +1,60 @@
+<ng-container *ngFor="let child of node?.children">
+
+  <ng-container [ngSwitch]="child.type"> 
+
+    <!-- Headings -->
+    <ng-container *ngSwitchCase="'heading'">
+      <h1 *ngIf="child.depth === 1" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h1>
+      <h2 *ngIf="child.depth === 2" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h2>
+      <h3 *ngIf="child.depth === 3" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h3>
+      <h4 *ngIf="child.depth === 4" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h4>
+      <h5 *ngIf="child.depth === 5" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h5>
+      <h6 *ngIf="child.depth === 6" [id]="toc(child)" [attr.data-line]="pos(child)" [wm-inline]="child"></h6>
+    </ng-container>
+
+    <!-- Paragraph -->
+    <p *ngSwitchCase="'paragraph'" [attr.data-line]="pos(child)" [wm-inline]="child"></p>
+
+    <!-- Lists -->
+    <ng-container *ngSwitchCase="'list'">
+      <ol *ngIf="child.ordered" [start]="child.start">
+        <li *ngFor="let item of child.children" [wm-block]="item"></li>
+      </ol>
+      <ul *ngIf="!child.ordered">
+        <li *ngFor="let item of child.children" [wm-block]="item"></li>
+      </ul> 
+    </ng-container>
+
+    <!-- Tables -->
+    <table *ngSwitchCase="'table'" [attr.data-line]="pos(child)">
+      <tbody>
+        <tr *ngFor="let row of child.children">
+          <td *ngFor="let cell of row.children; index as i" [attr.align]="child.align[i]||''" [wm-inline]="cell"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Code -->
+    <pre *ngSwitchCase="'code'" [attr.data-line]="pos(child)">
+      <!--code [wm-highlight]="child.value" [language]="child.lang"></code-->
+      <code>{{ child.value }}</code>
+    </pre>
+
+    <!-- Thematic Break -->
+    <hr *ngSwitchCase="'thematicBreak'" [attr.data-line]="pos(child)"/>
+
+    <!-- Blockquotes -->
+    <blockquote *ngSwitchCase="'blockquote'" [wm-block]="child"></blockquote>
+
+    <!-- Left aligned block - Align plugin -->
+    <span *ngSwitchCase="'leftAligned'" align="left" [wm-block]="child"></span>
+
+    <!-- Center aligned block - Align plugin -->
+    <span *ngSwitchCase="'centerAligned'" align="center" [wm-block]="child"></span>
+
+    <!-- Right aligned block - Align plugin -->
+    <span *ngSwitchCase="'rightAligned'" align="right" [wm-block]="child"></span>
+
+  </ng-container>
+    
+</ng-container>

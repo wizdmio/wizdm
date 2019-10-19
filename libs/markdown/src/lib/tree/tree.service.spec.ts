@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ParserService } from './parser.service';
+import { MarkdownTree } from './tree.service';
 
-describe('ParserService', () => {
+describe('MarkdownTree', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ParserService = TestBed.get(ParserService);
+    const service: MarkdownTree = TestBed.get(MarkdownTree);
     expect(service).toBeTruthy();
   });
 });
