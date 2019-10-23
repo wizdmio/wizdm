@@ -294,6 +294,37 @@
           "styleext": "scss"
         }
       }
+    },
+    "prism": {
+      "projectType": "library",
+      "root": "libs/prism",
+      "sourceRoot": "libs/prism/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/prism/tsconfig.lib.json",
+              "libs/prism/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/prism/src/test.ts",
+            "tsConfig": "libs/prism/tsconfig.spec.json",
+            "karmaConfig": "libs/prism/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

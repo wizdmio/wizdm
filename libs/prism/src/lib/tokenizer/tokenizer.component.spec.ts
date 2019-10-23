@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CodeHighlighter } from './highlight.component';
+import { PrismTokenizer } from './tokenizer.component';
 
-describe('CodeHighlighter', () => {
-  let component: CodeHighlighter;
-  let fixture: ComponentFixture<CodeHighlighter>;
+describe('PrismTokenizer', () => {
+  let component: PrismTokenizer;
+  let fixture: ComponentFixture<PrismTokenizer>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CodeHighlighter ]
+      declarations: [ PrismTokenizer ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CodeHighlighter);
+    fixture = TestBed.createComponent(PrismTokenizer);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

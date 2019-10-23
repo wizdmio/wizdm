@@ -18,11 +18,12 @@
       "@wizdm/connect": ["libs/connect/src/index.ts"],
       "@wizdm/markdown": ["libs/markdown/src/index.ts"],
       "@wizdm/markdown/*": ["libs/markdown/src/lib/*"],
+      "@wizdm/prism": ["libs/prism/src/index.ts"],
       "@wizdm/editable": ["libs/editable/src/index.ts"],
       "@wizdm/editable/*": ["libs/editable/src/lib/*"],
       "@wizdm/doorbell": ["libs/doorbell/src/index.ts"],
       "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"]
     }
   },
-  "exclude": ["node_modules", "tmp", ".tmp", ".experiments" ]
+  "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]
 }

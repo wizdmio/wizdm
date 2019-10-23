@@ -5,7 +5,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MarkdownModule } from '@wizdm/markdown';
 import { AnimateModule } from '../../elements/animate';
-import { IllustrationModule } from '../../elements/illustration';
 //import { ContentResolver } from '../../core';
 import { StaticComponent } from './static.component';
 
@@ -26,9 +25,8 @@ const routes: Routes = [
     CommonModule,
     //FlexLayoutModule,
     MatDividerModule,
-    MarkdownModule,
+    MarkdownModule.init({ commonmark: true, footnotes: true }),
     AnimateModule,
-    //IllustrationModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule ]

@@ -1,0 +1,5 @@
+
+<code *ngIf="!disabled; else transclude" [language]="language" [wm-prism]="source"></code>
+<ng-template #transclude>
+  <ng-content></ng-content>
+</ng-template>

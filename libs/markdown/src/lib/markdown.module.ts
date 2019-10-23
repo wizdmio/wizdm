@@ -1,22 +1,32 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PrismModule } from '@wizdm/prism';
 import { MarkdownRoot } from './markdown.component';
 import { MarkdownBlock } from './block/block.component';
 import { MarkdownInline } from './inline/inline.component';
-import { CodeHighlighter } from './highlight/highlight.component';
+import { MarkdownConfig, mdConfigToken } from './tree/tree-config';
 
 @NgModule({
   imports: [ 
-    CommonModule
+    CommonModule,
+    PrismModule
   ],
   declarations: [
     MarkdownRoot,
     MarkdownInline,
-    MarkdownBlock,
-    CodeHighlighter,
+    MarkdownBlock
   ],
   exports: [
     MarkdownRoot
   ]
 })
-export class MarkdownModule { }
+export class MarkdownModule { 
+  static init(config?: MarkdownConfig): ModuleWithProviders<MarkdownModule> {
+    return {
+      ngModule: MarkdownModule,
+      providers: [
+        { provide: mdConfigToken, useValue: config }
+      ]
+    }
+  }
+}

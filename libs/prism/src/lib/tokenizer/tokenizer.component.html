@@ -1,0 +1,12 @@
+<!-- Loops on tokens -->
+<ng-container *ngFor="let token of tokens">
+
+  <!-- Renders plain strings as text nodes -->
+  <ng-container *ngIf="isString(token);else spanToken">{{ token }}</ng-container>
+
+  <!-- Spans the token recurring down the tree with the proper styling otherwise -->
+  <ng-template #spanToken>
+    <span [class]="'token '+token.type" [wm-prism]="token.content"></span>
+  </ng-template>
+
+</ng-container>

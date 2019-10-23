@@ -1,6 +1,6 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { MarkdownTree } from '../tree/tree.service';
 import { mdContent, mdHeading } from '../tree/tree-types';
+import { MarkdownTree } from '../tree/tree.service';
 
 @Component({
   selector: '[wm-block]',
@@ -14,6 +14,12 @@ export class MarkdownBlock {
   constructor(readonly tree: MarkdownTree) {}
 
   @Input('wm-block') node: mdContent;
+
+  // AOT safe children from the node
+  get children() { return ("children" in this.node) ? this.node.children : [] }
+
+  // Highlight enable flag
+  get highlight() { return !!this.tree.config && !!this.tree.config.prism; }
 
   // Table of content anchor helper
   public toc(heading: mdHeading): string {
@@ -31,3 +37,4 @@ export class MarkdownBlock {
     return '' + (!!node && !!node.position && node.position.start.line);
   }
 }
+

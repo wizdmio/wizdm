@@ -1,5 +1,10 @@
 // Resets styles with Normalize.css for browser behaviour consistency
 @import '~normalize.css/normalize.css';
+
+// Import prism code highlighting theme
+//@import '~prismjs/themes/prism.css';
+
+// Import Angular Material theming 
 @import '~@angular/material/theming';
 
 // Load material icons from the web

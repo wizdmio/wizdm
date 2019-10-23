@@ -10,7 +10,11 @@ import { map } from 'rxjs/operators';
 })
 export class EditableConverter extends MarkdownTree {
 
-  constructor(private http: HttpClient) { super(); }
+  constructor(private http: HttpClient) { 
+    // Inits the tree parser with a minimal configuration
+    super({ commonmark: true }); 
+  }
+
 
   loadMarkdown(path: string, context?: any): Observable<any> {
 
