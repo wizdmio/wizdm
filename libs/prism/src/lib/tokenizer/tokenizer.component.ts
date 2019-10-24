@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import * as prism from 'prismjs';
+import { prism } from './prism';
 
 @Component({ 
   selector: ':not(pre)[wm-prism]', 
@@ -8,17 +8,16 @@ import * as prism from 'prismjs';
 export class PrismTokenizer { 
 
   private grammar: any;
+  public tokens: any;
 
   /** Selects the most appropriate grammar according to the language */
   @Input() set language(language: string) {
     this.grammar = !!language ? prism.languages[language] : null;
   }
 
-  public tokens: any;
-
   /** Tokenizes the input string or pass along the already tokenized array */
   @Input('wm-prism') set highlight(source: string|any[]) {
-    this.tokens = !!source ? typeof source === 'string' ? this.tokenize(source) : source : [];
+    this.tokens = !!source ? typeof(source) === 'string' ? this.tokenize(source) : source : [];
   }
 
   /** Helper for rendering strings */
