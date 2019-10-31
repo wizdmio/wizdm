@@ -42,7 +42,7 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
     // Loads the source data building the tree otherwise
     this.load(source).defrag();
 
-    console.log(this.value);
+    //console.log(this.value);
   }
 
   private editMode = false;

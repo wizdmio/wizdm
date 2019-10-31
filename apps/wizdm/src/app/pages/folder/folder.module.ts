@@ -1,24 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { FileOpenModule } from '../../elements/openfile';
 import { PopupModule } from '../../elements/popup';
-import { ContentResolver } from '../../core/content';
+import { AuthGuard, PageGuard } from '../../utils';
 import { FolderComponent } from './folder.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
   {
     path: '',
     component: FolderComponent,
-    resolve: { content: ContentResolver }, 
-    data: { i18n: ['folder'] },
-    canActivate: [ ContentResolver ],
-    canDeactivate: [ ContentResolver ]
+    content: 'folder',
+    canActivate: [ AuthGuard ],
+    canDeactivate: [ PageGuard ]
   }
 ];
 
@@ -33,8 +32,7 @@ const routes: Routes = [
     MatProgressBarModule,
     FileOpenModule,
     PopupModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [ RouterModule ]
+    ContentRouterModule.forChild(routes)
+  ]
 })
 export class FolderModule { }

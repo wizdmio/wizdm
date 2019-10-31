@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { IconModule } from '../../elements/icon';
-import { ContentResolver } from '../../core/content';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+//import { AuthGuard, PageGuard } from '../../utils';
 import { RedirectComponent } from './redirect.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
   {
     path: '',
     component: RedirectComponent,
-    resolve: { content: ContentResolver }, 
-    data: { i18n: ['redirect'] },
-    //canActivate: [ ContentResolver ],
-    //canDeactivate: [ ContentResolver ]
+    content: 'redirect'
+    //canActivate: [ AuthGuard ],
+    //canDeactivate: [ PageGuard ]
   }
 ];
 
@@ -27,8 +26,7 @@ const routes: Routes = [
     MatButtonModule,
     MatProgressBarModule,
     IconModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [ RouterModule ]
+    ContentRouterModule.forChild(routes)
+  ]
 })
 export class RedirectModule { }

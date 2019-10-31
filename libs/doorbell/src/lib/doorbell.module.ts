@@ -1,9 +1,9 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { DoorbellConfig } from './doorbell.definitions';
-import { DoorbellService, DoorbellConfigToken } from './doorbell.service';
+import { DoorbellConfig, DoorbellConfigToken } from './doorbell.definitions';
+import { DoorbellService } from './doorbell.service';
 
 @NgModule({
-  providers: [DoorbellService]
+  providers: [ DoorbellService ]
 })
 export class DoorbellModule {
 

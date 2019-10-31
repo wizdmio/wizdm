@@ -1,8 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContentResolver } from '../../core/content';
-import { Observable } from 'rxjs';
-import { $defaultMsgs } from './not-found-defaults';
 
 @Component({
   selector: 'wm-not-found',
@@ -12,19 +9,10 @@ import { $defaultMsgs } from './not-found-defaults';
 })
 export class NotFoundComponent implements OnInit, OnDestroy {
 
-  readonly msgs$: Observable<any>;
   private timeout = null; 
   private countdown = 5;
 
-  constructor(private router: Router, content: ContentResolver) {     
-    // Gets the localized content pre-fetched during routing resolving or use 
-    // defaults in case we have been redirected after content loading failure
-    this.msgs$ = content.stream('notFound', $defaultMsgs);
-  }
-
-  interpolate(msg: string): string {
-    return msg.interpolate(this);
-  }
+  constructor(private router: Router) {}
 
   ngOnInit() {
 

@@ -7,10 +7,10 @@ import { environment } from './environments/environment';
 import 'hammerjs';
 
 // Augment global objects with useful functions
-import './app/core/augment/string/camelize';
-import './app/core/augment/string/hyphenize';
-import './app/core/augment/string/interpolate';
-import './app/core/augment/string/select'
+import './app/utils/augment/string/camelize';
+import './app/utils/augment/string/hyphenize';
+import './app/utils/augment/string/interpolate';
+import './app/utils/augment/string/select'
 //import './app/core/augment/string/printf';
 //import './app/core/augment/math/normal';
 //import './app/core/augment/array//shuffle';

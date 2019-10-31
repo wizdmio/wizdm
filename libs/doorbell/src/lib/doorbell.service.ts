@@ -1,10 +1,8 @@
-import { Injectable, Inject, InjectionToken } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
-import { DoorbellConfig, DorbellSubmit } from './doorbell.definitions';
-
-export const DoorbellConfigToken = new InjectionToken<DoorbellConfig>('Doorbell configuration token');
+import { DoorbellConfig, DorbellSubmit, DoorbellConfigToken } from './doorbell.definitions';
 
 @Injectable()
 export class DoorbellService {

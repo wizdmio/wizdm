@@ -19,7 +19,7 @@
   @include angular-material-theme($theme);
 
   // Ovverrides standard material typo margins
-  @include override-material-typo-margins();
+  @include tweak-material-typo-margins();
 
   // Styles the elements according to the theme
   @include wm-elements-theme($theme);

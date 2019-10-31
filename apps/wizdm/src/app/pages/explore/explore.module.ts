@@ -1,30 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { ReactiveFormsModule } from '@angular/forms';;
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-//import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { ThumbnailModule } from '../../elements/thumbnail';
 import { AvatarModule } from '../../elements/avatar';
 import { IconModule } from '../../elements/icon';
-import { ContentResolver } from '../../core/content';
+import { AuthGuard, PageGuard } from '../../utils';
 import { UserInfoModule } from '../user-info/user-info.module';
 import { UploadModule } from '../upload/upload.module';
 import { ExploreComponent } from './explore.component';
 import { ProjectComponent } from './project/project.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
   {
     path: '',
     component: ExploreComponent,
-    resolve: { content: ContentResolver }, 
-    data: { i18n: ['explore'] },
-    //canActivate: [ ContentResolver ],
-    canDeactivate: [ ContentResolver ]
+    content: 'explore',
+    //canActivate: [ AuthGuard ],
+    canDeactivate: [ PageGuard ]
   }
 ];
 
@@ -41,14 +39,12 @@ const routes: Routes = [
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    //MatProgressSpinnerModule,
     ThumbnailModule,
     AvatarModule, 
     IconModule,
     UserInfoModule,
     UploadModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [ RouterModule ]
+    ContentRouterModule.forChild(routes)
+  ]
 })
 export class ExploreModule { }

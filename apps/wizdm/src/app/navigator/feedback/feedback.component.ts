@@ -1,8 +1,10 @@
 import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { UserProfile } from '@wizdm/connect';
+import { ContentLoader } from '@wizdm/content';
 import { DoorbellService } from '@wizdm/doorbell';
-import { ContentResolver } from '../../core/content';
+import { NavigatorService } from '../navigator.service';
 import { Observable } from 'rxjs';
 
 export interface DorbellSubmit {
@@ -33,8 +35,8 @@ export class FeedbackComponent {
   public sending = false;
   public sent = false;
 
-  get profile() { return this.content.user.data || {}; }
-  get authenticated() { return this.content.user.authenticated; }
+  get profile() { return this.user.data || {}; }
+  get authenticated() { return this.user.authenticated; }
 
   get fileSizeExceeded(): boolean {
 
@@ -50,13 +52,12 @@ export class FeedbackComponent {
     return false;
   }
   
-  constructor(private content  : ContentResolver, 
-              private builder  : FormBuilder, 
+  constructor(private builder  : FormBuilder, 
               private dialog   : MatDialog, 
+              private loader   : ContentLoader,
+              private nav      : NavigatorService,
+              private user     : UserProfile,
               private doorbell : DoorbellService) { 
-
-    // Gets the localized content pre-fetched by the resolver during routing
-    this.msgs$ = content.stream("feedback");
 
     this.form = this.builder.group({
       'name'   : [ '' ],
@@ -124,7 +125,7 @@ export class FeedbackComponent {
       ...this.form.value,
       
       // Adds the current language
-      language: this.content.language,
+      language: this.loader.language,
 
       // Includes the user id when available
       properties: this.authenticated ? { userId: this.profile.id } : undefined
@@ -148,7 +149,7 @@ export class FeedbackComponent {
   public redirect(url: string): boolean {
     
     // Redirects to the external url closing the dialog
-    this.content.navigateByUrl(url)
+    this.nav.navigateByUrl(url)
       .then( () => this.refDialog.close() );
     
     // Prevents default

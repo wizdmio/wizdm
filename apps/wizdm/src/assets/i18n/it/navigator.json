@@ -32,17 +32,5 @@
             { "label": "Profilo" },
             { "label": "Esci" }
         ]
-    },
-
-    "footer": {
-
-        "copyright": "Condiviso con saggezza dal pianeta Terra ©{{ year }}",
-
-        "links": [
-            { "label": "Chi siamo" },
-            { "label": "Il progetto" },
-            { "label": "Termini" },
-            { "label": "Privacy" }
-        ]
     }
 }

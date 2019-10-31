@@ -1,5 +1,5 @@
 
-<ng-container *ngIf="msgs$ | async as msgs">
+<ng-container *wmContent="let msgs select 'explore'">
 
   <section class="projects" fxLayout="column" fxLayoutAlign="center center" *ngIf="projects$ | async as items" [@list]="items?.length">
 
@@ -9,8 +9,8 @@
 
         <wm-project [project]="project" 
                     [msgs]="msgs"
-                    (open)="content.navigate(['explore', $event])" 
-                    (redirect)="content.navigateByUrl($event)" 
+                    (open)="openProject($event)" 
+                    (redirect)="navigate($event)" 
                     @bumpIn>
         </wm-project>  
 

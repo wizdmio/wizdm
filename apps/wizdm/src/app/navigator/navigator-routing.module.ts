@@ -1,16 +1,26 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ContentResolver } from '../core/content';
-import { ActionLinkObserver } from '../core/action-link/action-link.service';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { LanguageSelector, ActionLinkObserver } from '../utils';
 import { NavigatorComponent } from './navigator.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
+
+  // Redirects handler page (for firebase password confirmation/reset and stuff)
+  //{ path: 'handler', loadChildren: () => import('../pages/handler/handler.module').then(m => m.HandlerModule) },
+  
+  // Enables language autodetection on empty routes
+  { path: '', redirectTo: 'auto', pathMatch: 'full' },
+  
+  // Loads te main window (navigator) together with the localized content 
   {
-    path: '',
+    path: ':lang',
+    
     component: NavigatorComponent,
-    resolve: { content: ContentResolver }, 
-    data: { i18n: ['navigator', 'feedback'] },
-    // Localized pages
+    
+    canActivate: [ LanguageSelector ],
+    
+    content:['navigator', 'footer', 'feedback'],
+    
     children: [
       
       // Home page
@@ -45,8 +55,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ ],
-  imports: [ RouterModule.forChild(routes) ],
-  exports: [ RouterModule ]
+  imports: [ ContentRouterModule.forChild(routes) ],
+  exports: [ ContentRouterModule ],
+  providers: [ LanguageSelector ]
 })
 export class NavRoutingModule {}

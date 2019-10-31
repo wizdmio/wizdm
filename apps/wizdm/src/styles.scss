@@ -49,7 +49,7 @@ $wm-warn:    mat-palette($mat-red);
 // Creates a standard material light theme first...
 $wm-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
 //... than overrides with customized fore/background values
-$wm-theme: override-material-theme($wm-theme, 
+$wm-theme: tweak-material-theme($wm-theme, 
 
   $foreground: ( // Overrides Material foreground colors
 
@@ -58,7 +58,8 @@ $wm-theme: override-material-theme($wm-theme,
     icon:              mat-color($wm-primary),
     icons:             mat-color($wm-primary),
     text:              mat-color($wm-primary, 900),
-    contrast:        #f0f0f0
+    //light-text:       mat-color($primary, 50),
+    dark-text:         mat-color($wm-primary, 900)
   ), 
 
   $background: ( // Overrides Material background colors

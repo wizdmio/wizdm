@@ -1,14 +1,11 @@
 
 <ng-container *ngIf="document$ | async as document">
 
-  <!-- Background gradient -->
-  <!--wm-illustration class="background" src="assets/img/linear-gradient.svg" color="primary"></wm-illustration-->
-
   <!-- Foreground content -->
   <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document">
 
     <!-- Renders the markdown document -->
-    <section [wm-markdown]="document" (navigate)="content.navigateByUrl($event)" #body></section>
+    <section [wm-markdown]="document" (navigate)="nav.navigateByUrl($event)" #body></section>
 
     <!-- Renders the footnotes -->
     <section *ngIf="body.notes.length > 0">

@@ -15,6 +15,17 @@ export const common = {
   
   appname: 'wizdm',
 
+  content: {
+    selector: 'lang', 
+    contentRoot: 'assets/i18n',
+    supportedValues: ['en', 'it', 'ru'],
+    defaultValue: 'en'
+  },
+
+  router: { 
+    anchorScrolling: "enabled"
+  },
+
   firebase/*: { 
     apiKey: "Your api key",
     authDomain: "domain.firebaseapp.com",

@@ -10,7 +10,7 @@
       [edit]="editMode" 
       [@editing]="editMode"
       (contextmenu)="editMode ? menu.open($event) : true" 
-      (navigate)="content.navigateByUrl($event)"
+      (navigate)="navigate($event)"
       (longpress)="longpress.lookup($event)"
       (change)="save($event)"
       #doc>

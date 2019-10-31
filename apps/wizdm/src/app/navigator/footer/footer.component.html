@@ -1,6 +1,6 @@
 
 <mat-divider></mat-divider>
-<footer fxLayout="column" fxLayoutAlign="center center" *ngIf="msgs$ | async as msgs">
+<footer fxLayout="column" fxLayoutAlign="center center" *wmContent="let msgs select 'footer';let lang = language">
 
   <!-- Top section with links -->
   <section fxLayout="column" fxLayoutGap="16px">
@@ -8,7 +8,7 @@
     <!-- Mini fab with social links -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
 
-      <a mat-mini-fab color="primary" [href]="item.link" (click)="redirect(item.link)" *ngFor="let item of msgs.socials">
+      <a mat-mini-fab color="primary" routerLink="redirect" [queryParams]="{ url: item.link }" *ngFor="let item of msgs.socials">
         <wm-icon [icon]="item.icon"></wm-icon>
       </a>
 
@@ -27,8 +27,8 @@
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
 
       <a wm-link class="mat-small" 
-         [disabled]="content.isLanguage(item.value)"
-         [routerLink]="content.languageLink(item.value)" 
+         [disabled]="item.value === lang"
+         [routerLink]="languageLink(item.value)" 
          *ngFor="let item of msgs.languages">{{ item.label }}</a>
       
     </div>

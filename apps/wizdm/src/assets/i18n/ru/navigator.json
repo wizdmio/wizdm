@@ -31,24 +31,5 @@
             { "label": "Профайл" },
             { "label": "Выйти" }
         ]
-    },
-
-    "footer": {
-
-        "copyright": "Сделано с мудростью на Планете Земля ©{{ year }}",
-
-        "socials": [
-            { "label": "Facebook" },
-            { "label": "Twitter" },
-            { "label": "LinkedIn" },
-            { "label": "Github" } 
-        ],
-
-        "links": [
-            { "label": "О нас" },
-            { "label": "Наш проект" },
-            { "label": "Условия использования" },
-            { "label": "Конфиденциальность" }
-        ]
     }
 }

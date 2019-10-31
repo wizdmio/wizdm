@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { UserProfile, wmFile } from '@wizdm/connect';
+import { ContentStreamer } from '@wizdm/content';
 import { ToolbarService } from '../../navigator';
 import { OpenFileComponent } from '../../elements/openfile';
 import { PopupService } from '../../elements/popup';
-import { ContentResolver } from '../../core/content';
 import { Observable, Subscription } from 'rxjs';
 import { tap, switchMap } from 'rxjs/operators';
 
@@ -18,33 +18,30 @@ interface UploadTask {
   selector: 'wm-folder',
   templateUrl: './folder.component.html',
   styleUrls: ['./folder.component.scss'],
-  host: { 'class': 'wm-page adjust-top' }
+  host: { 'class': 'wm-page adjust-top' },
+  providers: [ ContentStreamer ]
 })
 export class FolderComponent implements OnInit, OnDestroy {
 
   @ViewChild(OpenFileComponent, { static: true }) openFile: OpenFileComponent;
   @ViewChild(MatSelectionList, { static: false }) fileList: MatSelectionList;
 
-  private msgs$: Observable<any>;
   private sub: Subscription;
   public msgs: any = {};
   
   public uploads$: Observable<any[]>;
   public tasks: UploadTask[] = [];
   
-  constructor(private  toolbar  : ToolbarService,
-              private  profile  : UserProfile,
-              private  popup    : PopupService,
-              readonly content  : ContentResolver) {
-
-    // Gets the localized content pre-fetched during routing resolving
-    this.msgs$ = content.stream('folder');
-  }
+  constructor(private content: ContentStreamer, 
+              private toolbar: ToolbarService,
+              private profile: UserProfile, 
+              private popup: PopupService) {}
 
   ngOnInit() {
 
     // Initialize the page content
-    this.sub = this.msgs$.pipe( switchMap( msgs => {
+    this.sub = this.content.stream('folder')
+      .pipe( switchMap( msgs => {
         // Keeps a snapshot of the localized content for internal use
         this.msgs = msgs;
         // Activates the toolbar actions

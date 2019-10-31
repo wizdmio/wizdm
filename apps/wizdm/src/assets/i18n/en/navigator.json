@@ -31,30 +31,5 @@
             { "label": "Profile", "link": "profile" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
         ]
-    },
-
-    "footer": {
-
-        "copyright": "Shared with wisdom from planet Earth ©{{ year }}",
-
-        "socials": [
-            { "label": "Facebook", "icon": "fab:fa-facebook", "link": "https://facebook.com" },
-            { "label": "Twitter", "icon": "fab:fa-twitter", "link": "https://twitter.com" },
-            { "label": "LinkedIn", "icon": "fab:fa-linkedin", "link": "https://linkedin.com" },
-            { "label": "Github", "icon": "fab:fa-github", "link": "https://github.com/wizdmio/wizdm" } 
-        ],
-
-        "links": [
-            { "label": "About", "link": "about" },
-            { "label": "The project", "link": "explore/6bw5ZNpQClMzydtAAYzO" },
-            { "label": "Terms of service", "link": "terms" },
-            { "label": "Privacy", "link": "privacy" }
-        ],
-
-        "languages": [
-            { "label": "English", "image": "assets/img/gb.svg", "value": "en" },
-            { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
-            { "label": "Русский", "image": "assets/img/ru.svg", "value": "ru" }
-        ]
     }
 }

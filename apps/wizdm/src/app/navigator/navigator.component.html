@@ -18,7 +18,8 @@
           <wm-logo color="primary" routerLink="."></wm-logo>  
       
           <!-- Desktop navigation links -->
-          <wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="desktop"></wm-navbar>
+          <!--wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="desktop"></wm-navbar-->
+          <wm-navbar *ngIf="desktop && msgs.toolbar as toolbar" [menuItems]="signedIn ? toolbar.private : toolbar.public"></wm-navbar>
         
         </nav>
 
@@ -48,9 +49,10 @@
       </mat-toolbar-row>
 
       <!-- Mobile menu -->
-      <mat-toolbar-row auto *ngIf="mobile">
+      <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menu">
         
-        <wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
+        <!--wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu-->
+        <wm-menu [menuItems]="signedIn ? menu.private : menu.public" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
       
       </mat-toolbar-row>
 

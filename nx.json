@@ -23,19 +23,13 @@
     "markdown": {
       "tags": []
     },
-    "wizdm-elements": {
-      "tags": []
-    },
-    "elements": {
+    "prism": {
       "tags": []
     },
     "editable": {
       "tags": []
     },
-    "libs-doorbell": {
-      "tags": []
-    },
-    "prism": {
+    "doorbell": {
       "tags": []
     }
   }

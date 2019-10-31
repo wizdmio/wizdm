@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ContentStreamer } from '@wizdm/content';
 import { wmDocument } from '@wizdm/editable';
-import { ToolbarService } from '../../navigator';
+import { ToolbarService, NavigatorService } from '../../navigator';
 import { ProjectService, ProjectWrapper, wmProject } from '../../core/project';
-import { ActionLinkObserver } from '../../core/action-link';
-import { ContentResolver } from '../../core/content';
+import { ActionLinkObserver } from '../../utils';
 import { PopupService } from '../../elements/popup';
 import { Observable, Subject, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { switchMap, debounceTime, map, tap } from 'rxjs/operators';
@@ -15,36 +15,35 @@ import { $animations } from './editor.animations';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
   host: { 'class': 'wm-page adjust-top' },
-  animations: $animations
+  animations: $animations,
+  providers: [ ContentStreamer ]
 })
 export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy {
 
   private editMode$ = new BehaviorSubject<boolean>(false);
   private saveDocument$ = new Subject<wmDocument>();
-  private msgs$: Observable<any>;
   private subs: Subscription;
-  public msgs: any = {};
 
-  constructor(private  projects : ProjectService,
-              private  route    : ActivatedRoute,
-              private  toolbar  : ToolbarService,
-              private  popup    : PopupService,
-              private  link     : ActionLinkObserver,
-              readonly content  : ContentResolver) { 
+  constructor(private projects  : ProjectService,
+              private route     : ActivatedRoute,
+              private navigator : NavigatorService,
+              private toolbar   : ToolbarService,
+              private popup     : PopupService,
+              private content   : ContentStreamer,
+              private link      : ActionLinkObserver) { 
 
     super(projects, '');
-
-    // Gets the localized content pre-fetched during routing resolving
-    this.msgs$ = this.content.stream('editor');
   }
+
+  get msgs(): any { return this.content.select('editor'); }
   
   ngOnInit() {
     
     // Combines the observables to better handle the page needs
     this.subs = combineLatest(
 
-      // Gets a snapshot of the current localized content for internal use
-      this.msgs$.pipe( tap( msgs => this.msgs = msgs ) ),
+      // Gets the localized content pre-fetched during routing resolving
+      this.content.stream('editor'),
       
       // Loads the project upon the routed 'id' and activates the wrapper to keep it in sync
       this.loadProject().pipe( map( project => this.wrap(project) ) )
@@ -122,6 +121,9 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   // Exits edit mode (this will trigger editable document to update)
   public leaveEditMode() { this.editMode$.next(false); }
 
+  // Navigates redirecting whenever necessary
+  public navigate(url: string) { return this.navigator.navigateByUrl(url); }
+
   // Pushes the updated document to be saved
   public save(document: wmDocument) { this.saveDocument$.next( document ); }
 
@@ -143,6 +145,6 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
 
   public canDeactivate() {
     // Ask user for deactivation (leaving the page) when in editMode
-    return !this.editMode || this.popup.popupDialog(this.msgs.canLeave);
+    return !this.editMode || this.popup.popupDialog(this.content.select('editor').canLeave);
   }
 }

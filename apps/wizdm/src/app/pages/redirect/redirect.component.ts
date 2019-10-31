@@ -1,7 +1,6 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { DOCUMENT, Location } from '@angular/common';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { ContentResolver } from '../../core/content';
 import { Observable, Subscription, timer, interval } from 'rxjs';
 import { map, take, switchMap, takeWhile } from 'rxjs/operators';
 
@@ -19,11 +18,7 @@ export class RedirectComponent implements OnDestroy {
 
   constructor(@Inject(DOCUMENT) private document: Document, 
                                 private location: Location,
-                                private route: ActivatedRoute,
-                                content: ContentResolver) {
-
-    // Gets the localized content resolved during routing
-    this.msgs$ = content.stream('redirect'); 
+                                private route: ActivatedRoute) {
 
     // Creates a progress observable
     this.progress$ = this.route.queryParamMap.pipe( 

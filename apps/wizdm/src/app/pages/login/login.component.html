@@ -1,5 +1,5 @@
 
-<div fxLayout="column" fxLayoutAlign="start center" class="panel" *ngIf="msgs$ | async as msgs">
+<div fxLayout="column" fxLayoutAlign="start center" class="panel" *wmContent="let msgs select 'login'">
 
   <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 

@@ -15,6 +15,7 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
+      "@wizdm/content": ["libs/content/src/index.ts"],
       "@wizdm/connect": ["libs/connect/src/index.ts"],
       "@wizdm/markdown": ["libs/markdown/src/index.ts"],
       "@wizdm/markdown/*": ["libs/markdown/src/lib/*"],

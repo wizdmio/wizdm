@@ -1,6 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { ContentResolver } from '../../core/content';
-import { Observable, Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'wm-footer',
@@ -9,25 +8,23 @@ import { Observable, Subscription } from 'rxjs';
   host: { 'class': 'wm-footer' }
 })
 export class FooterComponent {
-  
-  readonly msgs$: Observable<any>;
-  
-  constructor(readonly content: ContentResolver) {
-
-    // Gets the localized content pre-fetched by the resolver during routing
-    this.msgs$ = content.stream("navigator.footer");
-  }
 
   readonly year = (new Date()).getFullYear();
+  
+  constructor(private router: Router) {}
 
   copyright(msg: string): string {
-
     // Interpolates the copyright message to dynamically change the current year
     return msg.interpolate(this);
   }
 
-  public redirect(url: string): boolean {
-    
-    return this.content.navigateByUrl(url), false;
+  public languageLink(lang: string): any[] {
+    // Splits the current url
+    const cmds = this.router.url.split('/');
+    // Makes sure its absolute
+    cmds[0] = '/';
+    // Overwrites the language
+    cmds[1] = lang;
+    return cmds;
   }
 }

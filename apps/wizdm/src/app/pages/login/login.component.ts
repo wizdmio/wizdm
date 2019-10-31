@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { UserProfile } from '@wizdm/connect';
-import { ContentResolver } from '../../core/content';
 import { $animations } from './login-animations';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 
 type pageTypes = 'register' | 
@@ -43,10 +42,7 @@ export class LoginComponent implements OnInit  {
   public newEmail: FormControl;
   public newPassword: FormControl;
 
-  constructor(private content: ContentResolver, private profile: UserProfile, private route: ActivatedRoute) {
-
-    // Gets the localized content pre-fetched during routing resolving
-    this.msgs$ = content.stream('login');
+  constructor(private profile: UserProfile, private router: Router, private route: ActivatedRoute) {
 
     // Creates the loging form controls
     this.name = new FormControl(null, Validators.required);
@@ -123,7 +119,7 @@ export class LoginComponent implements OnInit  {
           const userLang = user.lang || 'en';
   
           // Jump to the projects explore switching to the user language if needed
-          this.content.switchLanguage(userLang, 'explore');
+          this.router.navigate(['/', userLang, 'explore']);
         }
       })
     ).subscribe();
@@ -277,7 +273,7 @@ export class LoginComponent implements OnInit  {
     // Signing-in with a email/password using the current language than send a verification email befor jumping to the profile page
     this.auth.registerNew(email, password, name )
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.content.navigate('profile') )
+      .then( () => this.router.navigate(['../profile'], { relativeTo: this.route }) )
       .catch( error => this.showError(error.code) );
   }
 
@@ -286,7 +282,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
 
     // Send an action code link to the registerred email to reset a forgotten password
-    this.auth.forgotPassword(email, this.content.language )
+    this.auth.forgotPassword(email/*, this.content.language*/ )
       .catch( error => this.showError(error.code) );
   }
 
@@ -296,7 +292,7 @@ export class LoginComponent implements OnInit  {
 
     // Resets the forgotten password by applying the action code received than jumps to the profile page
     this.auth.resetPassword(code, newPassword)
-      .then( () => this.content.navigate('profile') )
+      .then( () => this.router.navigate(['../profile'], { relativeTo: this.route }) )
       .catch( error => this.showError(error.code) );
   }
 
@@ -307,7 +303,7 @@ export class LoginComponent implements OnInit  {
     // Update the account email by re-authenticating than send a verification request and jumps to the profile page
     this.auth.updateEmail(password, newEmail)
       .then( () => this.auth.sendEmailVerification() )
-      .then( () => this.content.navigate('profile') )
+      .then( () => this.router.navigate(['../profile'], { relativeTo: this.route }) )
       .catch( error => this.showError(error.code) );
   }
 
@@ -317,7 +313,7 @@ export class LoginComponent implements OnInit  {
 
     // Updte the account password by re-authenticating than jumps to the profile page
     this.auth.updatePassword(password, newPassword)
-      .then( () => this.content.navigate('profile') )
+      .then( () => this.router.navigate(['../profile'], { relativeTo: this.route }) )
       .catch( error => this.showError(error.code) );
   }
 
@@ -326,7 +322,7 @@ export class LoginComponent implements OnInit  {
     this.progress = true;
   
     this.auth.deleteUser(password)
-      .then( () => this.content.navigate('home') )
+      .then( () => this.router.navigate(['../home'], { relativeTo: this.route }) )
       .catch( error => this.showError(error.code) );
   }
 
@@ -336,6 +332,6 @@ export class LoginComponent implements OnInit  {
     this.auth.signOut();
     //...and navigate to home overwriting the logout route to prevent unwanted
     // behaviours in case of navigating back after logout
-    this.content.navigate('home', { replaceUrl: true });
+    this.router.navigate(['/'], { replaceUrl: true })
   }
 }  

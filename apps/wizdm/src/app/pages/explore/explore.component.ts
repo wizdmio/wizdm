@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-//import { ToolbarService, ViewportService } from '../../navigator';
+import { Router, ActivatedRoute } from '@angular/router';
+import { UserProfile } from '@wizdm/connect';
+import { NavigatorService } from '../../navigator';
 import { ProjectService, wmProject } from '../../core/project';
-import { ContentResolver } from '../../core/content';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { $animations } from './explore.animations';
@@ -16,21 +16,15 @@ import { $animations } from './explore.animations';
 })
 export class ExploreComponent {
 
-  readonly msgs$: Observable<any>;
   public projects$: Observable<wmProject[]>;
   
-  //private filters$ = new BehaviorSubject<dbQueryFn>(undefined);
-
-  get me() { return this.content.user.id || ''; }
+  get me() { return this.profile.id || ''; }
   
-  constructor(private content  : ContentResolver, 
-              private projects : ProjectService,
-              private route    : ActivatedRoute ) {
-
-    // Gets the localized content pre-fetched during routing resolving
-    this.msgs$ = this.content.stream('explore');
-
-    
+  constructor(private projects  : ProjectService,
+              private profile   : UserProfile,
+              private navigator : NavigatorService,
+              private router    : Router, 
+              private route     : ActivatedRoute ) {    
 
     // Listing all projects (using pagination)
     //this.projects$ = this.projects.paging({ limit: 10 });
@@ -53,4 +47,10 @@ export class ExploreComponent {
     );
 
   }
+
+  // Opens the project editor 
+  public openProject(id: string) { return this.router.navigate([id], { relativeTo: this.route }); }
+
+  // Navigates redirecting whenever necessary
+  public navigate(url: string) { return this.navigator.navigateByUrl(url); }
 }

@@ -1,7 +1,7 @@
 
-<ng-container *ngIf="msgs$ | async as msgs">
+<ng-container *wmContent="let msgs select 'home'">
   
-  <wm-illustration *ngIf="!!msgs.banner" class="background" color="primary" [src]="msgs.banner" [baseHref]="baseHref$ | async"></wm-illustration> 
+  <wm-illustration *ngIf="!!msgs.banner" class="background" color="primary" [src]="msgs.banner" [baseHref]="msgs.lang"></wm-illustration> 
 
   <section fxLayout="row" fxLayoutAlign="center center" class="banner">
 
@@ -13,7 +13,7 @@
       
       <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption || 'Get started' }}</button>
       
-      <p [wm-disclaimer]="msgs.join" class="mat-small" (navigate)="content.navigate($event.target)"></p>
+      <p [wm-disclaimer]="msgs.join" class="mat-small" (navigate)="navigate($event.target)"></p>
   
     </div>
 
@@ -35,7 +35,7 @@
   
             <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
             <h2><b>{{ feat.title }}</b></h2>
-            <p [wm-disclaimer]="feat.description" (navigate)="content.navigateByUrl($event.target)"></p>
+            <p [wm-disclaimer]="feat.description" (navigate)="navigate($event.target)"></p>
   
           </div>
   

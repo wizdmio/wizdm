@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,22 +11,22 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { AvatarModule } from '../../elements/avatar';
 import { IconModule } from '../../elements/icon';
 import { PopupModule } from '../../elements/popup';
-import { ContentResolver } from '../../core/content';
+import { AuthGuard, PageGuard } from '../../utils';
 import { UploadModule } from '../upload/upload.module';
 import { UserComponent } from './profile.component';
 import { UserItemComponent } from './item/item.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
   {
     path: '',
     component: UserComponent,
-    resolve: { content: ContentResolver }, 
-    data: { i18n: ['profile'] },
-    canActivate: [ ContentResolver ],
-    canDeactivate: [ ContentResolver ]
+    content: 'profile',
+    canActivate: [ AuthGuard ],
+    canDeactivate: [ PageGuard ]
   }
 ];
 
@@ -53,8 +52,7 @@ const routes: Routes = [
     AvatarModule,
     PopupModule,
     UploadModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [ RouterModule ]
+    ContentRouterModule.forChild(routes)
+  ]
 })
 export class ProfileModule { }

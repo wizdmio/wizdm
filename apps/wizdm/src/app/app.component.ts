@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
-import { Router, ResolveStart, ResolveEnd } from '@angular/router';
+import { Router, ResolveStart, NavigationEnd } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sub = this.router.events
       .pipe( 
         // Filters Resolve events only
-        filter( e => e instanceof ResolveStart || e instanceof ResolveEnd), 
+        filter( e => e instanceof ResolveStart || e instanceof NavigationEnd ), 
         // Maps the event into true/false
         map( e => e instanceof ResolveStart )
         // Shows the loader spinner while resolving the route content

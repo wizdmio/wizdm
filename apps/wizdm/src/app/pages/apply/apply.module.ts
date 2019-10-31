@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,19 +8,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { DisclaimerModule } from '../../elements/disclaimer';
 import { PopupModule } from '../../elements/popup';
-import { ContentResolver } from '../../core/content';
+import { AuthGuard, PageGuard } from '../../utils';
 import { ApplyComponent } from './apply.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
   {
     path: '',
     component: ApplyComponent,
-    resolve: { content: ContentResolver }, 
-    data: { i18n: ['apply'] },
-    canActivate: [ ContentResolver ],
-    canDeactivate: [ ContentResolver ]
+    content: 'apply', 
+    canActivate: [ AuthGuard ],
+    canDeactivate: [ PageGuard ]
   }
 ];
 
@@ -39,8 +38,7 @@ const routes: Routes = [
     MatProgressBarModule,
     DisclaimerModule,
     PopupModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [ RouterModule ]
+    ContentRouterModule.forChild(routes)
+  ]
 })
 export class ApplyModule { }

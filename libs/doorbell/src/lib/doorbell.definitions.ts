@@ -1,3 +1,5 @@
+import { InjectionToken } from '@angular/core';
+
 export interface DoorbellConfig {
   url : string,//'https://doorbell.io/api/applications'
   id  : string,//'your id here',
@@ -16,3 +18,5 @@ export interface DorbellSubmit {
   nps?         : number,
   language?    : string
 };
+
+export const DoorbellConfigToken = new InjectionToken<DoorbellConfig>('wizdm.doorbel.config');

@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Title, Meta } from '@angular/platform-browser';
 import { MediaObserver } from '@angular/flex-layout';
+import { UserProfile } from '@wizdm/connect';
+import { ContentStreamer } from '@wizdm/content';
 import { ToolbarService } from './toolbar/toolbar.service';
-import { ContentResolver } from '../core/content';
-import { ActionLinkObserver } from '../core/action-link';
+import { ActionLinkObserver } from '../utils';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { Observable, Subscription, fromEvent } from 'rxjs';
 import { map, filter, distinctUntilChanged, flatMap, startWith } from 'rxjs/operators';
@@ -15,8 +16,9 @@ import { $animations } from './navigator.animations';
   selector: 'wm-navigator',
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss'],
+  host: { 'class': 'wm-navigator' },
   animations: $animations,
-  host: { 'class': 'wm-navigator' }
+  providers: [ ContentStreamer ]
 })
 export class NavigatorComponent implements OnInit, OnDestroy {
 
@@ -24,8 +26,6 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   private feedbackDialog: FeedbackComponent;
 
   readonly scrolled$: Observable<boolean>;  
-  readonly menuDesktop$: Observable<any>;
-  readonly menuMobile$: Observable<any>; 
   readonly msgs$: Observable<any>;
   private sub: Subscription;
 
@@ -34,17 +34,15 @@ export class NavigatorComponent implements OnInit, OnDestroy {
   public menu = false;
 
   constructor(private router: Router, private media: MediaObserver, private port: ViewportRuler,
-    private title: Title, private meta: Meta, private content: ContentResolver, 
-    readonly toolbar: ToolbarService, private actionLink: ActionLinkObserver) {
+    private title: Title, 
+    private meta: Meta, 
+    private content: ContentStreamer,
+    readonly toolbar: ToolbarService, 
+    private user: UserProfile, 
+    private actionLink: ActionLinkObserver) {
 
     // Gets the localized content pre-fetched by the resolver during routing
     this.msgs$ = this.content.stream("navigator");
-
-    // Creates the observable streaming the linkbar menu items (desktop)
-    this.menuDesktop$ = this.menuObservable('toolbar');
-
-    // Creates the observable streaming the drop menu items (mobile)
-    this.menuMobile$ = this.menuObservable('menu');
 
     // Creates an observable to detect whenever the viewport is scrolled
     this.scrolled$ = fromEvent(window, 'scroll').pipe(
@@ -77,18 +75,6 @@ export class NavigatorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { this.sub.unsubscribe(); }
 
-  private menuObservable(key: string): Observable<any[]> {
-
-    return this.content.user.authenticated$.pipe(
-      flatMap( authenticated => this.msgs$.pipe( 
-        map( msgs => {
-          const menu = !!msgs && msgs[key] || {};
-          return authenticated ? menu.private : menu.public;
-        })
-      ))
-    );
-  }
-
   // Media queries to switch between desktop/mobile views
   public get mobile(): boolean { return this.media.isActive('xs');/*|| this.media.isActive('sm');*/ }
   public get desktop(): boolean { return !this.mobile; }
@@ -98,11 +84,11 @@ export class NavigatorComponent implements OnInit, OnDestroy {
 
   // Signed In status
   public get signedIn(): boolean {
-    return this.content.user.authenticated || false;
+    return this.user.authenticated || false;
   }
 
   public get userImage(): string {
-    return this.content.user.data.img;
+    return this.user.data.img;
   }
 
   public feedbackSent(success: boolean) {

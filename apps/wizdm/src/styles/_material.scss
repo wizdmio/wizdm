@@ -82,7 +82,7 @@ $wm-theme: extend-material-theme($wm-theme,
 */
 
 // Overrides standard theme foreground and background values with customized ones
-@function override-material-theme($theme, $foreground, $background) {
+@function tweak-material-theme($theme, $foreground, $background) {
   
   // Gets the standard material maps of fore/background
   $fore: map-get($theme, foreground);
@@ -93,33 +93,37 @@ $wm-theme: extend-material-theme($wm-theme,
     foreground: map-merge($fore, $foreground),
     background: map-merge($back, $background)
   ));
-
-  // Picks the text/contrast colors from the theme to be used as palette contrasts
-  $is-dark : map-get($theme, is-dark);
-  $dark    : map-get($foreground, if(is-dark == true, contrast, text));
-  $light   : map-get($foreground, if(is-dark == true, text, contrast));
   
   // Overrides the default contrast values to reflect the new foreground
-  @return map-merge($result, override-material-contrast($result, $dark, $light));
+  @return map-merge($result, tweak-material-contrast($result));
 }
 
 // Overrides standard theme palette contrasts with customized values
-@function override-material-contrast($theme, $dark: $dark-primary-text, $light: $light-primary-text) {
+@function tweak-material-contrast($theme) {
 
+  // Picks the light/dark text overrides from the extended foreground 
+  $fore: map-get($theme, foreground);
+  $dark: map-get($fore, dark-text);
+  $light: map-get($fore, light-text);
+
+  // Loops on the three palettes
   @each $pal in ('primary', 'accent', 'warn') {
 
     $palette: map-get($theme, $pal);
 
+    // Loops on the three color contrasts
     @each $cnt in ('default', 'lighter', 'darker') {
 
       $contrast: map-get($palette, #{$cnt}-contrast);
 
-      @if $contrast == $dark-primary-text {
+      // Overrides $dark-primary-text values
+      @if $dark and $contrast == $dark-primary-text {
         $palette: map-merge($palette, (#{$cnt}-contrast: $dark));
         $theme: map-merge($theme, (#{$pal}: $palette ));
       }
 
-      @else if $contrast == $light-primary-text {
+      // Overrides $light-primary-text values
+      @if $light and $contrast == $light-primary-text {
         $palette: map-merge($palette, (#{$cnt}-contrast: $light));
         $theme: map-merge($theme, (#{$pal}: $palette ));
       }
@@ -129,7 +133,7 @@ $wm-theme: extend-material-theme($wm-theme,
   @return $theme;
 }
 
-@mixin override-material-typo-margins(
+@mixin tweak-material-typo-margins(
 
   $display-4:    24,
   $display-3:    24,

@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ContentModule } from '@wizdm/content';
 import { IconModule } from '../../elements/icon';
 import { FeedbackComponent } from './feedback.component';
 
@@ -22,6 +23,7 @@ import { FeedbackComponent } from './feedback.component';
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
+    ContentModule,
     IconModule
   ],
   declarations: [

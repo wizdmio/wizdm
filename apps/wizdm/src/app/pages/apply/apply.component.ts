@@ -3,16 +3,16 @@ import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material/stepper';
 import { UserProfile, wmUser } from '@wizdm/connect';
+import { ContentStreamer } from '@wizdm/content';
 import { wmDocument } from '@wizdm/editable';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { ToolbarService } from '../../navigator';
+import { ToolbarService, NavigatorService } from '../../navigator';
 import { ProjectService, wmProject } from '../../core/project';
-import { CanPageDeactivate, ContentResolver} from '../../core/content';
-import { EditableConverter } from '../../core/converter';
+import { CanPageDeactivate } from '../../utils';
+import { EditableConverter } from '../../utils/converter';
 import { PopupService } from '../../elements/popup';
 import { $animations } from './apply.animations';
-
 
 export interface wmApplication {
 
@@ -36,13 +36,14 @@ interface userApply extends wmUser {
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
   host: { 'class': 'wm-page adjust-top content-padding' },
-  animations: $animations
+  animations: $animations,
+  providers: [ ContentStreamer ]
 })
 export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate, OnDestroy {
 
-  public msgs$: Observable<any>;
+  //public msgs$: Observable<any>;
   private sub: Subscription;
-  private msgs: any = {};
+  public msgs: any;
 
   public headerForm: FormGroup;
   public stepForms : FormGroup[] = [];
@@ -51,16 +52,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
   public progress = false;
   
   constructor(private builder   : FormBuilder, 
-              private content   : ContentResolver,
               private profile   : UserProfile<userApply>,
               private converter : EditableConverter,
               private project   : ProjectService,
+              private navigator : NavigatorService,
               private toolbar   : ToolbarService,
-              private popup     : PopupService) { 
-
-    // Gets the localized content resolved during routing
-    this.msgs$ = content.stream('apply'); 
-  }
+              private popup     : PopupService,
+              private content   : ContentStreamer) {}
 
   ngOnInit() {
 
@@ -68,25 +66,23 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
     this.welcomeBack = !!this.application;
 
     // Resolves the localized content
-    this.sub = this.msgs$.subscribe( msgs => {
-      // Keeps a snapshot of the localized content for internal use
-      this.msgs = msgs;
-      // Build the stepper forms initializing the field values with the last application eventually saved
-      this.buildForm(this.application || {});
-    });
+    this.sub = this.content.stream('apply').pipe( 
 
-    // Enable actions on the navigation bar
-    this.sub.add( this.msgs$.pipe( 
-      // Enables the action buttons
       switchMap( msgs => {
+
+        // Keeps a snapshot of the localized content for internal use
+        this.msgs = msgs;
+        // Build the stepper forms initializing the field values with the last application eventually saved
+        this.buildForm(this.application || {});
         
+        // Enables the action buttons
         const actions = this.toolbar.activateActions(msgs.actions);
         this.toolbar.enableAction('clear', this.welcomeBack);
         return actions;
 
       } )
       // Subscribes to the actions
-    ).subscribe( code => this.disclaimerAction(code) ));
+    ).subscribe( code => this.disclaimerAction(code) );
   }
 
   ngAfterViewInit() {
@@ -290,7 +286,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
       .then( () => { 
 
         // Navigate back to the project explore reporting the creation of a new project
-        this.content.navigate('explore', { queryParams: {
+        this.navigator.navigate('explore', { queryParams: {
           project: 'new'
         }});
       })
@@ -313,7 +309,7 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
 
       // Navigates to the requested page otherwise
       default:
-      this.content.navigate(action);
+      this.navigator.navigate(action);
       break;
     }
   }

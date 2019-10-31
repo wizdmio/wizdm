@@ -1,10 +1,10 @@
 
-<section class="padding-top" fxLayout="column" fxLayoutAlign="center center" *ngIf="msgs$ | async as msgs">
+<section class="padding-top" fxLayout="column" fxLayoutAlign="center center" *wmContent="let data select 'notFound'">
   
-  <h1>{{ msgs.title }}</h1>
+  <h1>{{ data.title }}</h1>
   
-  <p>{{ msgs.e404 }}</p>
+  <p>{{ data.e404 }}</p>
   
-  <h5 [innerHTML]="interpolate(msgs.body)"></h5>  
+  <h5 [innerHTML]="data.body?.interpolate(this)"></h5>  
 
 </section>

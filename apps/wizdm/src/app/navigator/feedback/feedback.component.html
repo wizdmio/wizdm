@@ -1,5 +1,5 @@
 
-<ng-container *ngIf="msgs$ | async as msgs">
+<ng-container *wmContent="let msgs select 'feedback'">
 
   <button mat-raised-button class="feedback-btn" (click)="open()">
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
@@ -13,7 +13,7 @@
 <!-- Feedback Popup Dialog -->
 <ng-template #formTemplate>
 
-  <ng-container *ngIf="msgs$ | async as msgs">
+  <ng-container *wmContent="let msgs select 'feedback'">
 
     <!-- Common header with close button -->
     <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">

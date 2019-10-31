@@ -24,8 +24,8 @@ const routes: Routes = [
     component: StaticComponent,
     //resolve: { content: ContentResolver }, 
     //data: { i18n: ['static'] },
-    //canActivate: [ ContentResolver ],
-    //canDeactivate: [ ContentResolver ]
+    //canActivate: [ AuthGuard ],
+    //canDeactivate: [ PageGuard ]
   }
 ];
 

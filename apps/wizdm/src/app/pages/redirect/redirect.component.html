@@ -1,5 +1,5 @@
 
-<ng-container *ngIf="msgs$ | async as msgs">
+<ng-container *wmContent="let msgs select 'redirect'">
 
   <h1 class="padding-top">{{ msgs.leaving }}</h1> 
   
