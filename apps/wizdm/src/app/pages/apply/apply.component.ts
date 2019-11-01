@@ -10,7 +10,7 @@ import { switchMap, catchError } from 'rxjs/operators';
 import { ToolbarService, NavigatorService } from '../../navigator';
 import { ProjectService, wmProject } from '../../core/project';
 import { CanPageDeactivate } from '../../utils';
-import { EditableConverter } from '../../utils/converter';
+import { EditableConverter } from '../../utils/doc-converter';
 import { PopupService } from '../../elements/popup';
 import { $animations } from './apply.animations';
 
