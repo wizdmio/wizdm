@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-//import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { MarkdownModule } from '@wizdm/markdown';
 
 // Includes a subset of languages to support syntax highlighting. Checkout Prism.js to add more
@@ -15,15 +14,14 @@ import 'prismjs/components/prism-typescript';
 */
 
 import { AnimateModule } from '../../elements/animate';
-//import { ContentResolver } from '../../core';
+import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 
-const routes: Routes = [
+const routes: RoutesWithContent = [
   {
     path: '',
     component: StaticComponent,
-    //resolve: { content: ContentResolver }, 
-    //data: { i18n: ['static'] },
+    resolve: { document: StaticResolver }
     //canActivate: [ AuthGuard ],
     //canDeactivate: [ PageGuard ]
   }
@@ -33,12 +31,11 @@ const routes: Routes = [
   declarations: [ StaticComponent ],
   imports: [
     CommonModule,
-    //FlexLayoutModule,
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
     AnimateModule,
-    RouterModule.forChild(routes)
+    ContentRouterModule.forChild(routes)
   ],
-  exports: [ RouterModule ]
+  providers: [ StaticResolver ]
 })
 export class StaticModule { }
