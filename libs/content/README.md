@@ -1,7 +1,3 @@
-# content-lite
+# content
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `ng test content-lite` to execute the unit tests.
+Runtime content management by the Angular Router. The library provides a set of features to automatically install content resolvers to load json files from assets while routing lazily loaded modules.
