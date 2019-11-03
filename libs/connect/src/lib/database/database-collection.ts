@@ -1,36 +1,34 @@
-import { DatabaseService, dbCollectionRef, dbStreamFn } from './database.service';
+import { DatabaseApplication, dbCollectionRef, dbQueryFn } from './database-application';
 import { DatabaseDocument, dbCommon } from './database-document';
-import { Observable, of, from } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, mergeMap, expand, takeWhile } from 'rxjs/operators';
 
-/**
- * Collection object in the database, created by the DatabaseService
- */
+/** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends dbCommon> {
 
-  constructor(readonly db: DatabaseService, public path: string) { }
+  constructor(readonly db: DatabaseApplication, public ref: dbCollectionRef) {}
 
-  /**
-   * Helper returing the collection reference for internal use
-   */
-  public col(sf?: dbStreamFn): dbCollectionRef<T> {
-    return this.db.col<T>(this.path, sf);
+  /** Returns the collection object id */
+  public get id(): string { return this.ref.id; }
+
+  /** Returns the collection object path relative to the database root */
+  public get path(): string { return this.ref.path; }
+
+  /** Generates a unique ID as if to be used with a a new document */
+  public uniqueId(): string { return this.ref.doc().id; }
+
+  /** Helper returing the collection reference for internal use */
+  public col(qf?: dbQueryFn) {
+    return this.db.afs.collection(this.ref, qf);
   }
 
   /**
-   * Check for document existance
+   * Returns the requested child document
+   * @param path the document path within the collection. If no path is specified, 
+   * an automatically-generated unique ID will be used for the refurned DatabaseDocument
    */
-  public exists(): Promise<boolean> {
-    return this.col().ref.limit(1).get(undefined)
-      .then(snap => snap.size > 0);
-  }
-
-  /**
-   * Returns the requested document
-   * @param id the document id
-   */
-  public document(id: string): DatabaseDocument<T> {
-   return this.db.document<T>(this.path, id);
+  public document<D extends dbCommon = T>(path?: string): DatabaseDocument<D> {
+   return this.db.document<D>( this.ref.doc(path) );
   }
 
   /**
@@ -39,34 +37,41 @@ export class DatabaseCollection<T extends dbCommon> {
    */
   public add(data: T): Promise<DatabaseDocument<T>> {
     const timestamp = this.db.timestamp;
-    return this.col().add({
+    return this.ref.add({
       ...data as any,
       created: timestamp
-    }).then( ref => this.db.document<T>(this.path, ref.id) );
+    }).then( ref => this.db.document<T>(ref) );
   }
 
   /**
-   * Returns a promise of the collection content as an array
-   * @param sf the optional filtering funciton
+   * Returns a promise of the collection content as an array.
+   * Thanks to AngularFire this runs in NgZone triggering change detection.
+   * @param qf the optional filtering funciton
    */
-  public get(sf?: dbStreamFn): Observable<T[]> {
-    return this.col(sf).get()
-      .pipe( map( snapshot => {
+  public get(qf?: dbQueryFn): Promise<T[]> {
+    // Assosiates the query to the collection ref, if any
+    const ref = !!qf ? qf(this.ref) : this.ref;
+    // Gets the document snapshot
+    return ref.get().then( snapshot => { 
+        // Maps the snapshot in the dbCommon-like content
         const docs = snapshot.docs;
         return docs.map( doc => {
           const data = doc.data();
           const id = doc.id;
           return ( (typeof data !== 'undefined') ? { ...data as any, id } : undefined );
         });
-      }));
+    });
   }
 
   /**
-   * Streams the collection content as an array into an observable
-   * @param sf the optional filtering funciton
+   * Streams the collection content as an array into an observable.
+   * Thanks to AngularFire this runs in NgZone triggering change detection.
+   * @param qf the optional filtering funciton
    */
-  public stream(sf?: dbStreamFn): Observable<T[]> {
-    return this.col(sf).snapshotChanges()
+  public stream(qf?: dbQueryFn): Observable<T[]> {
+    // Gets a snapshotChanges observable using AungularFirestoreColleciton
+    return this.col(qf).snapshotChanges()
+      // Than maps the snapshot to the dbCommon-like content
       .pipe( map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
@@ -87,11 +92,12 @@ export class DatabaseCollection<T extends dbCommon> {
       .pipe(// Recursively delete the next batches 
         expand(() => this.wipeBatch(batchSize) ),
         takeWhile( val => val >= batchSize )
-      ).toPromise().then( () => {} );
+      ).toPromise().then( () => null );
   }
 
   // Detetes documents as batched transaction
   private wipeBatch(batchSize: number): Observable<number> {
+
     // Makes sure to limit the request up to bachSize documents
     return this.col(ref => ref.limit(batchSize)).get()
       .pipe( mergeMap(snapshot => {
@@ -101,7 +107,7 @@ export class DatabaseCollection<T extends dbCommon> {
           batch.delete(doc.ref);
         });
         // Commits the batch write and returns the snapshot length
-        return from( batch.commit().then(() => snapshot.size) );
+        return batch.commit().then(() => snapshot.size);
       }));
   }
 }

@@ -5,7 +5,7 @@ import { EditableDocument } from './model/editable-document';
 import { EditableInline } from './model/editable-inline';
 import { EditableContent } from './model/editable-content';
 import { EditableSelection } from './model/editable-selection';
-import { EditableFactory } from './factory/editable-factory.service';
+import { EditableFactoryService } from './factory/editable-factory.service';
 
 @Component({
   selector: '[wm-editable-document]',
@@ -25,7 +25,7 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
 
   private get window(): Window { return this.document.defaultView; }
 
-  constructor(@Inject(DOCUMENT) private document: Document, factory: EditableFactory) { 
+  constructor(@Inject(DOCUMENT) private document: Document, factory: EditableFactoryService) { 
     super(factory, null); 
     // Makes sure a minimal document always exists
     this.new();

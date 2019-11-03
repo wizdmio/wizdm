@@ -1,7 +1,8 @@
 import { wmEditable, wmParent, wmNodeType, wmIndentType, wmSizeLevel, wmAlignType, wmTextStyle } from './editable-types';
-import { EditableFactory, EditableTypes } from '../factory/editable-factory.service';
+import { EditableFactory, EditableTypes } from './editable-factory';
 
 export type EditablePosition = number[];
+
 export abstract class EditableContent<T extends wmEditable = wmEditable> {
 
   protected node: T;

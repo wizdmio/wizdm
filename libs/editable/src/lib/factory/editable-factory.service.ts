@@ -6,14 +6,11 @@ import { EditableInline } from '../model/editable-inline';
 import { EditableTable, EditableRow, EditableCell } from '../model/editable-table';
 import { EditableFigure, EditableImage, EditableCaption } from '../model/editable-figure';
 import { wmDocument, wmBlock, wmBulleted, wmNumbered, wmList, wmItem, wmHeading, wmParagraph, wmInline, wmText, wmLink, wmTable, wmRow, wmCell, wmFigure, wmImage, wmCaption, wmEditable } from '../model/editable-types';
+import { EditableTypes, EditableFactory } from '../model/editable-factory';
 import { Injectable } from '@angular/core';
 
-export type EditableTypes = EditableDocument|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableInline|EditableFigure|EditableImage|EditableCaption;
-
-@Injectable({ 
-  providedIn: 'root' 
-})
-export class EditableFactory {
+@Injectable()
+export class EditableFactoryService extends EditableFactory {
 
   node(data: wmDocument): EditableDocument;
   node(data: wmBlock): EditableBlock;
