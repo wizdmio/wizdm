@@ -19,8 +19,8 @@ import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ProfileComponent } from './profile.component';
-import { ProfileFormComponent } from './profile-form/profile-form.component';
-import { ProfilePhotoComponent } from './profile-photo/profile-photo.component';
+import { UserFormComponent } from './user-form/user-form.component';
+import { UserPhotoComponent } from './user-photo/user-photo.component';
 
 const routes: RoutesWithContent = [
   {
@@ -35,8 +35,8 @@ const routes: RoutesWithContent = [
 @NgModule({
   declarations: [
     ProfileComponent,
-    ProfileFormComponent,
-    ProfilePhotoComponent
+    UserFormComponent,
+    UserPhotoComponent
   ],
   imports: [
     CommonModule,

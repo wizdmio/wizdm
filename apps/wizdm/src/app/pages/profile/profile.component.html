@@ -30,10 +30,10 @@
       <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start center" fxLayoutGap="32px">
 
         <!-- Profile form -->
-        <wm-profile-form fxFlexOrder.lt-sm="2" [(value)]="profileData" #form></wm-profile-form>
+        <wm-user-form fxFlexOrder.lt-sm="2" [(value)]="profileData" #form></wm-user-form>
 
         <!-- Profile photo -->
-        <wm-profile-photo fxFlexOrder.lt-sm="1" [photo]="profilePhoto" (update)="updatePhoto($event)" (delete)="deletePhoto()"></wm-profile-photo>
+        <wm-user-photo fxFlexOrder.lt-sm="1" [photo]="profilePhoto" (update)="updatePhoto($event)" (delete)="deletePhoto()"></wm-user-photo>
       
       </div>
 

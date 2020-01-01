@@ -33,6 +33,10 @@ export class EditorComponent /*extends ProjectWrapper*/ implements OnInit, OnDes
   }
 
   get msgs(): any { return this.content.select('editor'); }
+
+  get document(): wmDocument {
+    return null;
+  }
   
   ngOnInit() {
     /*

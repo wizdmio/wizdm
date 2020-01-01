@@ -25,32 +25,4 @@
 
   </section>
 
-  <section class="features" fxLayout="column" fxLayoutAlign="center center">
-
-    <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column">
-  
-      <ng-container *ngFor="let feat of msgs.features">
-    
-        <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
-  
-          <div class="content mat-elevation-z2" wmAnimate="pulse" speed="fast" aos>
-
-            <div *ngIf="feat.comingSoon" class="coming-soon accent background-color-default contrast-default mat-small">{{ msgs.comingSoon }}</div>
-  
-            <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
-
-            <h2><b>{{ feat.title }}</b></h2>
-            
-            <p [wm-readme]="feat.description"></p>
-  
-          </div>
-  
-        </div>
-  
-      </ng-container>
-      
-    </div>
-  
-  </section>
-
 </ng-container>

@@ -12,7 +12,8 @@ export const content: ContentConfig = {
 };
 
 export const router: ExtraOptions = { 
-  anchorScrolling: "enabled"
+  anchorScrolling: "enabled",
+  scrollPositionRestoration: "enabled"
 };
 
 // Environment object common to all build configurations

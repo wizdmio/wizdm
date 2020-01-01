@@ -46,7 +46,7 @@ export class StaticResolver implements Resolve<string> {
         throw e;
       }),
       // Redirects to NotFound when no content is found
-      catchError( () => this.router.navigate(['/', lang, 'not-found']).then( () => '') )
+      catchError( () => this.router.navigate(['/not-found']).then( () => '') )
     );
   }
 }

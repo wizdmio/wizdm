@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StaticResolver } from './static-resolver.service';
+import { NotifyService } from './notify.service';
 
-describe('StaticResolver', () => {
+describe('NotifyService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: StaticResolver = TestBed.get(StaticResolver);
+    const service: NotifyService = TestBed.get(NotifyService);
     expect(service).toBeTruthy();
   });
 });

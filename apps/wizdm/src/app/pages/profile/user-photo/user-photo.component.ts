@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'wm-profile-photo',
-  templateUrl: './profile-photo.component.html',
-  styleUrls: ['./profile-photo.component.scss']
+  selector: 'wm-user-photo',
+  templateUrl: './user-photo.component.html',
+  styleUrls: ['./user-photo.component.scss']
 })
-export class ProfilePhotoComponent {
+export class UserPhotoComponent {
 
   @Input() photo: string;
 

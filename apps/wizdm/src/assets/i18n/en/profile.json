@@ -75,7 +75,7 @@
 
   "account": {
     
-    "title": "Account",
+    "title": "Account Settings",
     "description": "Your account has been created on *{{ created }}*.",
     "verifyEmail": {
       "title": "Verify Email",

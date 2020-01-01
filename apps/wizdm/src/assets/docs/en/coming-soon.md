@@ -8,4 +8,6 @@ Thank you for your interest in us. We are working to launch a fully functional t
 
 <- 
 
-[Back to Home](home)
+[Back](back)
+
+[Home](home)

@@ -69,13 +69,14 @@ export class Member<T extends wmMember = wmMember> extends DatabaseDocument<T> i
   }
 
   // Extends the delete function to wipe the bookmarks too
-  public delete(): Promise<void> {
+  /*public delete(): Promise<void> {
 
     // Wipes the bookmarks first
+    // DONT FORGET TO ADD THE SECURITY RULES TO LET THE USER WIPE THE BOOKMARK COLLECTION
     return this.bookmarks.wipe()
       // Deletes the profile document last
       .then( () => super.delete() );
-  }
+  }*/
 
   /** Creates the user profile from a User object */
   public register(user: User): Promise<void> {

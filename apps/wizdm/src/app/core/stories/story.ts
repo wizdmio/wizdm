@@ -135,7 +135,7 @@ export class Story extends DatabaseDocument<wmStory> {
 
   private figurify(figure: wmFigure): string {
     // Extracts the image url from a figure
-    return ('content' in figure) && (figure.content.find( item => item.type === 'image') as wmImage || {}).url || '';
+    return ('content' in figure) && (figure.content.find( item => item.type === 'image') as wmImage || { url: '' }).url || '';
   }
 
 /*

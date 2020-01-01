@@ -25,5 +25,7 @@ Wizdm is licensed under the [MIT-License](license).
 [Firebase](https://firebase.google.com/docs)
 
 [Github](https://github.com/wizdmio/wizdm) 
- 
-[Back to Home](home)
+
+[Back](back)
+
+[Home](home)

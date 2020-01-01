@@ -5,16 +5,16 @@
   <div fxFlex="1 1 auto" class="desk">
 
     <!-- Document body -->
-    <div class="page background-color" 
-      [wm-editable-document]="document"
+    <wm-editable-document class="page background-color" 
+      [source]="document"
       [edit]="editMode" 
-      [@editing]="editMode"
       (contextmenu)="editMode ? menu.open($event) : true" 
       (navigate)="navigate($event)"
       (longpress)="longpress.lookup($event)"
       (change)="save($event)"
+      [@editing]="editMode"
       #doc>
-    </div>
+    </wm-editable-document>
 
     <!-- Context menu -->
     <wm-context-menu color="primary" [sel]="doc.selection" [msgs]="msgs.tools" #menu></wm-context-menu>

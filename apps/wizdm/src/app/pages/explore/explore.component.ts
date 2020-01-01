@@ -1,20 +1,16 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
-import { RedirectService } from '@wizdm/redirect';
-//import { ProjectService } from 'app/core/project';
 import { Member } from 'app/core/member';
 import { wmStory } from 'app/core/stories';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { $animations } from './explore.animations';
+
 
 @Component({
   selector: 'wm-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
-  host: { 'class': 'wm-page adjust-top content-padding' },
-  animations: $animations
+  host: { 'class': 'wm-page adjust-top content-padding' }
 })
 export class ExploreComponent extends PagedCollection<wmStory> {
 

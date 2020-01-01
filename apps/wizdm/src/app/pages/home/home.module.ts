@@ -9,7 +9,7 @@ import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { IllustrationModule } from '@wizdm/elements/illustration';
 //import { AuthGuard } from 'app/utils/auth-guard';
-import { PageGuard } from 'app/utils/page-guard';
+//import { PageGuard } from 'app/utils/page-guard';
 import { HomeComponent } from './home.component';
 
 const routes: RoutesWithContent = [
@@ -18,7 +18,7 @@ const routes: RoutesWithContent = [
     content: 'home',
     component: HomeComponent,
     //canActivate: [ AuthGuard ],
-    canDeactivate: [ PageGuard ]
+    //canDeactivate: [ PageGuard ]
   }
 ];
 

@@ -5,11 +5,11 @@ import { Subscription } from "rxjs";
 import moment from 'moment';
 
 @Component({
-  selector: 'wm-profile-form',
-  templateUrl: './profile-form.component.html',
-  styleUrls: ['./profile-form.component.scss']
+  selector: 'wm-user-form',
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.scss']
 })
-export class ProfileFormComponent extends FormGroup implements OnDestroy {
+export class UserFormComponent extends FormGroup implements OnDestroy {
 
   private sub: Subscription;
   //readonly form: FormGroup;

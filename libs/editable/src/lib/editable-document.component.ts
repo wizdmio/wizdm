@@ -8,7 +8,7 @@ import { EditableSelection } from './model/editable-selection';
 import { EditableFactoryService } from './factory/editable-factory.service';
 
 @Component({
-  selector: '[wm-editable-document]',
+  selector: 'wm-editable-document',
   templateUrl: './editable-document.component.html',
   styleUrls: [ './editable-document.component.scss' ],
   host: { 'class': 'wm-editable-document' },
@@ -33,7 +33,7 @@ export class DocumentComponent extends EditableDocument implements AfterViewChec
 
   /** Document source */
   private source: wmDocument;
-  @Input('wm-editable-document') set _source(source: wmDocument) {
+  @Input('source') set _source(source: wmDocument) {
 
     // Keeps track of the source
     this.source = source;

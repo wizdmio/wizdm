@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableModule } from '@wizdm/editable';
+import { ReadmeModule } from '@wizdm/elements/readme';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { EditorComponent } from './editor.component';
@@ -37,6 +38,7 @@ const routes: RoutesWithContent = [
     MatDividerModule,
     MatSidenavModule,
     EditableModule,
+    ReadmeModule,
     CanLeaveModule,
     ContentRouterModule.forChild(routes)
   ],

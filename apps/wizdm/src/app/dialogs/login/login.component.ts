@@ -315,9 +315,11 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
         // Navigates home first
         this.navigate('/')
           // Deletes the user member first 
-          .then( () =>this.member.delete() )
+          .then( () => this.member.delete() )
           // Deletes the user object next
-          .then( () => user.delete() );
+          .then( () => user.delete() )
+          // Dispays the error code, eventually
+          .catch( error => this.showError(error.code) );
       })
       // Closes the dialog returning null
       .then( () => this.close(null) )

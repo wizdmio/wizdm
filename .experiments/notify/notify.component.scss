@@ -1,0 +1,40 @@
+//@import 'variables';
+//@import 'theme';
+
+//$wm-message-padding: 16px !default;
+
+:host {
+  display: block;
+  position: fixed;
+/*
+  top: $wm-content-top-desktop + 16px;
+  left: 10vw;
+  width: 80vw;
+  @media ($mat-xsmall) {
+    top: $wm-content-top-mobile + 8px;
+    left: 4px;
+    width: calc(100% - 8px);
+  }
+
+  // Uses the "accent" color palette
+  .info {
+    @include mat-elevation(8);
+    background-color: mat-color($wm-accent, 50);
+    color: mat-color($wm-accent, 600);
+    border: 1px solid mat-color($wm-accent, 600);
+    border-radius: 5px;
+  }
+
+  // Uses the "warning" color palette
+  .error {
+    @include mat-elevation(8);
+    background-color: mat-color($wm-warn, 50);
+    color: mat-color($wm-warn, 600);
+    border: 1px solid mat-color($wm-warn, 600);
+    border-radius: 5px;
+  }
+  */
+  .message {
+    text-align: center;
+  }
+}

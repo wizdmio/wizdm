@@ -1,0 +1,18 @@
+
+<ng-content></ng-content>
+
+<!-- Consent Popup Dialog -->
+<ng-template #consent>
+
+  <h2 mat-dialog-title>{{ msgs.title }}</h2>
+
+  <mat-dialog-content>
+    <wm-disclaimer>{{ msgs.description }}</wm-disclaimer>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close="true" 
+      color="primary"cdkFocusInitial>{{ msgs.accept }}</button>
+  </mat-dialog-actions>
+
+</ng-template>

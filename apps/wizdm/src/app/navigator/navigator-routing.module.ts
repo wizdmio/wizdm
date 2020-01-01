@@ -4,7 +4,6 @@ import { RedirectService } from '@wizdm/redirect';
 import { LanguageSelector } from 'app/utils/lang-selector';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from 'app/utils/action-link';
-
 import { NavigatorComponent } from './navigator.component';
 
 const routes: RoutesWithContent = [
@@ -40,14 +39,15 @@ const routes: RoutesWithContent = [
       // Active pages
       { path: 'apply',       loadChildren: () => import('../pages/apply/apply.module').then(m => m.ApplyModule) },
       { path: 'explore',     loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },
-      { path: 'explore/:id', loadChildren: () => import('../pages/editor/editor.module').then(m => m.EditorModule) },
+      //{ path: 'explore/:id', loadChildren: () => import('../pages/editor/editor.module').then(m => m.EditorModule) },
       { path: 'profile',     loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
-      { path: 'folder',      loadChildren: () => import('../pages/folder/folder.module').then(m => m.FolderModule) },
+      //{ path: 'folder',      loadChildren: () => import('../pages/folder/folder.module').then(m => m.FolderModule) },
+      { path: 'docs/:name',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Intercepts routing "action-links" to execute a non-routing action
       { path: 'login',       canActivate: [ ActionLinkObserver ] },
       { path: 'contact',     canActivate: [ ActionLinkObserver ] },
-      { path: 'edit',        canActivate: [ ActionLinkObserver ] },
+      { path: 'back',        canActivate: [ ActionLinkObserver ] },
       
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      
