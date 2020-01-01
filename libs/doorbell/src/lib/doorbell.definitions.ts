@@ -1,9 +1,9 @@
 import { InjectionToken } from '@angular/core';
 
 export interface DoorbellConfig {
-  url : string,//'https://doorbell.io/api/applications'
-  id  : string,//'your id here',
-  key : string,//'your key here'
+  url    : string,//'https://doorbell.io/api/applications'
+  id     : string,//'your id here',
+  appKey : string,//'your key here'
 };
 
 export interface DorbellSubmit {

@@ -12,7 +12,7 @@ export class DoorbellService {
 
   constructor(@Inject(DoorbellConfigToken) private config: DoorbellConfig, private http: HttpClient) { 
 
-    if(!config.url || !config.id || !config.key) {
+    if(!config.url || !config.id || !config.appKey) {
       throw( new Error('DoorbellSerive requires a valid configuration!!!') );
     }
   }
@@ -22,7 +22,7 @@ export class DoorbellService {
 
     return this.http.post(`${this.config.url}/${this.config.id}/open`, '', { 
       headers: { 'Content-Type': 'text/html' },
-      params: { 'key': this.config.key },
+      params: { 'key': this.config.appKey },
       observe: 'response',
       responseType: 'text' 
      }).toPromise().then( res => {console.log(res); return res.status === 201;} );
@@ -41,7 +41,7 @@ export class DoorbellService {
       return this.http.post(`${this.config.url}/${this.config.id}/submit`, 
         { ...body, attachments }, { 
           headers: { 'Content-Type': 'application/json' },
-          params: { 'key': this.config.key },
+          params: { 'key': this.config.appKey },
           observe: 'response',
           responseType: 'text' 
         }
@@ -76,7 +76,7 @@ export class DoorbellService {
     return this.http.post(`${this.config.url}/${this.config.id}/upload`, 
       this.formData(files), { 
         headers: { 'Accept': 'application/json' }, //'Content-Type': 'multipart/form-data' },
-        params: { 'key': this.config.key },
+        params: { 'key': this.config.appKey },
         observe: 'response',
         responseType: 'json' 
       }
