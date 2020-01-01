@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { DatabaseService, PagedCollection, UserProfile } from '@wizdm/connect';
+import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
 import { map, take, debounceTime } from 'rxjs/operators';
-import { ProjectWrapper, wmProject } from './project-wrapper';
+import { Member } from '../member';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectService extends PagedCollection<wmProject> {
+export class ProjectService extends PagedCollection<any> {
 
-  constructor(db: DatabaseService, readonly profile: UserProfile) {
-    super(db, '/projects');
+  constructor(db: DatabaseService, readonly member: Member) {
+    super(db, db.col('/projects'));
   }
 
   // Current user id
-  public get userId(): string { return this.profile.id; }
+  public get userId(): string { return this.member.id; }
 
   /**
    * Verifies if a project with the specified name already exists
@@ -42,16 +42,16 @@ export class ProjectService extends PagedCollection<wmProject> {
     return data;
   }
 
-  public project(id: string): ProjectWrapper {
-    return new ProjectWrapper(this, id);
+  public project(id: string): this {
+    return null;//new ProjectWrapper(this, id);
   }
 
-  public addProject(data: wmProject): Promise<string> {
+  public addProject(data: any): Promise<string> {
     return this.add( this.sanitizeData(data) )
       .then( doc => doc.id );
   }
 
-  public getProject(id: string): Promise<wmProject> {
-    return this.document(id).get().toPromise();
+  public getProject(id: string): Promise<any> {
+    return this.document(id).get();
   }
 }

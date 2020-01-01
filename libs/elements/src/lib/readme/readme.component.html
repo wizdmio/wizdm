@@ -1,0 +1,23 @@
+<ng-content *ngIf="segments.length === 0"></ng-content>
+
+<ng-container *ngFor="let segment of segments">
+
+  <ng-container [ngSwitch]="segment.type">
+
+    <ng-container *ngSwitchCase="'text'">{{ interpolate(segment.content) }}</ng-container>
+
+    <b *ngSwitchCase="'bold'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></b>
+
+    <i *ngSwitchCase="'italic'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></i>
+
+    <u *ngSwitchCase="'underline'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></u>
+
+    <s *ngSwitchCase="'strikethrough'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></s>
+
+    <a *ngSwitchCase="'link'" [href]="segment.url" [context]="context" [wm-readme]="segment.content" (click)="navigate(segment.url)"></a>
+
+    <br *ngSwitchCase="'break'" />
+
+  </ng-container>
+
+</ng-container>

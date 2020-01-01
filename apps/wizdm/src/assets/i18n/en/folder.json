@@ -2,14 +2,14 @@
   "title": "My files",
   "description": "Use Upload to load files into your private area",
 
-  "actions": [
-    { "caption": "Delete", "icon": "delete", "code": "delete" },
-    { "caption": "Upload", "icon": "cloud_upload", "code": "upload" }
-  ],
+  "actions": {
+    "delete": { "caption": "Delete", "icon": "fas:fa-trash-alt" },
+    "upload": { "caption": "Upload", "icon": "fas:fa-cloud-upload-alt" }
+  },
 
   "canDelete": {
     "title": "Deleting files",
-    "message": "WARNING, by proceeding you'll permanently delete the selected file(s).",
+    "message": "*WARNING!!!*\nBy proceeding you'll permanently delete the selected file(s).",
     "cancel": "Cancel",
     "ok": "Proceed"
   }

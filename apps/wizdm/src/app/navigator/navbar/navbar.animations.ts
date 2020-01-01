@@ -11,7 +11,7 @@ export let $animations = [
           transform: 'scale(0.5)', 
           opacity: 0 
         }),
-        stagger(100, animate($timing) )
+        stagger('100ms', animate($timing) )
       ], { optional: true })
     ])
   ])

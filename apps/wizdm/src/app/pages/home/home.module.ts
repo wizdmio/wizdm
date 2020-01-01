@@ -3,18 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { AnimateModule } from '../../elements/animate';
-import { IconModule } from '../../elements/icon';
-import { DisclaimerModule } from '../../elements/disclaimer';
-import { IllustrationModule } from '../../elements/illustration';
-import { AuthGuard, PageGuard } from '../../utils';
+import { RedirectModule } from '@wizdm/redirect';
+import { AnimateModule } from '@wizdm/animate';
+import { IconModule } from '@wizdm/elements/icon';
+import { ReadmeModule } from '@wizdm/elements/readme';
+import { IllustrationModule } from '@wizdm/elements/illustration';
+//import { AuthGuard } from 'app/utils/auth-guard';
+import { PageGuard } from 'app/utils/page-guard';
 import { HomeComponent } from './home.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    component: HomeComponent,
     content: 'home',
+    component: HomeComponent,
     //canActivate: [ AuthGuard ],
     canDeactivate: [ PageGuard ]
   }
@@ -26,9 +28,10 @@ const routes: RoutesWithContent = [
     CommonModule,
     FlexLayoutModule,
     MatButtonModule,
+    RedirectModule,
     AnimateModule,
     IconModule, 
-    DisclaimerModule,
+    ReadmeModule,
     IllustrationModule,
     ContentRouterModule.forChild(routes)
   ]

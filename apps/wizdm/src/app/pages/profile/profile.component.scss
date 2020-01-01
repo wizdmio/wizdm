@@ -1,26 +1,12 @@
 
-$wm-user-size: 128px;
-
 :host {
-  //display: flex;
-  //flex-direction: column;
-  //box-sizing: border-box;
-  //padding: 2vh 5vw;
-  //margin: 0 $wm-content-margin;
 
-  //@include wm-padding-top($wm-content-padding);
-
-  //align-items: center;
-
-  header { text-align: center; }
-
-  .user {
-    padding: 0;
-    margin: 10px 0;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
   
-    .wm-avatar {
-      width:  $wm-user-size;
-      height: $wm-user-size;
-    }
+  section { 
+    margin-bottom: 48px; 
   }
 }

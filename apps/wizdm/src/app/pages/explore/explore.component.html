@@ -1,26 +1,36 @@
 
 <ng-container *wmContent="let msgs select 'explore'">
 
-  <section class="projects" fxLayout="column" fxLayoutAlign="center center" *ngIf="projects$ | async as items" [@list]="items?.length">
+  <!-- Action Bar (projected in the top toolbar) -->
+  <ng-container *ngIf="msgs.actions || {} as actions">
+
+    <ng-container *wmActionbar>
+    
+      <!-- New story (adds a draft) -->
+      <wm-action color="primary" 
+                 [icon]="actions.new?.icon || 'post_add'" 
+                 [disabled]="noNewStoryAllowed" 
+                 (click)="newStory()">{{ actions.new?.caption || 'New story' }}</wm-action>
+
+    </ng-container>
+  </ng-container>
+
+  <section class="stories" fxLayout="column" fxLayoutAlign="center center" *ngIf="stories$ | async as stories" [@list]="stories?.length">
 
     <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column" fxFill>
   
-      <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%" *ngFor="let project of items">
+      <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%" *ngFor="let story of stories">
 
-        <wm-project [project]="project" 
-                    [msgs]="msgs"
-                    (open)="openProject($event)" 
-                    (redirect)="navigate($event)" 
-                    @bumpIn>
-        </wm-project>  
+        <!-- Display the story card -->
+        <wm-story-card [story]="story" (open)="open($event)" @bumpIn></wm-story-card>
 
       </div>
   
     </div>
 
-    <button mat-button color="primary" *ngIf="!(projects.done$ | async)" (click)="projects.more()">
+    <!--button mat-button color="primary" *ngIf="!(projects.done$ | async)" (click)="projects.more()">
       {{ msgs.more || 'More' }}
-    </button>
+    </button-->
   
   </section>
 

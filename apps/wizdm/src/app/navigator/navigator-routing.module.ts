@@ -1,12 +1,19 @@
 import { NgModule } from '@angular/core';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { LanguageSelector, ActionLinkObserver } from '../utils';
+import { RedirectService } from '@wizdm/redirect';
+import { LanguageSelector } from 'app/utils/lang-selector';
+import { Oauth2Handler } from 'app/utils/oauth2-handler';
+import { ActionLinkObserver } from 'app/utils/action-link';
+
 import { NavigatorComponent } from './navigator.component';
 
 const routes: RoutesWithContent = [
 
   // Redirects handler page (for firebase password confirmation/reset and stuff)
-  //{ path: 'handler', loadChildren: () => import('../pages/handler/handler.module').then(m => m.HandlerModule) },
+  { path: 'handler', canActivate: [ Oauth2Handler ] },
+
+  // External links redirection helper
+  { path: 'redirect', canActivate: [ RedirectService ] },
   
   // Enables language autodetection on empty routes
   { path: '', redirectTo: 'auto', pathMatch: 'full' },
@@ -19,7 +26,7 @@ const routes: RoutesWithContent = [
     
     canActivate: [ LanguageSelector ],
     
-    content:['navigator', 'footer', 'feedback'],
+    content: ['navigator', 'footer', 'login', 'feedback'],
     
     children: [
       
@@ -34,16 +41,13 @@ const routes: RoutesWithContent = [
       { path: 'apply',       loadChildren: () => import('../pages/apply/apply.module').then(m => m.ApplyModule) },
       { path: 'explore',     loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },
       { path: 'explore/:id', loadChildren: () => import('../pages/editor/editor.module').then(m => m.EditorModule) },
-      { path: 'login',       loadChildren: () => import('../pages/login/login.module').then(m => m.LoginModule) },
       { path: 'profile',     loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
       { path: 'folder',      loadChildren: () => import('../pages/folder/folder.module').then(m => m.FolderModule) },
 
-      // External links redirection page
-      { path: 'redirect',    loadChildren: () => import('../pages/redirect/redirect.module').then(m => m.RedirectModule) },
-
       // Intercepts routing "action-links" to execute a non-routing action
-      { path: 'contact',     canActivate: [ ActionLinkObserver ], data: { action: 'feedback' } },
-      { path: 'edit',        canActivate: [ ActionLinkObserver ], data: { action: 'edit' } },
+      { path: 'login',       canActivate: [ ActionLinkObserver ] },
+      { path: 'contact',     canActivate: [ ActionLinkObserver ] },
+      { path: 'edit',        canActivate: [ ActionLinkObserver ] },
       
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      

@@ -1,21 +1,18 @@
-import { Directive, Inject, OnInit, OnDestroy, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ContentConfigurator } from '../loader/content-configurator.service';
+import { Directive, OnInit, OnDestroy, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ContentStreamer } from './content-streamer.service';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: '[wmContent]'
+  selector: '[wmContent]',
+  providers: [ ContentStreamer ]
 })
 /** Provides the selected content to be consumed by the template */
-export class ContentDirective extends ContentStreamer implements OnInit, OnDestroy {
+export class ContentDirective implements OnInit, OnDestroy {
 
   private sub: Subscription;
   public $implicit: any = {};
 
-  constructor(route: ActivatedRoute, config: ContentConfigurator, private tpl: TemplateRef<ContentDirective>, private vcr: ViewContainerRef) {
-    super(route, config)
-  }
+  constructor(private content: ContentStreamer, private tpl: TemplateRef<ContentDirective>, private vcr: ViewContainerRef) { }
 
   ngOnInit() {
     // Creates the view using the directive body as the context
@@ -27,20 +24,8 @@ export class ContentDirective extends ContentStreamer implements OnInit, OnDestr
     if(!!this.sub) { this.sub.unsubscribe(); }
   }
 
-  /** Binds the requested content as an observable:
-   * Usage: 
-   * <... *wmContent="let data$ observe 'content.page1'">
-   *   ...
-   *   <... *ngIf="data$ | async as data">
-   *     ...
-   *     <span>{{ data.title }}</span>
-   */
-  @Input() set wmContentObserve(selector: string) {
-    // Skips on null selectors
-    if(!selector) { return; }
-    // Binds the data stream observable 
-    this.$implicit = this.stream(selector);
-  }
+  /** The current resolved language code */
+  get language(): string { return this.content.language; }
 
   /** Binds the requested content as an object directly:
    * Usage: 
@@ -54,8 +39,8 @@ export class ContentDirective extends ContentStreamer implements OnInit, OnDestr
     // Skips on null selectors
     if(!selector) { return; }
     // Subscribes to the data stream
-    this.sub = this.stream(selector)
+    this.sub = this.content.stream(selector)
       // Binds the data content
-      .subscribe( data => this.$implicit = data );
+      .subscribe( data => this.$implicit = data || {});
   }
 }

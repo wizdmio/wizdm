@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigatorService } from '../../navigator';
+import { RedirectService } from '@wizdm/redirect';
 
 @Component({
   selector: 'wm-static',
@@ -9,9 +9,6 @@ import { NavigatorService } from '../../navigator';
 })
 export class StaticComponent {
 
-  constructor(private nav: NavigatorService) {}
-
-  public navigate(url: string) {
-    return this.nav.navigateByUrl(url);
-  }
+  constructor(readonly redirect: RedirectService) {}
+  
 }

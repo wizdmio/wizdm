@@ -8,7 +8,7 @@
     <!-- Mini fab with social links -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px">
 
-      <a mat-mini-fab color="primary" routerLink="redirect" [queryParams]="{ url: item.link }" *ngFor="let item of msgs.socials">
+      <a mat-mini-fab color="primary" routerLink="/redirect" [queryParams]="{ url: item.link }" *ngFor="let item of msgs.socials">
         <wm-icon [icon]="item.icon"></wm-icon>
       </a>
 
@@ -26,9 +26,10 @@
     <!-- Languages -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
 
-      <a wm-link class="mat-small" 
-         [disabled]="item.value === lang"
+      <a class="mat-small" 
+         [hreflang]="item.value"
          [routerLink]="languageLink(item.value)" 
+         [attr.disabled]="item.value === lang"
          *ngFor="let item of msgs.languages">{{ item.label }}</a>
       
     </div>

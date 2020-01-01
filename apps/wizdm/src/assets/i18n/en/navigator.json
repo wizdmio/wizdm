@@ -31,5 +31,10 @@
             { "label": "Profile", "link": "profile" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
         ]
+    },
+
+    "contactUs" : {
+        "caption": "Contact us",
+        "icon": "far:fa-comment"
     }
 }

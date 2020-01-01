@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { RedirectService } from '@wizdm/redirect';
 
 @Component({
   selector: 'wm-not-found',
@@ -12,7 +12,7 @@ export class NotFoundComponent implements OnInit, OnDestroy {
   private timeout = null; 
   private countdown = 5;
 
-  constructor(private router: Router) {}
+  constructor(private redirect: RedirectService) {}
 
   ngOnInit() {
 
@@ -20,18 +20,15 @@ export class NotFoundComponent implements OnInit, OnDestroy {
     this.timeout = setInterval(() => {
 
       if(--this.countdown <= 0) {
-
-       this.router.navigate(['/']);
-       clearInterval(this.timeout);
+        // Redirects to home
+        this.redirect.navigate('home');
       }
 
     },1000);
   }
 
   ngOnDestroy() {
-
-    if(this.timeout) { // Prevents unexpected jump to Home in case the user navigated out 
-      clearInterval(this.timeout);
-    }
+    // Clears the timeout on leaving
+    clearInterval(this.timeout);
   }
 }

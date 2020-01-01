@@ -1,4 +1,4 @@
-import { DatabaseApplication, dbCollectionRef } from './database-application';
+import { DatabaseApplication, CollectionRef } from './database-application';
 import { DatabaseCollection } from './database-collection';
 import { dbCommon } from './database-document';
 import { Observable, BehaviorSubject, merge } from 'rxjs';
@@ -15,7 +15,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
   readonly counter$: Observable<number>;
   private _counter$: BehaviorSubject<number>; 
 
-  constructor(db: DatabaseApplication, ref: dbCollectionRef, public readonly shards) {
+  constructor(db: DatabaseApplication, ref: CollectionRef, public readonly shards) {
     super(db, ref);
 
     // Creates a local copy of the counter 

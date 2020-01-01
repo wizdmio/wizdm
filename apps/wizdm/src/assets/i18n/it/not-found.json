@@ -1,0 +1,5 @@
+{
+  "title": "Ooops... La pagina che cerchi non esiste.",
+  "e404": "Errore 404: pagina no trovata",
+  "body": "Verrai rediretto automaticamente in *{{ countdown }}*s...\nOppure [clicca qui](home)."
+}

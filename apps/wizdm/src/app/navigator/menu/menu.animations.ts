@@ -12,11 +12,11 @@ export let $animations = [
         style({ 
           opacity: '0', 
           transform: 'translateY(-150px)'
-        }),
+        }), { optional: true }
       ),
       group([
         animate($smooth, style({ height: '*' })),
-        query('button', stagger(-100, animate($smooth, style('*'))))
+        query('button', stagger(-100, animate($smooth, style('*'))), { optional: true })
       ]),
     ]),
 
@@ -26,7 +26,7 @@ export let $animations = [
         query('button', animate($smooth, style({ 
           opacity: '0', 
           transform: 'translateY(-150px)'
-        })))
+        })), { optional: true })
       ])
     )
 /*

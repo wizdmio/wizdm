@@ -1,31 +1,26 @@
+import { ExtraOptions } from '@angular/router';
+import { ContentConfig } from '@wizdm/content';
+import { firebase, doorbell } from "./secrets";
 
-/* Import local configuration objects from ./config folder. Make sure tsconfig.json contains the following options:
-{
-  "compilerOptions": {
-    "resolveJsonModule": true,
-    "esModuleInterop": true  
-  }
-}
-*/
-import firebase from "./config/firebase.json";
-import doorbell from "./config/doorbell.json";
+export const appname: string = 'wizdm';
+
+export const content: ContentConfig = {
+  selector: 'lang', 
+  contentRoot: 'assets/i18n',
+  supportedValues: ['en', 'it', 'ru'],
+  defaultValue: 'en'
+};
+
+export const router: ExtraOptions = { 
+  anchorScrolling: "enabled"
+};
 
 // Environment object common to all build configurations
 export const common = {
   
-  appname: 'wizdm',
-
-  content: {
-    selector: 'lang', 
-    contentRoot: 'assets/i18n',
-    supportedValues: ['en', 'it', 'ru'],
-    defaultValue: 'en'
-  },
-
-  router: { 
-    anchorScrolling: "enabled"
-  },
-
+  appname,
+  content,
+  router,
   firebase/*: { 
     apiKey: "Your api key",
     authDomain: "domain.firebaseapp.com",

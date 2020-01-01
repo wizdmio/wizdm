@@ -1,23 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatListModule } from '@angular/material/list';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+//import { MatDividerModule } from '@angular/material/divider';
+//import { MatListModule } from '@angular/material/list';
+//import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { FileOpenModule } from '../../elements/openfile';
-import { PopupModule } from '../../elements/popup';
-import { AuthGuard, PageGuard } from '../../utils';
+import { OpenFileModule } from '@wizdm/elements/openfile';
+import { DialogModule } from '@wizdm/elements/dialog';
+import { ReadmeModule } from '@wizdm/elements/readme';
+import { ThumbnailModule } from '@wizdm/elements/thumbnail';
+import { SpinnerModule } from '@wizdm/elements/spinner';
+import { ActionbarModule } from 'app/navigator/actionbar';
+import { AuthGuard } from 'app/utils/auth-guard';
+//import { CanLeaveGuard } from 'app/utils/can-leave';
 import { FolderComponent } from './folder.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    component: FolderComponent,
     content: 'folder',
+    component: FolderComponent,
     canActivate: [ AuthGuard ],
-    canDeactivate: [ PageGuard ]
+    //canDeactivate: [ CanLeaveGuard ]
   }
 ];
 
@@ -25,13 +30,14 @@ const routes: RoutesWithContent = [
   declarations: [ FolderComponent ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FlexLayoutModule,
-    MatDividerModule,
-    MatListModule,
-    MatProgressBarModule,
-    FileOpenModule,
-    PopupModule,
+    MatButtonModule,
+    OpenFileModule,
+    DialogModule,
+    ReadmeModule,
+    ThumbnailModule,
+    SpinnerModule,
+    ActionbarModule,
     ContentRouterModule.forChild(routes)
   ]
 })

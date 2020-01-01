@@ -2,56 +2,60 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { AvatarModule } from '../../elements/avatar';
-import { IconModule } from '../../elements/icon';
-import { PopupModule } from '../../elements/popup';
-import { AuthGuard, PageGuard } from '../../utils';
-import { UploadModule } from '../upload/upload.module';
-import { UserComponent } from './profile.component';
-import { UserItemComponent } from './item/item.component';
+import { RedirectModule } from '@wizdm/redirect';
+import { AvatarModule } from '@wizdm/elements/avatar';
+import { IconModule } from '@wizdm/elements/icon';
+import { ReadmeModule } from '@wizdm/elements/readme';
+import { DialogModule } from '@wizdm/elements/dialog';
+import { OpenFileModule } from '@wizdm/elements/openfile';
+import { ActionbarModule } from 'app/navigator/actionbar';
+import { AuthGuard } from 'app/utils/auth-guard';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
+import { ProfileComponent } from './profile.component';
+import { ProfileFormComponent } from './profile-form/profile-form.component';
+import { ProfilePhotoComponent } from './profile-photo/profile-photo.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    component: UserComponent,
     content: 'profile',
+    component: ProfileComponent,
     canActivate: [ AuthGuard ],
-    canDeactivate: [ PageGuard ]
+    canDeactivate: [ CanLeaveGuard ]
   }
 ];
 
 @NgModule({
   declarations: [
-    UserComponent,
-    UserItemComponent
+    ProfileComponent,
+    ProfileFormComponent,
+    ProfilePhotoComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    MatIconModule,
+    MatDividerModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatExpansionModule,
-    MatListModule,
-    MatCheckboxModule,
     MatSelectModule,
     MatDatepickerModule,
     IconModule, 
     AvatarModule,
-    PopupModule,
-    UploadModule,
+    ReadmeModule,
+    DialogModule,
+    OpenFileModule,
+    ActionbarModule,
+    CanLeaveModule,
+    RedirectModule,
     ContentRouterModule.forChild(routes)
   ]
 })

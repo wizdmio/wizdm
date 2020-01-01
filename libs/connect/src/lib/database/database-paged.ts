@@ -1,5 +1,5 @@
 import { QuerySnapshot, QueryDocumentSnapshot } from '@angular/fire/firestore';
-import { DatabaseApplication, dbCollectionRef, dbQuery } from './database-application';
+import { DatabaseApplication, CollectionRef, Query } from './database-application';
 import { DatabaseCollection } from './database-collection';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, scan } from 'rxjs/operators';
@@ -36,7 +36,7 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   protected _done$ = new BehaviorSubject<boolean>(false);
   public done$: Observable<boolean> = this._done$.asObservable();
 
-  constructor(db: DatabaseApplication, ref: dbCollectionRef) { 
+  constructor(db: DatabaseApplication, ref: CollectionRef) { 
     super(db, ref);
   }
 
@@ -127,7 +127,7 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   }
 
   // Helper to compute the pagination query function according to the current configuration
-  private queryPage(ref: dbCollectionRef|dbQuery): dbCollectionRef|dbQuery {
+  private queryPage(ref: CollectionRef|Query): CollectionRef|Query {
     
     // Order by the configured field (creation dated by default)
     if(this.config.field) { ref = ref.orderBy(this.config.field, this.config.reverse ? 'desc' : 'asc');}

@@ -1,13 +1,11 @@
 
-<nav fxLayout="column" fxLayoutAlign="start center" [@menu]="toggle" (@menu.done)="menuDone()">
+<nav fxLayout="column" fxLayoutAlign="start center" [@menu]="toggler" (@menu.done)="done()">
 
-  <button mat-button  
+  <button mat-button *ngFor="let item of items"
+    (click)="toggleMenu = false"
     [routerLink]="item.link"
     [queryParams]="item.params"
     routerLinkActive="link-active" 
-    [routerLinkActiveOptions]="{ exact: true }" 
-    *ngFor="let item of menuItems">
-    {{ item.label }}
-  </button>
+    [routerLinkActiveOptions]="{ exact: true }">{{ item.label }}</button>
 
 </nav>

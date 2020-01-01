@@ -1,10 +1,11 @@
+<section class="padding-top" fxLayout="column" fxLayoutAlign="center center" *wmContent="let data select 'not-found'">
+  
+  <h1>{{ data.title || 'The page does not exist' }}</h1>
+  
+  <p [wm-readme]="data.body" [context]="this">
+    You'll be redirected home in <b>{{ countdown }}</b>s...
+  </p>  
 
-<section class="padding-top" fxLayout="column" fxLayoutAlign="center center" *wmContent="let data select 'notFound'">
-  
-  <h1>{{ data.title }}</h1>
-  
-  <p>{{ data.e404 }}</p>
-  
-  <h5 [innerHTML]="data.body?.interpolate(this)"></h5>  
+  <h5>{{ data.e404 || 'Error 404' }}</h5>
 
 </section>

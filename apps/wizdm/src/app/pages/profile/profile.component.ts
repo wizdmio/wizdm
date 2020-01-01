@@ -1,204 +1,66 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
-import { MatExpansionPanel } from '@angular/material/expansion';
-import { Validators } from '@angular/forms';
-import { UserProfile, wmFile } from '@wizdm/connect';
-import { ContentStreamer } from '@wizdm/content';
-import { PopupService } from '../../elements/popup';
-import { CanPageDeactivate } from '../../utils';
-import { NavigatorService, ToolbarService } from '../../navigator';
-import { UserItemComponent, UserItemValidators } from './item/item.component';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { User } from '@wizdm/connect/auth';
+import { StorageService } from '@wizdm/connect/storage';
+import { Member, wmMember } from 'app/core/member';
+import { DialogRef } from '@wizdm/elements/dialog';
 import moment from 'moment';
 
 @Component({
   selector: 'wm-user-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  host: { 'class': 'wm-page adjust-top content-padding' },
-  providers: [ ContentStreamer ]
+  host: { 'class': 'wm-page adjust-top content-padding' }
 })
-export class UserComponent implements OnInit, OnDestroy, CanPageDeactivate  {
+export class ProfileComponent {
 
-  @ViewChildren(UserItemComponent) profileItems: QueryList<UserItemComponent>;
-  @ViewChildren(MatExpansionPanel) profilePanels: QueryList<MatExpansionPanel>;
+  private newProfile: wmMember;
 
-  private sub: Subscription;
-  public msgs: any = {};
+  constructor(private profile: Member, private storage: StorageService) {}
 
-  constructor(private content   : ContentStreamer,
-              private navigator : NavigatorService,
-              private toolbar   : ToolbarService,          
-              private profile   : UserProfile,
-              private popup     : PopupService) {}
+  public get profileData(): wmMember { return this.profile.data; }
 
-  ngOnInit() {
+  public get profilePhoto(): string { return this.profileData.photo || ''; }
 
-    // Gets a snapshot of the localized content for internal use
-    this.sub = this.content.stream('profile').subscribe( msgs => {
+  public get authUser(): User { return this.profile.auth.user || {} as User };
+
+  public get created(): string { return moment(!!this.authUser ? this.authUser.metadata.creationTime : null).format('ll'); }
+
+  public get emailVerified(): boolean { return this.authUser.emailVerified || false; }
+
+  public set profileData(user: wmMember) { 
     
-      // Keeps a snapshot of the localized content for internal use
-      this.msgs = msgs;
-
-      // Activates the relevant toolbar actions
-      this.toolbar.activateActions(this.msgs.actions);
-    });
+    this.newProfile = user;
   }
 
-  ngOnDestroy() { this.sub.unsubscribe(); }
+  public updateProfile() {
 
-  public get userImage(): string {
-    return this.profile.data.img;
+    return this.profile.update(this.newProfile);
   }
 
-  public selectImage(file: wmFile): void {
-    // Updates the user image
-    this.profile.update({ img: file.url || null });  
+  public updateProfileAndLeave(ref: DialogRef<boolean>) {
+
+    this.updateProfile()
+      .then( () => ref.close(true) );
   }
 
-  public profileEditable(key: string) {
-    
-    // Hardcoded editable flag to prevent unwanted db modifications
-    return key === 'profile:name' ||
-           key === 'profile:email' ||
-           key === 'profile:phone' ||
-           key === 'profile:birth' ||
-           key === 'profile:gender' ||
-           key === 'profile:motto' ||
-           key === 'profile:lang';
+  public updatePhoto(file: File) {
+
+    if(!file) { return; }
+
+    const folder = this.storage.ref(`${this.profile.uid}/${file.name}`);
+
+    folder.put(file)
+      .then( snap => snap.ref.getDownloadURL() )
+      .then( photo => this.profile.update( { photo } ));
   }
 
-  public profileValue(key: string): string {
+  public deletePhoto() {
 
-    let keys = key.split(':');
+    if(!this.profilePhoto) { return; }
 
-    // Intercepts timestapms requests
-    if(key === 'profile:created') {
-      let stamp = this.profile.data[ keys[1] ];
-      return stamp ? moment(stamp.toMillis(), 'x').format(moment.defaultFormat) : '';
-    }
+    const ref = this.storage.refFromURL(this.profilePhoto);
 
-    // Select the source of values based on the first half of the key
-    let source = keys[0] === 'profile' ? this.profile.data :
-                 keys[0] === 'user' ? this.profile.user :
-                 {};
- 
-    // Returns tne value based on the second half of the key
-    return source[ keys[1] ];
-  }
-
-  public profileOptions(key: string) {
-
-    switch(key) {
-
-      case 'profile:gender':
-      return this.msgs.genders;
-
-      case 'profile:lang':
-      return this.msgs.languages;
-
-      case 'user:emailVerified':
-      return this.msgs.identity;
-    }
-
-    return null;
-  }
-
-  public profileValidators(key: string): UserItemValidators {
-
-    return key == 'profile:email' ?  {
-
-      validators: [ Validators.required, Validators.email ],
-      errors: this.msgs.errors
-    
-    } : null;
-  }
-
-  public updateUserProfile(key: string, value: any) {
-  
-    let keys = key.split(':');  
-
-    if(keys[0] === 'profile') {
-
-      // Update the value otherwhise
-      this.profile.update({ [ keys[1] ]: value });
-
-      // Navigate to the new language
-      if(key === 'profile:lang') {
-
-        // Switch to the selected language
-        this.navigator.switchLanguage(value);
-      }
-    }
-  }
-
-  // Checks if some of the profile items is in edit mode
-  public get itemChanges() {
-    return this.profileItems && this.profileItems.some( item => item.edit );
-  }
-
-  public applyAllItemChanges(): boolean {
-
-    let success = true;
-
-    // Update each profile item in edit mode
-    this.profileItems.forEach( item => {
-      if(item.edit) {
-        success = item.updateControl() && success;
-      }
-    });
-
-    return success;
-  }
-
-  public panelClose(index: number) {
-
-    // Applies all the changes...
-    if(!this.applyAllItemChanges()) {
-
-      // If there's something wrong, seek for the closing panel
-      let panel = this.profilePanels.find( (p , i) => {
-          return i === index;
-        });
-
-      // Makes sure to keep it opened, so, fo the user to see the error message
-      panel.open();
-    }
-  }
-
-  public action(code: string) {
-
-    // Prepare the right popup according to the action code
-    const popup = this.msgs.popups[code];
-
-    // Ask for confirmation prior to initiate the requested action
-    // Note: the function resolves to of(true) in case popup is null
-    this.popup.confirmPopup(popup).subscribe( () => {
-
-      // If we can proceed, navigates to the login page applying the requested action code
-      this.navigator.navigate('login', { queryParams: { 
-        mode: code 
-      }});
-    });
-  }
-
-  public disabled(code: string): boolean {
-
-    // Disable the emailVerify action in case the account email has been verified already
-    return (code === 'emailVerify') 
-      ? this.profile.emailVerified
-        : false;
-  }
-
-  public canDeactivate() {
-
-    const popup = this.msgs.popups.canLeave;
-
-    // Ask the user to proceed in case there are unsaved changes
-    if(popup && this.itemChanges) { 
-      return this.popup.popupDialog(popup);
-    }
-
-    // Enable leaving otherwise
-    return true;
+    this.profile.update({ photo: '' })
+      .then( () => ref.delete() );
   }
 }

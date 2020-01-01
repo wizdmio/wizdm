@@ -1,0 +1,48 @@
+<!-- Edit dialog -->
+<ng-template>
+
+  <form [formGroup]="form" fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="16px" wmContent="select msgs of 'explore.editForm'"> 
+
+    <!-- Name -->
+    <mat-form-field>
+      <mat-label>{{ msgs.name?.label || 'Name' }}</mat-label>
+      <input matInput formControlName="name" cdkFocusInitial>
+      <mat-hint>{{ msgs.name?.hint }}</mat-hint>
+      <mat-error *ngIf="form.controls['name'].errors?.required">
+        {{ msgs.name?.errors?.required || 'Name required' }}
+      </mat-error>
+      <mat-error *ngIf="form.controls['name'].errors?.exists">
+        {{ msgs.name?.errors?.exists || 'Already exists' }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Pitch -->
+    <mat-form-field>
+      <mat-label>{{ msgs.pitch?.label || 'Pitch' }}</mat-label>
+      <textarea matInput formControlName="pitch" cdkTextareaAutosize></textarea>
+      <mat-hint>{{ msgs.pitch?.hint }}</mat-hint>
+      <mat-error *ngIf="form.controls['pitch'].errors?.required">
+        {{ msgs.pitch?.errors?.required || 'Pitch required' }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Web url -->
+    <mat-form-field>
+      <mat-label>{{ msgs.web?.label || 'Url' }}</mat-label>
+      <input matInput formControlName="web">
+      <mat-hint>{{ msgs.web?.hint }}</mat-hint>
+    </mat-form-field>
+    
+    <mat-dialog-actions align="end">
+
+      <button mat-button mat-dialog-close>{{ msgs.buttons?.cancel || 'Cancel' }}</button>
+      
+      <button mat-flat-button color="primary" [disabled]="!form.valid" [mat-dialog-close]="form.value">
+        {{ msgs.buttons?.save || 'Save' }}
+      </button>
+    
+    </mat-dialog-actions>
+
+  </form>
+
+</ng-template>

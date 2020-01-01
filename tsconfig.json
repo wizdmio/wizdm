@@ -15,15 +15,22 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
+      "app/*": ["apps/wizdm/src/app/*"],
+      "@wizdm/animate": ["libs/animate/src/index.ts"],
       "@wizdm/content": ["libs/content/src/index.ts"],
       "@wizdm/connect": ["libs/connect/src/index.ts"],
+      "@wizdm/connect/*": ["libs/connect/src/lib/*"],
+      "@wizdm/redirect": ["libs/redirect/src/index.ts"],
+      "@wizdm/elements/*": ["libs/elements/src/lib/*"],
       "@wizdm/markdown": ["libs/markdown/src/index.ts"],
       "@wizdm/markdown/*": ["libs/markdown/src/lib/*"],
       "@wizdm/prism": ["libs/prism/src/index.ts"],
       "@wizdm/editable": ["libs/editable/src/index.ts"],
       "@wizdm/editable/*": ["libs/editable/src/lib/*"],
       "@wizdm/doorbell": ["libs/doorbell/src/index.ts"],
-      "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"]
+      "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"],
+      "@wizdm/paypal": ["libs/paypal/src/index.ts"],
+      "@wizdm/stripe": ["libs/stripe/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]

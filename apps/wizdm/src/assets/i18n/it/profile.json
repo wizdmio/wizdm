@@ -73,34 +73,10 @@
     "email": "Qualcosa non va con questa emaill"
   },
 
-  "popups": {
-
-    "changeEmail": {
-      "title": "Cambio email dell'account",
-      "message": "Ti verrà richiesto di confermare la tua identità mediante password.",
-      "cancel": "Annulla",
-      "ok": "Procedi"
-    },
-  
-    "changePassword": {
-      "title": "Cambio password",
-      "message": "Ti verrà richiesto di confermare la tua identità mediante password.",
-      "cancel": "Annulla",
-      "ok": "Procedi"
-    },
-
-    "delete": {
-      "title": "Eliminazione account",
-      "message": "ATTENZIONE, tutte le informazioni del tuo account verranno eliminate permanentemente dai nostri server. Ti verrà richiesto di confermare la tua identità mediante password.",
-      "cancel": "Annulla",
-      "ok": "Procedi"
-    },
-
-    "canLeave": {
-      "title": "Modifiche non salvate",
-      "message": "Ci sono cambiamenti che non verranno salvati",
-      "cancel": "Annulla",
-      "ok": "Procedi"
-    }
+  "canLeave": {
+    "title": "Modifiche non salvate",
+    "message": "Ci sono cambiamenti che non verranno salvati",
+    "cancel": "Annulla",
+    "ok": "Procedi"
   }
 }

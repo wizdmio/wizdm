@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserProfile } from '@wizdm/connect';
-import { NavigatorService } from '../../navigator';
-import { ProjectService, wmProject } from '../../core/project';
+import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
+import { RedirectService } from '@wizdm/redirect';
+//import { ProjectService } from 'app/core/project';
+import { Member } from 'app/core/member';
+import { wmStory } from 'app/core/stories';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { $animations } from './explore.animations';
@@ -14,25 +16,37 @@ import { $animations } from './explore.animations';
   host: { 'class': 'wm-page adjust-top content-padding' },
   animations: $animations
 })
-export class ExploreComponent {
+export class ExploreComponent extends PagedCollection<wmStory> {
 
-  public projects$: Observable<wmProject[]>;
+  public stories$: Observable<any[]>;
   
-  get me() { return this.profile.id || ''; }
-  
-  constructor(private projects  : ProjectService,
-              private profile   : UserProfile,
-              private navigator : NavigatorService,
-              private router    : Router, 
-              private route     : ActivatedRoute ) {    
+  constructor(db: DatabaseService, readonly member: Member, private router: Router, private route: ActivatedRoute) {    
+
+    super(db, db.col(`stories`));
 
     // Listing all projects (using pagination)
     //this.projects$ = this.projects.paging({ limit: 10 });
 
-    this.projects$ = this.streamProjects();
+    // Lists all the stories paging by 10
+    this.stories$ = this.paging({ limit: 10 });
   }
 
-  private streamProjects(): Observable<wmProject[]> {
+  public get noNewStoryAllowed(): boolean {
+    return false;
+  }
+
+  public newStory() {
+
+  }
+
+  /** Opens the story for reading/editing */
+  public open(id: string) {
+
+    // Navigates relatively to the current route triggering the story editor
+    return this.router.navigate([id], { relativeTo: this.route });
+  }
+/*
+  private streamProjects(): Observable<any[]> {
 
     return this.route.queryParamMap.pipe(
       map( params => params.get('filter') ),
@@ -47,10 +61,5 @@ export class ExploreComponent {
     );
 
   }
-
-  // Opens the project editor 
-  public openProject(id: string) { return this.router.navigate([id], { relativeTo: this.route }); }
-
-  // Navigates redirecting whenever necessary
-  public navigate(url: string) { return this.navigator.navigateByUrl(url); }
+*/
 }

@@ -1,13 +1,46 @@
 
-<ng-container *ngIf="msgs">
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'apply'">
 
+  <!-- Action Bar (projected in the top toolbar) -->
+  <ng-container *wmActionbar>
+    <ng-container *ngIf="msgs.actions || {} as actions">
+      
+      <wm-action color="primary" [icon]="actions.clear?.icon || 'delete_forever'" [disabled]="!application" (click)="dlgClear.open()">
+        {{ actions.clear?.caption || 'Clear Application' }}
+      </wm-action>
+
+    </ng-container>
+
+    <!-- Can Clear confirmation dialog -->
+    <wm-dialog (closedChange)="!!$event && clearApplication()" #dlgClear>
+
+      <ng-container *ngIf="msgs.canClear || {} as clear">
+  
+        <h2 mat-dialog-title><b>{{ clear.title || 'Unsaved changes' }}</b></h2>
+  
+        <mat-dialog-content [wm-readme]="clear.message">
+          Are you sure you want to clear the unsaved application?
+        </mat-dialog-content>
+      
+        <mat-dialog-actions align="end">
+          <button mat-button color="primary" (click)="dlgClear.close(false)" cdkFocusInitial>{{ clear.cancel || 'Abort' }}</button>
+          <button mat-button color="warn" (click)="dlgClear.close(true)">{{ clear.ok || 'Proceed' }}</button>
+        </mat-dialog-actions>
+  
+      </ng-container>
+  
+    </wm-dialog>
+  
+  </ng-container>
+
+  <!-- Page Body -->
   <header fxLayout="column">
     <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
     <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
     <div fxHide.lt-sm>
       <p *ngIf="welcomeBack" @fadeIn>{{ msgs.welcomeBack }}</p>
       <p *ngIf="!welcomeBack" @fadeIn>{{ msgs.description }}</p>
-      <p *ngIf="application" [wm-disclaimer]="msgs.clearForm" (navigate)="disclaimerAction($event.target)" @fadeIn></p>
     </div>
   </header> 
 
@@ -108,18 +141,18 @@
     </mat-step>
 
     <!-- SUBMIT w/ DISCLAIMER -->
-    <mat-step>
-      <ng-template matStepLabel>{{ msgs.appSubmit?.title }}</ng-template>
+    <mat-step *ngIf="msgs.appSubmit as submit">
+      <ng-template matStepLabel>{{ submit.title }}</ng-template>
       
       <div fxLayout="row" fxLayoutAlign="center center" fxFill>
         <div class="disclaimer">
-          <p>{{ msgs.appSubmit?.description }}</p>
-          <p class="mat-small" [wm-disclaimer]="msgs.appSubmit?.disclaimer" (navigate)="disclaimerAction($event.target)"></p>
+          <p [wm-readme]="submit.description"></p>
+          <p class="mat-small" [wm-readme]="submit.disclaimer"></p>
 
           <!-- Agree checkbox -->
           <div fxLayout="row" fxLayoutAlign="center center" fxFill>
             <mat-checkbox labelPosition="before" color="primary" #agree>
-              <span [wm-disclaimer]="msgs.appSubmit?.agree" (navigate)="disclaimerAction($event.target)"></span>
+              <span [wm-readme]="submit.agree"></span>
             </mat-checkbox>
           </div>
         </div>
@@ -140,5 +173,25 @@
     </mat-step>
         
   </mat-vertical-stepper>
+
+  <!-- Can Leave dialog -->
+  <wm-dialog [dontLeave]="!!application">
+
+    <ng-container *ngIf="msgs.canLeave || {} as leave">
+
+      <h2 mat-dialog-title><b>{{ leave.title || 'Unsaved changes' }}</b></h2>
+    
+      <mat-dialog-content [wm-readme]="leave.message">
+        You're about to leave the page without saving the latest changes.<br>Please confirm.
+      </mat-dialog-content>
+    
+      <mat-dialog-actions align="end">
+        <button mat-button color="warn" [mat-dialog-close]="false" cdkFocusInitial>{{ leave.cancel || 'Abort' }}</button>
+        <button mat-button color="primary" [mat-dialog-close]="true">{{ leave.ok || 'Proceed' }}</button>
+      </mat-dialog-actions>
+
+    </ng-container>
+  
+  </wm-dialog>
 
 </ng-container>

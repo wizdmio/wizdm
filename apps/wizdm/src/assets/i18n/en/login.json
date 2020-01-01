@@ -1,9 +1,7 @@
 {
-  "signIn": "Sign-in",
-  "newUser": "Are you a new user?",
-  "register": "Register",
-  "registeredUser": "Already have login and password?",
-  "forgotPassword": "Forgot password?",
+  "signIn": "Already have login and password? [Sign-in](login?=mode=signIn)",
+  "register": "Are you a new user? [Register](login?mode=register)",
+  "forgot": "[Forgot password?](login?mode=forgotPassword)",
   "signInWith": "Or single click sign-in with:",
 
   "labels": {
@@ -17,46 +15,52 @@
   "pages": {
     "register": {
       "title": "Register",
-      "caption": "Register with my email" 
+      "message": "Welcome to *Wizdm*.\nAs a registered users you'll get unrestricted access to all the features",
+      "caption": "Register with my email"
     },
     "signIn": {
       "title": "Sign-in",
+      "message": "We're glad to see you again.\nPlease sign-in",
       "caption": "Sign-in with my email"
+
     },
     "forgotPassword": {
       "title": "Reset password",
-      "caption": "Reset the password" 
+      "message": "We'll be sending you a link to reset the password",
+      "caption": "Reset the password"
     },
     "resetPassword": {
       "title": "New password",
-      "caption": "Change the password" 
+      "message": "Please select your new password",
+      "caption": "Change the password"
     },
     "changePassword": {
       "title": "Change password",
-      "caption": "update the password",
-      "message": "Please confirm by re-authenticating"
+      "message": "Please confirm by _re-authenticating_",
+      "caption": "Update the password"
     },
-    "emailVerify": {
+    "sendEmailVerification": {
       "title": "Email verification",
-      "message": "An email has been sent to your address..."
+      "message": "Your email has *not* been verified yet.\nPlease proceed with the verification",
+      "caption": "Send the verification email"
     },
     "verifyEmail": {
       "title": "Email verification",
-      "message": "Thank you for verifying your email. You might need to sign-in again before seeing the effects"
+      "message": "Thank you for verifying your email.\nEnjoy"
     },
     "recoverEmail": {
       "title": "Email recovery",
-      "message": "Your previous email has been restored. We recommend changing your password the soonest"
+      "message": "Your previous email has been restored.\nWe recommend changing your password the soonest"
     },
     "changeEmail": {
       "title": "Change email",
-      "caption": "update the email",
-      "message": "Please confirm by re-authenticating"
+      "message": "Please confirm by _re-authenticating_",
+      "caption": "Update the email"
     },
     "delete": {
       "title": "Delete account",
-      "caption": "Confirm to delete",
-      "message": "Please confirm by re-authenticating"
+      "message": "_*WARNING!*_\nBy proceeding you'll permanently delete your account.\nPlease confirm by _re-authenticating_",
+      "caption": "Delete forever"
     }
   },
 

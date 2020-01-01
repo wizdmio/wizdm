@@ -1,6 +1,6 @@
-@import '../app/elements/elements-theme';
 @import '../app/navigator/navigator-theme';
 @import '../app/pages/page-theme';
+@import 'elements-theme';
 //@import './colors';
 
 // Initilize the global application theme
@@ -59,8 +59,28 @@
     // Disables outline on all elements
     * { outline: none; }
 
-    // Makes sure all the anchors emulates wm-link styles
-    a { text-decoration: underline; color: mat-color($primary); }
+    // Styles links
+    a { 
+
+      cursor: pointer;
+      text-decoration: underline;
+      color: mat-color($primary); 
+
+      // Styles according the theme palette colors
+      @each $color in ('accent', 'warn') {
+
+        &[color=#{$color}] { 
+          color: mat-color( map-get($theme, #{$color}) ); 
+        }
+      }
+
+      // Styles the disabled link
+      &[disabled=true] {
+
+        color: map-get( map-get($theme, foreground) , 'disabled');
+        text-decoration: dotted underline;
+      }    
+    }
 
     // Smoothen the text color on content
     p, li, td { color: rgba(map-get($foreground, text), 0.8); }

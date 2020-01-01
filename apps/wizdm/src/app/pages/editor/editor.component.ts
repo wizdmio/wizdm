@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentStreamer } from '@wizdm/content';
+import { RedirectService } from '@wizdm/redirect';
 import { wmDocument } from '@wizdm/editable';
-import { ToolbarService, NavigatorService } from '../../navigator';
-import { ProjectService, ProjectWrapper, wmProject } from '../../core/project';
-import { ActionLinkObserver } from '../../utils';
-import { PopupService } from '../../elements/popup';
+import { ActionLinkObserver } from 'app/utils/action-link';
 import { Observable, Subject, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { switchMap, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';
@@ -18,27 +16,26 @@ import { $animations } from './editor.animations';
   animations: $animations,
   providers: [ ContentStreamer ]
 })
-export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy {
+export class EditorComponent /*extends ProjectWrapper*/ implements OnInit, OnDestroy {
 
   private editMode$ = new BehaviorSubject<boolean>(false);
   private saveDocument$ = new Subject<wmDocument>();
   private subs: Subscription;
 
-  constructor(private projects  : ProjectService,
+  constructor(//private projects  : ProjectService,
               private route     : ActivatedRoute,
-              private navigator : NavigatorService,
-              private toolbar   : ToolbarService,
-              private popup     : PopupService,
+              private redirect  : RedirectService,
+              //private popup     : PopupService,
               private content   : ContentStreamer,
               private link      : ActionLinkObserver) { 
 
-    super(projects, '');
+    //super(projects, '');
   }
 
   get msgs(): any { return this.content.select('editor'); }
   
   ngOnInit() {
-    
+    /*
     // Combines the observables to better handle the page needs
     this.subs = combineLatest(
 
@@ -57,19 +54,17 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
     ).subscribe( code => this.doAction(code) );
 
     // Registers to support the 'edit' action link 
-    this.subs.add( this.link.register('edit')
-      .subscribe( action => this.doAction(action) ) 
-    );
+    this.subs.add( this.link.register('edit').subscribe( () => this.doAction('edit') ) );
 
     // Enables the auto-saving
-    this.subs.add( this.saveAutomatically() );
+    this.subs.add( this.saveAutomatically() );*/
   }
 
   ngOnDestroy() {
     // Unsubscribes local observalbles
     this.subs.unsubscribe();
     // Releases the project wrapper observables
-    super.release();
+    //super.release();
   }
 
   // Actions' handler
@@ -91,16 +86,16 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   }
 
   // Loads the project content from the route ID parameter
-  private loadProject(): Observable<wmProject> {
+  private loadProject(): Observable<any> {
 
-    return this.route.paramMap.pipe(
+    return null;/*this.route.paramMap.pipe(
       // Gets the routing param id
       map( param => param.get('id') ),
       // Turns the id into a project instance
       switchMap( id => this.projects.getProject(id) )
-    );
+    );*/
   }
-
+/*
   // Activates the relevant toolbar actions
   private activateActions(isMine: boolean, msgs: any): Observable<string> {
 
@@ -111,7 +106,7 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
       switchMap( actions => this.toolbar.activateActions(actions) )
     );
   }
-
+*/
   // Returns the current edit mode status
   get editMode() { return this.editMode$.value; }
 
@@ -122,11 +117,11 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
   public leaveEditMode() { this.editMode$.next(false); }
 
   // Navigates redirecting whenever necessary
-  public navigate(url: string) { return this.navigator.navigateByUrl(url); }
+  public navigate(url: string) { return this.redirect.navigate(url); }
 
   // Pushes the updated document to be saved
   public save(document: wmDocument) { this.saveDocument$.next( document ); }
-
+/*
   // Enables auto-saving
   private saveAutomatically() {
 
@@ -141,10 +136,10 @@ export class EditorComponent extends ProjectWrapper implements OnInit, OnDestroy
       tap( () => this.toolbar.enableAction('save', false) )
 
     ).subscribe();
-  }
-
+  }*/
+/*
   public canDeactivate() {
     // Ask user for deactivation (leaving the page) when in editMode
     return !this.editMode || this.popup.popupDialog(this.content.select('editor').canLeave);
-  }
+  }*/
 }

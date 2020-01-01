@@ -20,7 +20,7 @@
             "assets": ["apps/wizdm/src/assets"],
             "styles": ["apps/wizdm/src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["apps/wizdm/src/styles"]
+              "includePaths": ["apps/wizdm/src/styles", "libs/elements/src/lib"]
             },
             "scripts": []
           },
@@ -113,6 +113,37 @@
         }
       }
     },
+    "animate": {
+      "projectType": "library",
+      "root": "libs/animate",
+      "sourceRoot": "libs/animate/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/animate/tsconfig.lib.json",
+              "libs/animate/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/animate/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/animate/src/test.ts",
+            "tsConfig": "libs/animate/tsconfig.spec.json",
+            "karmaConfig": "libs/animate/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
     "content": {
       "projectType": "library",
       "root": "libs/content",
@@ -174,6 +205,68 @@
             ],
             "exclude": ["**/node_modules/**"]
           }
+        }
+      }
+    },
+    "redirect": {
+      "projectType": "library",
+      "root": "libs/redirect",
+      "sourceRoot": "libs/redirect/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/redirect/tsconfig.lib.json",
+              "libs/redirect/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/redirect/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/redirect/src/test.ts",
+            "tsConfig": "libs/redirect/tsconfig.spec.json",
+            "karmaConfig": "libs/redirect/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "elements": {
+      "projectType": "library",
+      "root": "libs/elements",
+      "sourceRoot": "libs/elements/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/elements/tsconfig.lib.json",
+              "libs/elements/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/elements/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/elements/src/test.ts",
+            "tsConfig": "libs/elements/tsconfig.spec.json",
+            "karmaConfig": "libs/elements/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
         }
       }
     },
@@ -289,6 +382,68 @@
             "main": "libs/doorbell/src/test.ts",
             "tsConfig": "libs/doorbell/tsconfig.spec.json",
             "karmaConfig": "libs/doorbell/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "paypal": {
+      "projectType": "library",
+      "root": "libs/paypal",
+      "sourceRoot": "libs/paypal/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/paypal/tsconfig.lib.json",
+              "libs/paypal/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/paypal/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/paypal/src/test.ts",
+            "tsConfig": "libs/paypal/tsconfig.spec.json",
+            "karmaConfig": "libs/paypal/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "stripe": {
+      "projectType": "library",
+      "root": "libs/stripe",
+      "sourceRoot": "libs/stripe/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/stripe/tsconfig.lib.json",
+              "libs/stripe/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/stripe/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/stripe/src/test.ts",
+            "tsConfig": "libs/stripe/tsconfig.spec.json",
+            "karmaConfig": "libs/stripe/karma.conf.js"
           }
         }
       },

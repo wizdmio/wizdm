@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ContentConfigurator } from '../loader/content-configurator.service';
 import { Observable } from 'rxjs';
@@ -30,6 +30,13 @@ export class ContentStreamer {
 
   /** Parses the data content returning the selected property */
   public select(selector: string, data: any = this.data): any {
-    return selector.split('.').reduce((value, token) => value && value[token], data);
+
+    if(selector === '') { return data; }
+
+    return selector.split('.').reduce((value, token) => {
+      
+      return value && value[token];
+    
+    }, data);
   }
 }

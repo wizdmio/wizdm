@@ -9,6 +9,7 @@ export * from './lib/model/editable-table';
 export * from './lib/model/editable-figure';
 export * from './lib/model/editable-document';
 export * from './lib/model/editable-selection';
+export * from './lib/model/editable-factory';
 export * from './lib/factory/editable-factory.service';
 export * from './lib/editable-document.component';
 export * from './lib/editable.module';

@@ -1,4 +1,4 @@
-import { DatabaseApplication, dbCollectionRef, dbQueryFn } from './database-application';
+import { DatabaseApplication, CollectionRef, QueryFn } from './database-application';
 import { DatabaseDocument, dbCommon } from './database-document';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap, expand, takeWhile } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { map, mergeMap, expand, takeWhile } from 'rxjs/operators';
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends dbCommon> {
 
-  constructor(readonly db: DatabaseApplication, public ref: dbCollectionRef) {}
+  constructor(readonly db: DatabaseApplication, public ref: CollectionRef) {}
 
   /** Returns the collection object id */
   public get id(): string { return this.ref.id; }
@@ -18,7 +18,7 @@ export class DatabaseCollection<T extends dbCommon> {
   public uniqueId(): string { return this.ref.doc().id; }
 
   /** Helper returing the collection reference for internal use */
-  public col(qf?: dbQueryFn) {
+  public col(qf?: QueryFn) {
     return this.db.afs.collection(this.ref, qf);
   }
 
@@ -48,7 +48,7 @@ export class DatabaseCollection<T extends dbCommon> {
    * Thanks to AngularFire this runs in NgZone triggering change detection.
    * @param qf the optional filtering funciton
    */
-  public get(qf?: dbQueryFn): Promise<T[]> {
+  public get(qf?: QueryFn): Promise<T[]> {
     // Assosiates the query to the collection ref, if any
     const ref = !!qf ? qf(this.ref) : this.ref;
     // Gets the document snapshot
@@ -68,7 +68,7 @@ export class DatabaseCollection<T extends dbCommon> {
    * Thanks to AngularFire this runs in NgZone triggering change detection.
    * @param qf the optional filtering funciton
    */
-  public stream(qf?: dbQueryFn): Observable<T[]> {
+  public stream(qf?: QueryFn): Observable<T[]> {
     // Gets a snapshotChanges observable using AungularFirestoreColleciton
     return this.col(qf).snapshotChanges()
       // Than maps the snapshot to the dbCommon-like content

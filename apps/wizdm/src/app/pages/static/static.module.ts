@@ -1,19 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { MatDividerModule } from '@angular/material/divider';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
-
-// Includes a subset of languages to support syntax highlighting. Checkout Prism.js to add more
-/*
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-c';
-import 'prismjs/components/prism-cpp';
-import 'prismjs/components/prism-csharp';
-import 'prismjs/components/prism-typescript';
-*/
-
-import { AnimateModule } from '../../elements/animate';
+import './prism-languages';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 
@@ -31,6 +23,7 @@ const routes: RoutesWithContent = [
   declarations: [ StaticComponent ],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
     AnimateModule,

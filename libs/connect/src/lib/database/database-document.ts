@@ -1,4 +1,4 @@
-import { DatabaseApplication, dbDocumentRef, dbTimestamp } from './database-application';
+import { DatabaseApplication, DocumentRef, Timestamp } from './database-application';
 import { DatabaseCollection } from './database-collection';
 import { DistributedCounter } from './database-counter';
 import { Observable } from 'rxjs';
@@ -7,14 +7,14 @@ import { map } from 'rxjs/operators';
 /** Common document content to extend from */
 export interface dbCommon {
   id?      : string,
-  created? : dbTimestamp,
-  updated? : dbTimestamp
+  created? : Timestamp,
+  updated? : Timestamp
 }
 
 /** Document object in the database, created by the DatabaseService */
 export class DatabaseDocument<T extends dbCommon> {
 
-  constructor(readonly db: DatabaseApplication, public ref: dbDocumentRef) {}
+  constructor(readonly db: DatabaseApplication, public ref: DocumentRef) {}
 
   /** Returns the document object id */
   public get id(): string { return this.ref.id; }

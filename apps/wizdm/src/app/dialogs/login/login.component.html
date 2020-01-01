@@ -1,0 +1,105 @@
+
+<ng-template>
+
+  <ng-container *wmContent="let msgs select 'login'">
+
+    <div [@vanish]="page">
+      <h1 class="mat-title">{{ msgs.pages[page]?.title }}</h1>
+      <p class="mat-small" [wm-readme]="msgs.pages[page]?.message"></p>
+    </div>
+
+    <form [formGroup]="form" fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px" (ngSubmit)="activate(page)" *ngIf="page !== 'verifyEmail' && page !== 'recoverEmail'">
+
+      <mat-error *ngIf="error" @inflate>{{ errorMessage(error, msgs.errors) }}</mat-error>
+
+      <!-- NAME -->
+      <mat-form-field appearance="legacy" *ngIf="form.contains('name')" @inflate>
+        <mat-label>{{ msgs.labels?.fullname }}</mat-label>
+        <input matInput formControlName="name">
+        <mat-error *ngIf="form.controls['name'].errors?.required">
+          {{ msgs.errors?.nameRequired }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- EMAIL -->
+      <mat-form-field appearance="legacy" *ngIf="form.contains('email')" @inflate>
+        <mat-label>{{ msgs.labels?.email }}</mat-label>
+        <input matInput formControlName="email">
+        <mat-error *ngIf="form.controls['email'].errors?.required">
+          {{ msgs.errors?.emailRequired }}
+        </mat-error>
+        <mat-error *ngIf="form.controls['email'].errors?.email">
+          {{ msgs.errors?.emailInvalid }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- PASSWORD -->
+      <mat-form-field appearance="legacy" *ngIf="form.contains('password')" @inflate>
+        <mat-label>{{ msgs.labels?.password }}</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+        <wm-icon matSuffix 
+                [icon]="hide ? 'visibility_off' : 'visibility'" 
+                (click)="hide = !hide">
+        </wm-icon>
+        <mat-error *ngIf="form.controls['password'].errors?.required">
+          {{ msgs.errors?.passwordRequired }}
+        </mat-error>
+        <mat-hint class="mat-small" *ngIf="page === 'signIn'" align="end" [wm-readme]="msgs.forgot" @inflate>
+          Forgot password?<a (click)="switchPage('forgotPassword')">Reset</a>
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- NEW EMAIL -->
+      <mat-form-field appearance="legacy" *ngIf="form.contains('newEmail')" @inflate>
+        <mat-label>{{ msgs.labels?.newEmail }}</mat-label>
+        <input matInput formControlName="newEmail">
+        <mat-error *ngIf="form.controls['newEmail'].errors?.required">
+          {{ msgs.errors?.emailRequired }}
+        </mat-error>
+        <mat-error *ngIf="form.controls['newEmail'].errors?.email">
+          {{ msgs.errors?.emailInvalid }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- NEW PASSWORD -->
+      <mat-form-field appearance="legacy" *ngIf="form.contains('newPassword')" @inflate>
+        <mat-label>{{ msgs.labels?.newPassword }}</mat-label>
+        <input matInput formControlName="newPassword">
+        <mat-error *ngIf="form.controls['newPassword'].errors?.required">
+          {{ msgs.errors?.passwordRequired }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- ACTION BUTTON -->
+      <button mat-stroked-button color="primary" type="submit" [disabled]="!!error || !form.valid" class="btn">
+        {{ msgs.pages[page]?.caption }}
+      </button>
+
+      <mat-progress-bar *ngIf="progress" mode="indeterminate" color="accent" @inflate></mat-progress-bar>
+    </form>
+
+    <!-- REGISTER LINK -->
+    <p class="mat-small bit-of-space" *ngIf="page === 'signIn'" [wm-readme]="msgs.register">
+      Are you a new user? <a (click)="switchPage('register')">Register</a>
+    </p>
+
+    <!-- BACK TO SIGN-IN LINK -->
+    <p class="mat-small bit-of-space" *ngIf="page === 'register' || page === 'forgotPassword'" [wm-readme]="msgs.signIn">
+      Already have login and password ?<a (click)="switchPage('signIn')">Sign-in</a>
+    </p>
+
+    <!-- SIGN IN WITH OPTION LINKS -->
+    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="page === 'signIn'" @inflate>
+
+      <p class="mat-small" [wm-readme]="msgs.signInWith">Or sign-in with:</p>
+
+      <div fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+
+        <button mat-icon-button *ngFor="let p of msgs.providers" (click)="signInWith(p.name)">
+          <wm-icon class="providers" [icon]="p.icon" [ngStyle]="{ color: p.color }"></wm-icon>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+</ng-template>

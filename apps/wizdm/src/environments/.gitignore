@@ -1,2 +1,2 @@
 # Configurations
-config/*.json
+*secrets.ts

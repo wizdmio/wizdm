@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-//import { AuthGuard, PageGuard } from '../../utils';
+//import { RedirectModule } from '@wizdm/redirect';
+import { ReadmeModule } from '@wizdm/elements/readme';
+//import { AuthGuard } from 'app/utils/auth-guard';
+//import { PageGuard } from 'app/utils/page-guard';
 import { NotFoundComponent } from './not-found.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    component: NotFoundComponent,
-    content: 'notFound'
+    content: 'not-found',
+    component: NotFoundComponent
     //canActivate: [ AuthGuard ],
     //canDeactivate: [ PageGuard ]
   }
@@ -20,6 +23,7 @@ const routes: RoutesWithContent = [
   imports: [
     CommonModule,
     FlexLayoutModule,
+    ReadmeModule,
     ContentRouterModule.forChild(routes)
   ]
 })

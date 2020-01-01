@@ -3,5 +3,29 @@
 
   header { padding: 32px 32px 0 32px; }
 
+  .folder {
+
+    padding: 32px;
+
+    .row {
+
+      .cell {
+
+        padding: 8px;
+
+        .file {
+
+          position: relative;
+
+          width: 100%;
+          height: 100%;
+          padding: 16px;
+          text-align: center;
+          box-sizing: border-box;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
 }
 

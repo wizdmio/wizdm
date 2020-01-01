@@ -1,43 +1,69 @@
 
-<header fxLayout="column">
-  <h1 fxHide.lt-sm>{{ msgs?.title }}</h1>
-  <h2 fxHide fxShow.lt-sm>{{ msgs?.title }}</h2>
-</header>
+<ng-container *wmContent="let msgs select 'folder'">
+      
+  <!-- Action Bar (projected in the top toolbar) -->
+  <ng-container *wmActionbar>
+    <ng-container *ngIf="msgs.actions || {} as actions">
 
-<mat-divider></mat-divider>
+      <wm-action color="primary" [icon]="actions.delete?.icon || 'delete'" [disabled]="" (click)="dlgDelete.open()">
+        {{ actions.delete?.caption || 'Delete' }}
+      </wm-action>
 
-<!-- Hidden OpenFile component -->
-<wm-openfile accept="image/*" (files)="upload($event)" multiple></wm-openfile>
+      <wm-action color="primary" [icon]="actions.upload?.icon || 'cloud_upload'" (click)="openfile.open()">
+        {{ actions.upload?.caption || 'Upload' }}
+      </wm-action>
 
-<!-- File list -->
-<mat-selection-list *ngIf="uploads$ | async as files" (selectionChange)="selectionChange($event)">
+    </ng-container>
 
-  <!-- No files message -->
-  <p *ngIf="!files.length && !tasks.length">{{ msgs?.description }}</p>
+    <!-- Hidden OpenFile component -->
+    <wm-openfile accept="image/*" multiple (files)="uploadFiles($event)" #openfile></wm-openfile>
 
-  <!-- Uploaded file items -->
-  <mat-list-option *ngFor="let file of files" [value]="file" [disabled]="isFileDeleting(file)">
-    <img matListAvatar [src]="file.url">
-    <h4 matLine>{{ file.name }}</h4>
-    <p matLine>
-      {{ file.size | wmFileSize }}
-      <span class="mat-small">&nbsp;({{ file.fullName }})</span>
-    </p>
-  </mat-list-option>
+    <!-- Can Delete confirmation dialog -->
+    <wm-dialog (closedChange)="!!$event && deleteFiles()" #dlgDelete>
 
-  <!-- Uploading progress fake item(s) -->
-  <ng-container *ngFor="let task of tasks">
-    <mat-list-item *ngIf="task.snapshot | async as snapshot">
-      <svg matListAvatar><use xlink:href="#upload"></use></svg>
-      <h4 matLine>{{ snapshot.fileName }}</h4>
-      <p matLine>
-        <mat-progress-bar [value]="progress(snapshot)"></mat-progress-bar>
-        <span>{{ snapshot.xfer | wmFileSize }} / {{ snapshot.size | wmFileSize }}</span>
-      </p>
-    </mat-list-item>
+      <ng-container *ngIf="msgs.canDelete || {} as delete">
+  
+        <h2 mat-dialog-title><b>{{ delete.title || 'Deleting files' }}</b></h2>
+  
+        <mat-dialog-content [wm-readme]="delete.message">
+          <b>WARNIN!!!G</b><br>By proceeding you'll permanently delete the selected file(s).
+        </mat-dialog-content>
+      
+        <mat-dialog-actions align="end">
+          <button mat-button color="primary" (click)="dlgDelete.close(false)" cdkFocusInitial>{{ delete.cancel || 'Abort' }}</button>
+          <button mat-button color="warn" (click)="dlgDelete.close(true)">{{ delete.ok || 'Proceed' }}</button>
+        </mat-dialog-actions>
+  
+      </ng-container>
+  
+    </wm-dialog>
+
   </ng-container>
+      
+  <!-- Page body: Folder with file thumbnails -->
+  <section class="folder" fxLayout="column" fxLayoutAlign="center center">
 
-</mat-selection-list>
+    <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column">
+  
+      <ng-container *ngFor="let file of files$ | async">
+    
+        <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
+  
+          <wm-thumbnail class="file" [name]="file.name$ | async" [src]="file.url$ | async" size="md">
+
+            <wm-spinner></wm-spinner>
+
+          </wm-thumbnail>
+  
+        </div>
+  
+      </ng-container>
+      
+    </div>
+  
+  </section>
+
+</ng-container>
 
 <!-- Cloud upload image for progress  -->
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="0" height="0" display="none">

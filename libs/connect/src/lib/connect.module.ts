@@ -1,13 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { AngularFireModule, 
-         FirebaseOptions, 
-         FirebaseOptionsToken, 
-         FirebaseNameOrConfigToken } from '@angular/fire';
+import { AngularFireModule, FirebaseOptions, FirebaseOptionsToken, FirebaseNameOrConfigToken } from '@angular/fire';
 
-export interface ConnectConfig {
-  appname?: string,
-  firebase: FirebaseOptions
-}
+export type ConnectConfig = FirebaseOptions;
 
 @NgModule({
   imports: [ AngularFireModule ],
@@ -15,12 +9,12 @@ export interface ConnectConfig {
 })
 export class ConnectModule { 
 
-  static init(config: ConnectConfig): ModuleWithProviders<ConnectModule> {
+  static init(config: ConnectConfig, appname?: string): ModuleWithProviders<ConnectModule> {
     return {
       ngModule: ConnectModule,
       providers: [
-        { provide: FirebaseOptionsToken, useValue: config.firebase },
-        { provide: FirebaseNameOrConfigToken, useValue: config.appname || '' }
+        { provide: FirebaseOptionsToken, useValue: config },
+        { provide: FirebaseNameOrConfigToken, useValue: appname || '' }
       ]
     }
   }

@@ -1,0 +1,17 @@
+
+<h2 mat-dialog-title *ngIf="!!data.title">
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content class="justify">
+  {{ data.message || 'Something wrong' }}
+</mat-dialog-content>
+
+<mat-dialog-actions *ngIf="!!data.ok || !!data.cancel" align="end">
+  <button mat-button [mat-dialog-close]="false" *ngIf="!!data.cancel" cdkFocusInitial>
+    {{ data.cancel }}
+  </button>
+  <button mat-button [mat-dialog-close]="true" *ngIf="!!data.ok">
+    {{ data.ok }}
+  </button>
+</mat-dialog-actions>

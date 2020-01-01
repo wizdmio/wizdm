@@ -5,16 +5,16 @@ import { PagedCollection } from './database-paged';
 import { DistributedCounter } from './database-counter';
 import { firestore } from 'firebase/app';
 //--
-export type dbCollectionRef = firestore.CollectionReference;
-export type dbDocumentRef = firestore.DocumentReference;
-export type dbWriteBatch = firestore.WriteBatch;
-export type dbTransaction = firestore.Transaction;
-export type dbTimestamp = firestore.Timestamp;
-export type dbPath = firestore.FieldPath;
-export type dbValue = firestore.FieldValue;
-export type dbGeopoint = firestore.GeoPoint;
-export type dbQuery = firestore.Query;
-export type dbQueryFn = (ref: dbCollectionRef | dbQuery) => dbQuery;
+export type CollectionRef = firestore.CollectionReference;
+export type DocumentRef = firestore.DocumentReference;
+export type WriteBatch = firestore.WriteBatch;
+export type Transaction = firestore.Transaction;
+export type Timestamp = firestore.Timestamp;
+export type FieldPath = firestore.FieldPath;
+export type FieldValue = firestore.FieldValue;
+export type GeoPoint = firestore.GeoPoint;
+export type Query = firestore.Query;
+export type QueryFn = (ref: CollectionRef | Query) => Query;
 
 export abstract class DatabaseApplication {
 
@@ -24,41 +24,41 @@ export abstract class DatabaseApplication {
   public get firestore() { return this.afs.firestore; }
 
   /** Return a server timestamp palceholder (it'll turn into a timestamp serverside) */
-  public get timestamp(): dbValue {
+  public get timestamp(): FieldValue {
     return firestore.FieldValue.serverTimestamp();
   }
 
   /** Return an ID sentinel to be used in queries */
-  public get sentinelId(): dbPath {
+  public get sentinelId(): FieldPath {
     return firestore.FieldPath.documentId();
   }
 
   /** Creates a geopoint at the given lat and lng */
-  public geopoint(lat: number, lng: number): dbGeopoint {
+  public geopoint(lat: number, lng: number): GeoPoint {
     return new firestore.GeoPoint(lat, lng);
   }
 
-  /** Returns a firestore.WriteBatch re-typed into a dbWriteBatch to support batch operations */
-  public batch(): dbWriteBatch {
+  /** Returns a firestore.WriteBatch re-typed into a WriteBatch to support batch operations */
+  public batch(): WriteBatch {
     return this.firestore.batch();
   }
 
   /** Runs a firestore.Transaction to support atomic operations */
-  public transaction<T>( updateFn: (t: dbTransaction) => Promise<T> ): Promise<T> {
+  public transaction<T>( updateFn: (t: Transaction) => Promise<T> ): Promise<T> {
     return this.firestore.runTransaction<T>(updateFn);
   }
 
-  public doc(ref: string|dbDocumentRef): dbDocumentRef {
+  public doc(ref: string|DocumentRef): DocumentRef {
     return typeof ref === 'string' ? this.firestore.doc(ref) : ref;
   }
 
-  public col(ref: string|dbCollectionRef): dbCollectionRef {
+  public col(ref: string|CollectionRef): CollectionRef {
     return typeof ref === 'string' ? this.firestore.collection(ref) : ref;
   }
 
   /** Database Objects Factories */
-  public abstract document<T>(path: string|dbDocumentRef): DatabaseDocument<T>;
-  public abstract collection<T>(path: string|dbCollectionRef): DatabaseCollection<T>;
-  public abstract pagedCollection<T>(path: string|dbCollectionRef): PagedCollection<T>;
-  public abstract counter(path: string|dbCollectionRef, shards: number): DistributedCounter;
+  public abstract document<T>(path: string|DocumentRef): DatabaseDocument<T>;
+  public abstract collection<T>(path: string|CollectionRef): DatabaseCollection<T>;
+  public abstract pagedCollection<T>(path: string|CollectionRef): PagedCollection<T>;
+  public abstract counter(path: string|CollectionRef, shards: number): DistributedCounter;
 }

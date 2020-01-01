@@ -4,9 +4,9 @@
   "welcomeBack": "Welcome back! The form below is already filled with the latest information you provided.",
   "clearForm": "Eventually, you can [clear the form](clear) and restart if you prefer.",
 
-  "actions": [
-    { "caption": "Clear Application", "icon": "delete_forever", "code": "clear" }
-  ],
+  "actions": {
+    "clear": { "caption": "Clear Application", "icon": "fas:fa-eraser" }
+  },
 
   "header": {
     "title": "Name your application",
@@ -129,7 +129,7 @@
 
   "canClear": {
     "title": "Clear application",
-    "message": "Are you sure you want to clear the unsaved changes?",
+    "message": "Are you sure you want to clear the unsaved application?",
     "cancel": "Cancel",
     "ok": "Proceed"
   },

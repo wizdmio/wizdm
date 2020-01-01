@@ -20,7 +20,11 @@ if(typeof String.prototype.select === 'undefined') {
   String.prototype.select = function(this: string, context: any, defaults?: any): any {
       
     return this.split(".").reduce( (value, token) => {
-        return (value && value[token]) || defaults;
-      }, context);
+        
+      if(token === '') { return value; }
+
+      return (value && value[token]) || defaults;
+
+    }, context);
   };
 }

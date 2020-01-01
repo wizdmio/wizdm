@@ -21,16 +21,25 @@ export class ContentSelector implements CanActivate {
     const selected = this.languageAllowed( requested === 'auto' ? this.browserLanguage : requested );
     console.log('Selected language:', selected);
 
+    // Keeps track of the currently selected language within the ContentConfigurator for other services to take advantage from
+    this.config.currentValue = selected;
+
     // Redirects to the selected whenever differs from the requested
-    return(requested !== selected ? this.router.createUrlTree( [selected] ) : true) as AllowedContent;
+    return(requested !== selected ? this.router.createUrlTree([selected]) : true) as AllowedContent;
   }
 
-  public languageAllowed(lang: string): string {
-    return this.config.supportedValues.find( allowed => allowed === lang) || this.config.defaultValue;
+  /** Checks if the language code is among the allowed ones */
+  protected isLanguageAllowed(lang: string): boolean {
+    return !!this.config.supportedValues.find( allowed => allowed === lang );
+  }
+
+  /** Filters the language code ensuring is among the allowed ones returning the default value otherwise*/
+  protected languageAllowed(lang: string): string {
+    return this.config.supportedValues.find( allowed => allowed === lang ) || this.config.defaultValue;
   }
 
   /** Two digits browser language code */
-  public get browserLanguage(): string { 
+  protected get browserLanguage(): string { 
     
     const detected = this.detectLanguage().split('-')[0];
     console.log("Detected language:", detected);
@@ -39,7 +48,7 @@ export class ContentSelector implements CanActivate {
   }
 
   /** Detects the preferred language according to the browser, whenever possible */
-  public detectLanguage(): string {
+  protected detectLanguage(): string {
 
     const navigator: any = !!window && window.navigator || {};
 

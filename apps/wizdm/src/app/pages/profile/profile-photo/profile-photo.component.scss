@@ -1,0 +1,27 @@
+
+:host {
+  display: block;
+  position: relative;
+
+  .label {
+    display: block;
+    color: rgba(0,0,0,0.56);
+  }
+
+  .frame {
+    display: block;
+    position: relative;
+  }
+  
+  .wm-avatar {
+    position: relative;
+    width:  250px;
+    height: 250px;
+  }
+
+  .buttons {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+}

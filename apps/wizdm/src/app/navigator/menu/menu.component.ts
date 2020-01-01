@@ -10,25 +10,24 @@ import { $animations } from './menu.animations';
 })
 export class MenuComponent {
 
-  @Input() menuItems: any[] = [];
-
-  public toggle = false;
+  public toggler = false;
   public visible = false;
 
-  constructor() { }
+  @Input() items: any[] = [];
+
+  @Input('toggler') set toggleMenu(toggler: boolean) {
+
+    this.togglerChange.emit(this.toggler = toggler);
+    
+    this.toggler && this.menuVisible.emit(this.visible = true);
+  }
+
+  public done() {
+
+    !this.toggler && this.menuVisible.emit(this.visible = false);
+  }
+
+  @Output() togglerChange = new EventEmitter<boolean>();
 
   @Output('visible') menuVisible = new EventEmitter<boolean>();
-  
-  @Input('toggle') set menuShow(toggle: boolean) {
-    
-    if(this.toggle = toggle) {
-      this.menuVisible.emit(this.visible = true);
-    }
-  }
-
-  public menuDone() {
-    if(!this.toggle) {
-      this.menuVisible.emit(this.visible = false);
-    }
-  }
 }

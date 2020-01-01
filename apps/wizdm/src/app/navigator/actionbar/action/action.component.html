@@ -1,0 +1,15 @@
+
+
+<!-- Displays the icon button on mobile devices -->
+<button mat-icon-button [color]="color" [disabled]="disabled" (click)="click.emit($event)" *ngIf="!!icon && mobile; else desktopVersion">
+  <wm-icon [icon]="icon"></wm-icon>
+</button>
+
+<ng-template #desktopVersion>
+
+  <!-- Displays the regular button otherwise -->
+  <button mat-button [color]="color" [disabled]="disabled" (click)="click.emit($event)">
+    <ng-content></ng-content>
+  </button>
+  
+</ng-template>

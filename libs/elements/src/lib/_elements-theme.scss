@@ -1,0 +1,22 @@
+
+@import './logo/logo-theme';
+@import './toggler/toggler-theme';
+@import './avatar/avatar-theme';
+@import './spinner/spinner-theme';
+@import './thumbnail/thumbnail-theme';
+@import './inkbar/inkbar-theme';
+@import './readme/readme-theme';
+@import './illustration/illustration-theme';
+
+@mixin wm-elements-theme($theme) {
+
+  // Includes element specifics theme styles
+  @include wm-logo-theme($theme);
+  @include wm-toggler-theme($theme);
+  @include wm-avatar-theme($theme);
+  @include wm-spinner-theme($theme);
+  @include wm-thumbnail-theme($theme);
+  @include wm-inkbar-theme($theme);
+  @include wm-readme-theme($theme);
+  @include wm-illustration-theme($theme, ('stroke', 'fill', 'stop-color'));
+}

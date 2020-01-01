@@ -3,21 +3,24 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
-import { LogoModule } from '../elements/logo';
-import { TogglerModule } from '../elements/toggler';
-import { IconModule } from '../elements/icon';
-import { AvatarModule } from '../elements/avatar';
-import { FlipModule } from '../elements/flip';
+import { LogoModule } from '@wizdm/elements/logo';
+import { TogglerModule } from '@wizdm/elements/toggler';
+import { IconModule } from '@wizdm/elements/icon';
+import { AvatarModule } from '@wizdm/elements/avatar';
+import { FlipModule } from '@wizdm/elements/flip';
+import { ActionLinkModule } from 'app/utils/action-link';
+import { LoginModule } from 'app/dialogs/login/login.module';
+import { FeedbackModule } from 'app/dialogs/feedback/feedback.module';
 import { NavbarModule } from './navbar/navbar.module'; 
-import { ToolbarModule } from './toolbar/toolbar.module'; 
+import { ActionbarModule } from './actionbar/actionbar.module'; 
 import { MenuModule } from './menu/menu.module'; 
 import { FooterModule } from './footer/footer.module';
-import { FeedbackModule } from './feedback/feedback.module';
 import { NavRoutingModule } from './navigator-routing.module';
 import { NavigatorComponent } from './navigator.component';
+import { TitleDirective } from './title/title.directive';
 
 @NgModule({
-  declarations: [ NavigatorComponent ],
+  declarations: [ NavigatorComponent, TitleDirective ],
   imports: [
     CommonModule,
     FlexLayoutModule,
@@ -26,13 +29,15 @@ import { NavigatorComponent } from './navigator.component';
     TogglerModule,
     LogoModule,
     IconModule, 
-    FlipModule,
     AvatarModule,
+    FlipModule,
+    ActionLinkModule,
+    LoginModule,
+    FeedbackModule,
     NavbarModule,
-    ToolbarModule,
+    ActionbarModule,
     MenuModule,
     FooterModule,
-    FeedbackModule,
     NavRoutingModule
   ]
 })

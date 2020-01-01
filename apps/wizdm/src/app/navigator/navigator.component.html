@@ -1,14 +1,15 @@
 
-<ng-container *ngIf="msgs$ | async as msgs">
+<ng-container *wmContent="let msgs select 'navigator'">
 
-  <header fxFlex="0 0 auto">
+  <!-- Updates the Title and the description meta-tag -->
+  <header fxFlex="0 0 auto" [wmTitle]="msgs.title" [description]="msgs.description">
 
     <mat-toolbar>
 
       <!-- Background w/ shadow to fade while blending in -->
-      <div class="background" [@blendin]="!menu && !(scrolled$ | async)"></div>
+      <div class="background" [@blendin]="!menuVisible && !(scrolled$ | async)"></div>
 
-      <!-- Navigation bar -->
+      <!-- Navigation bar (1st row) -->
       <mat-toolbar-row fxLayoutAlign="space-between center">
 
         <!-- Left pane -->
@@ -18,7 +19,6 @@
           <wm-logo color="primary" routerLink="."></wm-logo>  
       
           <!-- Desktop navigation links -->
-          <!--wm-navbar [menuItems]="menuDesktop$ | async" *ngIf="desktop"></wm-navbar-->
           <wm-navbar *ngIf="desktop && msgs.toolbar as toolbar" [menuItems]="signedIn ? toolbar.private : toolbar.public"></wm-navbar>
         
         </nav>
@@ -27,32 +27,36 @@
         <div fxLayout="row" fxLayoutAlign="end center">
 
           <!-- Action toolbar -->
-          <wm-toolbar *ngIf="toolbar.some$ | async" [buttons]="toolbar.buttons$ | async" (action)="toolbar.performAction($event)"></wm-toolbar>
+          <wm-actionbar [template]="actionbar | async"></wm-actionbar>
 
           <!-- Sign-in / User profile button -->
           <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
+            
             <!-- Flip button -->
             <wm-flip [flipped]="signedIn">
+            
               <!-- Shows a generic signIn icon on the front -->
               <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
+            
               <!-- Shows the loggedIn avatar on the back -->
               <wm-avatar back color="primary" [src]="userImage"></wm-avatar>
+            
             </wm-flip>
+
           </button>
 
           <!-- Mobile menu toggler -->
           <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
-            <wm-toggler toggler-style="menu" [toggled]="toggler"></wm-toggler>
+            <wm-toggler toggler-style="menu" [toggled]="menuToggler"></wm-toggler>
           </button>
 
         </div>
       </mat-toolbar-row>
 
-      <!-- Mobile menu -->
-      <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menu">
+      <!-- Mobile menu (2nd row) -->
+      <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
         
-        <!--wm-menu [menuItems]="menuMobile$ | async" [toggle]="toggler" (visible)="menu = $event"></wm-menu-->
-        <wm-menu [menuItems]="signedIn ? menu.private : menu.public" [toggle]="toggler" (visible)="menu = $event"></wm-menu>    
+        <wm-menu [items]="signedIn ? menus.private : menus.public" [(toggler)]="menuToggler" (visible)="menuVisible = $event"></wm-menu>    
       
       </mat-toolbar-row>
 
@@ -63,16 +67,32 @@
   <!-- Viewport container -->
   <main fxFlex="1 1 auto" fxLayout="column">
 
+    <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
+    <wm-login-dlg wmActionLink="login" (activate)="login.open($event)" #login></wm-login-dlg>
+
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
-      <router-outlet (deactivate)="toolbar.clearActions()"></router-outlet>
+      <router-outlet (deactivate)="actionbar.clear()"></router-outlet>
     </div>
     
     <!-- Footer always on the bottom -->
     <wm-footer fxFlex="0 0 auto"></wm-footer>
+
+    <!-- Feedback form activated on 'contact' action link  @see navigator-router-module -->
+    <wm-feedback-dlg [disableClose]="true" wmActionLink="contact" (activate)="feedback.open($event)" #feedback>
+      
+      <!-- Form trigger button -->
+      <button mat-raised-button class="feedback-btn" (click)="feedback.open()">
+
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
+          <span>{{ msgs.contactUs?.caption || 'Contact Us' }}</span>
+          <wm-icon [icon]="msgs.contactUs?.icon || 'message'"></wm-icon>
+        </div>
+      
+      </button>   
+
+    </wm-feedback-dlg>
+
   </main>
-
-  <!-- Feedback form -->
-  <wm-feedback></wm-feedback>
-
+  
 </ng-container>

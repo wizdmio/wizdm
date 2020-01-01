@@ -1,0 +1,25 @@
+
+.wm-avatar {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  &[shape="rounded"] { border-radius: 50%; }
+
+  &[shape="squared"] { border-radius: 5%; }
+
+  svg, img {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  // Sets opacity of both background and foreground, so, the latter will results being the sum of both
+  svg { #background, #foreground { opacity: 0.25; } }
+}

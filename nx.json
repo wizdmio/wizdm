@@ -31,6 +31,24 @@
     },
     "doorbell": {
       "tags": []
+    },
+    "animate": {
+      "tags": []
+    },
+    "elements": {
+      "tags": []
+    },
+    "paypal": {
+      "tags": []
+    },
+    "utils": {
+      "tags": []
+    },
+    "redirect": {
+      "tags": []
+    },
+    "stripe": {
+      "tags": []
     }
   }
 }

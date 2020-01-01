@@ -14,6 +14,7 @@ export abstract class ContentLoader {
 
   /** Returns the content snapshot */
   public get content(): any { return this.data || (this.data = { lang: this.config.defaultValue }); }
+  
   /** Returns the current language as a two digit code */
   public get language(): string { return this.content.lang; }
 
@@ -44,15 +45,14 @@ export class DefaultLoader extends ContentLoader {
 
     // Resets the data snapshot while switching language
     if(lang !== this.language) { this.data = { lang }; }
+
     // Returns the module from the data whenever possible
     if(!!this.content[moduleName]) { return of(this.content[moduleName]); }
+    
     // Always load the default module together with the requested one
     return forkJoin(
       // Default language file (full)
-      this.http.get<any>(`${this.config.contentRoot}/${this.config.defaultValue}/${moduleName}.json`)/*.pipe(
-        // Overwrites (or add) the lang property with the current two-digit language coce
-        tap( data => data.lang = this.language )
-      )*/,
+      this.http.get<any>(`${this.config.contentRoot}/${this.config.defaultValue}/${moduleName}.json`),
       // Requested language file (partial)
       this.http.get<any>(`${this.config.contentRoot}/${this.language}/${moduleName}.json`).pipe(
         // Reverts to the default language in case of errors (basically it pass an empty object 

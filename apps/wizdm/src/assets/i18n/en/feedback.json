@@ -1,6 +1,4 @@
 {
-  "caption": "Contact us",
-  "icon": "far:fa-comment",
   "title": "Let's talk",
   "send": "Send",
   "name": {
@@ -31,12 +29,12 @@
           "sizeExceeded": "File size exceeded"
       }
   },
-  "notifications": {
-      "success": "Thank you for reaching us out!\nWe'll get in touch very soon",
-      "error": "Seems the feedback didn't go through :/\nPlease retry in a minute"
-  },
   "credits": {
       "caption": "Powered by Doorbell.io",
       "url": "https://doorbell.io"
+  },
+  "notifications": {
+      "success": "Thank you for reaching us out!\nWe'll get in touch very soon",
+      "error": "Seems the feedback didn't go through :/\nPlease retry in a minute"
   }
 }

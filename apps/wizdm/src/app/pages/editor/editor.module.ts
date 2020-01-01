@@ -9,8 +9,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableModule } from '@wizdm/editable';
-import { PopupModule } from '../../elements/popup';
-import { AuthGuard, PageGuard } from '../../utils';
+import { AuthGuard } from 'app/utils/auth-guard';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { EditorComponent } from './editor.component';
 import { ToolboxComponent } from './toolbox/toolbox.component';
 import { ContextMenuComponent } from './menu/context-menu.component';
@@ -19,10 +19,10 @@ import { LongpressComponent } from './longpress/longpress.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    component: EditorComponent,
     content: 'editor',
+    component: EditorComponent,
     canActivate: [ AuthGuard ],
-    canDeactivate: [ PageGuard ],
+    canDeactivate: [ CanLeaveGuard ],
   }
 ];
 
@@ -37,7 +37,7 @@ const routes: RoutesWithContent = [
     MatDividerModule,
     MatSidenavModule,
     EditableModule,
-    PopupModule,
+    CanLeaveModule,
     ContentRouterModule.forChild(routes)
   ],
   declarations: [ 

@@ -1,0 +1,72 @@
+
+<!-- Profile form w/ localized content -->
+<form [formGroup]="this" fxLayout="column" fxLayoutGap="32px" *wmContent="let msgs select 'profile.form'">
+
+  <!-- Name -->
+  <mat-form-field *ngIf="msgs.name as name">
+    <mat-label>{{ name.label || 'Name' }}</mat-label>
+    <input matInput formControlName="name" cdkFocusInitial>
+    <wm-icon matPrefix [icon]="name.icon"></wm-icon>
+    <mat-hint>{{ name.hint }}</mat-hint>
+    <mat-error *ngIf="controls['name'].errors?.required">{{ name.errors.required }}</mat-error>
+  </mat-form-field>
+
+  <!-- Motto -->
+  <mat-form-field *ngIf="msgs.motto as motto">
+    <mat-label>{{ motto.label || 'Motto' }}</mat-label>
+    <textarea matInput formControlName="motto" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+    <wm-icon matPrefix [icon]="motto.icon"></wm-icon>
+    <mat-hint>{{ motto.hint }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Email -->
+  <mat-form-field *ngIf="msgs.email as email">
+    <mat-label>{{ email.label || 'Email' }}</mat-label>
+    <input matInput formControlName="email">
+    <wm-icon matPrefix [icon]="email.icon"></wm-icon>
+    <mat-hint>{{ email.hint }}</mat-hint>
+    <mat-error *ngIf="controls['email'].errors?.email">{{ email.errors.format }}</mat-error>
+  </mat-form-field>
+
+  <!-- Phone -->
+  <mat-form-field *ngIf="msgs.phone as phone">
+    <mat-label>{{ phone.label || 'Phone' }}</mat-label>
+    <input matInput formControlName="phone">
+    <wm-icon matPrefix [icon]="phone.icon"></wm-icon>
+    <mat-hint>{{ phone.hint }}</mat-hint>
+    <mat-error *ngIf="controls['phone'].errors?.phone">{{ phone.errors.format }}</mat-error>
+  </mat-form-field>
+
+  <!-- Birthday -->
+  <mat-form-field *ngIf="msgs.birth as birth">
+    <mat-label>{{ birth.label || 'Birthday' }}</mat-label>
+    <input matInput formControlName="birth" [matDatepicker]="picker">
+    <!--wm-icon matPrefix [icon]="birth.icon"></wm-icon-->
+    <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [touchUi]="isMobile" #picker></mat-datepicker>
+    <mat-hint>{{ birth.hint }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Gender -->
+  <mat-form-field *ngIf="msgs.gender as gender">  
+    <mat-label>{{ gender.label }}</mat-label>
+    <wm-icon matPrefix [icon]="genderIcon(gender.options) || gender.icon"></wm-icon>
+    <mat-select formControlName="gender">
+      <mat-option *ngFor="let option of gender.options" [value]="option.value">
+      <span><wm-icon [icon]="option.icon"></wm-icon>{{ option.label }}</span>
+      </mat-option>
+    </mat-select> 
+    <mat-hint>{{ gender.hint }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Language -->
+  <mat-form-field *ngIf="msgs.language as lang">  
+    <mat-label>{{ lang.label }}</mat-label>
+    <wm-icon matPrefix [icon]="lang.icon"></wm-icon>
+    <mat-select formControlName="lang">
+      <mat-option *ngFor="let option of lang.options" [value]="option.value">{{ option.label }}</mat-option>
+    </mat-select>
+    <mat-hint>{{ lang.hint }}</mat-hint>
+  </mat-form-field>
+
+</form>

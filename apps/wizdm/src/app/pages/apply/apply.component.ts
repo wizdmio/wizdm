@@ -2,17 +2,15 @@ import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material/stepper';
-import { UserProfile, wmUser } from '@wizdm/connect';
 import { ContentStreamer } from '@wizdm/content';
+import { RedirectService } from '@wizdm/redirect';
 import { wmDocument } from '@wizdm/editable';
-import { Observable, Subscription } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
-import { ToolbarService, NavigatorService } from '../../navigator';
-import { ProjectService, wmProject } from '../../core/project';
-import { CanPageDeactivate } from '../../utils';
-import { EditableConverter } from '../../utils/doc-converter';
-import { PopupService } from '../../elements/popup';
+import { ProjectService } from 'app/core/project';
+import { Member, wmMember } from 'app/core/member';
+import { EditableConverter } from 'app/utils/doc-converter';
 import { $animations } from './apply.animations';
+import { Observable, Subscription } from 'rxjs';
+import { tap, switchMap, catchError } from 'rxjs/operators';
 
 export interface wmApplication {
 
@@ -27,7 +25,7 @@ export interface wmApplication {
   comments?      : string  // Additional comments
 }
 
-interface userApply extends wmUser {
+interface userApply extends wmMember {
   lastApplication?: wmApplication,
 }
 
@@ -39,11 +37,9 @@ interface userApply extends wmUser {
   animations: $animations,
   providers: [ ContentStreamer ]
 })
-export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate, OnDestroy {
+export class ApplyComponent implements AfterViewInit, OnDestroy {
 
-  //public msgs$: Observable<any>;
   private sub: Subscription;
-  public msgs: any;
 
   public headerForm: FormGroup;
   public stepForms : FormGroup[] = [];
@@ -52,44 +48,22 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
   public progress = false;
   
   constructor(private builder   : FormBuilder, 
-              private profile   : UserProfile<userApply>,
+              private profile   : Member<userApply>,
               private converter : EditableConverter,
               private project   : ProjectService,
-              private navigator : NavigatorService,
-              private toolbar   : ToolbarService,
-              private popup     : PopupService,
-              private content   : ContentStreamer) {}
-
-  ngOnInit() {
+              private redirect  : RedirectService,
+              private content   : ContentStreamer) {
 
     // Checks if the application was previously saved
-    this.welcomeBack = !!this.application;
+    this.welcomeBack = !!this.application;  
 
-    // Resolves the localized content
-    this.sub = this.content.stream('apply').pipe( 
-
-      switchMap( msgs => {
-
-        // Keeps a snapshot of the localized content for internal use
-        this.msgs = msgs;
-        // Build the stepper forms initializing the field values with the last application eventually saved
-        this.buildForm(this.application || {});
-        
-        // Enables the action buttons
-        const actions = this.toolbar.activateActions(msgs.actions);
-        this.toolbar.enableAction('clear', this.welcomeBack);
-        return actions;
-
-      } )
-      // Subscribes to the actions
-    ).subscribe( code => this.disclaimerAction(code) );
+    this.buildForm(this.application || {});
   }
 
   ngAfterViewInit() {
 
     // Walk trough the saved application steps
     //this.stepIndex = this.application ? this.walkTrought() : 0;
-
   }
 
   ngOnDestroy() { this.sub.unsubscribe(); }
@@ -99,12 +73,12 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
     return this.profile.data.lastApplication || null;
   }
 
-  private resetApplication(): Promise<void> { 
+  private resetApplication() { //}: Promise<void> { 
     return this.saveApplication(null);
   }
 
   // Updates the last saved application
-  private saveApplication(value: any): Promise<void> {
+  private saveApplication(value: any) { //}: Promise<void> {
 
     const lastApplication = !!value ? {
       ...this.application,
@@ -113,9 +87,9 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
     
     return this.profile.update({ lastApplication })
       // Enables/Disables the 'clear' action button accordingly
-      .then(() => this.toolbar.enableAction('clear', value != null ) )
+      //.then(() => this.enableActions = { ...this.enableActions, clear: value != null } ) 
       // Catches errors
-      .catch(error => console.log("something wrong: " + error.code) );
+      //.catch(error => console.log("something wrong: " + error.code) );
   }
 
   @ViewChild('stepper', { static: false }) stepper: MatStepper;
@@ -156,31 +130,34 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
     };
   }
 
-  private buildForm(value?: any) {
+  private buildForm(value: any = {}) {
 
     // Creates the form group for the application name with:
     // a sync validator 'required'
     // an async validator to check for projects with the same name
     this.headerForm = this.builder.group({
-      name: [ value.name, Validators.required, this.projectNameValidator ],
-      pitch: [ value.pitch, Validators.required ]
+      name: [ value.name || '', Validators.required, this.projectNameValidator ],
+      pitch: [ value.pitch || '', Validators.required ]
     });
 
-    // Loops on the application questions to build the relevant form group and controls
-    this.msgs.questions.forEach(question => {
+    this.sub = this.content.stream('apply.questions').subscribe( (questions: any[]) => {
+
+      // Loops on the application questions to build the relevant form group and controls
+      questions.forEach(question => {
       
-      let group: any = {};
+        let group: any = {};
 
-      // Build the group's controls
-      question.fields.forEach( field => {
+        // Build the group's controls
+        question.fields.forEach( field => {
 
-        // Only required validator is supported
-        const required = field.errors && field.errors.required;
-        group[field.name] = new FormControl( value[field.name], required ? Validators.required : null);
+          // Only required validator is supported
+          const required = field.errors && field.errors.required;
+          group[field.name] = new FormControl( value[field.name], required ? Validators.required : null);
+        });
+
+        // Push the form group into the array
+        this.stepForms.push( new FormGroup(group) );
       });
-
-      // Push the form group into the array
-      this.stepForms.push( new FormGroup(group) );
     });
   }
   
@@ -286,38 +263,13 @@ export class ApplyComponent implements OnInit, AfterViewInit, CanPageDeactivate,
       .then( () => { 
 
         // Navigate back to the project explore reporting the creation of a new project
-        this.navigator.navigate('explore', { queryParams: {
-          project: 'new'
-        }});
+        this.redirect.navigate('explore?project=new');
       })
       .catch(error => {
 
         console.log("something wrong: " + error.code);
         this.progress = false;
       });
-  }
-
-  public disclaimerAction(action: string) {
-
-    switch(action) {
-
-      // Clears the forrm and the previously saved application to start from 
-      case 'clear':
-      this.popup.confirmPopup(this.msgs.canClear)
-        .subscribe( () => this.clearApplication() );
-      break;
-
-      // Navigates to the requested page otherwise
-      default:
-      this.navigator.navigate(action);
-      break;
-    }
-  }
-
-  public canDeactivate() {
-
-    // Enable deactivation (leaving the page) in case no appliaction has been created yet or the user agrees when asked (popup)
-    return !this.application || this.popup.popupDialog(this.msgs.canLeave);
   }
 }
 

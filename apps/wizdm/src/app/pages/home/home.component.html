@@ -9,11 +9,15 @@
 
       <h1 class="mat-display-1"><b>{{ msgs.title || 'Get your app done right' }}</b></h1>
       
-      <p>{{ msgs.pitch || 'Wizdm provides...' }}</p>
+      <p [wm-readme]="msgs.pitch">
+        Wizdm provides all the key features of a modern single page application ready to use.
+      </p>
       
       <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption || 'Get started' }}</button>
       
-      <p [wm-disclaimer]="msgs.join" class="mat-small" (navigate)="navigate($event.target)"></p>
+      <p [wm-readme]="msgs.join" class="mat-small">
+        Join us and become part of the revolution of <a wmRedirect="about">Wizdm</a>
+      </p>
   
     </div>
 
@@ -34,8 +38,10 @@
             <div *ngIf="feat.comingSoon" class="coming-soon accent background-color-default contrast-default mat-small">{{ msgs.comingSoon }}</div>
   
             <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
+
             <h2><b>{{ feat.title }}</b></h2>
-            <p [wm-disclaimer]="feat.description" (navigate)="navigate($event.target)"></p>
+            
+            <p [wm-readme]="feat.description"></p>
   
           </div>
   

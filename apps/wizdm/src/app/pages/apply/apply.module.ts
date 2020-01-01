@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,18 +10,20 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { DisclaimerModule } from '../../elements/disclaimer';
-import { PopupModule } from '../../elements/popup';
-import { AuthGuard, PageGuard } from '../../utils';
+import { DialogModule } from '@wizdm/elements/dialog';
+import { ReadmeModule } from '@wizdm/elements/readme';
+import { ActionbarModule } from 'app/navigator/actionbar';
+import { AuthGuard } from 'app/utils/auth-guard';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ApplyComponent } from './apply.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    component: ApplyComponent,
     content: 'apply', 
+    component: ApplyComponent,
     canActivate: [ AuthGuard ],
-    canDeactivate: [ PageGuard ]
+    canDeactivate: [ CanLeaveGuard ]
   }
 ];
 
@@ -28,6 +31,7 @@ const routes: RoutesWithContent = [
   declarations: [ ApplyComponent ],
   imports: [
     CommonModule,
+    HttpClientModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     MatButtonModule,
@@ -36,8 +40,10 @@ const routes: RoutesWithContent = [
     MatCheckboxModule,
     MatStepperModule,
     MatProgressBarModule,
-    DisclaimerModule,
-    PopupModule,
+    ReadmeModule,
+    ActionbarModule,
+    CanLeaveModule,
+    DialogModule,
     ContentRouterModule.forChild(routes)
   ]
 })

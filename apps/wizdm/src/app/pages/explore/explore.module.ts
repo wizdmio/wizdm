@@ -1,26 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout'
-import { ReactiveFormsModule } from '@angular/forms';;
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { ThumbnailModule } from '../../elements/thumbnail';
-import { AvatarModule } from '../../elements/avatar';
-import { IconModule } from '../../elements/icon';
-import { AuthGuard, PageGuard } from '../../utils';
-import { UserInfoModule } from '../user-info/user-info.module';
-import { UploadModule } from '../upload/upload.module';
+import { ReadmeModule } from '@wizdm/elements/readme';
+import { ThumbnailModule } from '@wizdm/elements/thumbnail';
+import { AvatarModule } from '@wizdm/elements/avatar';
+import { IconModule } from '@wizdm/elements/icon';
+//import { AuthGuard } from 'app/utils/auth-guard';
+import { PageGuard } from 'app/utils/page-guard';
+import { FolderModule } from 'app/dialogs/folder';
+import { UserInfoModule } from 'app/dialogs/user-info';
+//import { TopicComponent } from './topic-item/topic-item.component';
+//import { TopicFormModule } from './topic-form/topic-form.module';
 import { ExploreComponent } from './explore.component';
-import { ProjectComponent } from './project/project.component';
+import { StoryCardComponent } from './story-card/story-card.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
+    content: ['explore', 'folder'],
     component: ExploreComponent,
-    content: 'explore',
     //canActivate: [ AuthGuard ],
     canDeactivate: [ PageGuard ]
   }
@@ -29,21 +29,18 @@ const routes: RoutesWithContent = [
 @NgModule({
   declarations: [ 
     ExploreComponent, 
-    ProjectComponent
+    StoryCardComponent, 
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     FlexLayoutModule,
     MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
+    ReadmeModule,
     ThumbnailModule,
     AvatarModule, 
     IconModule,
+    FolderModule,
     UserInfoModule,
-    UploadModule,
     ContentRouterModule.forChild(routes)
   ]
 })

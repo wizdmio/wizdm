@@ -1,0 +1,5 @@
+{
+  "title": "Ooops... The page you're looking for doesn't exist.",
+  "e404": "Error 404: file not found",
+  "body": "You'll be redirected home in *{{ countdown }}*s...\nGo [home](home) now."
+}

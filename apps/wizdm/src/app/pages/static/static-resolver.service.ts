@@ -29,9 +29,11 @@ export class StaticResolver implements Resolve<string> {
     return this.http.get(fullPath, { responseType: 'text' }).pipe( 
       // Catches the possible error
       catchError( (e: HttpErrorResponse) => {
+
         // On file not found (404) of localized content...
         if(lang !== this.defaultLang && e.status === 404) { 
-          
+        
+          // Reverts to the default language
           const defaultPath = `assets/docs/${this.defaultLang}/${name}.md`;
           
           console.log('404 File not found, reverting to default language:', defaultPath);
@@ -41,10 +43,10 @@ export class StaticResolver implements Resolve<string> {
         }
 
         console.log('404 File not found, redirecting to not-found');
-        
-        // Redirects to NotFound when no content is found
-        return this.router.navigate(['/', lang, 'not-found']).then( () => ''); 
-      })
+        throw e;
+      }),
+      // Redirects to NotFound when no content is found
+      catchError( () => this.router.navigate(['/', lang, 'not-found']).then( () => '') )
     );
   }
 }

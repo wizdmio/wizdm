@@ -1,0 +1,22 @@
+
+.wm-login {
+
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  justify-content: space-around;
+  align-items: stretch;
+
+  width: 300px;
+  max-width: 100%;
+  text-align: center;
+  
+  .bit-of-space { margin: 12px 0; }
+  
+  .btn {
+    margin-top: 10px;
+    min-height: 48px;
+  }
+
+  .providers { font-size: 1.5em; }
+}

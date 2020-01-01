@@ -1,8 +1,0 @@
-
-.wm-link {
-  
-  cursor: pointer;
-
-  // Disabled
-  &[disabled=true] { pointer-events: none; }
-}

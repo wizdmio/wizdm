@@ -5,8 +5,8 @@ import { EditableItem } from '../model/editable-item';
 import { EditableInline } from '../model/editable-inline';
 import { EditableTable, EditableRow, EditableCell } from '../model/editable-table';
 import { EditableFigure, EditableImage, EditableCaption } from '../model/editable-figure';
-import { wmDocument, wmBlock, wmBulleted, wmNumbered, wmList, wmItem, wmHeading, wmParagraph, wmInline, wmText, wmLink, wmTable, wmRow, wmCell, wmFigure, wmImage, wmCaption, wmEditable } from '../model/editable-types';
 import { EditableTypes, EditableFactory } from '../model/editable-factory';
+import { wmDocument, wmBlock, wmBulleted, wmNumbered, wmList, wmItem, wmHeading, wmParagraph, wmInline, wmText, wmLink, wmTable, wmRow, wmCell, wmFigure, wmImage, wmCaption, wmEditable } from '../model/editable-types';
 import { Injectable } from '@angular/core';
 
 @Injectable()

@@ -5,8 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { ContentModule } from '@wizdm/content';
-import { IconModule } from '../../elements/icon';
-import { LinkModule } from '../../elements/link';
+import { IconModule } from '@wizdm/elements/icon';
 import { FooterComponent } from './footer.component';
 
 
@@ -19,8 +18,7 @@ import { FooterComponent } from './footer.component';
     MatButtonModule,
     MatDividerModule,
     ContentModule,
-    IconModule,
-    LinkModule
+    IconModule
   ],
   declarations: [
     FooterComponent

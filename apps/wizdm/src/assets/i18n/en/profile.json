@@ -1,115 +1,110 @@
 {
-  "title": "My profile",
-  
-  "uploadImage": {
-    "title": "Choose an image",
-    "noFiles": "There are no files uploaded yet",
-    "none": "None",
-    "cancel": "Cancel",
-    "select": "Select",
-    "delete": "Delete",
-    "browse": "Browse...",
-    "canDelete": {
-      "title": "Deleting a file",
-      "message": "WARNING, by proceeding you'll permanently delete the selected file.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
-    }
+  "title": "Public Profile",
+
+  "actions": {
+    "save": { "caption": "Save", "icon": "fas:fa-save" },
+    "signOut": { "caption": "Sign-out", "icon": "fas:fa-sign-out-alt" }
   },
 
-  "actions": [
-    { "caption": "Sign-out", "icon": "exit_to_app", "link": "login", "params": { "mode": "signOut" }},
-    { "menu": [
-      { "caption": "My Files", "icon": "cloud_upload", "link": "folder" }
-    ]}
-  ],
-
-  "panels": [
-    {
-      "title": "Personal information",
-      "icon": "account_box",
-      "expanded": true,
-      "fields": [
-        { "label": "Name", "hint": "How you'd like to be called", "icon": "far:fa-user", "type": "input", "key": "profile:name" },
-        { "label": "About me", "icon": "far:fa-comment", "type": "input", "key": "profile:motto" },
-        { "label": "Email", "hint": "We wish to stay in touch", "icon": "far:fa-envelope", "type": "input", "key": "profile:email" },
-        { "label": "Phone", "hint": "It's not tht we are calling you every moment...", "icon": "fas:fa-phone", "type": "input", "key": "profile:phone" },
-        { "label": "Birthday", "hint": "We'll wish you happy birthday, eventually", "icon": "fas:fa-birthday-cake", "type": "date", "key": "profile:birth" },
-        { "label": "Gender", "icon": "fas:fa-genderless", "type": "select", "key": "profile:gender" },
-        { "label": "Language", "icon": "fas:fa-language", "type": "select", "key": "profile:lang" }
-      ],
-      "applyChanges": "Apply changes"
+  "form": {
+    "name": {
+      "label": "Name",
+      "icon": "far:fa-user",
+      "hint": "How you'd like to be called",
+      "errors": {
+        "required": "A name is mandatory"
+      }
     },
-    {
-      "title": "Sign-in & security",
-      "icon": "lock",
-      "fields": [
-        { "label": "Account created", "icon": "far:fa-calendar", "type": "date", "key": "profile:created" },
-        { "label": "Sign-in provider", "icon": "fas:fa-shield-alt", "type": "input", "key": "user:providerId" },
-        { "label": "Account email", "icon": "fas:fa-envelope", "type": "input", "key": "user:email" },
-        { "label": "Identity", "icon": "fas:fa-user-shield", "type": "select", "key": "user:emailVerified" }
-      ],
-      "buttons": [
-        { "caption": "Verify email", "action": "emailVerify" },
-        { "caption": "Change email", "action": "changeEmail" },
-        { "caption": "Change password", "action": "changePassword" },
-        { "caption": "Delete account", "action": "delete", "color": "warn" },
-        { "caption": "Sign-out", "action": "signOut" }
+    "motto": {
+      "label": "About me",
+      "icon": "far:fa-comment",
+      "hint": "Tell us about you"
+    },
+    "email": {
+      "label": "Email",
+      "icon": "far:fa-envelope",
+      "hint": "We wish to stay in touch",
+      "errors": {
+        "required": "An email is mandatory",
+        "format" : "There's something wrong with this email"
+      }
+    },
+    "phone": {
+      "label": "Phone",
+      "icon": "fas:fa-phone",
+      "hint": "It's not that we are calling you every moment...",
+      "errors": {
+        "required": "A phone number would be useful",
+        "format" : "There's something wrong with this number"
+      }
+    },
+    "birth": {
+      "label": "Birthday",
+      "icon": "fas:fa-birthday-cake",
+      "hint": "We'll wish you happy birthday, eventually"
+    },
+    "gender": {
+      "label": "Gender",
+      "icon": "fas:fa-genderless",
+      "hint": "This is optional, if you wish to share",
+      "options": [
+        { "label": "Genderless", "icon": "fas:fa-genderless", "value": "u" },
+        { "label": "Male", "icon": "fas:fa-mars", "value": "m" },
+        { "label": "Female", "icon": "fas:fa-venus", "value": "f" },
+        { "label": "Beyond", "icon": "fas:fa-transgender-alt", "value": "x" }
       ]
-    }
-  ],
-
-  "genders": [
-    { "label": "Genderless", "icon": "fas:fa-genderless", "value": "u" },
-    { "label": "Male", "icon": "fas:fa-mars", "value": "m" },
-    { "label": "Female", "icon": "fas:fa-venus", "value": "f" },
-    { "label": "Beyond", "icon": "fas:fa-transgender-alt", "value": "x" }
-  ],
-
-  "languages": [
-    { "label": "English", "image": "assets/img/gb.svg", "value": "en" },
-    { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
-    { "label": "Русский","image": "assets/img/ru.svg", "value": "ru" }
-  ],
-
-  "identity": [
-    { "label": "Verified", "icon": "far:fa-check-circle", "value": true },
-    { "label": "Not verified", "icon": "far:fa-question-circle", "value": false }
-  ],
-  
-  "errors": {
-    "required": "This is a mandatory field",
-    "email": "There's something wrong with this email"
+    },
+    "language": {
+      "label": "Language",
+      "icon": "fas:fa-language",
+      "hint": "We'll try to adapt the content accordingly",
+      "options": [
+        { "label": "English", "image": "assets/img/gb.svg", "value": "en" },
+        { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
+        { "label": "Русский","image": "assets/img/ru.svg", "value": "ru" }
+      ]
+    },
+    "submit": { "label": "Update profile" }
   },
 
-  "popups": {
+  "photo": {
+    "label": "Profile picture", 
+    "delete": { "icon": "fas:fa-trash-alt" },
+    "upload": { "icon": "fas:fa-cloud-upload-alt" }
+  },
 
-    "changeEmail": {
-      "title": "Changing account email",
-      "message": "You'll be asked to confirm your identity by re-authenticating.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
+  "account": {
+    
+    "title": "Account",
+    "description": "Your account has been created on *{{ created }}*.",
+    "verifyEmail": {
+      "title": "Verify Email",
+      "verified": "Your email has been *verified* already.",
+      "unverified": " Your email has *_not_* been verified yet. Please proceed at your convenience.",
+      "action": "Verify your email"
     },
-  
-    "changePassword": {
-      "title": "Changing account password",
-      "message": "You'll be asked to confirm your identity by re-authenticating.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
-    },
+    "changeCredentials": {
 
-    "delete": {
-      "title": "Deleting account",
-      "message": "WARNING, by proceeding you'll permanently delete your account and all the related data. You'll be asked to confirm your identity by re-authenticating.",
-      "cancel": "Cancel",
-      "ok": "Proceed"
+      "title": "Change email / password",
+      "description": "Here you can change the credentials used for signin-in.",
+      "actions": {
+        "email": "Change your email",
+        "password": "Change your password"
+      }
     },
+    "deleteAccount": {
 
-    "canLeave": {
-      "title": "Unsaved changes",
-      "message": "If you leave now, changes won't be saved",
-      "cancel": "Cancel",
-      "ok": "Ok"
+      "title": "Delete account",
+      "description": "Be aware that by proceeding you'll *permanently* delete all your data.",
+      "action": "Delete your account"
     }
+  },
+
+  "canLeave": {
+    "title": "Unsaved changes",
+    "message": "If you leave now, changes won't be saved",
+    "cancel": "Stay",
+    "force": "Save and leave",
+    "ok": "Leave anyhow"
   }
 }

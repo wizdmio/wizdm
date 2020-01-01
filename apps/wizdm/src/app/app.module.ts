@@ -1,62 +1,54 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, ExtraOptions } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { FirebaseOptionsToken, FirebaseNameOrConfigToken } from '@angular/fire';
 import { MatIconRegistry, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
-import { ContentModule, ContentConfig } from '@wizdm/content';
-import { ConnectModule, 
-         AuthModule, 
-         DatabaseModule, 
-         UploaderModule, 
-         UserProfileModule } from '@wizdm/connect';
-import { DoorbellModule, DoorbellConfigToken } from '@wizdm/doorbell';
-import { AppComponent } from './app.component';
-import { environment } from '../environments/environment';
+import { ContentModule } from '@wizdm/content';
+import { ConnectModule } from '@wizdm/connect';
+import { AuthModule } from '@wizdm/connect/auth';
+import { DatabaseModule } from '@wizdm/connect/database';
+import { StorageModule } from '@wizdm/connect/storage';
+import { DoorbellModule } from '@wizdm/doorbell';
+import { ReadmeNavigator } from '@wizdm/elements/readme';
+import { RedirectService } from '@wizdm/redirect';
+import { AppComponent } from './app.component';  
+//import { environment } from '../environments/environment';
+import { appname, content, router } from '../environments/common';
+import { firebase, doorbell } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
-const routes: Routes = [ { path: '', loadChildren: () => import('./navigator/navigator.module').then(m => m.NavigatorModule) }];
+const routes: Routes = [ 
+  { path: '', loadChildren: () => import('./navigator/navigator.module').then(m => m.NavigatorModule) }
+];
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [ AppComponent ],
   imports: [
+    // Basics
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
-    // Initialize the database connection modules
-    ConnectModule,//.init(environment),
-    
-    ContentModule.init({
-      selector: 'lang', 
-      contentRoot: 'assets/i18n',
-      supportedValues: ['en', 'it', 'ru'],
-      defaultValue: 'en'
-    }),
-    
-    DoorbellModule.init({
-      url: "https://doorbell.io/api/applications",
-      id:  "10616",
-      key: "dk6Bcyz265Qwwlt6e8rDxrrRZwkagGcemEQOukOhD81dBLQKWKCMle1Tdoxyr6oY"  
-    }),
-
-    AuthModule,
-    DatabaseModule,
-    UploaderModule,
-    UserProfileModule,
-    RouterModule.forRoot(routes, environment.router as ExtraOptions)
+    // Database tools (Firebase)
+    ConnectModule.init(firebase, appname),
+    AuthModule, DatabaseModule, StorageModule,    
+    // Dynamic content (i18n)
+    ContentModule.init(content),    
+    // Doorbell service (Feedback form)
+    DoorbellModule.init(doorbell),
+    // Angular's Router
+    RouterModule.forRoot(routes, router)
   ],
   providers: [
+    // Provides the redirection service globally
+    RedirectService,
+    // Applies the  redirection service to ReadmeComponent from @wizdm/elements
+    { provide: ReadmeNavigator, useExisting: RedirectService },
+    // Provides the MatIconRegistry globally
     MatIconRegistry,
+    // Provides the MomentDateAdaper globally for @angular/material DatePicker
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-    // Workaround to make sure initialization works while using --aot
-    { provide: FirebaseOptionsToken, useValue: environment.firebase },
-    { provide: FirebaseNameOrConfigToken, useValue: environment.appname || '' },
-    //{ provide: DoorbellConfigToken, useValue: environment.doorbell }
+    // Configures Material Date Format accordingly
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
   ],
   bootstrap: [ AppComponent ]
 })
