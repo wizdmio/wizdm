@@ -1,0 +1,84 @@
+{
+  "signIn": "Hai già una password? [Sign-in](login?=mode=signIn)",
+  "register": "Sei nuovo? [Register](login?mode=register)",
+  "forgot": "[Password dimenticata?](login?mode=forgotPassword)",
+  "signInWith": "Oppure collegati con un click:",
+
+  "labels": {
+    "fullname": "Nome",
+    "email": "Email",
+    "password": "Password",
+    "newEmail": "Nuova email",
+    "newPassword": " Nuova password"
+  },
+
+  "pages": {
+    "register": {
+      "title": "Registrati",
+      "message": "Benvenuto!\nCome utente registrato avrai accesso a tutte le funzionalità",
+      "caption": "Registrati con l'email"
+    },
+    "signIn": {
+      "title": "Accedi",
+      "message": "Bentornato!\nAccedi con le solite credenziali",
+      "caption": "Accedi con l'email"
+
+    },
+    "forgotPassword": {
+      "title": "Ripristina password",
+      "message": "Ti invieremo un link col quale potrai ripristinare la password",
+      "caption": "Ripristina la password"
+    },
+    "resetPassword": {
+      "title": "Nuova password",
+      "message": "Procedi col selezionare la nuova password",
+      "caption": "Cambia la password"
+    },
+    "changePassword": {
+      "title": "Cambia password",
+      "message": "Per favore conferma la tua identità",
+      "caption": "Aggiorna la password"
+    },
+    "sendEmailVerification": {
+      "title": "Verifica email",
+      "message": "La tua email *non è ancora* stata verificata.\nProcedi con la verifica quanto prima",
+      "caption": "Invia una email di verifica"
+    },
+    "verifyEmail": {
+      "title": "Verifica email",
+      "message": "La tua email è verificata"
+    },
+    "recoverEmail": {
+      "title": "Recupero email",
+      "message": "La tua precedente email è stata ripristinata\nRaccomandiamo di aggiornare la password quanto prima"
+    },
+    "changeEmail": {
+      "title": "Cambia email",
+      "message": "Per favore conferma la tua identità",
+      "caption": "Aggiorna l'email"
+    },
+    "delete": {
+      "title": "Elimina account",
+      "message": "_*ATTENZIONE!*_\nProcedendo tutti i tuoi dati verranno eliminati per sempre",
+      "caption": "Elimina per sempre"
+    }
+  },
+
+  "errors": {
+    "nameRequired": "Dicci come chiamarti",
+    "emailRequired": "Dicci come contattarti",
+    "emailInvalid": "Sembra che l'email non sia valida",
+    "passwordRequired": "Una password è necessaria",
+
+    "auth": {
+      "wrongPassword": "La password non è corretta",
+      "userNotFound": "Questo utente non esiste",
+      "emailAlreadyInUse": "QUesta email è già in uso",
+      "invalidEmail": "Questa email non è valida",
+      "weakPassword": "La password scelta è troppo semplice",
+      "networkRequestFailed": "Ci sono problemi di rete",
+      "invalidActionCode": "Il codice di attivazione non è più valido",
+      "unsupportedProvider": "Il provider richiesto non è supportato"
+    }
+  }
+}
