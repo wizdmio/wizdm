@@ -52,6 +52,9 @@
     },
     "ipinfo": {
       "tags": []
+    },
+    "iplist": {
+      "tags": []
     }
   }
 }

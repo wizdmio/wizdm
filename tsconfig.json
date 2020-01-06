@@ -31,7 +31,8 @@
       "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"],
       "@wizdm/paypal": ["libs/paypal/src/index.ts"],
       "@wizdm/stripe": ["libs/stripe/src/index.ts"],
-      "@wizdm/ipinfo": ["libs/ipinfo/src/index.ts"]
+      "@wizdm/ipinfo": ["libs/ipinfo/src/index.ts"],
+      "@wizdm/iplist": ["libs/iplist/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]
