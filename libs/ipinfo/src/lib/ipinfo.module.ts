@@ -1,8 +1,10 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { IpInfo, IpInfoConfig, IpInfoConfigToken } from './ipinfo.service';
 
 @NgModule({
-  providers: [IpInfo]
+  imports: [ HttpClientModule ],
+  providers: [ IpInfo ]
 })
 export class IpInfoModule { 
 

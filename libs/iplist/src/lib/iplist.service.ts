@@ -24,9 +24,7 @@ export interface IpListAsn {
 }
 
 /** Check the IP related information from the free https//iplist.cc/api (country level information) */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class IpList extends Observable<IpListResult> {
 
   // The internal ip$ subject to specify dirfferent ip to inspect
