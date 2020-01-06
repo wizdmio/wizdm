@@ -452,6 +452,37 @@
           "styleext": "scss"
         }
       }
+    },
+    "ipinfo": {
+      "projectType": "library",
+      "root": "libs/ipinfo",
+      "sourceRoot": "libs/ipinfo/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/ipinfo/tsconfig.lib.json",
+              "libs/ipinfo/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/ipinfo/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/ipinfo/src/test.ts",
+            "tsConfig": "libs/ipinfo/tsconfig.spec.json",
+            "karmaConfig": "libs/ipinfo/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
