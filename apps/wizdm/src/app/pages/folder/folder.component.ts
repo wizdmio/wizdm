@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
   selector: 'wm-folder',
   templateUrl: './folder.component.html',
   styleUrls: ['./folder.component.scss'],
-  host: { 'class': 'wm-page adjust-top' }
+  host: { 'class': 'padding-top-toolbar' }
 })
 export class FolderComponent {
   

@@ -17,10 +17,12 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
 
 // Import local partials
-@import 'variables';
-@import 'preloader';
-@import 'material';
-@import 'theming';  
+// Import local partials
+@import './styles/variables';
+@import './styles/preloader';
+@import './styles/material';
+@import './styles/colors';
+@import './styles/theming';
 
 // Define the main font family 
 $wm-font-family: 'Ubuntu, sans-serif';

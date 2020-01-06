@@ -1,30 +1,51 @@
 
-$wm-colors: ('red', light, $mat-red), ('pink', light, $mat-pink), ('purple', light, $mat-purple), ('deep-purple', light, $mat-deep-purple), ('indigo', light, $mat-indigo), ('blue', light, $mat-blue), ('light-blue', light, $mat-light-blue), ('cyan', light, $mat-cyan), ('teal', light, $mat-teal), ('green', dark, $mat-green), ('light-green', dark, $mat-light-green), ('lime', dark, $mat-lime), ('yellow', dark, $mat-yellow), ('amber', dark, $mat-amber), ('orange', dark, $mat-orange), ('deep-orange', light, $mat-deep-orange), ('brown', light, $mat-brown), ('grey', dark, $mat-grey), ('gray', dark, $mat-grey), ('blue-grey', light, $mat-blue-grey), ('blue-gray', light, $mat-blue-grey);
+@mixin wm-theme-colors($theme, $props: ('color', 'background-color', 'border-color', 'stroke', 'fill')) {
 
-@mixin wm-theme-color($color, $back, $text) {
-  .wm-theme-#{$color} {
-    background-color: $back;
-    color: $text;
-  }
-  
-  *[wm-theme-color="#{$color}"] {
-    @extend .wm-theme-#{$color};
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+
+  .wm-theme-colors {
+
+    // Styles the text color
+    &.text-color, .text-color { color: map-get($foreground, text); }
+
+    // Styles the background color
+    &.background-color, .background-color { background-color: map-get($background, background); }
+
+    // Styles the theme palettes
+    @each $color in ('primary', 'accent', 'warn') {
+
+      $palette: map-get($theme, #{$color});
+
+      // Loops on each palette
+      &[color=#{$color}], &.#{$color}, .#{$color} {
+
+        // Styles a general selection 
+        &[selected=true], [selected=true], &.selected, .selected { 
+          border: 1px solid mat-color($palette);
+          background-color: mat-color($palette, lighter, 0.5);          
+        }
+
+        // Loops on each palette's color tone
+        @each $tone in ('default', 'lighter', 'darker') {
+
+          // Styles the contrast color
+          &.contrast-#{$tone}, .contrast-#{$tone} { color: map-get($palette, #{$tone}-contrast); }
+
+          // Styles the desider properties each palette, each tone and the full hues
+          @each $prop in $props {
+        
+            &.#{$prop}-#{$tone}, .#{$prop}-#{$tone} { #{$prop}: mat-color($palette, $tone); }
+
+            // All palette hues
+            @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
+              
+              &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat-color($palette, $hue); }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
-@mixin wm-theme-colors($light: white, $dark: black) {
-
-  // Inlcudes all the material colors
-  @each $color, $contrast, $palette in $wm-colors {
-    @if $contrast == light { 
-      @include wm-theme-color($color, map-get($palette, 500), $light); 
-    }
-    @if $contrast == dark { 
-      @include wm-theme-color($color, map-get($palette, 500), $dark);
-    }
-  }
-  // Completes with black/white and none
-  @include wm-theme-color('black', black, $light);
-  @include wm-theme-color('white', white, $dark);
-  @include wm-theme-color('none', transparent, $dark);
-}

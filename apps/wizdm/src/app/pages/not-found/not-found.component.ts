@@ -5,7 +5,7 @@ import { RedirectService } from '@wizdm/redirect';
   selector: 'wm-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
-  host: { 'class': 'wm-page adjust-top content-padding' }
+  host: { 'class': 'padding-top-toolbar' }
 })
 export class NotFoundComponent implements OnInit, OnDestroy {
 

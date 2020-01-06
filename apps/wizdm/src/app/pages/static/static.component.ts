@@ -5,7 +5,7 @@ import { RedirectService } from '@wizdm/redirect';
   selector: 'wm-static',
   templateUrl: './static.component.html',
   styleUrls: ['./static.component.scss'],
-  host: { 'class': 'wm-page adjust-top content-padding' }
+  host: { 'class': 'padding-top-toolbar' }
 })
 export class StaticComponent {
 

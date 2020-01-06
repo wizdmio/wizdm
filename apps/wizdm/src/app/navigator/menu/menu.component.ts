@@ -5,7 +5,7 @@ import { $animations } from './menu.animations';
   selector: 'wm-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
-  host: { 'class': 'wm-menu' },
+  host: { 'class': 'wm-menu  background-color' },
   animations: $animations
 })
 export class MenuComponent {

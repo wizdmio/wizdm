@@ -1,6 +1,9 @@
 
 :host {
-  
+
+  display: block;
+  position: relative;
+
   .desk {
     perspective: 1500px;
     background-color: rgb(200, 200, 220);

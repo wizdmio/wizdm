@@ -9,5 +9,11 @@
   height: auto;
   box-sizing: border-box;
   overflow: hidden;
-  
+
+  .link-active {
+
+    border-style: none solid;
+    border-width: 2px;
+    border-radius: 0;
+  }
 }

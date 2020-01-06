@@ -36,7 +36,7 @@ export class FeedbackComponent extends DialogComponent {
   constructor(dialog: MatDialog, private builder: FormBuilder, private user: Member, private doorbell: DoorbellService) { 
     super(dialog);
 
-    this.panelClass = 'wm-feedback';
+    this.panelClass = ['wm-feedback', 'wm-theme-colors'];
     
     this.form = this.builder.group({
       'name'   : [ '' ],

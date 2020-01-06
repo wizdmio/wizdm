@@ -1,7 +1,10 @@
 
 :host {
 
-  padding: 32px;
+  display: block;
+  position: relative;
+
+  header, section { padding: 32px };
 
   header { 
     position: relative;

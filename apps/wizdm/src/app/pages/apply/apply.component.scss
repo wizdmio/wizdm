@@ -1,10 +1,9 @@
 
 :host {
-  //display: flex;
-  //flex-direction: column;
-  //box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
+  display: block;
+  position: relative;
+  //justify-content: center;
+  //align-items: center;
   
   header { 
     position: relative;

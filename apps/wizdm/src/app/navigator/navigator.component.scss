@@ -24,10 +24,13 @@
 
     .mat-toolbar {
     
-      //background-color: transparent !important;
+      background-color: transparent;
 
       .mat-toolbar-row {
-        &[compact] { height: 40px; }
+
+        // Reduces the standard 16px left/right padding to 8px on mobile
+        @media (max-width: 959px) { padding: 0 8px; }
+
         &[auto] { height: auto; }
       }
 
@@ -39,6 +42,8 @@
         top: 0;
         
         pointer-events: none;
+
+        box-shadow: 0 6px 12px rgba(black, 0.125);
       }
     }
   }

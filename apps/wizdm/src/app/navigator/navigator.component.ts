@@ -14,7 +14,7 @@ import { $animations } from './navigator.animations';
   selector: 'wm-navigator',
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss'],
-  host: { 'class': 'wm-navigator' },
+  host: { 'class': 'wm-theme-colors' },
   animations: $animations,
   providers: [ ContentStreamer ]
 })

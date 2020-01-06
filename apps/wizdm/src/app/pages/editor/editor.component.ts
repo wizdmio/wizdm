@@ -12,7 +12,7 @@ import { $animations } from './editor.animations';
   selector: 'wm-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss'],
-  host: { 'class': 'wm-page adjust-top' },
+  host: { 'class': 'padding-top-toolbar' },
   animations: $animations,
   providers: [ ContentStreamer ]
 })

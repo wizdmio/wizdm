@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
   selector: 'wm-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
-  host: { 'class': 'wm-page adjust-top content-padding' }
+  host: { 'class': 'padding-top-toolbar' }
 })
 export class ExploreComponent extends PagedCollection<wmStory> {
 

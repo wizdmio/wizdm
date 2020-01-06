@@ -9,7 +9,7 @@ import moment from 'moment';
   selector: 'wm-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  host: { 'class': 'wm-page adjust-top content-padding' }
+  host: { 'class': 'padding-top-toolbar' }
 })
 export class ProfileComponent {
 

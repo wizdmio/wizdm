@@ -22,9 +22,9 @@
 
       <mat-dialog-content [ngSwitch]="success">
 
-        <p class="message info" *ngSwitchCase="true">{{ msgs.notifications?.success || 'Succeeded' }}</p>
+        <p class="message color-default primary" *ngSwitchCase="true">{{ msgs.notifications?.success || 'Succeeded' }}</p>
 
-        <p class="message error" *ngSwitchCase="false">{{ msgs.notifications?.error || 'Error' }}</p>
+        <p class="message color-default warn" *ngSwitchCase="false">{{ msgs.notifications?.error || 'Error' }}</p>
       
       </mat-dialog-content>
 

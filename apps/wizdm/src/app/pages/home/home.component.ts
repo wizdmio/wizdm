@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'wm-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  host: { 'class': 'wm-page adjust-top' }
+  host: { 'class': 'padding-top-toolbar' }
 })
 export class HomeComponent {
 
