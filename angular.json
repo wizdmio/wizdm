@@ -514,6 +514,37 @@
           "styleext": "scss"
         }
       }
+    },
+    "gtag": {
+      "projectType": "library",
+      "root": "libs/gtag",
+      "sourceRoot": "libs/gtag/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/gtag/tsconfig.lib.json",
+              "libs/gtag/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/gtag/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/gtag/src/test.ts",
+            "tsConfig": "libs/gtag/tsconfig.spec.json",
+            "karmaConfig": "libs/gtag/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {
