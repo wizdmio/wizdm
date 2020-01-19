@@ -2,7 +2,7 @@
 <ng-container *wmContent="let msgs select 'folder'">
       
   <!-- Action Bar (projected in the top toolbar) -->
-  <ng-container *wmActionbar>
+  <ng-template wmActionbar>
     <ng-container *ngIf="msgs.actions || {} as actions">
 
       <wm-action color="primary" [icon]="actions.delete?.icon || 'delete'" [disabled]="" (click)="dlgDelete.open()">
@@ -38,7 +38,7 @@
   
     </wm-dialog>
 
-  </ng-container>
+  </ng-template>
       
   <!-- Page body: Folder with file thumbnails -->
   <section class="folder" fxLayout="column" fxLayoutAlign="center center">

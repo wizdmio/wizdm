@@ -8,6 +8,7 @@ export class GtagService {
 
   constructor(@Inject(GTAG) private gtag: Gtag) { }
 
+  /** @see: https://developers.google.com/analytics/devguides/collection/gtagjs/setting-values */
   public set(params: CustomParams): void {
     return this.gtag('set', params);
   }
@@ -18,7 +19,7 @@ export class GtagService {
     return new Promise( (resolve, reject) => {
       try { 
         // Triggers a 1s time-out timer 
-        const tmr = setTimeout( () => { throw new Error('gtag call timed-out'); }, 3000 );
+        const tmr = setTimeout( () => reject( new Error('gtag call timed-out')), 3000 );
         // Performs the event call resolving with the event callback
         this.gtag('event', action, { ...params, event_callback: () => { clearTimeout(tmr); resolve(); }}); } 
       // Rejects the promise on errors

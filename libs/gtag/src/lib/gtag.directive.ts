@@ -1,4 +1,4 @@
-import { Directive, Input, OnChanges } from '@angular/core';
+import { Directive, Input, OnChanges, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { GtagService } from './gtag.service';
 
@@ -7,7 +7,7 @@ import { GtagService } from './gtag.service';
 })
 export class GtagDirective implements OnChanges {
 
-  constructor(private gtag: GtagService, private router: Router) {}
+  constructor(private gtag: GtagService, @Optional() private router: Router) {}
 
   @Input('gtag') title: string;
 
@@ -16,6 +16,6 @@ export class GtagDirective implements OnChanges {
   @Input() location: string;
 
   ngOnChanges() {
-    this.gtag.pageView(this.title, this.path, this.location || this.router.url);
+    this.gtag.pageView(this.title, this.path, this.location || this.router && this.router.url);
   }
 }

@@ -1,4 +1,4 @@
-import { trigger, state, animate, style, transition, query, group, animateChild } from '@angular/animations';
+import { trigger, state, animate, style, transition, query, stagger, group, animateChild } from '@angular/animations';
 
 export let $animations = [
 
@@ -9,5 +9,15 @@ export let $animations = [
             animate('450ms ease'),
             //query('@*', animateChild(), { optional: true })
         )//]))
-    ])
+    ]),
+    trigger('activate', [
+        transition('* => *', [
+          query(':enter', [
+            style({ opacity: 0 }),
+            stagger('-100ms', 
+              animate('250ms ease-out', style('*'))
+            )
+          ], { optional: true })
+        ])
+      ])
 ];

@@ -11,6 +11,8 @@ export interface GtagConfig {
 
 export const GtagConfigToken = new InjectionToken<GtagConfig>('wizdm.gtag.config');
 
+/** Reproduces the standard code snippet we would paste in index.html
+ * @see: https://developers.google.com/analytics/devguides/collection/gtagjs */
 export function gtagFactory(config: GtagConfig): Gtag {
 
   if((window as any).gtag) { return (window as any).gtag; }

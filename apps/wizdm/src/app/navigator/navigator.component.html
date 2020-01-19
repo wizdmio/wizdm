@@ -27,8 +27,10 @@
         <div fxLayout="row" fxLayoutAlign="end center">
 
           <!-- Action toolbar -->
-          <wm-actionbar [template]="actionbar | async"></wm-actionbar>
-
+          <div *ngIf="actionbar | async as template" [@activate]="template">
+            <ng-container *ngTemplateOutlet="template; context: { isMobile: mobile }"></ng-container>
+          </div>
+          
           <!-- Sign-in / User profile button -->
           <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
             
@@ -72,7 +74,7 @@
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
-      <router-outlet (deactivate)="actionbar.clear()"></router-outlet>
+      <router-outlet></router-outlet>
     </div>
     
     <!-- Footer always on the bottom -->
