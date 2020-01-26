@@ -17,21 +17,21 @@ export interface ButtonsConfig {
 
   style?: ButtonsStyle;
 
-  onInit?: (data: OnInitData, actions: OnInitActions) => Promise<void>;
+  onInit?: (data: OnInitData, actions: OnInitActions) => Promise<void>|void;
 
-  onError?: (err: OnErrorData) => Promise<void>;
+  onError?: (err: OnErrorData) => Promise<void>|void;
 
-  onClick?: (data: OnClickData, actions: OnClickActions) => Promise<boolean|void>;
+  onClick?: (data: OnClickData, actions: OnClickActions) => Promise<boolean|void>|void;
 
   createOrder?: (data: CreateOrderData, actions: CreateOrderActions) => Promise<string>;
 
   createSubscription?: (data: CreateSubscriptionData, actions: CreateSubscriptionActions) => Promise<string>;
 
-  onApprove?: (OnApproveData, OnApproveActions) => Promise<void>;
+  onApprove?: (OnApproveData, OnApproveActions) => Promise<void>|void;
 
-  onCancel?: (OnCancelData, OnCancelActions) => Promise<void>;
+  onCancel?: (OnCancelData, OnCancelActions) => Promise<void>|void;
 
-  onShippingChange?: (OnShippingChangeData, OnShippingChangeActions) => Promise<void>;
+  onShippingChange?: (OnShippingChangeData, OnShippingChangeActions) => Promise<void>|void;
 }
 
 // @see { https://developer.paypal.com/docs/checkout/integration-features/customize-button }

@@ -1,32 +1,52 @@
-import { Component, OnDestroy, Input, Output, EventEmitter, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
-import { Buttons, ButtonsStyle, ButtonsLayout, ButtonsColor, ButtonsShape, ButtonsLabel } from './types/buttons';
-import { CreateSubscriptionData, CreateSubscriptionActions } from './types/buttons';
-import { OnErrorData, OnClickData, OnClickActions } from './types/buttons';
-import { CreateOrderData, CreateOrderActions } from './types/buttons';
+import { Directive, Optional, OnDestroy, Input, Output, EventEmitter, HostBinding, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Buttons, ButtonsLayout, ButtonsColor, ButtonsShape, ButtonsLabel } from './types/buttons';
+import { OnShippingChangeData, OnShippingChangeActions } from './types/buttons';
 import { OnApproveData, OnApproveActions } from './types/buttons';
 import { OnCancelData, OnCancelActions } from './types/buttons';
+import { OnClickData, OnClickActions } from './types/buttons';
 import { OnInitData, OnInitActions } from './types/buttons';
 import { SubscriptionRequest } from './types/subscription';
+import { OnErrorData } from './types/buttons';
 import { OrderRequest } from './types/order';
 import { PayPal } from './types/paypal';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 export type ButtonsType = 'checkout'|'subscription';
 
-@Component({
-  selector: 'wm-paypal',
-  template: ''
-})
+export interface OnApprove {
+  onApprove(OnApproveData, OnApproveActions): Promise<void>;
+}
+
+export interface OnShippingChange {
+  onShippingChange(OnShippingChangeData, OnShippingChangeActions): Promise<void>;
+}
+
+/** PayPal processor abstract class */
+export abstract class PayPalProcessor implements OnApprove, OnShippingChange {
+  /** Called when the transaction has been approved for the payment to be captured */
+  abstract onApprove(data: OnApproveData, actions: OnApproveActions): Promise<void>;
+  /** Called when the shipping details has been changed for approval or rejection */
+  abstract onShippingChange(data: OnShippingChangeData, actions: OnShippingChangeActions): Promise<void>;
+}
+
+/** PayPal Buttons */
+@Directive({ selector: 'wm-paypal' })
 export class PayPalButtons implements OnChanges, OnDestroy {
 
-  private disable = new BehaviorSubject<boolean>(false);
-  private sub: Subscription;
-  private _buttons: Buttons;
-  
-  constructor(private paypal: PayPal, private el: ElementRef<HTMLElement>) {}
+  private disable$ = new BehaviorSubject<boolean>(false);
 
-  // Buttons type
-  @Input() type: ButtonsType = 'checkout';
+  private sub: Subscription;
+  
+  private _buttons: Buttons;
+
+  /** True when disabled */
+  get disabled(): boolean { return this.disable$.value; }
+  
+  constructor(private paypal: PayPal, private el: ElementRef<HTMLElement>, @Optional() private processor: PayPalProcessor) {}
+
+  // Tweak the component style to reflect the disabled status
+  @HostBinding('style.opacity') get opacity() { return this.disabled ? '0.33' : undefined; }
+  @HostBinding('style.pointer-events') get cursor() { return this.disabled ? 'none' : undefined; }
 
   // Style inputs
   @Input() label:   ButtonsLabel;
@@ -36,46 +56,32 @@ export class PayPalButtons implements OnChanges, OnDestroy {
   @Input() tagline: boolean;
   @Input() height:  number; // 25..55
 
+  // Buttons type
+  @Input() type: ButtonsType = 'checkout';
+
   /** Order or Subscription request to be processed when the button is clicked. The interpretation of the input depends upon
-   * the type attribute.
-  */
+   * the type input */
   @Input() request: OrderRequest|SubscriptionRequest;
 
   /** Disables the buttons */
   @Input() set disabled(disabled: boolean) {
-    this.disable.next(disabled);
+    this.disable$.next(disabled);
   }
 
   /** Emits on Click */
   @Output() click = new EventEmitter<OnClickData>();
 
   /** Emits on Approve */
-  @Output() approve = new EventEmitter<{ 
-    data: OnApproveData, 
-    actions: OnApproveActions 
-  }>();
+  @Output() approve = new EventEmitter<OnApproveData>();
 
   /** Emits on Cancel */
-  @Output() cancel = new EventEmitter<{
-    data: OnCancelData,
-    actions: OnCancelActions
-  }>();
+  @Output() cancel = new EventEmitter<OnCancelData>();
 
   /** Emits on Error */
   @Output() error = new EventEmitter<OnErrorData>();
 
-  /** Builds the buttons style based on inputs */
-  private get style(): ButtonsStyle {
-
-    return {
-      layout: this.layout,
-      label: this.label,
-      color: this.color,
-      shape: this.shape,
-      tagline: this.layout === 'horizontal' && this.tagline,
-      height: this.height
-    };
-  }
+  /** Emits on ShippingChange */
+  @Output() shippingChange = new EventEmitter<OnShippingChangeData>();
 
   ngOnChanges(changes: SimpleChanges) {
 
@@ -83,13 +89,13 @@ export class PayPalButtons implements OnChanges, OnDestroy {
     if(this.needRender(changes)) {
 
       // Prepare to render with an arrow function
-      const render = () => (this._buttons = this.buttons(this.style)).render(this.el.nativeElement);
-
+      const render = () => (this._buttons = this.buttons()).render(this.el.nativeElement);
       // Render the new buttons immediately or right after closing the previous ones
       this._buttons && this._buttons.close().then(render) || render();
     }
   }
 
+  // Returns true for any of the relevant input change
   private needRender(changes: SimpleChanges): boolean {
 
     return !!changes.type ||
@@ -102,67 +108,74 @@ export class PayPalButtons implements OnChanges, OnDestroy {
   }
 
   // Renders the Smart Buttons
-  private buttons(style: ButtonsStyle): Buttons {
+  private buttons(): Buttons {
     // Reverts on the PayPal service for rendering the buttons  
     return this.paypal.Buttons({  
-      // Applies the requested style
-      style,
-      // Defines the create order/subscription handler depending on the type attribute. Only one handler is allowed.
-      createOrder: this.type === 'checkout' && this.createOrder.bind(this) || undefined,
-      createSubscription: this.type === 'subscription' && this.createSubscription.bind(this) || undefined,
-      // Defines all the other handlers
-      onApprove: this.onApprove.bind(this),
-      onCancel: this.onCancel.bind(this),
-      onError: this.onError.bind(this),
-      onClick: this.onClick.bind(this),
-      onInit: this.onInit.bind(this) 
-    });
-  }
 
-  // Creates an order request based upon the order input
-  private createOrder(data: CreateOrderData, actions: CreateOrderActions) {
-    console.log('createOrder', data);   
-    return actions.order.create(this.request);
-  }
+      // Builds the buttons style from the inputs
+      style: {
+        layout: this.layout,
+        label: this.label,
+        color: this.color,
+        shape: this.shape,
+        tagline: this.layout === 'horizontal' && this.tagline,
+        height: this.height
+      },
 
-  // Creates a subscription request based upon the subscription input
-  private createSubscription(data: CreateSubscriptionData, actions: CreateSubscriptionActions)  {
-    console.log('createSubscription', data);   
-    return actions.subscription.create(this.request);
-  }
+      // Handles buttons initialization
+      onInit: (data: OnInitData, actions: OnInitActions) => {
+        // Unsubscribes previous subscriptions, if any
+        this.sub && this.sub.unsubscribe();
+        // Subscribes to the disable observable
+        this.sub = this.disable$.subscribe( disabled => {
+          // Disables/Enables the buttons according to the disable observable value 
+          if(disabled) { actions.disable(); }
+          else { actions.enable(); }
+        })
+      },
 
-  private onApprove(data: OnApproveData, actions: OnApproveActions) {
-    console.log('Approving transaction:', data, actions);
-    this.approve.emit({ data, actions });
-  }
+      // Handles button clicks
+      onClick: (data: OnClickData, actions: OnClickActions) => {
+        // Emits the onClick data
+        this.click.emit(data);
+        // Prevents the execution when no orders nor subscriptions are defined
+        return !!this.request ? actions.resolve() : actions.reject();
+      },
+      
+      // Handles order creation for checkouts
+      createOrder: this.type === 'checkout' ? (_,actions) => actions.order.create(this.request) : undefined,
 
-  private onCancel(data: OnCancelData, actions: OnCancelActions){
-    console.log('OnCancel', data, actions);
-    this.cancel.emit({ data, actions });
-  }
+      // Handles subscription creation otherwise
+      createSubscription: this.type === 'subscription' ? (_,actions) => actions.subscription.create(this.request) : undefined,
+      
+      // Handles order capturing and subscription activation
+      onApprove: (data: OnApproveData, actions: OnApproveActions) => {
 
-  private onError(error: OnErrorData) {
-    console.log('OnError', error);
-    this.error.emit(error);
-  }
+        // Emits the approve event
+        this.approve.emit(data);
 
-  private onClick(data: OnClickData, actions: OnClickActions) {
-    console.log('onClick', data, actions);
-    // Emits the onClick data
-    this.click.emit(data);
-    // Prevents the execution when no orders nor subscriptions are defined
-    return !!this.request ? actions.resolve() : actions.reject();
-  }
+        // Delegates the PayPalProvessor whenever defined
+        if(!!this.processor && typeof(this.processor.onApprove) == 'function') {
+          return this.processor.onApprove(data, actions);
+        }
+      },
+      
+      // Simply emits the cancel event
+      onCancel: data => this.cancel.emit(data),
+      // Simply emits the error event
+      onError: data => this.error.emit(data),
+      
+      // Handles the shipping changes
+      onShippingChange: (data: OnShippingChangeData, actions: OnShippingChangeActions) => {
+       
+        // Emits the shipping change event
+        this.shippingChange.emit(data);
 
-  private onInit(data: OnInitData, actions: OnInitActions) {
-    console.log('onInit', data, actions);
-    // Unsubscribes previous subscriptions, if any
-    this.sub && this.sub.unsubscribe();
-    // Subscribes to the disable observable
-    this.sub = this.disable.subscribe( disabled => {
-      // Disables/Enables the buttons according to the disable observable value 
-      if(disabled) { actions.disable(); }
-      else { actions.enable(); }
+        // Delegates the PayPalProvessor whenever defined
+        if(!!this.processor && typeof(this.processor.onShippingChange) == 'function') {
+          return this.processor.onShippingChange(data, actions);
+        }
+      }
     });
   }
 

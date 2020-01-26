@@ -5,7 +5,7 @@ export const PayPalConfigToken = new InjectionToken<PayPalConfig>('wizdm.paypal.
 
 /** Retrives the global PayPal object  */
 export function getPayPal(): PayPal {
-  return (!!window ? (window as any).paypal : undefined);
+  return window && (window as any).paypal;
 }
 
 /** PayPal JavaScript SDK loader  */
