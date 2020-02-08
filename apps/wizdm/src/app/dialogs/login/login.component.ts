@@ -2,6 +2,7 @@ import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { RedirectService } from '@wizdm/redirect';
+import { GtagService } from '@wizdm/gtag';
 import { User } from '@wizdm/connect/auth';
 import { DialogComponent } from '@wizdm/elements/dialog';
 import { Member } from 'app/core/member';
@@ -41,7 +42,7 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
 
   get auth() { return this.member.auth; }
   
-  constructor(dialog: MatDialog, private member: Member, private redirect: RedirectService) {
+  constructor(dialog: MatDialog, private member: Member, private gtag: GtagService, private redirect: RedirectService) {
 
     super(dialog);
 

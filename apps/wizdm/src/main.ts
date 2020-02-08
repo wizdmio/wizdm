@@ -3,9 +3,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-// Include HammerJS to support gestures (used by Material)
-import 'hammerjs';
-
 // Augment global objects with useful functions
 import 'app/utils/augment/string/camelize';
 import 'app/utils/augment/string/hyphenize';

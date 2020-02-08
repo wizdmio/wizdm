@@ -10,7 +10,7 @@ import { wmTextStyle, EditableSelection } from '@wizdm/editable';
   styleUrls: ['./context-menu.component.scss']
 })
 export class ContextMenuComponent {
-  @ViewChild(MatMenuTrigger, { static: false }) private trigger: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger) private trigger: MatMenuTrigger;
 
   readonly alignements = ['left', 'center', 'right', 'justify'];
   readonly formats = ['bold', 'italic', 'underline', 'strikethrough'];

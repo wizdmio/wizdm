@@ -92,7 +92,7 @@ export class ApplyComponent implements AfterViewInit, OnDestroy {
       //.catch(error => console.log("something wrong: " + error.code) );
   }
 
-  @ViewChild('stepper', { static: false }) stepper: MatStepper;
+  @ViewChild('stepper') stepper: MatStepper;
 
   public clearApplication() {
 

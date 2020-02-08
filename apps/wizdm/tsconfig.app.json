@@ -4,11 +4,11 @@
     "outDir": "../../dist/out-tsc/apps/wizdm",
     "types": []
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
   ],
   "include": [
-    "**/*.ts"
+    "**/*.d.ts"
   ]
 }

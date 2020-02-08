@@ -4,7 +4,6 @@ import { GtagService, GTAG } from './gtag.service';
 import { GtagDirective } from './gtag.directive';
 
 @NgModule({
-  providers: [ GtagService ],
   declarations: [ GtagDirective ],
   exports: [ GtagDirective ]
 })
@@ -14,6 +13,7 @@ export class GtagModule {
     return {
       ngModule: GtagModule,
       providers: [
+        GtagService,
         { provide: GtagConfigToken, useValue: config },
         { provide: GTAG,
           useFactory: gtagFactory, 

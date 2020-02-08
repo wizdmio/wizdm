@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter } from '@angular/material/core';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { Member } from 'app/core/member';
 import { map, first } from 'rxjs/operators';

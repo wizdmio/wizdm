@@ -53,7 +53,7 @@ const routes: RoutesWithContent = [
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      
 
       // Static content pages, redirecting to NotFound when no content is available
-      { path: ':name',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) }
+      { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) }
     ]
   }
 ];

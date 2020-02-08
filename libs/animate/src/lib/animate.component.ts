@@ -97,7 +97,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() { 
+  ngOnInit() {
 
     // Triggers the animation based on the input flags
     this.animateTrigger(this.elm).subscribe( trigger => {
@@ -116,7 +116,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
   // Triggers the animation
   private animateTrigger(elm: ElementRef<HTMLElement>): Observable<boolean> {
 
-    return this.animateReplay().pipe( flatMap( trigger => this.aos ? this.animateOnScroll(elm) : of(trigger)) );
+    return this.animateReplay().pipe( delay(0), flatMap( trigger => this.aos ? this.animateOnScroll(elm) : of(trigger)) );
   }
 
   // Triggers the animation deferred
@@ -133,11 +133,11 @@ export class AnimateComponent implements OnInit, OnDestroy {
       // Makes sure to dispose on destroy
       takeUntil(this.dispose$),
       // Starts with initial element visibility 
-      startWith(!this.paused  && this.visibility >= this.threshold),
+      startWith(!this.paused && (this.visibility >= this.threshold)),
       // Maps the scrolling to the element visibility value
       map(() => this.visibility),
       // Applies an hysteresys, so, to trigger the animation on based on the treshold while off on full invisibility
-      scan<number,boolean>((result, visiblility) => (visiblility >= this.threshold || (result ? visiblility > 0 : false))),
+      scan((result, visiblility) => (visiblility >= this.threshold) || (result && visiblility > 0), false),
       // Distincts the resulting triggers 
       distinctUntilChanged(),
       // Stop taking the first on trigger when aosOnce is set
@@ -153,6 +153,8 @@ export class AnimateComponent implements OnInit, OnDestroy {
   }
 
   private intersectRatio(rect: wmRect, cont: wmRect): number {
+
+    //console.log(rect);
 
     // Return 1.0 when the element is fully within its scroller container
     if(rect.left > cont.left && rect.top > cont.top && rect.right < cont.right && rect.bottom < cont.bottom) { 
@@ -178,8 +180,8 @@ export class AnimateComponent implements OnInit, OnDestroy {
 
   // Element client bounding rect helper
   private clientRect(elm: ElementRef<HTMLElement>): wmRect {
-    const el = !!elm && elm.nativeElement;
-    return !!el && el.getBoundingClientRect();
+    const el = elm && elm.nativeElement;
+    return el && el.getBoundingClientRect();
   }
 
   private windowRect(): wmRect {

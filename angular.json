@@ -12,20 +12,35 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/apps/wizdm",
             "index": "apps/wizdm/src/index.html",
             "main": "apps/wizdm/src/main.ts",
             "polyfills": "apps/wizdm/src/polyfills.ts",
             "tsConfig": "apps/wizdm/tsconfig.app.json",
-            "assets": ["apps/wizdm/src/assets"],
-            "styles": ["apps/wizdm/src/styles.scss"],
+            "assets": [
+              "apps/wizdm/src/favicon.ico",
+              "apps/wizdm/src/assets"
+            ],
+            "styles": [
+              "apps/wizdm/src/styles.scss"
+            ],
             "stylePreprocessorOptions": {
-              "includePaths": ["apps/wizdm/src/styles", "libs/elements/src/lib"]
+              "includePaths": [
+                "apps/wizdm/src/styles",
+                "libs/elements/src/lib"
+              ]
             },
             "scripts": []
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "apps/wizdm/src/environments/environment.ts",
@@ -71,9 +86,14 @@
             "polyfills": "apps/wizdm/src/polyfills.ts",
             "tsConfig": "apps/wizdm/tsconfig.spec.json",
             "karmaConfig": "apps/wizdm/karma.conf.js",
-            "styles": ["apps/wizdm/src/styles.scss"],
+            "styles": [
+              "apps/wizdm/src/styles.scss"
+            ],
             "scripts": [],
-            "assets": ["apps/wizdm/src/favicon.ico", "apps/wizdm/src/assets"]
+            "assets": [
+              "apps/wizdm/src/favicon.ico",
+              "apps/wizdm/src/assets"
+            ]
           }
         },
         "lint": {
@@ -83,7 +103,9 @@
               "apps/wizdm/tsconfig.app.json",
               "apps/wizdm/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -108,7 +130,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/wizdm-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -126,7 +150,10 @@
               "libs/animate/tsconfig.lib.json",
               "libs/animate/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/animate/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/animate/**"
+            ]
           }
         },
         "test": {
@@ -157,7 +184,9 @@
               "libs/content/tsconfig.lib.json",
               "libs/content/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -186,6 +215,11 @@
           "options": {
             "tsConfig": "libs/connect/tsconfig.lib.json",
             "project": "libs/connect/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/connect/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -203,7 +237,9 @@
               "libs/connect/tsconfig.lib.json",
               "libs/connect/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -221,7 +257,10 @@
               "libs/redirect/tsconfig.lib.json",
               "libs/redirect/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/redirect/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/redirect/**"
+            ]
           }
         },
         "test": {
@@ -252,7 +291,10 @@
               "libs/elements/tsconfig.lib.json",
               "libs/elements/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/elements/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/elements/**"
+            ]
           }
         },
         "test": {
@@ -281,6 +323,11 @@
           "options": {
             "tsConfig": "libs/markdown/tsconfig.lib.json",
             "project": "libs/markdown/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/markdown/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -298,7 +345,9 @@
               "libs/markdown/tsconfig.lib.json",
               "libs/markdown/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -316,7 +365,9 @@
               "libs/prism/tsconfig.lib.json",
               "libs/prism/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -355,7 +406,9 @@
               "libs/editable/tsconfig.lib.json",
               "libs/editable/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -373,7 +426,9 @@
               "libs/doorbell/tsconfig.lib.json",
               "libs/doorbell/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "test": {
@@ -404,7 +459,10 @@
               "libs/paypal/tsconfig.lib.json",
               "libs/paypal/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/paypal/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/paypal/**"
+            ]
           }
         },
         "test": {
@@ -435,7 +493,10 @@
               "libs/stripe/tsconfig.lib.json",
               "libs/stripe/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/stripe/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/stripe/**"
+            ]
           }
         },
         "test": {
@@ -466,7 +527,10 @@
               "libs/ipinfo/tsconfig.lib.json",
               "libs/ipinfo/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/ipinfo/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/ipinfo/**"
+            ]
           }
         },
         "test": {
@@ -497,7 +561,10 @@
               "libs/iplist/tsconfig.lib.json",
               "libs/iplist/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/iplist/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/iplist/**"
+            ]
           }
         },
         "test": {
@@ -528,7 +595,10 @@
               "libs/gtag/tsconfig.lib.json",
               "libs/gtag/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/gtag/**"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/gtag/**"
+            ]
           }
         },
         "test": {
@@ -552,7 +622,8 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@nrwl/schematics"
+    "defaultCollection": "@nrwl/schematics",
+    "analytics": false
   },
   "schematics": {
     "@nrwl/schematics:component": {

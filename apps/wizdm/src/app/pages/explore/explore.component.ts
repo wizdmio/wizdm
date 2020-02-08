@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+/*import { Router, ActivatedRoute } from '@angular/router';
 import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
 import { Member } from 'app/core/member';
 import { wmStory } from 'app/core/stories';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs';*/
 
 @Component({
   selector: 'wm-explore',
@@ -12,16 +11,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./explore.component.scss'],
   host: { 'class': 'padding-top-toolbar' }
 })
-export class ExploreComponent extends PagedCollection<wmStory> {
+export class ExploreComponent /*extends PagedCollection<wmStory>*/ {
 
-  public stories$: Observable<any[]>;
+  //public stories$: Observable<any[]>;
   
-  constructor(db: DatabaseService, readonly member: Member, private router: Router, private route: ActivatedRoute) {    
+  /*constructor(db: DatabaseService, readonly member: Member, private router: Router, private route: ActivatedRoute) {    
 
     super(db, db.col(`stories`));
 
     // Listing all projects (using pagination)
-    //this.projects$ = this.projects.paging({ limit: 10 });
+    this.projects$ = this.projects.paging({ limit: 10 });
 
     // Lists all the stories paging by 10
     this.stories$ = this.paging({ limit: 10 });
@@ -35,13 +34,12 @@ export class ExploreComponent extends PagedCollection<wmStory> {
 
   }
 
-  /** Opens the story for reading/editing */
   public open(id: string) {
 
     // Navigates relatively to the current route triggering the story editor
     return this.router.navigate([id], { relativeTo: this.route });
   }
-/*
+
   private streamProjects(): Observable<any[]> {
 
     return this.route.queryParamMap.pipe(

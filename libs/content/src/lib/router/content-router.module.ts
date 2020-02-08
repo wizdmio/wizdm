@@ -1,4 +1,4 @@
-import { NgModule, Inject } from '@angular/core';
+import { NgModule, ModuleWithProviders, Inject } from '@angular/core';
 import { RouterModule, Route, Routes, ROUTES, provideRoutes } from '@angular/router';
 import { ContentConfigurator } from '../loader/content-configurator.service';
 import { SelectorResolver } from './selector-resolver.service';
@@ -64,10 +64,11 @@ export class ContentRouterModule {
   }
 
   /** Initializes child routes with content */
-  static forChild(routes: RoutesWithContent) {
-    return { // Replicates RouterModule.forChild( routes )
-      ngModule: ContentRouterModule,
-      providers: [ provideRoutes(routes) ]
+  /** Initializes child routes with content */
+static forChild(routes: RoutesWithContent): ModuleWithProviders<ContentRouterModule> {
+    return {
+        ngModule: ContentRouterModule,
+        providers: [provideRoutes(routes)]
     };
-  }
+}
 }

@@ -20,7 +20,7 @@ export class StaticResolver implements Resolve<string> {
     const lang = this.selector.resolve(route);
 
     // Resolves the file name source from the route
-    const name = route.paramMap.get('name');
+    const name = route.paramMap.get('page');
 
     // Computes the full path
     const fullPath = `assets/docs/${lang}/${name}.md`;

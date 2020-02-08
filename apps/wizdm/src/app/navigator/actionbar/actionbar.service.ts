@@ -1,18 +1,21 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActionbarService extends BehaviorSubject<TemplateRef<any>> {
+export class ActionbarService extends Observable<TemplateRef<any>> {
 
-  constructor() { super(null); }
+  private template$ = new BehaviorSubject<TemplateRef<any>>(null);
+
+  constructor() { super( subscriber => this.template$.pipe(delay(0)).subscribe( subscriber )); }
 
   public activate(template: TemplateRef<any>) {
-    this.next(template);
+    this.template$.next(template);
   }
 
   public clear() { 
-    this.next(null);
+    this.template$.next(null);
   }
 }

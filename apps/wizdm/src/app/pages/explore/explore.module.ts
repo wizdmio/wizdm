@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { MatButtonModule } from '@angular/material/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { RedirectModule } from '@wizdm/redirect';
 import { ReadmeModule } from '@wizdm/elements/readme';
@@ -29,6 +30,7 @@ const routes: RoutesWithContent = [
     CommonModule,
     FlexLayoutModule,
     MatButtonModule,
+    GtagModule,
     AnimateModule,
     RedirectModule,
     ReadmeModule,

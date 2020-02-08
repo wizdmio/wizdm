@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { MatIconRegistry, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { ContentModule } from '@wizdm/content';
 import { ConnectModule } from '@wizdm/connect';
@@ -12,10 +13,11 @@ import { StorageModule } from '@wizdm/connect/storage';
 import { DoorbellModule } from '@wizdm/doorbell';
 import { ReadmeNavigator } from '@wizdm/elements/readme';
 import { RedirectService } from '@wizdm/redirect';
+import { GtagModule } from '@wizdm/gtag';
 import { AppComponent } from './app.component';  
 //import { environment } from '../environments/environment';
 import { appname, content, router } from '../environments/common';
-import { firebase, doorbell } from '../environments/secrets';
+import { firebase, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 
@@ -35,6 +37,8 @@ const routes: Routes = [
     ContentModule.init(content),    
     // Doorbell service (Feedback form)
     DoorbellModule.init(doorbell),
+    // Google Analytics
+    GtagModule.init(gtag),
     // Angular's Router
     RouterModule.forRoot(routes, router)
   ],

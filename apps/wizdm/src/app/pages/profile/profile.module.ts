@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { GtagModule } from '@wizdm/gtag';
 import { RedirectModule } from '@wizdm/redirect';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
@@ -48,6 +49,7 @@ const routes: RoutesWithContent = [
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
+    GtagModule,
     IconModule, 
     AvatarModule,
     ReadmeModule,

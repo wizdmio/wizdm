@@ -98,8 +98,7 @@
     { 
       "icon": "fas:fa-chart-bar",
       "title": "Google Analytics",
-      "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience.",
-      "comingSoon": true  
+      "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience."
     },
     { 
       "icon": "fas:fa-camera",
@@ -111,13 +110,13 @@
       "icon": "fab:fa-paypal",
       "title": "Paypal",
       "description": "Payment processing powered by [Paypal](https://www.paypal.com).",
-      "comingSoon": true  
+      "experimental": true
     },
     { 
       "icon": "fab:fa-stripe-s",
       "title": "Payments",
       "description": "Payment processing powered by [Stripe](https://stripe.com).",
-      "comingSoon": true  
+      "experimental": true
     },
     { 
       "icon": "fab:fa-angular",

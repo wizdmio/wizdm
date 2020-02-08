@@ -2,7 +2,7 @@
 <ng-container *wmContent="let document select 'document'">
 
   <!-- Foreground content -->
-  <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document">
+  <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document" [gtag]="page$ | async">
 
     <!-- Renders the markdown document -->
     <section [wm-markdown]="document" (navigate)="redirect.navigate($event)" #body></section>

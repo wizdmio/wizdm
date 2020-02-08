@@ -1,4 +1,4 @@
-import { OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Output, EventEmitter } from '@angular/core';
+import { OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Output, EventEmitter, Directive } from '@angular/core';
 import { Element, ElementType, ElementOptions, ChangeEventObject } from './stripe-definitions/element';
 import { StripeError } from './stripe-definitions/error';
 import { StripeElements } from './stripe-elements';
@@ -11,6 +11,7 @@ export type StripeElementType = Exclude<ElementType, 'paymentRequestButton'>;
  * Abstract generic class turning a StripeElement into an Angular component with basic features
  * To be used as the base class for all the Stripe related specific components: StripeCard...
  */
+@Directive()
 export abstract class StripeElement<T extends StripeElementType> implements OnInit, OnChanges, OnDestroy {
 
   constructor(readonly elementType: T, private elements: StripeElements, private config: StripeConfig<T>,private ref: ElementRef<HTMLElement>) {}

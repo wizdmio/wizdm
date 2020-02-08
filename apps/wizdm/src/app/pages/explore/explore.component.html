@@ -1,7 +1,7 @@
 
 <ng-container *wmContent="let msgs select 'explore'">
 
-  <header fxLayout="column">
+  <header fxLayout="column" gtag="explore">
     <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
     <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
     <p [wm-readme]="msgs.description">
@@ -35,7 +35,6 @@
           <div *ngIf="feat.comingSoon" class="tag accent background-color-default contrast-default mat-small">{{ msgs.comingSoon }}</div>
 
           <div *ngIf="feat.experimental" class="tag warn background-color-default contrast-default mat-small">{{ msgs.experimental }}</div>
-
 
         </div>
 
