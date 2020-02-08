@@ -37,16 +37,15 @@ The workspace has been converted from the original angular-cli to the monorepo f
 
 ## Internationalization
 
-The project uses a [content resolver](apps/wizdm/src/app/core/content-resolver) to dynamically load contents in different languages by pre-fetching localilzed content from 'assets/i18n'. The service is then injected into the components (pages) needing 
-to get localized contents making sure it is always fully loaded and available to the target container prior to get initialized.
+The project uses a content resolver to dynamically load contents in different languages by pre-fetching localilzed content from 'assets/i18n'.
 
 At first start, the resolver checks the authenticated user language preferences falling back detecting the browser language when unavailable (aka the user is not logged in). This provides the useful side effect of preventing the initial page from flickering between unlogged and logged-in statuses while an already logged-in user is loading the app from scratch.
 
-The navigation system is used to switch among languages, so, from the user perspective, it looks like having multiple apps in different languages (e.g. https://wizdm.io/en/home for English or https://wizdm.io/it/home for Italian).
+The router is used to switch among languages, so, from the user perspective, it looks like having multiple apps in different languages (e.g. https://wizdm.io/en/home for English or https://wizdm.io/it/home for Italian).
 
-The localized content is provided as an observable granting smooth transitions while switching languages without the need of reloading the full page nor the app.
+The localized content is provided by means of the *wmContent* resolving as an observable granting smooth transitions while switching languages without the need of reloading the full page nor the app.
 
-The same service is used as a guard for both activating/deactivating pages while routing.
+Take a look on [@wizdm/content](libs/content) package for further information.
 
 ## Development server
 
