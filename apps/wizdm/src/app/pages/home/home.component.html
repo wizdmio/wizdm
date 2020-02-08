@@ -1,7 +1,7 @@
 
-<ng-container *wmContent="let msgs select 'home'">
+<ng-container *wmContent="let msgs select 'home';let lang = language">
   
-  <wm-illustration *ngIf="!!msgs.banner" class="background" color="primary" [src]="msgs.banner" [baseHref]="msgs.lang"></wm-illustration> 
+  <wm-illustration *ngIf="!!msgs.banner" class="background" color="primary" [src]="msgs.banner" [baseHref]="lang"></wm-illustration> 
 
   <section fxLayout="row" fxLayoutAlign="center center" class="banner" gtag="home">
 
