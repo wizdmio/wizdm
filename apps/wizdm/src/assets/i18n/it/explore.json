@@ -33,12 +33,16 @@
       "description": "Grazie al flessibile gestore dei contenuti alla propria base, wizdm gestisce contemporaneamente tante lingue quante te ne servono."
     },
     { 
+      "title": "Geo-localizzazione IP",
+      "description": "Rileva il paese e la città in base all'indirizzo IP grazie ai servizi *API* di [IpList](https://iplist.cc/) e [IpInfo](https://ipinfo.io/)."
+    },
+    { 
       "title": "Gestione utenti",
       "description": "Autenticazione degli utenti, verifica e recupero dell'email, profilo utente e cancellazione dell'account."
     },
     { 
       "title": "Sincronizzazione dati",
-      "description": "Sincronizzazione in tempo reali dei dati online e offline basata su potenti database NoSQL pronti a garantire copertura globale."
+      "description": "Sincronizzazione in tempo reali dei dati online e offline basata su potenti database *NoSQL* pronti a garantire copertura globale."
     },
     { 
       "title": "Memorizzazione file",
@@ -46,11 +50,11 @@
     },
     { 
       "title": "Contenuti statici",
-      "description": "Supporto markdown integrato per impostare subito i contenuti statici come i termini e la privacy senza dover riccorrere a programmazione extra."
+      "description": "Supporto *markdown* integrato per impostare subito i contenuti statici come i termini e la privacy senza dover riccorrere a programmazione extra."
     },
     { 
       "title": "Contenuti modificabili",
-      "description": "Potente editor WYSIWYG per la modifica online dei tuoi contenuti."
+      "description": "Potente editor *WYSIWYG* per la modifica online dei tuoi contenuti."
     },
     { 
       "title": "Modulo feedback",
@@ -94,7 +98,7 @@
     },
     { 
       "title": "Open source",
-      "description": "Wizdm è 100% open source e supportato da una crescente cominità."
+      "description": "Wizdm è *100%* open source e supportato da una crescente cominità."
     },
     { 
       "title": "Per bootstrapper",

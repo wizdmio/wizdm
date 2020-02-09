@@ -13,6 +13,7 @@ import { StorageModule } from '@wizdm/connect/storage';
 import { DoorbellModule } from '@wizdm/doorbell';
 import { ReadmeNavigator } from '@wizdm/elements/readme';
 import { RedirectService } from '@wizdm/redirect';
+import { IpListModule } from '@wizdm/iplist';
 import { GtagModule } from '@wizdm/gtag';
 import { AppComponent } from './app.component';  
 //import { environment } from '../environments/environment';
@@ -32,7 +33,9 @@ const routes: Routes = [
     BrowserAnimationsModule,
     // Database tools (Firebase)
     ConnectModule.init(firebase, appname),
-    AuthModule, DatabaseModule, StorageModule,    
+    AuthModule, DatabaseModule, StorageModule,
+    // IP location (iplist.cc)
+    IpListModule,   
     // Dynamic content (i18n)
     ContentModule.init(content),    
     // Doorbell service (Feedback form)

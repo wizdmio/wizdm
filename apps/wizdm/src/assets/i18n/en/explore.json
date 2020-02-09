@@ -37,9 +37,14 @@
       "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)"
     },
     { 
-      "icon": "fas:fa-globe-europe",
+      "icon": "fas:fa-language",
       "title": "Internationalization",
       "description": "Thanks to a flexible content manager at its core, wizdm handles as many lanuages as you need at once."
+    },
+    { 
+      "icon": "fas:fa-globe-europe",
+      "title": "IP geolocation",
+      "description": "Country level and City level IP info localization supported by [IpList](https://iplist.cc/) and [IpInfo](https://ipinfo.io/) *API*s."
     },
     { 
       "icon": "fas:fa-user-circle",
@@ -49,7 +54,7 @@
     { 
       "icon": "fas:fa-sync-alt",
       "title": "Data synchronization",
-      "description": "Real-time online and offline data sync based on severless NoSQL database ready for global level scale."
+      "description": "Real-time online and offline data sync based on severless *NoSQL* database ready for global level scale."
     },
     { 
       "icon": "fas:fa-folder-open",
@@ -59,12 +64,12 @@
     { 
       "icon": "fab:fa-markdown",
       "title": "Static content",
-      "description": "Markdown rendering to quickly set up static contents such as terms of service and privacy without extra coding."
+      "description": "*Markdown* rendering to quickly set up static contents such as terms of service and privacy without extra coding."
     },
     { 
       "icon": "far:fa-edit",
       "title": "Content editing",
-      "description": "Powerfull built-in WYSIWYG content editing capabilities to serve your needs.",
+      "description": "Powerfull built-in *WYSIWYG* content editing capabilities to serve your needs.",
       "experimental": true
     },
     { 
@@ -126,7 +131,7 @@
     { 
       "icon": "fab:fa-github",
       "title": "Open source",
-      "description": "Wizdm is 100% open source and supported by a growing community."
+      "description": "Wizdm is *100%* open source and supported by a growing community."
     },
     { 
       "icon": "fas:fa-rocket",

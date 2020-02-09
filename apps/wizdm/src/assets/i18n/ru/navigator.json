@@ -32,5 +32,21 @@
         ]
     },
 
-    "contactUs" : { "caption": "Связаться с нами" }
+    "footer": {
+        "copyright": "Сделано с мудростью на Планете Земля ©{{ year }}",
+      
+        "socials": [
+            { "label": "Facebook" },
+            { "label": "Twitter" },
+            { "label": "LinkedIn" },
+            { "label": "Github" } 
+        ],
+      
+        "links": [
+            { "label": "О нас" },
+            { "label": "Условия использования" },
+            { "label": "Конфиденциальность" },
+            { "label": "Связаться с нами" }
+        ]
+      }
 }

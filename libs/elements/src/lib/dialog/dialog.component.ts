@@ -53,7 +53,7 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
   /** Min-height of the dialog. If a number is provided, assumes pixel units. */
   @Input() minHeight?: number | string;
   /** Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw. */
-  @Input() maxWidt: number | string = '80vw';
+  @Input() maxWidth: number | string = '80vw';
   /** Max-height of the dialog. If a number is provided, assumes pixel units. */
   @Input() maxHeight: number | string;
   /** Position overrides. */

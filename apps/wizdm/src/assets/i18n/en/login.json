@@ -1,5 +1,5 @@
 {
-  "signIn": "Already have login and password? [Sign-in](login?=mode=signIn)",
+  "signIn": "Already have login and password? [Sign-in](login?mode=signIn)",
   "register": "Are you a new user? [Register](login?mode=register)",
   "forgot": "[Forgot password?](login?mode=forgotPassword)",
   "signInWith": "Or single click sign-in with:",
@@ -12,21 +12,32 @@
     "newPassword": " New password"
   },
 
+  "socials": [ "google", "facebook", "instagram", "twitter"],
+
   "pages": {
+    "social": {
+      "title": "Sign-in with a social",
+      "message": "Welcome to *Wizdm*.\nUse your favorite social to access.",
+      "instructions": "You can also [register](login?mode=register) with your email or, if already registered, [sign-in](login?mode=signIn)."
+    },
     "register": {
-      "title": "Register",
+      "title": "Register with your email",
       "message": "Welcome to *Wizdm*.\nAs a registered users you'll get unrestricted access to all the features",
+      "instructions": "Already have login and password? [Sign-in](login?mode=signIn).",
       "caption": "Register with my email"
     },
     "signIn": {
-      "title": "Sign-in",
+      "title": "Sign-in with your email",
       "message": "We're glad to see you again.\nPlease sign-in",
+      "forgot": "[Forgot password?](login?mode=forgotPassword)",
+      "instructions": "Are you a new user?\nYou can [register](login?mode=register) with your email or login with your [favorite social](login?mode=social)",
       "caption": "Sign-in with my email"
 
     },
     "forgotPassword": {
       "title": "Reset password",
       "message": "We'll be sending you a link to reset the password",
+      "instructions": "Already have login and password? [Sign-in](login?mode=signIn)",
       "caption": "Reset the password"
     },
     "resetPassword": {

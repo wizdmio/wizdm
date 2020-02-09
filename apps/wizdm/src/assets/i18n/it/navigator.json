@@ -33,5 +33,14 @@
         ]
     },
 
-    "contactUs" : { "caption": "Contataci" }
+    "footer": {
+        "copyright": "Condiviso con saggezza dal pianeta Terra ©{{ year }}",
+      
+        "links": [
+            { "label": "Chi siamo" },
+            { "label": "Termini" },
+            { "label": "Privacy" },
+            { "label": "Contattaci" }
+        ]
+    }
 }

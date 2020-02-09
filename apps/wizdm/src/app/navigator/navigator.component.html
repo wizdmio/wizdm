@@ -27,7 +27,7 @@
         <div fxLayout="row" fxLayoutAlign="end center">
 
           <!-- Action toolbar -->
-          <div *ngIf="actionbar | async as template" [@activate]="template">
+          <div *ngIf="actionbar$ | async as template" [@activate]="template">
             <ng-container *ngTemplateOutlet="template; context: { isMobile: mobile }"></ng-container>
           </div>
           
@@ -66,11 +66,8 @@
 
   </header>
 
-  <!-- Viewport container -->
-  <main fxFlex="1 1 auto" fxLayout="column">
-
-    <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
-    <wm-login-dlg wmActionLink="login" (activate)="login.open($event)" #login></wm-login-dlg>
+  <!-- Viewport container with dynamic background -->
+  <main fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
 
     <!-- Router Outlet stretched to fit -->
     <div fxFlex="1 1 auto">
@@ -78,22 +75,13 @@
     </div>
     
     <!-- Footer always on the bottom -->
-    <wm-footer fxFlex="0 0 auto"></wm-footer>
+    <footer fxFlex="0 0 auto"></footer>
+
+    <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
+    <wm-login-dlg maxWidth="95vw" wmActionLink="login" (activate)="login.open($event)" #login></wm-login-dlg>
 
     <!-- Feedback form activated on 'contact' action link  @see navigator-router-module -->
-    <wm-feedback-dlg [disableClose]="true" wmActionLink="contact" (activate)="feedback.open($event)" #feedback>
-      
-      <!-- Form trigger button -->
-      <button mat-raised-button class="feedback-btn" (click)="feedback.open()">
-
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="4px">
-          <span>{{ msgs.contactUs?.caption || 'Contact Us' }}</span>
-          <wm-icon [icon]="msgs.contactUs?.icon || 'message'"></wm-icon>
-        </div>
-      
-      </button>   
-
-    </wm-feedback-dlg>
+    <wm-feedback-dlg maxWidth="95vw" disableClose="true" wmActionLink="contact" (activate)="feedback.open($event)" #feedback></wm-feedback-dlg>
 
   </main>
   

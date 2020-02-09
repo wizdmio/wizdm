@@ -9,6 +9,7 @@ import { AnimateModule } from '@wizdm/animate';
 import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { IllustrationModule } from '@wizdm/elements/illustration';
+import { BackgroundModule } from 'app/navigator/background';
 //import { AuthGuard } from 'app/utils/auth-guard';
 //import { PageGuard } from 'app/utils/page-guard';
 import { HomeComponent } from './home.component';
@@ -35,6 +36,7 @@ const routes: RoutesWithContent = [
     IconModule, 
     ReadmeModule,
     IllustrationModule,
+    BackgroundModule,
     ContentRouterModule.forChild(routes)
   ]
 })

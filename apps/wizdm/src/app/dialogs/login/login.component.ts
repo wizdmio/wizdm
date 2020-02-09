@@ -1,14 +1,14 @@
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '@wizdm/elements/dialog';
 import { RedirectService } from '@wizdm/redirect';
 import { GtagService } from '@wizdm/gtag';
 import { User } from '@wizdm/connect/auth';
-import { DialogComponent } from '@wizdm/elements/dialog';
 import { Member } from 'app/core/member';
 import { $animations } from './login-animations';
 
-export type loginAction = 'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
+export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
 
 export interface LoginData { 
   mode?: loginAction;
@@ -82,7 +82,7 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
     }
 
     // Populates the form according to the requested action
-    this.switchPage(data && data.mode || 'signIn');
+    this.switchPage(data && data.mode || 'social');
 
     // Opens the login dialog
     return super.open(data);

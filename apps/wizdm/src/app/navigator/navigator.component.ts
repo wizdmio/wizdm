@@ -6,6 +6,7 @@ import { ContentStreamer } from '@wizdm/content';
 import { Member } from 'app/core/member';
 import { ActionLinkObserver } from 'app/utils/action-link';
 import { ActionbarService } from './actionbar';
+import { BackgroundStyle } from './background';
 import { Observable, fromEvent } from 'rxjs';
 import { map, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { $animations } from './navigator.animations';
@@ -30,7 +31,8 @@ export class NavigatorComponent {
               private viewport: ViewportRuler, 
               private actionlink: ActionLinkObserver,
               private location: Location,
-              readonly actionbar: ActionbarService, 
+              readonly actionbar$: ActionbarService, 
+              readonly background$: BackgroundStyle,
               readonly member: Member) {
 
     // Creates an observable to detect whenever the viewport is scrolled

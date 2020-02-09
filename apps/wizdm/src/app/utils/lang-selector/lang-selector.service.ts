@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { DateAdapter } from '@angular/material/core';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
+import { flatMap, map, first } from 'rxjs/operators';
+import { IpList } from '@wizdm/iplist';
 import { Member } from 'app/core/member';
-import { map, first } from 'rxjs/operators';
+import { $languageMap } from './lang-map';
+import { of } from 'rxjs';
 import moment from 'moment';
 
 /**
@@ -12,7 +15,7 @@ import moment from 'moment';
 @Injectable()
 export class LanguageSelector extends ContentSelector {
 
-  constructor(private adapter: DateAdapter<any>, private user: Member, router: Router, config: ContentConfigurator) { 
+  constructor(private iplist: IpList, private adapter: DateAdapter<any>, private user: Member, router: Router, config: ContentConfigurator) { 
     super(router, config); 
   }
 
@@ -21,7 +24,20 @@ export class LanguageSelector extends ContentSelector {
     // Resolves user profile data, when authenticated. This also prevents page flickering by delaying routing until authentication is completed
     return this.user.stream().pipe( 
 
-      map( profile => {
+      // Detects the language from the user profile
+      flatMap( profile => {
+
+        // Whenever authenticated, returns the user preferred language
+        if(profile && profile.lang) { return of(profile.lang) }; 
+        
+        // Detects the location from the IP and returns the coresponding language falling back to the browser language
+        // Note; IpList caches the last value to avoid multiple API calls unless requested.
+        return this.iplist.pipe( map( list => list?.countrycode && $languageMap[list.countrycode][0] || this.browserLanguage ));
+      }), 
+
+      map( detected => {
+
+        console.log("Detected language:", detected);
 
         // Gets the language code from the route
         const requested = route.paramMap.get( this.config.selector );
@@ -40,7 +56,7 @@ export class LanguageSelector extends ContentSelector {
         if( requested === 'auto' ) {
 
           // Gets the preferred user language from the profile, when authenticated, or the browser otherwise
-          const preferred = this.languageAllowed( !!profile && profile.lang || this.browserLanguage );
+          const preferred = this.languageAllowed( detected );
           console.log('User preferred language:', preferred);
 
           // Patches the state url with the new language code
