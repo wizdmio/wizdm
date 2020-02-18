@@ -11,7 +11,7 @@ export let $animations = [
     ])
   ]),
 
-  trigger('inflate', [
+  trigger('morph', [
     transition(':enter', [
       style({ 
         opacity: '0', 

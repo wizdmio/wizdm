@@ -103,6 +103,8 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
     // Add the relevant controls to the form according to selected page
     switch(this.page = page) {
 
+      case 'social': break;
+
       case 'register':
       this.form.addControl('name', this.name);
       this.form.addControl('email', this.email);
@@ -135,6 +137,9 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
       case 'delete':
       this.form.addControl('password', this.password);      
       break;
+
+      default:
+      console.error('Invalid login action:', page);
     }
   }
 

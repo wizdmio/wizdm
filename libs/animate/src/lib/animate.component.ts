@@ -147,44 +147,24 @@ export class AnimateComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Computes the element visibility ratio
-  private get visibility() { 
-    return this.intersectRatio( this.clientRect(this.elm), this.getScrollingArea(this.elm) );
-  }
+  // Computes the element's visibility ratio
+  private get visibility(): number {
 
-  private intersectRatio(rect: wmRect, cont: wmRect): number {
+    // Gets the element's bounding rect
+    const rect = this.elm && this.elm.nativeElement && this.elm.nativeElement.getBoundingClientRect();
+    if(!rect) { return 0; }
 
-    //console.log(rect);
-
-    // Return 1.0 when the element is fully within its scroller container
-    if(rect.left > cont.left && rect.top > cont.top && rect.right < cont.right && rect.bottom < cont.bottom) { 
-      return 1.0; 
+    // Return 1.0 when the element is fully within the viewport
+    if(rect.left >= 0 && rect.top >= 0 && rect.right < window.innerWidth + 1 && rect.bottom < window.innerHeight + 1) { 
+      return 1; 
     }
 
     // Computes the intersection area otherwise
     const a = Math.round(rect.width * rect.height);
-    const b = Math.max(0, Math.min(rect.right, cont.right) - Math.max(rect.left, cont.left));
-    const c = Math.max(0, Math.min(rect.bottom, cont.bottom) - Math.max(rect.top, cont.top));
+    const b = Math.max(0, Math.min(rect.right, window.innerWidth) - Math.max(rect.left,0));
+    const c = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
 
     // Returns the amount of visible area 
     return Math.round(b * c / a * 10) / 10;
-  }
-
-  // Returns the rectangular surface area of the element's scrolling container
-  private getScrollingArea(elm: ElementRef<HTMLElement>): wmRect {
-    // Gets the cdkScolling container, if any
-    const scroller = this.scroll.getAncestorScrollContainers(elm).pop();
-    // Returns the element's most likely scrolling container area
-    return !!scroller ? this.clientRect( scroller.getElementRef() ) : this.windowRect();
-  }
-
-  // Element client bounding rect helper
-  private clientRect(elm: ElementRef<HTMLElement>): wmRect {
-    const el = elm && elm.nativeElement;
-    return el && el.getBoundingClientRect();
-  }
-
-  private windowRect(): wmRect {
-    return new wmRect(0,0, window.innerWidth, window.innerHeight);
   }
 }

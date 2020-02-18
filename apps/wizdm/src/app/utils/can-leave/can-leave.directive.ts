@@ -1,4 +1,4 @@
-import { Directive, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { DialogComponent } from '@wizdm/elements/dialog';
 import { CanLeaveGuard } from './can-leave.service';
 import { Observable, of, defer } from 'rxjs';
@@ -26,5 +26,13 @@ export class CanLeaveDirective {
     return defer( () => this.dontLeave ? this.dialog.open().afterClosed() : of(true) )
       // Makes sure all the following requests will be true once the first has been granted
       .pipe( tap( granted => (granted === this.dontLeave) && this.dontLeaveChange.emit(this.dontLeave = !granted) ));
+  }
+
+  // Prevents the tab/page to be closed 
+  @HostListener('window:beforeunload', ['$event']) beforeUnload(ev: Event) {
+
+    if(this.dontLeave) {
+      return false;
+    }
   }
 }

@@ -1,7 +1,7 @@
 {
   "signIn": "Hai già una password? [Sign-in](login?=mode=signIn)",
   "register": "Sei nuovo? [Register](login?mode=register)",
-  "forgot": "[Password dimenticata?](login?mode=forgotPassword)",
+  "forgot": "[Password dimenticata?](forgotPassword)",
   "signInWith": "Oppure collegati con un click:",
 
   "labels": {

@@ -11,7 +11,10 @@
   max-width: 100%;
   text-align: center;
 
-  .social { height: 48px; }
+  .providers {
+    height: 48px;
+    svg { width: 48px; height: 48px; }
+  }
   
   .bit-of-space { margin: 12px 0; }
   
@@ -19,6 +22,4 @@
     margin-top: 10px;
     min-height: 48px;
   }
-
-  .providers { font-size: 1.5em; }
 }

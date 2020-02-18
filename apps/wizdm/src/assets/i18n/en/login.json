@@ -1,8 +1,5 @@
 {
-  "signIn": "Already have login and password? [Sign-in](login?mode=signIn)",
-  "register": "Are you a new user? [Register](login?mode=register)",
-  "forgot": "[Forgot password?](login?mode=forgotPassword)",
-  "signInWith": "Or single click sign-in with:",
+  "forgot": "[Forgot password?](forgotPassword)",
 
   "labels": {
     "fullname": "Full name",
@@ -12,32 +9,28 @@
     "newPassword": " New password"
   },
 
-  "socials": [ "google", "facebook", "instagram", "twitter"],
-
   "pages": {
     "social": {
       "title": "Sign-in with a social",
       "message": "Welcome to *Wizdm*.\nUse your favorite social to access.",
-      "instructions": "You can also [register](login?mode=register) with your email or, if already registered, [sign-in](login?mode=signIn)."
+      "instructions": "You can also [register](register) with your email or, if already registered, [sign-in](signIn)."
     },
     "register": {
       "title": "Register with your email",
       "message": "Welcome to *Wizdm*.\nAs a registered users you'll get unrestricted access to all the features",
-      "instructions": "Already have login and password? [Sign-in](login?mode=signIn).",
+      "instructions": "Already have login and password? [Sign-in](signIn).",
       "caption": "Register with my email"
     },
     "signIn": {
       "title": "Sign-in with your email",
       "message": "We're glad to see you again.\nPlease sign-in",
-      "forgot": "[Forgot password?](login?mode=forgotPassword)",
-      "instructions": "Are you a new user?\nYou can [register](login?mode=register) with your email or login with your [favorite social](login?mode=social)",
+      "instructions": "Are you a new user?\nYou can [register](register) with your email or login with your [favorite social](social)",
       "caption": "Sign-in with my email"
-
     },
     "forgotPassword": {
       "title": "Reset password",
       "message": "We'll be sending you a link to reset the password",
-      "instructions": "Already have login and password? [Sign-in](login?mode=signIn)",
+      "instructions": "Already have login and password? [Sign-in](signIn)",
       "caption": "Reset the password"
     },
     "resetPassword": {
@@ -74,14 +67,6 @@
       "caption": "Delete forever"
     }
   },
-
-  "providers": [
-    { "name": "google", "icon": "fab:fa-google", "color": "#EA4335", "contrast": "#FFFFFF" },
-    { "name": "facebook", "icon": "fab:fa-facebook", "color": "#3B5998", "contrast": "#FFFFFF" },
-    { "name": "twitter", "icon": "fab:fa-twitter", "color": "#55ACEE", "contrast": "#FFFFFF" },
-    { "name": "linkedin", "icon": "fab:fa-linkedin", "color": "#0077b5", "contrast": "#FFFFFF" },
-    { "name": "github", "icon": "fab:fa-github", "color": "#333333", "contrast": "#FFFFFF" }
-  ],
 
   "errors": {
     "nameRequired": "Please specify your name here",
