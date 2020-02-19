@@ -92,7 +92,7 @@ export class ReadmeComponent {
     });
 
     // Appends the final text chunk 
-    if(start < source.length - 1) {
+    if(start < source.length) {
       const content = source.substring(start, source.length);
       this.segments.push({ type: "text", content });
     }
