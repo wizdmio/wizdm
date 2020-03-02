@@ -1,0 +1,33 @@
+
+<!-- Mode selection: Auto, Web and Native -->
+<mat-radio-group fxLayout="column" fxLayoutAlign="center end" fxLayoutGap="5px" labelPosition="before" [value]="mode" (change)="mode = $event.value">
+  <mat-radio-button value="auto">Auto <span class="mat-small">{{ native ? '(Native support detected)' : '(No native support)' }}</span></mat-radio-button>
+  <mat-radio-button value="web">Web</mat-radio-button>
+  <mat-radio-button value="native">Native</mat-radio-button>
+</mat-radio-group>
+
+<section fxLayout="column" fxLayoutAlign="start center">
+
+  <h1>Emoji Text</h1>
+  <p [wm-emoji-text]="text" [mode]="mode"></p>
+
+  <br>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Emoji Input</mat-label>
+    <wm-emoji-input matEmoji [value]="text" [mode]="mode" placeholder="Type a message" (change)="updateText($event)" #einput></wm-emoji-input>
+    <button mat-icon-button matSuffix><wm-icon icon="send"></wm-icon></button>
+    <mat-hint>Material Form Field applied to Emoji input</mat-hint>
+  </mat-form-field>
+
+  <div fxLayout="row" style="user-select: none;"> 
+    <button mat-icon-button tabindex="-1" *ngFor="let key of keys" (mousedown)="einput.typein(key);false" style="font-size: 24px; line-height: 24px;">
+      <img [wm-emoji]="key" />
+    </button>
+  </div>
+
+  <br>
+
+  <p>{{ debug }}</p>
+
+</section>

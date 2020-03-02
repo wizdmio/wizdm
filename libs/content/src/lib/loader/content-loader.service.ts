@@ -63,7 +63,9 @@ export class DefaultLoader extends ContentLoader {
       // Packs the result by merging the modules whenever necessary
       zip( data => this.language === this.config.defaultValue ? data[0] : this.merge(data[1], data[0]) ),
       // Caches the content for further requests
-      tap( data => this.content[moduleName] = data )
+      tap( data => this.content[moduleName] = data ),
+      // Whereve happens (the requested file does not exist) returns an empty object
+      catchError( () => of({}) )
     );
   }
 

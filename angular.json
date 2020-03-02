@@ -20,7 +20,11 @@
             "tsConfig": "apps/wizdm/tsconfig.app.json",
             "assets": [
               "apps/wizdm/src/favicon.ico",
-              "apps/wizdm/src/assets"
+              "apps/wizdm/src/assets",
+              { "glob": "*.png",
+                "input": "./node_modules/emoji-datasource-google/img/google/64/",
+                "output": "/assets/emoji/" 
+              }
             ],
             "styles": [
               "apps/wizdm/src/styles.scss"
@@ -607,6 +611,40 @@
             "main": "libs/gtag/src/test.ts",
             "tsConfig": "libs/gtag/tsconfig.spec.json",
             "karmaConfig": "libs/gtag/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "emoji": {
+      "projectType": "library",
+      "root": "libs/emoji",
+      "sourceRoot": "libs/emoji/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/emoji/tsconfig.lib.json",
+              "libs/emoji/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/emoji/**"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/emoji/src/test.ts",
+            "tsConfig": "libs/emoji/tsconfig.spec.json",
+            "karmaConfig": "libs/emoji/karma.conf.js"
           }
         }
       },

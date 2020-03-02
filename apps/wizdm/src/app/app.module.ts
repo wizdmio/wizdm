@@ -13,11 +13,12 @@ import { StorageModule } from '@wizdm/connect/storage';
 import { DoorbellModule } from '@wizdm/doorbell';
 import { ReadmeNavigator } from '@wizdm/elements/readme';
 import { RedirectService } from '@wizdm/redirect';
+import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpListModule } from '@wizdm/iplist';
 import { GtagModule } from '@wizdm/gtag';
 import { AppComponent } from './app.component';  
 //import { environment } from '../environments/environment';
-import { appname, content, router } from '../environments/common';
+import { appname, content, emoji, router } from '../environments/common';
 import { firebase, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
@@ -42,6 +43,8 @@ const routes: Routes = [
     DoorbellModule.init(doorbell),
     // Google Analytics
     GtagModule.init(gtag),
+    // Universal Emoji support
+    EmojiSupportModule.init(emoji),
     // Angular's Router
     RouterModule.forRoot(routes, router)
   ],

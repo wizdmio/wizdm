@@ -8,8 +8,7 @@ import moment from 'moment';
 @Component({
   selector: 'wm-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
-  host: { 'class': 'padding-top-toolbar' }
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
 

@@ -1,0 +1,12 @@
+<!-- Renders the compiled segments -->
+<ng-container *ngFor="let segment of segments; trackBy: trackByFn">
+
+  <ng-container [ngSwitch]="segment.type">
+    <!-- Renders the emoji as an image -->
+    <img *ngSwitchCase="'emoji'" draggable="false" [wm-emoji]="segment.content" />
+    <!-- Renders the text node -->
+    <ng-container *ngSwitchDefault>{{ segment.content || '\n' }}</ng-container>
+
+  </ng-container>
+
+</ng-container>

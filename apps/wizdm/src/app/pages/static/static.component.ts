@@ -7,8 +7,7 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'wm-static',
   templateUrl: './static.component.html',
-  styleUrls: ['./static.component.scss'],
-  host: { class: 'padding-top-toolbar' }
+  styleUrls: ['./static.component.scss']
 })
 export class StaticComponent {
 

@@ -1,5 +1,6 @@
 import { ExtraOptions } from '@angular/router';
 import { ContentConfig } from '@wizdm/content';
+import { EmojiConfig } from '@wizdm/emoji';
 import { firebase, doorbell } from "./secrets";
 
 export const appname: string = 'wizdm';
@@ -9,6 +10,11 @@ export const content: ContentConfig = {
   contentRoot: 'assets/i18n',
   supportedValues: ['en', 'it', 'ru'],
   defaultValue: 'en'
+};
+
+export const emoji: EmojiConfig = {
+  emojiPath: 'assets/emoji',
+  emojiExt: '.png'
 };
 
 export const router: ExtraOptions = { 

@@ -33,7 +33,6 @@ interface userApply extends wmMember {
   selector: 'wm-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
-  host: { 'class': 'padding-top-toolbar' },
   animations: $animations,
   providers: [ ContentStreamer ]
 })

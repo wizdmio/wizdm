@@ -1,0 +1,39 @@
+
+.wm-emoji-input {
+
+  display: inline-block;
+  white-space: pre-wrap;
+  min-height: 1em;
+  outline: none;
+
+  // Uses ::before meta-element to simulate the placehoder
+  &::before {
+    // Contents comes from the placehoder attribute
+    content: attr(placeholder); 
+    position: absolute;
+    opacity: 0.5;
+
+    // The placeholder is normally hidden
+    visibility: hidden;
+  }
+
+  // Displays the placeholder when empty
+  &.empty::before {
+    visibility: visible;
+  }
+}
+
+// This is provided to support styling for matEmoji directive since the directive can't have styles of its own. 
+.mat-form-field {
+
+  // Adds transtion timinig on opacity to cope with the floating label
+  .wm-emoji-input::before {
+    transition: opacity 150ms ease 200ms;
+  }
+
+  // Hides the placeholder immediately
+  &.mat-form-field-hide-placeholder .wm-emoji-input::before {
+    transition: unset;
+    opacity: 0;
+  }
+}
