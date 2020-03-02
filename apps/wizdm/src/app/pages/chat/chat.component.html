@@ -15,7 +15,7 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Emoji Input</mat-label>
-    <wm-emoji-input matEmoji [value]="text" [mode]="mode" placeholder="Type a message" (change)="updateText($event)" #einput></wm-emoji-input>
+    <wm-emoji-input matEmoji [value]="text" [mode]="mode" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)" #einput></wm-emoji-input>
     <button mat-icon-button matSuffix><wm-icon icon="send"></wm-icon></button>
     <mat-hint>Material Form Field applied to Emoji input</mat-hint>
   </mat-form-field>

@@ -93,6 +93,12 @@ export class EmojiInput extends EmojiText implements AfterViewChecked, OnChanges
   @Input('required') set requireInput(value: boolean) { this.required = coerceBooleanProperty(value); }
   public required = false; 
 
+  /** Selects the newline mode. 
+   * - None: enter does nothig. 
+   * - Always: enter always inserts a new line. 
+   * - Shift: enter inserts newline in conjunction with the shift key only */
+  @Input() newline: 'none'|'always'|'shift' = 'always';
+
   /** Undo history bouncing time */
   @Input() historyTime: number = 1000;
 
@@ -125,9 +131,6 @@ export class EmojiInput extends EmojiText implements AfterViewChecked, OnChanges
   // Handles keydown event
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
 
-    // Prevents keyboard repeating giving a chance to Mac's press&hold to work
-    if(ev.repeat) { return false; }
-
     // Query for the current selection
     this.query();
 
@@ -146,12 +149,17 @@ export class EmojiInput extends EmojiText implements AfterViewChecked, OnChanges
       case 'Backspace':
       this.back(); break;
 
-      // Do nothing
-      case 'Enter':
-      this.enter(ev.shiftKey); break;
+      // Insert a newline according to the newline input mode
+      case 'Enter': if(this.newline === 'always' || (this.newline === 'shift' && ev.shiftKey)) { 
+        this.insert('\n');
+      }
+      break;
 
       // Editing
       default: if(ev.key.length === 1 || this.utils.isEmoji(ev.key) ) {
+
+        // Prevents keyboard repeating giving a chance to Mac's press&hold to work
+        if(ev.repeat) { return false; }
 
         // Intercepts accelerators
         if(ev.metaKey && this.mac || ev.ctrlKey) {
@@ -253,9 +261,17 @@ export class EmojiInput extends EmojiText implements AfterViewChecked, OnChanges
   // Clears the history while leaving 
   public ngOnDestroy() { this.clearHistory(); }
 
-  public updateValue(value: string) {
+  /** Updates the value emitting the relevant valueChange event */
+  private updateValue(value: string) {
     // Emits the updated source text
     return this.valueChange.emit(this.value = value), value;
+  }
+
+  /** Compiles the input text into segment accounting for multiple lines */
+  public compile(source: string): number {
+    // Appends an extra '\n' forcing the browser displaying a new line normally omitted when at the end
+    // On native behavior this just adds an extra char to render while on web behavior dds an extra segment
+    return super.compile(source + (source && source.endsWith('\n') ? '\n' : ''));
   }
 
   /** Helper function simulalting typing into the input box */
@@ -278,10 +294,6 @@ export class EmojiInput extends EmojiText implements AfterViewChecked, OnChanges
     this.end = (this.start += ins.length);
     // Marks the selection for restoration after rendering 
     this.marked = true;
-  }
-
-  /** Do nothing */
-  public enter(shift?: boolean) {
   }
 
   /** Deletes the current selection (Del-like) */

@@ -13,7 +13,7 @@ export class ChatComponent implements OnInit {
   public mode = 'auto';
   
 
-  readonly keys = ['😀', '😁', '😂', '😃', '😄', '😅', '😆', '😇', '😈', '😉', '😊', '😋'];
+  readonly keys = ['😂', '👋🏻', '💕', '😈', '💣', '🚖', '🐵', '👩‍🦰', '🙏🏾'];
 
   constructor(@Inject(EmojiRegex) private regex: RegExp, @Inject(EmojiNative) readonly native: boolean) { }
 
