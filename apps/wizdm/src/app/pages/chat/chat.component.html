@@ -1,33 +1,51 @@
 
 <!-- Mode selection: Auto, Web and Native -->
 <mat-radio-group fxLayout="column" fxLayoutAlign="center end" fxLayoutGap="5px" labelPosition="before" [value]="mode" (change)="mode = $event.value">
+  <!-- Auto: detects the native support and acts accordingly -->
   <mat-radio-button value="auto">Auto <span class="mat-small">{{ native ? '(Native support detected)' : '(No native support)' }}</span></mat-radio-button>
+
+  <!-- Web: Displays the emoji as images -->
   <mat-radio-button value="web">Web</mat-radio-button>
+
+  <!-- Native: Displays the emoji as text (relying on the native OS capabilities) -->
   <mat-radio-button value="native">Native</mat-radio-button>
 </mat-radio-group>
 
-<section fxLayout="column" fxLayoutAlign="start center">
+<section fxLayout="column" fxLayoutAlign="center center">
 
   <h1>Emoji Text</h1>
-  <p [wm-emoji-text]="text" [mode]="mode"></p>
+  <p [wm-emoji-text]="text" [mode]="mode" #message></p>
 
   <br>
 
-  <mat-form-field appearance="outline">
+  <!-- Emoji Input for the Web -->
+  <mat-form-field appearance="outline" *ngIf="message.behavior === 'web'">
     <mat-label>Emoji Input</mat-label>
-    <wm-emoji-input matEmoji [value]="text" [mode]="mode" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)" #einput></wm-emoji-input>
+    <wm-emoji-input matEmoji typein [value]="text" mode="web" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)"></wm-emoji-input>
     <button mat-icon-button matSuffix><wm-icon icon="send"></wm-icon></button>
-    <mat-hint>Material Form Field applied to Emoji input</mat-hint>
+    <mat-hint>Material Form Field applied to universal Emoji Input</mat-hint>
   </mat-form-field>
 
+  <!-- Native Input for platforms supporting Emoji natively -->
+  <mat-form-field appearance="outline" *ngIf="message.behavior === 'native'">
+    <mat-label>Native Input</mat-label>
+    <!--input matInput [value]="text" placeholder="Type a message" (input)="updateText($event.target.value)" #einput /-->
+    <textarea matInput typein [value]="text" placeholder="Type a message" (valueChange)="updateText($event)" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+    <button mat-icon-button matSuffix><wm-icon icon="send"></wm-icon></button>
+    <mat-hint>Material Form Field applied to Native input</mat-hint>
+  </mat-form-field>
+ 
   <div fxLayout="row" style="user-select: none;"> 
-    <button mat-icon-button tabindex="-1" *ngFor="let key of keys" (mousedown)="einput.typein(key);false" style="font-size: 24px; line-height: 24px;">
-      <img [wm-emoji]="key" />
+    <button mat-icon-button tabindex="-1" *ngFor="let key of keys" (mousedown)="typein(key)" style="font-size: 24px; line-height: 24px;">
+      <span *ngIf="message.behavior === 'native'; else emojiImg">{{ key }}</span>  
+      <ng-template #emojiImg><img [wm-emoji]="key" /></ng-template>
     </button>
   </div>
 
   <br>
 
-  <p>{{ debug }}</p>
+  <!--p> Emoji native: {{native}}</p>
+  <input [style.width]="'300px'" [value]="text" (input)="updateText($event.target.value)"/-->
+  <p class="debug">{{ decoded }}</p>
 
 </section>

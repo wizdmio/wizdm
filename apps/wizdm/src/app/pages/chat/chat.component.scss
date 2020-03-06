@@ -12,6 +12,11 @@
     margin: 10px;
     * { margin: 5px; }
   }
+
+  wm-emoji-input, textarea {
+    line-height: 1.5em;
+    word-break: break-all;
+  }
   
   .mat-form-field {
     width: 300px;

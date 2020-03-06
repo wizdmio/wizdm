@@ -1,5 +1,6 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { EmojiRegex, EmojiNative } from '@wizdm/emoji/utils';
+import { TypeinAdapter } from './typein-adapter/typein-adapter.directive';
 
 @Component({
   selector: 'wm-chat',
@@ -8,8 +9,10 @@ import { EmojiRegex, EmojiNative } from '@wizdm/emoji/utils';
 })
 export class ChatComponent implements OnInit {
 
+  @ViewChild(TypeinAdapter) typeinAdapter: TypeinAdapter;
+
   public text = "Playing with emoji \ud83d\ude03\u{1F976}\u{1F469}\u{1F3FB}\u200D\u{1F9B0} - \u{1F64F}\u{1F64F}\u{1F3FF}";
-  public debug: string;
+  public decoded: string;
   public mode = 'auto';
   
 
@@ -22,7 +25,16 @@ export class ChatComponent implements OnInit {
   }
 
   updateText(text: string) {
-    this.debug = this.decode(this.text = text);
+    this.decoded = this.decode(this.text = text);
+  }
+
+  public typein(key: string) {
+
+    if(!this.typeinAdapter) { return false; }
+    // Types the key in the textarea/EmojiInput
+    this.typeinAdapter.typein(key);
+    // Prevents the default behavior avoiding focus change
+    return false;
   }
 
   private decode(text: string): string {

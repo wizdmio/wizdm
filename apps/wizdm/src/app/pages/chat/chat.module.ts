@@ -21,6 +21,7 @@ import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ChatComponent } from './chat.component';
+import { TypeinAdapter } from './typein-adapter/typein-adapter.directive';
 
 const routes: RoutesWithContent = [
   {
@@ -33,7 +34,7 @@ const routes: RoutesWithContent = [
 ];
 
 @NgModule({
-  declarations: [ ChatComponent ],
+  declarations: [ ChatComponent, TypeinAdapter ],
   imports: [
     CommonModule,
     FlexLayoutModule,

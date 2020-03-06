@@ -9,7 +9,8 @@ export interface emSegment {
 @Component({
   selector: '[wm-emoji-text]',
   templateUrl: './emoji-text.component.html',
-  styleUrls: ['./emoji-text.component.scss']
+  styleUrls: ['./emoji-text.component.scss'],
+  host: { "class": "wm-emoji-text" }
 })
 export class EmojiText implements OnChanges {
 
@@ -44,7 +45,7 @@ export class EmojiText implements OnChanges {
   }
 
   /** Compiles the source text into an array of eather text or emoji segments */
-  public compile(source: string): number {
+  protected compile(source: string): number {
     // Resets the segments array
     this.segments.splice(0);
     // Skips null or emptiìy sources

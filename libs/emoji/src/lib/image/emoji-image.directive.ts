@@ -1,25 +1,67 @@
 import { Directive, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 import { EmojiUtils } from '../utils';
 
+// 1x1px transparent image placeholder
+export const fakeImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+
 @Directive({
   selector: 'img[wm-emoji]',
-  host: { "style": "width: 1.25em; height: 1.25em; vertical-align: text-bottom; margin: 0 0.05em; box-sizing: border-box;" }
+  host: { 
+    "style": "vertical-align: text-bottom;",
+    "[style.width]": "size || '1.25em'",
+    "[style.height]": "size || '1.25em'",
+    "[style.margin-left]": "spacing || '0.05em'",
+    "[style.margin-right]": "spacing || '0.05em'",
+    "[style.border]": "error ? '1px dashed currentColor' : undefined",
+    "[style.opacity]": "error ? '0.25' : undefined",
+    "[style.visibility]": "load ? undefined : 'hidden'"
+  }
 })
-export class EmojiImage { 
+export class EmojiImage {
+
+  private error: boolean; 
+  private load: boolean; 
+  private emoji: string;
 
   constructor(private utils: EmojiUtils) { }
-
-  /** The source file of the emoji image corresponding to the requested code */
-  @HostBinding('attr.src') get src(): string {
-    return this.utils.imageFilePath(this.emoji);
+  
+  /** The emoji code to be rendered */
+  @Input('wm-emoji') set value(emoji: string) {
+    // Tracks the requested emoji sequence
+    this.emoji = emoji;
+    // Resets the loading flags
+    this.load = this.error = false;
   }
 
-  //@HostBinding('attr.alt')
-  /** The emoji code to be rendered */
-  @Input('wm-emoji') emoji: string; 
+  /** Customizes the emoji size when in web mode. Default is 1.25em */
+  @Input() size: string;
+
+  /** Customizes the emoji spacing when in web mode. Default is 0.05em (each side) */
+  @Input() spacing: string;
+
+  /** Applies the emoji sequence as the alternative */
+  @HostBinding('alt') get alt(): string {
+    return this.emoji;
+  } 
+
+  /** The source file of the emoji image corresponding to the requested code */
+  @HostBinding('src') get src(): string {
+    // Loads the file falling back to a fake image on error
+    return this.error ? fakeImage : this.utils.imageFilePath(this.emoji);
+  }
 
   /** Emits which side (left or right) the emoji image as been hit (mousedowm) */
   @Output() hit = new EventEmitter<'left'|'right'>();
+
+  /** Handles on error event */
+  @HostListener('error') onError() { 
+    this.error = true; 
+  }
+
+  /** Handles on load event */
+  @HostListener('load') onLoad() { 
+    this.load = true; 
+  }
 
   /** Handles the mouse event to catch for user hits */
   @HostListener('mousedown', ['$event']) onMouseDown({ target, clientX }: MouseEvent) {
