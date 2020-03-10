@@ -3,6 +3,7 @@ import { prism } from './prism';
 
 export interface Token {
   type: string;
+  alias: string|string[];
   content: string|Token[];
 };
 
@@ -27,6 +28,23 @@ export class PrismTokenizer {
 
   /** Helper for rendering strings */
   isString(token: string|Token): boolean { return typeof(token) === 'string'; } 
+
+  /** Helper for rendering tokens */
+  tokenClass(token: Token): string {
+    // Returns the basic token class + type and appends the aliases, if any 
+    return token ? ('token ' + (token.type || '') + this.tokenAliases(token)) : '';    
+  } 
+
+  private tokenAliases(token: Token): string {
+    // Skips when no aliases
+    if(!token.alias) { return ''; }
+    // Appends the multiple aliases
+    if(token.alias instanceof Array) {
+      return token.alias.reduce( (c, alias) => c + ' ' + alias,'');
+    }
+    // Appends the single alias
+    return ' ' + token.alias;
+  }
 
   /** Tokenizes the source text using Prism */
   private tokenize(source: string): (string|Token)[] {
