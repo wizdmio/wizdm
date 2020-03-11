@@ -26,6 +26,11 @@
       "description": "Both [Material](https://material.io/icons) icons font and [FontAwesome](https://fontawesome.com) icon set are natively supported to enrich you user interface."
     },
     { 
+      "icon": "far:fa-kiss-beam",
+      "title": "Emoji Support",
+      "description": "Universal emoji rendering capabilities to always offer the best user experience no matter the platform."
+    },
+    { 
       "icon": "fas:fa-box-open",
       "title": "Animate On Scroll",
       "description": "Ready to use animation set with built-in \"Animate on Scroll\" trigger to enrich your contents with catching-eye motion",

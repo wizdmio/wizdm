@@ -1,9 +1,8 @@
 import { EmojiUtils, EmojiConfig, EmojiConfigToken } from './utils/emoji-utils.service';
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  imports: [ HttpClientModule ],
+  imports: [ ],
   providers: [ EmojiUtils ]
 })
 export class EmojiSupportModule { 

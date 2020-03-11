@@ -20,13 +20,15 @@ import { ReadmeModule } from '@wizdm/elements/readme';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
+import { EmojiKeyboardModule } from './emoji-keyboard/emoji-keyboard.module';
 import { ChatComponent } from './chat.component';
 import { TypeinAdapter } from './typein-adapter/typein-adapter.directive';
+
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'chat',
+    content: ['chat', 'emoji-keys'],
     component: ChatComponent,
     canActivate: [ AuthGuard ],
     canDeactivate: [ CanLeaveGuard ]
@@ -53,6 +55,7 @@ const routes: RoutesWithContent = [
     EmojiTextModule,
     EmojiInputModule,
     EmojiMaterialModule,
+    EmojiKeyboardModule,
     ContentRouterModule.forChild(routes)
   ]
 })

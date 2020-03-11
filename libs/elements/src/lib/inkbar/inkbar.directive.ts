@@ -3,7 +3,7 @@ import { InkbarComponent } from './inkbar.component';
 
 @Directive({
   selector: '[wmInkbarIf]',
-  host:{ class: 'wm-inkbar-item'}
+  host: { class: 'wm-inkbar-item' }
 })
 export class InkbarDirective {
 

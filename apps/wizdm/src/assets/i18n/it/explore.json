@@ -21,6 +21,10 @@
       "description": "Sia il font di [Material](https://material.io/icons) che il set d'icone di [FontAwesome](https://fontawesome.com) sono disponibili nativamente per arricchire la tua interfaccia utente."
     },
     { 
+      "title": "Supporto Emoji",
+      "description": "Capacità di rendering universale per emoji per offrire sempre la migliore epserienza utente indipendentemente dalla piattaforma autilizzata."
+    },
+    { 
       "title": "Animazione allo scorrimento",
       "description": "Animazioni pronte all'uso complete di esecuizione allo scorrimento per arricchire i tuoi contenuti di movimento accattivante."
     },

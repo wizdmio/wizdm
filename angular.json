@@ -21,9 +21,15 @@
             "assets": [
               "apps/wizdm/src/favicon.ico",
               "apps/wizdm/src/assets",
-              { "glob": "*.png",
-                "input": "./node_modules/emoji-datasource-google/img/google/64/",
+              { 
+                "glob": "*.png", 
+                "input": "./node_modules/emoji-datasource-google/img/google/64/", 
                 "output": "/assets/emoji/" 
+              },
+              { 
+                "glob": "20.png", 
+                "input": "./node_modules/emoji-datasource-google/img/google/sheets-clean/", 
+                "output": "/assets/emoji/sheets/" 
               }
             ],
             "styles": [

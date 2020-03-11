@@ -35,17 +35,19 @@
     <mat-hint>Material Form Field applied to Native input</mat-hint>
   </mat-form-field>
  
-  <div fxLayout="row" style="user-select: none;"> 
+  <!--div fxLayout="row" style="user-select: none;"> 
     <button mat-icon-button tabindex="-1" *ngFor="let key of keys" (mousedown)="typein(key)" style="font-size: 24px; line-height: 24px;">
       <span *ngIf="message.behavior === 'native'; else emojiImg">{{ key }}</span>  
       <ng-template #emojiImg><img [wm-emoji]="key" /></ng-template>
     </button>
-  </div>
+  </div-->
 
   <br>
 
-  <!--p> Emoji native: {{native}}</p>
-  <input [style.width]="'300px'" [value]="text" (input)="updateText($event.target.value)"/-->
-  <p class="debug">{{ decoded }}</p>
+  <wm-emoji-keyboard [mode]="mode" (key)="typeinAdapter.typein($event)"></wm-emoji-keyboard>
+
+  
+
+  <!--p class="debug">{{ decoded }}</p-->
 
 </section>

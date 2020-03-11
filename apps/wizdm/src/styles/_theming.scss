@@ -65,8 +65,10 @@
     a { 
 
       cursor: pointer;
-      text-decoration: underline;
       color: mat-color($primary); 
+      text-decoration: none;
+
+      &:hover { text-decoration: underline; }
 
       // Styles according the theme palette colors
       @each $color in ('accent', 'warn') {

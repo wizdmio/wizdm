@@ -1,0 +1,28 @@
+
+<ng-container *wmContent="let emojikeys select 'emoji-keys'">
+
+  <wm-inkbar fxLayout="row" color="accent">
+
+    <button mat-button [wmInkbarIf]="selectedGroup === group.name" (mousedown)="selectGroup(group.name)" *ngFor="let group of emojikeys">
+
+      <span class="key" [attr.mode]="behavior" [attr.key]="group.icon"></span>
+      
+    </button>
+
+  </wm-inkbar>    
+
+  <ng-container *ngFor="let group of emojikeys">
+
+    <div fxLayout="row wrap" *ngIf="selectedGroup === group.name">
+
+      <button mat-icon-button *ngFor="let key of group.keys" (mousedown)="sendkey(key)">
+
+        <span class="key" [attr.mode]="behavior" [attr.key]="key"></span>
+
+      </button>
+      
+    </div>
+
+  </ng-container>
+
+</ng-container>

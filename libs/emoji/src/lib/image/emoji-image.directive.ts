@@ -7,6 +7,7 @@ export const fakeImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB
 @Directive({
   selector: 'img[wm-emoji]',
   host: { 
+    "class": "wm-emoji",
     "style": "vertical-align: text-bottom;",
     "[style.width]": "size || '1.25em'",
     "[style.height]": "size || '1.25em'",

@@ -6,14 +6,17 @@
 ## [Internationalization](docs/content)
 @wizdm/content
 
-## [Smart Redirection](docs/redirect)
-@wizdm/redirect
-
 ## [Real Time Data](docs/connect)
 @wizdm/connect
 
 ## [UI Elements](docs/elements)
 @wizdm/elements
+
+## [Emoji Support](docs/emoji)
+@wizdm/emoji
+
+## [Smart Redirection](docs/redirect)
+@wizdm/redirect
 
 ## [Static Content](docs/markdown)
 @wizdm/markdown

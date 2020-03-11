@@ -213,7 +213,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
 
   /** Wait for the current queue of microtaks to be emptied. The async funtion will than be called after the rendering completed */
   private whenDone(async: () => void) { 
-    return this.zone.onStable.pipe( first() ).subscribe(() => async() ); 
+    this.zone.onStable.pipe( first() ).subscribe( () => async() ); 
   }
 
   /** Insert a new text at the current cursor position */
@@ -256,17 +256,25 @@ export class EmojiInput extends EmojiText implements OnDestroy {
 
   /** Internal insertion/deletion helper */
   private ins(key: string): this {
-    // Insert the new text replacing the current selection  
+    // Computes the new text value
     const text = this.value.slice(0, this.start) + key + this.value.slice(this.end);
-    // Updates the source and compiles the segment for rendering 
-    this.compile(super.value = text);
-    // Updates the cursor position
-    this.end = (this.start += key.length);
+    // Computes the new cursor location
+    const caret = this.start + key.length;
+    // Updates the content
+    return this.update(text, caret, caret);
+  }
+
+  /** Updates the value of the text and selection  */
+  private update(value: string, start: number, end: number): this {
+    // Restores the selection
+    this.start = start; this.end = end;
+    // Restores the content
+    this.compile(super.value = value);
     // Applies the selection back when rendering is done
-    this.whenDone( () => this.apply() );
+    this.focused && this.whenDone( () => this.apply() );
     // Emits the ne value
     this.valueChange.emit(this.value);
-    // Return this for chaining purposes
+    // Returns this for chaining purposes
     return this;
   }
 
@@ -356,7 +364,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
   /** Computes the absolute text offset from the Node/offset dom selection pair */  
   private offset(node: Node, offset: number): number {
     // Short-circuits for invalid nodes
-    if(!node) { return 0; }
+    if(!node) { return this.value?.length || 0; }
 
     // Case #1: The given node is a text node, meaning the dom selection is expressed as the text-node and the relative offset whithin such text. We keep the pair unchanged and move forward.
     if(node.nodeType !== Node.TEXT_NODE) {
@@ -381,7 +389,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
       child = child.nextSibling;
     }
 
-    return 0;
+    return this.value?.length || 0;
   }
 
   /** Computes a Node/offset dom selection pair from an absolute offset */
@@ -515,7 +523,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
     // Gets the latest snapshot from the history
     const snapshot = this.history[++this.timeIndex];
     // Reloads the snapshot's content restoring the selection too
-    return this.restore(snapshot);
+    return this.update(snapshot.value, ...snapshot.selection);
   }
 
   /** Returns true whenever the last undone modifications can be redone */
@@ -530,20 +538,6 @@ export class EmojiInput extends EmojiText implements OnDestroy {
     // Removes the newest snapshot when back to the present
     if(this.timeIndex === 0) { this.history.shift(); }
     // Reloads the snapshot's content restoring the selection too
-    return this.restore(snapshot);
-  }
-
-  /** Restores the input content fromn the given history record */
-  private restore({ value, selection }: { value: string, selection: [number, number] }): this {
-    // Restores the selection
-    [ this.start, this.end ] = selection;
-    // Restores the content
-    this.compile(super.value = value);
-    // Applies the selection back when rendering is done
-    this.whenDone( () => this.apply() );
-    // Emits the ne value
-    this.valueChange.emit(this.value);
-    // Returns this for chaining purposes
-    return this;
+    return this.update(snapshot.value, ...snapshot.selection);
   }
 }

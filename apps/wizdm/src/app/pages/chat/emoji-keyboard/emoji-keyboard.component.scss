@@ -1,0 +1,45 @@
+@import './emoji-sheet-map';
+$sheetFile: "/assets/emoji/sheets/20.png";
+$sheetSize: 1254px 1254px;
+$sheetBias: 22px;
+$iconSize:  20px;
+
+:host {
+  display: block;
+  position: relative;
+
+  .wm-inkbar { margin: 6px 0; }
+
+  .key {
+    display: inline-block;
+    position: relative;
+    width: $iconSize;
+    height: $iconSize;
+    
+    cursor: pointer;
+
+    &[mode="native"]::before { 
+
+      content: attr(key); 
+      position: absolute;
+      left: 0;top: 0;
+      width: $iconSize;
+      height: $iconSize;
+      font-size: $iconSize;
+      line-height: $iconSize;
+    }
+
+    &[mode="web"] {
+
+      background-size: $sheetSize;
+      background-image: url($sheetFile);
+
+      @each $key, $x, $y in $sheetMap {
+
+        &[key="#{$key}"] {
+          background-position: ($x * -$sheetBias - ($sheetBias - $iconSize)/2) ($y * -$sheetBias - ($sheetBias - $iconSize)/2);
+        }
+      }
+    }
+  }
+}

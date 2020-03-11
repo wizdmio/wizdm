@@ -15,12 +15,12 @@ export class NotFoundComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // Counts down 5 secs before redirecting to Home
+    // Counts down 5 secs before redirecting Back
     this.timeout = setInterval(() => {
 
       if(--this.countdown <= 0) {
         // Redirects to home
-        this.redirect.navigate('home');
+        this.redirect.navigate('back');
       }
 
     },1000);

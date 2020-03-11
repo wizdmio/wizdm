@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges, Input, Inject } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { EmojiUtils } from '../utils';
 
 export interface emSegment {

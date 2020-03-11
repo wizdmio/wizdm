@@ -43,7 +43,7 @@ const routes: RoutesWithContent = [
       //{ path: 'explore/:id', loadChildren: () => import('../pages/editor/editor.module').then(m => m.EditorModule) },
       { path: 'profile',     loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
       //{ path: 'folder',      loadChildren: () => import('../pages/folder/folder.module').then(m => m.FolderModule) },
-      { path: 'docs/:name',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
+      { path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Intercepts routing "action-links" to execute a non-routing action
       { path: 'login',       canActivate: [ ActionLinkObserver ] },
