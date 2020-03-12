@@ -3,19 +3,6 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 import { rmSegment } from './readme-types';
 
-/** Parsing regex:
-   * 1st - Styling match - "([*+_~])(.*?)(?<!\\)\1" 
-   * Matches sequences starting with '*', '+', '_' or '~' end ending with the very same character except when preceeded by a '\' 
-   * to render <b>, <i>, <u> or <s> elements respectively.
-   * 2nd - Anchor match - "\[(.*?)\]\((.+?)\)"
-   * matches text within square brakets followed by an url within round brakets '[text](url)' to render as anchors <a> elements.
-   * 3rd - Escape match - Matches backslashes followed by one of the special chars to renders the char as it is.
-   * 4th - Break match: '\n' 
-   * matches the newline charachers to render <br> elements
-   */
-  const parsex = /([*+_~])(.*?)(?<!\\)\1|\[(.*?)\]\((.+?)\)|\\([*+_~])|\n/g;
-  const intex = /{{\s*([.\w]+)\s*}}/g;
-
 /** Navigation service token */
 export abstract class ReadmeNavigator {
   public abstract navigate(url: string): boolean|Promise<boolean>;
@@ -40,8 +27,6 @@ export class ReadmeComponent {
   /** Plain text souce input */
   @Input('wm-readme') set parse(source: string) {
     this.compile(source); 
-
-    console.log(this.segments);
   }
 
   /** (Optional) The context object to interpolate the variable from. */
@@ -55,56 +40,65 @@ export class ReadmeComponent {
   @Input('disabled') set disabling(value: boolean) { this.disabled = coerceBooleanProperty(value); }
   public disabled = false;
 */
+  /** Compiles the input text into segments */
+  private compile(source: string): rmSegment[] {
 
-  public compile(source: string, segments: rmSegment[] = this.segments): rmSegment[] {
-
-    let start = 0;
     // Resets the segments array
     this.segments.splice(0);
     // Skips null or emptiìy sources
-    if(!source) { return segments; }
+    if(!source) { return this.segments; }
 
-    // Parses the input text
-    source.replace(parsex, (match: string, style: string, content: string, anchor: string, url: string, esc: string, offset: number) => {
+    /** Parsing regex:
+     * 1st - Styling match - "([*+_~])(.*?)(?<!\\)\1" 
+     * Matches sequences starting with '*', '+', '_' or '~' end ending with the very same character except when preceeded by a '\' 
+     * to render <b>, <i>, <u> or <s> elements respectively.
+     * 2nd - Anchor match - "\[(.*?)\]\((.+?)\)"
+     * matches text within square brakets followed by an url within round brakets '[text](url)' to render as anchors <a> elements.
+     * 3rd - Escape match - Matches backslashes followed by one of the special chars to renders the char as it is.
+     * 4th - Break match: '\n' 
+     * matches the newline charachers to render <br> elements 
+     */
+    let start = 0; let match; const rx = /([*+_~])(.*?)(?<!\\)\1|\[(.*?)\]\((.+?)\)|\\([*+_~])|\n/g;
+    while(match = rx.exec(source)) {
 
       // Pushes the text preceeding a match 
-      if(offset > start){ 
-        const content = source.substring(start, offset);
+      if(match.index > start){ 
+        const content = source.substring(start, match.index);
         this.segments.push({ type: "text", content });   
       }
-
+ 
       // Breaks
-      if(match === '\n') { this.segments.push({ type: "break" }); }
+      if(match[0] === '\n') { this.segments.push({ type: "break" }); }
       // Styled texts
-      else if(style) { 
+      else if(match[1]) { 
 
-        const type = style === '*' ? 'bold' : ( style === '+' ? 'italic' : ( style === '_' ? 'underline' : 'strikethrough' ));
-        this.segments.push( { type, content });
+        const type = match[1] === '*' ? 'bold' : ( match[1] === '+' ? 'italic' : ( match[1] === '_' ? 'underline' : 'strikethrough' ));
+        this.segments.push( { type, content: match[2] });
       }
       // Links
-      else if(anchor) { this.segments.push({ type: "link", content: anchor, url }); }
+      else if(match[3]) { this.segments.push({ type: "link", content: match[3], url: match[4] }); }
       // Escapes
-      else if(esc) { this.segments.push({ type: "text", content: esc }); }
+      else if(match[5]) { this.segments.push({ type: "text", content: match[5] }); };
 
-      // Keeps track of the next beginning for the eventual plain text between this match and the next
-      start = offset + match.length;
-      return "";
-    });
+      // Moves to the next text segment
+      start = match.index + match[0].length;
+    }
 
     // Appends the final text chunk 
-    if(start < source.length) {
+    if(rx.lastIndex < source.length) {
       const content = source.substring(start, source.length);
       this.segments.push({ type: "text", content });
     }
 
-    return segments;
+    return this.segments;
   }
 
-  public interpolate(source: string, context: any = this.context): string {
-    return source.replace(intex, (match, capture) => {
+  /** Interpolates the source text using the given context */
+  public interpolate(source: string): string {
+    return source.replace(/{{\s*([.\w]+)\s*}}/g, (match, capture) => {
       return capture.split(".").reduce( (obj, token) => { 
         return obj && obj[token];
-      }, context || {});
+      }, this.context || {});
     });
   }
 
