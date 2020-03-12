@@ -3,6 +3,19 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 import { rmSegment } from './readme-types';
 
+/** Parsing regex:
+   * 1st - Styling match - "([*+_~])(.*?)(?<!\\)\1" 
+   * Matches sequences starting with '*', '+', '_' or '~' end ending with the very same character except when preceeded by a '\' 
+   * to render <b>, <i>, <u> or <s> elements respectively.
+   * 2nd - Anchor match - "\[(.*?)\]\((.+?)\)"
+   * matches text within square brakets followed by an url within round brakets '[text](url)' to render as anchors <a> elements.
+   * 3rd - Escape match - Matches backslashes followed by one of the special chars to renders the char as it is.
+   * 4th - Break match: '\n' 
+   * matches the newline charachers to render <br> elements
+   */
+  const parsex = /([*+_~])(.*?)(?<!\\)\1|\[(.*?)\]\((.+?)\)|\\([*+_~])|\n/g;
+  const intex = /{{\s*([.\w]+)\s*}}/g;
+
 /** Navigation service token */
 export abstract class ReadmeNavigator {
   public abstract navigate(url: string): boolean|Promise<boolean>;
@@ -14,18 +27,6 @@ export abstract class ReadmeNavigator {
   host: { 'class': 'wm-readme' }
 })
 export class ReadmeComponent {
-
-  /** Parsing regex:
-   * Escape: '\\([\*\+_~()\[\]{}])' - matches backslashes followed by one of the special chars to renders the char as it is
-   * Bold: '\*([^*]*)\*' - matches texts between asterisks '*' to render inside <b> elements
-   * Italic: '\+([^+]*)\+' - matches texts between pluses '+' to render inside <i> elements
-   * Underline: '_([^_]*)_' - matches texts between underscores '_' to render inside <u> elements
-   * Strikethrough: '~([^~]*)~' - matches texts between tildes '~' to render inside <s> elements
-   * Anchor: '\[([^\[\]]*)\]\(([^\(\)]+)\)' - matches text within square brakets followed by an url within round brakets '[text](url)' to render as anchors <a> elements
-   * Break: '([\n\r\f]+)' - matches newline, linefeed and formfeed special charachers to render as <br> elements 
-   */
-  private static parsex = /\\([\*\+_~()\[\]{}])|\*([^*]*)\*|\+([^+]*)\+|_([^_]*)_|~([^~]*)~|\[([^\[\]]*)\]\(([^\(\)]+)\)|([\n\r\f]+)/g;
-  private static interpolex = /{{\s*([.\w]+)\s*}}/g;
 
   readonly segments: rmSegment[] = [];
 
@@ -39,6 +40,8 @@ export class ReadmeComponent {
   /** Plain text souce input */
   @Input('wm-readme') set parse(source: string) {
     this.compile(source); 
+
+    console.log(this.segments);
   }
 
   /** (Optional) The context object to interpolate the variable from. */
@@ -49,7 +52,6 @@ export class ReadmeComponent {
 
   /*
   @Input() color: ThemePalette;
-
   @Input('disabled') set disabling(value: boolean) { this.disabled = coerceBooleanProperty(value); }
   public disabled = false;
 */
@@ -63,7 +65,7 @@ export class ReadmeComponent {
     if(!source) { return segments; }
 
     // Parses the input text
-    source.replace(ReadmeComponent.parsex, (match: string, esc: string, b: string, i: string, u: string, s: string, a: string, url: string, br: string, offset: number) => {
+    source.replace(parsex, (match: string, style: string, content: string, anchor: string, url: string, esc: string, offset: number) => {
 
       // Pushes the text preceeding a match 
       if(offset > start){ 
@@ -71,20 +73,18 @@ export class ReadmeComponent {
         this.segments.push({ type: "text", content });   
       }
 
-      // Pushes the matched segment
-      if(esc) { this.segments.push({ type: "text", content: esc }); }
+      // Breaks
+      if(match === '\n') { this.segments.push({ type: "break" }); }
+      // Styled texts
+      else if(style) { 
 
-      else if(!!b) { this.segments.push({ type: "bold", content: b }); } 
-
-      else if(!!i) { this.segments.push({ type: "italic", content: i }); }
-      
-      else if(!!u) { this.segments.push({ type: "underline", content: u }); }
-      
-      else if(!!s) { this.segments.push({ type: "strikethrough", content: s }); }
-
-      else if(!!a) { this.segments.push({ type: "link", content: a, url }); }
-
-      else if(!!br) { this.segments.push({ type: "break" }); }
+        const type = style === '*' ? 'bold' : ( style === '+' ? 'italic' : ( style === '_' ? 'underline' : 'strikethrough' ));
+        this.segments.push( { type, content });
+      }
+      // Links
+      else if(anchor) { this.segments.push({ type: "link", content: anchor, url }); }
+      // Escapes
+      else if(esc) { this.segments.push({ type: "text", content: esc }); }
 
       // Keeps track of the next beginning for the eventual plain text between this match and the next
       start = offset + match.length;
@@ -101,7 +101,7 @@ export class ReadmeComponent {
   }
 
   public interpolate(source: string, context: any = this.context): string {
-    return source.replace(ReadmeComponent.interpolex, (match, capture) => {
+    return source.replace(intex, (match, capture) => {
       return capture.split(".").reduce( (obj, token) => { 
         return obj && obj[token];
       }, context || {});
