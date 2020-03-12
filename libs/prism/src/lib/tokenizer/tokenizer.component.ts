@@ -1,9 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { prism } from './prism';
 
+/** Grammar */
+export type Grammar = any;
+
+/** Prism token */
 export interface Token {
+  /** Token type */
   type: string;
+  /** Token aliases */
   alias: string|string[];
+  /** Token content */
   content: string|Token[];
 };
 
@@ -14,7 +21,7 @@ export interface Token {
 export class PrismTokenizer { 
 
   public tokens: (string|Token)[];
-  private grammar: any;
+  private grammar: Grammar;
 
   /** Selects the most appropriate grammar according to the language */
   @Input() set language(language: string) {
