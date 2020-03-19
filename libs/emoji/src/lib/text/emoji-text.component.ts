@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input, ViewEncapsulation } from '@angular/core';
 import { EmojiUtils } from '../utils';
 
 export interface emSegment {
@@ -10,7 +10,8 @@ export interface emSegment {
   selector: '[wm-emoji-text]',
   templateUrl: './emoji-text.component.html',
   styleUrls: ['./emoji-text.component.scss'],
-  host: { "class": "wm-emoji-text" }
+  host: { "class": "wm-emoji-text" },
+  encapsulation: ViewEncapsulation.None
 })
 export class EmojiText implements OnChanges {
 

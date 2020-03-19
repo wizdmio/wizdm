@@ -1,28 +1,36 @@
 
-<ng-container *wmContent="let emojikeys select 'emoji-keys'">
+<div class="favorites"> 
 
-  <wm-inkbar fxLayout="row" color="accent">
+  <button mat-icon-button (mousedown)="toggle()" >
+    <mat-icon>emoji_emotions</mat-icon>
+  </button>
+  
+  <button mat-icon-button *ngFor="let key of favorites" (mousedown)="press(key)">
+    <span class="key" [attr.mode]="behavior" [attr.key]="key"></span>
+  </button>
 
-    <button mat-button [wmInkbarIf]="selectedGroup === group.name" (mousedown)="selectGroup(group.name)" *ngFor="let group of emojikeys">
+</div>
 
-      <span class="key" [attr.mode]="behavior" [attr.key]="group.icon"></span>
+<mat-expansion-panel class="mat-elevation-z0" hideToggle #panel>
+
+  <mat-divider></mat-divider>
+
+  <!-- Scrollbar hiding container -->
+  <div scrollHide>
+
+    <!-- Adjust the height to accomodate for the scrollbar -->
+    <cdk-virtual-scroll-viewport orientation="horizontal" [itemSize]="keySize" [scrollHeight]="viewportHeight">
       
-    </button>
+      <div fxLayout="column" *cdkVirtualFor="let column of columns$ | async">
 
-  </wm-inkbar>    
+        <button mat-icon-button *ngFor="let key of column" (mousedown)="press(key)">
+          <span class="key" [attr.mode]="behavior" [attr.key]="key"></span>
+        </button>
 
-  <ng-container *ngFor="let group of emojikeys">
-
-    <div fxLayout="row wrap" *ngIf="selectedGroup === group.name">
-
-      <button mat-icon-button *ngFor="let key of group.keys" (mousedown)="sendkey(key)">
-
-        <span class="key" [attr.mode]="behavior" [attr.key]="key"></span>
-
-      </button>
+      </div>
       
-    </div>
+    </cdk-virtual-scroll-viewport>
 
-  </ng-container>
+  </div>
 
-</ng-container>
+</mat-expansion-panel>

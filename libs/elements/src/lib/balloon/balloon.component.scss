@@ -1,0 +1,95 @@
+$arrowSize: 12px;
+
+@mixin arrow($side: "bottom", $anchor: "center") {
+  
+  &[side=#{$side}] {
+
+    margin: $arrowSize * 1.4/2;
+
+    &[anchor=#{$anchor}]::after {
+      position: absolute;
+      display: block;
+      content: "";
+      width: $arrowSize;
+  		height: $arrowSize;
+      transform-origin: 50% 50%;
+      border-width: inherit;
+      border-color: inherit;
+      border-right-style: inherit;
+      border-bottom-style: inherit;
+      border-top-style: none;
+      border-left-style: none;
+      background-color: inherit;
+      box-sizing: border-box;
+      @content;
+    }
+  }
+}
+
+.wm-balloon {
+  position: relative;
+  display: inline-block;
+  border-radius: $arrowSize/2;
+  padding: $arrowSize;
+  box-sizing: border-box;
+  
+  @include arrow(bottom, center) {
+    left: calc(50% - #{$arrowSize/2}); bottom: -1px;
+    transform: translateY($arrowSize/2) rotate(45deg);
+  }
+
+  @include arrow(bottom, start) {
+    left: $arrowSize; bottom: -1px;
+    transform: translateY($arrowSize/2) rotate(45deg);
+  }
+
+  @include arrow(bottom, end) {
+    right: $arrowSize;bottom: -1px;
+    transform: translateY($arrowSize/2) rotate(45deg);
+  }
+
+  @include arrow(left, center) {
+    top: calc(50% - #{$arrowSize/2}); left: -1px;
+    transform: translateX(-$arrowSize/2) rotate(135deg);
+  }
+
+  @include arrow(left, start) {
+    top: $arrowSize; left: -1px;
+    transform: translateX(-$arrowSize/2) rotate(135deg);
+  }
+
+  @include arrow(left, end) {
+    bottom: $arrowSize; left: -1px;
+    transform: translateX(-$arrowSize/2) rotate(135deg);
+  }
+
+  @include arrow(right, center) {
+    top: calc(50% - #{$arrowSize/2}); right: -1px;
+    transform: translateX($arrowSize/2) rotate(-45deg);
+  }
+
+  @include arrow(right, start) {
+    top: $arrowSize; right: -1px;
+    transform: translateX($arrowSize/2) rotate(-45deg);
+  }
+
+  @include arrow(right, end) {
+    bottom: $arrowSize; right: -1px;
+    transform: translateX($arrowSize/2) rotate(-45deg);
+  }
+
+  @include arrow(top, center) {
+    left: calc(50% - #{$arrowSize/2}); top: -1px;
+    transform: translateY(-$arrowSize/2) rotate(-135deg);
+  }
+
+  @include arrow(top, start) {
+    left: $arrowSize; top: -1px;
+    transform: translateY(-$arrowSize/2) rotate(-135deg);
+  }
+
+  @include arrow(top, end) {
+    right: $arrowSize; top: -1px;
+    transform: translateY(-$arrowSize/2) rotate(-135deg);
+  }
+}

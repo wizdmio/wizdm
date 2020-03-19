@@ -11,7 +11,7 @@
         "private": [
             { "label": "Wizdm", "link": "." },
             { "label": "Explore", "link": "explore" },
-            { "label": "Chat", "link": "chat" }
+            { "label": "Community", "link": "chat" }
         ]
     },
 
@@ -25,7 +25,7 @@
         "private": [
             { "label": "Home", "link": "." },
             { "label": "Explore", "link": "explore" },
-            { "label": "Chat", "link": "chat" },
+            { "label": "Community", "link": "chat" },
             { "label": "Upload", "link": "upload" },
             { "label": "Profile", "link": "profile" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }

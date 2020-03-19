@@ -13,41 +13,46 @@
 
 <section fxLayout="column" fxLayoutAlign="center center">
 
-  <h1>Emoji Text</h1>
-  <p [wm-emoji-text]="text" [mode]="mode" #message></p>
-
+  <h1 wm-emoji-text="Send a message 😉" [mode]="mode" #message></h1>
   <br>
 
   <!-- Emoji Input for the Web -->
   <mat-form-field appearance="outline" *ngIf="message.behavior === 'web'">
     <mat-label>Emoji Input</mat-label>
     <wm-emoji-input matEmoji typein [value]="text" mode="web" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)"></wm-emoji-input>
-    <button mat-icon-button matSuffix><wm-icon icon="send"></wm-icon></button>
+    <button mat-icon-button matSuffix (click)="send()"><wm-icon icon="send"></wm-icon></button>
     <mat-hint>Material Form Field applied to universal Emoji Input</mat-hint>
   </mat-form-field>
 
   <!-- Native Input for platforms supporting Emoji natively -->
   <mat-form-field appearance="outline" *ngIf="message.behavior === 'native'">
     <mat-label>Native Input</mat-label>
-    <!--input matInput [value]="text" placeholder="Type a message" (input)="updateText($event.target.value)" #einput /-->
-    <textarea matInput typein [value]="text" placeholder="Type a message" (valueChange)="updateText($event)" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
-    <button mat-icon-button matSuffix><wm-icon icon="send"></wm-icon></button>
+    <textarea matInput typein [value]="text" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+    <button mat-icon-button matSuffix (click)="send()"><wm-icon icon="send"></wm-icon></button>
     <mat-hint>Material Form Field applied to Native input</mat-hint>
   </mat-form-field>
  
-  <!--div fxLayout="row" style="user-select: none;"> 
-    <button mat-icon-button tabindex="-1" *ngFor="let key of keys" (mousedown)="typein(key)" style="font-size: 24px; line-height: 24px;">
-      <span *ngIf="message.behavior === 'native'; else emojiImg">{{ key }}</span>  
-      <ng-template #emojiImg><img [wm-emoji]="key" /></ng-template>
-    </button>
-  </div-->
-
-  <br>
-
-  <wm-emoji-keyboard [mode]="mode" (key)="typeinAdapter.typein($event)"></wm-emoji-keyboard>
-
   
+  <wm-emoji-keyboard rows="5" [mode]="mode" [favorites]="keys" (keyPressed)="typein($event)"></wm-emoji-keyboard>
 
   <!--p class="debug">{{ decoded }}</p-->
+
+</section>
+
+<section fxLayout="column" fxLayoutAlign="center center">
+
+  <h1>Emoji Texts</h1>
+
+  <div fxFill fxLayout="row" [fxLayoutAlign]="even ? 'start' : 'end'" *ngFor="let msg of messages;let even = even">
+
+  <wm-balloon [side]="even ? 'left' : 'right'" [color]="even ? 'primary' : 'accent'" class="mat-elevation-z3">
+
+    <span [wm-emoji-text]="msg" [mode]="mode"></span>
+
+  </wm-balloon>
+
+  </div>
+
+  <br><br>
 
 </section>

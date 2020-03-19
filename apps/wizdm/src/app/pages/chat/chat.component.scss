@@ -3,22 +3,27 @@
 
   display: block;
   position: relative;
-  padding: 32px;
 
-  .mode {
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin: 10px;
-    * { margin: 5px; }
+  .mat-radio-group {
+    margin: 8px;
   }
 
-  wm-emoji-input, textarea {
+  .wm-emoji-input, textarea {
     line-height: 1.5em;
     word-break: break-all;
   }
-  
-  .mat-form-field {
-    width: 300px;
+
+  .debug {
+    word-break: break-all;
+  }
+
+  .mat-form-field, .wm-emoji-text {
+    width: 400px;
+    max-width: 90%
+  }
+
+  .wm-emoji-keyboard {
+    width: 400px;
+    max-width: 100%
   }
 }

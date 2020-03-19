@@ -7,34 +7,74 @@ import { TypeinAdapter } from './typein-adapter/typein-adapter.directive';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent {
 
   @ViewChild(TypeinAdapter) typeinAdapter: TypeinAdapter;
 
-  public text = "Playing with emoji \ud83d\ude03\u{1F976}\u{1F469}\u{1F3FB}\u200D\u{1F9B0} - \u{1F64F}\u{1F64F}\u{1F3FF}";
-  public decoded: string;
+  public text = "";
   public mode = 'auto';
+  public decoded: string;
+  public messages = [];
+ 
+  private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1 };
+  public keys: string[];
   
+  constructor(@Inject(EmojiRegex) private regex: RegExp, @Inject(EmojiNative) readonly native: boolean) { 
 
-  readonly keys = ['😂', '👋🏻', '💕', '😈', '💣', '🚖', '🐵', '👩‍🦰', '🙏🏾'];
+    this.keys = this.sortFavorites(this.stats);
 
-  constructor(@Inject(EmojiRegex) private regex: RegExp, @Inject(EmojiNative) readonly native: boolean) { }
-
-  ngOnInit(): void {
     this.updateText(this.text);
-  }
-
-  updateText(text: string) {
-    this.decoded = this.decode(this.text = text);
   }
 
   public typein(key: string) {
 
     if(!this.typeinAdapter) { return false; }
+
+    if(this.keys.findIndex(fav => fav === key) < 0) {
+      this.keys.push(key);
+    }
+
     // Types the key in the textarea/EmojiInput
     this.typeinAdapter.typein(key);
     // Prevents the default behavior avoiding focus change
     return false;
+  }
+
+  public send() {
+
+    this.updateFavorites(this.text);
+
+    this.messages.push(this.text); 
+
+    this.updateText("");
+  }
+
+  private sortFavorites(stats: { [key:string]: number }): string[] {
+    return Object.keys(stats).sort( (a,b) => stats[b] - stats[a] );
+  }
+
+  public updateFavorites(message: string) {
+
+    let match; let emojis = [];
+    while(match = this.regex.exec(message)) {
+
+      const key = match[0];
+
+      if(emojis.findIndex( emoji => emoji === key ) < 0) {
+
+        emojis.push(match[0]);
+
+        this.stats[key] = (this.stats[key] || 0) + 1;
+      }
+    }
+
+    if(emojis.length > 0) {
+      this.keys = this.sortFavorites(this.stats);
+    }
+  }
+
+  public updateText(text: string) {
+    this.decoded = this.decode(this.text = text);
   }
 
   private decode(text: string): string {
@@ -49,5 +89,13 @@ export class ChatComponent implements OnInit {
 
       return decoded;
     });
+  }
+
+  test(ev: KeyboardEvent) {
+
+    if(ev.key === 'Enter') {
+      ev.stopPropagation();
+      return false;
+    }
   }
 }

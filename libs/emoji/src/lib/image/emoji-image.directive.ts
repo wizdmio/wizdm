@@ -8,21 +8,22 @@ export const fakeImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB
   selector: 'img[wm-emoji]',
   host: { 
     "class": "wm-emoji",
-    "style": "vertical-align: text-bottom;",
+    "style": "box-sizing: border-box; vertical-align: text-bottom;",
     "[style.width]": "size || '1.25em'",
     "[style.height]": "size || '1.25em'",
     "[style.margin-left]": "spacing || '0.05em'",
     "[style.margin-right]": "spacing || '0.05em'",
-    "[style.border]": "error ? '1px dashed currentColor' : undefined",
-    "[style.opacity]": "error ? '0.25' : undefined",
-    "[style.visibility]": "load ? undefined : 'hidden'"
+    "[style.border]": "loading || error ? '1px dashed currentColor' : undefined",
+    "[style.opacity]": "loading || error ? '0.25' : undefined"
   }
 })
 export class EmojiImage {
 
-  private error: boolean; 
-  private load: boolean; 
-  private emoji: string;
+  public error: boolean; 
+  public load: boolean; 
+  public emoji: string;
+  
+  get loading(): boolean { return !this.load; }
 
   constructor(private utils: EmojiUtils) { }
   

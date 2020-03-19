@@ -17,13 +17,14 @@ import { EmojiMaterialModule } from '@wizdm/emoji/material';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/elements/readme';
+import { BalloonModule } from '@wizdm/elements/balloon';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { EmojiKeyboardModule } from './emoji-keyboard/emoji-keyboard.module';
-import { ChatComponent } from './chat.component';
 import { TypeinAdapter } from './typein-adapter/typein-adapter.directive';
-
+import { TextareaNewline } from './textarea-newline';
+import { ChatComponent } from './chat.component';
 
 const routes: RoutesWithContent = [
   {
@@ -36,7 +37,7 @@ const routes: RoutesWithContent = [
 ];
 
 @NgModule({
-  declarations: [ ChatComponent, TypeinAdapter ],
+  declarations: [ ChatComponent, TypeinAdapter, TextareaNewline ],
   imports: [
     CommonModule,
     FlexLayoutModule,
@@ -48,6 +49,7 @@ const routes: RoutesWithContent = [
     IconModule, 
     AvatarModule,
     ReadmeModule,
+    BalloonModule,
     ActionbarModule,
     CanLeaveModule,
     RedirectModule,

@@ -45,7 +45,7 @@ $wm-typography: mat-typography-config(
 
 // Define the main theme colors palettes.
 $wm-primary: mat-palette($mat-blue);
-$wm-accent:  mat-palette($mat-amber, 400, 600, 800);
+$wm-accent:  mat-palette($mat-amber);//, 400, 600, 800);
 $wm-warn:    mat-palette($mat-red);
 
 // Creates a standard material light theme first...
