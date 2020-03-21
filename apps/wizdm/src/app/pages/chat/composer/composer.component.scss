@@ -1,0 +1,16 @@
+
+
+:host {
+
+  position: relative;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: stretch; 
+  box-sizing: border-box;
+
+  wm-emoji-input, textarea {
+    word-break: break-all;
+  }
+}

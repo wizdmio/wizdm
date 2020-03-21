@@ -1,52 +1,23 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { EmojiRegex, EmojiNative } from '@wizdm/emoji/utils';
-import { TypeinAdapter } from './typein-adapter/typein-adapter.directive';
+import { Component, Inject } from '@angular/core';
+import { EmojiRegex } from '@wizdm/emoji/utils';
 
 @Component({
   selector: 'wm-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  host: { "style": "flex: 1 1 auto;" }
 })
 export class ChatComponent {
 
-  @ViewChild(TypeinAdapter) typeinAdapter: TypeinAdapter;
-
   public text = "";
-  public mode = 'auto';
-  public decoded: string;
-  public messages = [];
+  public messages = [ ];
  
-  private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1 };
+  private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
   public keys: string[];
-  
-  constructor(@Inject(EmojiRegex) private regex: RegExp, @Inject(EmojiNative) readonly native: boolean) { 
+
+  constructor(@Inject(EmojiRegex) private regex: RegExp) {
 
     this.keys = this.sortFavorites(this.stats);
-
-    this.updateText(this.text);
-  }
-
-  public typein(key: string) {
-
-    if(!this.typeinAdapter) { return false; }
-
-    if(this.keys.findIndex(fav => fav === key) < 0) {
-      this.keys.push(key);
-    }
-
-    // Types the key in the textarea/EmojiInput
-    this.typeinAdapter.typein(key);
-    // Prevents the default behavior avoiding focus change
-    return false;
-  }
-
-  public send() {
-
-    this.updateFavorites(this.text);
-
-    this.messages.push(this.text); 
-
-    this.updateText("");
   }
 
   private sortFavorites(stats: { [key:string]: number }): string[] {
@@ -73,29 +44,16 @@ export class ChatComponent {
     }
   }
 
-  public updateText(text: string) {
-    this.decoded = this.decode(this.text = text);
-  }
+  public send(text: string) {
+ 
+    if(text.match(/^\s*$/)) { return; }
 
-  private decode(text: string): string {
+    this.updateFavorites(text);
 
-    return text && text.replace(this.regex, match => {
+    this.messages.push(text); 
 
-      let decoded = "";
+    this.text = ""; 
 
-      for (let codePoint of match) {
-        decoded += "\\u{" + codePoint.codePointAt(0).toString(16) +"}";
-      } 
-
-      return decoded;
-    });
-  }
-
-  test(ev: KeyboardEvent) {
-
-    if(ev.key === 'Enter') {
-      ev.stopPropagation();
-      return false;
-    }
+    return false;
   }
 }

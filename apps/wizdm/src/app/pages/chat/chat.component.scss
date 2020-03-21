@@ -1,29 +1,33 @@
 
 :host {
 
-  display: block;
   position: relative;
-
-  .mat-radio-group {
-    margin: 8px;
-  }
-
-  .wm-emoji-input, textarea {
-    line-height: 1.5em;
+  display: flex;
+  flex-flow: column;
+  
+  wm-emoji-input, textarea {
     word-break: break-all;
   }
 
-  .debug {
-    word-break: break-all;
-  }
+  .message {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    padding: 0 5%;
+    box-sizing: border-box;
 
-  .mat-form-field, .wm-emoji-text {
-    width: 400px;
-    max-width: 90%
-  }
+    &.in { 
+      
+      justify-content: flex-end; 
+      & + .in { margin-top: 2px; }
+      & + .out { margin-top: 12px; }  
+    }
+    
+    &.out { 
 
-  .wm-emoji-keyboard {
-    width: 400px;
-    max-width: 100%
+      justify-content: flex-start; 
+      & + .out { margin-top: 2px; }
+      & + .in { margin-top: 12px; }  
+    }
   }
 }

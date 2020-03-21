@@ -1,58 +1,53 @@
 
-<!-- Mode selection: Auto, Web and Native -->
-<mat-radio-group fxLayout="column" fxLayoutAlign="center end" fxLayoutGap="5px" labelPosition="before" [value]="mode" (change)="mode = $event.value">
-  <!-- Auto: detects the native support and acts accordingly -->
-  <mat-radio-button value="auto">Auto <span class="mat-small">{{ native ? '(Native support detected)' : '(No native support)' }}</span></mat-radio-button>
+<ng-container *wmContent="let msgs select 'chat'">
 
-  <!-- Web: Displays the emoji as images -->
-  <mat-radio-button value="web">Web</mat-radio-button>
+  <section fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start center">
 
-  <!-- Native: Displays the emoji as text (relying on the native OS capabilities) -->
-  <mat-radio-button value="native">Native</mat-radio-button>
-</mat-radio-group>
+    <div class="message out">
 
-<section fxLayout="column" fxLayoutAlign="center center">
+      <wm-balloon side="left" color="primary" class="mat-elevation-z3">
 
-  <h1 wm-emoji-text="Send a message 😉" [mode]="mode" #message></h1>
-  <br>
+        <span wm-emoji-text="Fake message out"></span>
 
-  <!-- Emoji Input for the Web -->
-  <mat-form-field appearance="outline" *ngIf="message.behavior === 'web'">
-    <mat-label>Emoji Input</mat-label>
-    <wm-emoji-input matEmoji typein [value]="text" mode="web" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)"></wm-emoji-input>
-    <button mat-icon-button matSuffix (click)="send()"><wm-icon icon="send"></wm-icon></button>
-    <mat-hint>Material Form Field applied to universal Emoji Input</mat-hint>
-  </mat-form-field>
+      </wm-balloon>
 
-  <!-- Native Input for platforms supporting Emoji natively -->
-  <mat-form-field appearance="outline" *ngIf="message.behavior === 'native'">
-    <mat-label>Native Input</mat-label>
-    <textarea matInput typein [value]="text" newline="shift" placeholder="Type a message" (valueChange)="updateText($event)" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
-    <button mat-icon-button matSuffix (click)="send()"><wm-icon icon="send"></wm-icon></button>
-    <mat-hint>Material Form Field applied to Native input</mat-hint>
-  </mat-form-field>
- 
-  
-  <wm-emoji-keyboard rows="5" [mode]="mode" [favorites]="keys" (keyPressed)="typein($event)"></wm-emoji-keyboard>
+    </div>
 
-  <!--p class="debug">{{ decoded }}</p-->
+    <div class="message" [ngClass]="even ? 'out' : 'in'" *ngFor="let msg of messages;let even = even">
 
-</section>
+      <wm-balloon [side]="even ? 'left' : 'right'" [color]="even ? 'primary' : 'accent'" class="mat-elevation-z3">
 
-<section fxLayout="column" fxLayoutAlign="center center">
+        <span [wm-emoji-text]="msg"></span>
 
-  <h1>Emoji Texts</h1>
+      </wm-balloon>
 
-  <div fxFill fxLayout="row" [fxLayoutAlign]="even ? 'start' : 'end'" *ngFor="let msg of messages;let even = even">
+    </div>
 
-  <wm-balloon [side]="even ? 'left' : 'right'" [color]="even ? 'primary' : 'accent'" class="mat-elevation-z3">
+    <br><br>
 
-    <span [wm-emoji-text]="msg" [mode]="mode"></span>
+  </section>
 
-  </wm-balloon>
+  <wm-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (send)="send($event)"></wm-composer> 
 
-  </div>
+  <!-- Can Leave dialog -->
+  <wm-dialog [dontLeave]="!!text"> 
 
-  <br><br>
+    <ng-container *ngIf="msgs.canLeave || {} as leave">
 
-</section>
+      <h2 mat-dialog-title><b>{{ leave.title || 'Unsent message' }}</b></h2>
+    
+      <mat-dialog-content [wm-readme]="leave.message">
+        You're about to leave the page without sending the last message.<br>Please confirm.
+      </mat-dialog-content>
+    
+      <mat-dialog-actions align="end">
+        <button mat-button color="warn" [mat-dialog-close]="false" cdkFocusInitial>{{ leave.cancel || 'Wait' }}</button>
+        <button mat-button color="primary" [mat-dialog-close]="true">{{ leave.ok || 'Proceed' }}</button>
+      </mat-dialog-actions>
+
+    </ng-container>
+
+  </wm-dialog>
+
+</ng-container>
+

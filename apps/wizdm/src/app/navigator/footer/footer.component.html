@@ -4,17 +4,28 @@
   <!-- Top section with links -->
   <section class="content" fxLayout="row" fxLayoutAlign="space-between" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center">
 
-    <!-- Left pane: Links to About, terms, privacy... -->
-    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center center">
+    <!-- Left/Top pane: Links to About, terms, privacy... -->
+    <div fxLayout="row" fxHide.lt-sm fxLayoutAlign="center center">
 
+      <!-- Regular links on desktop -->
       <a mat-button *ngFor="let item of msgs.links" [routerLink]="item.link"> 
         {{ item.label }}
       </a>
       
     </div>
 
-    <!-- Right pane -->
+    <!-- Right/Bottom pane -->
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+
+      <!-- Links menu on mobile -->
+      <a mat-icon-button fxHide fxShow.lt-sm [matMenuTriggerFor]="linksMenu">
+        <wm-icon icon="fas:fa-info-circle"></wm-icon>
+      </a>
+
+      <!-- Links menu on mobile -->
+      <mat-menu #linksMenu="matMenu">
+        <button mat-menu-item *ngFor="let item of msgs.links" [routerLink]="item.link">{{ item.label }}</button>
+      </mat-menu>
 
       <!-- Social media links -->
       <a mat-icon-button routerLink="/redirect" [queryParams]="{ url: item.link }" *ngFor="let item of msgs.socials">

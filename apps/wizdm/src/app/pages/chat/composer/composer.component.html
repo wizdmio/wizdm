@@ -1,0 +1,35 @@
+
+<div fxLayout="row" fxLayoutAlign="center center" (keydown)="sendOnEnter($event)">
+
+  <!-- Toggles Emoji Keyboard -->
+  <button mat-icon-button (mousedown)="toggleEmojiKeys()">
+    <mat-icon>emoji_emotions</mat-icon>
+  </button>
+
+  <!-- Native Input for platforms supporting Emoji natively -->
+  <mat-form-field appearance="legacy" fxFlex="1 1 auto" *ngIf="native; else webMode">
+    <mat-label>Type a message</mat-label>
+    <textarea matInput typein [(value)]="value" [newline]="enterMode" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+  </mat-form-field>
+
+  <!-- Emoji Input for the Web -->
+  <ng-template #webMode>
+    <mat-form-field appearance="legacy" fxFlex="1 1 auto">
+      <mat-label>Type a message</mat-label>
+      <wm-emoji-input matEmoji typein [(value)]="value" [newline]="enterMode"></wm-emoji-input>
+    </mat-form-field>
+  </ng-template>
+
+  <!-- Send button -->
+  <button mat-icon-button (mousedown)="sendNow()">
+    <mat-icon>send</mat-icon>
+  </button>
+
+</div>
+
+<!-- On Demand Emoji Keyboard -->
+<mat-expansion-panel class="padding-0 mat-elevation-z0" hideToggle>
+ 
+  <wm-emoji-keyboard [favorites]="keys" rows="5" (keyPressed)="typein($event)"></wm-emoji-keyboard>
+
+</mat-expansion-panel>

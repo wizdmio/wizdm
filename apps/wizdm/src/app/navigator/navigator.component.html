@@ -7,10 +7,10 @@
     <mat-toolbar>
 
       <!-- Background w/ shadow to fade while blending in -->
-      <div class="background background-color" [@blendin]="!menuVisible && !(scrolled$ | async)"></div>
+      <div class="background background-color" [@blendin]="!(menuToggler || menuVisible) && !(scrolled$ | async)"></div>
 
       <!-- Navigation bar (1st row) -->
-      <mat-toolbar-row fxLayoutAlign="space-between center">
+      <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
 
         <!-- Left pane -->
         <nav fxLayout="row" fxLayoutAlign="start center">
@@ -70,9 +70,12 @@
   <main fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
 
     <!-- Router Outlet stretched to fit -->
-    <div fxFlex="1 1 auto">
-      <!-- Use the router-outlet as a placehoder to push the pages down -->
-      <router-outlet class="padding-top-toolbar"></router-outlet>
+    <div fxFlex="1 1 auto" fxLayout="column">
+
+      <!-- Use the router-outlet as a placehoder to push the pages down by the height of the navbar -->
+      <router-outlet fxFlex="0 0 auto" [style.height.px]="navbar?.clientHeight || 0"></router-outlet>
+      
+      <!-- Pages will be here: use host: "style { flex 1 1 auto }" to fit all the available space -->
     </div>
     
     <!-- Footer always on the bottom -->

@@ -1,5 +1,5 @@
 
-<nav fxLayout="column" fxLayoutAlign="start center" [@menu]="toggler" (@menu.done)="done()">
+<nav fxLayout="column" fxLayoutAlign="start center" [@menu]="!!toggler" (@menu.done)="done()">
 
   <button mat-button *ngFor="let item of items"
     (click)="toggleMenu = false"

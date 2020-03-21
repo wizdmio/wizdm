@@ -25,13 +25,6 @@
   // Styles the theme colors globally
   @include wm-theme-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
 
-  // Defines a top padding helper to skip the toolbar
-  .padding-top-toolbar { 
-
-    padding-top: $wm-content-top-desktop;
-    @media ($mat-xsmall) { padding-top: $wm-content-top-mobile; }
-  }
- 
   // Tweaks material styles
   .mat-menu-content { padding: 0 !important;}
   .mat-menu-panel { min-width: unset !important; min-height: unset !important; }
@@ -44,9 +37,14 @@
     }
   }*/
   
-  // Defines a global class to resets dialog container's padding on request
-  // to be used in MatDialogConfig.panelClass when needed
-  .mat-dialog-reset { mat-dialog-container { padding: 0;} }
+  // Padding resetters for material components
+  .mat-dialog.padding-0 .mat-dialog-container { 
+    padding: 0;
+  } 
+
+  .mat-expansion-panel.padding-0 .mat-expansion-panel-body { 
+    padding: 0;
+  }
 
   // Applies a smooth scroll behaviour whenever supported
   html { scroll-behavior: smooth; }

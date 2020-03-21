@@ -1,4 +1,4 @@
-import { trigger, state, animate, style, transition, group, keyframes, query, stagger } from '@angular/animations';
+import { trigger, state, animate, style, transition, group, query, stagger } from '@angular/animations';
 const $smooth = '1s cubic-bezier(0.2, 1, 0.2, 1)';
 
 export let $animations = [

@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatExpansionPanel } from '@angular/material/expansion';
 import { ContentStreamer } from '@wizdm/content';
 import { EmojiUtils } from '@wizdm/emoji/utils';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -15,9 +14,7 @@ import { map, switchMap } from 'rxjs/operators';
 })
 export class EmojiKeyboard {
 
-  @ViewChild(MatExpansionPanel) private panel: MatExpansionPanel; 
-
-  readonly rows$ = new BehaviorSubject<number>(5);
+  readonly rows$ = new BehaviorSubject<number>(5); 
   readonly columns$: Observable<string[][]>;
   readonly keySize = 40;
 
@@ -76,15 +73,7 @@ export class EmojiKeyboard {
     this.rows$.next(rows);
   };
 
-  /** Toggles the keyboard */
-  public toggle() {
-    // Toggles the expansion panel and prevents default to avoid getting the focus
-    return this.panel.toggle(), false;
-  }
-
   public press(key: string) {
-    // Closes the panel
-    this.panel.close();
     // emits the pressed key and prevents default to avoid getting the focus
     return this.keyPressed.emit(key), false;
   }

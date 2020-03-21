@@ -1,4 +1,3 @@
-
 :host {
   
   display: flex;
@@ -20,12 +19,12 @@
     
     // Makes sure all the children lays on the same z-index
     z-index: 2;
-    & * { z-index: 2; }
+    & * { z-index: inherit; }
 
     .mat-toolbar {
     
       background-color: transparent;
-
+      
       .mat-toolbar-row {
 
         // Reduces the standard 16px left/right padding to 8px on mobile
@@ -48,11 +47,12 @@
     }
   }
 
-  & > main {
-    router-outlet {
-      display: block;
-      position: relative;
-    }
+  // Use the router-outlet as the plaeholder to compensate for toolbar height
+  & > main router-outlet {
+
+    display: block;
+    position: relative;
+    width: 100%;
   }
 }
 

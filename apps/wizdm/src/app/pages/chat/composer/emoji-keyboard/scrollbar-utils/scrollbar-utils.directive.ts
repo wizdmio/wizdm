@@ -3,19 +3,20 @@ import { first } from 'rxjs/operators';
 
 @Directive({
   selector: '[scrollHide]',
-  exportAs: 'scrollHide'
+  exportAs: 'scrollHide',
+  host: { "style": "overflow: hidden;" }
 }) 
 export class ScrollHide {
 
   public height;
   public width;
 
-  @HostBinding('style.margin-bottom.px') get marginBottom(): number {
-    return -this.height;
+  @HostBinding('style.height.px') get marginBottom(): number {
+    return this.height;
   }
 
-  @HostBinding('style.margin-right.px') get marginRight(): number {
-    return -this.width;
+  @HostBinding('style.width.px') get marginRight(): number {
+    return this.width;
   }
 }
 
@@ -36,8 +37,8 @@ export class ScrollHeight {
 
   /** The height of the element */
   @Input() set scrollHeight(value: number) {
-    // Keeps tehe height value
-    this.value = value;
+    // Inform the parent scrollHide directive about the visible height
+    this.scrollHide.height = this.value = value;
     // Computes the extra padding/margin as soon as change detection ended
     this.zone.onStable.pipe( first() ).subscribe( () => this.update() );
   }
@@ -47,7 +48,5 @@ export class ScrollHeight {
     const el = this.elref.nativeElement;
     // Measures the height of the scrollbar to be used for extra padding
     this.padding = el.offsetHeight - el.clientHeight;
-    // Inform the parent scrollHide directive about the extra height to hidden
-    this.scrollHide.height = this.padding;
   }
 }
