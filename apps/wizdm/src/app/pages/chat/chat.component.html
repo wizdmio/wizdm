@@ -1,11 +1,19 @@
 
 <ng-container *wmContent="let msgs select 'chat'">
 
-  <section fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start center">
+  <!-- use gtag="chat" somewhere--> 
+
+  <div fxFlex="1 1 auto" style="position: relative;">
+
+    <wm-chat-viewer [messages]="messages" cdkScrollable></wm-chat-viewer>
+
+  </div>
+
+  <!--section fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start center">
 
     <div class="message out">
 
-      <wm-balloon side="left" color="primary" class="mat-elevation-z3">
+      <wm-balloon class="mat-elevation-z3" side="left" color="primary">
 
         <span wm-emoji-text="Fake message out"></span>
 
@@ -15,7 +23,7 @@
 
     <div class="message" [ngClass]="even ? 'out' : 'in'" *ngFor="let msg of messages;let even = even">
 
-      <wm-balloon [side]="even ? 'left' : 'right'" [color]="even ? 'primary' : 'accent'" class="mat-elevation-z3">
+      <wm-balloon class="mat-elevation-z3" [side]="even ? 'left' : 'right'" [color]="even ? 'primary' : 'accent'">
 
         <span [wm-emoji-text]="msg"></span>
 
@@ -25,27 +33,24 @@
 
     <br><br>
 
-  </section>
+  </section-->
 
-  <wm-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (send)="send($event)"></wm-composer> 
+  <!-- Message composer -->
+  <wm-chat-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (send)="send($event)"></wm-chat-composer> 
 
   <!-- Can Leave dialog -->
-  <wm-dialog [dontLeave]="!!text"> 
+  <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
 
-    <ng-container *ngIf="msgs.canLeave || {} as leave">
-
-      <h2 mat-dialog-title><b>{{ leave.title || 'Unsent message' }}</b></h2>
-    
-      <mat-dialog-content [wm-readme]="leave.message">
-        You're about to leave the page without sending the last message.<br>Please confirm.
-      </mat-dialog-content>
-    
-      <mat-dialog-actions align="end">
-        <button mat-button color="warn" [mat-dialog-close]="false" cdkFocusInitial>{{ leave.cancel || 'Wait' }}</button>
-        <button mat-button color="primary" [mat-dialog-close]="true">{{ leave.ok || 'Proceed' }}</button>
-      </mat-dialog-actions>
-
-    </ng-container>
+    <h2 mat-dialog-title><b>{{ leave.title || 'Unsent message' }}</b></h2>
+  
+    <mat-dialog-content [wm-readme]="leave.message">
+      You're about to leave the page without sending the last message.
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-button color="warn" [mat-dialog-close]="false" cdkFocusInitial>{{ leave.cancel || 'Wait' }}</button>
+      <button mat-button color="primary" [mat-dialog-close]="true">{{ leave.ok || 'Proceed' }}</button>
+    </mat-dialog-actions>
 
   </wm-dialog>
 

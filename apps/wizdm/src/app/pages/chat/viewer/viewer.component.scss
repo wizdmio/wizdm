@@ -1,0 +1,30 @@
+
+:host {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+
+  .message {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    padding: 0 5%;
+    box-sizing: border-box;
+
+    &.in { 
+      
+      justify-content: flex-end; 
+      & + .in { margin-top: 2px; }
+      & + .out { margin-top: 12px; }  
+    }
+    
+    &.out { 
+
+      justify-content: flex-start; 
+      & + .out { margin-top: 2px; }
+      & + .in { margin-top: 12px; }  
+    }
+  }
+}

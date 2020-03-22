@@ -11,7 +11,7 @@ import { EmojiMaterialModule } from '@wizdm/emoji/material';
 import { EmojiKeyboardModule } from './emoji-keyboard';
 import { TextareaNewline } from './textarea-newline';
 import { TypeinAdapter } from './typein-adapter';
-import { ComposerComponent } from './composer.component';
+import { ChatComposer } from './composer.component';
 
 @NgModule({
   imports: [
@@ -26,7 +26,7 @@ import { ComposerComponent } from './composer.component';
     EmojiMaterialModule,
     EmojiKeyboardModule
   ],
-  declarations: [ ComposerComponent, TextareaNewline, TypeinAdapter ],
-  exports: [ ComposerComponent ]
+  declarations: [ ChatComposer, TextareaNewline, TypeinAdapter ],
+  exports: [ ChatComposer ]
 })
 export class ComposerModule { }

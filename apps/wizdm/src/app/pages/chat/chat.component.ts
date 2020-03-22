@@ -1,13 +1,16 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ElementRef, ViewChild } from '@angular/core';
 import { EmojiRegex } from '@wizdm/emoji/utils';
+import { ChatComposer } from './composer';
 
 @Component({
   selector: 'wm-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss'],
-  host: { "style": "flex: 1 1 auto;" }
+  styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent {
+
+  @ViewChild(ChatComposer, { read: ElementRef }) 
+  private composer: ElementRef<HTMLElement>;
 
   public text = "";
   public messages = [ ];
@@ -15,7 +18,12 @@ export class ChatComponent {
   private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
   public keys: string[];
 
-  constructor(@Inject(EmojiRegex) private regex: RegExp) {
+  get viewHeight(): number {
+
+    return (this.elref?.nativeElement?.clientHeight || 0) - (this.composer?.nativeElement?.clientHeight || 0) || 100;
+  }
+
+  constructor(private elref: ElementRef<HTMLElement>, @Inject(EmojiRegex) private regex: RegExp) {
 
     this.keys = this.sortFavorites(this.stats);
   }

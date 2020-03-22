@@ -47,12 +47,19 @@
     }
   }
 
-  // Use the router-outlet as the plaeholder to compensate for toolbar height
-  & > main router-outlet {
+  // Makes sure all the content containers are positioned
+  & > main {
 
-    display: block;
     position: relative;
-    width: 100%;
+    & > div { position: relative; }
+  
+    // Use the router-outlet as the plaeholder to compensate for toolbar height
+    router-outlet {
+
+      display: block;
+      position: relative;
+      width: 100%;
+    }
   }
 }
 

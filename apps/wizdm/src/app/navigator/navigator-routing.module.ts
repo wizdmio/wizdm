@@ -4,6 +4,7 @@ import { RedirectService } from '@wizdm/redirect';
 import { LanguageSelector } from 'app/utils/lang-selector';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from 'app/utils/action-link';
+import { BackLinkObserver } from 'app/utils/back-link';
 import { NavigatorComponent } from './navigator.component';
 
 const routes: RoutesWithContent = [
@@ -48,7 +49,7 @@ const routes: RoutesWithContent = [
       // Intercepts routing "action-links" to execute a non-routing action
       { path: 'login',       canActivate: [ ActionLinkObserver ] },
       { path: 'contact',     canActivate: [ ActionLinkObserver ] },
-      { path: 'back',        canActivate: [ ActionLinkObserver ] },
+      { path: 'back',        canActivate: [ BackLinkObserver ] },
       
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      

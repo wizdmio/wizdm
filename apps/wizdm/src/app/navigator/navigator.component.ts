@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { MediaObserver } from '@angular/flex-layout';
 import { ContentStreamer } from '@wizdm/content';
 import { Member } from 'app/core/member';
-import { ActionLinkObserver } from 'app/utils/action-link';
 import { ActionbarService } from './actionbar';
 import { BackgroundStyle } from './background';
 import { Observable, fromEvent } from 'rxjs';
@@ -29,8 +27,6 @@ export class NavigatorComponent {
 
   constructor(private media: MediaObserver, 
               private viewport: ViewportRuler, 
-              private actionlink: ActionLinkObserver,
-              private location: Location,
               readonly actionbar$: ActionbarService, 
               readonly background$: BackgroundStyle,
               readonly member: Member) {
@@ -41,9 +37,6 @@ export class NavigatorComponent {
       map( () => this.viewport.getViewportScrollPosition().top > 5 ),
       distinctUntilChanged()
     );
-
-    // Registers to the 'back' actionlink to navigate back on request
-    this.actionlink.register('back').subscribe(() => this.location.back() );
   }
 
   // Media queries to switch between desktop/mobile views
