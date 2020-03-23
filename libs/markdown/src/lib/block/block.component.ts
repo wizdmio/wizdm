@@ -18,9 +18,6 @@ export class MarkdownBlock {
   // AOT safe children from the node
   get children() { return ("children" in this.node) ? this.node.children : [] }
 
-  // Highlight enable flag
-  get highlight() { return !!this.tree.config && !!this.tree.config.prism; }
-
   // Table of content anchor helper
   public toc(heading: mdHeading): string {
 

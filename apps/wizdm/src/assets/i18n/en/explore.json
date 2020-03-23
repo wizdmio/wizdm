@@ -72,6 +72,11 @@
       "description": "*Markdown* rendering to quickly set up static contents such as terms of service and privacy without extra coding."
     },
     { 
+      "icon": "fas:fa-highlighter",
+      "title": "Syntax Highlighting",
+      "description": "Code syntax highlighting powered by [PrismJS](https://prismjs.com/)"
+    },
+    { 
       "icon": "far:fa-edit",
       "title": "Content editing",
       "description": "Powerfull built-in *WYSIWYG* content editing capabilities to serve your needs.",

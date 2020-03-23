@@ -25,7 +25,7 @@
   const align   = require('remark-align');
 
   // Setupd the markdown parser configured with the given options @see {https://github.com/remarkjs/remark/tree/master/packages/remark-parse}
-  function setupParser(options) {
+  function reparseFactory(options) {
     return unified()
   	  .use(parse, options)
   	  .use(subsup)
@@ -34,6 +34,6 @@
   }
 
   // Exports the parser setup function
-	module.exports = { setupParser }
+	module.exports = { reparseFactory }
   
 }(window));

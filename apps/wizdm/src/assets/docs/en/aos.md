@@ -4,6 +4,14 @@
 
 Animate is a directive-like component designed to animate its transcluded content. 
 
+## Usage
+
+``` html
+<section aos="landing" speed="slow"> 
+  My content goes here
+</section>
+```
+
 ## Resources
 
 Read [Animate On Scroll in Angular](https://medium.com/wizdm-genesys/animate-on-scroll-in-angular-330efd05ebec) on Medium.

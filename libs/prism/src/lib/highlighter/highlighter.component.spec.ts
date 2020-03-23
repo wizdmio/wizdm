@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrismHighlihter } from './highlighter.component';
+import { PrismHighlighter } from './highlighter.component';
 
-describe('PrismHighlihter', () => {
-  let component: PrismHighlihter;
-  let fixture: ComponentFixture<PrismHighlihter>;
+describe('PrismHighlighter', () => {
+  let component: PrismHighlighter;
+  let fixture: ComponentFixture<PrismHighlighter>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrismHighlihter ]
+      declarations: [ PrismHighlighter ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrismHighlihter);
+    fixture = TestBed.createComponent(PrismHighlighter);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

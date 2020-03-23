@@ -67,6 +67,7 @@
     "@types/jasmine": "^2.8.8",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^12.11.1",
+    "@types/prismjs": "^1.16.0",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~2.8.0",
     "jasmine-marbles": "0.4.0",

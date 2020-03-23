@@ -50,7 +50,7 @@
     <span *ngSwitchCase="'rightAligned'" align="right" [wm-block]="child"></span>
 
     <!-- Code Block w/ syntax highlighting by Prism when enabled -->
-    <pre *ngSwitchCase="'code'" [attr.data-line]="pos(child)" [disabled]="!highlight" [language]="child.lang" [wm-prism]="child.value">
+    <pre *ngSwitchCase="'code'" [attr.data-line]="pos(child)" [language]="child.lang" [wm-prism]="child.value">
       <!-- Renders the flat content when disabled -->
       <code>{{ child.value }}</code>
     </pre>

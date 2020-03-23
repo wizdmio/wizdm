@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MarkdownTree, mdContent, mdRoot, mdParent, mdTable, mdTableRow, mdTableCell } from '@wizdm/markdown';
 import { wmEditable, wmDocument, wmAlignType, wmRow, wmCell } from '@wizdm/editable';
@@ -10,9 +10,8 @@ import { map } from 'rxjs/operators';
 })
 export class EditableConverter extends MarkdownTree {
 
-  constructor(private http: HttpClient) { 
-    // Inits the tree parser with a minimal configuration
-    super({ commonmark: true }); 
+  constructor(private http: HttpClient, @Inject('reparse') reparse) { 
+    super(reparse); 
   }
 
 

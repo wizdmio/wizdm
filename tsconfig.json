@@ -25,6 +25,7 @@
       "@wizdm/markdown": ["libs/markdown/src/index.ts"],
       "@wizdm/markdown/*": ["libs/markdown/src/lib/*"],
       "@wizdm/prism": ["libs/prism/src/index.ts"],
+      "@wizdm/prism/*": ["libs/prism/src/lib/*"],
       "@wizdm/editable": ["libs/editable/src/index.ts"],
       "@wizdm/editable/*": ["libs/editable/src/lib/*"],
       "@wizdm/doorbell": ["libs/doorbell/src/index.ts"],

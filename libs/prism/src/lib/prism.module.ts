@@ -1,19 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PrismHighlihter } from './highlighter/highlighter.component';
+import { PrismHighlighter } from './highlighter/highlighter.component';
 import { PrismTokenizer } from './tokenizer/tokenizer.component';
+import { prism } from './prism-module';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [
-    PrismHighlihter,
+    PrismHighlighter,
     PrismTokenizer
   ],
   exports: [
-    PrismHighlihter,
+    PrismHighlighter,
     PrismTokenizer
-  ]
+  ],
+  providers: [ { provide: 'prism', useFactory: () => prism }]
 })
 export class PrismModule { }

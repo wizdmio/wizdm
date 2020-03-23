@@ -9,7 +9,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 /** Perform code hilighting by processing an input text to be rendered into an angular template 
  * Using prism as tokenizer @see {https://github.com/PrismJS/prism} */
-export class PrismHighlihter { 
+export class PrismHighlighter { 
 
   /** Applies the proper classes to the host <pre> element */
   @HostBinding('class') get clazz() {

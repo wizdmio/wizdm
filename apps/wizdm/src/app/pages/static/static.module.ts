@@ -6,7 +6,8 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
-import './prism-languages';
+import { PrismTsModule } from '@wizdm/prism/languages';
+import { PrismScssModule } from '@wizdm/prism/languages';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 
@@ -27,6 +28,8 @@ const routes: RoutesWithContent = [
     HttpClientModule,
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
+    PrismTsModule,
+    PrismScssModule,
     GtagModule,
     AnimateModule,
     ContentRouterModule.forChild(routes)
