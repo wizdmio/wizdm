@@ -1,41 +1,73 @@
-import { Component, Inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild, NgZone } from '@angular/core';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import { EmojiRegex } from '@wizdm/emoji/utils';
-import { ChatComposer } from './composer';
+import { Message } from 'app/core/chat';
+import { Subscription, Observable } from 'rxjs';
+import { first, filter, startWith, map, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { FakeMessages } from './fake-messages';
+import { $animations } from './chat.animations';
 
 @Component({
   selector: 'wm-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  animations: $animations
 })
 export class ChatComponent {
 
-  @ViewChild(ChatComposer, { read: ElementRef }) 
-  private composer: ElementRef<HTMLElement>;
+  @ViewChild(CdkScrollable) scroller: CdkScrollable;
 
+  private autoScroll = true;
+  private sub: Subscription;
   public text = "";
-  public messages = [ ];
  
   private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
   public keys: string[];
 
-  get viewHeight(): number {
+  get messages$(): Observable<Message[]> { return this.fake.messages$; }
 
-    return (this.elref?.nativeElement?.clientHeight || 0) - (this.composer?.nativeElement?.clientHeight || 0) || 100;
-  }
-
-  constructor(private elref: ElementRef<HTMLElement>, @Inject(EmojiRegex) private regex: RegExp) {
+  constructor(@Inject(EmojiRegex) private regex: RegExp, private fake: FakeMessages, private zone: NgZone) {
 
     this.keys = this.sortFavorites(this.stats);
+
+    fake.receive();
+  }
+
+  ngAfterViewInit() {
+
+    this.sub = this.messages$.pipe( filter(() => this.autoScroll), switchMap( () => this.zone.onStable.pipe( first() ) ) )
+      .subscribe( () => this.backToBottom() );
+
+    this.sub.add( this.scroller.elementScrolled().pipe( 
+      map( () => this.scroller.measureScrollOffset('bottom') < 50 ),
+      distinctUntilChanged(),
+      startWith(true),
+    ).subscribe( auto => this.zone.run( () => {
+      console.log( this.autoScroll = auto );
+    })));
+
+  }  
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  public backToBottom() {
+    this.scroller.scrollTo({ bottom: 0 });
+  }
+
+  public onKeyboardExpand() {
+    this.autoScroll && this.backToBottom();
   }
 
   private sortFavorites(stats: { [key:string]: number }): string[] {
     return Object.keys(stats).sort( (a,b) => stats[b] - stats[a] );
   }
 
-  public updateFavorites(message: string) {
+  public updateFavorites(text: string) {
 
     let match; let emojis = [];
-    while(match = this.regex.exec(message)) {
+    while(match = this.regex.exec(text)) {
 
       const key = match[0];
 
@@ -52,15 +84,15 @@ export class ChatComponent {
     }
   }
 
-  public send(text: string) {
- 
-    if(text.match(/^\s*$/)) { return; }
+  public send(body: string) {
 
-    this.updateFavorites(text);
+    this.autoScroll = true;
 
-    this.messages.push(text); 
+    this.updateFavorites(body);
 
-    this.text = ""; 
+    this.fake.send({ body, sender: 'me', timestamp: undefined }); 
+
+    this.text = "";
 
     return false;
   }

@@ -7,7 +7,8 @@ import { TypeinAdapter } from './typein-adapter';
 @Component({
   selector: 'wm-chat-composer',
   templateUrl: './composer.component.html',
-  styleUrls: ['./composer.component.scss']
+  styleUrls: ['./composer.component.scss'],
+  host: { "class": "wm-chat-composer" }
 })
 export class ChatComposer {
 
@@ -26,6 +27,9 @@ export class ChatComposer {
 
   /** Value changes event */
   @Output() valueChange = new EventEmitter<string>();
+
+  /** Keyboard expanded event */
+  @Output() expanded = new EventEmitter<void>();
 
   /** Send message event */
   @Output() send = new EventEmitter<string>();
@@ -57,8 +61,14 @@ export class ChatComposer {
     return (this.touch || ev.shiftKey || ev.key !== 'Enter') || this.sendNow();
   }
 
+  public get valid(): boolean {
+    return (this.value || '').match(/^\s*$/) === null;
+  }
+
   /** Sends the message emitting the relevant event */
   public sendNow() {
-    return this.send.emit(this.value), false;
+
+    this.valid && this.send.emit( this.value );
+    return false;
   }
 }

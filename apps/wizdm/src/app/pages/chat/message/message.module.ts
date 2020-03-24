@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmojiTextModule } from '@wizdm/emoji/text';
 import { BalloonModule } from '@wizdm/elements/balloon';
-import { ChatViewer } from './viewer.component';
+import { ChatMessage } from './message.component';
 
 @NgModule({
-  imports: [ 
+  imports: [
     CommonModule,
     EmojiTextModule,
     BalloonModule
   ],
-  declarations: [ ChatViewer ],
-  exports: [ ChatViewer ]
+  declarations: [ ChatMessage ],
+  exports: [ ChatMessage ]
 })
-export class ViewerModule { }
+export class ChatMessageModule { }

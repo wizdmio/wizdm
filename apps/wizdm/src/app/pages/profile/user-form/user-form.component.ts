@@ -1,8 +1,8 @@
-import { Component, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnDestroy, Output, EventEmitter, Input, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { wmMember } from 'app/core/member';
 import { Subscription } from "rxjs";
-import moment from 'moment';
+import moment, { defaultFormat } from 'moment';
 
 @Component({
   selector: 'wm-user-form',
@@ -16,7 +16,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
 
   //get modified(): boolean { return this.form.touched; }
 
-  constructor(/*builder: FormBuilder*/) {
+  constructor() {
     // Builds the form controls
     super({
       name   : new FormControl('', Validators.required ),
@@ -49,7 +49,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
      if(!value) { return; }
 
     // Turns the birthdate into a moment
-    const birth = value.birth ? moment(value.birth, moment.defaultFormat) : null;
+    const birth = value.birth ? moment(value.birth, defaultFormat) : null;
     // Fills up the form with user data
     this.patchValue({ ...value, birth });
     // Marks the form as pristine right after the view updated
@@ -65,7 +65,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
   public submit(value: wmMember) {
 
     // Birthday: turns the moment object to a string
-    const birth = moment.isMoment(value.birth) ? value.birth.format(moment.defaultFormat) : '';
+    const birth = moment.isMoment(value.birth) ? (value.birth as any).format(defaultFormat) : '';
     // Emits the update
     this.formValueChange.emit({ ...value, birth } as wmMember);
   }

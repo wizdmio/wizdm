@@ -8,6 +8,7 @@ import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
 import { PrismTsModule } from '@wizdm/prism/languages';
 import { PrismScssModule } from '@wizdm/prism/languages';
+import { SizeLockModule } from 'app/utils/size-lock';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 
@@ -32,6 +33,7 @@ const routes: RoutesWithContent = [
     PrismScssModule,
     GtagModule,
     AnimateModule,
+    SizeLockModule,
     ContentRouterModule.forChild(routes)
   ],
   providers: [ StaticResolver ]

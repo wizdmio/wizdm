@@ -29,4 +29,4 @@ import { ChatComposer } from './composer.component';
   declarations: [ ChatComposer, TextareaNewline, TypeinAdapter ],
   exports: [ ChatComposer ]
 })
-export class ComposerModule { }
+export class ChatComposerModule { }

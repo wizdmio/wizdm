@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { User } from '@wizdm/connect/auth';
 import { StorageService } from '@wizdm/connect/storage';
 import { Member, wmMember } from 'app/core/member';

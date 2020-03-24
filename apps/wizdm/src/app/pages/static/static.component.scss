@@ -1,29 +1,18 @@
 
 :host {
-  
-  display: block;
+
   position: relative;
-
-  .background {
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 480px;
-    height: 80vh;
-    max-height: 560px;
-    box-sizing: border-box;
-    transform: skewY(-10deg);
-    transform-origin: 0 100%;
-  }
-
+  display: block;
+  width: 100%;
+  
+  // foregroung article max-width is locked to the viewport width by a directive forcing
+  // its content to scroll horizontally (especially code blocks) despite the element is
+  // relatively positioned
   .foreground {
-    display: block;
     position: relative;
+    display: block;
     width: 100%;
-    min-height: 350px;
-    box-sizing: border-box;
     padding: 5vw;
+    box-sizing: border-box;
   }
 }

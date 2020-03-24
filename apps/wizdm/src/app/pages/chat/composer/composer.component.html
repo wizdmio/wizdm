@@ -1,5 +1,5 @@
 
-<div fxLayout="row" fxLayoutAlign="center center" (keydown)="sendOnEnter($event)">
+<div fxLayout="row" fxLayoutAlign="center end" (keydown)="sendOnEnter($event)">
 
   <!-- Toggles Emoji Keyboard -->
   <button mat-icon-button (mousedown)="toggleEmojiKeys()">
@@ -21,14 +21,14 @@
   </ng-template>
 
   <!-- Send button -->
-  <button mat-icon-button (mousedown)="sendNow()">
+  <button mat-icon-button [disabled]="!valid" (mousedown)="sendNow()">
     <mat-icon>send</mat-icon>
   </button>
 
 </div>
 
 <!-- On Demand Emoji Keyboard -->
-<mat-expansion-panel class="padding-0 mat-elevation-z0" hideToggle>
+<mat-expansion-panel class="padding-0 mat-elevation-z0" (afterExpand)="expanded.emit()" hideToggle>
  
   <wm-emoji-keyboard [favorites]="keys" rows="5" (keyPressed)="typein($event)"></wm-emoji-keyboard>
 

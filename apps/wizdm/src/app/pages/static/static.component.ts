@@ -7,7 +7,8 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'wm-static',
   templateUrl: './static.component.html',
-  styleUrls: ['./static.component.scss']
+  styleUrls: ['./static.component.scss'],
+  //host: { "style": "flex 1 1 auto" }
 })
 export class StaticComponent {
 

@@ -4,15 +4,53 @@
   width: 100%;
   height: 100%;
 
-  display: flex;
-  flex-flow: column;
-  overflow: hidden;
-
-  wm-chat-viewer {
+  .wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     width: 100%;
     height: 100%;
+    
+    .wm-chat-composer { margin-top: 5px; }
+
+    // Outer container to fill the available space (display: flex)
+    .viewer {
+      position: relative;
+      overflow: hidden;
+
+      .back-to-bottom {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+      }
+
+      // Scrolling container to enable scroll (display: flex)
+      .scroller {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;  
+        padding: 10px 5%;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        // Makes sure there's no smooth scrolling to avoid falsing the manual scroll detection
+        // during automatic scrolling of new messages to the bottom
+        scroll-behavior: unset;
+        &::-webkit-scrollbar { width: 6px; }
+        &::-webkit-scrollbar-track { background: transparent; }
+        &::-webkit-scrollbar-thumb { background: #DDD; border-radius: 6px; }
+
+        // Content inner container to align the message bottom using margin-top: auto
+        .content {
+          position: relative;
+          margin-top: auto;
+
+          // Customize the distance between messages
+          .in + .in, .out + .out { margin-top: 2px; }
+          .in + .out, .out + .in { margin-top: 12px; }
+        }
+      }
+    }
   }
 }
