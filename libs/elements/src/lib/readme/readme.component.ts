@@ -49,8 +49,8 @@ export class ReadmeComponent {
     if(!source) { return this.segments; }
 
     /** Parsing regex:
-     * 1st - Styling match - "([*+_~])(.*?)(?<!\\)\1" 
-     * Matches sequences starting with '*', '+', '_' or '~' end ending with the very same character except when preceeded by a '\' 
+     * 1st - Styling match - "([*+_~])(.*?[^\\])\1" 
+     * Matches sequences starting with '*', '+', '_' or '~' end ending with the very same character as soon as it isn't preceeded by a '\' 
      * to render <b>, <i>, <u> or <s> elements respectively.
      * 2nd - Anchor match - "\[(.*?)\]\((.+?)\)"
      * matches text within square brakets followed by an url within round brakets '[text](url)' to render as anchors <a> elements.
@@ -58,7 +58,7 @@ export class ReadmeComponent {
      * 4th - Break match: '\n' 
      * matches the newline charachers to render <br> elements 
      */
-    let start = 0; let match; const rx = /([*+_~])(.*?)(?<!\\)\1|\[(.*?)\]\((.+?)\)|\\([*+_~])|\n/g;
+    let start = 0; let match; const rx = /([*+_~])(.*?[^\\])\1|\[(.*?)\]\((.+?)\)|\\([*+_~])|\n/g;
     while(match = rx.exec(source)) {
 
       // Pushes the text preceeding a match 
