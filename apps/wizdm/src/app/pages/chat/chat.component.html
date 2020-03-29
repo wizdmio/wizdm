@@ -1,50 +1,47 @@
 
-<mat-sidenav-container *wmContent="let msgs select 'chat'" gtag="chat">
+<ng-container *wmContent="let msgs select 'chat'" gtag="chat">
 
-  <mat-sidenav fxFlex="0 0 auto" [mode]="mobile ? 'over' : 'side'" [opened]="desktop">
-    
+  <ng-template wmTeleport="sidenav" let-mobile="isMobile">
+
     <mat-action-list>
-      <button mat-list-item *ngFor="let conv of conversations$ | async">{{ conv.id }}</button>
-    </mat-action-list>
+
+      <mat-list-item class="height-unset" *ngFor="let group of groups$ | async">
+
+        <wm-chat-group [group]="group" (click)="groupId = group.id"></wm-chat-group>
       
-  </mat-sidenav>
+      </mat-list-item>
 
-  <mat-sidenav-content fxFlex="1 1 auto">
+    </mat-action-list>
 
-    <!-- Content wrapper absolutely positioned to squeeze the message view into the available space -->
-    <div class="wrapper" fxLayout="column" >
+  </ng-template>
 
-      <!-- Message list viewer accomidating the maximum space left from the composer -->
-      <div class="viewer" fxFlex="1 1 auto" fxLayout="column">
+  <!-- Message list viewer accomidating the maximum space left from the composer -->
+  <div class="viewer" fxFlex="1 1 auto" fxLayout="column">
 
-        <!-- Scrolling container using display: flex to ensure content end alignement with margin-top: auto -->
-        <div class="scroller" fxLayout="column" cdkScrollable>
+    <!-- Scrolling container using display: flex to ensure content end alignement with margin-top: auto -->
+    <div class="scroller" fxLayout="column" cdkScrollable>
 
-          <!-- Content inner container using display: block enduring scrolling works on all browsers -->
-          <div class="content">
+      <!-- Content inner container using display: block ensuring scrolling works on all browsers -->
+      <div class="content">
 
-            <wm-message [message]="msg" *ngFor="let msg of messages$ | async"></wm-message>
-
-          </div>
-        </div>
-
-        <!-- Back to bottom button appearing when scrolled back enough -->
-        <button mat-mini-fab color="primary" class="back-to-bottom" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
-          <mat-icon>expand_more</mat-icon>
-        </button>
+        <wm-message [message]="msg" *ngFor="let msg of messages$ | async"></wm-message>
 
       </div>
+    </div>
 
-      <!-- Message composer -->
-      <wm-chat-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (expanded)="onKeyboardExpand()" (send)="send($event)">
-      </wm-chat-composer> 
+    <!-- Back to bottom button appearing when scrolled back enough -->
+    <button mat-mini-fab color="primary" class="back-to-bottom" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
+      <mat-icon>expand_more</mat-icon>
+    </button>
 
-    </div>  
+  </div>
 
-  </mat-sidenav-content>
+  <!-- Message composer -->
+  <wm-chat-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (expanded)="onKeyboardExpand()" (send)="send($event)">
+  </wm-chat-composer> 
 
   <!-- Can Leave dialog -->
-  <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
+  <!--wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
 
     <h2 mat-dialog-title><b>{{ leave.title || 'Unsent message' }}</b></h2>
   
@@ -57,6 +54,7 @@
       <button mat-button color="primary" [mat-dialog-close]="true">{{ leave.ok || 'Proceed' }}</button>
     </mat-dialog-actions>
 
-  </wm-dialog>
+  </wm-dialog-->
 
-</mat-sidenav-container>
+</ng-container>
+

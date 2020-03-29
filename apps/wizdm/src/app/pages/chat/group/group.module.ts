@@ -12,7 +12,7 @@ import { ChatGroup } from './group.component';
     MatBadgeModule,
     AvatarModule
   ],
-  declarations: [ChatGroup],
-  exports: [ChatGroup],
+  declarations: [ ChatGroup ],
+  exports: [ ChatGroup ],
 })
 export class ChatGroupModule { }

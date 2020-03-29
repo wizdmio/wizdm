@@ -7,6 +7,9 @@
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
+  
+  
+  padding: 7px 0;
   width: 320px;
 
   .wm-avatar {
@@ -15,20 +18,18 @@
     margin-right: 6px;
   }
 
-  // Fix the mat-badge to better accomodate long texts
-  .mat-badge-content {
-    min-width: 16px;
-    width: auto;
-    padding: 0 4px;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-
   .content {
     position: relative;
     overflow: hidden;
 
-    .name { width: 100%; margin: 0; }
+    .name { 
+      width: 100%; 
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
     .last {
       width: 100%; 
       opacity: 0.5;

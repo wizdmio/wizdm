@@ -77,21 +77,21 @@
     <mat-sidenav class="mat-elevation-z3" fixedInViewport [fixedTopGap]="navbar?.clientHeight || 0" 
       [mode]="mobile ? 'over' : 'side'" [(opened)]="sideToggler">
 
-      <!-- Side panel content is teleported here -->
-      <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)"></ng-template>
-
       <!-- Side panel toggler to stay visible even when the panel is closed -->
       <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sidenavOn" @sidenav>
         <wm-icon [icon]="'fas:fa-chevron-' + (sideToggler ? 'left' : 'right')"></wm-icon>
       </button>
+
+      <!-- Side panel content is teleported here -->
+      <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)"></ng-template>
         
     </mat-sidenav>
   
     <!-- Page container to fit all the available space -->
     <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" [style.margin-top.px]="navbar?.clientHeight || 0">
 
-      <!-- Pages will fit here: use host: "style { flex 1 1 auto }" to fit all the available space -->
-      <div fxFlex="1 1 auto" fxLayout="column"><router-outlet></router-outlet></div>
+      <!-- Pages will fit here -->
+      <div fxFlex="1 1 auto" style="position: relative;"><router-outlet></router-outlet></div>
 
       <!-- Footer always on the content's bottom -->
       <footer wm-footer fxFlex="0 0 auto"></footer>

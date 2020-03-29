@@ -1,63 +1,57 @@
 
 :host {
-  position: relative;
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
 
-  .mat-sidenav-container, .mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  .mat-list-item { height: 72px; }
+
+  .wm-chat-composer { margin-top: 5px; }
+
+  // Outer container to fill the available space (display: flex)
+  .viewer {
     position: relative;
-    width: 100%;
-    height: 100%;
-  }
+    overflow: hidden;
 
-  .wrapper {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    
-    .wm-chat-composer { margin-top: 5px; }
+    //box-shadow: inset 0 8px 12px -6px rgba(black, 0.125);
 
-    // Outer container to fill the available space (display: flex)
-    .viewer {
-      position: relative;
-      overflow: hidden;
+    .back-to-bottom {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+    }
 
-      //box-shadow: inset 0 8px 12px -6px rgba(black, 0.125);
+    // Scrolling container to enable scroll (display: flex)
+    .scroller {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;  
+      padding: 10px 5%;
 
-      .back-to-bottom {
-        position: absolute;
-        right: 16px;
-        bottom: 16px;
-      }
+      overflow-x: hidden;
+      overflow-y: auto;
 
-      // Scrolling container to enable scroll (display: flex)
-      .scroller {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%;
-        height: 100%;  
-        padding: 10px 5%;
+      // Makes sure there's no smooth scrolling to avoid falsing the manual scroll detection
+      // during automatic scrolling of new messages to the bottom
+      scroll-behavior: unset;
+      &::-webkit-scrollbar { width: 6px; }
+      &::-webkit-scrollbar-track { background: transparent; }
+      &::-webkit-scrollbar-thumb { background: #DDD; border-radius: 6px; }
 
-        overflow-x: hidden;
-        overflow-y: auto;
+      // Content inner container to align the message bottom using margin-top: auto
+      .content {
+        position: relative;
+        margin-top: auto;
 
-        // Makes sure there's no smooth scrolling to avoid falsing the manual scroll detection
-        // during automatic scrolling of new messages to the bottom
-        scroll-behavior: unset;
-        &::-webkit-scrollbar { width: 6px; }
-        &::-webkit-scrollbar-track { background: transparent; }
-        &::-webkit-scrollbar-thumb { background: #DDD; border-radius: 6px; }
-
-        // Content inner container to align the message bottom using margin-top: auto
-        .content {
-          position: relative;
-          margin-top: auto;
-
-          // Customize the distance between messages
-          .in + .in, .out + .out { margin-top: 2px; }
-          .in + .out, .out + .in { margin-top: 12px; }
-        }
+        // Customize the distance between messages
+        .in + .in, .out + .out { margin-top: 2px; }
+        .in + .out, .out + .in { margin-top: 12px; }
       }
     }
   }

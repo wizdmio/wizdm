@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Group, User, Message, ChatService } from 'app/core/chat'; 
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -13,7 +13,7 @@ interface GroupData extends Group {
 @Component({
   selector: 'wm-chat-group',
   templateUrl: './group.component.html',
-  styleUrls: ['./group.component.css']
+  styleUrls: ['./group.component.scss']
 })
 export class ChatGroup  {
 
@@ -24,15 +24,15 @@ export class ChatGroup  {
 
     this.data$ = this.input$.pipe(
 
-      switchMap( conv => {
+      switchMap( group => {
 
-        const sender = conv && conv.recipients.find(id => id !== 'me');
+        const sender = group && group.recipients.find(id => id !== 'me');
 
-        const lastRead = conv && conv.lastRead['me'];
+        const lastRead = group && group.lastRead['me'];
         
         return chat.recipient( sender ).pipe(
 
-          switchMap( sender => chat.thread(conv.id).pipe(
+          switchMap( sender => chat.thread(group.id).pipe(
 
             map( thread => {
 
@@ -50,7 +50,7 @@ export class ChatGroup  {
 
               const unread = lastIndex >= 0 ? (receiveCount - lastIndex - 1) : receiveCount;
                             
-              return {...conv, sender, last, unread };
+              return {...group, sender, last, unread };
             })
           ))
         )
@@ -58,8 +58,8 @@ export class ChatGroup  {
     );  
   }
 
-  @Input() set conv(conv: Group) {
-    this.input$.next(conv);
+  @Input() set group(group: Group) {
+    this.input$.next(group);
   }
 
   time(timestamp: string) {

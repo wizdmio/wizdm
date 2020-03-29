@@ -160,6 +160,37 @@ $wm-theme: extend-material-theme($wm-theme,
   .mat-display-1, .mat-typography .mat-display-1 { margin: 0 0 #{$display-1}px; }
 }
 
+// Tweaks the mat-badge to better accomodate long texts
+@mixin tweak-mat-badge-size($size) {
+  .mat-badge-content {
+    min-width: $size;
+    width: auto;
+    padding: 0 4px;
+    border-radius: $size / 2;
+    box-sizing: border-box;
+  }
+}
+
+@mixin tweak-material-components() {
+  
+  // Minifies the menu on request
+  .mat-menu-panel.mini { min-width: unset !important; min-height: unset !important; }  
+
+  .mat-list-item.height-unset { height: unset !important; }
+
+  // Resets the padding on request
+  .mat-menu-panel.padding-0 .mat-menu-content,
+  .mat-dialog.padding-0 .mat-dialog-container,
+  .mat-expansion-panel.padding-0 .mat-expansion-panel-body { 
+    padding: 0;
+  }
+
+  // Fix the mat-badge to better accomodate long texts
+  .mat-badge-small { @include tweak-mat-badge-size($mat-badge-small-size); }
+  .mat-badge-medium { @include tweak-mat-badge-size($mat-badge-default-size); }
+  .mat-badge-large { @include tweak-mat-badge-size($mat-badge-large-size); }
+}
+
 // Create the theme styles for selected component only.
 @mixin custom-material-theme($theme, $config: null) {
 

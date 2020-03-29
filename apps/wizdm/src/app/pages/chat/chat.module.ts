@@ -5,10 +5,10 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { GtagModule } from '@wizdm/gtag';
+import { TeleportModule } from '@wizdm/teleport';
 import { RedirectModule } from '@wizdm/redirect';
+import { GtagModule } from '@wizdm/gtag';
 import { AvatarModule } from '@wizdm/elements/avatar';
 //import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/elements/readme';
@@ -16,6 +16,7 @@ import { DialogModule } from '@wizdm/elements/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
+import { ChatGroupModule } from './group';
 import { ChatMessageModule } from './message';
 import { ChatComposerModule } from './composer';
 import { ChatComponent } from './chat.component';
@@ -39,7 +40,8 @@ const routes: RoutesWithContent = [
     MatIconModule,
     MatButtonModule,
     MatListModule,
-    MatSidenavModule,
+    TeleportModule,
+    RedirectModule,
     GtagModule,
     //IconModule, 
     AvatarModule,
@@ -47,7 +49,7 @@ const routes: RoutesWithContent = [
     DialogModule,
     ActionbarModule,
     CanLeaveModule,
-    RedirectModule,
+    ChatGroupModule,
     ChatMessageModule,
     ChatComposerModule,
     ContentRouterModule.forChild(routes)

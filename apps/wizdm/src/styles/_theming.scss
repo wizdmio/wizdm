@@ -19,21 +19,14 @@
   // Ovverrides standard material typo margins
   @include tweak-material-typo-margins();
 
+  // Tweaks material compoment styles for improved flexibility
+  @include tweak-material-components();
+
   // Styles the elements according to the theme
   @include wm-elements-theme($theme);
 
   // Styles the theme colors globally
   @include wm-theme-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
-
-  // Tweaks material styles:
-  // Minifies the menu on request
-  .mat-menu-panel.mini { min-width: unset !important; min-height: unset !important; }  
-  // Resets the padding on request
-  .mat-menu-panel.padding-0 .mat-menu-content,
-  .mat-dialog.padding-0 .mat-dialog-container,
-  .mat-expansion-panel.padding-0 .mat-expansion-panel-body { 
-    padding: 0;
-  }
 
   // Applies a smooth scroll behaviour whenever supported
   html { scroll-behavior: smooth; }
