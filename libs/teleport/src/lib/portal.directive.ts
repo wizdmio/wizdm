@@ -1,20 +1,21 @@
-import { Directive, OnInit, OnDestroy, OnChanges, SimpleChanges, SimpleChange, Input, Output, EventEmitter, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, OnDestroy, OnChanges, SimpleChanges, SimpleChange, Input, Output, EventEmitter, TemplateRef, ViewContainerRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { observeOn } from 'rxjs/operators';
-import { Subscription, animationFrameScheduler } from 'rxjs';
+import { switchMap, observeOn } from 'rxjs/operators';
+import { Subscription, animationFrameScheduler, BehaviorSubject } from 'rxjs';
 import { TeleportService, TeleportPayload } from './teleport.service';
 
 @Directive({
   selector: 'ng-template[wmPortal]',
   exportAs: 'wmPortal'
 })
-export class PortalDirective extends NgTemplateOutlet implements OnInit, OnDestroy, OnChanges {
+export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnChanges {
 
+  private name$ = new BehaviorSubject<string>('');
   private firstChange: boolean = true;
   private sub: Subscription;
 
   /** The portal name */
-  @Input('wmPortal') name: string;
+  @Input('wmPortal') set name(name: string) { this.name$.next(name); }
 
   /** The portal context */
   @Input('wmPortalContext') ngTemplateOutletContext: Object|null;
@@ -30,12 +31,12 @@ export class PortalDirective extends NgTemplateOutlet implements OnInit, OnDestr
 
   constructor(private teleport: TeleportService, private host: TemplateRef<Object|null>, container: ViewContainerRef) { 
     super(container); 
-  }
-
-  ngOnInit() {
 
     // Builds the template observable
-    this.sub = this.teleport.beam(this.name).pipe(
+    this.sub = this.name$.pipe( 
+
+      // Beams the content with the given name
+      switchMap( name => this.teleport.beam(name) ),
 
       // Schedule on the next animation frame
       observeOn( animationFrameScheduler )
