@@ -1,0 +1,50 @@
+
+:host {
+  position: relative;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  width: 320px;
+
+  .wm-avatar {
+    width: 56px;
+    height: 56px;
+    margin-right: 6px;
+  }
+
+  // Fix the mat-badge to better accomodate long texts
+  .mat-badge-content {
+    min-width: 16px;
+    width: auto;
+    padding: 0 4px;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  .content {
+    position: relative;
+    overflow: hidden;
+
+    .name { width: 100%; margin: 0; }
+    .last {
+      width: 100%; 
+      opacity: 0.5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &.unread {
+        opacity: 1;
+        font-weight: 600;
+      }
+    }
+    .time { 
+      position: absolute; 
+      right: 10px; 
+      top: 0; 
+    }
+  }
+}

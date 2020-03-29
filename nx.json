@@ -58,6 +58,12 @@
     },
     "gtag": {
       "tags": []
+    },
+    "teleport": {
+      "tags": []
+    },
+    "actionlink": {
+      "tags": []
     }
   }
 }

@@ -1,1 +1,1 @@
-export * from './message-types';
+export * from './chat.service';

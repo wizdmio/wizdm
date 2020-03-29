@@ -12,6 +12,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { ReadmeModule } from '@wizdm/elements/readme';
+import { TeleportModule } from '@wizdm/teleport';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
@@ -41,6 +42,7 @@ const routes: RoutesWithContent = [
     MatStepperModule,
     MatProgressBarModule,
     ReadmeModule,
+    TeleportModule,
     ActionbarModule,
     CanLeaveModule,
     DialogModule,

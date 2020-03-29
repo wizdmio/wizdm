@@ -3,7 +3,7 @@
 <ng-container *wmContent="let msgs select 'profile'">
 
   <!-- Action Bar (projected in the top toolbar) -->
-  <ng-template wmActionbar let-mobile="isMobile">
+  <ng-template wmTeleport="actionbar" let-mobile="isMobile">
     <ng-container *ngIf="msgs.actions || {} as actions">
 
       <wm-action color="primary" [icon]="actions.signOut?.icon || 'exit_to_app'" wmRedirect="login?mode=signOut">

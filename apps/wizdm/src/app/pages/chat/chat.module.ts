@@ -4,6 +4,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { RedirectModule } from '@wizdm/redirect';
@@ -36,6 +38,8 @@ const routes: RoutesWithContent = [
     ScrollingModule,
     MatIconModule,
     MatButtonModule,
+    MatListModule,
+    MatSidenavModule,
     GtagModule,
     //IconModule, 
     AvatarModule,

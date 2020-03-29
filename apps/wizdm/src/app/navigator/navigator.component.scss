@@ -1,6 +1,7 @@
 :host {
   
   display: flex;
+  flex-flow: column;
   position: absolute;
   top: 0;
   left: 0;
@@ -47,19 +48,50 @@
     }
   }
 
+  .mat-sidenav { 
+    min-width: 240px; 
+    overflow: visible;
+
+    .sidenav-toggler {
+      // Centers the toggler vertically
+      position: absolute;
+      right: -20px; top: 50%;
+      // Keeps the toggler visible even while the panel is hidden
+      visibility: visible;
+      // Right side only shadow
+      box-shadow: 6px 0 6px -6px #333;
+    }
+  }
+
+  
+/*
+  .mat-sidenav-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+
+    //.mat-sidenav { background-color: transparent; }
+  }
+
   // Makes sure all the content containers are positioned
-  & > main {
+  //& > main {
+  /*.mat-sidenav-content {
 
     position: relative;
-    & > div { position: relative; }
+    //& > div { position: relative; }
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
   
     // Use the router-outlet as the plaeholder to compensate for toolbar height
-    router-outlet {
+    /*router-outlet {
 
       display: block;
       position: relative;
       width: 100%;
-    }
-  }
+    }*/
+  //}
 }
 

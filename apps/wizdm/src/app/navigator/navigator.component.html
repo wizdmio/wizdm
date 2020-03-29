@@ -2,12 +2,12 @@
 <ng-container *wmContent="let msgs select 'navigator'">
 
   <!-- Updates the Title and the description meta-tag -->
-  <header fxFlex="0 0 auto" [wmTitle]="msgs.title" [description]="msgs.description">
+  <header [wmTitle]="msgs.title" [description]="msgs.description">
 
     <mat-toolbar>
 
       <!-- Background w/ shadow to fade while blending in -->
-      <div class="background background-color" [@blendin]="!(menuToggler || menuVisible) && !(scrolled$ | async)"></div>
+      <div class="background background-color" [@blendin]="!(sideToggler || menuToggler || menuVisible) && !(scrolled$ | async)"></div>
 
       <!-- Navigation bar (1st row) -->
       <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
@@ -16,7 +16,8 @@
         <nav fxLayout="row" fxLayoutAlign="start center">
 
           <!-- Wizdm logo routing to home -->
-          <wm-logo color="primary" routerLink="."></wm-logo>  
+          <!--wm-logo color="primary" routerLink="."></wm-logo-->
+          <wm-logo color="primary" (click)="sidenav = !sidenav"></wm-logo>  
       
           <!-- Desktop navigation links -->
           <wm-navbar *ngIf="desktop && msgs.toolbar as toolbar" [menuItems]="signedIn ? toolbar.private : toolbar.public"></wm-navbar>
@@ -27,10 +28,13 @@
         <div fxLayout="row" fxLayoutAlign="end center">
 
           <!-- Action toolbar -->
-          <div *ngIf="actionbar$ | async as template" [@activate]="template">
-            <ng-container *ngTemplateOutlet="template; context: { isMobile: mobile }"></ng-container>
+          <div [@actionbar]="activateActions">
+
+            <!-- De-sugared wmPortat directive: Actions will be teleported here -->
+            <ng-template wmPortal="actionbar" [wmPortalContext]="{ isMobile: mobile }" (wmPortalTemplate)="activateActions = $event"></ng-template>
+
           </div>
-          
+
           <!-- Sign-in / User profile button -->
           <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
             
@@ -49,7 +53,7 @@
 
           <!-- Mobile menu toggler -->
           <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
-            <wm-toggler toggler-style="menu" [toggled]="menuToggler"></wm-toggler>
+            <wm-toggler toggler-style="more_vert" [toggled]="menuToggler"></wm-toggler>
           </button>
 
         </div>
@@ -66,27 +70,40 @@
 
   </header>
 
-  <!-- Viewport container with dynamic background -->
-  <main fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
+  <!-- Main Navigation Container with dynamic background -->
+  <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
 
-    <!-- Router Outlet stretched to fit -->
-    <div fxFlex="1 1 auto" fxLayout="column">
+    <!-- Side Navigation Panel -->
+    <mat-sidenav class="mat-elevation-z3" fixedInViewport [fixedTopGap]="navbar?.clientHeight || 0" 
+      [mode]="mobile ? 'over' : 'side'" [(opened)]="sideToggler">
 
-      <!-- Use the router-outlet as a placehoder to push the pages down by the height of the navbar -->
-      <router-outlet fxFlex="0 0 auto" [style.height.px]="navbar?.clientHeight || 0"></router-outlet>
-      
+      <!-- Side panel content is teleported here -->
+      <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)"></ng-template>
+
+      <!-- Side panel toggler to stay visible even when the panel is closed -->
+      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sidenavOn" @sidenav>
+        <wm-icon [icon]="'fas:fa-chevron-' + (sideToggler ? 'left' : 'right')"></wm-icon>
+      </button>
+        
+    </mat-sidenav>
+  
+    <!-- Page container to fit all the available space -->
+    <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" [style.margin-top.px]="navbar?.clientHeight || 0">
+
       <!-- Pages will fit here: use host: "style { flex 1 1 auto }" to fit all the available space -->
-    </div>
-    
-    <!-- Footer always on the bottom -->
-    <footer fxFlex="0 0 auto"></footer>
+      <div fxFlex="1 1 auto" fxLayout="column"><router-outlet></router-outlet></div>
 
-    <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
-    <wm-login-dlg maxWidth="95vw" wmActionLink="login" (activate)="login.open($event)" #login></wm-login-dlg>
+      <!-- Footer always on the content's bottom -->
+      <footer wm-footer fxFlex="0 0 auto"></footer>
 
-    <!-- Feedback form activated on 'contact' action link  @see navigator-router-module -->
-    <wm-feedback-dlg maxWidth="95vw" disableClose="true" wmActionLink="contact" (activate)="feedback.open($event)" #feedback></wm-feedback-dlg>
+    </mat-sidenav-content>
 
-  </main>
+  </mat-sidenav-container>
+
+  <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
+  <wm-login-dlg maxWidth="95vw" wmActionLink="login" (activate)="login.open($event)" #login></wm-login-dlg>
+
+  <!-- Feedback form activated on 'contact' action link  @see navigator-router-module -->
+  <wm-feedback-dlg maxWidth="95vw" disableClose="true" wmActionLink="contact" (activate)="feedback.open($event)" #feedback></wm-feedback-dlg>
   
 </ng-container>

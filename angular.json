@@ -21,25 +21,22 @@
             "assets": [
               "apps/wizdm/src/favicon.ico",
               "apps/wizdm/src/assets",
-              { 
-                "glob": "*.png", 
-                "input": "./node_modules/emoji-datasource-google/img/google/64/", 
-                "output": "/assets/emoji/" 
+              {
+                "glob": "*.png",
+                "input":
+                  "./node_modules/emoji-datasource-google/img/google/64/",
+                "output": "/assets/emoji/"
               },
-              { 
-                "glob": "20.png", 
-                "input": "./node_modules/emoji-datasource-google/img/google/sheets-clean/", 
-                "output": "/assets/emoji/sheets/" 
+              {
+                "glob": "20.png",
+                "input":
+                  "./node_modules/emoji-datasource-google/img/google/sheets-clean/",
+                "output": "/assets/emoji/sheets/"
               }
             ],
-            "styles": [
-              "apps/wizdm/src/styles.scss"
-            ],
+            "styles": ["apps/wizdm/src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "apps/wizdm/src/styles",
-                "libs/elements/src/lib"
-              ]
+              "includePaths": ["apps/wizdm/src/styles", "libs/elements/src/lib"]
             },
             "scripts": []
           },
@@ -96,14 +93,9 @@
             "polyfills": "apps/wizdm/src/polyfills.ts",
             "tsConfig": "apps/wizdm/tsconfig.spec.json",
             "karmaConfig": "apps/wizdm/karma.conf.js",
-            "styles": [
-              "apps/wizdm/src/styles.scss"
-            ],
+            "styles": ["apps/wizdm/src/styles.scss"],
             "scripts": [],
-            "assets": [
-              "apps/wizdm/src/favicon.ico",
-              "apps/wizdm/src/assets"
-            ]
+            "assets": ["apps/wizdm/src/favicon.ico", "apps/wizdm/src/assets"]
           }
         },
         "lint": {
@@ -113,9 +105,7 @@
               "apps/wizdm/tsconfig.app.json",
               "apps/wizdm/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -140,9 +130,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/wizdm-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -160,10 +148,7 @@
               "libs/animate/tsconfig.lib.json",
               "libs/animate/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/animate/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/animate/**"]
           }
         },
         "test": {
@@ -194,9 +179,7 @@
               "libs/content/tsconfig.lib.json",
               "libs/content/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -247,9 +230,7 @@
               "libs/connect/tsconfig.lib.json",
               "libs/connect/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -267,10 +248,7 @@
               "libs/redirect/tsconfig.lib.json",
               "libs/redirect/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/redirect/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/redirect/**"]
           }
         },
         "test": {
@@ -301,10 +279,7 @@
               "libs/elements/tsconfig.lib.json",
               "libs/elements/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/elements/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/elements/**"]
           }
         },
         "test": {
@@ -355,9 +330,7 @@
               "libs/markdown/tsconfig.lib.json",
               "libs/markdown/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -375,9 +348,7 @@
               "libs/prism/tsconfig.lib.json",
               "libs/prism/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -416,9 +387,7 @@
               "libs/editable/tsconfig.lib.json",
               "libs/editable/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -436,9 +405,7 @@
               "libs/doorbell/tsconfig.lib.json",
               "libs/doorbell/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "test": {
@@ -469,10 +436,7 @@
               "libs/paypal/tsconfig.lib.json",
               "libs/paypal/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/paypal/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/paypal/**"]
           }
         },
         "test": {
@@ -503,10 +467,7 @@
               "libs/stripe/tsconfig.lib.json",
               "libs/stripe/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/stripe/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/stripe/**"]
           }
         },
         "test": {
@@ -537,10 +498,7 @@
               "libs/ipinfo/tsconfig.lib.json",
               "libs/ipinfo/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/ipinfo/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/ipinfo/**"]
           }
         },
         "test": {
@@ -571,10 +529,7 @@
               "libs/iplist/tsconfig.lib.json",
               "libs/iplist/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/iplist/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/iplist/**"]
           }
         },
         "test": {
@@ -605,10 +560,7 @@
               "libs/gtag/tsconfig.lib.json",
               "libs/gtag/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/gtag/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/gtag/**"]
           }
         },
         "test": {
@@ -639,10 +591,7 @@
               "libs/emoji/tsconfig.lib.json",
               "libs/emoji/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/emoji/**"
-            ]
+            "exclude": ["**/node_modules/**", "!libs/emoji/**"]
           }
         },
         "test": {
@@ -651,6 +600,68 @@
             "main": "libs/emoji/src/test.ts",
             "tsConfig": "libs/emoji/tsconfig.spec.json",
             "karmaConfig": "libs/emoji/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "teleport": {
+      "projectType": "library",
+      "root": "libs/teleport",
+      "sourceRoot": "libs/teleport/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/teleport/tsconfig.lib.json",
+              "libs/teleport/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/teleport/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/teleport/src/test.ts",
+            "tsConfig": "libs/teleport/tsconfig.spec.json",
+            "karmaConfig": "libs/teleport/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "actionlink": {
+      "projectType": "library",
+      "root": "libs/actionlink",
+      "sourceRoot": "libs/actionlink/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/actionlink/tsconfig.lib.json",
+              "libs/actionlink/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/actionlink/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/actionlink/src/test.ts",
+            "tsConfig": "libs/actionlink/tsconfig.spec.json",
+            "karmaConfig": "libs/actionlink/karma.conf.js"
           }
         }
       },

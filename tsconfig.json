@@ -16,10 +16,12 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "app/*": ["apps/wizdm/src/app/*"],
+      "@wizdm/actionlink": ["libs/actionlink/src/index.ts"],
       "@wizdm/animate": ["libs/animate/src/index.ts"],
       "@wizdm/content": ["libs/content/src/index.ts"],
       "@wizdm/connect": ["libs/connect/src/index.ts"],
       "@wizdm/connect/*": ["libs/connect/src/lib/*"],
+      "@wizdm/teleport": ["libs/teleport/src/index.ts"],
       "@wizdm/redirect": ["libs/redirect/src/index.ts"],
       "@wizdm/elements/*": ["libs/elements/src/lib/*"],
       "@wizdm/markdown": ["libs/markdown/src/index.ts"],

@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { TeleportModule } from '@wizdm/teleport';
 import { LogoModule } from '@wizdm/elements/logo';
 import { TogglerModule } from '@wizdm/elements/toggler';
 import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { FlipModule } from '@wizdm/elements/flip';
-import { ActionLinkModule } from 'app/utils/action-link';
+import { ActionLinkModule } from '@wizdm/actionlink';
 import { LoginModule } from 'app/dialogs/login/login.module';
 import { FeedbackModule } from 'app/dialogs/feedback/feedback.module';
 import { NavbarModule } from './navbar/navbar.module'; 
@@ -19,13 +21,16 @@ import { NavRoutingModule } from './navigator-routing.module';
 import { NavigatorComponent } from './navigator.component';
 import { TitleDirective } from './title/title.directive';
 
+
 @NgModule({
   declarations: [ NavigatorComponent, TitleDirective ],
   imports: [
     CommonModule,
     FlexLayoutModule,
     MatToolbarModule,
+    MatSidenavModule,
     MatButtonModule,
+    TeleportModule,
     TogglerModule,
     LogoModule,
     IconModule, 

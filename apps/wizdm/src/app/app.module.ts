@@ -10,15 +10,16 @@ import { ConnectModule } from '@wizdm/connect';
 import { AuthModule } from '@wizdm/connect/auth';
 import { DatabaseModule } from '@wizdm/connect/database';
 import { StorageModule } from '@wizdm/connect/storage';
+import { TeleportModule } from '@wizdm/teleport';
 import { DoorbellModule } from '@wizdm/doorbell';
 import { ReadmeNavigator } from '@wizdm/elements/readme';
 import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpListModule } from '@wizdm/iplist';
 import { GtagModule } from '@wizdm/gtag';
+
 import { AppComponent } from './app.component';  
-//import { environment } from '../environments/environment';
-import { appname, content, emoji, router } from '../environments/common';
+import { appname, content, teleport, emoji, router } from '../environments/common';
 import { firebase, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
@@ -38,7 +39,9 @@ const routes: Routes = [
     // IP location (iplist.cc)
     IpListModule,   
     // Dynamic content (i18n)
-    ContentModule.init(content),    
+    ContentModule.init(content),
+    // Template teleport
+    TeleportModule.init(teleport),
     // Doorbell service (Feedback form)
     DoorbellModule.init(doorbell),
     // Google Analytics

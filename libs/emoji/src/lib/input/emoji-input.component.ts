@@ -62,7 +62,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
   @Input() placeholder: string;
 
   /** The input value */
-  get value(): string { return super.value; }
+  get value(): string { return super.value || ''; }
   @Input() set value(value: string) {
     // Avoids unecessary changes
     if(value === this.value) { return; }
@@ -216,6 +216,15 @@ export class EmojiInput extends EmojiText implements OnDestroy {
     this.zone.onStable.pipe( first() ).subscribe( () => async() ); 
   }
 
+  /** Selects the text between start and end when specified. 
+   * Sets the cursor position otherwise */
+  public select(start: number, end?: number): this {
+
+    this.start = Math.max(start, 0);
+    this.end = Math.min(end || this.start, this.value.length);
+    return this.sort().apply();
+  }
+
   /** Insert a new text at the current cursor position */
   public insert(key: string): this {
     // Skips empty insertions when unfruitful
@@ -298,6 +307,18 @@ export class EmojiInput extends EmojiText implements OnDestroy {
     return offset;
   }
 
+  /** Sorts the selection edges */ 
+  private sort(): this {
+    
+    if(this.start <= this.end) { return this; }
+
+    const tmp = this.start; 
+    this.start = this.end; 
+    this.end = tmp;
+
+    return this;
+  }
+
   /** Queries the current selection */
   private query(): this {
 
@@ -308,12 +329,10 @@ export class EmojiInput extends EmojiText implements OnDestroy {
       this.start = this.offset(sel.anchorNode, sel.anchorOffset);
       // Computes the end offset from the focus node
       this.end = sel.isCollapsed ? this.start : this.offset(sel.focusNode, sel.focusOffset);
-      // Sorts the edges
-      if(this.start > this.end) { const tmp = this.start; this.start = this.end; this.end = tmp; }
     }
     catch(e) { this.start = this.end = 0; /*console.error(e);*/ }
-    // Returns this for chaining purposes
-    return this;
+    // Sorts the edges and returns this for chaining purposes
+    return this.sort();
   }
 
   /** Applies the current selection back to the dom */

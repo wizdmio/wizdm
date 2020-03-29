@@ -2,7 +2,7 @@
 <ng-container *wmContent="let msgs select 'folder'">
       
   <!-- Action Bar (projected in the top toolbar) -->
-  <ng-template wmActionbar>
+  <ng-template wmTeleport="actionbar">
     <ng-container *ngIf="msgs.actions || {} as actions">
 
       <wm-action color="primary" [icon]="actions.delete?.icon || 'delete'" [disabled]="" (click)="dlgDelete.open()">

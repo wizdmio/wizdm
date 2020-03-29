@@ -1,25 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { ActionComponent } from './action/action.component';
-import { ActionbarDirective } from './actionbar.directive';
+import { ActionComponent } from './action.component';
 import { IconModule } from '@wizdm/elements/icon';
-import { DialogModule } from '@wizdm/elements/dialog';
 
 @NgModule({
   imports: [ 
     CommonModule, 
     MatButtonModule, 
-    IconModule,
-    DialogModule
+    IconModule
   ],
-  declarations: [ 
-    ActionComponent, 
-    ActionbarDirective 
-  ],
-  exports: [ 
-    ActionComponent, 
-    ActionbarDirective 
-  ]
+  declarations: [ ActionComponent ],
+  exports: [ ActionComponent ]
 })
 export class ActionbarModule { }

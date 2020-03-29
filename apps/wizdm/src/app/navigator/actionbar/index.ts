@@ -1,4 +1,2 @@
-export * from './actionbar.service';
-export * from './action/action.component';
-export * from './actionbar.directive';
+export * from './action.component';
 export * from './actionbar.module';

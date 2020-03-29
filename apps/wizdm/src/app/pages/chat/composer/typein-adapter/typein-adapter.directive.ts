@@ -1,13 +1,15 @@
-import { Directive, ElementRef, Optional, Self, Output, EventEmitter, OnDestroy, HostListener } from '@angular/core';
+import { Directive, ElementRef, Inject, Optional, Self, Output, EventEmitter, HostListener } from '@angular/core';
+import { DOCUMENT } from '@angular/common'; 
 import { EmojiInput } from '@wizdm/emoji/input';
 
+/** Typing In Adapter for texarea and EmojiInput */
 /** Typing In Adapter for texarea and EmojiInput */
 @Directive({
   selector: 'textarea[typein], wm-emoji-input[typein]'
 })
 export class TypeinAdapter {
 
-  constructor(private elref: ElementRef, @Optional() @Self() private emoji: EmojiInput) {}
+  constructor(@Inject(DOCUMENT) private document: Document, private elref: ElementRef, @Optional() @Self() private emoji: EmojiInput) {}
 
   /** The host element */
   private get element(): HTMLElement { return this.elref.nativeElement; }
@@ -18,6 +20,24 @@ export class TypeinAdapter {
     if(this.element.tagName !== 'TEXTAREA') { throw new Error('This element expected to be a textarea!'); }
     // Return the element as a textarea
     return this.element as HTMLTextAreaElement;
+  }
+
+  /** True whenever the element has focus */
+  private get hasFocus(): boolean { return this.element === this.document.activeElement; }
+
+  /** Returns the input value */
+  private get value(): string {
+    return (this.emoji || this.textarea).value;
+  }
+
+  private ensureFocus() {
+    // Do nothing whenever the elment already has focus
+    if(this.hasFocus) { return; }
+    // Focuses the element
+    this.element.focus(); 
+    // Moves teh selection at the end of the current text
+    if(this.emoji) { this.emoji.select(this.value.length); }
+    else { this.textarea.selectionStart = this.textarea.selectionEnd = this.value.length; }
   }
 
   // Hooks on the input event (textarea only)
@@ -31,7 +51,8 @@ export class TypeinAdapter {
 
   /** Types the given text in the textarea/emoji-input at the current cursor position */
   public typein(key: string) {
-
+    // Ensure the input has focus
+    this.ensureFocus();
     // Redirects the input to the EmojiInput.insert()
     if(this.emoji) { this.emoji.insert(key); }
     else {

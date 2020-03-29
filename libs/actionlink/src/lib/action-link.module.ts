@@ -4,7 +4,7 @@ import { ActionLinkObserver } from './action-link.service';
 
 @NgModule({
   declarations: [ ActionLinkDirective ],
-  exports: [  ActionLinkDirective ],
+  exports: [ ActionLinkDirective ],
   providers: [ ActionLinkObserver ]
 })
 export class ActionLinkModule { }

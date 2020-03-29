@@ -3,7 +3,7 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
 import { LanguageSelector } from 'app/utils/lang-selector';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
-import { ActionLinkObserver } from 'app/utils/action-link';
+import { ActionLinkObserver } from '@wizdm/actionlink';
 import { BackLinkObserver } from 'app/utils/back-link';
 import { NavigatorComponent } from './navigator.component';
 

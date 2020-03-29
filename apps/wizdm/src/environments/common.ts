@@ -1,5 +1,6 @@
 import { ExtraOptions } from '@angular/router';
 import { ContentConfig } from '@wizdm/content';
+import { TeleportConfig } from '@wizdm/teleport';
 import { EmojiConfig } from '@wizdm/emoji';
 import { firebase, doorbell } from "./secrets";
 
@@ -10,6 +11,10 @@ export const content: ContentConfig = {
   contentRoot: 'assets/i18n',
   supportedValues: ['en', 'it', 'ru'],
   defaultValue: 'en'
+};
+
+export const teleport: TeleportConfig = {
+  bufferSize: 1
 };
 
 export const emoji: EmojiConfig = {

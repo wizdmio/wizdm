@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { ActionLinkObserver } from '@wizdm/actionlink';
 import { Location } from '@angular/common';
-import { ActionLinkObserver } from '../action-link';
 import { Subscription } from 'rxjs';
 
 @Injectable({

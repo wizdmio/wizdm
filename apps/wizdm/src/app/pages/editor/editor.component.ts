@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentStreamer } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
 import { wmDocument } from '@wizdm/editable';
-import { ActionLinkObserver } from 'app/utils/action-link';
+import { ActionLinkObserver } from '@wizdm/actionlink';
 import { Observable, Subject, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { switchMap, debounceTime, map, tap } from 'rxjs/operators';
 import { $animations } from './editor.animations';
