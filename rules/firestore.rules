@@ -3,9 +3,9 @@ service cloud.firestore {
 
   match /databases/{database}/documents {
   
-  	// Check if the requesting user is signed in
-    function authenticated() {
-  		return request.auth.uid != null;
+		// Check if the requesting user is signed in
+		function authenticated() {
+			return request.auth.uid != null;
 		}
     
     // Check if the specified userId corresponds the requesting user
