@@ -26,7 +26,7 @@ service cloud.firestore {
       
       // Allows every signed-in user to create a new profile
       allow create: if authenticated();
-      
+       
     	// Allows only the user herself to update or delete the profile  
       allow update, delete: if itsMe(userId);
       
