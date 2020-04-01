@@ -1,79 +1,112 @@
+rules_version = '2';
 service cloud.firestore {
+
   match /databases/{database}/documents {
-
-  	// User profiles.
-  	// Allows everyone to read user data 
-    // Allows every signed-in user to create a new profile
-    // Allows only the user herself to update or delete the profile
-    match /users/{userId} {
-      allow read: if true;
-      allow create: if authenticated();
-      allow update, delete: if itsMe(userId);
-    }
-    
-    // Projects.
-    // Allows everyone to browse projects
-    // Allows every signed-in user to create new projects
-    // Allows only the project owner to update or delete them
-    match /projects/{project} {
-    	allow read: if true;
-    	allow create: if authenticated();
-      allow update, delete: if itsMe(resource.data.author);
-		}
-    
-    // Project's likes.
-    // Allows everyone to read project's likes
-    // Allows every signed-in user to likes other's projects
-    // Only the owner is allowed to delete it (deleting the user)
-    match /projects/{project}/likes/{shards} {
-    	allow read: if true;
-    	allow create, update: if authenticated();
-      allow delete: if itsMe(resource.data.author);
-		}
-    
-    // Project's likedBy.
-    // Allows everyone to read project's likedBy 
-    // Allows every signed-in user to likes other's projects
-    // Only the owner is allowed to unlike it (deleting itelf from likers)
-    match /projects/{project}/likedBy/{likers} {
-    	allow read: if true;
-    	allow create, update: if authenticated();
-      allow delete: if itsMe(resource.id);
-		}
-        
-    // User' uploads.
-    // Allows everyone to view the uploaded files
-    // Allows only the user herself to upload, modify or delete contents
-    match /users/{userId}/uploads/{upload} {
-    	allow read: if true;
-      //allow read: if isSignedIn();
-      allow create, update, delete: if itsMe(userId);
-    }
-    
-    // Conversations.
-    // Allows every signed-in user to read and create conversations
-    // Allows only the sender to update or delete them
-    match /conversations/{conversation} {
-    	allow read, create: if authenticated();
-      allow update, delete: if itsMe(resource.data.from);
-		}
-    
-    // Messages.
-    // Allows every signed-in user to read and create messages
-    // Allows only the sender to update or delete them
-    match /conversations/{conversation}/messages/{message} {
-    	allow read, create: if authenticated();
-      allow update, delete: if itsMe(resource.data.from);
-		}
-
-		// Check if the requesting user is signed in
+  
+  	// Check if the requesting user is signed in
     function authenticated() {
   		return request.auth.uid != null;
 		}
     
-    // Check if the specified userId corresponds the the requesting user
+    // Check if the specified userId corresponds the requesting user
     function itsMe(userId) {
   		return request.auth.uid == userId;
 		}
+    
+    // Gets the specified user's id profile 
+    //function profile(userId) {
+    //	return get(/databases/$(database)/documents/users/$(userId)).data;
+    //}
+
+  	// User profiles.
+  	match /users/{userId} {
+    
+    	// Allows everyone to read user data   
+      allow read: if true;
+      
+      // Allows every signed-in user to create a new profile
+      allow create: if authenticated();
+      
+    	// Allows only the user herself to update or delete the profile  
+      allow update, delete: if itsMe(userId);
+      
+      // User' uploads.
+    	match /uploads/{upload} {
+        
+        // Allows everyone to view the uploaded files
+        allow read: if true;
+        
+    		// Allows only the user herself to upload, modify or delete contents
+        allow create, update, delete: if itsMe(userId);
+      }
+    }
+    
+    // Conversations (group of users messaging).
+    match /conversations/{convId} {
+    
+    	// Allow every signed-in user to create new conversations
+    	allow create: if authenticated();
+      
+      // Allow read/list of conversations only by recipients
+    	allow read: if resource.data.recipients[request.auth.id] != null;
+      
+      // Allow delete/modify only by the conversation's owner (first recipient)
+      allow update, delete: if itsMe(resource.data.recipients[0]);
+      
+      // Messages.
+      match /messages/{msgId} {
+      
+      	// Gets the current conversation data
+        function conversation() {
+          return get(/databases/$(database)/documents/conversations/$(convId)).data;
+        }
+      
+      	// Allows every signed-in user to read and create messages
+        allow read, create: if conversation().recipients[request.auth.id] != null;
+        
+        // Allows only the sender to update and delete a message 
+        allow update, delete: if itsMe(resource.data.sender);
+      }
+		}
+    
+    
+    // Projects.
+    match /projects/{prjId} {
+    
+    	// Allows everyone to browse projects
+    	allow read: if true;
+    
+    	// Allows signed-in users to create new projects
+      allow create: if authenticated();
+    
+    	// Allows only the project owner to update or delete them
+      allow update, delete: if itsMe(resource.data.author);
+      
+      // Project's likes.
+    	match /likes/{shard} {
+      
+      	// Allows everyone to read project's likes
+        allow read: if true;
+        
+        // Allows signed-in users to like other's projects
+        allow create, update: if authenticated();
+        
+        // Only the owner is allowed to delete it (deleting the project)
+        allow delete: if itsMe(resource.data.author);
+      }
+      
+      // Project's likedBy.
+      match /likedBy/{likerId} {
+        
+        // Allows everyone to read project's likedBy 
+        allow read: if true;
+        
+        // Allows signed-in users to like other's projects
+        allow create, update: if authenticated();
+        
+        // Only the owner is allowed to unlike it (deleting itelf from likers)
+        allow delete: if itsMe(likerId);
+      }
+    }    
   }
 }
