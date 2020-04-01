@@ -22,7 +22,7 @@ service cloud.firestore {
   	match /users/{userId} {
     
     	// Allows everyone to read user data   
-      allow read: if true;
+      allow read;
       
       // Allows every signed-in user to create a new profile
       allow create: if authenticated();
@@ -34,7 +34,7 @@ service cloud.firestore {
     	match /uploads/{upload} {
         
         // Allows everyone to view the uploaded files
-        allow read: if true;
+        allow read;
         
     		// Allows only the user herself to upload, modify or delete contents
         allow create, update, delete: if itsMe(userId);
@@ -74,7 +74,7 @@ service cloud.firestore {
     match /projects/{prjId} {
     
     	// Allows everyone to browse projects
-    	allow read: if true;
+    	allow read;
     
     	// Allows signed-in users to create new projects
       allow create: if authenticated();
@@ -86,7 +86,7 @@ service cloud.firestore {
     	match /likes/{shard} {
       
       	// Allows everyone to read project's likes
-        allow read: if true;
+        allow read;
         
         // Allows signed-in users to like other's projects
         allow create, update: if authenticated();
@@ -99,7 +99,7 @@ service cloud.firestore {
       match /likedBy/{likerId} {
         
         // Allows everyone to read project's likedBy 
-        allow read: if true;
+        allow read;
         
         // Allows signed-in users to like other's projects
         allow create, update: if authenticated();
