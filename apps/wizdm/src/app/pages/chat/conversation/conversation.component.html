@@ -1,0 +1,18 @@
+
+<ng-container>
+
+  <div fxFlex="0 0 auto"> <!--[matBadge]="data.unread" [matBadgeHidden]="!data.unread" matBadgeSize="small"-->
+    <wm-avatar [src]="(sender$ | async)?.img" color="primary"></wm-avatar>
+  </div>
+
+  <div fxFlex="1 1 auto" class="content">
+
+    <div class="name mat-title">{{ (sender$ | async)?.name || '\n' }}</div>
+
+    <div class="last mat-body" [wm-emoji-text]="(last$ | async)?.body || '\n'"></div>
+
+    <div class="time mat-small">{{ time((last$ | async)?.created) }}</div>
+
+  </div>
+
+</ng-container>

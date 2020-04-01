@@ -1,6 +1,6 @@
 import { Component, OnDestroy, Output, EventEmitter, Input, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { wmMember } from 'app/core/member';
+import { dbUser } from 'app/core/member';
 import { Subscription } from "rxjs";
 import moment, { defaultFormat } from 'moment';
 
@@ -44,7 +44,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
 
   ngOnDestroy() { !!this.sub && this.sub.unsubscribe(); }
 
-  @Input('value') set formValue(value: wmMember) { 
+  @Input('value') set formValue(value: dbUser) { 
 
      if(!value) { return; }
 
@@ -62,13 +62,13 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
     return gender && gender.icon;
   }
 
-  public submit(value: wmMember) {
+  public submit(value: dbUser) {
 
     // Birthday: turns the moment object to a string
     const birth = moment.isMoment(value.birth) ? (value.birth as any).format(defaultFormat) : '';
     // Emits the update
-    this.formValueChange.emit({ ...value, birth } as wmMember);
+    this.formValueChange.emit({ ...value, birth } as dbUser);
   }
 
-  @Output('valueChange') formValueChange = new EventEmitter<wmMember>();
+  @Output('valueChange') formValueChange = new EventEmitter<dbUser>();
 }

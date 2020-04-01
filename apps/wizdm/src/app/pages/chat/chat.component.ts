@@ -3,10 +3,16 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { MediaObserver } from '@angular/flex-layout';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { of, Observable, BehaviorSubject } from 'rxjs';
-import { first, startWith, map, switchMap, distinctUntilChanged, tap } from 'rxjs/operators';
-import { ChatService, Group, Message } from 'app/core/chat';
+import { first, startWith, map, flatMap, switchMap, distinctUntilChanged, tap } from 'rxjs/operators';
+import { DatabaseService, DatabaseDocument, DatabaseCollection, dbCommon } from '@wizdm/connect/database';
+import { Member, dbUser } from 'app/core/member';
+import { ChatService, dbConversation, dbMessage } from 'app/core/chat';
 import { runInZone } from 'app/utils/common';
 import { $animations } from './chat.animations';
+
+export interface dbChatter extends dbUser {
+  lastConversation?: string;
+}
 
 @Component({
   selector: 'wm-chat',
@@ -14,16 +20,15 @@ import { $animations } from './chat.animations';
   styleUrls: ['./chat.component.scss'],
   animations: $animations
 })
-export class ChatComponent implements AfterViewInit {
+export class ChatComponent extends DatabaseCollection<dbConversation> implements AfterViewInit {
 
   @ViewChild(CdkScrollable) scroller: CdkScrollable;
 
   public   scrolled$: Observable<boolean> = of(false);
-  readonly groups$:  Observable<Group[]>;
-  readonly group$:  Observable<Group>;
-  readonly messages$:  Observable<Message[]>;
+  readonly conversations$:  Observable<dbConversation[]>;
+  readonly messages$:  Observable<dbMessage[]>;
 
-  private groupId$ = new BehaviorSubject<string>('0');
+  private conversationId$: BehaviorSubject<string>;
 
   private  autoScroll: boolean = true;
   public text = "";
@@ -31,50 +36,66 @@ export class ChatComponent implements AfterViewInit {
   private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
   public keys: string[];
 
-  // Media queries to switch between desktop/mobile views
-  public get mobile(): boolean { return this.media.isActive('xs'); }
-  public get desktop(): boolean { return !this.mobile; }
-
-  public get groupId(): string { return this.groupId$.value; }
-  public set groupId(id: string) { this.groupId$.next(id); }
+  private thread: DatabaseCollection<dbMessage>;
   
-  constructor(@Inject(EmojiRegex) private regex: RegExp, 
-                                  private media: MediaObserver, 
-                                  private chat: ChatService,  
-                                  private zone: NgZone) {
+  constructor(db: DatabaseService, private user: Member<dbChatter>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
 
-    this.groups$ = chat.groups$;
+    super(db, 'conversations');
 
-    this.group$ = this.groupId$.pipe( switchMap( id => this.groups$.pipe(
-      map( convs => convs.find( conv => conv.id === id ))
-    )));
+    this.conversationId$ = new BehaviorSubject<string>(this.user.data.lastConversation || '');
 
-    this.messages$ = this.group$.pipe(
+    // Streams all the conversations where recipients[] contains the user's id
+    this.conversations$ = this.stream( qf => qf.where('recipients', 'array-contains', this.user.id) );
 
-      switchMap( conv => conv && conv.thread$ || of([]) ),
+    // Streams up to the last 50 messages
+    this.messages$ = this.conversationId$.pipe( 
 
-      tap( thread => this.autoScroll && this.afterRender( () => {
-/*
-        const lastMsg = thread[thread.length-1];
+      distinctUntilChanged(),
 
-        if(lastMsg.sender !== 'me') { 
+      switchMap( id => {
 
-          this.chat.lastRead(this.groupId, 'me', lastMsg);
-        }
-*/
-        this.scrollToBottom();
-      }))
+        const doc = this.document(id);
+
+        return doc.exists().then( exists => {
+
+          if(exists) { return doc.get(); }
+
+          return this.get( qf => qf.limit(1) ).then( one => one[0] );
+
+        });
+      }),
+
+      tap( conv => this.conversationId$.next(conv.id) ),
+
+      map( conv => this.thread = this.db.collection<dbMessage>(`conversations/${conv.id}/messages`) ),
+      
+      switchMap( thread => thread.stream( qf => qf.orderBy('created', 'asc').limitToLast(50) )),
+  
+      tap( msgs => {
+
+        this.autoScroll && this.afterRender( () => this.scrollToBottom() );
+  
+        //console.log("last message:",lastMsg);
+      })
     );
 
     this.keys = this.sortFavorites(this.stats);
-
-    this.chat.receive();
   }
 
   ngAfterViewInit() {
     // Replaces the scrolled observable once the cdkScrollable is available
     this.scrolled$ = this.observeScroll();
   }  
+
+  public trackById(msg: dbMessage) {
+    return msg.id;
+  }
+
+  public get conversationId(): string { return this.conversationId$.value; }
+
+  public selectConversation(id: string) { 
+    this.conversationId$.next(id); 
+  }
 
   /** Returns an observable telling if the view has been scrolled */
   private observeScroll(): Observable<boolean> {
@@ -137,14 +158,21 @@ export class ChatComponent implements AfterViewInit {
 
   /** Send the current message */
   public send(body: string) {
-    // Enables automatic scrolling
-    this.autoScroll = true;
+    
     // Updates the key usage statistics
     this.updateFavorites(body);
-    // Sends the message
-    this.chat.send({ body, sender: 'me' }, this.groupId); 
-    // Resets the last message text
-    this.text = ""; 
+    
+    // Sends the message adding it to the current conversation thread
+    this.thread.add({ body, sender: this.user.id }).then( () => {
+
+      // Enables automatic scrolling
+      this.autoScroll = true;
+
+      // Resets the last message text
+      this.text = ""; 
+    });
+    //this.chat.send({ body, sender: 'me' }, this.conversationId); 
+    
     // Prevents default
     return false;
   }

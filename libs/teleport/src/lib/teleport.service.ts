@@ -1,4 +1,4 @@
-import { Injectable, TemplateRef, InjectionToken, Inject } from '@angular/core';
+import { Injectable, TemplateRef, InjectionToken, Inject, Optional } from '@angular/core';
 import { filter, map, shareReplay } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
 
@@ -17,15 +17,17 @@ export interface TeleportPayload {
   data?: any;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class TeleportService {
 
   private inner$ = new BehaviorSubject<TeleportInstance>(null);
   readonly beam$: Observable<TeleportInstance>;
 
-  constructor(@Inject(TeleportConfigToken) config: TeleportConfig) { 
+  constructor(@Optional() @Inject(TeleportConfigToken) config: TeleportConfig) { 
 
-    this.beam$ = this.inner$.pipe( shareReplay(config.bufferSize || 1) );
+    this.beam$ = this.inner$.pipe( shareReplay(config?.bufferSize || 1) );
   }
 
   public beam(name: string): Observable<TeleportPayload> {

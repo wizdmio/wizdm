@@ -18,7 +18,7 @@ export class DatabaseService extends DatabaseApplication {
    * @param id the id of the document to be retrived
    */
   public document<T>(path: string|DocumentRef): DatabaseDocument<T> {
-    return new DatabaseDocument<T>(this, this.doc(path) );
+    return new DatabaseDocument<T>(this, path);
   }
 
   /**
@@ -26,7 +26,7 @@ export class DatabaseService extends DatabaseApplication {
    * @param path the path to the collection
    */
   public collection<T>(path: string|CollectionRef): DatabaseCollection<T> {
-    return new DatabaseCollection<T>(this, this.col(path));
+    return new DatabaseCollection<T>(this, path);
   }
 
   /**
@@ -34,7 +34,7 @@ export class DatabaseService extends DatabaseApplication {
    * @param path the path to the collection
    */
   public pagedCollection<T>(path: string|CollectionRef): PagedCollection<T> {
-    return new PagedCollection<T>(this, this.col(path) );
+    return new PagedCollection<T>(this, path);
   }
 
   /**
@@ -43,6 +43,6 @@ export class DatabaseService extends DatabaseApplication {
    * @param shards number of shards to share the counting with
    */
   public counter(path: string|CollectionRef, shards: number = 3): DistributedCounter {
-    return new DistributedCounter(this, this.col(path), shards);
+    return new DistributedCounter(this, path, shards);
   }
 }

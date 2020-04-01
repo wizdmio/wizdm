@@ -24,7 +24,7 @@ export let $animations = [
     ])
   ]),
 
-  trigger('sidenav', [
+  trigger('sidenavOn', [
     transition(':enter',[
       style({ opacity: 0, transform: 'translateX(-20px)' }),
       animate('450ms cubic-bezier(0.8, -0.5, 0.2, 1.5)')
@@ -34,5 +34,18 @@ export let $animations = [
         style({ opacity: 0, transform: 'translateX(-20px)' })
       )
     )
-  ])
+  ]),
+/*
+  trigger('sidenavOpen', [
+    transition('* => *', group([ 
+      query('@transform', animateChild(), { optional: true }  ),
+      query('@sideToggler', animateChild(), { optional: true} )
+    ]))
+  ]),
+
+  trigger('sideToggler', [
+    state('true', style({ transform: 'none' })),
+    state('false', style({ transform: 'translateX(8px) rotateZ(180deg)'})),
+    transition('false <=> true', animate('450ms ease'))
+  ]),*/
 ];

@@ -4,21 +4,23 @@ import { DatabaseService, DatabaseDocument, DatabaseCollection, dbCommon } from 
 import { Observable, Subscription, of } from 'rxjs';
 import { switchMap, tap, map } from 'rxjs/operators';
 
-export interface wmMember extends dbCommon {
-  name?    : string,
-  email?   : string,
-  photo?   : string,
-  phone?   : string,
-  birth?   : string,
-  gender?  : string,
-  motto?   : string,
-  lang?    : string
+export interface dbUser extends dbCommon {
+  name?    : string;
+  email?   : string;
+  photo?   : string;
+  phone?   : string;
+  birth?   : string;
+  gender?  : string;
+  motto?   : string;
+  lang?    : string;
+
+  searchIndex?   : string[];
 };
 
 @Injectable({
   providedIn: 'root'
 })
-export class Member<T extends wmMember = wmMember> extends DatabaseDocument<T> implements OnDestroy {
+export class Member<T extends dbUser = dbUser> extends DatabaseDocument<T> implements OnDestroy {
 
   /** Current user profile snapshot */
   private snapshot: T = null;
@@ -68,16 +70,6 @@ export class Member<T extends wmMember = wmMember> extends DatabaseDocument<T> i
     );
   }
 
-  // Extends the delete function to wipe the bookmarks too
-  /*public delete(): Promise<void> {
-
-    // Wipes the bookmarks first
-    // DONT FORGET TO ADD THE SECURITY RULES TO LET THE USER WIPE THE BOOKMARK COLLECTION
-    return this.bookmarks.wipe()
-      // Deletes the profile document last
-      .then( () => super.delete() );
-  }*/
-
   /** Creates the user profile from a User object */
   public register(user: User): Promise<void> {
 
@@ -91,10 +83,55 @@ export class Member<T extends wmMember = wmMember> extends DatabaseDocument<T> i
       .then( exists => !exists ? this.set({
           name: user.displayName,
           email: user.email,
-          photo: user.photoURL
+          photo: user.photoURL,
+          searchIndex: this.searchIndex( user.displayName )
         } as T) : null
       );
-  }  
+  }
+
+  // Extends the delete function to wipe the bookmarks too
+  /*public delete(): Promise<void> {
+
+    // Wipes the bookmarks first
+    // DONT FORGET TO ADD THE SECURITY RULES TO LET THE USER WIPE THE BOOKMARK COLLECTION
+    return this.bookmarks.wipe()
+      // Deletes the profile document last
+      .then( () => super.delete() );
+  }*/
+
+  // Extends the update function to include the search index
+  public update(data: T): Promise<void> {
+
+    // Computes the new search index
+    const searchIndex = this.searchIndex(data.name);
+    // Updates the profile
+    return super.update({...data, searchIndex });
+  }
+
+  /** Build a simple search index based on the user name */
+  private searchIndex(name: string): string[] {
+
+    if(!name) { return [""]; }
+
+    return name
+      .toLowerCase()
+      .replace(/^\s+|\s+$/g,'')
+      .split(/\s/)
+      .reduce( (out, token) => {
+        // Splits the token in UTF-16 compatible substrings.
+        let sub = "";        
+        for(let ch of token) {
+
+          sub += ch;
+          // Adds the subscring provided is unique
+          if(out.findIndex( index => index === sub ) < 0) {
+            out.push(sub);
+          }
+        }
+
+        return out;
+      }, []);
+  }
 
   // BOOKMARKS handling
 

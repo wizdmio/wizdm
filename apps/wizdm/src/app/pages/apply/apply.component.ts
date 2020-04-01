@@ -6,7 +6,7 @@ import { ContentStreamer } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
 import { wmDocument } from '@wizdm/editable';
 import { ProjectService } from 'app/core/project';
-import { Member, wmMember } from 'app/core/member';
+import { Member, dbUser } from 'app/core/member';
 import { EditableConverter } from 'app/utils/doc-converter';
 import { $animations } from './apply.animations';
 import { Observable, Subscription } from 'rxjs';
@@ -25,7 +25,7 @@ export interface wmApplication {
   comments?      : string  // Additional comments
 }
 
-interface userApply extends wmMember {
+interface userApply extends dbUser {
   lastApplication?: wmApplication,
 }
 

@@ -14,7 +14,12 @@ export interface dbCommon {
 /** Document object in the database, created by the DatabaseService */
 export class DatabaseDocument<T extends dbCommon> {
 
-  constructor(readonly db: DatabaseApplication, public ref: DocumentRef) {}
+  /** The internal document reference */
+  public ref: DocumentRef;
+
+  constructor(readonly db: DatabaseApplication, ref: string|DocumentRef) {
+    this.ref = db?.doc(ref);
+  }
 
   /** Returns the document object id */
   public get id(): string { return this.ref.id; }
@@ -29,12 +34,12 @@ export class DatabaseDocument<T extends dbCommon> {
 
   /** Returns a child collection */
   public collection<C extends dbCommon>(path: string): DatabaseCollection<C> {
-    return this.db.collection<C>( this.ref.collection(path) );
+    return this.db.collection<C>( path && this.ref.collection(path) );
   }
 
   /** Returns a child distributed counter */
   public counter(path: string, shards?: number): DistributedCounter {
-    return this.db.counter( this.ref.collection(path), shards);
+    return this.db.counter( path && this.ref.collection(path), shards);
   }
   
   /**
@@ -75,6 +80,9 @@ export class DatabaseDocument<T extends dbCommon> {
 
   /** Check for document existance */
   public exists(): Promise<boolean> {
+
+    if(!this.ref) { return Promise.resolve(false); }
+    
     return this.ref.get(undefined)
       .then(snap => snap.exists);
   }

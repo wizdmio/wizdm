@@ -6,7 +6,12 @@ import { map, mergeMap, expand, takeWhile } from 'rxjs/operators';
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends dbCommon> {
 
-  constructor(readonly db: DatabaseApplication, public ref: CollectionRef) {}
+  /** The internal collection reference */
+  public ref: CollectionRef;
+
+  constructor(readonly db: DatabaseApplication, ref: string|CollectionRef) {
+    this.ref = db?.col(ref);
+  }
 
   /** Returns the collection object id */
   public get id(): string { return this.ref.id; }
@@ -19,7 +24,7 @@ export class DatabaseCollection<T extends dbCommon> {
 
   /** Helper returing the collection reference for internal use */
   public col(qf?: QueryFn) {
-    return this.db.afs.collection(this.ref, qf);
+    return this.ref && this.db.afs.collection(this.ref, qf);
   }
 
   /**
@@ -28,7 +33,7 @@ export class DatabaseCollection<T extends dbCommon> {
    * an automatically-generated unique ID will be used for the refurned DatabaseDocument
    */
   public document<D extends dbCommon = T>(path?: string): DatabaseDocument<D> {
-   return this.db.document<D>( this.ref.doc(path) );
+   return this.db.document<D>( path && this.ref.doc(path) );
   }
 
   /**

@@ -3,8 +3,4 @@
 <ng-content></ng-content>
 
 <!-- inkbar -->
-<div class="inkbar"
-     [style.height.px]="height" 
-     [@slide]="animate"
-     (@slide.done)="done.emit(pos)">
-</div>
+<div class="inkbar" [@slide]="animate" (@slide.done)="done.emit(pos)"></div>

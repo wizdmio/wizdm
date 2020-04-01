@@ -7,6 +7,7 @@ export interface GtagConfig {
   configInfo?: ConfigParams;
   setParams?: CustomParams; // gtag('set', setParams)
   moreIds?: string[];
+  timeout?: number;
 }
 
 export const GtagConfigToken = new InjectionToken<GtagConfig>('wizdm.gtag.config');

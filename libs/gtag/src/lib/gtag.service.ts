@@ -1,12 +1,13 @@
-import { Injectable, InjectionToken, Inject } from '@angular/core';
+import { Injectable, InjectionToken, Inject, Optional, NgZone } from '@angular/core';
 import { Gtag, EventParams, CustomParams, Product, Promotion, Action, Content } from './gtag-definitions';
+import { GtagConfigToken, GtagConfig } from './gtag-factory';
 
 export const GTAG = new InjectionToken<Gtag>('wizdm.gtag.instance');
 
 @Injectable()
 export class GtagService {
 
-  constructor(@Inject(GTAG) private gtag: Gtag) { }
+  constructor(@Inject(GTAG) private gtag: Gtag, @Optional() @Inject(GtagConfigToken) private config: GtagConfig, private zone: NgZone) { }
 
   /** @see: https://developers.google.com/analytics/devguides/collection/gtagjs/setting-values */
   public set(params: CustomParams): void {
@@ -16,15 +17,15 @@ export class GtagService {
   /** @see: https://developers.google.com/analytics/devguides/collection/gtagjs/events */
   public event(action: string, params?: EventParams): Promise<void> {
     // Wraps the event call into a Promise
-    return new Promise( (resolve, reject) => {
+    return this.zone.runOutsideAngular( () => new Promise( (resolve, reject) => {
       try { 
         // Triggers a 1s time-out timer 
-        const tmr = setTimeout( () => reject( new Error('gtag call timed-out')), 3000 );
+        const tmr = setTimeout( () => reject( new Error('gtag call timed-out')), this.config?.timeout || 10000 );
         // Performs the event call resolving with the event callback
         this.gtag('event', action, { ...params, event_callback: () => { clearTimeout(tmr); resolve(); }}); } 
       // Rejects the promise on errors
       catch(e) { reject(e); }
-    });
+    }));
   }
 
   /** @see: https://developers.google.com/analytics/devguides/collection/gtagjs/pages */

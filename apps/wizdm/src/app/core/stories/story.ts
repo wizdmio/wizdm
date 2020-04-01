@@ -3,7 +3,7 @@ import { map, tap, flatMap, throttleTime, distinctUntilChanged } from 'rxjs/oper
 import { DatabaseDocument, dbCommon } from '@wizdm/connect/database';
 import { DatabaseService } from '@wizdm/connect/database';
 import { wmDocument, wmItem, wmFigure, wmImage } from '@wizdm/editable';
-import { Member, wmMember } from '../member';
+import { Member, dbUser } from '../member';
 
 export interface wmStory extends wmDocument, dbCommon {
   
@@ -22,7 +22,7 @@ export class Story extends DatabaseDocument<wmStory> {
   readonly mine$: Observable<boolean>;
   
   /** The author user member object */
-  readonly author$: Observable<wmMember>;
+  readonly author$: Observable<dbUser>;
 
   /** Story title, if any */
   readonly title$: Observable<string>;
@@ -68,7 +68,7 @@ export class Story extends DatabaseDocument<wmStory> {
         // Short-circuits on the current user
         of(this.member.data) :  
         // Streams the other user member otherwise
-        this.db.document<wmMember>(`/users/${author}`).stream() 
+        this.db.document<dbUser>(`/users/${author}`).stream() 
       )
     );
 

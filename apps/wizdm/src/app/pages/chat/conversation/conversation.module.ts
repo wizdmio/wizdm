@@ -2,17 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatBadgeModule } from '@angular/material/badge';
+import { EmojiTextModule } from '@wizdm/emoji/text';
 import { AvatarModule } from '@wizdm/elements/avatar';
-import { ChatGroup } from './group.component';
+import { ChatConversation } from './conversation.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FlexLayoutModule,
     MatBadgeModule,
+    EmojiTextModule,
     AvatarModule
   ],
-  declarations: [ ChatGroup ],
-  exports: [ ChatGroup ],
+  declarations: [ ChatConversation ],
+  exports: [ ChatConversation ],
 })
-export class ChatGroupModule { }
+export class ChatConversationModule { }

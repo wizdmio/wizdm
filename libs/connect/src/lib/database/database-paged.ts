@@ -36,7 +36,7 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   protected _done$ = new BehaviorSubject<boolean>(false);
   public done$: Observable<boolean> = this._done$.asObservable();
 
-  constructor(db: DatabaseApplication, ref: CollectionRef) { 
+  constructor(db: DatabaseApplication, ref: string|CollectionRef) { 
     super(db, ref);
   }
 

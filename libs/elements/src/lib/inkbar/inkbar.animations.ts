@@ -9,8 +9,9 @@ export let $animations = [
       style({
         left: '{{ left }}',
         top: '{{ top }}',
-        width: '{{ width }}' 
-      }), { params: { left: '*', top: '*', width: 0 } }
+        width: '{{ width }}',
+        height: '{{ height }}'  
+      }), { params: { left: '*', top: '*', width: 0, height: 0 } }
     ),
     transition('* => *', animate($timing))
   ])

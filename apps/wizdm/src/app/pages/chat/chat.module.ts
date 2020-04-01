@@ -16,7 +16,7 @@ import { DialogModule } from '@wizdm/elements/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
-import { ChatGroupModule } from './group';
+import { ChatConversationModule } from './conversation';
 import { ChatMessageModule } from './message';
 import { ChatComposerModule } from './composer';
 import { ChatComponent } from './chat.component';
@@ -49,7 +49,7 @@ const routes: RoutesWithContent = [
     DialogModule,
     ActionbarModule,
     CanLeaveModule,
-    ChatGroupModule,
+    ChatConversationModule,
     ChatMessageModule,
     ChatComposerModule,
     ContentRouterModule.forChild(routes)

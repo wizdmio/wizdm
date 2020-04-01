@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { User } from '@wizdm/connect/auth';
 import { StorageService } from '@wizdm/connect/storage';
-import { Member, wmMember } from 'app/core/member';
+import { Member, dbUser } from 'app/core/member';
 import { DialogRef } from '@wizdm/elements/dialog';
 import moment from 'moment';
 
@@ -12,11 +12,11 @@ import moment from 'moment';
 })
 export class ProfileComponent {
 
-  private newProfile: wmMember;
+  private newProfile: dbUser;
 
   constructor(private member: Member, private storage: StorageService) {}
 
-  public get profileData(): wmMember { return this.member.data; }
+  public get profileData(): dbUser { return this.member.data; }
 
   public get profilePhoto(): string { return this.profileData.photo || ''; }
 
@@ -26,7 +26,7 @@ export class ProfileComponent {
 
   public get emailVerified(): boolean { return this.authUser.emailVerified || false; }
 
-  public set profileData(user: wmMember) { 
+  public set profileData(user: dbUser) { 
     
     this.newProfile = user;
   }

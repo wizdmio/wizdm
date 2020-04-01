@@ -49,11 +49,11 @@ export abstract class DatabaseApplication {
   }
 
   public doc(ref: string|DocumentRef): DocumentRef {
-    return typeof ref === 'string' ? this.firestore.doc(ref) : ref;
+    return !!ref ? (typeof ref === 'string' ? this.firestore.doc(ref) : ref) : null;
   }
 
   public col(ref: string|CollectionRef): CollectionRef {
-    return typeof ref === 'string' ? this.firestore.collection(ref) : ref;
+    return !!ref ? (typeof ref === 'string' ? this.firestore.collection(ref) : ref) : null;
   }
 
   /** Database Objects Factories */

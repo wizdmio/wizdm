@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Message } from 'app/core/chat';
+import { Member, dbUser } from 'app/core/member';
+import { dbMessage } from 'app/core/chat';
 import moment from 'moment';
 
 @Component({
@@ -13,9 +14,9 @@ import moment from 'moment';
 })
 export class ChatMessage {
 
-  @Input() message: Message;
+  @Input() message: dbMessage;
 
-  constructor() {}
+  constructor(private me: Member) {}
 
   get body(): string {
     return this.message && this.message.body || '';
@@ -26,12 +27,12 @@ export class ChatMessage {
   }
 
   get time(): string {
-    const stamp = this.message && this.message.timestamp || '0';
+    const stamp = this.message && this.message.created || '0';
     return moment(stamp, 'x').format('HH:mm');
   }
 
   get dir(): 'in'|'out' {
-    return this.sender === 'me' ? 'out' : 'in';
+    return this.sender === this.me.id ? 'out' : 'in';
   }
 
   get color() {

@@ -1,6 +1,6 @@
 import { DatabaseDocument, DatabaseCollection, DistributedCounter, dbCommon } from '@wizdm/connect/database';
 import { DatabaseService } from '@wizdm/connect/database';
-import { Member, wmMember } from '../member';
+import { Member, dbUser } from '../member';
 
 export interface wmPublication extends dbCommon {
   

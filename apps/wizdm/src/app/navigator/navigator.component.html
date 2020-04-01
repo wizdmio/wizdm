@@ -78,8 +78,8 @@
       [mode]="mobile ? 'over' : 'side'" [(opened)]="sideToggler">
 
       <!-- Side panel toggler to stay visible even when the panel is closed -->
-      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sidenavOn" @sidenav>
-        <wm-icon [icon]="'fas:fa-chevron-' + (sideToggler ? 'left' : 'right')"></wm-icon>
+      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sidenavOn" @sidenavOn>
+        <wm-icon [class.closed]="!sideToggler" icon="fas:fa-chevron-left"></wm-icon>
       </button>
 
       <!-- Side panel content is teleported here -->

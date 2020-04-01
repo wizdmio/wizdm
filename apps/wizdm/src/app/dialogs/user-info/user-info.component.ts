@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatabaseService } from '@wizdm/connect/database';
-import { wmMember } from 'app/core/member';
+import { dbUser } from 'app/core/member';
 //import { wmProject } from 'app/core/project';
 
 @Component({
@@ -18,15 +18,15 @@ export class UserInfoComponent {
   constructor(private dialog: MatDialog, private database: DatabaseService) { }
 
   // Loads the member's profile from the database
-  private loadUser(userId: string): Promise<wmMember> {
-    return userId ? this.database.document<wmMember>(`/users/${userId}`)
-      .get() : Promise.resolve(<wmMember>{});
+  private loadUser(userId: string): Promise<dbUser> {
+    return userId ? this.database.document<dbUser>(`/users/${userId}`)
+      .get() : Promise.resolve(<dbUser>{});
   }
 
-  public user: wmMember;
+  public user: dbUser;
 
   // Accepts user info in various forms
-  @Input('user') set setUser(user: wmMember) { // as a user object
+  @Input('user') set setUser(user: dbUser) { // as a user object
     this.user = user;
   }
 

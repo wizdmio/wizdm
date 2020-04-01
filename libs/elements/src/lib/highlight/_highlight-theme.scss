@@ -1,0 +1,13 @@
+@mixin wm-highlight-theme($theme) {
+
+  .wm-highlight {
+
+    // Styles according the theme palette colors
+    @each $color in ('primary', 'accent', 'warn') {
+
+      span[color=#{$color}] { 
+        color: mat-color( map-get($theme, #{$color}) );
+      }
+    }    
+  }
+}

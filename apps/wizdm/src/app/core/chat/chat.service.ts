@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { first, delay, map, tap, switchMap } from 'rxjs/operators';
+import { DatabaseService, DatabaseDocument, DatabaseCollection, dbCommon } from '@wizdm/connect/database';
 import moment from 'moment';
 import * as faker from 'faker';
 
@@ -10,22 +11,20 @@ export interface User {
   img: string;
 }
 
-export interface Message {
-  id?: string;
+export interface dbMessage  extends dbCommon {
   body: string;
   sender: string;
   timestamp?: string;
 }
 
-export interface LastRead {
-  [recipient:string]: any;
-}
-
-export interface Group {
-  id: string;
+export interface dbConversation extends dbCommon {
   recipients: string[];
   lastRead?: LastRead;
-  thread$: BehaviorSubject<Message[]>;
+  thread$: BehaviorSubject<dbMessage[]>;
+}
+
+export interface LastRead {
+  [recipient:string]: any;
 }
 
 @Injectable({
@@ -33,23 +32,23 @@ export interface Group {
 })
 export class ChatService {
 
-  private _groups$: BehaviorSubject<Group[]>;
-  readonly groups$: Observable<Group[]>;
+  private _conversations$: BehaviorSubject<dbConversation[]>;
+  readonly conversations$: Observable<dbConversation[]>;
   readonly users$: Observable<User[]>;
   private users: User[] = [];
   
   constructor() {
 
-     this._groups$ = new BehaviorSubject<Group[]>( this.history(5) );
+     this._conversations$ = new BehaviorSubject<dbConversation[]>( this.history(5) );
 
-    this.groups$ = this._groups$.asObservable();
+    this.conversations$ = this._conversations$.asObservable();
 
     this.users$ = of( this.users );
   }
 
-  public conversation(convId: string): Observable<Group> {
+  public conversation(convId: string): Observable<dbConversation> {
 
-    return this.groups$.pipe( map( convs => convs.find( conv => conv.id === convId )) );
+    return this.conversations$.pipe( map( convs => convs.find( conv => conv.id === convId )) );
   } 
 
   public recipient(id: string): Observable<User> {
@@ -57,7 +56,7 @@ export class ChatService {
     return this.users$.pipe( map( users => users.find( user => user.id === id ) ) );
   }
 
-  public thread(convId: string): Observable<Message[]> {
+  public thread(convId: string): Observable<dbMessage[]> {
 
     return this.conversation(convId).pipe( 
       switchMap( conv => conv && conv.thread$ || of([]) )
@@ -66,7 +65,7 @@ export class ChatService {
 
   public lastRead(convId: string, recipient: string, msg: any) {
 
-    const convs = this._groups$.value;
+    const convs = this._conversations$.value;
 
     const conv = convs[convId];
 
@@ -82,12 +81,12 @@ export class ChatService {
       }
     }
 
-    this._groups$.next(convs);
+    this._conversations$.next(convs);
   }
 
   public receive() {
 
-    this.groups$.pipe( 
+    this.conversations$.pipe( 
 
       delay( Math.floor(5000 + Math.random() * 10000) ), 
       
@@ -107,9 +106,9 @@ export class ChatService {
     ).subscribe( () => this.receive() );
   }
 
-  public send(msg: Message, convId: string) {
+  public send(msg: dbMessage, convId: string) {
 
-    this.groups$.pipe( tap( convs => {
+    this.conversations$.pipe( tap( convs => {
 
       const conv = convs.find( conv => conv.id === convId );
 
@@ -122,7 +121,7 @@ export class ChatService {
     }), first() ).subscribe();
   }
 
-  private history(n: number): Group[] {
+  private history(n: number): dbConversation[] {
 
     return Array(n).fill(0).map( (_,i) => {
 
@@ -145,7 +144,7 @@ export class ChatService {
     return { id, name, img };
   }
 
-  private createGroup(id: string): Group {
+  private createGroup(id: string): dbConversation {
 
     const userId = faker.random.uuid();
 
@@ -160,7 +159,7 @@ export class ChatService {
     return { id, recipients: ['me', userId], thread$, lastRead: { 'me': lastRead } };
   }
 
-  private createMessage(sender: string, time?: string): Message {
+  private createMessage(sender: string, time?: string): dbMessage {
 
     const id = faker.random.uuid();
     
@@ -171,7 +170,7 @@ export class ChatService {
     return { id, timestamp, sender, body };
   }
 
-  private messageHistory(sender: string, n: number): Message[] {
+  private messageHistory(sender: string, n: number): dbMessage[] {
 
     let now = moment().format('x');
 

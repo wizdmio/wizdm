@@ -3,9 +3,10 @@ import { ThemePalette } from '@angular/material/core'
 import { $animations } from './inkbar.animations';
 
 export interface inkbarPosition {
-  left?  : number;
-  top?   : number;
-  width? : number;
+  left?   : number;
+  top?    : number;
+  width?  : number;
+  height? : number;
 }
 
 @Component({
@@ -18,7 +19,7 @@ export interface inkbarPosition {
 })
 export class InkbarComponent {
 
-  public pos: inkbarPosition = { left: 0, top: 0, width: 0 };
+  private pos: inkbarPosition = { left: 0, top: 0, width: 0, height: 0 };
   private elm: ElementRef<HTMLElement>;
 
   // Triggers the inkbar animation with custom left/width parameters
@@ -28,7 +29,8 @@ export class InkbarComponent {
       params: {
         left : `${this.pos.left}px`,
         top  : `${this.pos.top}px`,
-        width: `${this.pos.width}px`
+        width: `${this.pos.width}px`,
+        height: `${this.pos.height}px`,
       }
     };
   }
@@ -39,22 +41,35 @@ export class InkbarComponent {
   @HostBinding('attr.color')
   @Input() color: ThemePalette = 'accent';
 
-  @Input() height = 2;
+  @Input() thickness: number = 2;
+
+  @Input() side: 'left'|'top'|'right'|'bottom' = 'bottom';
 
   @Output() done = new EventEmitter<inkbarPosition>();
 
-  public clear() { return this.pos = { ...this.pos, width: 0 }; } 
+  public get vertical(): boolean {
+    return this.side === 'left' || this.side === 'right';
+  }
+
+  public clear() { 
+    return this.pos = { 
+      ...this.pos, 
+      width: (this.vertical ? this.thickness : 0),
+      height: (this.vertical ? 0 : this.thickness) 
+    }; 
+  } 
 
   // Update the inkbarPosition based on the item element
   public activate(elm: ElementRef<HTMLElement>) {
 
     const el = (this.elm = elm).nativeElement;
+    if(!el) { return this.pos }
 
-    return this.pos = !!el ? { 
-      ...this.pos,
-      top: el.offsetTop + el.clientHeight, 
-      left: el.offsetLeft,
-      width: el.clientWidth 
-    } : this.pos;
+    const top = el.offsetTop + (this.side === 'bottom' ? el.clientHeight : 0);
+    const left = el.offsetLeft + (this.side === 'right' ? el.clientWidth : 0);
+    const width = this.vertical ? this.thickness : el.clientWidth;
+    const height = this.vertical ? el.clientHeight : this.thickness; 
+
+    return this.pos = { ...this.pos, left, top, width, height };
   }
 }

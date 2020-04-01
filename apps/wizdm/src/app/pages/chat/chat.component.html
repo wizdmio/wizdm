@@ -5,9 +5,9 @@
 
     <mat-action-list>
 
-      <mat-list-item class="height-unset" *ngFor="let group of groups$ | async">
+      <mat-list-item class="height-unset" *ngFor="let conv of conversations$ | async">
 
-        <wm-chat-group [group]="group" (click)="groupId = group.id"></wm-chat-group>
+        <wm-chat-conversation [data]="conv" (click)="selectConversation(conv.id)"></wm-chat-conversation>
       
       </mat-list-item>
 
@@ -24,7 +24,7 @@
       <!-- Content inner container using display: block ensuring scrolling works on all browsers -->
       <div class="content">
 
-        <wm-message [message]="msg" *ngFor="let msg of messages$ | async"></wm-message>
+        <wm-message [message]="msg" *ngFor="let msg of messages$ | async; trackBy: trackById"></wm-message>
 
       </div>
     </div>

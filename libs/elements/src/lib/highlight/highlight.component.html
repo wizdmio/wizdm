@@ -1,0 +1,9 @@
+<ng-content *ngIf="tokens.length === 0"></ng-content>
+
+<ng-container *ngFor="let token of tokens">
+
+  <span [attr.color]="color" *ngIf="token.highlight; else plainText">{{ token.content }}</span>
+
+  <ng-template #plainText>{{ token }}</ng-template>
+
+</ng-container>
