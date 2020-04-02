@@ -16,8 +16,7 @@
         <nav fxLayout="row" fxLayoutAlign="start center">
 
           <!-- Wizdm logo routing to home -->
-          <!--wm-logo color="primary" routerLink="."></wm-logo-->
-          <wm-logo color="primary" (click)="sidenav = !sidenav"></wm-logo>  
+          <wm-logo color="primary" routerLink="."></wm-logo>
       
           <!-- Desktop navigation links -->
           <wm-navbar *ngIf="desktop && msgs.toolbar as toolbar" [menuItems]="signedIn ? toolbar.private : toolbar.public"></wm-navbar>
@@ -27,7 +26,7 @@
         <!-- Right pane -->
         <div fxLayout="row" fxLayoutAlign="end center">
 
-          <!-- Action toolbar -->
+          <!-- Action toolbar animating the element's entrance -->
           <div [@actionbar]="activateActions">
 
             <!-- De-sugared wmPortat directive: Actions will be teleported here -->

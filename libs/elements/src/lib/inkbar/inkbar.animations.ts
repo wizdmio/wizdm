@@ -1,6 +1,6 @@
 import { trigger, state, animate, style, transition, keyframes } from '@angular/animations';
 
-const $timing = '500ms cubic-bezier(0.2, 1, 0.3, 1)';
+const $timing = '1s cubic-bezier(0.2, 1, 0.3, 1)';
 
 export let $animations = [
 

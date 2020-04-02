@@ -1,8 +1,10 @@
 
 <ng-container>
 
-  <div fxFlex="0 0 auto"> <!--[matBadge]="data.unread" [matBadgeHidden]="!data.unread" matBadgeSize="small"-->
+  <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) <= 0" matBadgeSize="small">
+
     <wm-avatar [src]="(sender$ | async)?.img" color="primary"></wm-avatar>
+    
   </div>
 
   <div fxFlex="1 1 auto" class="content">

@@ -19,7 +19,7 @@ export interface inkbarPosition {
 })
 export class InkbarComponent {
 
-  private pos: inkbarPosition = { left: 0, top: 0, width: 0, height: 0 };
+  public pos: inkbarPosition = { left: 0, top: 0, width: 0, height: 0 };
   private elm: ElementRef<HTMLElement>;
 
   // Triggers the inkbar animation with custom left/width parameters
@@ -52,7 +52,7 @@ export class InkbarComponent {
   }
 
   public clear() { 
-    return this.pos = { 
+    return this.pos = {
       ...this.pos, 
       width: (this.vertical ? this.thickness : 0),
       height: (this.vertical ? 0 : this.thickness) 

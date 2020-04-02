@@ -1,5 +1,7 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, NgZone } from '@angular/core';
+import { map, distinctUntilChanged } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'footer[wm-footer]',
@@ -10,16 +12,20 @@ import { Router } from '@angular/router';
 export class FooterComponent {
 
   readonly year = (new Date()).getFullYear();
+  readonly xsmall$: Observable<boolean>;
 
   /** Host element */
   private get element(): HTMLElement { return this.elref.nativeElement; }
 
-  /** Media-match like value based on the element's with instead of the viewport's. 
-   * Since the footer is squeezed by the sidenav, we better consider the available 
-   * width rather then the screens */
-  get xsmall(): boolean { return (this.element?.clientWidth || 0) <= 599; }
-  
-  constructor(private elref: ElementRef<HTMLElement>, private router: Router) {}
+  constructor(private elref: ElementRef<HTMLElement>, private router: Router, zone: NgZone) {
+
+    /** Media-match like value based on the element's width instead of the viewport's. 
+     * Since the footer is squeezed by the sidenav, we better consider the available 
+     * remaining space rather then the screen width */
+    this.xsmall$ = zone.onStable.pipe( map(() => (this.element?.clientWidth || 0) <= 599 ), distinctUntilChanged() );
+    // NOTE: we're using NgZone.onStable to make sure the element's width is "sampled" when the rendering has been completed
+    // to avoid raising the valueChangedAfterItHasBeenChecked() exception
+  }
 
   copyright(msg: string): string {
     // Interpolates the copyright message to dynamically change the current year

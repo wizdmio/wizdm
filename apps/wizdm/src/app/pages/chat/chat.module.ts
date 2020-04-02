@@ -5,12 +5,13 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { MatBadgeModule } from '@angular/material/badge';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { TeleportModule } from '@wizdm/teleport';
 import { RedirectModule } from '@wizdm/redirect';
 import { GtagModule } from '@wizdm/gtag';
 import { AvatarModule } from '@wizdm/elements/avatar';
-//import { IconModule } from '@wizdm/elements/icon';
+import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
@@ -40,10 +41,11 @@ const routes: RoutesWithContent = [
     MatIconModule,
     MatButtonModule,
     MatListModule,
+    MatBadgeModule,
     TeleportModule,
     RedirectModule,
     GtagModule,
-    //IconModule, 
+    IconModule, 
     AvatarModule,
     ReadmeModule,
     DialogModule,

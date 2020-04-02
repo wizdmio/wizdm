@@ -1,64 +1,97 @@
-import { Component, Input } from '@angular/core';
-import { DatabaseService, DatabaseDocument, DatabaseCollection, dbCommon } from '@wizdm/connect/database';
-import { User, dbConversation, dbMessage } from 'app/core/chat'; 
-import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
-import { map, filter, switchMap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
-import { Member, dbUser } from 'app/core/member';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { map, tap, filter, switchMap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, from } from 'rxjs';
+import { DatabaseService, DatabaseDocument } from '@wizdm/connect/database';
+import { dbChatter, dbConversation, dbMessage } from '../chat-types';
+import { Member } from 'app/core/member';
 import moment from 'moment';
-
-interface DisplayData extends dbConversation {
-  sender: User;
-  last: dbMessage;
-  unread?: number;
-}
 
 @Component({
   selector: 'wm-chat-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss']
 })
-export class ChatConversation {
+export class ChatConversation extends DatabaseDocument<dbConversation> {
 
   private input$ = new BehaviorSubject<dbConversation>(undefined);
 
-  readonly conv$: Observable<dbConversation>;
-  readonly sender$: Observable<dbUser>;
+  /** The sender profile */
+  readonly sender$: Observable<dbChatter>;
+  /** The last message */
   readonly last$: Observable<dbMessage>;
-  
-  constructor(db: DatabaseService, private user: Member) {
-
-    this.conv$ = this.input$.pipe( filter( conv => !!conv ), shareReplay(1) );
-
-    this.sender$ = this.conv$.pipe(       
-
-      map( conv => conv && conv.recipients.find(id => id !== this.user.id) ),
-
-      distinctUntilChanged(),
-      
-      switchMap( senderId =>  db.document(`users/${senderId}`).stream() ),
-
-      shareReplay(1)
-    );
-
-    this.last$ = this.conv$.pipe( 
-
-      map( conv => conv && conv.id),
-
-      distinctUntilChanged(),
-
-      switchMap( convId => db.collection<dbMessage>(`conversations/${convId}/messages`).stream(
-
-        qf => qf.orderBy('created', 'desc').limit(1)
-      )),
-
-      map( msgs => msgs[0] ),
-
-      shareReplay(1)
-    );
-  }
+  /** The unread messages count */
+  readonly unread$: Observable<number>;
 
   @Input() set data(conv: dbConversation) {
     this.input$.next(conv);
+  }
+
+  @Output() unreadCount = new EventEmitter<number>();
+  
+  constructor(db: DatabaseService, private user: Member) {
+
+    super(db, '');
+
+    // Builds a conversation observable
+    const conv$ = this.input$.pipe( 
+      // Filters null values
+      filter( conv => !!conv ), 
+      // Wraps the conversation as this
+      tap( conv => this.from(`conversations/${conv.id}`) ) 
+    );
+
+    // Builds a conversation's messages
+    const messages$ = conv$.pipe( map( () => this.collection<dbMessage>('messages') ) );
+
+    // Resolves the sender user profile
+    this.sender$ = conv$.pipe(
+      // Assumes the sender is the first recipient that it's not me (works for group of two, load the group avatar for groups)
+      map( conv => conv.recipients.find(id => id !== this.user.id) ),
+      // Skips unchanged id values
+      distinctUntilChanged(),
+      // Loads teh user's profile
+      switchMap( senderId =>  db.document(`users/${senderId}`).stream() ),
+      // Shares the same result to multiple subscribers
+      shareReplay(1)
+    );
+
+    // Resolves the last message in the thread
+    this.last$ = messages$.pipe(
+      // Streams the conversation's messages filtering the very latest
+      switchMap( messages => messages.stream( qf => qf.orderBy('created', 'desc').limit(1) )),
+      // Plucks the message body from the array
+      map( msgs => msgs[0] ),
+      // Shares the same result to multiple subscribers
+      shareReplay(1)
+    );
+
+    this.unread$ = conv$.pipe(
+
+      map( conv => conv.lastRead?.[this.user.id] ),
+
+      distinctUntilChanged(),
+
+      switchMap( lastId => messages$.pipe( 
+        
+        switchMap( messages => 
+
+          ( !!lastId ? from( messages.document(lastId).ref.get() ) : of(null) ).pipe( 
+            
+            switchMap( snapshot => messages.stream(
+              
+              qf => ( snapshot && snapshot.exists ? qf.orderBy('created').startAfter(snapshot) : qf.orderBy('created') ).limit(11)
+              
+            ))
+          )
+        )  
+      )),
+
+      map( msgs => msgs.length ),
+
+      tap( count => this.unreadCount.emit(count) ),
+
+      shareReplay(1)
+    );
   }
 
   time(timestamp: string) {

@@ -10,7 +10,12 @@ export class DatabaseCollection<T extends dbCommon> {
   public ref: CollectionRef;
 
   constructor(readonly db: DatabaseApplication, ref: string|CollectionRef) {
-    this.ref = db?.col(ref);
+    this.from(ref);
+  }
+
+  /** Applies the given reference to this object */
+  public from(ref: string|CollectionRef): this {
+    return (this.ref = this.db?.col(ref) || null), this;
   }
 
   /** Returns the collection object id */

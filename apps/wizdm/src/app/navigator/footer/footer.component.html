@@ -3,11 +3,11 @@
 
   <!-- Top section with links -->
   <!--section class="content" fxLayout="row" fxLayoutAlign="space-between" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center"-->
-  <section class="content" fxLayout="row" [fxLayoutAlign]="xsmall ? 'center' : 'space-between'">
+  <section class="content" fxLayout="row" [fxLayoutAlign]="(xsmall$ | async) ? 'center' : 'space-between'">
 
     <!-- Left/Top pane: Links to About, terms, privacy... -->
     <!--div fxLayout="row" fxHide.lt-sm fxLayoutAlign="center center"-->
-    <div fxLayout="row" *ngIf="!xsmall">
+    <div fxLayout="row" *ngIf="!(xsmall$ | async)">
 
       <!-- Regular links on desktop -->
       <a mat-button *ngFor="let item of msgs.links" [routerLink]="item.link"> 
@@ -21,7 +21,7 @@
 
       <!-- Links menu on mobile -->
       <!--a mat-icon-button fxHide fxShow.lt-sm [matMenuTriggerFor]="linksMenu"-->
-      <ng-container *ngIf="xsmall">
+      <ng-container *ngIf="xsmall$ | async">
 
         <a mat-icon-button [matMenuTriggerFor]="linksMenu">
           <wm-icon icon="fas:fa-info-circle"></wm-icon>

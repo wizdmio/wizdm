@@ -18,7 +18,12 @@ export class DatabaseDocument<T extends dbCommon> {
   public ref: DocumentRef;
 
   constructor(readonly db: DatabaseApplication, ref: string|DocumentRef) {
-    this.ref = db?.doc(ref);
+    this.from(ref);
+  }
+
+  /** Applies the given reference to this object */
+  public from(ref: string|DocumentRef): this {
+    return (this.ref = this.db?.doc(ref) || null), this;
   }
 
   /** Returns the document object id */

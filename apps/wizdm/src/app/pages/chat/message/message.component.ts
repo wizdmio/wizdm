@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Member, dbUser } from 'app/core/member';
-import { dbMessage } from 'app/core/chat';
+import { Member } from 'app/core/member';
+import { dbMessage } from '../chat-types';
 import moment from 'moment';
 
 @Component({

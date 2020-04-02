@@ -1,7 +1,6 @@
-import { Component, AfterViewInit, OnDestroy, ContentChildren, QueryList, HostListener, Input, ViewEncapsulation } from '@angular/core';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { Component, AfterViewInit, OnDestroy, ContentChildren, QueryList, ViewEncapsulation } from '@angular/core';
+import { Router, RouterEvent, NavigationEnd, RouterLinkActive } from '@angular/router';
 import { InkbarComponent } from '../inkbar/inkbar.component';
-import { RouterInkbarDirective } from '../router-inkbar/router-inkbar.directive';
 import { Subscription } from 'rxjs';
 import { filter, delay } from 'rxjs/operators';
 import { $animations } from '../inkbar/inkbar.animations';
@@ -16,9 +15,9 @@ import { $animations } from '../inkbar/inkbar.animations';
 })
 export class RouterInkbarComponent extends InkbarComponent implements AfterViewInit, OnDestroy {
 
-  // Query for RouterInkbarDirective children
-  @ContentChildren(RouterInkbarDirective, { descendants: true })
-  readonly links: QueryList<RouterInkbarDirective>;
+  // Query for RouterLinkActive children
+  @ContentChildren(RouterLinkActive, { descendants: true })
+  readonly links: QueryList<RouterLinkActive>;
   private sub: Subscription;
 
   constructor(private router: Router) { super(); 
@@ -45,9 +44,9 @@ export class RouterInkbarComponent extends InkbarComponent implements AfterViewI
     this.activateLink( this.links.find( link => link.isActive ) );
   }
 
-  private activateLink(link: RouterInkbarDirective) {
+  private activateLink(link: RouterLinkActive) {
 
-    if(!!link) { this.activate(link.elm); }
+    if(!!link) { this.activate((link as any).element); }
     else { this.clear(); }
   }
 }

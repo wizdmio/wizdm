@@ -1,13 +1,25 @@
 
 <ng-container *wmContent="let msgs select 'chat'" gtag="chat">
 
+  <ng-template wmTeleport="actionbar" let-mobile="isMobile">
+
+    <button mat-icon-button *ngIf="unreadCount">
+      <wm-icon icon="far:fa-bell" [matBadge]="unreadCount" matBadgeSize="small"></wm-icon>
+    </button>
+
+  </ng-template>
+
   <ng-template wmTeleport="sidenav" let-mobile="isMobile">
 
     <mat-action-list>
 
       <mat-list-item class="height-unset" *ngFor="let conv of conversations$ | async">
 
-        <wm-chat-conversation [data]="conv" (click)="selectConversation(conv.id)"></wm-chat-conversation>
+        <wm-chat-conversation [data]="conv" 
+                              [style.visibility.hidden]="conv.archive"
+                              (unreadCount)="accumulateUnread(conv.id, $event)"
+                              (click)="selectConversation(conv.id)">
+        </wm-chat-conversation>
       
       </mat-list-item>
 

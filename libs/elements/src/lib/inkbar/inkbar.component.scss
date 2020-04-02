@@ -2,10 +2,10 @@
 .wm-inkbar {
   
   display: block;
-  overflow: hidden;
+  position: relative;
 
   .inkbar {
     position: absolute;
     background-color: currentColor;
   }
-}
+} 

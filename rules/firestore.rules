@@ -2,20 +2,21 @@ rules_version = '2';
 service cloud.firestore {
 
   match /databases/{database}/documents {
-  
-		// Check if the requesting user is signed in
-		function authenticated() {
-			return request.auth.uid != null;
+    	
+  	// Check if the requesting user is signed in
+    function authenticated() {
+  		return request.auth != null && request.auth.uid != null;
 		}
     
     // Check if the specified userId corresponds the requesting user
     function itsMe(userId) {
-  		return request.auth.uid == userId;
+  		return authenticated() && request.auth.uid == userId;
 		}
     
-    // Gets the specified user's id profile 
+    // Gets the specified user's profile 
     //function profile(userId) {
-    //	return get(/databases/$(database)/documents/users/$(userId)).data;
+    //  let profile = get(/databases/$(database)/documents/users/$(userId));
+    //	return profile.data;
     //}
 
   	// User profiles.
@@ -26,7 +27,7 @@ service cloud.firestore {
       
       // Allows every signed-in user to create a new profile
       allow create: if authenticated();
-       
+      
     	// Allows only the user herself to update or delete the profile  
       allow update, delete: if itsMe(userId);
       
@@ -48,27 +49,34 @@ service cloud.firestore {
     	allow create: if authenticated();
       
       // Allow read/list of conversations only by recipients
-    	allow read: if resource.data.recipients[request.auth.id] != null;
+    	allow read: if request.auth.uid in resource.data.recipients;
       
       // Allow delete/modify only by the conversation's owner (first recipient)
       allow update, delete: if itsMe(resource.data.recipients[0]);
       
       // Messages.
-      match /messages/{msgId} {
+      match /messages/{messageId} {
       
-      	// Gets the current conversation data
-        function conversation() {
-          return get(/databases/$(database)/documents/conversations/$(convId)).data;
+      	// Returns the parent's recipients array
+      	function recipients() {
+        	// Uses a variable to make sure the following 'in' clause will work 
+        	let conv = get(/databases/$(database)/documents/conversations/$(convId));  
+          return conv.data.recipients;
         }
-      
-      	// Allows every signed-in user to read and create messages
-        allow read, create: if conversation().recipients[request.auth.id] != null;
+        
+        // True whenever the requesting user is listed among the recipients
+        function amongRecipients() {
+        	// Skips to get the collection if not authenticated
+        	return authenticated() && (request.auth.uid in recipients());
+        }
+        
+				// Allows reading/creating users listed in the parents recipients array 
+      	allow read, create: if amongRecipients();
         
         // Allows only the sender to update and delete a message 
         allow update, delete: if itsMe(resource.data.sender);
       }
 		}
-    
     
     // Projects.
     match /projects/{prjId} {
