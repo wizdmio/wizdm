@@ -3,7 +3,7 @@ import { trigger, state, animate, style, transition, query, stagger, group, anim
 export let $animations = [
 
   // Toolbar background blend-in
-  trigger('blendin', [
+  trigger('backgndBlendin', [
     state('false', style('*')),
     state('true', style({ opacity: 0 })),
     transition('false <=> true', //group([
@@ -12,10 +12,10 @@ export let $animations = [
     )//]))
   ]),
 
-  // Actionbar item activation
-  trigger('actionbar', [
+  // Actionbar's activation of actions
+  trigger('actionActivate', [
     transition('* => *', [
-      query(':enter', [
+      query('wm-action:enter', [
         style({ opacity: 0 }),
         stagger('-100ms', 
           animate('250ms ease-out', style('*'))

@@ -7,7 +7,7 @@
     <mat-toolbar>
 
       <!-- Background w/ shadow to fade while blending in -->
-      <div class="background background-color" [@blendin]="!(sideToggler || menuToggler || menuVisible) && !(scrolled$ | async)"></div>
+      <div class="background background-color" [@backgndBlendin]="!(sideToggler || menuToggler || menuVisible) && !(scrolled$ | async)"></div>
 
       <!-- Navigation bar (1st row) -->
       <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
@@ -27,7 +27,7 @@
         <div fxLayout="row" fxLayoutAlign="end center">
 
           <!-- Action toolbar animating the element's entrance -->
-          <div [@actionbar]="activateActions">
+          <div [@actionActivate]="activateActions">
 
             <!-- De-sugared wmPortat directive: Actions will be teleported here -->
             <ng-template wmPortal="actionbar" [wmPortalContext]="{ isMobile: mobile }" (wmPortalTemplate)="activateActions = $event"></ng-template>

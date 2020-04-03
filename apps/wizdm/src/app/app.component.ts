@@ -3,7 +3,6 @@ import { trigger, animate, style, transition } from '@angular/animations';
 import { Router, ResolveStart, NavigationEnd } from '@angular/router';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'body',
@@ -32,16 +31,15 @@ export class AppComponent implements OnInit, OnDestroy {
     // Registers font awesome among the available sets of icons for mat-icon component
     this.icon.registerFontClassAlias('fontawesome', 'fa');
 
-    // Subscribes to the ContentManager events to  detect language loading
-    // showing and hiding the loader accordingly
-    this.sub = this.router.events
-      .pipe( 
-        // Filters Resolve events only
-        filter( e => e instanceof ResolveStart || e instanceof NavigationEnd ), 
-        // Maps the event into true/false
-        map( e => e instanceof ResolveStart )
-        // Shows the loader spinner while resolving the route content
-      ).subscribe( e => this.loading = e );
+    // Intercepts router events...
+    this.sub = this.router.events.subscribe( e => {
+
+      // Enable the loading spinner during content resolving
+      if( e instanceof ResolveStart ) { this.loading = true; }
+
+      // Disables the loading spinner every end of navigation
+      if( e instanceof NavigationEnd ) { this.loading = false; }      
+    });
   }
     
   ngOnDestroy() { this.sub.unsubscribe(); }

@@ -23,8 +23,11 @@ export const emoji: EmojiConfig = {
 };
 
 export const router: ExtraOptions = { 
-  anchorScrolling: "enabled",
-  scrollPositionRestoration: "enabled"
+
+  // Keeps the default anchor scrolling disabled since implemented by the AppComponent
+  // using CdkScrollable for wider compatibility
+  anchorScrolling: "disabled",
+  //scrollPositionRestoration: "enabled"
 };
 
 // Environment object common to all build configurations
