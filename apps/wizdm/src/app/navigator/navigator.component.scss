@@ -88,6 +88,13 @@
       }
     }
 
-    .mat-sidenav-content { overflow: hidden; }
+    // Page's content
+    .mat-sidenav-content { 
+    
+      // Prevents the scrolling since the main scolling container is the navigator itself
+      overflow: hidden; 
+
+      .page { position: relative; }
+    }
   }
 }

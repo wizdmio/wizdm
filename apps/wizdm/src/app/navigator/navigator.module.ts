@@ -4,6 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { AnimateModule } from '@wizdm/animate';
 import { TeleportModule } from '@wizdm/teleport';
 import { LogoModule } from '@wizdm/elements/logo';
 import { TogglerModule } from '@wizdm/elements/toggler';
@@ -30,6 +31,7 @@ import { TitleDirective } from './title/title.directive';
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
+    AnimateModule,
     TeleportModule,
     TogglerModule,
     LogoModule,

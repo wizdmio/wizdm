@@ -52,10 +52,14 @@ const routes: RoutesWithContent = [
       { path: 'back',        canActivate: [ BackLinkObserver ] },
       
       // Not found page
-      { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },      
+      { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
 
       // Static content pages, redirecting to NotFound when no content is available
-      { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) }
+      { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
+
+      // Named outled ?
+      { path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule), outlet: 'side' },
+      { path: '**',          loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule),  outlet: 'side' }
     ]
   }
 ];

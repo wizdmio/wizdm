@@ -9,7 +9,6 @@ import { Member } from 'app/core/member';
 import { BackgroundStyle } from './background';
 import { Observable, Subscription } from 'rxjs';
 import { filter, map, distinctUntilChanged, startWith, sample } from 'rxjs/operators';
-
 import { runInZone } from 'app/utils/common';
 import { $animations } from './navigator.animations';
 
@@ -50,8 +49,7 @@ export class NavigatorComponent extends CdkScrollable implements OnDestroy {
                                 readonly background$: BackgroundStyle, 
                                 readonly member: Member, 
                                 private zone: NgZone, 
-                                private error: ErrorHandler,
-                                elref: ElementRef, scroll: ScrollDispatcher, @Optional() dir: Directionality) {
+                                private error: ErrorHandler, elref: ElementRef, scroll: ScrollDispatcher, @Optional() dir: Directionality) {
 
     super(elref, scroll, zone, dir);
 

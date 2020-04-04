@@ -1,18 +1,26 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, Optional, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, NgZone } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { $animations } from './animate.animations';
-import { Subject, Observable, of } from 'rxjs';
-import { map, startWith, distinctUntilChanged, delay, scan, takeUntil, takeWhile, flatMap } from 'rxjs/operators';
+import { Subject, Observable, of, OperatorFunction} from 'rxjs';
+import { map, startWith, distinctUntilChanged, delay, first, scan, takeUntil, takeWhile, switchMap } from 'rxjs/operators';
+import { AnimateService } from './animate.service';
 
 export type wmAnimations = 'landing'|'pulse'|'beat'|'heartBeat'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'zoomIn'|'bumpIn'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'zoomOut';
 export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
 
-export class wmRect { 
-  constructor(readonly left: number, readonly top: number, readonly right: number, readonly bottom: number) {}
-  get width(): number { return this.right - this.left; }
-  get height(): number { return this.bottom - this.top; } 
-};
+/** Returns an observable mirroring the source while running within the given zone */
+export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {
+  return source => {
+    return new Observable( observer => {
+      return source.subscribe(
+        (value: T) => zone.run(() => observer.next(value)),
+        (e: any) => zone.run(() => observer.error(e)),
+        () => zone.run(() => observer.complete())
+      );
+    });
+  };
+}
 
 @Component({
  selector: '[wmAnimate]',
@@ -29,7 +37,10 @@ export class AnimateComponent implements OnInit, OnDestroy {
   public animating = false;
   public animated = false;
 
-  constructor(private elm: ElementRef, private scroll: ScrollDispatcher, private zone: NgZone) {}
+  constructor(private elm: ElementRef, private scroll: ScrollDispatcher, private zone: NgZone, private view: AnimateService) {}
+
+  // Computes the element's visibility ratio
+  private get visibility(): number { return this.view.visibility( this.elm?.nativeElement ); }
 
   private get idle() { return { value: 'idle' }; }
   private get play() { 
@@ -116,20 +127,35 @@ export class AnimateComponent implements OnInit, OnDestroy {
   // Triggers the animation
   private animateTrigger(elm: ElementRef<HTMLElement>): Observable<boolean> {
 
-    return this.animateReplay().pipe( delay(0), flatMap( trigger => this.aos ? this.animateOnScroll(elm) : of(trigger)) );
+    // Waits until the zone is stable once, aka the render is complete so the element to measure is there 
+    return this.zone.onStable.pipe( 
+      // Waits just once
+      first(),
+      // Triggers the play and replay requests
+      switchMap( () => this.animateReplay() ),
+      // Triggers the while scrolling
+      switchMap( trigger => this.aos ? this.animateOnScroll(elm) : of(trigger) ) 
+    );
   }
 
   // Triggers the animation deferred
   private animateReplay(): Observable<boolean> {
 
-    return this.replay$.pipe( takeUntil(this.dispose$), delay(0), startWith(!this.paused) );
+    return this.replay$.pipe( 
+      // Disposed on destroy
+      takeUntil(this.dispose$), 
+      // Waits the next roud to re-trigger
+      delay(0), 
+      // Triggers immediately when not paused
+      startWith(!this.paused) 
+    );
   }
 
   // Triggers the animation on scroll
   private animateOnScroll(elm: ElementRef<HTMLElement>): Observable<boolean> {
 
     // Returns an AOS observable
-    return this.scroll.ancestorScrolled(elm, 100).pipe(
+    return this.scroll.ancestorScrolled(elm, 0).pipe(
       // Makes sure to dispose on destroy
       takeUntil(this.dispose$),
       // Starts with initial element visibility 
@@ -142,29 +168,8 @@ export class AnimateComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       // Stop taking the first on trigger when aosOnce is set
       takeWhile(trigger => !trigger || !this.once, true),
-      // Run NEXT within the angular zone to trigger change detection back on
-      flatMap(trigger => new Observable<boolean>(observer => this.zone.run(() => observer.next(trigger))))
+      // Runs within the angular zone to trigger change detection back on
+      runInZone(this.zone)
     );
-  }
-
-  // Computes the element's visibility ratio
-  private get visibility(): number {
-
-    // Gets the element's bounding rect
-    const rect = this.elm && this.elm.nativeElement && this.elm.nativeElement.getBoundingClientRect();
-    if(!rect) { return 0; }
-
-    // Return 1.0 when the element is fully within the viewport
-    if(rect.left >= 0 && rect.top >= 0 && rect.right < window.innerWidth + 1 && rect.bottom < window.innerHeight + 1) { 
-      return 1; 
-    }
-
-    // Computes the intersection area otherwise
-    const a = Math.round(rect.width * rect.height);
-    const b = Math.max(0, Math.min(rect.right, window.innerWidth) - Math.max(rect.left,0));
-    const c = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
-
-    // Returns the amount of visible area 
-    return Math.round(b * c / a * 10) / 10;
   }
 }
