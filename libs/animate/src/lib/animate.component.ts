@@ -39,9 +39,6 @@ export class AnimateComponent implements OnInit, OnDestroy {
 
   constructor(private elm: ElementRef, private scroll: ScrollDispatcher, private zone: NgZone, private view: AnimateService) {}
 
-  // Computes the element's visibility ratio
-  private get visibility(): number { return this.view.visibility( this.elm?.nativeElement ); }
-
   private get idle() { return { value: 'idle' }; }
   private get play() { 
     return { 
@@ -151,6 +148,11 @@ export class AnimateComponent implements OnInit, OnDestroy {
     );
   }
 
+  // Returns the element's visibility ratio Observable
+  private get visibility(): Observable<number> { 
+    return this.view.visibility( this.elm?.nativeElement ); 
+  }
+
   // Triggers the animation on scroll
   private animateOnScroll(elm: ElementRef<HTMLElement>): Observable<boolean> {
 
@@ -158,10 +160,10 @@ export class AnimateComponent implements OnInit, OnDestroy {
     return this.scroll.ancestorScrolled(elm, 0).pipe(
       // Makes sure to dispose on destroy
       takeUntil(this.dispose$),
-      // Starts with initial element visibility 
-      startWith(!this.paused && (this.visibility >= this.threshold)),
+      // Makes sure triggering the start no matter there's no scroll event hits yet
+      startWith(null),
       // Maps the scrolling to the element visibility value
-      map(() => this.visibility),
+      switchMap( () => this.visibility ),
       // Applies an hysteresys, so, to trigger the animation on based on the treshold while off on full invisibility
       scan((result, visiblility) => (visiblility >= this.threshold) || (result && visiblility > 0), false),
       // Distincts the resulting triggers 

@@ -1,65 +1,74 @@
-import { Injectable, OnDestroy, Optional } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { startWith } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { startWith, map, debounceTime, shareReplay } from 'rxjs/operators';
 
-export abstract class AnimateView {
+export interface AnimateView {
 
-  abstract left: number;
-  abstract top: number;
-  abstract right: number;
-  abstract bottom: number;
-};
+  left?: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class AnimateService implements OnDestroy {
+export class AnimateService {
 
-  private sub: Subscription;
-  private left: number;
-  private top: number;
-  private right: number;
-  private bottom: number;
+  private update$ = new BehaviorSubject<AnimateView>(null);
+  
+  private view$: Observable<AnimateView>;
 
-  constructor(viewPort: ViewportRuler, @Optional() animateView: AnimateView) {
+  constructor(viewPort: ViewportRuler) {
 
     // Tracks for viewport changes giving it 100ms time to accurately update for orientation changes
-    this.sub = viewPort.change(100).pipe( startWith(null) ).subscribe( () => {
+    this.view$ = combineLatest( this.update$, viewPort.change(100).pipe( 
+      
+      startWith( viewPort.getViewportRect() ), 
+    
+      map( () => viewPort.getViewportRect() )
 
-      // Gets the viewport
-      const port = viewPort.getViewportRect();
+    )).pipe( debounceTime(20), map( ([view, port]) => {
 
-      // Updates the view area combining the viewport with the AnimateView directive
-      this.left = animateView?.left || port.left;
-      this.top = animateView?.top || port.top;
-      this.right = animateView?.right || port.right;
-      this.bottom = animateView?.bottom || port.bottom;
+      // Updates the view area combining the viewport with the updated value from AnimateView directive
+      const left = view?.left || port.left;
+      const top = view?.top || port.top;
+      const right = view?.right || port.right;
+      const bottom = view?.bottom || port.bottom;
 
-      console.log(this);
-    });
+      return { left, top, right, bottom };
+
+      // Makes all the component to share the same viewport values
+    }), shareReplay(1) );
   }
 
-  ngOnDestroy() { this.sub.unsubscribe(); }
+  public update(view: AnimateView) { 
+    this.update$.next(view); 
+  }
 
   // Computes the element's visibility ratio against the viewport
-  public visibility(el: HTMLElement): number {
+  public visibility(el: HTMLElement): Observable<number> {
 
-    // Gets the element's bounding rect
-    const rect = el?.getBoundingClientRect();
-    if(!rect) { return 0; }
+    // Resolves from the latest viewport
+    return this.view$.pipe( map( view => {
 
-    // Return 1.0 when the element is fully within the viewport
-    if(rect.left >= this.left && rect.top >= this.top && rect.right < this.right + 1 && rect.bottom < this.bottom + 1) { 
-      return 1; 
-    }
+      // Gets the element's bounding rect
+      const rect = el?.getBoundingClientRect();
+      if(!rect) { return 0; }
 
-    // Computes the intersection area otherwise
-    const a = Math.round(rect.width * rect.height);
-    const b = Math.max(0, Math.min(rect.right, this.right) - Math.max(rect.left, this.left));
-    const c = Math.max(0, Math.min(rect.bottom, this.bottom) - Math.max(rect.top, this.top));
+      // Return 1.0 when the element is fully within the viewport
+      if(rect.left >= view.left && rect.top >= view.top && rect.right < view.right + 1 && rect.bottom < view.bottom + 1) { 
+        return 1; 
+      }
 
-    // Returns the amount of visible area 
-    return Math.round(b * c / a * 10) / 10;
+      // Computes the intersection area otherwise
+      const a = Math.round(rect.width * rect.height);
+      const b = Math.max(0, Math.min(rect.right, view.right) - Math.max(rect.left, view.left));
+      const c = Math.max(0, Math.min(rect.bottom, view.bottom) - Math.max(rect.top, view.top));
+
+      // Returns the amount of visible area 
+      return Math.round(b * c / a * 10) / 10;
+    }));
   }
 }
