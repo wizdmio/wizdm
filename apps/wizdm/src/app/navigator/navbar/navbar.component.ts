@@ -1,5 +1,12 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { $animations } from './navbar.animations';
+
+export interface MenuItem {
+
+  label: string;
+  link?: string;
+  menu?: MenuItem[];
+}
 
 @Component({
   selector: 'wm-navbar',
@@ -11,5 +18,5 @@ import { $animations } from './navbar.animations';
 export class NavbarComponent {
 
   // Navigation menu items (links)
-  @Input() menuItems: any[] = [];
+  @Input() menuItems: MenuItem[] = [];
 }

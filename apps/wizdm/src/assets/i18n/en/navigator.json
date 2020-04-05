@@ -2,7 +2,7 @@
     "title": "Wizdm - Get your app done right",
     "description": "The fully featured boilerplate to launch your web application quickly",
 
-    "toolbar": {
+    "navbar": {
         "public": [
             { "label": "Wizdm", "link": "." },
             { "label": "About", "link": "about" },
@@ -11,7 +11,15 @@
         "private": [
             { "label": "Wizdm", "link": "." },
             { "label": "Explore", "link": "explore" },
-            { "label": "Community", "link": "chat" }
+            { "label": "Community", "link": "chat" },
+            { "label": "Dashboards", "menu": [
+                { "label": "Sales", "link": "dashboards/sales" },
+                { "label": "Projects", "link": "dashboards/projects" },
+                { "label": "More", "menu": [ 
+                    { "label": "Sales", "link": "dashboards/sales" },
+                    { "label": "Projects", "link": "dashboards/projects" }
+                ]}
+            ]}
         ]
     },
 

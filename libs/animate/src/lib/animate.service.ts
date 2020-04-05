@@ -17,7 +17,6 @@ export interface AnimateView {
 export class AnimateService {
 
   private update$ = new BehaviorSubject<AnimateView>(null);
-  
   private view$: Observable<AnimateView>;
 
   constructor(viewPort: ViewportRuler) {
@@ -43,7 +42,8 @@ export class AnimateService {
     }), shareReplay(1) );
   }
 
-  public update(view: AnimateView) { 
+  // Forces to udate the animate viewport with the given values
+  public update(view: AnimateView|null) { 
     this.update$.next(view); 
   }
 

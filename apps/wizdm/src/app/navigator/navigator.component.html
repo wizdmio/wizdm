@@ -19,7 +19,7 @@
           <wm-logo color="primary" routerLink="."></wm-logo>
       
           <!-- Desktop navigation links -->
-          <wm-navbar *ngIf="desktop && msgs.toolbar as toolbar" [menuItems]="signedIn ? toolbar.private : toolbar.public"></wm-navbar>
+          <wm-navbar *ngIf="desktop && msgs.navbar as navbar" [menuItems]="signedIn ? navbar.private : navbar.public"></wm-navbar>
         
         </nav>
 

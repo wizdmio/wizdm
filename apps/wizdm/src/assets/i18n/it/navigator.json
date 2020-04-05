@@ -2,7 +2,7 @@
     "title": "Wizdm - La tua app pronta subito",
     "description": "Realizza la tua app velocemente e lancia il tuo prodotto",
 
-    "toolbar": {
+    "navbar": {
         "public": [
             { "label": "Wizdm" },
             { "label": "Chi siamo" },

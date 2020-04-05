@@ -57,9 +57,12 @@ const routes: RoutesWithContent = [
       // Static content pages, redirecting to NotFound when no content is available
       { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
+      // Anything else will route to not found
+      { path: '**',          redirectTo: 'not-found' }
+
       // Named outled ?
-      { path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule), outlet: 'side' },
-      { path: '**',          loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule),  outlet: 'side' }
+      /*{ path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule), outlet: 'side' },
+      { path: '**',          loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule),  outlet: 'side' }*/
     ]
   }
 ];
