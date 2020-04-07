@@ -20,10 +20,10 @@ export interface MenuItem {
 })
 export class NavbarComponent {
 
-  // Navigation menu items (links)
+  /** Navigation menu items (links) */
   @Input() menuItems: MenuItem[] = [];
 
-  // Inkbars color
+  /** Active links highlighting color */
   @Input() color: ThemePalette = 'accent';
 
 }

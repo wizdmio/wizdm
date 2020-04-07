@@ -27,11 +27,13 @@ export class MenuComponent {
   public visible = false;
   private count = 0;
 
+  /** Menu items  */
   @Input() items: MenuItem[] = [];
 
-  // Highlighting color
+  /** Active link highlighting color */
   @Input() color: ThemePalette = 'accent';
 
+  /** Menu trogger input */
   @Input('toggler') set toggleMenu(toggler: boolean) {
     // Skips meaningless changes to avoid looping on double binding
     if(toggler === this.toggler) { return; }
@@ -43,10 +45,11 @@ export class MenuComponent {
     this.count++;
   }
 
+  /** Closes the menu with sub-menus  */
   public close() {
-
+    // Closes all the sub panels
     this.panels?.forEach( panel => panel.close() );
-
+    // Toggles the menu close
     this.toggleMenu = false;
   }
 
@@ -57,7 +60,9 @@ export class MenuComponent {
     !this.toggler && this.menuVisible.emit(this.visible = false);
   }
 
+  /** Menu toggler output */
   @Output() togglerChange = new EventEmitter<boolean>();
 
+  /** Menu visible output. True whenever the menu is closing but still visible */
   @Output('visible') menuVisible = new EventEmitter<boolean>();
 }

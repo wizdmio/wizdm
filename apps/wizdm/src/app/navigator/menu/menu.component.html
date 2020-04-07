@@ -1,10 +1,13 @@
 
 <nav fxLayout="column" fxLayoutAlign="start center" [@menu]="!!toggler" (@menu.done)="done()">
 
+  <!-- Sub-menu grouping accordion -->
   <mat-accordion displayMode="flat" hideToggle fxLayout="column">
 
+    <!-- Loops on menu items -->
     <ng-container *ngFor="let item of items">
 
+      <!-- Top links -->
       <button mat-button 
               (click)="close()"
               [routerLink]="item.link"
@@ -12,19 +15,24 @@
               [routerLinkActive]="'link-active border-color-default ' + color" 
               [routerLinkActiveOptions]="{ exact: true }" *ngIf="item.link">{{ item.label }}</button>
 
-
+      <!-- Menu links -->
       <ng-container *ngIf="item.menu as menu">
 
+        <!-- Menu trigger button -->
         <button mat-button [class]="'menu-trigger border-color-default ' + color"
                            [class.link-active]="menuLinks.isActive && !panel.expanded"
                            (click)="panel.toggle()">{{ item.label }}</button>
 
+        <!-- Expandable sub-menu. Using routerLinkActive to detect sub links activation -->
         <mat-expansion-panel class="padding-0 mat-elevation-z0" #panel routerLinkActive #menuLinks="routerLinkActive">
 
+          <!-- Sub menu content -->
           <div class="menu-items" fxLayout="column">
 
+            <!-- Loops on sub-menu items -->
             <ng-container *ngFor="let sub of menu">
 
+              <!-- Sub-menu links -->
               <button mat-button
                       (click)="close()"
                       [routerLink]="sub.link"
