@@ -61,7 +61,7 @@
       <!-- Mobile menu (2nd row) -->
       <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
         
-        <wm-menu [items]="signedIn ? menus.private : menus.public" [(toggler)]="menuToggler" (visible)="menuVisible = $event"></wm-menu>    
+        <wm-menu color="primary" [items]="menus[signedIn ? 'private' : 'public']" [(toggler)]="menuToggler" (visible)="menuVisible = $event"></wm-menu>    
       
       </mat-toolbar-row>
 

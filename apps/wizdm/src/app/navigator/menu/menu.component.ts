@@ -1,5 +1,15 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { ThemePalette } from '@angular/material/core'
 import { $animations } from './menu.animations';
+
+export interface MenuItem {
+
+  label: string;
+  link?: string;
+  params?: { [param:string]: string };
+  menu?: MenuItem[];
+}
 
 @Component({
   selector: 'wm-menu',
@@ -10,12 +20,17 @@ import { $animations } from './menu.animations';
 })
 export class MenuComponent {
 
+  @ViewChildren(MatExpansionPanel) private panels: QueryList<MatExpansionPanel>;
+
   // Keeps the toggler undefined to ensure the very first value always goes trough
   public toggler = undefined;
   public visible = false;
   private count = 0;
 
-  @Input() items: any[] = [];
+  @Input() items: MenuItem[] = [];
+
+  // Highlighting color
+  @Input() color: ThemePalette = 'accent';
 
   @Input('toggler') set toggleMenu(toggler: boolean) {
     // Skips meaningless changes to avoid looping on double binding
@@ -26,6 +41,13 @@ export class MenuComponent {
     this.toggler && this.menuVisible.emit(this.visible = true);
     // Keeps track of the toggle hits
     this.count++;
+  }
+
+  public close() {
+
+    this.panels?.forEach( panel => panel.close() );
+
+    this.toggleMenu = false;
   }
 
   public done() {

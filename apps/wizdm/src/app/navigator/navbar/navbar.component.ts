@@ -6,6 +6,7 @@ export interface MenuItem {
 
   label: string;
   link?: string;
+  params?: { [param:string]: string };
   menu?: MenuItem[];
 }
 

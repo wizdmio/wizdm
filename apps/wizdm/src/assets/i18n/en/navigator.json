@@ -12,6 +12,7 @@
             { "label": "Wizdm", "link": "." },
             { "label": "Explore", "link": "explore" },
             { "label": "Community", "link": "chat" },
+            
             { "label": "Dashboards", "menu": [
                 { "label": "Sales", "link": "dashboards/sales" },
                 { "label": "Projects", "link": "dashboards/projects" },
@@ -34,7 +35,13 @@
             { "label": "Home", "link": "." },
             { "label": "Explore", "link": "explore" },
             { "label": "Community", "link": "chat" },
+
+            { "label": "Dashboards", "menu": [
+                { "label": "Sales", "link": "dashboards/sales" },
+                { "label": "Projects", "link": "dashboards/projects" }
+            ]},
             { "label": "Upload", "link": "upload" },
+            
             { "label": "Profile", "link": "profile" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
         ]

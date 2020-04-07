@@ -1,11 +1,47 @@
 
 <nav fxLayout="column" fxLayoutAlign="start center" [@menu]="!!toggler" (@menu.done)="done()">
 
-  <button mat-button *ngFor="let item of items"
-    (click)="toggleMenu = false"
-    [routerLink]="item.link"
-    [queryParams]="item.params"
-    routerLinkActive="link-active border-color-default primary" 
-    [routerLinkActiveOptions]="{ exact: true }">{{ item.label }}</button>
+  <mat-accordion displayMode="flat" hideToggle fxLayout="column">
+
+    <ng-container *ngFor="let item of items">
+
+      <button mat-button 
+              (click)="close()"
+              [routerLink]="item.link"
+              [queryParams]="item.params"
+              [routerLinkActive]="'link-active border-color-default ' + color" 
+              [routerLinkActiveOptions]="{ exact: true }" *ngIf="item.link">{{ item.label }}</button>
+
+
+      <ng-container *ngIf="item.menu as menu">
+
+        <button mat-button [class]="'menu-trigger border-color-default ' + color"
+                           [class.link-active]="menuLinks.isActive && !panel.expanded"
+                           (click)="panel.toggle()">{{ item.label }}</button>
+
+        <mat-expansion-panel class="padding-0 mat-elevation-z0" #panel routerLinkActive #menuLinks="routerLinkActive">
+
+          <div class="menu-items" fxLayout="column">
+
+            <ng-container *ngFor="let sub of menu">
+
+              <button mat-button
+                      (click)="close()"
+                      [routerLink]="sub.link"
+                      [queryParams]="sub.params"
+                      [routerLinkActive]="'link-active border-color-default ' + color" 
+                      [routerLinkActiveOptions]="{ exact: true }" *ngIf="sub.link">{{ sub.label }}</button>
+
+            </ng-container>
+
+          </div>
+
+        </mat-expansion-panel>
+
+      </ng-container>
+
+    </ng-container>
+
+  </mat-accordion>
 
 </nav>
