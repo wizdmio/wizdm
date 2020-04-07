@@ -57,6 +57,8 @@ const routes: RoutesWithContent = [
       // Static content pages, redirecting to NotFound when no content is available
       { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
+      { path: 'dashboards/:page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
+
       // Anything else will route to not found
       { path: '**',          redirectTo: 'not-found' }
 

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { ThemePalette } from '@angular/material/core'
 import { $animations } from './navbar.animations';
 
 export interface MenuItem {
@@ -13,10 +14,15 @@ export interface MenuItem {
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   host: { 'class': 'wm-navbar' },
+  encapsulation: ViewEncapsulation.None,
   animations: $animations
 })
 export class NavbarComponent {
 
   // Navigation menu items (links)
   @Input() menuItems: MenuItem[] = [];
+
+  // Inkbars color
+  @Input() color: ThemePalette = 'accent';
+
 }

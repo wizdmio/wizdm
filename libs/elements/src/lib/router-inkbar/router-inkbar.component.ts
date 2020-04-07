@@ -1,8 +1,10 @@
 import { Component, AfterViewInit, OnDestroy, ContentChildren, QueryList, ViewEncapsulation } from '@angular/core';
-import { Router, RouterEvent, NavigationEnd, RouterLinkActive } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { RouterInkbarDirective } from './router-inkbar.directive';
 import { InkbarComponent } from '../inkbar/inkbar.component';
-import { Subscription } from 'rxjs';
-import { filter, delay } from 'rxjs/operators';
+import { InkbarItem, InkbarDirective } from '../inkbar/inkbar.directive';
+import { Subscription, animationFrameScheduler } from 'rxjs';
+import { filter, observeOn } from 'rxjs/operators';
 import { $animations } from '../inkbar/inkbar.animations';
 
 @Component({
@@ -15,9 +17,12 @@ import { $animations } from '../inkbar/inkbar.animations';
 })
 export class RouterInkbarComponent extends InkbarComponent implements AfterViewInit, OnDestroy {
 
-  // Query for RouterLinkActive children
-  @ContentChildren(RouterLinkActive, { descendants: true })
-  readonly links: QueryList<RouterLinkActive>;
+  // Query for RouterInkbarDirective children
+  @ContentChildren(RouterInkbarDirective, { descendants: true }) readonly links: QueryList<InkbarItem>;
+
+  // Query for base InkbarDirective children
+  @ContentChildren(InkbarDirective, { descendants: true }) readonly items: QueryList<InkbarItem>;
+
   private sub: Subscription;
 
   constructor(private router: Router) { super(); 
@@ -26,9 +31,9 @@ export class RouterInkbarComponent extends InkbarComponent implements AfterViewI
     this.sub = this.router.events.pipe( 
       // Filters navigation end events
       filter((s: RouterEvent) => s instanceof NavigationEnd), 
-      // Delays the action on the next scheduler round 
-      delay(0),
-
+      // Switch to the AnimationFrame scheduler preventing ExpressionChangedAfterHasBeenChecked() exception without delaying
+      observeOn(animationFrameScheduler)
+      // Updates the inkbar position
     ).subscribe( () =>  this.update() );   
   }
 
@@ -40,13 +45,13 @@ export class RouterInkbarComponent extends InkbarComponent implements AfterViewI
   
   // Overrides the update() reverting to the active link
   public update() {
-    // Search for the active link
-    this.activateLink( this.links.find( link => link.isActive ) );
+    // Search for the active link or item
+    this.activateLink( this.links.find( link => link.isActive ) || this.items.find( link => link.isActive ) );
   }
 
-  private activateLink(link: RouterLinkActive) {
+  private activateLink(link: InkbarItem) {
 
-    if(!!link) { this.activate((link as any).element); }
+    if(!!link) { this.activate(link.elm); }
     else { this.clear(); }
   }
 }
