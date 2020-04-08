@@ -2,8 +2,8 @@ import { InjectionToken, inject, Type } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { SelectorResolver } from './selector-resolver.service';
 import { ContentLoader } from '../loader/content-loader.service';
-import { Observable, of } from 'rxjs';
-import { first, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 /** Builds a content resolver instance for the specified source file on the fly */
 export function contentResolver<T = any>(source: string, providedIn: 'root'|Type<T> = 'root') {

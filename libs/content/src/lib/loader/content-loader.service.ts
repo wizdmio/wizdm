@@ -53,12 +53,16 @@ export class DefaultLoader extends ContentLoader {
     return forkJoin(
       // Default language file (full)
       this.http.get<any>(`${this.config.contentRoot}/${this.config.defaultValue}/${moduleName}.json`),
-      // Requested language file (partial)
-      this.http.get<any>(`${this.config.contentRoot}/${this.language}/${moduleName}.json`).pipe(
+      // Loads the requested language file only when differs from he default language
+      this.language !== this.config.defaultValue ? 
+        // Requested language file (partial)
+        this.http.get<any>(`${this.config.contentRoot}/${this.language}/${moduleName}.json`).pipe(
         // Reverts to the default language in case of errors (basically it pass an empty object 
         // since default content will be merged in the next map() )
-        catchError( () => of({}) )
-      )
+          catchError( () => of({}) )
+          // Skips unnecessary loading
+        ) : of({})
+
     ).pipe( 
       // Packs the result by merging the modules whenever necessary
       zip( data => this.language === this.config.defaultValue ? data[0] : this.merge(data[1], data[0]) ),

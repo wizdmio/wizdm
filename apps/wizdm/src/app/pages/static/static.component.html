@@ -1,17 +1,27 @@
 
+<!-- Gets the document content while reporting the page name with gtag -->
 <ng-container *wmContent="let document select 'document'" [gtag]="page$ | async">
 
-  <!--ng-template wmTeleport="sidenav">
-    <p>Table Of Contents</p>
-  </ng-template-->
+  <!-- Checks for an optional Table Of Contents -->
+  <ng-container *ngIf="!!document.toc">
+
+    <!-- Teleports teh TOC into the side panel -->
+    <ng-template wmTeleport="sidenav">
+      
+      <!-- Renders the markdown document toc -->
+      <section style="padding: 16px" [wm-markdown]="document.toc || ''" (navigate)="redirect.navigate($event)"></section>
+
+    </ng-template>
+
+  </ng-container>
 
   <!-- Foreground content having the width locked to the viewport width despite is relatively positioned -->
   <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document" lockMaxWidth>
 
-    <!-- Renders the markdown document -->
-    <section [wm-markdown]="document" (navigate)="redirect.navigate($event)" #body></section>
+    <!-- Renders the markdown document body -->
+    <section [wm-markdown]="document.body || ''" (navigate)="redirect.navigate($event)" #body></section>
 
-    <!-- Renders the footnotes -->
+    <!-- Renders the footnotes, if any -->
     <section *ngIf="body.notes.length > 0">
 
       <mat-divider></mat-divider>
