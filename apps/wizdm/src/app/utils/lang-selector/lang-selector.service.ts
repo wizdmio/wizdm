@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { DateAdapter } from '@angular/material/core';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
-import { flatMap, map, first } from 'rxjs/operators';
+import { switchMap, map, first } from 'rxjs/operators';
 import { IpList } from '@wizdm/iplist';
 import { Member } from 'app/core/member';
 import { $languageMap } from './lang-map';
@@ -25,13 +25,13 @@ export class LanguageSelector extends ContentSelector {
     return this.user.stream().pipe( 
 
       // Detects the language from the user profile
-      flatMap( profile => {
+      switchMap( profile => {
 
         // Whenever authenticated, returns the user preferred language
         if(profile && profile.lang) { return of(profile.lang) }; 
         
         // Detects the location from the IP and returns the coresponding language falling back to the browser language
-        // Note; IpList caches the last value to avoid multiple API calls unless requested.
+        // Note; IpList service caches the last value to avoid multiple API calls unless requested.
         return this.iplist.pipe( map( list => list?.countrycode && $languageMap[list.countrycode][0] || this.browserLanguage ));
       }), 
 
@@ -41,10 +41,10 @@ export class LanguageSelector extends ContentSelector {
 
         // Gets the language code from the route
         const requested = route.paramMap.get( this.config.selector );
-        console.log('Requested language:', requested);
-
         // Whenever the requested language is allowed...
         if( this.isLanguageAllowed(requested) ) { 
+
+          console.log('Requested language:', requested);
 
           // Updates the adapter's locale according to the new language keeping track of the current language for further use
           this.adapter.setLocale( moment.locale( this.config.currentValue = requested ) );

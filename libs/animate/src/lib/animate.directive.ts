@@ -1,17 +1,17 @@
-import { Directive, Input, OnChanges, SimpleChanges, forwardRef } from '@angular/core';
-import { ViewportRuler } from '@angular/cdk/scrolling';
+import { Directive, Input, OnChanges, SimpleChanges, forwardRef, NgZone } from '@angular/core';
+import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { AnimateService, AnimateView } from './animate.service';
 
 @Directive({
   selector: '[wmAnimateView.left], [wmAnimateView.top], [wmAnimateView.right], [wmAnimateView.bottom]',
   providers: [
-    
+    // Provides the AnimateDirective as the service, so, for the child component to trigger within a modified viewport
     { provide: AnimateService, useExisting: forwardRef(() => AnimateDirective) },
   ]
 })
 export class AnimateDirective extends AnimateService implements OnChanges {
 
-  constructor(viewport: ViewportRuler) { super(viewport); }
+  constructor(scroll: ScrollDispatcher, viewport: ViewportRuler, zone: NgZone) { super(scroll, viewport, zone); }
 
   @Input('wmAnimateView.left') left: number;
 
