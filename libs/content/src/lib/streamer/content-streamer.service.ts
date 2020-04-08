@@ -12,7 +12,7 @@ export class ContentStreamer {
   constructor(readonly route: ActivatedRoute, readonly config: ContentConfigurator) {}
   
   /** The content data snapshot */
-  get data(): any { return this.route.snapshot.data || {}; }
+  get data(): any { return this.route.snapshot.data; }
 
   /** The content data observable */
   get data$(): Observable<any> { return this.route.data; }

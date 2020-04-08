@@ -55,7 +55,7 @@ export class AnimateService {
     }), shareReplay(1) );
   }
 
-  // Forces to udate the animate viewport with the given values
+  /** Updates the animate viewport with the given values */
   public update(view: AnimateView|null) { 
     this.update$.next(view); 
   }
@@ -66,9 +66,9 @@ export class AnimateService {
     return source => this.zone.onStable.pipe( 
       // Waits just once
       first(),
-      // Triggers the play and replay requests
+      // Chains the source trigger...
       switchMap( () => source ),
-      // Triggers the while scrolling
+      // ...with the AOS trigger
       switchMap( trigger => threshold > 0 ? this.aos(elm, threshold, once) : of(trigger) ) 
     );
   }
@@ -94,15 +94,12 @@ export class AnimateService {
 
   /** Computes the element's visibility ratio against the viewport */
   private visibility(elm: ElementRef<HTMLElement>): Observable<number> {
-
-    const el = elm.nativeElement;
-    if(!el) { return of(0); }
-
+    
     // Resolves from the latest viewport
     return this.view$.pipe( map( view => {
 
       // Gets the element's bounding rect
-      const rect = el.getBoundingClientRect();
+      const rect = elm?.nativeElement?.getBoundingClientRect();
       if(!rect) { return 0; }
 
       // Return 1.0 when the element is fully within the viewport

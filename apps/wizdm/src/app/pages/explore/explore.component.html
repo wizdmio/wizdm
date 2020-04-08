@@ -1,7 +1,7 @@
 
-<ng-container *wmContent="let msgs select 'explore'">
+<ng-container *wmContent="let msgs select 'explore'" gtag="explore">
 
-  <header fxLayout="column" gtag="explore">
+  <header fxLayout="column">
     <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
     <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
     <p [wm-readme]="msgs.description">

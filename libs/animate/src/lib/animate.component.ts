@@ -92,7 +92,6 @@ export class AnimateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     // Triggers the animation based on the input flags
     this.sub = this.replay$.pipe( 
       // Waits the next round to re-trigger
@@ -108,5 +107,6 @@ export class AnimateComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Disposes of the observable
   ngOnDestroy() { this.sub.unsubscribe(); }
 }

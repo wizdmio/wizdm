@@ -1,12 +1,10 @@
 
-<ng-container *wmContent="let msgs select 'home';let lang = language">
+<ng-container *wmContent="let msgs select 'home';let lang = language" gtag="home">
   
-  <!--wm-illustration *ngIf="!!msgs.banner" class="background" color="primary" [src]="msgs.banner" [baseHref]="lang"></wm-illustration--> 
-
   <!-- Applies a scrolling background image to the navigator -->
   <wm-background [url]="msgs.banner" attachment="local" repeat="no-repeat" size="cover"></wm-background>
 
-  <section fxLayout="row" fxLayoutAlign="center center" class="banner" gtag="home">
+  <section fxLayout="row" fxLayoutAlign="center center" class="banner">
 
     <div fxFlex.gt-sm="50" fxLayout="column" fxLayoutAlign="center center" class="textbox" wmAnimate="landing" speed="slow" aos>
 
