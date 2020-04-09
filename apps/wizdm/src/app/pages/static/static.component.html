@@ -8,7 +8,7 @@
     <!-- Teleports teh TOC into the side panel -->
     <ng-template wmTeleport="sidenav">
       
-      <!-- Renders the markdown document toc -->
+      <!-- Renders the markdown Table Of Contens -->
       <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="redirect.navigate($event)"></section>
 
     </ng-template>

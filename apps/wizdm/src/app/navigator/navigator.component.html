@@ -1,5 +1,6 @@
 
-<ng-container *wmContent="let msgs select 'navigator'">
+<!-- Resolve the localized content and activate a smooth navigation scrolling -->
+<ng-container *wmContent="let msgs select 'navigator'" [wmScroll]="scrollTo$ | async" [top]="navbar?.clientHeight || 0" behavior="smooth">
 
   <!-- Updates the Title and the description meta-tag -->
   <header [wmTitle]="msgs.title" [description]="msgs.description">
@@ -72,9 +73,9 @@
   <!-- Main Navigation Container with dynamic background -->
   <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
 
-    <!-- Side Navigation Panel -->
+    <!-- Side Navigation Panel - Scrollable -->
     <mat-sidenav class="mat-elevation-z3" fixedInViewport [style.padding-top.px]="navbar?.clientHeight || 0" 
-      [mode]="mobile ? 'over' : 'side'" [(opened)]="sideToggler"> 
+      [mode]="mobile ? 'over' : 'side'" [(opened)]="sideToggler" CdkScrollable> 
 
       <!-- Side panel toggler to stay visible even when the panel is closed -->
       <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sidenavOn" @sidenavOn>
