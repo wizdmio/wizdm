@@ -20,6 +20,8 @@ export class MarkdownRoot extends MarkdownBlock {
   public get notes(): mdFootnoteDefinition[] { return this.tree.notes || []; }
 
   @Input('wm-markdown') set parse(source: string|mdContent) {
+    // Makes sure source is a valid entry
+    if(!source) { source = ''; }
     // Parses the source md file into an mdAST syntax tree
     this.node = typeof source === 'string' ? this.tree.parse(source) : source;
   }

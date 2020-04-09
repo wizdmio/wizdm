@@ -2,7 +2,7 @@ import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { SelectorResolver } from '@wizdm/content';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, tap, catchError, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 // Optional configuration
@@ -19,11 +19,17 @@ export interface StaticContent {
   toc?: string;
 }
 
+export interface StaticCache {
+  lang: string;
+  [key:string]: string;
+}
+
 @Injectable()
 export class StaticResolver implements Resolve<StaticContent> {
 
-  private path; 
-
+  private cache: StaticCache;
+  private path: string; 
+  
   constructor(private router: Router, 
               private http: HttpClient, 
               private selector: SelectorResolver,
@@ -49,6 +55,12 @@ export class StaticResolver implements Resolve<StaticContent> {
     
     // Resolves the file name source from the route
     const page = route.paramMap.get('page');
+
+    // Resets the cache whenever the requested language changes
+    // Caching the content results in the following advantages:
+    // 1. Skipping http.get() requests for already cached content provided the static module hasn't been reloaded
+    // 2. Skipping markdown re-rendering of unchanged content (likely the toc) since the cached string doesn't change
+    if(lang !== this.cache?.lang) { this.cache = { lang }; }
     
     // Loads the main .md file
     return this.loadFile(lang, page).pipe(
@@ -85,6 +97,9 @@ export class StaticResolver implements Resolve<StaticContent> {
 
   private loadFile(lang: string, name: string): Observable<string> {
 
+    // Returns the cached version of the content, if any
+    if(this.cache[name]) { return of(this.cache[name]); }
+
     // Computes the full path
     const fullPath = this.path + lang + '/' + name + '.md';
 
@@ -107,7 +122,9 @@ export class StaticResolver implements Resolve<StaticContent> {
         }
 
         throw e;
-      })
+      }),
+      // Caches the content for further use
+      tap( data => this.cache[name] = data )
     );
   }
 }

@@ -9,7 +9,7 @@
     <ng-template wmTeleport="sidenav">
       
       <!-- Renders the markdown document toc -->
-      <section style="padding: 16px" [wm-markdown]="document.toc || ''" (navigate)="redirect.navigate($event)"></section>
+      <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="redirect.navigate($event)"></section>
 
     </ng-template>
 
@@ -19,7 +19,7 @@
   <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document" lockMaxWidth>
 
     <!-- Renders the markdown document body -->
-    <section [wm-markdown]="document.body || ''" (navigate)="redirect.navigate($event)" #body></section>
+    <section [wm-markdown]="document.body" (navigate)="redirect.navigate($event)" #body></section>
 
     <!-- Renders the footnotes, if any -->
     <section *ngIf="body.notes.length > 0">

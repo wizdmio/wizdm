@@ -1,5 +1,7 @@
 # Elements
 
+<!-- toc: index.md -->
+
 [Index](docs/index#ui-elements) - [Back](back) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/elements/src/lib)
 
 Elements is a collection of UI elements designed to blend-in with [Angular Material](https://material.angular.io/).
