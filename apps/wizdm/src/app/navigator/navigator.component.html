@@ -84,8 +84,9 @@
       <!-- Side panel content is teleported here -->
       <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
 
-        <!-- Secondary router outlet named "side" -->
-        <router-outlet name="side" (activate)="activate(true)" (deactivate)="activateSidenav(false)"></router-outlet>
+        <!-- Secondary router outlet named "side" as the default side content -->
+        <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/18271 -->
+        <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
 
       </ng-template>
         

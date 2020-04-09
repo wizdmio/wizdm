@@ -34,11 +34,11 @@ export class StaticResolver implements Resolve<StaticContent> {
     this.path = !!config?.path ? (
       // Makes sure the given path ends with a slash
       config.path.endsWith('/') ? config.path : ( config.path + '/' )
-      // Defaults to docs
+      // Defaults to docs otherwise
     ) : 'assets/docs/';
   }
 
-  // Returns the default language of the content manager
+  /** The default language of the content manager */
   get defaultLang() { return this.selector.config.defaultValue; }
 
   /** Resolves the content loading the requested source file */
