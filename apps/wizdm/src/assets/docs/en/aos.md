@@ -1,6 +1,6 @@
 # Animate On Scroll
 
-<!-- toc: index.md -->
+<!-- toc: index.md ref: animate-on-scroll -->
 
 [Index](docs/index#animate-on-scroll) - [Back](back) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
 

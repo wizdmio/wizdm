@@ -1,13 +1,12 @@
-import { Component, Optional, ElementRef, NgZone, forwardRef } from '@angular/core';
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { Component, ViewChild, NgZone } from '@angular/core';
+import { filter, map, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Router, Scroll } from '@angular/router';
 import { MediaObserver } from '@angular/flex-layout';
-import { Directionality } from '@angular/cdk/bidi';
-import { Member } from 'app/core/member';
 import { BackgroundStyle } from './background';
+import { Member } from 'app/core/member';
 import { Observable } from 'rxjs';
-import { filter, map, distinctUntilChanged, startWith, sample } from 'rxjs/operators';
 import { runInZone } from 'app/utils/common';
+import { ScrollableDirective } from './scroll';
 import { $animations } from './navigator.animations';
 
 @Component({
@@ -15,14 +14,15 @@ import { $animations } from './navigator.animations';
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss'],
   host: { 'class': 'wm-theme-colors' },
-  // Makes sure to provide the Navigator as a CdkScrollable for the wmScroll directive to work
-  providers: [{ provide: CdkScrollable, useExisting: forwardRef(() => NavigatorComponent ) }],
   animations: $animations
 })
-export class NavigatorComponent extends CdkScrollable {
+export class NavigatorComponent {
 
-  readonly scrollTo$: Observable<string|[number, number]|HTMLElement>;
-  readonly scrolled$: Observable<boolean>;
+  // The main scrolling container
+  @ViewChild(ScrollableDirective) private scroller: ScrollableDirective;
+
+  public scrollTo$: Observable<string|[number, number]|HTMLElement>;
+  public scrolled$: Observable<boolean>;
   
   // Menu toggle
   public menuToggler = false;
@@ -40,13 +40,25 @@ export class NavigatorComponent extends CdkScrollable {
   public get desktop(): boolean { return !this.mobile; }
 
   constructor(private media: MediaObserver, private router: Router,
-              readonly background$: BackgroundStyle, readonly member: Member, 
-              private zone: NgZone, elref: ElementRef, scroll: ScrollDispatcher, @Optional() dir: Directionality) {
+              readonly background$: BackgroundStyle, readonly member: Member,
+              private zone: NgZone) {}
 
-    // Constructs the parent CdkScollable directive
-    super(elref, scroll, zone, dir);
+  ngAfterViewInit() {
 
-    // Biuld the scrolling observable to be used with wmScroll directive
+    // Builds an observable detecting whenever the navigator main content is scrolled
+    this.scrolled$ = this.scroller.elementScrolled().pipe(
+      // Starts with some value to ensure triggering at start, if needed
+      startWith( null ),
+      // Maps to the top distance
+      map( () => this.scroller.measureScrollOffset('top') > 5 ),
+      // Filters for changes
+      distinctUntilChanged(),
+      // Enters the zone since cdk/scrolling observables run out of angular zone
+      runInZone(this.zone)
+    );
+
+    // Builds the navigation scrolling observable to be used with wmScroll directive.
+    // This replaces the Angular's basic RouterScrolling mechanism for wider compatibiity.
     this.scrollTo$ = this.router.events.pipe( 
       // Filters for scroll events only
       filter( e => e instanceof Scroll ), 
@@ -54,18 +66,6 @@ export class NavigatorComponent extends CdkScrollable {
       // sample(zone.onStable), No more needed since scrolling is performed by wmScroll directive
       // Translates the event into the scroll target 
       map( (e: Scroll) =>  e.anchor || e.position || [0, 0] )
-    );
-
-    // Builds an observable detecting whenever the navigator is scrolled
-    this.scrolled$ = this.elementScrolled().pipe(
-      // Starts with some value to ensure triggering at start, if needed
-      startWith( null ),
-      // Maps to the top distance
-      map( () => this.measureScrollOffset('top') > 5 ),
-      // Filters for changes
-      distinctUntilChanged(),
-      // Enters the zone since cdk/scrolling observables run out of angular zone
-      runInZone(this.zone)
     );
   }
 
@@ -75,6 +75,7 @@ export class NavigatorComponent extends CdkScrollable {
   // Toggles the sidenav status
   public toggleSidenav() { this.sideToggler = !this.sideToggler; }
 
+  // Activates the sidenav toggler
   public activateSidenav(active: boolean) { 
 
     if(this.sidenavOn = active) { return; }

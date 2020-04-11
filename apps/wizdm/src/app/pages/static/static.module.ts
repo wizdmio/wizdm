@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDividerModule } from '@angular/material/divider';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
@@ -29,6 +30,7 @@ const routes: RoutesWithContent = [
   imports: [
     CommonModule,
     HttpClientModule,
+    ScrollingModule,
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
     PrismTsModule,

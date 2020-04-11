@@ -7,9 +7,14 @@
 
     <!-- Teleports teh TOC into the side panel -->
     <ng-template wmTeleport="sidenav">
+
+      <!-- Scrolling container -->
+      <ng-container [wmScroll]="document.ref || [0, 0]" target="sidenav" behavior="smooth">
       
-      <!-- Renders the markdown Table Of Contens -->
-      <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="redirect.navigate($event)"></section>
+        <!-- Renders the markdown Table Of Contens and scrolls it to the given position -->
+        <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="redirect.navigate($event)"></section>
+
+      </ng-container>
 
     </ng-template>
 

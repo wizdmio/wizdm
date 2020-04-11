@@ -28,7 +28,9 @@ export class HighlightComponent implements OnChanges {
       }
 
       if(!!this.pattern && typeof(this.pattern) === 'string') { 
-        this.rx = new RegExp(`\\b${this.pattern}`, 'ig'); 
+        // Builds a default regex to match the input string pattern
+        // at every word boundary case insensitive
+        this.rx = new RegExp(`\\b${this.pattern||'\\B'}`, 'ig'); 
       }
     }
 
@@ -52,6 +54,9 @@ export class HighlightComponent implements OnChanges {
 
     let start = 0; let match;
     while(match = rx.exec(source)) {
+
+      // Prevents the zero-length match infinite loop for all browsers
+      if(match.index == rx.lastIndex) { rx.lastIndex++ };
 
       // Pushes the text preceeding a match 
       if(match.index > start) {

@@ -61,6 +61,9 @@ export class ReadmeComponent {
     let start = 0; let match; const rx = /([*+_~])(.*?[^\\])\1|\[(.*?)\]\((.+?)\)|\\([*+_~])|\n/g;
     while(match = rx.exec(source)) {
 
+      // Prevents the zero-length match infinite loop for all browsers
+      if(match.index == rx.lastIndex) { rx.lastIndex++ };
+
       // Pushes the text preceeding a match 
       if(match.index > start){ 
         const content = source.substring(start, match.index);

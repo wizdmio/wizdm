@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ScrollDirective } from './scroll.directive';
+import { ScrollableDirective } from './scrollable.directive';
 
 @NgModule({
-  imports: [],
-  declarations: [ ScrollDirective ],
-  exports: [ ScrollDirective ]
+  imports: [ ScrollingModule ],
+  declarations: [ ScrollDirective, ScrollableDirective ],
+  exports: [ ScrollDirective, ScrollableDirective ]
 })
 export class ScrollModule { }

@@ -67,16 +67,16 @@ export class StaticResolver implements Resolve<StaticContent> {
       // Gets the body contents...
       switchMap( body => {
 
-        // Seeks for a comment containing a reference to the table of contents file 
-        // e.g. <!-- toc: fileName.md --> matches 'fileName'
-        const toc = body.match(/<!--\s*toc:\s*(\w+)(?:\.md)?\s*-->/)?.[1];
-        // Reverts to the body when no toc is found
-        if(!toc) { return of({ body }); }
+        // Parses the comments looking for options
+        const options = this.parseComments(body);
+
+        // Returns the body plus the options when no toc is found
+        if(!options.toc) { return of({ body, ...options }); }
         
-        // Loads the toc file
-        return this.loadFile(lang, toc).pipe( 
-          // And returns both the body and toc
-          map( toc => ({ body, toc }) 
+        // Loads the toc file if any
+        return this.loadFile(lang, options.toc).pipe( 
+          // And returns the body, the toc and the options
+          map( toc => ({ body, ...options, toc }) 
         ));
       }),
       
@@ -100,8 +100,8 @@ export class StaticResolver implements Resolve<StaticContent> {
     // Returns the cached version of the content, if any
     if(this.cache[name]) { return of(this.cache[name]); }
 
-    // Computes the full path
-    const fullPath = this.path + lang + '/' + name + '.md';
+    // Computes the full path removing the extension, if any
+    const fullPath = this.path + lang + '/' + name.replace(/\.\w+$/, '') + '.md';
 
     // Loads the requested file first
     return this.http.get(fullPath, { responseType: 'text' }).pipe( 
@@ -126,5 +126,40 @@ export class StaticResolver implements Resolve<StaticContent> {
       // Caches the content for further use
       tap( data => this.cache[name] = data )
     );
+  }
+
+  private parseComments(source): { [key:string]: string } {
+
+    const out = {};
+
+    if(!source) { return out; }
+
+    const comments = /<!--([\s\S]*?)-->/g;
+    const pairs = /\s*(\w+):\s*([\w-_.]*)\s*/g;
+
+    this.parse(comments, source, comment => {
+
+      this.parse(pairs, comment[1], pair => {
+
+        out[ pair[1] ] = pair[2];
+
+      });
+    });
+
+    return out;
+  }
+
+  private parse(rx: RegExp, source: string, fn: (match: RegExpExecArray) => void) {
+
+    if(typeof(fn) !== 'function') { throw new Error("fn must be a function"); }
+
+    let match;
+    while( match = rx.exec( source ) ) {
+
+      // Prevents the zero-length match infinite loop for all browsers
+      if(match.index == rx.lastIndex) { rx.lastIndex++ };
+
+      fn(match);
+    }
   }
 }

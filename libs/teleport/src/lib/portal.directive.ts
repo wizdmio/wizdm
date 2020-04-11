@@ -1,7 +1,7 @@
 import { Directive, OnDestroy, OnChanges, SimpleChanges, SimpleChange, Input, Output, EventEmitter, TemplateRef, ViewContainerRef } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { switchMap, observeOn } from 'rxjs/operators';
-import { Subscription, animationFrameScheduler, BehaviorSubject } from 'rxjs';
+import { switchMap, delay } from 'rxjs/operators';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { TeleportService, TeleportPayload } from './teleport.service';
 
 @Directive({
@@ -38,8 +38,8 @@ export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnCh
       // Beams the content with the given name
       switchMap( name => this.teleport.beam(name) ),
 
-      // Schedule on the next animation frame
-      observeOn( animationFrameScheduler )
+      // Wait the next round to avid expressionChangedAfterItHasBeenChecked() exception
+      delay(0)
  
     ).subscribe( template => this.changeTemplate(template || { template: null }) );
   }
