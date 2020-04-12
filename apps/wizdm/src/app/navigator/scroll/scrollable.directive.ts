@@ -2,6 +2,7 @@ import { Directive, Input, Inject, Optional, ElementRef, NgZone, ErrorHandler } 
 import { CdkScrollable, ScrollDispatcher, ExtendedScrollToOptions } from '@angular/cdk/scrolling';
 import { Directionality } from '@angular/cdk/bidi';
 import { DOCUMENT } from '@angular/common';
+import { first } from 'rxjs/operators';
 
 /** Extends CdkScrollable directive with strollToElement and scrollToAnchor capabilities */
 @Directive({
@@ -29,7 +30,7 @@ export class ScrollableDirective extends CdkScrollable {
   private get element(): HTMLElement { return this.elref.nativeElement; }
 
   constructor(@Inject(DOCUMENT) private document: Document, private error: ErrorHandler, private elref: ElementRef<HTMLElement>, 
-    scroll: ScrollDispatcher, zone: NgZone, @Optional() dir: Directionality) {
+    scroll: ScrollDispatcher, private zone: NgZone, @Optional() dir: Directionality) {
 
     // Constructs the parent CdkScollable directive
     super(elref, scroll, zone, dir);
@@ -62,16 +63,16 @@ export class ScrollableDirective extends CdkScrollable {
 
       // Escape anything passed to `querySelector` as it can throw errors and stop the application from working.
       anchor = this.escapeAnchor(anchor);
-      
-      // Scroll to the element...
-      this.scrollToElement( 
+
+      // Runs the scrolling once the rendering has completed making sure the element we are querying for is actually there
+      this.zone.onStable.pipe( first() ).subscribe( () => this.scrollToElement( 
         // Queries for ID anchors primary
         this.document.querySelector('#' + anchor ) || 
         // Queries for name anchors alternatively
         this.document.querySelector(`[name='${anchor}']`),
         // Applies a custom behavior on request
         behavior
-      )
+      ));
       // Let Angular handle the error
     } catch (e) { this.error.handleError(e); }
   }
@@ -91,7 +92,7 @@ export class ScrollableDirective extends CdkScrollable {
     const top = rect.top - container.top;
     
     // Scroll to the position
-    this.scrollTo({ left, top, behavior });
+    this.scrollTo({ left, top, behavior });    
   }
 
   /**  Anchor escaping function */

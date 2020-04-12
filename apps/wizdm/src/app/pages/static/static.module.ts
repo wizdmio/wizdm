@@ -10,6 +10,7 @@ import { MarkdownModule } from '@wizdm/markdown';
 import { PrismTsModule } from '@wizdm/prism/languages';
 import { PrismScssModule } from '@wizdm/prism/languages';
 import { ScrollModule } from 'app/navigator/scroll';
+import { SidenavModule } from 'app/navigator/sidenav';
 import { SizeLockModule } from 'app/utils/size-lock';
 import { TeleportModule } from '@wizdm/teleport';
 import { StaticResolver } from './static-resolver.service';
@@ -38,6 +39,7 @@ const routes: RoutesWithContent = [
     GtagModule,
     AnimateModule,
     ScrollModule,
+    SidenavModule,
     SizeLockModule,
     TeleportModule,
     ContentRouterModule.forChild(routes)

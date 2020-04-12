@@ -14,6 +14,7 @@ import { FlipModule } from '@wizdm/elements/flip';
 import { ActionLinkModule } from '@wizdm/actionlink';
 import { LoginModule } from 'app/dialogs/login/login.module';
 import { FeedbackModule } from 'app/dialogs/feedback/feedback.module';
+import { TitleModule } from './title/title.module';
 import { NavbarModule } from './navbar/navbar.module'; 
 import { ActionbarModule } from './actionbar/actionbar.module'; 
 import { MenuModule } from './menu/menu.module'; 
@@ -21,10 +22,9 @@ import { FooterModule } from './footer/footer.module';
 import { ScrollModule } from './scroll/scroll.module';
 import { NavRoutingModule } from './navigator-routing.module';
 import { NavigatorComponent } from './navigator.component';
-import { TitleDirective } from './title/title.directive';
 
 @NgModule({
-  declarations: [ NavigatorComponent, TitleDirective ],
+  declarations: [ NavigatorComponent ],
   imports: [
     CommonModule,
     FlexLayoutModule,
@@ -41,6 +41,7 @@ import { TitleDirective } from './title/title.directive';
     ActionLinkModule,
     LoginModule,
     FeedbackModule,
+    TitleModule,
     NavbarModule,
     ActionbarModule,
     MenuModule,

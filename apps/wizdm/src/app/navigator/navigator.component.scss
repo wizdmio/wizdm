@@ -86,10 +86,12 @@
         // and animateChild() do not work properly @see {https://github.com/angular/angular/issues/32133}
         // So we are using a css transition instead.
         .wm-icon {
+          // Translates the chevron to make it visible while closed
+          transform: translateX(8px);
           // Animates the icon
           transition: transform 450ms ease;
-          // Rotates and translates the chevron while closed
-          &.closed { transform: translateX(8px) rotateZ(180deg); }
+          // Rotates and translates back the chevron while opened
+          &.opened { transform: rotateZ(180deg); }
         }
       }
     }

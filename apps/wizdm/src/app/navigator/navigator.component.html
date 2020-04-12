@@ -11,7 +11,7 @@
       <mat-toolbar>
 
         <!-- Background w/ shadow to fade while blending in -->
-        <div class="background background-color" [@backgndBlendin]="!(sideToggler || menuToggler || menuVisible) && !(scrolled$ | async)"></div>
+        <div class="background background-color" [@backgndBlendin]="!(sideOpened$ | async) && !isMenuOpened && !(scrolled$ | async)"></div>
 
         <!-- Navigation bar (1st row) -->
         <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
@@ -78,14 +78,14 @@
 
       <!-- Side Navigation Panel -->
       <mat-sidenav class="mat-elevation-z3" fixedInViewport [style.padding-top.px]="navbar?.clientHeight || 0" 
-        [mode]="mobile ? 'over' : 'side'" [(opened)]="sideToggler">
+        [mode]="mobile ? 'over' : 'side'" [opened]="sideOpened$ | async" (openedChange)="openSidenav($event)">
 
         <!-- Wraps the sidenav content within a secondary scolling container -->
         <div class="mat-drawer-inner-container" wmScrollable="sidenav">
 
           <!-- Side panel toggler to stay visible even when the panel is closed -->
-          <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sidenavOn" @sidenavOn>
-            <wm-icon [class.closed]="!sideToggler" icon="fas:fa-chevron-left"></wm-icon>
+          <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
+            <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
           </button>
 
           <!-- Side panel content is teleported here -->

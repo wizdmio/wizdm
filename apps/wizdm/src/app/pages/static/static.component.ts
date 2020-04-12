@@ -16,7 +16,7 @@ export class StaticComponent {
 
   constructor(readonly redirect: RedirectService, route: ActivatedRoute) {
 
-    // Resolve the requested page to be used with gtag directive
+    // Resolves the requested page to be used with gtag directive
     this.page$ = route.paramMap.pipe( map( params => params && params.get('page') || '') );
   }
 }

@@ -5,11 +5,11 @@
   <!-- Checks for an optional Table Of Contents -->
   <ng-container *ngIf="!!document.toc">
 
-    <!-- Teleports teh TOC into the side panel -->
-    <ng-template wmTeleport="sidenav">
+    <!-- Teleports the TOC into the side panel persisting the status across navigation -->
+    <ng-template wmSidenav opened persist>
 
-      <!-- Scrolling container -->
-      <ng-container [wmScroll]="document.ref || [0, 0]" target="sidenav" behavior="smooth">
+      <!-- Scrolling the toc at the reference -->
+      <ng-container [wmScroll]="document.ref" target="sidenav" behavior="smooth">
       
         <!-- Renders the markdown Table Of Contens and scrolls it to the given position -->
         <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="redirect.navigate($event)"></section>
