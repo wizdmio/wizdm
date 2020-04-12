@@ -4,8 +4,11 @@ const $smooth = '1s cubic-bezier(0.2, 1, 0.2, 1)';
 export let $animations = [
 
   trigger('menu', [
+    
     state('false', style({ height: 0 })),
+    
     state('true', style({ height: '*' })),
+
     transition('false => true', [
       style({ height: 0 }),
       query('button',

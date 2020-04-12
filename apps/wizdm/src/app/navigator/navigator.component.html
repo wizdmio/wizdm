@@ -11,7 +11,9 @@
       <mat-toolbar>
 
         <!-- Background w/ shadow to fade while blending in -->
-        <div class="background background-color" [@backgndBlendin]="!(sideOpened$ | async) && !isMenuOpened && !(scrolled$ | async)"></div>
+        <div class="background background-color" 
+             [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !(scrolled$ | async)">
+        </div>
 
         <!-- Navigation bar (1st row) -->
         <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
@@ -56,7 +58,7 @@
 
             <!-- Mobile menu toggler -->
             <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
-              <wm-toggler toggler-style="more_vert" [toggled]="menuToggler"></wm-toggler>
+              <wm-toggler toggler-style="more_vert" [toggled]="menuOpened$ | async"></wm-toggler>
             </button>
 
           </div>
@@ -65,7 +67,11 @@
         <!-- Mobile menu (2nd row) -->
         <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
           
-          <wm-menu color="primary" [items]="menus[signedIn ? 'private' : 'public']" [(toggler)]="menuToggler" (visible)="menuVisible = $event"></wm-menu>    
+          <wm-menu color="primary" 
+                   [items]="menus[signedIn ? 'private' : 'public']" 
+                   [toggler]="menuOpened$ | async" 
+                   (togglerChange)="openMenu($event)"
+                   (visible)="isMenuVisible = $event"></wm-menu>    
         
         </mat-toolbar-row>
 
@@ -77,8 +83,12 @@
     <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
 
       <!-- Side Navigation Panel -->
-      <mat-sidenav class="mat-elevation-z3" fixedInViewport [style.padding-top.px]="navbar?.clientHeight || 0" 
-        [mode]="mobile ? 'over' : 'side'" [opened]="sideOpened$ | async" (openedChange)="openSidenav($event)">
+      <mat-sidenav class="mat-elevation-z3" 
+                   fixedInViewport 
+                   [style.padding-top.px]="navbar?.clientHeight || 0" 
+                   [mode]="mobile ? 'over' : 'side'" 
+                   [opened]="sideOpened$ | async" 
+                   (openedChange)="openSidenav($event)">
 
         <!-- Wraps the sidenav content within a secondary scolling container -->
         <div class="mat-drawer-inner-container" wmScrollable="sidenav">
@@ -90,11 +100,9 @@
 
           <!-- Side panel content is teleported here -->
           <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
-
             <!-- Secondary router outlet named "side" as the default side content -->
             <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/18271 -->
             <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
-
           </ng-template>
 
         </div><!-- End of sidenav scrolling container -->

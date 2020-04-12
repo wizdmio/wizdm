@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 import { $animations } from './menu.animations';
 
@@ -35,7 +36,9 @@ export class MenuComponent {
 
   /** Menu trogger input */
   @Input('toggler') set toggleMenu(toggler: boolean) {
-    // Skips meaningless changes to avoid looping on double binding
+    // Gets teh proper boolean value
+    toggler = coerceBooleanProperty(toggler);
+    // Skips meaningless values to avoid looping on double binding
     if(toggler === this.toggler) { return; }
     // Updates the menu toggle status
     this.togglerChange.emit(this.toggler = toggler);
@@ -55,7 +58,7 @@ export class MenuComponent {
 
   public done() {
     // Skips the animation.done prior to the last one
-    if(--this.count > 0) { return; }
+    if(this.count < 0 || --this.count > 0) { return; }
     // Updates the visibility status
     !this.toggler && this.menuVisible.emit(this.visible = false);
   }
