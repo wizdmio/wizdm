@@ -6,6 +6,7 @@ import { TeleportService } from '@wizdm/teleport';
 import { skip, first, tap, map, filter, pluck } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
+/** Teleports the given content towards the 'sidenav' portal witihn the navigator */
 @Directive({
   selector: 'ng-template[wmSidenav]'
 })

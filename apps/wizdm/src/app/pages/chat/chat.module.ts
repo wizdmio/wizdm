@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { TeleportModule } from '@wizdm/teleport';
 import { RedirectModule } from '@wizdm/redirect';
 import { GtagModule } from '@wizdm/gtag';
 import { AvatarModule } from '@wizdm/elements/avatar';
@@ -43,7 +42,6 @@ const routes: RoutesWithContent = [
     MatButtonModule,
     MatListModule,
     MatBadgeModule,
-    TeleportModule,
     RedirectModule,
     GtagModule,
     IconModule, 

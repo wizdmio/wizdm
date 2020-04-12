@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { TeleportModule } from '@wizdm/teleport';
 import { GtagModule } from '@wizdm/gtag';
 import { RedirectModule } from '@wizdm/redirect';
 import { AvatarModule } from '@wizdm/elements/avatar';
@@ -57,7 +56,6 @@ const routes: RoutesWithContent = [
     DialogModule,
     OpenFileModule,
     ActionbarModule,
-    TeleportModule,
     CanLeaveModule,
     RedirectModule,
     ContentRouterModule.forChild(routes)

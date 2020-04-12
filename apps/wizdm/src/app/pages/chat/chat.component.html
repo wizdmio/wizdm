@@ -1,7 +1,8 @@
 
 <ng-container *wmContent="let msgs select 'chat'" gtag="chat">
 
-  <ng-template wmTeleport="actionbar" let-mobile="isMobile">
+  <!-- Displays the notification's button on the actionbar -->
+  <ng-template wmActionbar let-mobile="isMobile">
 
     <button mat-icon-button *ngIf="unreadCount">
       <wm-icon icon="far:fa-bell" [matBadge]="unreadCount" matBadgeSize="small"></wm-icon>
@@ -9,6 +10,7 @@
 
   </ng-template>
 
+  <!-- Displays the conversations on the sidenav panel -->
   <ng-template wmSidenav opened persist>
 
     <mat-action-list>

@@ -11,7 +11,6 @@ import { DialogModule } from '@wizdm/elements/dialog';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { ThumbnailModule } from '@wizdm/elements/thumbnail';
 import { SpinnerModule } from '@wizdm/elements/spinner';
-import { TeleportModule } from '@wizdm/teleport';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { AuthGuard } from 'app/utils/auth-guard';
 //import { CanLeaveGuard } from 'app/utils/can-leave';
@@ -38,7 +37,6 @@ const routes: RoutesWithContent = [
     ReadmeModule,
     ThumbnailModule,
     SpinnerModule,
-    TeleportModule,
     ActionbarModule,
     ContentRouterModule.forChild(routes)
   ]
