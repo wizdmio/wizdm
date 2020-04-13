@@ -4,7 +4,7 @@
   <!-- Displays the notification's button on the actionbar -->
   <ng-template wmActionbar let-mobile="isMobile">
 
-    <button mat-icon-button *ngIf="unreadCount">
+    <button mat-icon-button *ngIf="unreadCount" color="primary">
       <wm-icon icon="far:fa-bell" [matBadge]="unreadCount" matBadgeSize="small"></wm-icon>
     </button>
 
@@ -55,7 +55,7 @@
   </wm-chat-composer> 
 
   <!-- Can Leave dialog -->
-  <!--wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
+  <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
 
     <h2 mat-dialog-title><b>{{ leave.title || 'Unsent message' }}</b></h2>
   
@@ -68,7 +68,7 @@
       <button mat-button color="primary" [mat-dialog-close]="true">{{ leave.ok || 'Proceed' }}</button>
     </mat-dialog-actions>
 
-  </wm-dialog-->
+  </wm-dialog>
 
 </ng-container>
 

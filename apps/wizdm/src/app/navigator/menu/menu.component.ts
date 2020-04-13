@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, HostBinding, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ThemePalette } from '@angular/material/core'
+import { ThemePalette } from '@angular/material/core';
 import { $animations } from './menu.animations';
 
 export interface MenuItem {

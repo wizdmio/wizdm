@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { ThemePalette } from '@angular/material/core'
+import { ThemePalette } from '@angular/material/core';
 import { $animations } from './navbar.animations';
 
 export interface MenuItem {

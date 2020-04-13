@@ -91,8 +91,8 @@
 
     </header>
 
-    <!-- Main Navigation Container with dynamic background -->
-    <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async">
+    <!-- Main Navigation Container with dynamic background. Enables content's autosize when sidenav is active -->
+    <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async" [autosize]="sideActive$ | async">
 
       <!-- Side Navigation Panel -->
       <mat-sidenav class="mat-elevation-z3" 
