@@ -8,20 +8,25 @@ import { Subscription } from 'rxjs';
 
 /** Teleports the given content towards the 'sidenav' portal witihn the navigator */
 @Directive({
-  selector: 'ng-template[wmSidenav]'
+  selector: 'ng-template[wmSidenav]',
+  exportAs: 'wmSidenav'
 })
 export class SidenavDirective implements OnInit, OnDestroy {
 
   private sub: Subscription;
+  private _opened: boolean;
 
   /** When true persists the open/close status within the route configuration to restore it accordingly */
   @Input('persist') set persistValue(persist: boolean) { this.persist = coerceBooleanProperty(persist); } 
   private persist: boolean = false;
 
+  /** True when the sidenav panel is open */
+  get opened() { return !!this._opened; }
+
   /** opens/closes the sidenav panel */
   @Input() set opened(open: boolean) {
     // Delegates the navigator to open/close the panel
-    this.nav.openSidenav( coerceBooleanProperty(open) );
+    this.nav.openSidenav( this._opened = coerceBooleanProperty(open) );
   }
 
   /** Emits the open/close sidenav panel status */
@@ -32,6 +37,15 @@ export class SidenavDirective implements OnInit, OnDestroy {
     // Returns the router config data, if any, or assigns an empty one
     return this.route.routeConfig.data || (this.route.routeConfig.data = {});
   }
+
+  /** Opens the sidenav panel */
+  public open() { this.opened = true; }
+
+  /** Closes the sidenav panel */
+  public close() { this.opened = false; }
+
+  /** Toggles the sidenav panel */
+  public toggle() { this.opened = !this.opened; }
 
   constructor(private nav: NavigatorComponent,
               private route: ActivatedRoute,
@@ -50,7 +64,7 @@ export class SidenavDirective implements OnInit, OnDestroy {
       tap( value => this.persist && (this.routeData['sidenav'] = value) ) 
 
       // Emits the output status
-    ).subscribe( opened => this.openedChange.emit(opened) );
+    ).subscribe( opened => this.openedChange.emit(this._opened = opened) );
 
     // Restores the previous status saved within the route configuration
     this.route.data.pipe( 

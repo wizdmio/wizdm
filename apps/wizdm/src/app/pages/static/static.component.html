@@ -6,13 +6,13 @@
   <ng-container *ngIf="!!document.toc">
 
     <!-- Teleports the TOC into the side panel persisting the status across navigation -->
-    <ng-template wmSidenav opened persist>
+    <ng-template wmSidenav opened persist let-mobile="isMobile">
 
       <!-- Scrolling the toc at the reference -->
       <ng-container [wmScroll]="document.ref" target="sidenav" behavior="smooth">
       
         <!-- Renders the markdown Table Of Contens and scrolls it to the given position -->
-        <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="redirect.navigate($event)"></section>
+        <section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="navigate($event, mobile)"></section>
 
       </ng-container>
 
@@ -24,7 +24,7 @@
   <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="document" lockMaxWidth>
 
     <!-- Renders the markdown document body -->
-    <section [wm-markdown]="document.body" (navigate)="redirect.navigate($event)" #body></section>
+    <section [wm-markdown]="document.body" (navigate)="navigate($event)" #body></section>
 
     <!-- Renders the footnotes, if any -->
     <section *ngIf="body.notes.length > 0">

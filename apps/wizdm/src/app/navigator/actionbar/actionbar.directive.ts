@@ -3,7 +3,8 @@ import { TeleportService } from '@wizdm/teleport';
 
 /** Teleports the given content towards the 'actionbar' portal witihn the navigator */
 @Directive({
-  selector: 'ng-template[wmActionbar]'
+  selector: 'ng-template[wmActionbar]',
+  exportAs: 'wmActionbar'
 })
 export class ActionbarDirective implements OnInit, OnChanges, OnDestroy {
 
