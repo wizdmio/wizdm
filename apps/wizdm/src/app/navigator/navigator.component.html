@@ -5,15 +5,17 @@
   <!-- Wraps everything within a main scrolling container -->
   <div class="scroller" wmScrollable="navigator" [wmScroll]="scrollTo$ | async" [top]="navbar?.clientHeight || 0" behavior="smooth">
 
+    <!-- Inserts a transparent backdrop panel when the mobile menu is open -->
+    <div class="backdrop" (click)="openMenu(false)" *ngIf="mobile && (menuOpened$ | async)"></div>
+
     <!-- Updates the Title and the description meta-tag -->
     <header [wmTitle]="msgs.title" [description]="msgs.description">
 
-      <mat-toolbar>
+      <!-- Main toolbar with transparent background. Closes the mobile menu whenever the event bubbles up -->
+      <mat-toolbar (click)="openMenu(false)">
 
         <!-- Background w/ shadow to fade while blending in -->
-        <div class="background background-color" 
-             [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !(scrolled$ | async)">
-        </div>
+        <div class="background background-color" [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !(scrolled$ | async)"></div>
 
         <!-- Navigation bar (1st row) -->
         <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
@@ -21,11 +23,14 @@
           <!-- Left pane -->
           <nav fxLayout="row" fxLayoutAlign="start center">
 
-            <!-- Wizdm logo routing to home -->
+            <!-- Wizdm logo routing to home (closing the mobile menu if open) -->
             <wm-logo color="primary" routerLink="."></wm-logo>
         
             <!-- Desktop navigation links -->
-            <wm-navbar *ngIf="desktop && msgs.navbar as navbar" [menuItems]="navbar[signedIn ? 'private' : 'public']" color="primary"></wm-navbar>
+            <wm-navbar *ngIf="desktop && msgs.navbar as navbar" 
+                       [menuItems]="navbar[signedIn ? 'private' : 'public']" 
+                       color="primary">
+            </wm-navbar>
           
           </nav>
 
@@ -36,11 +41,14 @@
             <div [@actionActivate]="activateActions">
 
               <!-- De-sugared wmPortat directive: Actions will be teleported here -->
-              <ng-template wmPortal="actionbar" [wmPortalContext]="{ isMobile: mobile }" (wmPortalTemplate)="activateActions = $event"></ng-template>
+              <ng-template wmPortal="actionbar" 
+                          [wmPortalContext]="{ isMobile: mobile }" 
+                          (wmPortalTemplate)="activateActions = $event">
+              </ng-template>
 
             </div>
 
-            <!-- Sign-in / User profile button -->
+            <!-- Sign-in / User profile button (closing the mobile menu if open) -->
             <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
               
               <!-- Flip button -->
@@ -56,9 +64,12 @@
 
             </button>
 
-            <!-- Mobile menu toggler -->
-            <button mat-icon-button (click)="toggleMenu()" *ngIf="mobile">
+            <!-- Mobile menu toggler. Prevents the click event to bubble up the toolbar -->
+            <button mat-icon-button (click)="toggleMenu(); $event.stopPropagation()" *ngIf="mobile">
+
+              <!-- Uses a three vertical dots animated toggler -->
               <wm-toggler toggler-style="more_vert" [toggled]="menuOpened$ | async"></wm-toggler>
+
             </button>
 
           </div>
@@ -67,6 +78,7 @@
         <!-- Mobile menu (2nd row) -->
         <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
           
+          <!-- Animated menu -->
           <wm-menu color="primary" 
                    [items]="menus[signedIn ? 'private' : 'public']" 
                    [toggler]="menuOpened$ | async" 

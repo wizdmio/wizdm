@@ -1,14 +1,22 @@
 
 :host {
 
-  display: block;
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
   left: 0;
   top: 0;
   width: 100%;
   height: auto;
   box-sizing: border-box;
   overflow: hidden;
+
+  // Applies some extra margin to the first and last item in both the main and sub menu
+  .mat-button:first-of-type { margin-top: 8px; }
+  .mat-button:last-of-type { margin-bottom: 8px; }
 
   .link-active {
 
@@ -42,6 +50,4 @@
       transform: translateY(-30%) translateX(50%);
     }
   }
-
-  .menu-items { padding: 8px 0; }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
@@ -21,7 +21,11 @@ export interface MenuItem {
 })
 export class MenuComponent {
 
+  /** The sub-menu panels */
   @ViewChildren(MatExpansionPanel) private panels: QueryList<MatExpansionPanel>;
+
+  // Activates the main animation by the toggler
+  @HostBinding('@menu') get trigger() { return !!this.toggler; }
 
   // Keeps the toggler undefined to ensure the very first value always goes trough
   public toggler = undefined;
@@ -48,6 +52,12 @@ export class MenuComponent {
     this.count++;
   }
 
+  // Stops the click event from bubbling up to the parent. This helps to 
+  // implement a general close on click by the container
+  @HostListener('click', ['$event']) preventBubbling(event: MouseEvent) {
+    event.stopPropagation();
+  }
+
   /** Closes the menu with sub-menus  */
   public close() {
     // Closes all the sub panels
@@ -56,7 +66,8 @@ export class MenuComponent {
     this.toggleMenu = false;
   }
 
-  public done() {
+  // Reacts to the animation completion
+  @HostListener('@menu.done') public done() {
     // Skips the animation.done prior to the last one
     if(this.count < 0 || --this.count > 0) { return; }
     // Updates the visibility status

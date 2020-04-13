@@ -46,7 +46,10 @@ export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnCh
 
   private changeTemplate({ template, data }: TeleportPayload) {
 
-    /** Skips on no changes */
+    // Emits the new optional data, if any
+    if(typeof(data) !== undefined) { this.data.emit(data); }
+
+    /** Skips on no template changes */
     if(template === this.ngTemplateOutlet) { return; }
 
     // Creates a simple change object
@@ -63,9 +66,6 @@ export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnCh
 
     // Emits the new template
     this.template.emit(this.ngTemplateOutlet);
-
-    // Emits the optional data, if any
-    this.data.emit(data || null);
 
     // Emits true whenever the template isn't the host one
     this.active.emit(this.ngTemplateOutlet !== this.host);

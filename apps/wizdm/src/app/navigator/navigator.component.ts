@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject, of, combineLatest, scheduled, animationFrameScheduler } from 'rxjs';
+import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } from 'rxjs';
 import { filter, map, tap, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
@@ -155,4 +155,6 @@ export class NavigatorComponent {
   public toggleSidenav() { 
     this.openSidenav( !this.isSidenavOpened ); 
   }
+
+  testClick(ev) { console.log("click", ev); }
 }

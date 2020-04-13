@@ -1,6 +1,6 @@
 
 
-<!-- Displays the icon button on mobile devices -->
+<!-- Displays the icon button on small screen devices -->
 <button mat-icon-button [color]="color" [disabled]="disabled" (click)="click.emit($event)" *ngIf="!!icon && mobile; else desktopVersion">
   <wm-icon [icon]="icon"></wm-icon>
 </button>

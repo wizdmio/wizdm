@@ -1,55 +1,50 @@
+<!-- Sub-menu grouping accordion -->
+<mat-accordion displayMode="flat" hideToggle fxLayout="column">
 
-<nav fxLayout="column" fxLayoutAlign="start center" [@menu]="!!toggler" (@menu.done)="done()">
+  <!-- Loops on menu items -->
+  <ng-container *ngFor="let item of items">
 
-  <!-- Sub-menu grouping accordion -->
-  <mat-accordion displayMode="flat" hideToggle fxLayout="column">
+    <!-- Top links -->
+    <button mat-button 
+            (click)="close()"
+            [routerLink]="item.link"
+            [queryParams]="item.params"
+            [routerLinkActive]="'link-active border-color-default ' + color" 
+            [routerLinkActiveOptions]="{ exact: true }" *ngIf="item.link">{{ item.label }}</button>
 
-    <!-- Loops on menu items -->
-    <ng-container *ngFor="let item of items">
+    <!-- Menu links -->
+    <ng-container *ngIf="item.menu as menu">
 
-      <!-- Top links -->
-      <button mat-button 
-              (click)="close()"
-              [routerLink]="item.link"
-              [queryParams]="item.params"
-              [routerLinkActive]="'link-active border-color-default ' + color" 
-              [routerLinkActiveOptions]="{ exact: true }" *ngIf="item.link">{{ item.label }}</button>
+      <!-- Menu trigger button -->
+      <button mat-button [class]="'menu-trigger border-color-default ' + color"
+                          [class.link-active]="menuLinks.isActive && !panel.expanded"
+                          (click)="panel.toggle()">{{ item.label }}</button>
 
-      <!-- Menu links -->
-      <ng-container *ngIf="item.menu as menu">
+      <!-- Expandable sub-menu. Using routerLinkActive to detect sub links activation -->
+      <mat-expansion-panel class="padding-0 mat-elevation-z0" #panel routerLinkActive #menuLinks="routerLinkActive">
 
-        <!-- Menu trigger button -->
-        <button mat-button [class]="'menu-trigger border-color-default ' + color"
-                           [class.link-active]="menuLinks.isActive && !panel.expanded"
-                           (click)="panel.toggle()">{{ item.label }}</button>
+        <!-- Sub menu content -->
+        <div fxLayout="column">
 
-        <!-- Expandable sub-menu. Using routerLinkActive to detect sub links activation -->
-        <mat-expansion-panel class="padding-0 mat-elevation-z0" #panel routerLinkActive #menuLinks="routerLinkActive">
+          <!-- Loops on sub-menu items -->
+          <ng-container *ngFor="let sub of menu">
 
-          <!-- Sub menu content -->
-          <div class="menu-items" fxLayout="column">
+            <!-- Sub-menu links -->
+            <button mat-button
+                    (click)="close()"
+                    [routerLink]="sub.link"
+                    [queryParams]="sub.params"
+                    [routerLinkActive]="'link-active border-color-default ' + color" 
+                    [routerLinkActiveOptions]="{ exact: true }" *ngIf="sub.link">{{ sub.label }}</button>
 
-            <!-- Loops on sub-menu items -->
-            <ng-container *ngFor="let sub of menu">
+          </ng-container>
 
-              <!-- Sub-menu links -->
-              <button mat-button
-                      (click)="close()"
-                      [routerLink]="sub.link"
-                      [queryParams]="sub.params"
-                      [routerLinkActive]="'link-active border-color-default ' + color" 
-                      [routerLinkActiveOptions]="{ exact: true }" *ngIf="sub.link">{{ sub.label }}</button>
+        </div>
 
-            </ng-container>
-
-          </div>
-
-        </mat-expansion-panel>
-
-      </ng-container>
+      </mat-expansion-panel>
 
     </ng-container>
 
-  </mat-accordion>
+  </ng-container>
 
-</nav>
+</mat-accordion>
