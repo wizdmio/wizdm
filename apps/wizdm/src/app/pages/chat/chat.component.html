@@ -1,26 +1,29 @@
 
 <ng-container *wmContent="let msgs select 'chat'" gtag="chat">
 
-  <!-- Displays the notification's button on the actionbar -->
+  <!-- Actionbar -->
   <ng-template wmActionbar let-mobile="isMobile">
 
+    <!-- Notification's button -->
     <button mat-icon-button *ngIf="unreadCount" color="primary">
+      <!-- Displays the icon with the overall unread count -->
       <wm-icon icon="far:fa-bell" [matBadge]="unreadCount" matBadgeSize="small"></wm-icon>
     </button>
 
   </ng-template>
 
-  <!-- Displays the conversations on the sidenav panel -->
+  <!-- Sidenav panel -->
   <ng-template wmSidenav opened persist>
 
+    <!-- Normally, displays the list of active conversations -->
     <mat-action-list>
 
-      <mat-list-item class="height-unset" *ngFor="let conv of conversations$ | async">
+      <mat-list-item class="height-unset" *ngFor="let conversation of conversations$ | async">
 
-        <wm-chat-conversation [data]="conv" 
-                              [style.visibility.hidden]="conv.archive"
-                              (unreadCount)="accumulateUnread(conv.id, $event)"
-                              (click)="selectConversation(conv.id)">
+        <wm-chat-conversation [data]="conversation" 
+                              [style.visibility.hidden]="conversation.archive"
+                              (unreadCount)="accumulateUnread(conversation.id, $event)"
+                              (click)="selectConversation(conversation.id)">
         </wm-chat-conversation>
       
       </mat-list-item>
@@ -50,7 +53,7 @@
 
   </div>
 
-  <!-- Message composer -->
+  <!-- Message composer on the bottom -->
   <wm-chat-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (expanded)="onKeyboardExpand()" (send)="send($event)">
   </wm-chat-composer> 
 

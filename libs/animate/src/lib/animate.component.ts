@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { $animations } from './animate.animations';
+import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
+import { $animations, wmAnimations, wmAnimateSpeed } from './animate.animations';
 import { Subject, Subscription } from 'rxjs';
 import { startWith, delay } from 'rxjs/operators';
 import { AnimateService } from './animate.service';
-
-export type wmAnimations = 'landing'|'pulse'|'beat'|'heartBeat'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'zoomIn'|'bumpIn'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'zoomOut';
-export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
 
 @Component({
  selector: '[wmAnimate]',
@@ -15,9 +12,11 @@ export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
 })
 export class AnimateComponent implements OnInit, OnDestroy {
 
-  readonly timings = { slower: '3s', slow: '2s', normal: '1s', fast: '500ms', faster: '300ms' };
-  private  replay$ = new Subject<boolean>();
-  private  sub: Subscription;
+  private replay$ = new Subject<boolean>();
+  private sub: Subscription;
+
+  private timing: string = '1s';
+  private delay: string = '';
   
   // Animating properties
   public animating = false;
@@ -25,24 +24,40 @@ export class AnimateComponent implements OnInit, OnDestroy {
 
   constructor(private elm: ElementRef, private scroll: AnimateService) {}
 
-  private get idle() { return { value: 'idle' }; }
-  private get play() { 
-    return { 
-      value: this.animate,
-      //delay: this.delay, 
-      params: { 
-        timing: this.timings[this.speed] || '1s' 
-      }
-    };
-  }
+  private get idle() { return { value: `idle-${this.animate}` }; }
+  private get play() { return { 
+    value: this.animate,
+    params: { timing: this.timing, delay: this.delay }
+  };}
 
-  //@Input() delay: number|string;
- 
   /** Selects the animation to be played */
   @Input('wmAnimate') animate: wmAnimations;
 
   /** Speeds up or slows down the animation */
-  @Input() speed: wmAnimateSpeed = 'normal';
+  @Input() set speed(speed: wmAnimateSpeed) {
+    // Turns the requested speed into a valid timing
+    this.timing = { 
+      slower: '3s', 
+      slow: '2s', 
+      normal: '1s', 
+      fast: '500ms', 
+      faster: '300ms' 
+    }[speed || 'normal'] || '1s';
+  }
+
+  /** Delays the animation */
+  @Input('delay') set postpone(delay: string) {
+    // Coerces the input into a number first
+    const value = coerceNumberProperty(delay, 0);
+    if(value) { 
+      // Turns a valid number into a ms delay
+      this.delay = `${value}ms`;
+    }
+    else {
+      // Test the string for a valid delay combination
+      this.delay = /^\d+(?:ms|s)$/.test(delay) ? delay : '';
+    }
+  }
 
   @HostBinding('@animate')
   private trigger: string | {} = 'idle';
@@ -66,17 +81,14 @@ export class AnimateComponent implements OnInit, OnDestroy {
   @Input('paused') set pauseAnimation(value: boolean) { this.paused = coerceBooleanProperty(value); }
   public paused: boolean = false;
 
-  /** When true, triggers the animation on element scrolling in the viewport */
-  @Input('aos') set enableAOS(value: boolean) { this.aos = coerceBooleanProperty(value); }
-  public aos: boolean = false;
+  /** When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified */
+  @Input('aos') set enableAOS(value: number) { this.threshold = coerceNumberProperty(value, 0.5); }
+  private threshold: number = 0;
 
   /** When true, triggers the animation on element scrolling in the viewport */
   @Input('once') set aosOnce(value: boolean) { this.once = coerceBooleanProperty(value); }
   public once: boolean = false;
 
-    /** Specifies the amout of visibility triggering AOS */
-  @Input() threshold: number = 0.2;
-  
   /** Replays the animation */
   @Input() set replay(replay: any) {
 
@@ -99,7 +111,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
       // Triggers immediately when not paused
       startWith(!this.paused),
       // Builds the AOS observable from the common service
-      this.scroll.trigger(this.elm, this.aos ? this.threshold : 0, this.once)
+      this.scroll.trigger(this.elm, this.threshold, this.once)
 
     ).subscribe( trigger => {
       // Triggers the animation to play or to idle

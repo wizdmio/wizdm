@@ -15,6 +15,7 @@ import { ReadmeModule } from '@wizdm/elements/readme';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';
+import { ScrollModule } from 'app/navigator/scroll';
 import { AuthGuard } from 'app/utils/auth-guard';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ChatConversationModule } from './conversation';
@@ -50,6 +51,7 @@ const routes: RoutesWithContent = [
     DialogModule,
     ActionbarModule,
     SidenavModule,
+    //ScrollModule,
     CanLeaveModule,
     ChatConversationModule,
     ChatMessageModule,

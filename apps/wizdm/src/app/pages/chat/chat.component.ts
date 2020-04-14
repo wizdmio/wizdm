@@ -111,12 +111,12 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
 
   /** Scrolls te view to the bottom to make the latest message visible */
   public scrollToBottom() {
-    this.scroller && this.scroller.scrollTo({ bottom: 0 });
+    this.scroller?.scrollTo({ bottom: 0 });
   }
 
   /** Forces the view to scroll whenever the keyboard expanded */
   public onKeyboardExpand() {
-    // Scrolls to bottom wheneve the autoSCroll mode is enabled
+    // Scrolls to bottom wheneve the autoScroll mode is enabled
     this.autoScroll && this.scrollToBottom();
   }
 
