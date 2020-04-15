@@ -1,15 +1,7 @@
 import { Injectable, ElementRef, NgZone } from '@angular/core';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
-import { Observable, BehaviorSubject, combineLatest, of, OperatorFunction } from 'rxjs';
-import { map, startWith, distinctUntilChanged, first, scan, takeWhile, switchMap,debounceTime, shareReplay } from 'rxjs/operators';
-
-export interface AnimateView {
-
-  left?: number;
-  top?: number;
-  right?: number;
-  bottom?: number;
-}
+import { Observable, of, OperatorFunction } from 'rxjs';
+import { map, startWith, distinctUntilChanged, first, scan, switchMap, debounceTime, shareReplay } from 'rxjs/operators';
 
 /** Returns an observable mirroring the source while running within the given zone */
 export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {
@@ -29,77 +21,67 @@ export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {
 })
 export class AnimateService {
 
-  private update$ = new BehaviorSubject<AnimateView>(null);
-  private view$: Observable<AnimateView>;
+  private view$: Observable<ClientRect>;
 
-  constructor(private scroll: ScrollDispatcher, viewPort: ViewportRuler, private zone: NgZone) {
+  // By default, use the viewport rectangle
+  protected get viewRect(): ClientRect {
+    return this.viewPort.getViewportRect();
+  }
+
+  constructor(readonly scroll: ScrollDispatcher, readonly viewPort: ViewportRuler, private zone: NgZone) {
 
     // Tracks for viewport changes giving it 100ms time to accurately update for orientation changes
-    this.view$ = combineLatest( this.update$, viewPort.change(100).pipe( 
+    this.view$ = viewPort.change(100).pipe( 
       
-      startWith( viewPort.getViewportRect() ), 
+      startWith( null ), 
     
-      map( () => viewPort.getViewportRect() )
+      map( () => this.viewRect ),
 
-    )).pipe( debounceTime(20), map( ([view, port]) => {
-
-      // Updates the view area combining the viewport with the updated value from AnimateView directive
-      const left = view?.left || port.left;
-      const top = view?.top || port.top;
-      const right = view?.right || port.right;
-      const bottom = view?.bottom || port.bottom;
-
-      return { left, top, right, bottom };
-
+      debounceTime(20), 
       // Makes all the component to share the same viewport values
-    }), shareReplay(1) );
+      shareReplay(1) 
+    );
   }
 
-  /** Updates the animate viewport with the given values */
-  public update(view: AnimateView|null) { 
-    this.update$.next(view); 
-  }
+  // Triggers the animation
+  public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean> {
 
-  /** Builds the AOS observable from the given parameters */
-  public trigger(elm: ElementRef<HTMLElement>, threshold: number, once: boolean): OperatorFunction<boolean, boolean> {
     // Waits until the zone is stable once, aka the render is complete so the element to measure is there 
     return source => this.zone.onStable.pipe( 
       // Waits just once
       first(),
-      // Chains the source trigger...
+      // Triggers the play and replay requests
       switchMap( () => source ),
-      // ...with the AOS trigger
-      switchMap( trigger => threshold > 0 ? this.aos(elm, threshold, once) : of(trigger) ) 
+      // Triggers the while scrolling
+      switchMap( trigger => threshold > 0 ? this.aos(elm, threshold) : of(trigger) ) 
     );
   }
 
-  /** Observable triggering the animation on scroll */
-  private aos(elm: ElementRef<HTMLElement>, threshold: number, once: boolean): Observable<boolean> {
+  // Triggers the animation on scroll
+  private aos(elm: ElementRef<HTMLElement>, threshold: number): Observable<boolean> {
+
     // Returns an AOS observable
     return this.scroll.ancestorScrolled(elm, 0).pipe(
       // Makes sure triggering the start no matter there's no scroll event hits yet
-      startWith(null),
+      startWith(0),
       // Maps the scrolling to the element visibility value
       switchMap( () => this.visibility(elm) ),
       // Applies an hysteresys, so, to trigger the animation on based on the treshold while off on full invisibility
       scan((result, visiblility) => (visiblility >= threshold) || (result && visiblility > 0), false),
       // Distincts the resulting triggers 
       distinctUntilChanged(),
-      // Stop taking the first on trigger when aosOnce is set
-      takeWhile(trigger => !trigger || !once, true),
       // Runs within the angular zone to trigger change detection back on
       runInZone(this.zone)
     );
   }
-
-  /** Computes the element's visibility ratio against the viewport */
+  // Computes the element's visibility ratio against the viewport
   private visibility(elm: ElementRef<HTMLElement>): Observable<number> {
-    
+
     // Resolves from the latest viewport
     return this.view$.pipe( map( view => {
 
       // Gets the element's bounding rect
-      const rect = elm?.nativeElement?.getBoundingClientRect();
+      const rect = elm && elm.nativeElement && elm.nativeElement.getBoundingClientRect();
       if(!rect) { return 0; }
 
       // Return 1.0 when the element is fully within the viewport

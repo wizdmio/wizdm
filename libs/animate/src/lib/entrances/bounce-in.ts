@@ -29,7 +29,7 @@ export const bounceIn = [
       animate('{{timing}} {{delay}} cubic-bezier(0.215, 0.61, 0.355, 1)', 
 
         keyframes([
-          style({ opacity: 0, transform: 'translateY(-3000px)', offset: 0 }),
+          style({ opacity: 0, transform: 'translateY(-100%)', offset: 0 }),
           style({ opacity: 1, transform: 'translateY(25px)', offset: 0.6 }),
           style({ transform: 'translateY(-10px)', offset: 0.75 }),
           style({ transform: 'translateY(5px)', offset: 0.9 }),
@@ -44,7 +44,7 @@ export const bounceIn = [
       animate('{{timing}} {{delay}} cubic-bezier(0.215, 0.61, 0.355, 1)', 
 
         keyframes([
-          style({ opacity: 0, transform: 'translateX(-3000px)', offset: 0 }),
+          style({ opacity: 0, transform: 'translateX(-100%)', offset: 0 }),
           style({ opacity: 1, transform: 'translateX(25px)', offset: 0.6 }),
           style({ transform: 'translateX(-10px)', offset: 0.75 }),
           style({ transform: 'translateX(5px)', offset: 0.9 }),
@@ -59,7 +59,7 @@ export const bounceIn = [
       animate('{{timing}} {{delay}} cubic-bezier(0.215, 0.61, 0.355, 1)', 
 
         keyframes([
-          style({ opacity: 0, transform: 'translateY(3000px)', offset: 0 }),
+          style({ opacity: 0, transform: 'translateY(100%)', offset: 0 }),
           style({ opacity: 1, transform: 'translateY(-25px)', offset: 0.6 }),
           style({ transform: 'translateY(10px)', offset: 0.75 }),
           style({ transform: 'translateY(-5px)', offset: 0.9 }),
@@ -74,7 +74,7 @@ export const bounceIn = [
       animate('{{timing}} {{delay}} cubic-bezier(0.215, 0.61, 0.355, 1)', 
 
         keyframes([
-          style({ opacity: 0, transform: 'translateX(3000px)', offset: 0 }),
+          style({ opacity: 0, transform: 'translateX(100%)', offset: 0 }),
           style({ opacity: 1, transform: 'translateX(-25px)', offset: 0.6 }),
           style({ transform: 'translateX(10px)', offset: 0.75 }),
           style({ transform: 'translateX(-5px)', offset: 0.9 }),

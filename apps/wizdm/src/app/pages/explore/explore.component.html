@@ -1,7 +1,7 @@
 
 <ng-container *wmContent="let msgs select 'explore'" gtag="explore">
 
-  <header fxLayout="column">
+  <header fxLayout="column" wmAnimate="fadeInDown">
     <h1 fxHide.lt-sm>{{ msgs.title }}</h1>
     <h2 fxHide fxShow.lt-sm>{{ msgs.title }}</h2>
     <p [wm-readme]="msgs.description">
@@ -17,7 +17,7 @@
       <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%" *ngFor="let feat of msgs.features">
 
         <!-- Feature Card -->
-        <div class="content mat-elevation-z2" wmAnimate="bounceIn" aos>
+        <div class="content background-color mat-elevation-z2" wmAnimate="bounceIn" aos>
       
           <div class="goto" [wmRedirect]="feat.reference || 'docs/missing'">
 

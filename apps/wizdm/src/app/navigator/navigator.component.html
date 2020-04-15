@@ -2,8 +2,8 @@
 <!-- Resolve the localized content -->
 <ng-container *wmContent="let msgs select 'navigator'">
 
-  <!-- Wraps everything within a main scrolling container -->
-  <div class="scroller" wmScrollable="navigator" [wmScroll]="scrollTo$ | async" [top]="navbar?.clientHeight || 0" behavior="smooth">
+  <!-- Wraps everything within a main scrolling container to be used as teh animation view as well -->
+  <div class="scroller" wmAnimateView wmScrollable="navigator" [wmScroll]="scrollTo$ | async" [top]="navbar?.clientHeight || 0" behavior="smooth">
 
     <!-- Inserts a transparent backdrop panel when the mobile menu is open -->
     <div class="backdrop" (click)="openMenu(false)" *ngIf="mobile && (menuOpened$ | async)"></div>
@@ -121,11 +121,10 @@
           
       </mat-sidenav>
     
-      <!-- Page container to fit all the available space -->
+      <!-- Page container to fit all the available space setting the animation viewport -->
       <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" [style.margin-top.px]="navbar?.clientHeight || 0">
 
-        <!-- Page's container adjusting the animation view top to skip the toolbar -->
-        <div class="page" fxFlex="1 1 auto" [wmAnimateView.top]="navbar?.clientHeight || 0">
+        <div class="page" fxFlex="1 1 auto">
 
           <!-- Pages will fit here -->
           <router-outlet></router-outlet>

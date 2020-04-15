@@ -3,11 +3,8 @@ import { state, animate, style, transition, keyframes } from '@angular/animation
 export const tada = [
 
   transition('* => tada', [
-
     style('*'),
-    
     animate('{{timing}} {{delay}} ease-in-out', 
-
       keyframes([
         style({ transform: 'scale3d(1, 1, 1)', offset: 0 }),
         style({ transform: 'scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg)', offset: 0.1 }),
@@ -21,7 +18,6 @@ export const tada = [
         style({ transform: 'scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg)', offset: 0.9 }),
         style({ transform: 'scale3d(1, 1, 1)', offset: 1 }),
       ])
-      
     )], { params: { timing: '1s', delay: ''}}
   )  
 ];
