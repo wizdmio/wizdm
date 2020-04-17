@@ -15,11 +15,11 @@ import { DoorbellModule } from '@wizdm/doorbell';
 import { ReadmeNavigator } from '@wizdm/elements/readme';
 import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
-import { IpListModule } from '@wizdm/iplist';
+import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
 
 import { AppComponent } from './app.component';  
-import { appname, content, teleport, emoji, router } from '../environments/common';
+import { appname, content, teleport, emoji, router, ipinfo } from '../environments/common';
 import { firebase, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
@@ -36,8 +36,8 @@ const routes: Routes = [
     // Database tools (Firebase)
     ConnectModule.init(firebase, appname),
     AuthModule, DatabaseModule, StorageModule,
-    // IP location (iplist.cc)
-    IpListModule,   
+    // IP location info
+    IpInfoModule.init(ipinfo),   
     // Dynamic content (i18n)
     ContentModule.init(content),
     // Template teleport

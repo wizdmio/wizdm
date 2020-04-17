@@ -3,7 +3,7 @@ import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@a
 import { DateAdapter } from '@angular/material/core';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { switchMap, map, first } from 'rxjs/operators';
-import { IpList } from '@wizdm/iplist';
+import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Member } from 'app/core/member';
 import { $languageMap } from './lang-map';
 import { of } from 'rxjs';
@@ -15,7 +15,7 @@ import moment from 'moment';
 @Injectable()
 export class LanguageSelector extends ContentSelector {
 
-  constructor(private iplist: IpList, private adapter: DateAdapter<any>, private user: Member, router: Router, config: ContentConfigurator) { 
+  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: Member, router: Router, config: ContentConfigurator) { 
     super(router, config); 
   }
 
@@ -31,8 +31,8 @@ export class LanguageSelector extends ContentSelector {
         if(profile && profile.lang) { return of(profile.lang) }; 
         
         // Detects the location from the IP and returns the coresponding language falling back to the browser language
-        // Note; IpList service caches the last value to avoid multiple API calls unless requested.
-        return this.iplist.pipe( map( list => list?.countrycode && $languageMap[list.countrycode][0] || this.browserLanguage ));
+        // Note; IpInfo service caches the last value to avoid multiple API calls unless requested.
+        return this.iplist.pipe( map( list => $languageMap[list.countrycode][0] || this.browserLanguage ));
       }), 
 
       map( detected => {

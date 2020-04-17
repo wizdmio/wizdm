@@ -35,7 +35,7 @@
       "@wizdm/paypal": ["libs/paypal/src/index.ts"],
       "@wizdm/stripe": ["libs/stripe/src/index.ts"],
       "@wizdm/ipinfo": ["libs/ipinfo/src/index.ts"],
-      "@wizdm/iplist": ["libs/iplist/src/index.ts"],
+      "@wizdm/ipinfo/*": ["libs/ipinfo/src/lib/*"],
       "@wizdm/gtag": ["libs/gtag/src/index.ts"],
       "@wizdm/emoji": ["libs/emoji/src/index.ts"],
       "@wizdm/emoji/*": ["libs/emoji/src/lib/*"]

@@ -2,6 +2,7 @@ import { ExtraOptions } from '@angular/router';
 import { ContentConfig } from '@wizdm/content';
 import { TeleportConfig } from '@wizdm/teleport';
 import { EmojiConfig } from '@wizdm/emoji';
+import { IpInfoConfig, IP_LIST_CC } from '@wizdm/ipinfo';
 import { firebase, doorbell } from "./secrets";
 
 export const appname: string = 'wizdm';
@@ -22,12 +23,16 @@ export const emoji: EmojiConfig = {
   emojiExt: '.png'
 };
 
+export const ipinfo: IpInfoConfig = {
+  // Use iplist.cc as the provider
+  provider: IP_LIST_CC
+}
+
 export const router: ExtraOptions = { 
 
-  // Keeps the default anchor scrolling disabled since implemented by the AppComponent
+  // Keeps the default anchor scrolling disabled since implemented by the Navigator
   // using CdkScrollable for wider compatibility
-  anchorScrolling: "disabled",
-  //scrollPositionRestoration: "enabled"
+  anchorScrolling: "disabled"
 };
 
 // Environment object common to all build configurations
