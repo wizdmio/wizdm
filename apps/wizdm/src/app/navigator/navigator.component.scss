@@ -24,10 +24,11 @@
 
   header { 
     display: block;
-    position: fixed;
+    position: sticky;
     width: 100%;
     top: 0;
     left: 0;
+    height: fit-content;
     
     // Makes sure all the children lays on the same z-index
     z-index: 2;
