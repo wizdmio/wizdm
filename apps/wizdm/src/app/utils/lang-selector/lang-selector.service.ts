@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { DateAdapter } from '@angular/material/core';
-import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { switchMap, map, first } from 'rxjs/operators';
+import { DateAdapter } from '@angular/material/core';
+import { Injectable } from '@angular/core';
+import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Member } from 'app/core/member';
 import { $languageMap } from './lang-map';
@@ -45,6 +45,8 @@ export class LanguageSelector extends ContentSelector {
         if( this.isLanguageAllowed(requested) ) { 
 
           console.log('Requested language:', requested);
+
+          //this.user.auth.language = requested;
 
           // Updates the adapter's locale according to the new language keeping track of the current language for further use
           this.adapter.setLocale( moment.locale( this.config.currentValue = requested ) );

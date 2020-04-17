@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '@wizdm/elements/dialog';
@@ -224,6 +224,8 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
     // Registering a new user with a email/password
     this.auth.registerNew(email, password, name )
       .then( user => {
+        // Tracks the activity with analytics
+        this.gtag.signUp(user?.providerId);
         // Creates the new user member  
         this.member.register(user)
           // Sends the email verification
@@ -242,6 +244,8 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
     this.auth.signIn(email, password)
       // Closes the dialog returning the user
       .then( user => {
+        // Tracks the activity with analytics
+        this.gtag.login(user?.providerId);
         // Jumps to the requested target...
         this.navigate(this.redirectTo)
           //...prior to close the fialog
@@ -255,6 +259,8 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
     // Signing-in with a provider    
     this.auth.signInWith( provider )
       .then( user => { 
+        // Tracks the activity with analytics
+        this.gtag.login(user?.providerId);
         // Creates the new user member if needed, keeps the existing one otherwise 
         this.member.register(user)
           // Jumps to the requested target...
