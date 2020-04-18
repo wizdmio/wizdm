@@ -1,6 +1,6 @@
 import { Component, OnDestroy, Output, EventEmitter, Input, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { dbUser } from 'app/core/member';
+import { dbUser } from 'app/utils/user-profile';
 import { Subscription } from "rxjs";
 import moment, { defaultFormat } from 'moment';
 

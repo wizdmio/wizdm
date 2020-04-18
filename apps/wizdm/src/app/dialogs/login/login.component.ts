@@ -2,10 +2,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '@wizdm/elements/dialog';
+import { User as authUser } from '@wizdm/connect/auth';
 import { RedirectService } from '@wizdm/redirect';
 import { GtagService } from '@wizdm/gtag';
-import { User } from '@wizdm/connect/auth';
-import { Member } from 'app/core/member';
+import { User } from 'app/utils/user-profile';
 import { $animations } from './login-animations';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
@@ -24,7 +24,7 @@ export interface LoginData {
   encapsulation: ViewEncapsulation.None,
   animations: $animations
 })
-export class LoginComponent extends DialogComponent<LoginData, User> {
+export class LoginComponent extends DialogComponent<LoginData, authUser> {
   
   readonly form: FormGroup;
 
@@ -42,7 +42,7 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
 
   get auth() { return this.member.auth; }
   
-  constructor(dialog: MatDialog, private member: Member, private gtag: GtagService, private redirect: RedirectService) {
+  constructor(dialog: MatDialog, private member: User, private gtag: GtagService, private redirect: RedirectService) {
 
     super(dialog);
 
@@ -134,12 +134,14 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
       this.form.addControl('newEmail', this.newEmail);
       break;
 
+      case 'sendEmailVerification': break;
+
       case 'delete':
       this.form.addControl('password', this.password);      
       break;
 
       default:
-      console.error('Invalid login action:', page);
+      console.error('Invalid login page requested:', page);
     }
   }
 
@@ -201,8 +203,6 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
       case 'delete':
       this.deleteAccount( this.password.value );
       break;
-
-      //default:
     }
   }
 
@@ -231,7 +231,7 @@ export class LoginComponent extends DialogComponent<LoginData, User> {
           // Sends the email verification
           .then( () => user.sendEmailVerification() )
           // Jumps to the member page
-          .then( () => this.navigate('member') )
+          .then( () => this.navigate('profile') )
           // Closes the dialog returning the user
           .then( () => this.close(user) );
       })

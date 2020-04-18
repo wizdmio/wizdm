@@ -3,7 +3,7 @@ import { filter, map, tap, distinctUntilChanged, startWith, switchMap } from 'rx
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
 import { MediaObserver } from '@angular/flex-layout';
-import { Member } from 'app/core/member';
+import { User } from 'app/utils/user-profile';
 import { runInZone } from 'app/utils/common';
 import { ScrollableDirective } from './scroll';
 import { $animations } from './navigator.animations';
@@ -50,7 +50,7 @@ export class NavigatorComponent {
   public get mobile(): boolean { return this.media.isActive('xs'); }
   public get desktop(): boolean { return !this.mobile; }
 
-  constructor(private media: MediaObserver, private router: Router, readonly member: Member, private zone: NgZone) {
+  constructor(private media: MediaObserver, private router: Router, readonly user: User, private zone: NgZone) {
 
     // Ensures the style being applied according to the animationFrameScheduler (so to say in-sync with the rendering)
     // preventing the notorious ExpressionChangedAfterItHasBeenChecked exception without introducing any delay the 
@@ -99,11 +99,11 @@ export class NavigatorComponent {
 
   // Signed In status
   public get signedIn(): boolean {
-    return this.member.auth.authenticated || false;
+    return this.user.auth.authenticated || false;
   }
 
   public get userImage(): string {
-    return this.member.data.photo || '';
+    return this.user.data.photo || '';
   }
 
   /** Applies the given style to the navigator's content background */

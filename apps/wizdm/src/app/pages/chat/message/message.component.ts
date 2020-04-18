@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Member } from 'app/core/member';
+import { User } from 'app/utils/user-profile';
 import { dbMessage } from '../chat-types';
 import moment from 'moment';
 
@@ -16,7 +16,7 @@ export class ChatMessage {
 
   @Input() message: dbMessage;
 
-  constructor(private me: Member) {}
+  constructor(private me: User) {}
 
   get body(): string {
     return this.message && this.message.body || '';

@@ -1,13 +1,13 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material/stepper';
 import { ContentStreamer } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
 import { wmDocument } from '@wizdm/editable';
-import { ProjectService } from 'app/core/project';
-import { Member, dbUser } from 'app/core/member';
+import { User, dbUser } from 'app/utils/user-profile';
 import { EditableConverter } from 'app/utils/doc-converter';
+import { ProjectService } from './project.service';
 import { $animations } from './apply.animations';
 import { Observable, Subscription } from 'rxjs';
 import { tap, switchMap, catchError } from 'rxjs/operators';
@@ -47,7 +47,7 @@ export class ApplyComponent implements AfterViewInit, OnDestroy {
   public progress = false;
   
   constructor(private builder   : FormBuilder, 
-              private profile   : Member<userApply>,
+              private profile   : User<userApply>,
               private converter : EditableConverter,
               private project   : ProjectService,
               private redirect  : RedirectService,

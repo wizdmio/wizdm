@@ -4,7 +4,7 @@ import { DateAdapter } from '@angular/material/core';
 import { Injectable } from '@angular/core';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
-import { Member } from 'app/core/member';
+import { User } from 'app/utils/user-profile';
 import { $languageMap } from './lang-map';
 import { of } from 'rxjs';
 import moment from 'moment';
@@ -15,7 +15,9 @@ import moment from 'moment';
 @Injectable()
 export class LanguageSelector extends ContentSelector {
 
-  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: Member, router: Router, config: ContentConfigurator) { 
+  private get auth() { return this.user.auth; }
+
+  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: User, router: Router, config: ContentConfigurator) { 
     super(router, config); 
   }
 
@@ -46,10 +48,10 @@ export class LanguageSelector extends ContentSelector {
 
           console.log('Requested language:', requested);
 
-          //this.user.auth.language = requested;
-
-          // Updates the adapter's locale according to the new language keeping track of the current language for further use
-          this.adapter.setLocale( moment.locale( this.config.currentValue = requested ) );
+          // Updates the authentication's locale according to the new language keeping track of the current language for further use
+          this.auth.setLocale( this.config.currentValue = requested );
+          // Updates the adapter's locale accordingly
+          this.adapter.setLocale( moment.locale( requested ) );
           // Proceed with the routing
           return true; 
         }

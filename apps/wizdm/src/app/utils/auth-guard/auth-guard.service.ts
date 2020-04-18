@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree,CanActivate,ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Member } from 'app/core/member';
 import { AuthService } from '@wizdm/connect/auth';
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';

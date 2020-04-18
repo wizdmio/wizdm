@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { User } from '@wizdm/connect/auth';
+import { User as authUser } from '@wizdm/connect/auth';
 import { StorageService } from '@wizdm/connect/storage';
-import { Member, dbUser } from 'app/core/member';
+import { User, dbUser } from 'app/utils/user-profile';
 import { DialogRef } from '@wizdm/elements/dialog';
+import { Component } from '@angular/core';
 import moment from 'moment';
 
 @Component({
@@ -14,13 +14,13 @@ export class ProfileComponent {
 
   private newProfile: dbUser;
 
-  constructor(private member: Member, private storage: StorageService) {}
+  constructor(private member: User, private storage: StorageService) {}
 
   public get profileData(): dbUser { return this.member.data; }
 
   public get profilePhoto(): string { return this.profileData.photo || ''; }
 
-  public get authUser(): User { return this.member.auth.user || {} as User };
+  public get authUser(): authUser { return this.member.auth.user || {} as authUser };
 
   public get created(): string { return moment(!!this.authUser ? this.authUser.metadata.creationTime : null).format('ll'); }
 

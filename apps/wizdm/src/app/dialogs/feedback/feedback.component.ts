@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
 import { DialogComponent } from '@wizdm/elements/dialog';
-import { Member } from 'app/core/member';
+import { User } from 'app/utils/user-profile';
 
 export interface DorbellSubmit {
   email        : string,
@@ -33,7 +33,7 @@ export class FeedbackComponent extends DialogComponent {
   public sending = false;
   public sent = false;
   
-  constructor(dialog: MatDialog, private builder: FormBuilder, private user: Member, private doorbell: DoorbellService) { 
+  constructor(dialog: MatDialog, private builder: FormBuilder, private user: User, private doorbell: DoorbellService) { 
     super(dialog);
 
     this.panelClass = ['wm-feedback', 'wm-theme-colors'];

@@ -37,8 +37,8 @@ export class AuthService {
   }
 
   /** Sets/Gets the code for the language to be used during the authentication */
-  public set language(code: string) { this.auth.languageCode = code; }
-  public get language(): string { return this.auth.languageCode; }
+  public get locale(): string { return this.auth.languageCode; }
+  public setLocale(code: string) { this.auth.languageCode = code; }
 
   /**
    * Registers a new user by email and confirmPasswordReset

@@ -5,7 +5,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { DatabaseService, DatabaseCollection } from '@wizdm/connect/database';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { runInZone } from 'app/utils/common';
-import { Member } from 'app/core/member';
+import { User } from 'app/utils/user-profile';
 import { dbChatter, dbConversation, dbMessage } from './chat-types';
 import { $animations } from './chat.animations';
 
@@ -43,7 +43,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
     return msg.id;
   }
   
-  constructor(db: DatabaseService, private user: Member<dbChatter>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
+  constructor(db: DatabaseService, private user: User<dbChatter>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
 
     super(db, 'conversations');
 

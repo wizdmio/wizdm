@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Inject, ViewChild, TemplateRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DatabaseService } from '@wizdm/connect/database';
-import { dbUser } from 'app/core/member';
-//import { wmProject } from 'app/core/project';
+import { dbUser } from 'app/utils/user-profile';
 
 @Component({
   selector: 'wm-user-info',

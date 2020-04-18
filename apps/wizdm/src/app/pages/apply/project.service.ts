@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
 import { map, take, debounceTime } from 'rxjs/operators';
-import { Member } from '../member';
+import { User } from 'app/utils/user-profile';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService extends PagedCollection<any> {
 
-  constructor(db: DatabaseService, readonly member: Member) {
+  constructor(db: DatabaseService, readonly user: User) {
     super(db, db.col('/projects'));
   }
 
   // Current user id
-  public get userId(): string { return this.member.id; }
+  public get userId(): string { return this.user.id; }
 
   /**
    * Verifies if a project with the specified name already exists
