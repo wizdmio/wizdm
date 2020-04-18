@@ -29,10 +29,11 @@ export const ipinfo: IpInfoConfig = {
 }
 
 export const router: ExtraOptions = { 
-
-  // Keeps the default anchor scrolling disabled since implemented by the Navigator
-  // using CdkScrollable for wider compatibility
-  anchorScrolling: "disabled"
+  // Anchor scrolling and scroll position restoration are overidden by the AppComponent
+  // making sure the rendering is completed prior to perform the scrolling attempt
+  scrollPositionRestoration: 'top',
+  anchorScrolling: 'enabled',
+  scrollOffset: [0, 80]
 };
 
 // Environment object common to all build configurations

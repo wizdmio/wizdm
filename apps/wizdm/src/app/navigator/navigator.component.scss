@@ -1,18 +1,20 @@
 :host {
   
   // Positions the navigator on the viewport
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  //top: 0;
+  //left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 
   display: flex;
   flex-flow: column;
+
+  overflow: hidden;
   
   // Settle a lower general zindex (1)
   z-index: 1;
-
+/*
   .scroller {
     position: absolute;
     top: 0;
@@ -21,7 +23,7 @@
     height: 100%;
     overflow: auto;
   }
-
+*/
   header { 
     display: block;
     position: fixed;
@@ -74,9 +76,9 @@
   .mat-sidenav-container {
 
     // Ensures the sidenav container always stretch, so, to scroll within the navigator
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
+    //top: 0;
+    //left: 0;
     width: 100%;
     min-height: 100%;
 

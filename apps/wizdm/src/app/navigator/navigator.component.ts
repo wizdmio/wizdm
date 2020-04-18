@@ -1,11 +1,10 @@
 import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } from 'rxjs';
-import { filter, map, tap, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
-import { Component, ViewChild, NgZone } from '@angular/core';
-import { Router, Scroll } from '@angular/router';
+import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
+import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { MediaObserver } from '@angular/flex-layout';
+import { Component, NgZone } from '@angular/core';
 import { User } from 'app/utils/user-profile';
 import { runInZone } from 'app/utils/common';
-import { ScrollableDirective } from './scroll';
 import { $animations } from './navigator.animations';
 
 @Component({
@@ -17,15 +16,11 @@ import { $animations } from './navigator.animations';
 })
 export class NavigatorComponent {
 
-  // The main scrolling container
-  @ViewChild(ScrollableDirective) private scroller: ScrollableDirective;
-
   // Background style 
   readonly background$: Observable<any>;
   private bkStyler$ = new BehaviorSubject<any>(undefined);
 
-  // Scrolling observables
-  readonly scrollTo$: Observable<string|[number, number]|HTMLElement>;
+  // Scrolled observable
   readonly scrolled$: Observable<boolean> = of(false);
 
   /** Observale tracking the mobile menu status */
@@ -50,7 +45,11 @@ export class NavigatorComponent {
   public get mobile(): boolean { return this.media.isActive('xs'); }
   public get desktop(): boolean { return !this.mobile; }
 
-  constructor(private media: MediaObserver, private router: Router, readonly user: User, private zone: NgZone) {
+  constructor(private media: MediaObserver, 
+              private scroller: ScrollDispatcher,
+              private ruler: ViewportRuler,
+              readonly user: User, 
+              private zone: NgZone) {
 
     // Ensures the style being applied according to the animationFrameScheduler (so to say in-sync with the rendering)
     // preventing the notorious ExpressionChangedAfterItHasBeenChecked exception without introducing any delay the 
@@ -72,29 +71,19 @@ export class NavigatorComponent {
       // Runs on the next animation frame
     ), animationFrameScheduler);
 
-    // Builds the navigation scrolling observable to be used with wmScroll directive.
-    // This replaces the Angular's basic RouterScrolling mechanism for wider compatibiity.
-    this.scrollTo$ = this.router.events.pipe( 
-      // Filters for scroll events only
-      filter( e => e instanceof Scroll ), 
-      // Translates the event into the scroll target 
-      map( (e: Scroll) =>  e.anchor || e.position || [0, 0] )
-    );
-  }
-
-  ngAfterViewInit() {
-
     // Builds an observable detecting whenever the navigator main content is scrolled
-    (this.scrolled$ as any) = this.scroller.elementScrolled().pipe(
+    this.scrolled$ = this.scroller.scrolled(0).pipe(
       // Starts with some value to ensure triggering at start, if needed
-      startWith( false ),
+      startWith( null ),
+      // Filters the scrolling events from secondary cdkScollable directives
+      filter( scrollable => !scrollable ),
       // Maps to the top distance
-      map( () => this.scroller.measureScrollOffset('top') > 5 ),
+      map( () => this.ruler.getViewportScrollPosition().top > 5 ),
       // Filters for changes
       distinctUntilChanged(),
       // Enters the zone since cdk/scrolling observables run out of angular zone
       runInZone(this.zone)
-    );
+    )
   }
 
   // Signed In status

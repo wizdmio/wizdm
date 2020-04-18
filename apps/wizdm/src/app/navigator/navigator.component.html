@@ -2,142 +2,138 @@
 <!-- Resolve the localized content -->
 <ng-container *wmContent="let msgs select 'navigator'">
 
-  <!-- Wraps everything within a main scrolling container to be used as teh animation view as well -->
-  <div class="scroller" wmAnimateView wmScrollable="navigator" [wmScroll]="scrollTo$ | async" [top]="navbar?.clientHeight || 0" behavior="smooth">
+  <!-- Inserts a transparent backdrop panel when the mobile menu is open -->
+  <div class="backdrop" (click)="openMenu(false)" *ngIf="mobile && (menuOpened$ | async)"></div>
 
-    <!-- Inserts a transparent backdrop panel when the mobile menu is open -->
-    <div class="backdrop" (click)="openMenu(false)" *ngIf="mobile && (menuOpened$ | async)"></div>
+  <!-- Updates the Title and the description meta-tag -->
+  <header [wmTitle]="msgs.title" [description]="msgs.description">
 
-    <!-- Updates the Title and the description meta-tag -->
-    <header [wmTitle]="msgs.title" [description]="msgs.description">
+    <!-- Main toolbar with transparent background. Closes the mobile menu whenever the event bubbles up -->
+    <mat-toolbar (click)="openMenu(false)">
 
-      <!-- Main toolbar with transparent background. Closes the mobile menu whenever the event bubbles up -->
-      <mat-toolbar (click)="openMenu(false)">
+      <!-- Background w/ shadow to fade while blending in -->
+      <div class="background background-color" [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !(scrolled$ | async)"></div>
 
-        <!-- Background w/ shadow to fade while blending in -->
-        <div class="background background-color" [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !(scrolled$ | async)"></div>
+      <!-- Navigation bar (1st row) -->
+      <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
 
-        <!-- Navigation bar (1st row) -->
-        <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
+        <!-- Left pane -->
+        <nav fxLayout="row" fxLayoutAlign="start center">
 
-          <!-- Left pane -->
-          <nav fxLayout="row" fxLayoutAlign="start center">
-
-            <!-- Wizdm logo routing to home (closing the mobile menu if open) -->
-            <wm-logo color="primary" routerLink="."></wm-logo>
+          <!-- Wizdm logo routing to home (closing the mobile menu if open) -->
+          <wm-logo color="primary" routerLink="."></wm-logo>
+      
+          <!-- Desktop navigation links -->
+          <wm-navbar *ngIf="desktop && msgs.navbar as navbar" 
+                      [menuItems]="navbar[signedIn ? 'private' : 'public']" 
+                      color="primary">
+          </wm-navbar>
         
-            <!-- Desktop navigation links -->
-            <wm-navbar *ngIf="desktop && msgs.navbar as navbar" 
-                       [menuItems]="navbar[signedIn ? 'private' : 'public']" 
-                       color="primary">
-            </wm-navbar>
-          
-          </nav>
+        </nav>
 
-          <!-- Right pane -->
-          <div fxLayout="row" fxLayoutAlign="end center">
+        <!-- Right pane -->
+        <div fxLayout="row" fxLayoutAlign="end center">
 
-            <!-- Action toolbar animating the element's entrance -->
-            <div [@actionActivate]="activateActions">
+          <!-- Action toolbar animating the element's entrance -->
+          <div [@actionActivate]="activateActions">
 
-              <!-- De-sugared wmPortat directive: Actions will be teleported here -->
-              <ng-template wmPortal="actionbar" 
-                          [wmPortalContext]="{ isMobile: mobile }" 
-                          (wmPortalTemplate)="activateActions = $event">
-              </ng-template>
-
-            </div>
-
-            <!-- Sign-in / User profile button (closing the mobile menu if open) -->
-            <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
-              
-              <!-- Flip button -->
-              <wm-flip [flipped]="signedIn">
-              
-                <!-- Shows a generic signIn icon on the front -->
-                <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
-              
-                <!-- Shows the loggedIn avatar on the back -->
-                <wm-avatar back color="primary" [src]="userImage"></wm-avatar>
-              
-              </wm-flip>
-
-            </button>
-
-            <!-- Mobile menu toggler. Prevents the click event to bubble up the toolbar -->
-            <button mat-icon-button (click)="toggleMenu(); $event.stopPropagation()" *ngIf="mobile">
-
-              <!-- Uses a three vertical dots animated toggler -->
-              <wm-toggler toggler-style="more_vert" [toggled]="menuOpened$ | async"></wm-toggler>
-
-            </button>
+            <!-- De-sugared wmPortat directive: Actions will be teleported here -->
+            <ng-template wmPortal="actionbar" 
+                        [wmPortalContext]="{ isMobile: mobile }" 
+                        (wmPortalTemplate)="activateActions = $event">
+            </ng-template>
 
           </div>
-        </mat-toolbar-row>
 
-        <!-- Mobile menu (2nd row) -->
-        <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
-          
-          <!-- Animated menu -->
-          <wm-menu color="primary" 
-                   [items]="menus[signedIn ? 'private' : 'public']" 
-                   [toggler]="menuOpened$ | async" 
-                   (togglerChange)="openMenu($event)"
-                   (visible)="isMenuVisible = $event"></wm-menu>    
-        
-        </mat-toolbar-row>
+          <!-- Sign-in / User profile button (closing the mobile menu if open) -->
+          <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
+            
+            <!-- Flip button -->
+            <wm-flip [flipped]="signedIn">
+            
+              <!-- Shows a generic signIn icon on the front -->
+              <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
+            
+              <!-- Shows the loggedIn avatar on the back -->
+              <wm-avatar back color="primary" [src]="userImage"></wm-avatar>
+            
+            </wm-flip>
 
-      </mat-toolbar>
-
-    </header>
-
-    <!-- Main Navigation Container with dynamic background. Enables content's autosize when sidenav is active -->
-    <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async" [autosize]="sideActive$ | async">
-
-      <!-- Side Navigation Panel -->
-      <mat-sidenav class="mat-elevation-z3" 
-                   fixedInViewport 
-                   [style.padding-top.px]="navbar?.clientHeight || 0" 
-                   [mode]="mobile ? 'over' : 'side'" 
-                   [opened]="sideOpened$ | async" 
-                   (openedChange)="openSidenav($event)">
-
-        <!-- Wraps the sidenav content within a secondary scolling container -->
-        <div class="mat-drawer-inner-container" wmScrollable="sidenav">
-
-          <!-- Side panel toggler to stay visible even when the panel is closed -->
-          <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
-            <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
           </button>
 
-          <!-- Side panel content is teleported here -->
-          <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
-            <!-- Secondary router outlet named "side" as the default side content -->
-            <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/18271 -->
-            <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
-          </ng-template>
+          <!-- Mobile menu toggler. Prevents the click event to bubble up the toolbar -->
+          <button mat-icon-button (click)="toggleMenu(); $event.stopPropagation()" *ngIf="mobile">
 
-        </div><!-- End of sidenav scrolling container -->
-          
-      </mat-sidenav>
-    
-      <!-- Page container to fit all the available space setting the animation viewport -->
-      <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" [style.margin-top.px]="navbar?.clientHeight || 0">
+            <!-- Uses a three vertical dots animated toggler -->
+            <wm-toggler toggler-style="more_vert" [toggled]="menuOpened$ | async"></wm-toggler>
 
-        <div class="page" fxFlex="1 1 auto">
+          </button>
 
-          <!-- Pages will fit here -->
-          <router-outlet></router-outlet>
         </div>
+      </mat-toolbar-row>
 
-        <!-- Footer always on the content's bottom -->
-        <footer wm-footer fxFlex="0 0 auto"></footer>
+      <!-- Mobile menu (2nd row) -->
+      <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
+        
+        <!-- Animated menu -->
+        <wm-menu color="primary" 
+                  [items]="menus[signedIn ? 'private' : 'public']" 
+                  [toggler]="menuOpened$ | async" 
+                  (togglerChange)="openMenu($event)"
+                  (visible)="isMenuVisible = $event"></wm-menu>    
+      
+      </mat-toolbar-row>
 
-      </mat-sidenav-content>
+    </mat-toolbar>
 
-    </mat-sidenav-container>
+  </header>
 
-  </div> <!-- End of main scrolling container -->
+  <!-- Main Navigation Container with dynamic background. Enables content's autosize when sidenav is active -->
+  <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async" [autosize]="sideActive$ | async">
+
+    <!-- Side Navigation Panel -->
+    <mat-sidenav class="mat-elevation-z3" 
+                  fixedInViewport 
+                  [style.padding-top.px]="navbar?.clientHeight || 0" 
+                  [mode]="mobile ? 'over' : 'side'" 
+                  [opened]="sideOpened$ | async" 
+                  (openedChange)="openSidenav($event)">
+
+      <!-- Wraps the sidenav content within a secondary scrolling container -->
+      <div class="mat-drawer-inner-container" cdkScrollable name="sidenav">
+
+        <!-- Side panel toggler to stay visible even when the panel is closed -->
+        <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
+          <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
+        </button>
+
+        <!-- Side panel content is teleported here -->
+        <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
+          <!-- Secondary router outlet named "side" as the default side content -->
+          <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/18271 -->
+          <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
+        </ng-template>
+
+      </div><!-- End of sidenav scrolling container -->
+        
+    </mat-sidenav>
+  
+    <!-- Main content wrapping page and footer -->
+    <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" [style.margin-top.px]="navbar?.clientHeight || 0">
+
+      <!-- Page container to fit all the available space setting the animation viewport -->
+      <div class="page" fxFlex="1 1 auto" wmAnimateView [top]="navbar?.clientHeight || 0">
+
+        <!-- Pages will fit here -->
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- Footer always on the content's bottom -->
+      <footer wm-footer fxFlex="0 0 auto"></footer>
+
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
 
   <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
   <wm-login-dlg maxWidth="95vw" wmActionLink="login" (activate)="login.open($event)" #login></wm-login-dlg>

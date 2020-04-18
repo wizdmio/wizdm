@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +20,6 @@ import { NavbarModule } from './navbar/navbar.module';
 import { ActionbarModule } from './actionbar/actionbar.module'; 
 import { MenuModule } from './menu/menu.module'; 
 import { FooterModule } from './footer/footer.module';
-import { ScrollModule } from './scroll/scroll.module';
 import { NavRoutingModule } from './navigator-routing.module';
 import { NavigatorComponent } from './navigator.component';
 
@@ -28,6 +28,7 @@ import { NavigatorComponent } from './navigator.component';
   imports: [
     CommonModule,
     FlexLayoutModule,
+    ScrollingModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
@@ -46,7 +47,6 @@ import { NavigatorComponent } from './navigator.component';
     ActionbarModule,
     MenuModule,
     FooterModule,
-    ScrollModule,
     NavRoutingModule
   ]
 })
