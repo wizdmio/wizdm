@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+import { AnimateModule } from '@wizdm/animate';
 import { ContentModule } from '@wizdm/content';
 import { ConnectModule } from '@wizdm/connect';
 import { AuthModule } from '@wizdm/connect/auth';
@@ -33,6 +34,8 @@ const routes: Routes = [
     // Basics
     BrowserModule,
     BrowserAnimationsModule,
+    // Content animation module
+    //AnimateModule.init({ mode: 'scrolling' }),
     // Database tools (Firebase)
     ConnectModule.init(firebase, appname),
     AuthModule, DatabaseModule, StorageModule,

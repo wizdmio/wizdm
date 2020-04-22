@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { ContentStreamer } from '@wizdm/content';
 import { EmojiUtils } from '@wizdm/emoji/utils';
 import { Observable, BehaviorSubject } from 'rxjs';

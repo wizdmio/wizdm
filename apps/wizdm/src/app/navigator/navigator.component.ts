@@ -4,7 +4,7 @@ import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { MediaObserver } from '@angular/flex-layout';
 import { Component, NgZone } from '@angular/core';
 import { User } from 'app/utils/user-profile';
-import { runInZone } from 'app/utils/common';
+import { runInZone } from 'app/utils/rxjs';
 import { $animations } from './navigator.animations';
 
 @Component({

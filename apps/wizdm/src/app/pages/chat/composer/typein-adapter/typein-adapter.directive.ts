@@ -3,7 +3,6 @@ import { DOCUMENT } from '@angular/common';
 import { EmojiInput } from '@wizdm/emoji/input';
 
 /** Typing In Adapter for texarea and EmojiInput */
-/** Typing In Adapter for texarea and EmojiInput */
 @Directive({
   selector: 'textarea[typein], wm-emoji-input[typein]'
 })
