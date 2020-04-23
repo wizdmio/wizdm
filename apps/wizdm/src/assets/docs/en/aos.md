@@ -84,6 +84,12 @@ This customizations above will affect the container's children elements only, so
 
 ## API Reference
 
+|Name|Description|Import from|
+|:---|:----------|:---------:|
+|AnimateModule|The main module|@import { AnimateModule } from '@wizdm/animate';|
+|AnimateService|Service providing the triggering logic|@import { AnimateService } from '@wizdm/animate';|
+|AnimateDirective|The `wmAnimateView` directive to customize the triggering viewport|@import { AnimateDirective } from '@wizdm/animate';|
+|AnimateComponent|The `wmAnimate` component enable the feature on the target element|@import { AnimateComponent } from '@wizdm/animate';|
 
 ## Resources
 
