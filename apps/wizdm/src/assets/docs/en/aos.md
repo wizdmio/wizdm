@@ -20,7 +20,18 @@ Animations are grouped in three catetgories: Attention seekers, Entrances and Ex
 
 | Attention seekers | Entrances | Exits |
 |:-----------------:|:---------:|:-----:|
-|   beat bounce flip headShake heartBeat jello' pulse rubberBand shake swing tada wobble | | |
+| beat 
+ bounce 
+ flip 
+ headShake 
+ heartBeat 
+ jello' 
+ pulse 
+ rubberBand 
+ shake 
+ swing 
+ tada 
+ wobble | | |
 
 * Attention seekers: `'beat'|'bounce'|'flip'|'headShake'|'heartBeat'|'jello'|'pulse'|'rubberBand'|'shake'|'swing'|'tada'|'wobble'`
 * Entrances: `'bumpIn'|'bounceIn'|'bounceInDown'|'bounceInLeft'|'bounceInUp'|'bounceInRight'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'flipInX'|'flipInY'|'jackInTheBox'|'landing'|'rollIn'|'zoomIn'|'zoomInDown'|'zoomInLeft'|'zoomInUp'|'zoomInRight'`
