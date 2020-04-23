@@ -19,6 +19,7 @@ Start by adding the `wmAnimate` directive to the element you want to animate. Th
 Animations are grouped in three catetgories: Attention seekers, Entrances and Exists.
 
 | Attention seekers | Entrances | Exits |
+|:-----------------:|:---------:|:-----:|
 |   beat bounce flip headShake heartBeat jello' pulse rubberBand shake swing tada wobble | | |
 
 * Attention seekers: `'beat'|'bounce'|'flip'|'headShake'|'heartBeat'|'jello'|'pulse'|'rubberBand'|'shake'|'swing'|'tada'|'wobble'`
