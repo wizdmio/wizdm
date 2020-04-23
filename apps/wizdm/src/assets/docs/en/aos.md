@@ -182,7 +182,36 @@ export class AnimateDirective {
 |`@Input() right: number`|Optional right offset|
 
 ### AnimateService
-The service providing the triggering logic.   
+The service providing the triggering logic.
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class AnimateService {
+
+  /** True when the trigger is provided using the IntersectionObserver API */
+  public get useIntersectionObserver(): boolean;
+
+  /** True when the trigger is provided using cdk/scrolling package */
+  public get useScrolling(): boolean;
+
+  /** Applies the given options to the triggering service */
+  public setup(options: AnimateOptions);
+  
+  // Triggers the animation
+  public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>;
+}
+```
+
+|Properties|Description|
+|:--|:--|
+|` `|When ...|
+
+|Methods|Description|
+|:--|:--|
+|` `|When ...|
+
 
 ## Resources
 
