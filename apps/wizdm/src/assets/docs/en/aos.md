@@ -127,8 +127,6 @@ export class AnimateComponent {
   public animating;
   public animated;
 
-  constructor(private elm: ElementRef, private scroll: AnimateService) {}
-
   @Input('wmAnimate') animate: wmAnimations;
   @Input() set speed(speed: wmAnimateSpeed);
   @Input() set delay(delay: string);
@@ -160,6 +158,28 @@ export class AnimateComponent {
 
 ### AnimateDirective
 The `wmAnimateView` directive to customize the triggering viewport.
+
+```typescript
+@Directive({
+  selector: '[wmAnimateView]'
+})
+export class AnimateDirective {
+
+  @Input() useElement: boolean;
+  @Input() top: number;
+  @Input() left: number;
+  @Input() bottom: number;
+  @Input() right: number;
+}
+```
+
+|Properties|Description|
+|:--|:--|
+|`@Input() useElement: boolean`|When **true** uses the element's bounding rect as the animation view|
+|`@Input() top: number`|Optional top offset|
+|`@Input() left: number`|Optional left offset|
+|`@Input() bottom: number`|Optional bottom offset|
+|`@Input() right: number`|Optional right offset|
 
 ### AnimateService
 The service providing the triggering logic.   
