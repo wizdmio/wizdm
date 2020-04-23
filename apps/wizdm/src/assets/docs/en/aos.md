@@ -28,7 +28,7 @@ The animation will trigger as soon as the component renders if not specified oth
 The animation can be triggered again using the `replay` input. Every change in this input value will trigger the animation again provided the value can be coerced into a truthful boolean. Use the `paused` flag to prevevnt the animation from triggering at first, so, you'll get the full control about when the triggering will happen.  
 
 ### Animate On Scroll
-Setting the `aos` flag enables the "Animate on Scroll" mechanism with a default threshold of `0.5`, so, the animation triggers as soon as the 50% of the element area intersects the viewport area. The triggering threshold can be customized setting the `aos` input to a different numeric value from `0` (escluded) up to `1` (included). Setting `aos=0` disables the animation on scroll.
+Setting the `aos` flag enables the "Animate On Scroll" mechanism with a default threshold of `0.5`, so, the animation triggers as soon as the 50% of the element area intersects the viewport area. The triggering threshold can be customized setting the `aos` input to a different numeric value from `0` (escluded) up to `1` (included). Setting `aos=0` disables the trigger. 
 When the element scrolls out completely, the trigger resets, so, the animation will trigger again as soon as the element enters the visible portion of the viewport again. Use the `once` flag to prevent the trigger to reset, so, the animation will run just once.
 
 ## Timing
@@ -40,6 +40,9 @@ By default every animation applies the optimal timing. However, timing can be ov
 * `faster`: running the animation with a 300ms timing 
 
 Additionally, the animation can be delayed using `delay` input. The input accepts both a string describing the delay such as '1s' or '250ms' or a number that will be considered a delay expressed in **ms**.
+
+## Reference
+
 
 ## Resources
 
