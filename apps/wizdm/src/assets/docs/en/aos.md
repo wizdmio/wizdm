@@ -80,7 +80,7 @@ Alternatively, by setting the `useElement` flag, the container's client bounding
 </div>
 ```
 
-This customizations above will affect the container's children elements only, so, different triggering areas can be used for different containers. 
+The customizations above will affect the container's children elements only, so, different triggering areas can be used for different containers. 
 
 ## API Reference
 
@@ -114,7 +114,13 @@ interface AnimateConfig {
 * `offsetBottom`: A global offset, expressed in pixels, to shrink the triggering area from the bottom with.
 
 ### AnimateComponent
-The `wmAnimate` component enabling the feature on the target element.
+The `wmAnimate` component enables the animation of the target element.
+
+|Properties|Description|
+|:--|:--|
+|`animating: boolean`|True then the animation is running|
+|`animated: boolean`|True after the animation completed. False while the animation is running|
+|`@Input('wmAnimate') animate: wmAnimations`|Selects teh animation to run. See [supported animations](docs/aos#supported-animations)| 
 
 ### AnimateDirective
 The `wmAnimateView` directive to customize the triggering viewport.
