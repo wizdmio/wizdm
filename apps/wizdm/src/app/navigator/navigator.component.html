@@ -2,13 +2,13 @@
 <!-- Resolve the localized content -->
 <ng-container *wmContent="let msgs select 'navigator'">
 
-  <!-- Inserts a transparent backdrop panel when the mobile menu is open -->
+  <!-- Inserts a transparent backdrop panel to close the mobile menu when is open -->
   <div class="backdrop" (click)="openMenu(false)" *ngIf="mobile && (menuOpened$ | async)"></div>
 
   <!-- Updates the Title and the description meta-tag -->
   <header [wmTitle]="msgs.title" [description]="msgs.description">
 
-    <!-- Main toolbar with transparent background. Closes the mobile menu whenever the event bubbles up -->
+    <!-- Main toolbar with transparent background. Closes the mobile menu whenever the click event bubbles up -->
     <mat-toolbar (click)="openMenu(false)">
 
       <!-- Background w/ shadow to fade while blending in -->
@@ -20,7 +20,7 @@
         <!-- Left pane -->
         <nav fxLayout="row" fxLayoutAlign="start center">
 
-          <!-- Wizdm logo routing to home (closing the mobile menu if open) -->
+          <!-- Wizdm logo routing to home -->
           <wm-logo color="primary" routerLink="."></wm-logo>
       
           <!-- Desktop navigation links -->
@@ -45,7 +45,7 @@
 
           </div>
 
-          <!-- Sign-in / User profile button (closing the mobile menu if open) -->
+          <!-- Sign-in / User profile button -->
           <button mat-icon-button [routerLink]="signedIn ? 'profile' : 'login'">
             
             <!-- Flip button -->
