@@ -211,6 +211,8 @@ export class AnimateService {
 
 ### Methods
 
+---
+
 ```typescript
 public setup(options: AnimateOptions)
 ```
@@ -241,6 +243,8 @@ public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunctio
 Observable operator to be used for triggering the animation on scroll.
 * elm: The element for which the animation will be triggered.
 * threshold: The visibility ratio to trigger the animation with. 
+
+---
 
 [Back](back) 
 
