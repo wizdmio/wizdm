@@ -2,7 +2,7 @@
 
 <!-- toc: index.md ref: animate -->
 
-[Index](docs/index#animate) - [Back](back) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
+[Index](docs/index#animate) - [Back](back) - [API](docs/aos#api-reference) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
 
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
@@ -42,7 +42,38 @@ By default every animation applies the optimal timing. However, timing can be ov
 
 Additionally, the animation can be delayed using `delay` input. The input accepts both a string describing the delay such as '1s' or '250ms' or a number that will be considered a delay expressed in **ms**.
 
-## Reference
+## Viewport
+When `aos` is enabled each animated element's area is checked against the viewport area to evaluate its visibility ratio and trigger the animation accordingly. 
+
+The triggering area can optionally be adjusted, so, to shrink (or expand) the effective area by `left`, `top`, `right` and `bottom` margins:
+
+``` html
+<div class="container" wmAnimateView top="64">
+
+  <section wmAnimate="landing" aos> 
+    My animated content goes here
+  </section>
+  ...
+</div>
+```
+
+By using the `wmAnimateView` directive on a parent container in the example above, the effective triggering area has been reduced by a 64 pixels offset from the top of the viewport. 
+
+Alternatively, by setting the `useElement` flag, the container's client bounding box will be used as the triggering area instead of the viewport: 
+
+``` html
+<div class="container" wmAnimateView useElement top="64">
+
+  <section wmAnimate="landing" aos> 
+    My animated content goes here
+  </section>
+  ...
+</div>
+```
+
+This customizations above will affect the container's children elements only, so, different triggering areas can be used for different containers. 
+
+## API Reference
 
 
 ## Resources
