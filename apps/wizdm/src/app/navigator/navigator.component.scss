@@ -1,65 +1,15 @@
 :host {
   
-  // Positions the navigator on the viewport
+  // Let's the navigator stretch to fill all the available space
   position: relative;
-  //top: 0;
-  //left: 0;
   width: 100%;
   min-height: 100%;
 
   display: flex;
   flex-flow: column;
 
-  overflow: hidden;
-  
   // Settle a lower general zindex (1)
   z-index: 1;
-/*
-  .scroller {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-  }
-*/
-  header { 
-    display: block;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    
-    // Makes sure all the children lays on the same z-index
-    z-index: 2;
-    & * { z-index: inherit; }
-
-    .mat-toolbar {
-    
-      background-color: transparent;
-      
-      .mat-toolbar-row {
-
-        // Reduces the standard 16px left/right padding to 8px on mobile
-        @media (max-width: 959px) { padding: 0 8px; }
-
-        &[auto] { height: auto; }
-      }
-
-      .background {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        
-        pointer-events: none;
-
-        box-shadow: 0 6px 12px rgba(black, 0.125);
-      }
-    }
-  }
 
   // Mobile menu backdrop
   .backdrop {
@@ -72,13 +22,53 @@
     // Ensures laying onthe same menu's z-index
     z-index: 2;
   }
+  
+  header { 
+    // Keeps the header fixed to the top of the viewport
+    display: block;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    
+    // Makes sure all the children lays on the same z-index
+    z-index: 2;
+    & * { z-index: inherit; }
+
+    .mat-toolbar {
+    
+      // Makes the toolbar transparent to blendin with the page
+      background-color: transparent;
+      
+      // Uses this class to make the background appear when needed 
+      .background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        
+        pointer-events: none;
+
+        box-shadow: 0 6px 12px rgba(black, 0.125);
+      }
+      
+      // Customizes the rows
+      .mat-toolbar-row {
+
+        // Reduces the standard 16px left/right padding to 8px on mobile
+        @media (max-width: 959px) { padding: 0 8px; }
+
+        // Breaks the min-height on request
+        &[auto] { height: auto; }
+      }
+    }
+  }
 
   .mat-sidenav-container {
 
-    // Ensures the sidenav container always stretch, so, to scroll within the navigator
+    // Ensures the sidenav container always stretch, so, to scroll with the navigator
     position: relative;
-    //top: 0;
-    //left: 0;
     width: 100%;
     min-height: 100%;
 
@@ -113,7 +103,7 @@
     // Page's content
     .mat-sidenav-content { 
     
-      // Prevents the scrolling since the main scolling container is the navigator itself
+      // Prevents the scrolling since the main scolling container remains the window
       overflow: hidden; 
 
       .page { position: relative; }
