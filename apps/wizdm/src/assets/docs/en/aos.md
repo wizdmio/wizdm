@@ -86,17 +86,42 @@ This customizations above will affect the container's children elements only, so
 
 `import { AnimateModule } from '@wizdm/animate';`
 
-|Name|Description|
-|:---|:----------|
-|AnimateModule|The main module|
-|AnimateService|Service providing the triggering logic|
-|AnimateDirective|The `wmAnimateView` directive to customize the triggering viewport|
-|AnimateComponent|The `wmAnimate` component enabling the feature on the target element|
+The main module provides an optional `init()` static function to customize the module behvior:
+```typescript
+static init(config?: AnimateConfig): ModuleWithProviders<AnimateModule>
+```
+**config**
+```typescript
+interface AnimateConfig {
+  triggerMode?: 'scrolling'|intersectionObserver'|'auto';
+  offsetTop?: number;
+  offsetLeft?: number;
+  offsetRight?: number;
+  offsetBottom?: number;
+}
+```
+* `triggerMode`: Specifies wich mechanism is going to be used for trigggering the animations while scrolling.
+  * `'scrolling'`: Computes the visibility upon scrolling with the help of the [CdkScrolling](https://material.angular.io/cdk/scrolling/overview) package. In order to work the animate elements must belong to the main scrolling window or within a `cdkScrollable` child container.
+  * `'intersectionObserver'`: Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method.
+  * `'auto`: (The default value). Tells the package to check for the best mode to be used.
+* `offsetTop`: A global offset, expressed in pixels, to shrink the triggering area from the top with.
+* `offsetLeft`: A global offset, expressed in pixels, to shrink the triggering area from the left with.
+* `offsetRight`: A global offset, expressed in pixels, to shrink the triggering area from the right with.
+* `offsetBottom`: A global offset, expressed in pixels, to shrink the triggering area from the bottom with.
+
+### AnimateComponent
+The `wmAnimate` component enabling the feature on the target element.
+
+### AnimateDirective
+The `wmAnimateView` directive to customize the triggering viewport.
+
+### AnimateService
+The service providing the triggering logic.   
 
 ## Resources
 
 Read [Animate On Scroll in Angular](https://medium.com/wizdm-genesys/animate-on-scroll-in-angular-330efd05ebec) on Medium.
 
-[Back](back)
+[Back](back) 
 
 [Home](home)
