@@ -241,8 +241,8 @@ export interface AnimateOptions {
 public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
 ```
 Observable operator to be used for triggering the animation on scroll.
-* elm: The element for which the animation will be triggered.
-* threshold: The visibility ratio to trigger the animation with. 
+* `elm`: The element for which the animation will be triggered.
+* `threshold`: The visibility ratio to trigger the animation with. 
 
 ---
 
