@@ -27,7 +27,8 @@ By default every animation applies the optimal timing. However, timing can be ov
 * `slow`: running the animation with a 2s timing
 * `normal`: running the animation with a 1s timing
 * `fast` : running the animation with a 500ms timing
-* `faster`: running the animation with a 300ms timing
+* `faster`: running the animation with a 300ms timing 
+
 Additionally, the animation can be delayed using `delay` input. The input accepts both a string describing the delay such as '1s' or '250ms' or a number that will be considered a delay expressed in ms.
 
 ## Resources
