@@ -100,7 +100,8 @@ interface AnimateConfig {
   offsetBottom?: number;
 }
 ```
-* `triggerMode`: Specifies wich mechanism is going to be used for trigggering the animations while scrolling.
+* `triggerMode`: Specifies wich mechanism is going to be used for trigggering the animations while scrolling. 
+
 |:---|:---|
 |`'scrolling'`|Computes the visibility upon scrolling with the help of the [CdkScrolling](https://material.angular.io/cdk/scrolling/overview) package. In order to work the animate elements must belong to the main scrolling window or within a `cdkScrollable` child container|
 |`'intersectionObserver'`|Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method|
