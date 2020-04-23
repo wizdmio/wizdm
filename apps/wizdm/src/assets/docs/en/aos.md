@@ -131,11 +131,11 @@ export class AnimateComponent {
 
   @Input('wmAnimate') animate: wmAnimations;
   @Input() set speed(speed: wmAnimateSpeed);
-  @Input('delay') set postpone(delay: string);
-  @Input('disabled') disabled;
-  @Input('paused') paused: boolean;
-  @Input('aos') private threshold: number;
-  @Input('once') once: boolean;
+  @Input() set delay(delay: string);
+  @Input() disabled: boolean;
+  @Input() paused: boolean;
+  @Input() set aos(threashold: number);
+  @Input() once: boolean;
   @Input() set replay(replay: any);
   
   @Output() start: EventEmitter<void>;  
@@ -149,11 +149,11 @@ export class AnimateComponent {
 |`animated: boolean`|True after the animation completed. False while the animation is running|
 |`@Input('wmAnimate') animate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
 |`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
-|`@Input('delay') set postpone(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
-|`@Input('disabled') disabled`|Disables teh animation|
-|`@Input('paused') paused: boolean`|When true, keeps the animation idle until the next replay triggers|
-|`@Input('aos') private threshold`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
-|`@Input('once') once: boolean`|When true, prevents the animation to run again|
+|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
+|`@Input() disabled: boolean`|Disables teh animation|
+|`@Input() paused: boolean`|When true, keeps the animation idle until the next replay triggers|
+|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
+|`@Input() once: boolean`|When true, prevents the animation to run again|
 |`@Input() set replay(replay: any)`|Replays the animation|
 |`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
 |`@Output() done: EventEmitter<void>`|Emits at the end of the animation|
