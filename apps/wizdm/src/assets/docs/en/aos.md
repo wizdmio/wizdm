@@ -43,11 +43,11 @@ When the element scrolls out completely, the trigger resets, so, the animation w
 
 ## Timing
 By default every animation applies the optimal timing. However, timing can be overridden with the `speed` input. Possible values are:
-* `slower`: running the animation with a 3s timing
-* `slow`: running the animation with a 2s timing
-* `normal`: running the animation with a 1s timing
-* `fast` : running the animation with a 500ms timing
-* `faster`: running the animation with a 300ms timing 
+* `slower`: running the animation with a **3s** timing
+* `slow`: running the animation with a **2s** timing
+* `normal`: running the animation with a **1s** timing
+* `fast` : running the animation with a **500ms** timing
+* `faster`: running the animation with a **300ms** timing 
 
 Additionally, the animation can be delayed using `delay` input. The input accepts both a string describing the delay such as '1s' or '250ms' or a number that will be considered a delay expressed in **ms**.
 
@@ -108,10 +108,10 @@ interface AnimateConfig {
 |`'intersectionObserver'`|Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method|
 |`'auto'`|(The default value). Tells the package to check for the best mode to be used|
 
-* `offsetTop`: A global offset, expressed in pixels, to shrink the triggering area from the top with.
-* `offsetLeft`: A global offset, expressed in pixels, to shrink the triggering area from the left with.
-* `offsetRight`: A global offset, expressed in pixels, to shrink the triggering area from the right with.
-* `offsetBottom`: A global offset, expressed in pixels, to shrink the triggering area from the bottom with.
+* `offsetTop`: A global offset, expressed in **pixels**, to shrink the triggering area from the top with.
+* `offsetLeft`: A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
+* `offsetRight`: A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
+* `offsetBottom`: A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.
 
 ### AnimateComponent
 The `wmAnimate` component enables the animation of the target element.
@@ -145,15 +145,15 @@ export class AnimateComponent {
 
 |Properties|Description|
 |:--|:--|
-|`animating: boolean`|True when the animation is running|
-|`animated: boolean`|True after the animation completed. False while the animation is running|
+|`animating: boolean`|**True** when the animation is running|
+|`animated: boolean`|**True** after the animation completed. False while the animation is running|
 |`@Input('wmAnimate') animate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
 |`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
 |`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
-|`@Input() disabled: boolean`|Disables teh animation|
-|`@Input() paused: boolean`|When true, keeps the animation idle until the next replay triggers|
+|`@Input() disabled: boolean`|Disables the animation|
+|`@Input() paused: boolean`|When **true**, keeps the animation idle until the next replay triggers|
 |`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
-|`@Input() once: boolean`|When true, prevents the animation to run again|
+|`@Input() once: boolean`|When **true**, prevents the animation to run again|
 |`@Input() set replay(replay: any)`|Replays the animation|
 |`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
 |`@Output() done: EventEmitter<void>`|Emits at the end of the animation|
