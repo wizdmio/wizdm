@@ -2,7 +2,7 @@
 
 <!-- toc: index.md ref: animate -->
 
-[Index](docs/index#animate) - [Back](back) - [API](docs/aos#api-reference) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
+[Back](back) - [API](docs/aos#api-reference) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
 
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
@@ -17,6 +17,10 @@ Start by adding the `wmAnimate` directive to the element you want to animate. Th
 
 ## Supported animations
 Animations are grouped in three catetgories: Attention seekers, Entrances and Exists.
+
+| Attention seekers | Entrances | Exits |
+|   beat bounce flip headShake heartBeat jello' pulse rubberBand shake swing tada wobble | | |
+
 * Attention seekers: `'beat'|'bounce'|'flip'|'headShake'|'heartBeat'|'jello'|'pulse'|'rubberBand'|'shake'|'swing'|'tada'|'wobble'`
 * Entrances: `'bumpIn'|'bounceIn'|'bounceInDown'|'bounceInLeft'|'bounceInUp'|'bounceInRight'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'flipInX'|'flipInY'|'jackInTheBox'|'landing'|'rollIn'|'zoomIn'|'zoomInDown'|'zoomInLeft'|'zoomInUp'|'zoomInRight'`
 * Exists: `'bounceOut'|'bounceOutDown'|'bounceOutUp'|'bounceOutRight'|'bounceOutLeft'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'hinge'|'rollOut'|'zoomOut'|'zoomOutDown'|'zoomOutRight'|'zoomOutUp'|'zoomOutLeft'`
