@@ -14,7 +14,7 @@ Start by adding the `wmAnimate` directive to the element you want to animate. Th
   My animated content goes here
 </section>
 ```
-
+ 
 ## Supported animations
 Animations are grouped in three catetgories: Attention seekers, Entrances and Exists.
 
