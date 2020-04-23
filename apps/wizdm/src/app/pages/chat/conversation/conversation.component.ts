@@ -103,35 +103,6 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
 
       shareReplay(1) 
     );
-/*
-    this.unread$ = conv$.pipe(
-
-      map( conv => conv.lastRead?.[this.user.id] ),
-
-      distinctUntilChanged(),
-
-      switchMap( lastId => messages$.pipe( 
-        
-        switchMap( messages => 
-
-          ( !!lastId ? from( messages.document(lastId).ref.get() ) : of(null) ).pipe( 
-            
-            switchMap( snapshot => messages.stream(
-              
-              qf => ( snapshot && snapshot.exists ? qf.orderBy('created').startAfter(snapshot) : qf.orderBy('created') ).limit(11)
-              
-            ))
-          )
-        )  
-      )),
-
-      map( msgs => msgs.length ),
-
-      tap( count => this.unreadCount.emit(count) ),
-
-      shareReplay(1)
-    );
-    */
   }
 
   time(timestamp: string) {

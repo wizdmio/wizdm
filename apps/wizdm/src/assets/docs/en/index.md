@@ -1,6 +1,6 @@
 # Wizdm Reference
 
-## [Animate On Scroll](docs/aos)
+## [Animate](docs/aos)
 @wizdm/animate
 
 ## [Internationalization](docs/content)

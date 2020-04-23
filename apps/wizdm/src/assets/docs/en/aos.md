@@ -9,7 +9,7 @@ Animate is a package providing a directive-like component designed to animate it
 ## Usage example
 Start by adding the `wmAnimate` directive to the element you want to animate. The `aos` flag is then used to enable the "Animate On Scroll" triggering mechanism: 
 
-``` html
+```html
 <section wmAnimate="landing" aos> 
   My animated content goes here
 </section>
@@ -19,16 +19,19 @@ Start by adding the `wmAnimate` directive to the element you want to animate. Th
 Animations are grouped in three catetgories: Attention seekers, Entrances and Exists.
 
 ### Attention seekers
-Attention seekers animate starting and ending with the original element's style. Possible values are:
-`'beat'|'bounce'|'flip'|'headShake'|'heartBeat'|'jello'|'pulse'|'rubberBand'|'shake'|'swing'|'tada'|'wobble'`
+Attention seekers animate starting and ending with the original element's style. Possible values are: 
+
+`beat`, `bounce`, `flip`, `headShake`, `heartBeat`, `jello`, `pulse`, `rubberBand`, `shake`, `swing`, `tada`, `wobble`.
 
 ### Entrances
-Entrances animate starting with opacity level set to '0' (invisible) and animates ending with the original element's style. Possible entrance values are:
-`'bumpIn'|'bounceIn'|'bounceInDown'|'bounceInLeft'|'bounceInUp'|'bounceInRight'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'flipInX'|'flipInY'|'jackInTheBox'|'landing'|'rollIn'|'zoomIn'|'zoomInDown'|'zoomInLeft'|'zoomInUp'|'zoomInRight'`
+Entrances animate starting with opacity level set to '0' (invisible) and animates ending with the original element's style. Possible entrance values are: 
+
+`bumpIn`, `bounceIn`, `bounceInDown`, `bounceInLeft`, `bounceInUp`, `bounceInRight`, `fadeIn`, `fadeInRight`, `fadeInLeft`, `fadeInUp`, `fadeInDown`, `flipInX`, `flipInY`, `jackInTheBox`, `landing`, `rollIn`, `zoomIn`, `zoomInDown`, `zoomInLeft`, `zoomInUp`, `zoomInRight`.
 
 ### Exists
-Exits animate starting from the original element's style ending with the opacity level set to '0' (invisible). Possible exit values are:
-`'bounceOut'|'bounceOutDown'|'bounceOutUp'|'bounceOutRight'|'bounceOutLeft'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'hinge'|'rollOut'|'zoomOut'|'zoomOutDown'|'zoomOutRight'|'zoomOutUp'|'zoomOutLeft'`
+Exits animate starting from the original element's style ending with the opacity level set to '0' (invisible). Possible exit values are: 
+
+`bounceOut`, `bounceOutDown`, `bounceOutUp`, `bounceOutRight`, `bounceOutLeft`, `fadeOut`, `fadeOutRight`, `fadeOutLeft`, `fadeOutDown`, `fadeOutUp`, `hinge`, `rollOut`, `zoomOut`, `zoomOutDown`, `zoomOutRight`, `zoomOutUp`, `zoomOutLeft`.
 
 ## Trigger
 The animation will trigger as soon as the component renders if not specified otherwise. 
@@ -56,7 +59,7 @@ When `aos` is enabled each animated element's area is checked against the viewpo
 
 The triggering area can optionally be adjusted, so, to shrink (or expand) the effective area by `left`, `top`, `right` and `bottom` margins:
 
-``` html
+```html
 <div class="container" wmAnimateView top="64">
 
   <section wmAnimate="landing" aos> 
@@ -70,7 +73,7 @@ By using the `wmAnimateView` directive on a parent container in the example abov
 
 Alternatively, by setting the `useElement` flag, the container's client bounding box will be used as the triggering area instead of the viewport: 
 
-``` html
+```html
 <div class="container" wmAnimateView useElement top="64">
 
   <section wmAnimate="landing" aos> 
@@ -82,12 +85,18 @@ Alternatively, by setting the `useElement` flag, the container's client bounding
 
 The customizations above will affect the container's children elements only, so, different triggering areas can be used for different containers. 
 
-## API Reference
-[AnimateModule](docs/aos#animatemodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice) 
+&nbsp;  
 
-### AnimateModule 
+# API Reference
+[AnimateModule](docs/aos#animatemodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
 
-`import { AnimateModule } from '@wizdm/animate';`
+&nbsp;  
+
+## AnimateModule 
+
+```typescript
+import { AnimateModule } from '@wizdm/animate';
+```
 
 The main module provides an optional `init()` static function to customize the module behvior:
 ```typescript
@@ -105,7 +114,7 @@ interface AnimateConfig {
 ```
 * `triggerMode`: Specifies wich mechanism is going to be used for trigggering the animations while scrolling.
 
-|Value|Description|
+|**Value**|**Description**|
 |:--|:--|
 |`'scrolling'`|Computes the visibility upon scrolling with the help of the [CdkScrolling](https://material.angular.io/cdk/scrolling/overview) package. In order to work the animate elements must belong to the main scrolling window or within a `cdkScrollable` child container|
 |`'intersectionObserver'`|Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method|
@@ -114,9 +123,11 @@ interface AnimateConfig {
 * `offsetTop`: A global offset, expressed in **pixels**, to shrink the triggering area from the top with.
 * `offsetLeft`: A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
 * `offsetRight`: A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
-* `offsetBottom`: A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.
+* `offsetBottom`: A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.  
 
-### AnimateComponent
+&nbsp;  
+
+## AnimateComponent
 The `wmAnimate` component enables the animation of the target element.
 
 ```typescript
@@ -144,7 +155,7 @@ export class AnimateComponent {
 }
 ```
 
-|Properties|Description|
+|**Properties**|**Description**|
 |:--|:--|
 |`animating: boolean`|**True** when the animation is running|
 |`animated: boolean`|**True** after the animation completed. False while the animation is running|
@@ -157,9 +168,11 @@ export class AnimateComponent {
 |`@Input() once: boolean`|When **true**, prevents the animation to run again|
 |`@Input() set replay(replay: any)`|Replays the animation|
 |`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
-|`@Output() done: EventEmitter<void>`|Emits at the end of the animation|
+|`@Output() done: EventEmitter<void>`|Emits at the end of the animation|  
 
-### AnimateDirective
+&nbsp;  
+
+## AnimateDirective
 The `wmAnimateView` directive to customize the triggering viewport.
 
 ```typescript
@@ -176,15 +189,17 @@ export class AnimateDirective {
 }
 ```
 
-|Properties|Description|
+|**Properties**|**Description**|
 |:--|:--|
 |`@Input() useElement: boolean`|When **true** uses the element's bounding rect as the animation view|
 |`@Input() top: number`|Optional top offset|
 |`@Input() left: number`|Optional left offset|
 |`@Input() bottom: number`|Optional bottom offset|
-|`@Input() right: number`|Optional right offset|
+|`@Input() right: number`|Optional right offset|  
 
-### AnimateService
+&nbsp;  
+
+## AnimateService
 The service providing the triggering logic.
 
 ```typescript
@@ -196,15 +211,12 @@ export class AnimateService {
   public get useIntersectionObserver(): boolean;
   public get useScrolling(): boolean;
 
-  /** Applies the given options to the triggering service */
   public setup(options: AnimateOptions);
-  
-  // Triggers the animation
   public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>;
 }
 ```
 
-|Properties|Description|
+|**Properties**|**Description**|
 |:--|:--|
 |`get useIntersectionObserver(): boolean`|**True** when the trigger is provided using the IntersectionObserver API|
 |`get useScrolling(): boolean`|**True** when the trigger is provided using cdk/scrolling package|

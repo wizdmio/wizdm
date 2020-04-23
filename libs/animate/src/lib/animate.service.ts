@@ -53,7 +53,6 @@ export class AnimateService {
         map( () => {
           // Picks the ClientRect of the relevant container 
           const rt = (options.root instanceof Element) ? options.root.getBoundingClientRect() : this.viewPort.getViewportRect(); 
-
           // Combines the various options to build the final container
           const left = rt.left + (options.left || this.config.offsetLeft || 0);
           const top = rt.top + (options.top || this.config.offsetTop || 0);

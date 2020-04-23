@@ -3,6 +3,9 @@
   // Forces all the elements to inline 
   &[inline] { * { display: inline; } }
 
+  // Justifies paragraphs by default
+  p { text-align: justify; }
+
   // Table cells alignement
   td {
     &[align="left"] { text-align: left; }
