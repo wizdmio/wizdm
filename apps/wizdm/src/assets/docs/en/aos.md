@@ -214,7 +214,8 @@ export class AnimateService {
 ```typescript
 public setup(options: AnimateOptions)
 ```
-**options**
+Configures the service with the given **options**:
+
 ```typescript
 export interface AnimateOptions {
   
@@ -226,14 +227,21 @@ export interface AnimateOptions {
 }
 ```
 
+* `root`: An optional element which bounding rectanlge will be used as the animation view. When undefined or null, the overall viewport will be used.
+* `left`: An offset, expressed in **pixels**, to shrink the triggering area from the left with. This value overrides the global `offsetLeft` value.
+* `top`: An offset, expressed in **pixels**, to shrink the triggering area from the top with. This value overrides the global `offsetTop` value.
+* `right`: An offset, expressed in **pixels**, to shrink the triggering area from the right with. This value overrides the global `offsetRight` value.
+* `bottom`: An offset, expressed in **pixels**, to shrink the triggering area from the bottom with. This value overrides the global `offsetBottom` value.
+
+---
+
 ```typescript
 public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
 ```
-
-## Resources
-
-Read [Animate On Scroll in Angular](https://medium.com/wizdm-genesys/animate-on-scroll-in-angular-330efd05ebec) on Medium.
+Observable operator to be used for triggering the animation on scroll.
+* elm: The element for which the animation will be triggered.
+* threshold: The visibility ratio to trigger the animation with. 
 
 [Back](back) 
 
-[Home](home)
+[Top](docs/aos#animate)
