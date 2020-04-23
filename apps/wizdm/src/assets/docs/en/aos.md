@@ -19,10 +19,15 @@ Start by adding the `wmAnimate` directive to the element you want to animate. Th
 Animations are grouped in three catetgories: Attention seekers, Entrances and Exists.
 
 ### Attention seekers
+Attention seekers animate starting and ending with the original element's style. Possible values are:
 `'beat'|'bounce'|'flip'|'headShake'|'heartBeat'|'jello'|'pulse'|'rubberBand'|'shake'|'swing'|'tada'|'wobble'`
-### Entrances 
+
+### Entrances
+Entrances animate starting with opacity level set to '0' (invisible) and animates ending with the original element's style. Possible entrance values are:
 `'bumpIn'|'bounceIn'|'bounceInDown'|'bounceInLeft'|'bounceInUp'|'bounceInRight'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'flipInX'|'flipInY'|'jackInTheBox'|'landing'|'rollIn'|'zoomIn'|'zoomInDown'|'zoomInLeft'|'zoomInUp'|'zoomInRight'`
-### Exists 
+
+### Exists
+Exits animate starting from the original element's style ending with the opacity level set to '0' (invisible). Possible exit values are:
 `'bounceOut'|'bounceOutDown'|'bounceOutUp'|'bounceOutRight'|'bounceOutLeft'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'hinge'|'rollOut'|'zoomOut'|'zoomOutDown'|'zoomOutRight'|'zoomOutUp'|'zoomOutLeft'`
 
 ## Trigger
