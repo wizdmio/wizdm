@@ -83,6 +83,9 @@ Alternatively, by setting the `useElement` flag, the container's client bounding
 The customizations above will affect the container's children elements only, so, different triggering areas can be used for different containers. 
 
 ## API Reference
+[AnimateModule](docs/aos#animatemodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice) 
+
+### AnimateModule 
 
 `import { AnimateModule } from '@wizdm/animate';`
 
@@ -190,10 +193,7 @@ The service providing the triggering logic.
 })
 export class AnimateService {
 
-  /** True when the trigger is provided using the IntersectionObserver API */
   public get useIntersectionObserver(): boolean;
-
-  /** True when the trigger is provided using cdk/scrolling package */
   public get useScrolling(): boolean;
 
   /** Applies the given options to the triggering service */
@@ -206,12 +206,29 @@ export class AnimateService {
 
 |Properties|Description|
 |:--|:--|
-|` `|When ...|
+|`get useIntersectionObserver(): boolean`|**True** when the trigger is provided using the IntersectionObserver API|
+|`get useScrolling(): boolean`|**True** when the trigger is provided using cdk/scrolling package|
 
-|Methods|Description|
-|:--|:--|
-|` `|When ...|
+### Methods
 
+```typescript
+public setup(options: AnimateOptions)
+```
+**options**
+```typescript
+export interface AnimateOptions {
+  
+  root?: Element;
+  left?: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+}
+```
+
+```typescript
+public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
+```
 
 ## Resources
 
