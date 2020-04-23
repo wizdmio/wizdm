@@ -7,7 +7,7 @@
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
 ## Usage example
-Start by adding the `wmAnimate` directive to the element you want to animate. The `aos` flag is than used to enable the "Animate On Scroll" triggeright mechanism: 
+Start by adding the `wmAnimate` directive to the element you want to animate. The `aos` flag is then used to enable the "Animate On Scroll" triggering mechanism: 
 
 ``` html
 <section wmAnimate="landing" aos> 
@@ -22,6 +22,13 @@ Animations are grouped in three catetgories: Attention seekers, Entrances and Ex
 * Exists: `'bounceOut'|'bounceOutDown'|'bounceOutUp'|'bounceOutRight'|'bounceOutLeft'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'hinge'|'rollOut'|'zoomOut'|'zoomOutDown'|'zoomOutRight'|'zoomOutUp'|'zoomOutLeft'`
 
 ## Timing
+By default every animation applies the optimal timing. However, timing can be overridden with the `speed` input. Possible values are:
+* `slower`: running the animation with a 3s timing
+* `slow`: running the animation with a 2s timing
+* `normal`: running the animation with a 1s timing
+* `fast` : running the animation with a 500ms timing
+* `faster`: running the animation with a 300ms timing
+Additionally, the animation can be delayed using `delay` input. The input accepts both a string describing the delay such as '1s' or '250ms' or a number that will be considered a delay expressed in ms.
 
 ## Resources
 
