@@ -240,10 +240,10 @@ export interface AnimateOptions {
 ```typescript
 public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
 ```
-Observable operator to be used for triggering the animation on scroll.
+Observable operator to be used for triggering the animation on scroll. 
 * `elm`: The element for which the animation will be triggered.
-* `threshold`: The visibility ratio to trigger the animation with. 
-
+* `threshold`: The visibility ratio to trigger the animation with.
+The returned `OperatorFunction` accepts an input trigger to emit an output trigger. In case the threshold value is 0, the output trigger simply mirrors the input one. For values greater than 0, the service checks the given element's area against the animation view emitting **true** when the two rectangles intersect for an area equal or greater than the threshold value, emitting **false** when the element's area is totally out of the view area. 
 ---
 
 [Back](back) 
