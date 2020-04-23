@@ -1,4 +1,4 @@
-# Animate (On Scroll)
+# Animate
 
 <!-- toc: index.md ref: animate -->
 
@@ -124,49 +124,39 @@ The `wmAnimate` component enables the animation of the target element.
 })
 export class AnimateComponent {
 
-  // Animating properties
-  public animating = false;
-  public animated = false;
+  public animating;
+  public animated;
 
   constructor(private elm: ElementRef, private scroll: AnimateService) {}
 
-  /** Selects the animation to be played */
   @Input('wmAnimate') animate: wmAnimations;
-
-  /** Speeds up or slows down the animation */
   @Input() set speed(speed: wmAnimateSpeed);
-
-  /** Delays the animation */
   @Input('delay') set postpone(delay: string);
-  
-  /** Disables the animation */
-  @Input('disabled') disabled = false;
-
-  /** Emits at the end of the animation */
-  @Output() start = new EventEmitter<void>();  
-
-  /** Emits at the end of the animation */
-  @Output() done = new EventEmitter<void>();  
-
-  /** When true, keeps the animation idle until the next replay triggers */
-  @Input('paused') public paused: boolean = false;
-
-  /** When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified */
-  @Input('aos') private threshold: number = 0;
-
-  /** When true, triggers the animation on element scrolling in the viewport */
-  @Input('once') public once: boolean = false;
-
-  /** Replays the animation */
+  @Input('disabled') disabled;
+  @Input('paused') paused: boolean;
+  @Input('aos') private threshold: number;
+  @Input('once') once: boolean;
   @Input() set replay(replay: any);
+  
+  @Output() start: EventEmitter<void>;  
+  @Output() done: EventEmitter<void>; 
 }
 ```
 
 |Properties|Description|
 |:--|:--|
-|`animating: boolean`|True then the animation is running|
+|`animating: boolean`|True when the animation is running|
 |`animated: boolean`|True after the animation completed. False while the animation is running|
-|`@Input('wmAnimate') animate: wmAnimations`|Selects teh animation to run. See [supported animations](docs/aos#supported-animations)| 
+|`@Input('wmAnimate') animate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
+|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
+|`@Input('delay') set postpone(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
+|`@Input('disabled') disabled`|Disables teh animation|
+|`@Input('paused') paused: boolean`|When true, keeps the animation idle until the next replay triggers|
+|`@Input('aos') private threshold`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
+|`@Input('once') once: boolean`|When true, prevents the animation to run again|
+|`@Input() set replay(replay: any)`|Replays the animation|
+|`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
+|`@Output() done: EventEmitter<void>`|Emits at the end of the animation|
 
 ### AnimateDirective
 The `wmAnimateView` directive to customize the triggering viewport.
