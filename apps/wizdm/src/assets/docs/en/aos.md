@@ -116,6 +116,52 @@ interface AnimateConfig {
 ### AnimateComponent
 The `wmAnimate` component enables the animation of the target element.
 
+```typescript
+@Component({
+ selector: '[wmAnimate]',
+ template: '<ng-content></ng-content>',
+ animations: [...]
+})
+export class AnimateComponent {
+
+  // Animating properties
+  public animating = false;
+  public animated = false;
+
+  constructor(private elm: ElementRef, private scroll: AnimateService) {}
+
+  /** Selects the animation to be played */
+  @Input('wmAnimate') animate: wmAnimations;
+
+  /** Speeds up or slows down the animation */
+  @Input() set speed(speed: wmAnimateSpeed);
+
+  /** Delays the animation */
+  @Input('delay') set postpone(delay: string);
+  
+  /** Disables the animation */
+  @Input('disabled') disabled = false;
+
+  /** Emits at the end of the animation */
+  @Output() start = new EventEmitter<void>();  
+
+  /** Emits at the end of the animation */
+  @Output() done = new EventEmitter<void>();  
+
+  /** When true, keeps the animation idle until the next replay triggers */
+  @Input('paused') public paused: boolean = false;
+
+  /** When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified */
+  @Input('aos') private threshold: number = 0;
+
+  /** When true, triggers the animation on element scrolling in the viewport */
+  @Input('once') public once: boolean = false;
+
+  /** Replays the animation */
+  @Input() set replay(replay: any);
+}
+```
+
 |Properties|Description|
 |:--|:--|
 |`animating: boolean`|True then the animation is running|
