@@ -2,8 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RedirectService } from '@wizdm/redirect';
 import { SidenavDirective } from 'app/navigator/sidenav';
+import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { TocItem } from './toc';
 
 @Component({
   selector: 'wm-static',
@@ -20,11 +21,13 @@ export class StaticComponent {
 
   constructor(private redirect: RedirectService, route: ActivatedRoute) {
 
-    // Resolves the requested page to be used with gtag directive
+    // Resolves the requested page
     this.page$ = route.paramMap.pipe( map( params => params && params.get('page') || '') );
   }
 
   public navigate(url: string, closeSidenav?: boolean) { 
+
+    console.log('Navigating to:', url)
 
     // Closes the sidenav panel on request
     if(!!closeSidenav) { this.sidenav?.close(); }

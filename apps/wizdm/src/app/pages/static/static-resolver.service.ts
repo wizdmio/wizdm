@@ -1,8 +1,8 @@
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { SelectorResolver } from '@wizdm/content';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, tap, catchError, switchMap } from 'rxjs/operators';
+import { SelectorResolver } from '@wizdm/content';
 import { Observable, of } from 'rxjs';
 
 // Optional configuration
@@ -16,7 +16,8 @@ export const STATIC_CONFIG = new InjectionToken<StaticConfig>("wizdm.static.conf
 
 export interface StaticContent {
   body: string;
-  toc?: string;
+  toc?: any;
+  ref?: string;
 }
 
 export interface StaticCache {
@@ -63,7 +64,7 @@ export class StaticResolver implements Resolve<StaticContent> {
     if(lang !== this.cache?.lang) { this.cache = { lang }; }
     
     // Loads the main .md file
-    return this.loadFile(lang, page).pipe(
+    return this.loadFile(lang, page, 'text').pipe(
       // Gets the body contents...
       switchMap( body => {
 
@@ -74,7 +75,7 @@ export class StaticResolver implements Resolve<StaticContent> {
         if(!options.toc) { return of({ body, ...options }); }
         
         // Loads the toc file if any
-        return this.loadFile(lang, options.toc).pipe( 
+        return this.loadFile(lang, options.toc, 'json').pipe( 
           // And returns the body, the toc and the options
           map( toc => ({ body, ...options, toc }) 
         ));
@@ -95,16 +96,18 @@ export class StaticResolver implements Resolve<StaticContent> {
     );
   }
 
-  private loadFile(lang: string, name: string): Observable<string> {
+  private loadFile(lang: string, name: string, responseType: 'text'|'json' = 'text'): Observable<any> {
 
     // Returns the cached version of the content, if any
     if(this.cache[name]) { return of(this.cache[name]); }
 
+    const fileExt = (name.match(/\.\w+$/)?.[0]) || ('.' + (responseType === 'text' ? 'md' : responseType));
+
     // Computes the full path removing the extension, if any
-    const fullPath = this.path + lang + '/' + name.replace(/\.\w+$/, '') + '.md';
+    const fullPath = this.path + lang + '/' + name.replace(/\.\w+$/, '') + fileExt;
 
     // Loads the requested file first
-    return this.http.get(fullPath, { responseType: 'text' }).pipe( 
+    return this.http.request('GET', fullPath, { observe: 'body', responseType }).pipe( 
 
       // Catches the possible error
       catchError( (e: HttpErrorResponse) => {
@@ -118,7 +121,7 @@ export class StaticResolver implements Resolve<StaticContent> {
           console.log('404 File not found, reverting to default language:', defaultPath);
           
           // Loads the same document in the default language instead
-          return this.http.get(defaultPath, { responseType: 'text' });
+          return this.http.request('GET', defaultPath, { observe: 'body', responseType });
         }
 
         throw e;

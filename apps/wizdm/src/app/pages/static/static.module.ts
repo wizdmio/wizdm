@@ -15,10 +15,12 @@ import { SizeLockModule } from 'app/utils/size-lock';
 import { TeleportModule } from '@wizdm/teleport';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
+import { TocModule } from './toc';
 
 const routes: RoutesWithContent = [
   {
     path: '',
+    //content: 'static',
     component: StaticComponent,
     resolve: { document: StaticResolver }
     //canActivate: [ AuthGuard ],
@@ -42,6 +44,7 @@ const routes: RoutesWithContent = [
     SidenavModule,
     SizeLockModule,
     TeleportModule,
+    TocModule,
     ContentRouterModule.forChild(routes)
   ],
   providers: [ StaticResolver ]

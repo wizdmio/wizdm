@@ -1,0 +1,19 @@
+:host {
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 250px;
+
+  .w100 { width: 100%; }
+
+  .mat-button { 
+    height: 48px; 
+    text-align: start;
+  }
+
+  .mat-icon {
+    transition: transform 150ms ease;
+    &.opened { transform: rotateZ(90deg); }
+  }
+}

@@ -1,6 +1,6 @@
 # Animate
 
-<!-- toc: index.md ref: animate -->
+<!-- toc: toc.json -->
 
 [Back](back) - [API Reference](docs/aos#api-reference) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
 

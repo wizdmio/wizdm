@@ -1,0 +1,31 @@
+[
+  { "label": "Introduction",  "link": "docs/intro" },
+
+  { "label": "Navigation", "items": [
+    { "label": "Navigator", "link": "docs/navigator" },
+    { "label": "Navigation bar", "link": "docs/navbar" },
+    { "label": "Action bar", "link": "docs/actionbar" },
+    { "label": "Mobile menu", "link": "docs/mobmenu" },
+    { "label": "Side panel", "link": "docs/sidenav" },
+    { "label": "Footer", "link": "docs/footer" }
+  ]},
+
+  { "label": "Pages", "items": [
+    { "label": "Home", "link": "docs/home" },
+    { "label": "Explorer", "link": "docs/explorer" },
+    { "label": "Profile", "link": "docs/profile" },
+    { "label": "Community", "link": "docs/chat" },
+    { "label": "Static", "link": "docs/static" }
+  ]},
+
+  { "label": "Packages", "items": [
+    { "label": "Animate", "link": "docs/aos" },
+    { "label": "Connect", "link": "docs/connect" },
+    { "label": "Content (i18n)", "link": "docs/content" },
+    { "label": "Elements", "items": [
+      { "label": "Introduction", "link": "docs/elements" },
+      { "label": "Icon", "link": "docs/icon" },
+      { "label": "Flip", "link": "docs/flip" }
+    ]}
+  ]}
+]

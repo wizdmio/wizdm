@@ -1,6 +1,6 @@
 # Elements
 
-<!-- toc: index.md ref: ui-elements -->
+<!-- toc: toc.json -->
 
 [Index](docs/index#ui-elements) - [Back](back) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/elements/src/lib)
 
