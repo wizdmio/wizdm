@@ -10,13 +10,13 @@ import { ReadmeModule } from '@wizdm/elements/readme';
 import { IconModule } from '@wizdm/elements/icon';
 //import { AuthGuard } from 'app/utils/auth-guard';
 //import { PageGuard } from 'app/utils/page-guard';
-import { ExploreComponent } from './explore.component';
+import { FeaturesComponent } from './features.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'explore',
-    component: ExploreComponent,
+    content: 'features',
+    component: FeaturesComponent,
     //canActivate: [ AuthGuard ],
     //canDeactivate: [ PageGuard ]
   }
@@ -24,7 +24,7 @@ const routes: RoutesWithContent = [
 
 @NgModule({
   declarations: [ 
-    ExploreComponent
+    FeaturesComponent
   ],
   imports: [
     CommonModule,
@@ -38,4 +38,4 @@ const routes: RoutesWithContent = [
     ContentRouterModule.forChild(routes)
   ]
 })
-export class ExploreModule { }
+export class FeaturesModule { }

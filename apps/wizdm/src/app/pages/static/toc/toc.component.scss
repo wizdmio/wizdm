@@ -7,11 +7,16 @@
 
   .w100 { width: 100%; }
 
+  // Overrides teh general selection theme to remove the border
+  .selected { border: none; }
+
+  // Customizes the button
   .mat-button { 
     height: 48px; 
     text-align: start;
   }
 
+  // Animates the chevron icon
   .mat-icon {
     transition: transform 150ms ease;
     &.opened { transform: rotateZ(90deg); }

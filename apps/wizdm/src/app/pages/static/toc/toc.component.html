@@ -3,7 +3,7 @@
 <ng-container *ngFor="let item of items">
 
   <!-- Renders the single items as buttons -->
-  <button mat-button class="w100" [color]="hasSelection(item) ? color : ''" (click)="onItemClick(item)">
+  <button mat-button class="w100 selected" [color]="hasSelection(item) ? color : ''" (click)="onItemClick(item)">
 
     <span fxLayout="row" fxLayoutAlign="space-between center">
 

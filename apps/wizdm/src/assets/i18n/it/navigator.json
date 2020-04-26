@@ -6,11 +6,14 @@
         "public": [
             { "label": "Wizdm" },
             { "label": "Chi siamo" },
-            { "label": "Esplora" }
+            { "label": "Funzionalità" }
         ],
         "private": [
             { "label": "Wizdm" },
-            { "label": "Esplora" },
+            { "label": "Esplora", "menu": [
+                { "label": "Funzionalità" },
+                { "label": "Documentazione" }
+            ]},
             { "label": "Community" }
         ]
     },
@@ -19,14 +22,16 @@
         "public": [
             { "label": "Home" },
             { "label": "Chi siamo" },
-            { "label": "Esplora" },
+            { "label": "Funzionalità" },
             { "label": "Entra/Registrati" }
         ],
         "private": [
             { "label": "Home" },
-            { "label": "Esplora" },
+            { "label": "Esplora", "menu": [
+                { "label": "Funzionalità" },
+                { "label": "Documentazione" }
+            ]},
             { "label": "Community" },
-            { "label": "Upload" },
             { "label": "Profilo" },
             { "label": "Esci" }
         ]

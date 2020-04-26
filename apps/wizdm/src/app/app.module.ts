@@ -35,7 +35,7 @@ const routes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     // Content animation module
-    //AnimateModule.init({ mode: 'scrolling' }),
+    //AnimateModule.init({ triggerMode: 'scrolling' }),
     // Database tools (Firebase)
     ConnectModule.init(firebase, appname),
     AuthModule, DatabaseModule, StorageModule,

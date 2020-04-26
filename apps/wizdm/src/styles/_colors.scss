@@ -18,17 +18,12 @@
       $palette: map-get($theme, #{$color});
 
       // Loops on each palette
-      &[color=#{$color}], &.#{$color}, .#{$color} {
+      &[color=#{$color}], &.#{$color}, .#{$color}, &.mat-#{$color}, .mat-#{$color} {
 
         // Styles a general selection 
         &[selected=true], [selected=true], &.selected, .selected { 
           border: 1px solid mat-color($palette);
           background-color: mat-color($palette, lighter, 0.2);          
-        }
-
-        // Styles a general hover 
-        &[hover=true]:hover, [hover=true]:hover, &.hover:hover, .hover:hover { 
-          background-color: mat-color($palette, lighter, 0.5);          
         }
 
         // Loops on each palette's color tone

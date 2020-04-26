@@ -11,14 +11,6 @@
       <!-- Renders the Table Of Content -->
       <div [wm-toc]="document.toc" [page]="page$ | async" (navigate)="navigate($event, mobile)" color="primary"></div>
 
-      <!-- Scrolling the toc at the reference -->
-      <!--ng-container [wmScroll]="document.ref" target="sidenav" behavior="smooth"-->
-      
-        <!-- Renders the markdown Table Of Contens and scrolls it to the given position -->
-        <!--section style="padding: 16px" [wm-markdown]="document.toc" (navigate)="navigate($event, mobile)"></section-->
-
-      <!--/ng-container-->
-
     </ng-template>
 
   </ng-container>

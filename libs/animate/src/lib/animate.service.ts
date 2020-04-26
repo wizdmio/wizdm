@@ -24,12 +24,12 @@ export class AnimateService {
 
   /** True when the trigger is provided using the IntersectionObserver API */
   public get useIntersectionObserver(): boolean {
-    return this.config.mode === 'intersectionObserver';
+    return this.config.triggerMode === 'intersectionObserver';
   }
 
   /** True when the trigger is provided using cdk/scrolling package */
   public get useScrolling(): boolean {
-    return this.config.mode === 'scrolling';
+    return this.config.triggerMode === 'scrolling';
   }
 
   /** Applies the given options to the triggering service */

@@ -34,16 +34,15 @@ const routes: RoutesWithContent = [
       { path: '', loadChildren: () => import('../pages/home/home.module').then(m => m.HomeModule) },
       { path: 'home', redirectTo: '', pathMatch: 'full' },
 
-      // Redirecs to coming soon page
-      // { path: '**',          redirectTo:   'coming-soon', pathMatch: 'full' },
-      
       // Active pages
-      { path: 'apply',       loadChildren: () => import('../pages/apply/apply.module').then(m => m.ApplyModule) },
-      { path: 'chat',        loadChildren: () => import('../pages/chat/chat.module').then(m => m.ChatModule) },
-      { path: 'explore',     loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },
-      //{ path: 'explore/:id', loadChildren: () => import('../pages/editor/editor.module').then(m => m.EditorModule) },
+      //{ path: 'apply',       loadChildren: () => import('../pages/apply/apply.module').then(m => m.ApplyModule) },
       { path: 'profile',     loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
+      { path: 'features',     loadChildren: () => import('../pages/features/features.module').then(m => m.FeaturesModule) },
+      { path: 'chat',        loadChildren: () => import('../pages/chat/chat.module').then(m => m.ChatModule) },
       //{ path: 'folder',      loadChildren: () => import('../pages/folder/folder.module').then(m => m.FolderModule) },
+      
+      // Reference
+      { path: 'docs',        redirectTo: 'docs/start', pathMatch: 'full' },
       { path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Intercepts routing "action-links" to execute a non-routing action
@@ -57,14 +56,8 @@ const routes: RoutesWithContent = [
       // Static content pages, redirecting to NotFound when no content is available
       { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
-      { path: 'dashboards/:page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
-
       // Anything else will route to not found
       { path: '**',          redirectTo: 'not-found' }
-
-      // Named outled ?
-      /*{ path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule), outlet: 'side' },
-      { path: '**',          loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule),  outlet: 'side' }*/
     ]
   }
 ];
