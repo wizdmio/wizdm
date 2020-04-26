@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '@wizdm/elements/dialog';
+import { DialogComponent } from '@wizdm/dialog';
 import { StorageService, StorageFile } from '@wizdm/connect/storage';
 import { map, flatMap } from 'rxjs/operators';
 import { Observable, Subject, of } from 'rxjs';

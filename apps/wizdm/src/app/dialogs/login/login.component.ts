@@ -1,12 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '@wizdm/elements/dialog';
-import { User as authUser } from '@wizdm/connect/auth';
 import { RedirectService } from '@wizdm/redirect';
-import { GtagService } from '@wizdm/gtag';
-import { User } from 'app/utils/user-profile';
+import { DialogComponent } from '@wizdm/dialog';
 import { $animations } from './login-animations';
+import { GtagService } from '@wizdm/gtag';
+import { UserProfile } from 'app/auth';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
 
@@ -24,7 +23,7 @@ export interface LoginData {
   encapsulation: ViewEncapsulation.None,
   animations: $animations
 })
-export class LoginComponent extends DialogComponent<LoginData, authUser> {
+export class LoginComponent extends DialogComponent<LoginData> {
   
   readonly form: FormGroup;
 
@@ -40,9 +39,9 @@ export class LoginComponent extends DialogComponent<LoginData, authUser> {
 
   public page: loginAction;
 
-  get auth() { return this.member.auth; }
+  get auth() { return this.user.auth; }
   
-  constructor(dialog: MatDialog, private member: User, private gtag: GtagService, private redirect: RedirectService) {
+  constructor(dialog: MatDialog, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService) {
 
     super(dialog);
 
@@ -226,11 +225,11 @@ export class LoginComponent extends DialogComponent<LoginData, authUser> {
       .then( user => {
         // Tracks the activity with analytics
         this.gtag.signUp(user?.providerId);
-        // Creates the new user member  
-        this.member.register(user)
+        // Creates the new user user  
+        this.user.register(user)
           // Sends the email verification
           .then( () => user.sendEmailVerification() )
-          // Jumps to the member page
+          // Jumps to the user page
           .then( () => this.navigate('profile') )
           // Closes the dialog returning the user
           .then( () => this.close(user) );
@@ -261,8 +260,8 @@ export class LoginComponent extends DialogComponent<LoginData, authUser> {
       .then( user => { 
         // Tracks the activity with analytics
         this.gtag.login(user?.providerId);
-        // Creates the new user member if needed, keeps the existing one otherwise 
-        this.member.register(user)
+        // Creates the new user user if needed, keeps the existing one otherwise 
+        this.user.register(user)
           // Jumps to the requested target...
           .then( () => this.navigate(this.redirectTo) )
           // Closes the dialog returning the user
@@ -326,8 +325,8 @@ export class LoginComponent extends DialogComponent<LoginData, authUser> {
       .then( user => {
         // Navigates home first
         this.navigate('/')
-          // Deletes the user member first 
-          .then( () => this.member.delete() )
+          // Deletes the user user first 
+          .then( () => this.user.delete() )
           // Deletes the user object next
           .then( () => user.delete() )
           // Dispays the error code, eventually

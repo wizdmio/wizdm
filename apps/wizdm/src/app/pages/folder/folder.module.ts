@@ -7,13 +7,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { OpenFileModule } from '@wizdm/elements/openfile';
-import { DialogModule } from '@wizdm/elements/dialog';
+import { DialogModule } from '@wizdm/dialog';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { ThumbnailModule } from '@wizdm/elements/thumbnail';
 import { SpinnerModule } from '@wizdm/elements/spinner';
 import { ActionbarModule } from 'app/navigator/actionbar';
-import { AuthGuard } from 'app/utils/auth-guard';
-//import { CanLeaveGuard } from 'app/utils/can-leave';
+//import { CanLeaveGuard } from 'app/navigator/can-leave';
+import { AuthGuard } from 'app/navigator/auth-guard';
 import { FolderComponent } from './folder.component';
 
 const routes: RoutesWithContent = [

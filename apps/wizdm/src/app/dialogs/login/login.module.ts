@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentModule } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
-import { DialogModule } from '@wizdm/elements/dialog';
+import { DialogModule } from '@wizdm/dialog';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { LoginComponent } from './login.component';

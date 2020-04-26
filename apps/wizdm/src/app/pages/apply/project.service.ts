@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
 import { map, take, debounceTime } from 'rxjs/operators';
-import { User } from 'app/utils/user-profile';
+import { UserProfile } from 'app/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService extends PagedCollection<any> {
 
-  constructor(db: DatabaseService, readonly user: User) {
+  constructor(db: DatabaseService, readonly user: UserProfile) {
     super(db, db.col('/projects'));
   }
 

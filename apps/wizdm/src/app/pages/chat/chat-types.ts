@@ -1,5 +1,5 @@
 import { dbCommon } from '@wizdm/connect/database';
-import { dbUser } from 'app/utils/user-profile';
+import { dbUser } from 'app/auth';
 
 export interface dbChatter extends dbUser {
   lastConversation?: string;

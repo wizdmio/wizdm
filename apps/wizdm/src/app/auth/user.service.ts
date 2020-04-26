@@ -1,6 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { AuthService, User as authUser} from '@wizdm/connect/auth';
 import { DatabaseService, DatabaseDocument, dbCommon } from '@wizdm/connect/database';
+import { AuthService, User as authUser} from '@wizdm/connect/auth';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subscription, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ export interface dbUser extends dbCommon {
 @Injectable({
   providedIn: 'root'
 })
-export class User<T extends dbUser = dbUser> extends DatabaseDocument<T> implements OnDestroy {
+export class UserProfile<T extends dbUser = dbUser> extends DatabaseDocument<T> implements OnDestroy {
 
   /** Current user profile snapshot */
   private snapshot: T = null;

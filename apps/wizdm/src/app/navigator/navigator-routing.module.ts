@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
-import { LanguageSelector } from 'app/utils/lang-selector';
-import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from '@wizdm/actionlink';
-import { BackLinkObserver } from 'app/utils/back-link';
 import { NavigatorComponent } from './navigator.component';
+import { LanguageSelector } from './lang-selector';
+import { BackLinkObserver } from './back-link';
+import { Oauth2Handler } from './oauth2';
 
 const routes: RoutesWithContent = [
 

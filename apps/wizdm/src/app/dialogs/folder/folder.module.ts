@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { DialogModule } from '@wizdm/elements/dialog';
+import { DialogModule } from '@wizdm/dialog';
 import { ReadmeModule } from '@wizdm/elements/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { ThumbnailModule } from '@wizdm/elements/thumbnail';

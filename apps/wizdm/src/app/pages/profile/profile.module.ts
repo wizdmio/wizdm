@@ -9,19 +9,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { GtagModule } from '@wizdm/gtag';
-import { RedirectModule } from '@wizdm/redirect';
+import { OpenFileModule } from '@wizdm/elements/openfile';
+import { ReadmeModule } from '@wizdm/elements/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
-import { ReadmeModule } from '@wizdm/elements/readme';
-import { DialogModule } from '@wizdm/elements/dialog';
-import { OpenFileModule } from '@wizdm/elements/openfile';
+import { RedirectModule } from '@wizdm/redirect';
+import { DialogModule } from '@wizdm/dialog';
+import { GtagModule } from '@wizdm/gtag';
+import { CanLeaveModule, CanLeaveGuard } from 'app/navigator/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
-import { AuthGuard } from 'app/utils/auth-guard';
-import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
-import { ProfileComponent } from './profile.component';
-import { UserFormComponent } from './user-form/user-form.component';
 import { UserPhotoComponent } from './user-photo/user-photo.component';
+import { UserFormComponent } from './user-form/user-form.component';
+import { ProfileComponent } from './profile.component';
+import { AuthGuard } from 'app/navigator/auth-guard';
 
 const routes: RoutesWithContent = [
   {

@@ -10,12 +10,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { DialogModule } from '@wizdm/elements/dialog';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { CanLeaveModule, CanLeaveGuard } from 'app/navigator/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
-import { AuthGuard } from 'app/utils/auth-guard';
-import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
+import { ReadmeModule } from '@wizdm/elements/readme';
+import { AuthGuard } from 'app/navigator/auth-guard';
 import { ApplyComponent } from './apply.component';
+import { DialogModule } from '@wizdm/dialog';
 
 const routes: RoutesWithContent = [
   {

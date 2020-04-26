@@ -1,7 +1,7 @@
-import { User as authUser } from '@wizdm/connect/auth';
 import { StorageService } from '@wizdm/connect/storage';
-import { User, dbUser } from 'app/utils/user-profile';
-import { DialogRef } from '@wizdm/elements/dialog';
+import { UserProfile, dbUser } from 'app/auth';
+import { User } from '@wizdm/connect/auth';
+import { DialogRef } from '@wizdm/dialog';
 import { Component } from '@angular/core';
 import moment from 'moment';
 
@@ -14,17 +14,17 @@ export class ProfileComponent {
 
   private newProfile: dbUser;
 
-  constructor(private member: User, private storage: StorageService) {}
+  constructor(private user: UserProfile, private storage: StorageService) {}
 
-  public get profileData(): dbUser { return this.member.data; }
+  public get profileData(): dbUser { return this.user.data; }
 
   public get profilePhoto(): string { return this.profileData.photo || ''; }
 
-  public get authUser(): authUser { return this.member.auth.user || {} as authUser };
+  public get User(): User { return this.user.auth.user || {} as User };
 
-  public get created(): string { return moment(!!this.authUser ? this.authUser.metadata.creationTime : null).format('ll'); }
+  public get created(): string { return moment(!!this.User ? this.User.metadata.creationTime : null).format('ll'); }
 
-  public get emailVerified(): boolean { return this.authUser.emailVerified || false; }
+  public get emailVerified(): boolean { return this.User.emailVerified || false; }
 
   public set profileData(user: dbUser) { 
     
@@ -33,7 +33,7 @@ export class ProfileComponent {
 
   public updateProfile() {
 
-    return this.member.update(this.newProfile);
+    return this.user.update(this.newProfile);
   }
 
   public updateProfileAndLeave(ref: DialogRef<boolean>) {
@@ -46,11 +46,11 @@ export class ProfileComponent {
 
     if(!file) { return; }
 
-    const folder = this.storage.ref(`${this.member.uid}/${file.name}`);
+    const folder = this.storage.ref(`${this.user.uid}/${file.name}`);
 
     folder.put(file)
       .then( snap => snap.ref.getDownloadURL() )
-      .then( photo => this.member.update( { photo } ));
+      .then( photo => this.user.update( { photo } ));
   }
 
   public deletePhoto() {
@@ -59,7 +59,7 @@ export class ProfileComponent {
 
     const ref = this.storage.refFromURL(this.profilePhoto);
 
-    this.member.update({ photo: '' })
+    this.user.update({ photo: '' })
       .then( () => ref.delete() );
   }
 }

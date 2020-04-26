@@ -3,7 +3,7 @@ import { map, tap, filter, switchMap, distinctUntilChanged, shareReplay } from '
 import { Observable, BehaviorSubject, of, from, combineLatest } from 'rxjs';
 import { DatabaseService, DatabaseDocument } from '@wizdm/connect/database';
 import { dbChatter, dbConversation, dbMessage } from '../chat-types';
-import { User } from 'app/utils/user-profile';
+import { UserProfile } from 'app/auth';
 import moment from 'moment';
 
 @Component({
@@ -28,7 +28,7 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
 
   @Output() unreadCount = new EventEmitter<number>();
   
-  constructor(db: DatabaseService, private user: User) {
+  constructor(db: DatabaseService, private user: UserProfile) {
 
     super(db, '');
 

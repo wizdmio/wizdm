@@ -670,6 +670,37 @@
           "styleext": "scss"
         }
       }
+    },
+    "dialog": {
+      "projectType": "library",
+      "root": "libs/dialog",
+      "sourceRoot": "libs/dialog/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/dialog/tsconfig.lib.json",
+              "libs/dialog/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/dialog/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/dialog/src/test.ts",
+            "tsConfig": "libs/dialog/tsconfig.spec.json",
+            "karmaConfig": "libs/dialog/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

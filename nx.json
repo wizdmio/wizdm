@@ -64,6 +64,9 @@
     },
     "actionlink": {
       "tags": []
+    },
+    "dialog": {
+      "tags": []
     }
   }
 }

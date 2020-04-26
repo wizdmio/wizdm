@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { User } from 'app/utils/user-profile';
 import { dbMessage } from '../chat-types';
+import { UserProfile } from 'app/auth';
 import moment from 'moment';
 
 @Component({
@@ -16,7 +16,7 @@ export class ChatMessage {
 
   @Input() message: dbMessage;
 
-  constructor(private me: User) {}
+  constructor(private me: UserProfile) {}
 
   get body(): string {
     return this.message && this.message.body || '';

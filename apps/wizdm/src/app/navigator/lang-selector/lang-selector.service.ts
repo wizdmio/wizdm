@@ -1,11 +1,11 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { switchMap, map, first } from 'rxjs/operators';
 import { DateAdapter } from '@angular/material/core';
-import { Injectable } from '@angular/core';
-import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
-import { User } from 'app/utils/user-profile';
+import { Injectable } from '@angular/core';
 import { $languageMap } from './lang-map';
+import { UserProfile } from 'app/auth';
 import { of } from 'rxjs';
 import moment from 'moment';
 
@@ -17,7 +17,7 @@ export class LanguageSelector extends ContentSelector {
 
   private get auth() { return this.user.auth; }
 
-  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: User, router: Router, config: ContentConfigurator) { 
+  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, router: Router, config: ContentConfigurator) { 
     super(router, config); 
   }
 

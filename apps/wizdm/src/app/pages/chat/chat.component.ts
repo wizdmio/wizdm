@@ -1,13 +1,13 @@
 import { first, startWith, map, tap, filter, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { Component, AfterViewInit, Inject, ViewChild, NgZone } from '@angular/core';
+import { DatabaseService, DatabaseCollection } from '@wizdm/connect/database';
+import { dbChatter, dbConversation, dbMessage } from './chat-types';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { DatabaseService, DatabaseCollection } from '@wizdm/connect/database';
+import { $animations } from './chat.animations';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { runInZone } from 'app/utils/rxjs';
-import { User } from 'app/utils/user-profile';
-import { dbChatter, dbConversation, dbMessage } from './chat-types';
-import { $animations } from './chat.animations';
+import { UserProfile } from 'app/auth';
 
 @Component({
   selector: 'wm-chat',
@@ -43,7 +43,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
     return msg.id;
   }
   
-  constructor(db: DatabaseService, private user: User<dbChatter>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
+  constructor(db: DatabaseService, private user: UserProfile<dbChatter>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
 
     super(db, 'conversations');
 

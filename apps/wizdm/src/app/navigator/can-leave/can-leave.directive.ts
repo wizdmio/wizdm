@@ -1,6 +1,6 @@
 import { Directive, Input, Output, EventEmitter, HostListener } from '@angular/core';
-import { DialogComponent } from '@wizdm/elements/dialog';
 import { CanLeaveGuard } from './can-leave.service';
+import { DialogComponent } from '@wizdm/dialog';
 import { Observable, of, defer } from 'rxjs';
 import { tap } from 'rxjs/operators';
 

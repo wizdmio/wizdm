@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { Router, UrlTree,CanActivate,ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '@wizdm/connect/auth';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { first, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

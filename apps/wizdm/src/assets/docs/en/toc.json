@@ -1,35 +1,69 @@
 [
   { "label": "Getting Started", "link": "docs/start" },
-  { "label": "Styling",  "link": "docs/styling" },
+
+  { "label": "Basics", "items": [
+
+    { "label": "Environment", "link": "docs/environment" },
+    { "label": "Styling", "link": "docs/styling" },
+    { "label": "Scrolling", "link": "docs/scrolling" }
+  ]},
+
+  { "label": "Authentication", "link": "docs/auth" },
+
+  { "label": "Content Management", "link": "docs/content" },
+
   { "label": "Navigation", "items": [
 
-    { "label": "Navigator", "link": "docs/navigator" },
-    { "label": "Navigation bar", "link": "docs/navbar" },
-    { "label": "Action bar", "link": "docs/actionbar" },
-    { "label": "Mobile menu", "link": "docs/mobmenu" },
-    { "label": "Side panel", "link": "docs/sidenav" },
-    { "label": "Footer", "link": "docs/footer" }
+    { "label": "Overview", "link": "docs/navigator" },
+    { "label": "Guarding", "link": "docs/guards" },
+    { "label": "Action Bar", "link": "docs/actionbar" },
+    { "label": "Action Links", "link": "docs/actionlink" },
+    { "label": "Background", "link": "docs/background" },
+    { "label": "Side Panel", "link": "docs/sidenav" }
   ]},
 
-  { "label": "Pages", "items": [
-
-    { "label": "Home", "link": "docs/home" },
-    { "label": "Explorer", "link": "docs/explorer" },
-    { "label": "Profile", "link": "docs/profile" },
-    { "label": "Community", "link": "docs/chat" },
-    { "label": "Static", "link": "docs/static" }
-  ]},
-
-  { "label": "Packages", "items": [
-
-    { "label": "Animate", "link": "docs/aos" },
-    { "label": "Connect", "link": "docs/connect" },
-    { "label": "Content (i18n)", "link": "docs/content" },
-    { "label": "Elements", "items": [
+  { "label": "Elements", "items": [
       
-      { "label": "Introduction", "link": "docs/elements" },
-      { "label": "Icon", "link": "docs/icon" },
-      { "label": "Flip", "link": "docs/flip" }
-    ]}
-  ]}
+    { "label": "Introduction", "link": "docs/elements" },
+    { "label": "Avatar", "link": "docs/avatar" },
+    { "label": "Balloon", "link": "docs/balloon" },
+    { "label": "Flip", "link": "docs/flip" },
+    { "label": "Icon", "link": "docs/icon" },
+    { "label": "Illustration", "link": "docs/illustration" },
+    { "label": "Inkbar", "link": "docs/inkbar" },
+    { "label": "Logo", "link": "docs/logo" },
+    { "label": "Open File", "link": "docs/openfile" },
+    { "label": "Read Me", "link": "docs/readme" },
+    { "label": "Router Inkbar", "link": "docs/router-inkbar" },
+    { "label": "Spinner", "link": "docs/spinner" },
+    { "label": "Thumbnail", "link": "docs/thumbnail" },
+    { "label": "Toggler", "link": "docs/toggler" }
+  ]},
+
+  { "label": "Extensions", "items": [
+    { "label": "Animate On Scroll", "link": "docs/aos" },
+    { "label": "Declarative Dialog", "link": "docs/dialog" },
+    { "label": "Emoji Support", "link": "docs/emoji" },
+    { "label": "IP Geolocation", "link": "docs/ipinfo" },
+    { "label": "Smart Redirection", "link": "docs/redirect" },
+    { "label": "Teleportation", "link": "docs/teleport" }
+  ]},
+
+  { "label": "Integrations", "items": [
+
+    { "label": "Doorbell", "link": "docs/doorbell" },
+    { "label": "Firebase", "link": "docs/connect" },
+    { "label": "Google Analytics", "link": "docs/gtag" },
+    { "label": "Paypal", "link": "docs/paypal" },
+    { "label": "Stripe", "link": "docs/stripe" }
+  ]},
+
+  { "label": "Static content", "items": [
+
+    { "label": "Introduction", "link": "docs/static" },
+    { "label": "Markdown rendering", "link": "docs/markdown" },
+    { "label": "Syntax highlighting", "link": "docs/prism" }
+  ]},
+
+  { "label": "Utilities", "link": "docs/utils" }
 ]
