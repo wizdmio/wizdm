@@ -15,6 +15,11 @@ Wizdm is an evolving boilerplate designed to help developers getting started wit
 If you are new to Angular, see Angular's full [Getting Started](https://angular.io/start) and [Setting up your environment](https://angular.io/guide/setup-local) guides.
 
 ## Workspace
-The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl](https://nrwl.io) using their [Nx Angular Extension](https://nx.dev/angular/getting-started/why-nx). This means both the source code of the web application(s) and the  potentially shared libraries are stored in the same single repository under the /apps and /libs folders respectively.
+The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl](https://nrwl.io) using their [Nx Angular Extension](https://nx.dev/angular/getting-started/why-nx). This means both the source code of the web application(s) and the  potentially shared libraries are stored in the same single repository under the [/apps](https://github.com/wizdmio/wizdm/tree/master/apps) and [/libs](https://github.com/wizdmio/wizdm/tree/master/libs) folders respectively.
 
+## Wizdm app
+
+```
+src
+```
 
