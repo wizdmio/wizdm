@@ -20,6 +20,9 @@ The workspace has been converted from the original angular-cli to the monorepo f
 ## Wizdm app
 
 ```
-src
+wizdm
++----/apps
+     +----/wizdm
+          +-----/src
 ```
 
