@@ -21,29 +21,19 @@ The workspace has been converted from the original angular-cli to the monorepo f
 
 ```
 /apps/wizdm/src
-├──/auth
-|  └── user.service.ts
-├──/dialogs
-|  ├──/login
-|  |  ├── login.component.ts
-|  |  └── login.module.ts
-|  └──/feedback
-|     └── ...
-├──/navigator
-|  ├──/...
-|  ├── navigator.component.ts
-|  └── navigator.module.ts
-├──/pages
+├──/app
+|  ├──/auth
+|  ├──/dialogs
+|  ├──/navigator
+|  ├──/pages
 |  ├──/home
-|  |  ├── home.component.ts
-|  |  └── home.module.ts
-|  ├──/profile
-|  |  └── ...
-|  ├──/static
-|  |  └── ...
-|  └──/not-found
-|  |  └── ...
-└──/utils
-   └── ...
-```
-
+|  └──/utils
+├──/assets
+|  ├──/docs
+|  ├──/i18n
+|  └──/img
+├──/environments
+├──/styles
+├── main.ts
+└── index.html
+ ```
