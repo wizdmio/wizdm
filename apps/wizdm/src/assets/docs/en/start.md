@@ -77,4 +77,4 @@ The `/styles` folder containes the `scss` files making up the application themin
 
 ---
 
-[Top](docs/start#getting-started) - [Next](docs/next) 
+[Top](docs/start#getting-started) - [Continue Next](docs/next) 
