@@ -39,4 +39,4 @@ The main application code is located at [/apps/wizdm/src](https://github.com/wiz
 ├── main.ts
 └── index.html
  ```
-As for any Angular application, the `main.ts` file bootstraps the `AppModule`. The `AppComponent`, however, impersonates the `body` element using `ViewEncapsulation.None`, so, for its styling to be applied globally.
+As for any Angular application, the `main.ts` file bootstraps the `AppModule` loading and initializing all the common root level feature modules to be available across the application. The `AppComponent` impersonates the `body` element using `ViewEncapsulation.None`, so, for its styling to be applied globally and delegates the `NavigatorModule` to take over and manage the application routing.
