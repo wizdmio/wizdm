@@ -76,5 +76,6 @@ The `/environments` folder contains the application environment variables groupe
 The `/styles` folder containes the `scss` files making up the application theming as explained in full under the [Styling section](docs/styling).
 
 ---
-
-[Top](docs/start#getting-started) - [Continue Next](docs/next) 
+->
+[Top](docs/start#getting-started) - [Continue Next](docs/toc?go=next) 
+<-
