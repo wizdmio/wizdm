@@ -69,8 +69,12 @@ Assets are divided in three main categories:
 1. Content files, under the `/i18n` subfolder, are json files used by the application to dynamically load the relevant content for pages, dialogs and the navigator itself. As for the documents, different languages are handled by the corresponding locale subfolder.
 1. Images, under the `/img` subfolder, are the image files available to the application.
 
-### Environments
-The `/environments` folder contains the application environment variables grouped by sensitivity. The `common.ts` file contains all the publicly available variables while the file named `secrets.ts` is the one where to store all the sensitive variables such as private API keys and such. 
+### Environment
+The `/environments` folder contains the application environment variables grouped by sensitivity. The `common.ts` file contains all the publicly available variables while the file named `secrets.ts` is the one where to store all the sensitive variables such as private API keys and such. More details will be found in the [Environment section](docs/environment).
 
 ### Styling
 The `/styles` folder containes the `scss` files making up the application theming as explained in full under the [Styling section](docs/styling).
+
+---
+
+[Top](docs/start#getting-started) - [Next](docs/next) 
