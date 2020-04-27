@@ -30,7 +30,6 @@ The main application code is located at [/apps/wizdm/src](https://github.com/wiz
 |  |  ├── navigator-routing.module.ts
 |  |  └── navigator.module.ts
 |  ├──/pages
-|  ├──/home
 |  ├──/utils
 |  ├── app.component.ts
 |  └── app.module.ts
