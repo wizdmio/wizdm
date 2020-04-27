@@ -17,8 +17,8 @@ If you are new to Angular, see Angular's full [Getting Started](https://angular.
 ## Workspace
 The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl](https://nrwl.io) using their [Nx Angular Extension](https://nx.dev/angular/getting-started/why-nx). This means both the source code of the web application(s) and the  potentially shared libraries are stored in the same single repository under the [/apps](https://github.com/wizdmio/wizdm/tree/master/apps) and [/libs](https://github.com/wizdmio/wizdm/tree/master/libs) folders respectively.
 
-## Wizdm app
-
+## Wizdm Demo App
+The main application code is located at [/apps/wizdm/src](https://github.com/wizdmio/wizdm/tree/master/apps/wizdm/src) and structured as per the following:
 ```
 /apps/wizdm/src
 ├──/app
@@ -27,7 +27,9 @@ The workspace has been converted from the original angular-cli to the monorepo f
 |  ├──/navigator
 |  ├──/pages
 |  ├──/home
-|  └──/utils
+|  ├──/utils
+|  ├── app.component.ts
+|  └── app.module.ts
 ├──/assets
 |  ├──/docs
 |  ├──/i18n
@@ -37,3 +39,4 @@ The workspace has been converted from the original angular-cli to the monorepo f
 ├── main.ts
 └── index.html
  ```
+As for any Angular application, the `main.ts` file bootstraps the `AppModule`. The `AppComponent`, however, impersonates the `body` element using `ViewEncapsulation.None`, so, for its styling to be applied globally.
