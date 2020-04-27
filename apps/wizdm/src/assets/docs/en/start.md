@@ -25,6 +25,9 @@ The main application code is located at [/apps/wizdm/src](https://github.com/wiz
 |  ├──/auth
 |  ├──/dialogs
 |  ├──/navigator
+|  |  ├── ...
+|  |  ├── navigator-routing.module.ts
+|  |  └── navigator.module.ts
 |  ├──/pages
 |  ├──/home
 |  ├──/utils
