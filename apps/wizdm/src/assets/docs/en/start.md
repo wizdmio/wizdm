@@ -2,7 +2,7 @@
 
 <!-- toc: toc.json -->
 
-[Go Back](back) - [Continue Next](docs/next)
+[Go Back](back) - [Next Topic](docs/toc?go=next)
 
 Wizdm is an evolving boilerplate designed to help developers getting started with their single page applications. It is based upon the [Angular Framework](https://angular.io) and utilizes several well known packages and technologies:
 
