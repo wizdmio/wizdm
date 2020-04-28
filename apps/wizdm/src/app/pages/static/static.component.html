@@ -8,8 +8,15 @@
     <!-- Teleports the TOC into the side panel persisting the status across navigation -->
     <ng-template wmSidenav opened persist let-mobile="isMobile">
 
-      <!-- Renders the Table Of Content -->
-      <div [wm-toc]="document.toc" [page]="page$ | async" (navigate)="navigate($event, mobile)" color="primary"></div>
+      <!-- Renders the Table Of Content using an ActionLink to navigate back/forward -->
+      <div #toc
+        [wm-toc]="document.toc" 
+        [page]="page$ | async" 
+        (navigate)="navigate($event, mobile)" 
+        color="primary" 
+        wmActionLink="toc" 
+        (activate)="toc.go($event.go)">
+      </div>
 
     </ng-template>
 

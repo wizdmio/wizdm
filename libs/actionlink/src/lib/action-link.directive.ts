@@ -18,9 +18,9 @@ export class ActionLinkDirective implements OnDestroy {
     this.sub && this.sub.unsubscribe();
 
     // Registers to the specified link to emit on activation
-    this.sub = this.observer.register(link).subscribe( params => 
-      this.activate.emit( params ) 
-    );
+    this.sub = this.observer.register(link).subscribe( params => { 
+      this.activate.emit( params );
+    });
   }
 
   /** Emits on activation */

@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone } from '@angular/core';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import moment from 'moment';
 
 @Component({
   selector: 'footer[wm-footer]',
@@ -11,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class FooterComponent {
 
-  readonly year = (new Date()).getFullYear();
+  readonly year = moment().year().toString();
   readonly xsmall$: Observable<boolean>;
 
   /** Host element */
@@ -29,7 +30,7 @@ export class FooterComponent {
 
   copyright(msg: string): string {
     // Interpolates the copyright message to dynamically change the current year
-    return msg.interpolate(this);
+    return msg.replace(/{{\s*year\s*}}/, this.year);
   }
 
   public languageLink(lang: string): any[] {

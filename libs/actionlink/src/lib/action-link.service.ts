@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ParamMap } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 /** Actinng as a CanActivate guard to intercept routing actions */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ActionLinkObserver implements CanActivate {
 
   private observers$ = new Subject<ActivatedRouteSnapshot>();
@@ -18,7 +18,7 @@ export class ActionLinkObserver implements CanActivate {
   }
 
   /** Turns a ParamMap into an object */
-  private extract(params: ParamMap): { [key: string]: string } | undefined {
+  private extract(params: ParamMap, action?: string): { [key: string]: string } | undefined {
     // Skips when no params are present
     if(!params || params.keys.length <= 0) { return undefined; }
     // Reduces the keys arrayn into the resulting object
@@ -26,7 +26,7 @@ export class ActionLinkObserver implements CanActivate {
       // Adds the single key, value pair
       obj[key] = params.get(key);
       return obj;
-    }, {});
+    }, { action });
   }
 
   /** Register the observer returning the observable emitting on the specified action(s) */
@@ -34,9 +34,11 @@ export class ActionLinkObserver implements CanActivate {
 
     return this.observers$.pipe( 
       // Filters the request based on the action code
-      filter( request => actions.some( action => request.routeConfig.path === action ) ),
+      filter( route => {
+        return actions.some( action => action === (route.data.actionMatch || route.routeConfig.path));
+      }),
       // Emits the route's quesy parameters' map as an object
-      map( route => this.extract(route.queryParamMap) )
+      map( route => this.extract(route.queryParamMap, route.data.actionMatch || route.routeConfig.path) )
     );
   }
 }

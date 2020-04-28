@@ -43,6 +43,7 @@ const routes: RoutesWithContent = [
       
       // Reference
       { path: 'docs',        redirectTo: 'docs/start', pathMatch: 'full' },
+      { path: 'docs/toc',    canActivate: [ ActionLinkObserver ], data: { actionMatch: 'toc' } },
       { path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Intercepts routing "action-links" to execute a non-routing action

@@ -13,11 +13,16 @@ export interface TocItem {
   selector: '[wm-toc]',
   templateUrl: './toc.component.html',
   styleUrls: ['./toc.component.scss'],
-  animations: $animations
+  animations: $animations 
 })
 export class TocComponent {
 
   private _selected: TocItem;
+  private _items: TocItem[];
+  private _index: TocItem[];
+
+  // Injects the parent TocComponent, if any, to compute the indentation level accordingly
+  constructor(@Optional() @SkipSelf() private parent: TocComponent) {}
 
   /** Returns the indentation level in pixels */
   get indent(): number { return !!this.parent ? this.parent.indent + 24 : 0; }
@@ -25,36 +30,35 @@ export class TocComponent {
   /** The currently selected item */
   get selected(): TocItem { return this._selected; }
 
-  // Injects the parent TocComponent, if any, to compute the indentation level accordingly
-  constructor(@Optional() @SkipSelf() private parent: TocComponent) {}
+  /** The toc items at this level */
+  get items(): TocItem[] { return this._items; }
+
+  /** The linear toc index  */
+  get index(): TocItem[] { return this._index || []; }
+
+  /** Moves the selection to the previous or the next page according to dir*/
+  public go(dir: 'prev'|'next') {
+
+    this.selected = dir === 'prev' ? this.previousPage() : this.nextPage(); 
+    /** Emits the navigation link, if any */
+    this.navigate.emit(this.selected.link);
+  }
+
+  /** The toc items to render */
+  @Input('wm-toc') set items(items: TocItem[]) {
+    // Computes the linear index while storing the input
+    this._index = this.buildIndex(this._items = items);
+  }
 
   /** Active link highlighting color */
   @Input() color: ThemePalette = 'accent';
 
-  /** The toc items to render */
-  @Input('wm-toc') items: TocItem[];
-
   /** Selects the toc item by the page */
   @Input() set page(page: string) {
-
-    // Searches recursively throughout the items 
-    const find = (page, items: TocItem[]) => items && items.reduce( (found, item) => {
-      // Returns the found item
-      if(!!found) { return found; }
-      // Checks the link for ending with the given page
-      if(item.link && item.link.endsWith(page)) { return item; }
-      // Recurs down the children
-      return find(page, item.items); 
-
-    }, undefined);
-      
-    // Starts searching
-    this.selected = find(page, this.items);
+    // Seeks for the page from the index
+    this.selected = this.findPage(page);
   }
 
-  /** Emits the target link when clicking on a navigation item */
-  @Output() navigate = new EventEmitter<string>();
-  
   /** Selects the given item */
   @Input() set selected(item: TocItem) {
 
@@ -70,6 +74,43 @@ export class TocComponent {
 
   /** Emits the currently selected item */
   @Output() selectedChange = new EventEmitter<TocItem>();
+
+  /** Emits the target link when clicking on a navigation item */
+  @Output() navigate = new EventEmitter<string>();
+  
+  /** Builds a linear index from the toc tree */
+  private buildIndex(items: TocItem[]): TocItem[] {
+    // Skips to the parent index
+    if(!!this.parent) { return this.parent.index; }
+    // Computes the index otherwise
+    return items.reduce( (index, item) => {
+      // Concatenates the index from the next level
+      if('items' in item) {
+
+        return index.concat(this.buildIndex(item.items)); 
+      }
+      // Pusches the item
+      return index.push(item), index;
+    }, []);
+  }
+
+  /** Returns the requested page */
+  public findPage(page: string): TocItem {
+   // Seeks for the page within the linear index
+   return this.index.find( item => item.link && item.link.endsWith(page) );
+  }
+
+  /** Returns the next page from the given position */
+  public nextPage(from: TocItem = this.selected): TocItem {
+    // Seeks for the next page from the linear index
+    return this.index[ this.index.findIndex(item => item === from) + 1] || this.index[0];
+  }
+
+  /** Returns the preceeding page from the given position */
+  public previousPage(from: TocItem = this.selected): TocItem {
+    // Seeks for the previous page from the linear index
+    return this.index[ this.index.findIndex(item => item === from) - 1] || this.index[this.index.length - 1];
+  }
 
   /** Updates the selection upon click */
   public onItemClick(item: TocItem) {
