@@ -1,10 +1,9 @@
-import { QuerySnapshot, QueryDocumentSnapshot } from '@angular/fire/firestore';
-import { DatabaseApplication, CollectionRef, Query } from './database-application';
-import { DatabaseCollection } from './database-collection';
+import { DatabaseCollection, CollectionRef, Query, QuerySnapshot, QueryDocumentSnapshot } from '../collection';
+import { DatabaseApplication } from '../database-application';
+import { mapSnaphotData } from '../collection/utils';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, scan } from 'rxjs/operators';
-
-export type PagePostProcessOp<I,O> = (data: Observable<I[]>) => Observable<I[]|O[]>;
+import { firestore } from 'firebase/app';
 
 export interface PageConfig {
   field?   : string,  // Sorting field
@@ -36,7 +35,7 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   protected _done$ = new BehaviorSubject<boolean>(false);
   public done$: Observable<boolean> = this._done$.asObservable();
 
-  constructor(db: DatabaseApplication, ref: string|CollectionRef) { 
+  constructor(db: DatabaseApplication, ref: string|CollectionRef<T>) { 
     super(db, ref);
   }
 
@@ -55,18 +54,11 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
     };
   }
 
-  // Helper to map the internal document representation into the output format
-  protected output(doc: QueryDocumentSnapshot<T>) {
-    const data = doc.data();
-    const id = doc.id;
-    return ( (typeof data !== 'undefined') ? { ...data as any, id } : undefined );
-  }
-
   /**
    * Streams the collection content as pages of documents array 
    * @param opts (optional) the page configuration
    */
-  public paging<O=T>(opts?: PageConfig): Observable<O[]> {
+  public paging(opts?: PageConfig): Observable<T[]> {
     // Initzialize the page configuration
     this.config = this.init(opts);
     // Makes sure the page is empty
@@ -76,13 +68,13 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
     // Returns the observable array for data consumption
     return this._data$.pipe(
       // Maps the internal data representation into the output data format
-      map( snapshot => (snapshot.docs || []).map(doc => this.output(doc)) ),
+      map( snapshot => (snapshot.docs || []).map(doc => mapSnaphotData(doc)) ),
       // Reverse the array when prepending is requested
       map( values => this.config.prepend ? values.reverse() : values ),
       // Accumulates the resulting array
-      scan<O[]>( (acc, val) =>  this.config.prepend ? val.concat(acc) : acc.concat(val) ),
+      scan( (acc, val) => this.config.prepend ? val.concat(acc) : acc.concat(val) ),
       // Resets the loading status
-      tap( () =>  this._loading$.next(false) )
+      tap( () => this._loading$.next(false) )
     );
   }
 
@@ -109,7 +101,6 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
     if(this._done$.value || this._loading$.value) { return };
     // Sets the loading status
     this._loading$.next(true);
-
     // Gets the next page and pushes it into the data stream
     this.queryPage(this.ref).get().then( (page: QuerySnapshot<T>) => {
       // Notifies when done
@@ -127,7 +118,7 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   }
 
   // Helper to compute the pagination query function according to the current configuration
-  private queryPage(ref: CollectionRef|Query): CollectionRef|Query {
+  private queryPage(ref: CollectionRef<T>|Query<T>): CollectionRef<T>|Query<T> {
     
     // Order by the configured field (creation dated by default)
     if(this.config.field) { ref = ref.orderBy(this.config.field, this.config.reverse ? 'desc' : 'asc');}

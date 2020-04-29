@@ -1,31 +1,45 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth, User } from 'firebase';
+import { Injectable, Inject } from '@angular/core';
+import { APP, FirebaseApp } from '../connect.module';
+import { auth, User } from 'firebase/app';
+import { Observable } from 'rxjs';
 //--
-export { User } from 'firebase';
+export type FirebaseAuth = auth.Auth;
+export { User } from 'firebase/app';
 
+/** Wraps the Firebase Auth as a service */
 @Injectable()
-/** Wraps the AngularFireAuth service for extended functionalities */
 export class AuthService {
 
-  constructor(readonly fire: AngularFireAuth) {}
+  /** Authentication states observable */
+  readonly state$: Observable<User>;
 
-  // Wraps AngularFireAuth basic functionalities
+  /** User observable, includes id token refreshes */
+  readonly user$: Observable<User>;
 
-  /** Firebase Auth instance */
-  public get auth() { return this.fire.auth; }
-  /** Observable of authentication state; as of Firebase 4.0 this is only triggered via sign-in/out */
-  public get authState$() { return this.fire.authState; }
-  /** Observable of the currently signed-in user's JWT token used to identify the user to a Firebase service (or null) */
-  public get idToken$() { return this.fire.idToken; }
-  /** Observable of the currently signed-in user (or null) */
-  public get user$() { return this.fire.user; }
+  /** inner Firebase Auth instance */
+  readonly auth: FirebaseAuth;
+
+  constructor(@Inject(APP) app: FirebaseApp) {
+
+    // Gets the firebase Auth instance
+    this.auth = app.auth();
+
+    // Builds the authentication state observable (sign-in/out)
+    this.state$ = new Observable(subscriber =>
+      this.auth.onAuthStateChanged(subscriber)
+    );
+
+    // Builds the user observable (this includes it token refreshes)
+    this.user$ = new Observable(subscriber => 
+      this.auth.onIdTokenChanged(subscriber)
+    );
+  }
 
   /** Current user object snapshot */
-  public get user() { return this.auth.currentUser; }
+  public get user() { 
+    return this.auth.currentUser; 
+  }
   
-  // Extends the Auth service features
-
   /** Returns true if user is logged in */
   public get authenticated(): boolean {
     return !!this.user;
@@ -134,6 +148,7 @@ export class AuthService {
 
   /** Signs out */
   public signOut(): Promise<void> {
+    
     console.log("Signing-out");
     return this.auth.signOut();
   }

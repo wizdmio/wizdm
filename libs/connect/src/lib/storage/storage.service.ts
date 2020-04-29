@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { Injectable, Inject } from '@angular/core';
+import { APP, FirebaseApp } from '../connect.module';
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
 import { StorageFile } from './storage-file';
 import { storage } from 'firebase/app';
+
 //--
+export type FirebaseStorage      = storage.Storage;
 export type StorageRef         = storage.Reference;
 export type ListOptions        = storage.ListOptions;
 export type ListResult         = storage.ListResult;
@@ -14,14 +16,16 @@ export type StringFormat       = storage.StringFormat;
 export type UploadTask         = storage.UploadTask;
 export type UploadTaskSnapshot = storage.UploadTaskSnapshot;
 
+/** Wraps the Firebase Storage as a service */
 @Injectable()
-/** Wraps the AngularFireStorage service adding refFromURL() support */
 export class StorageService {
 
-  constructor(readonly st: AngularFireStorage) {}
+  readonly storage: FirebaseStorage;
 
-  /** Returns the storage instance */
-  public get storage() { return this.st.storage; }
+  constructor(@Inject(APP) app: FirebaseApp) {
+    // Gets the Storage instance 
+    this.storage = app.storage();
+  }
 
   /** Returns a reference to the storage object identified by its path */
   public ref(path: string|StorageRef): StorageReference {

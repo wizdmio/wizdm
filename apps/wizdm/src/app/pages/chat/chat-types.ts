@@ -1,11 +1,11 @@
-import { dbCommon } from '@wizdm/connect/database';
-import { dbUser } from 'app/auth';
+import { DocumentData } from '@wizdm/connect/database/document';
+import { UserData } from 'app/auth';
 
-export interface dbChatter extends dbUser {
+export interface dbChatter extends UserData {
   lastConversation?: string;
 }
 
-export interface dbMessage  extends dbCommon {
+export interface dbMessage  extends DocumentData {
   
   body: string;
   
@@ -14,7 +14,7 @@ export interface dbMessage  extends dbCommon {
   timestamp?: string;
 }
 
-export interface dbConversation extends dbCommon {
+export interface dbConversation extends DocumentData {
   
   recipients: string[];
   

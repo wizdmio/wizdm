@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { DatabaseService, PagedCollection } from '@wizdm/connect/database';
+import { PagedCollection } from '@wizdm/connect/database/paged-collection';
+import { DatabaseService } from '@wizdm/connect/database';
 import { map, take, debounceTime } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { UserProfile } from 'app/auth';
 
 @Injectable({

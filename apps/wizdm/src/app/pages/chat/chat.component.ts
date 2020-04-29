@@ -1,6 +1,7 @@
 import { first, startWith, map, tap, filter, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { Component, AfterViewInit, Inject, ViewChild, NgZone } from '@angular/core';
-import { DatabaseService, DatabaseCollection } from '@wizdm/connect/database';
+import { DatabaseCollection } from '@wizdm/connect/database/collection';
+import { DatabaseService } from '@wizdm/connect/database';
 import { dbChatter, dbConversation, dbMessage } from './chat-types';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';

@@ -1,11 +1,12 @@
-import { DatabaseApplication, CollectionRef } from './database-application';
-import { DatabaseCollection } from './database-collection';
-import { dbCommon } from './database-document';
-import { Observable, BehaviorSubject, merge } from 'rxjs';
+import { DatabaseCollection, CollectionRef } from '../collection';
 import { map, tap, distinctUntilChanged } from 'rxjs/operators';
+import { DatabaseApplication } from '../database-application';
+import { Observable, BehaviorSubject, merge } from 'rxjs';
+import { DocumentData } from '../document';
 
-interface CounterShard extends dbCommon {
-  count : number
+/** The single shard composing the counter */
+export interface CounterShard extends DocumentData {
+  count: number
 }
 
 /** Implements a DistributedCounter extending a DatabaseCollection */
@@ -15,7 +16,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
   readonly counter$: Observable<number>;
   private _counter$: BehaviorSubject<number>; 
 
-  constructor(db: DatabaseApplication, ref: string|CollectionRef, public readonly shards) {
+  constructor(db: DatabaseApplication, ref: string|CollectionRef<CounterShard>, public readonly shards) {
     super(db, ref);
 
     // Creates a local copy of the counter 
@@ -65,28 +66,12 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
       if(counter && counter.length > 0) {
         // Select a single shard randomly
         const rnd = Math.floor(Math.random() * this.shards);
-        // Updates the shard or create a new one when scaling up
-        return this.updateShard(rnd.toString(), increment);
+        // Updates the shard using an increment FieldValue
+        const count = this.db.increment(increment) as any;
+        return this.ref.doc(rnd.toString()).update({ count });        
       }
       // Or create the counter if needed
       return this.create(increment);
     });
-  }
-
-  // Updates a given shard in an atomic transaction
-  private updateShard(shard: string, increment: number): Promise<void> {
-    // Uses firestore references directly
-    const ref = this.ref.doc(shard);
-    // Runs a transaction to increment the given shard
-    return this.db.transaction( trx => {
-      return trx.get(ref).then( snap => {
-        // Reads the shard, when existing, falling back to {}
-        const data = snap.data() || {};
-        // Computes the new count value
-        const count = (data.count || 0) + increment;
-        // Updates the existing shard or creates a new one
-        trx.set(ref, { count });
-      });
-    })
   }
 }

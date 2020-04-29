@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
 import { first, delay, map, tap, switchMap } from 'rxjs/operators';
-import { DatabaseService, DatabaseDocument, DatabaseCollection, dbCommon } from '@wizdm/connect/database';
+import { DocumentData } from '@wizdm/connect/database/document';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Injectable } from '@angular/core';
 import moment from 'moment';
 import * as faker from 'faker';
 
@@ -11,13 +11,13 @@ export interface User {
   img: string;
 }
 
-export interface dbMessage  extends dbCommon {
+export interface dbMessage  extends DocumentData {
   body: string;
   sender: string;
   timestamp?: string;
 }
 
-export interface dbConversation extends dbCommon {
+export interface dbConversation extends DocumentData {
   recipients: string[];
   lastRead?: LastRead;
   thread$: BehaviorSubject<dbMessage[]>;

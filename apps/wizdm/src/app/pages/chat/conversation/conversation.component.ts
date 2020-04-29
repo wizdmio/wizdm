@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { map, tap, filter, switchMap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
 import { Observable, BehaviorSubject, of, from, combineLatest } from 'rxjs';
-import { DatabaseService, DatabaseDocument } from '@wizdm/connect/database';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { dbChatter, dbConversation, dbMessage } from '../chat-types';
+import { DatabaseDocument } from '@wizdm/connect/database/document';
+import { DatabaseService } from '@wizdm/connect/database';
 import { UserProfile } from 'app/auth';
 import moment from 'moment';
 

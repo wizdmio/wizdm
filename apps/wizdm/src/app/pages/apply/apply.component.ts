@@ -10,7 +10,7 @@ import { ContentStreamer } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
 import { Observable, Subscription } from 'rxjs';
 import { wmDocument } from '@wizdm/editable';
-import { UserProfile, dbUser } from 'app/auth';
+import { UserProfile, UserData } from 'app/auth';
 
 export interface wmApplication {
 
@@ -25,7 +25,7 @@ export interface wmApplication {
   comments?      : string  // Additional comments
 }
 
-interface userApply extends dbUser {
+interface userApply extends UserData {
   lastApplication?: wmApplication,
 }
 

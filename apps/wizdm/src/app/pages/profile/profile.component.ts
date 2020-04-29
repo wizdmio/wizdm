@@ -1,5 +1,5 @@
 import { StorageService } from '@wizdm/connect/storage';
-import { UserProfile, dbUser } from 'app/auth';
+import { UserProfile, UserData } from 'app/auth';
 import { User } from '@wizdm/connect/auth';
 import { DialogRef } from '@wizdm/dialog';
 import { Component } from '@angular/core';
@@ -12,11 +12,11 @@ import moment from 'moment';
 })
 export class ProfileComponent {
 
-  private newProfile: dbUser;
+  private newProfile: UserData;
 
   constructor(private user: UserProfile, private storage: StorageService) {}
 
-  public get profileData(): dbUser { return this.user.data; }
+  public get profileData(): UserData { return this.user.data; }
 
   public get profilePhoto(): string { return this.profileData.photo || ''; }
 
@@ -26,7 +26,7 @@ export class ProfileComponent {
 
   public get emailVerified(): boolean { return this.User.emailVerified || false; }
 
-  public set profileData(user: dbUser) { 
+  public set profileData(user: UserData) { 
     
     this.newProfile = user;
   }

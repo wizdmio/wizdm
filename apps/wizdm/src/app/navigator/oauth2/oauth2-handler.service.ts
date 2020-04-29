@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
 //import { AuthService } from '@wizdm/connect/auth';
 
 @Injectable({
