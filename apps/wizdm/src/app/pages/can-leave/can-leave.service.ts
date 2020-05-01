@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, first } from 'rxjs/operators';
+import { flatMap, take } from 'rxjs/operators';
 
 export type CanLeaveType = boolean|Promise<boolean>|Observable<boolean>;
 
@@ -23,7 +23,7 @@ export class CanLeaveGuard implements CanDeactivate<any> {
       // Flatten the observer to a lower order when needed
       flatMap( canLeave => typeof(canLeave) === 'boolean' ? of(canLeave) : canLeave ),
       // Makes sure the observable always resolves
-      first()
+      take(1)
     );
   }
 }

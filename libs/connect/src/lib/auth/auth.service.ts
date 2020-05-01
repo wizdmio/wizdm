@@ -1,10 +1,24 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '../connect.module';
+import { shareReplay } from 'rxjs/operators';
 import { auth, User } from 'firebase/app';
-import { Observable } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
 //--
 export type FirebaseAuth = auth.Auth;
 export { User } from 'firebase/app';
+
+/** Returns an observable mirroring the source while running within the given zone */
+export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {
+  return source => {
+    return new Observable( observer => {
+      return source.subscribe(
+        (value: T) => zone.run(() => observer.next(value)),
+        (e: any) => zone.run(() => observer.error(e)),
+        () => zone.run(() => observer.complete())
+      );
+    });
+  };
+}
 
 /** Wraps the Firebase Auth as a service */
 @Injectable()
@@ -19,20 +33,24 @@ export class AuthService {
   /** inner Firebase Auth instance */
   readonly auth: FirebaseAuth;
 
-  constructor(@Inject(APP) app: FirebaseApp) {
+  constructor(@Inject(APP) app: FirebaseApp, zone: NgZone) {
 
     // Gets the firebase Auth instance
     this.auth = app.auth();
 
     // Builds the authentication state observable (sign-in/out)
-    this.state$ = new Observable(subscriber =>
+    this.state$ = new Observable<User>(subscriber =>
+      // Wraps the onAuthStaeChanged observer
       this.auth.onAuthStateChanged(subscriber)
-    );
+      // Replay the same result to all subscribers
+    ).pipe( /*shareReplay({ bufferSize: 1, refCount: false }),*/ runInZone(zone) );
 
     // Builds the user observable (this includes it token refreshes)
-    this.user$ = new Observable(subscriber => 
+    this.user$ = new Observable<User>(subscriber => 
+      // Wraps the onIdTokenChanged observer
       this.auth.onIdTokenChanged(subscriber)
-    );
+      // Replay the same result to all subscribers
+    ).pipe(/*shareReplay({ bufferSize: 1, refCount: false }),*/ runInZone(zone) );
   }
 
   /** Current user object snapshot */

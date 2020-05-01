@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -16,19 +17,19 @@ import { IconModule } from '@wizdm/elements/icon';
 import { RedirectModule } from '@wizdm/redirect';
 import { DialogModule } from '@wizdm/dialog';
 import { GtagModule } from '@wizdm/gtag';
-import { CanLeaveModule, CanLeaveGuard } from 'app/navigator/can-leave';
+import { CanLeaveModule, CanLeaveGuard } from 'app/pages/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UserPhotoComponent } from './user-photo/user-photo.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { ProfileComponent } from './profile.component';
-import { AuthGuard } from 'app/navigator/auth-guard';
+import { AuthGuard, loggedIn, canActivate } from 'app/auth/auth-guard';
 
 const routes: RoutesWithContent = [
   {
     path: '',
     content: 'profile',
     component: ProfileComponent,
-    canActivate: [ AuthGuard ],
+    canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },
     canDeactivate: [ CanLeaveGuard ]
   }
 ];
@@ -49,6 +50,7 @@ const routes: RoutesWithContent = [
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
+    MatProgressBarModule,
     GtagModule,
     IconModule, 
     AvatarModule,

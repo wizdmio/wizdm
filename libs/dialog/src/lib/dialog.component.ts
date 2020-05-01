@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef, forwardRef } from '@angular/core';
-import { MatDialog, MatDialogRef, MatDialogConfig, DialogRole, DialogPosition, MatDialogClose } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig, DialogRole, DialogPosition } from '@angular/material/dialog';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollStrategy } from '@angular/cdk/overlay';
 import { Direction } from '@angular/cdk/bidi';

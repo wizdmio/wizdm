@@ -2,7 +2,7 @@ import { PagedCollection } from '@wizdm/connect/database/paged-collection';
 import { DatabaseService } from '@wizdm/connect/database';
 import { map, take, debounceTime } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { UserProfile } from 'app/auth';
+import { UserProfile } from 'app/auth/user-profile';
 
 @Injectable({
   providedIn: 'root'

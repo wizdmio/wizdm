@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { dbChatter, dbConversation, dbMessage } from '../chat-types';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
 import { DatabaseService } from '@wizdm/connect/database';
-import { UserProfile } from 'app/auth';
+import { UserProfile } from 'app/auth/user-profile';
 import moment from 'moment';
 
 @Component({

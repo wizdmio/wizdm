@@ -3,7 +3,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ActivatedRoute } from '@angular/router';
 import { NavigatorComponent } from '../navigator.component';
 import { TeleportService } from '@wizdm/teleport';
-import { skip, first, tap, map, filter, pluck } from 'rxjs/operators';
+import { skip, take, tap, map, filter, pluck } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 /** Teleports the given content towards the 'sidenav' portal witihn the navigator */
@@ -70,7 +70,7 @@ export class SidenavDirective implements OnInit, OnDestroy {
     this.route.data.pipe( 
 
         // Loads the data once
-        first(), 
+        take(1), 
 
         // Pluks the 'sidenav' property
         pluck('sidenav'), 

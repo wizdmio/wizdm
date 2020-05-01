@@ -1,5 +1,5 @@
 import { Directive, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ActionLinkObserver } from './action-link.service';
+import { ActionLinkObserver, ActionData } from './action-link.service';
 import { Subscription } from 'rxjs';
 
 @Directive({
@@ -12,19 +12,21 @@ export class ActionLinkDirective implements OnDestroy {
   constructor(private observer: ActionLinkObserver) { }
 
   /** Sets the link path the directive will activate upon */
-  @Input() set wmActionLink(link: string) {
+  @Input() set wmActionLink(action: string) {
 
     // Unsubscribes previous subscriptions, if any
     this.sub && this.sub.unsubscribe();
 
     // Registers to the specified link to emit on activation
-    this.sub = this.observer.register(link).subscribe( params => { 
-      this.activate.emit( params );
+    this.sub = this.observer.register(action).subscribe( data => { 
+
+      // Always emit the activation event
+      this.activate.emit( data );
     });
   }
 
   /** Emits on activation */
-  @Output() activate = new EventEmitter<{ [key: string]: string } | undefined>();
+  @Output() activate = new EventEmitter<ActionData>();
 
   /** Disposes of the subscriptions */
   ngOnDestroy() {

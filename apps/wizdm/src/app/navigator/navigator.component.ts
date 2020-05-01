@@ -5,7 +5,7 @@ import { MediaObserver } from '@angular/flex-layout';
 import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
 import { runInZone } from 'app/utils/rxjs';
-import { UserProfile } from 'app/auth';
+import { UserProfile } from 'app/auth/user-profile';
 
 @Component({
   selector: 'wm-navigator',

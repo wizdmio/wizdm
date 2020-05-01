@@ -1,6 +1,6 @@
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
-import { first, last, map, flatMap, startWith } from 'rxjs/operators';
+import { take, last, map, flatMap, startWith } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 /** Helper class to display stored files */
@@ -33,7 +33,7 @@ export class StorageFile {
     // Builds the UploadObservable set of observables
     if(ref instanceof UploadObservable) {
 
-      this.name$ = ref.pipe( first(), map( s => s.ref.name ) );
+      this.name$ = ref.pipe( take(1), map( s => s.ref.name ) );
 
       this.meta$ = ref.pipe( last(), flatMap( s => s.ref.getMetadata() ), startWith({}) );
 

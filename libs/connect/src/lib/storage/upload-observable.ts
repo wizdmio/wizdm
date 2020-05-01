@@ -1,4 +1,5 @@
 import { UploadTask, UploadTaskSnapshot } from './storage.service';
+import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export class UploadObservable extends Observable<UploadTaskSnapshot> {
@@ -11,10 +12,17 @@ export class UploadObservable extends Observable<UploadTaskSnapshot> {
   }
 
   /** Constructs an UploadTask cold observable */
-  constructor(private factory: () => UploadTask) {
+  constructor(private factory: () => UploadTask, zone: NgZone) {
     // Builds the uploading observable hooking on the 'state_changed' observer. Since task creation is delegated to the 
     // factory function this result being a cold observable (upload starts upon subscription)
-    super( sub => this.task.on('state_changed', snap => sub.next(snap), error => sub.error(error), () => sub.complete()) );
+    super( sub => this.task.on('state_changed',
+      // Runs the observable within the Angular's zone
+      snap => zone.run( () => sub.next(snap) ),
+      // Runs the observable within the Angular's zone
+      error => zone.run( () => sub.error(error) ), 
+      // Runs the observable within the Angular's zone
+      () => zone.run( () => sub.complete() )
+    ));
 
     if(typeof factory !== "function") { 
       throw new Error('The UploadObservable task factory must be a function'); 

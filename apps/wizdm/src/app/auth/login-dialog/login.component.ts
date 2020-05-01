@@ -5,7 +5,7 @@ import { RedirectService } from '@wizdm/redirect';
 import { DialogComponent } from '@wizdm/dialog';
 import { $animations } from './login-animations';
 import { GtagService } from '@wizdm/gtag';
-import { UserProfile } from 'app/auth';
+import { UserProfile } from 'app/auth/user-profile';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
 

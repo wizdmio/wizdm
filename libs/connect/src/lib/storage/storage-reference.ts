@@ -1,11 +1,12 @@
 import { StorageRef, SettableMetadata, UploadMetadata, ListResult, ListOptions, StringFormat } from './storage.service';
 import { UploadObservable } from './upload-observable';
 import { Observable, defer } from 'rxjs';
+import { NgZone } from '@angular/core';
 
 /** Wraps the AngularFireStorageReference including list() and listAll() functionalities recently added to firebase API */
 export class StorageReference {
 
-  constructor(public ref: StorageRef) {}
+  constructor(public ref: StorageRef, private zone: NgZone) {}
 
   /** Returns the bucket name */
   public get bucket(): string { return this.ref.bucket; }
@@ -18,17 +19,17 @@ export class StorageReference {
 
    /** Returns a child StorageReference object */
   public root(path: string): StorageReference { 
-    return new StorageReference( this.ref.root ); 
+    return new StorageReference( this.ref.root, this.zone ); 
   }
 
    /** Returns a child StorageReference object */
   public parent(path: string): StorageReference { 
-    return new StorageReference( this.ref.parent ); 
+    return new StorageReference( this.ref.parent, this.zone ); 
   }
 
   /** Returns a child StorageReference object */
   public child(path: string): StorageReference { 
-    return new StorageReference( this.ref.child(path) ); 
+    return new StorageReference( this.ref.child(path), this.zone ); 
   }
 
   //-- Reverts back to the original Primise-based storage API
@@ -71,11 +72,11 @@ export class StorageReference {
 
   /** Returns an UploadTask cold observable for binary data. Upload process will start upon subscription. */
   public put(data: Blob|Uint8Array|ArrayBuffer, metadata?: UploadMetadata): UploadObservable {
-    return new UploadObservable( () => this.ref.put(data, metadata) );
+    return new UploadObservable( () => this.ref.put(data, metadata), this.zone );
   }
 
   /** Returns an UploadTask cold observable text encoded data. Upload process will start upon subscription. */
   public putString(data: string, format?: StringFormat, metadata?: UploadMetadata): UploadObservable {
-    return new UploadObservable( () => this.ref.putString(data, format, metadata) );
+    return new UploadObservable( () => this.ref.putString(data, format, metadata), this.zone );
   }
 } 

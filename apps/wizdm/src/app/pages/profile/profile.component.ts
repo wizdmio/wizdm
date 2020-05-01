@@ -1,5 +1,4 @@
-import { StorageService } from '@wizdm/connect/storage';
-import { UserProfile, UserData } from 'app/auth';
+import { UserProfile, UserData } from 'app/auth/user-profile';
 import { User } from '@wizdm/connect/auth';
 import { DialogRef } from '@wizdm/dialog';
 import { Component } from '@angular/core';
@@ -14,7 +13,9 @@ export class ProfileComponent {
 
   private newProfile: UserData;
 
-  constructor(private user: UserProfile, private storage: StorageService) {}
+  constructor(private user: UserProfile) {}
+
+  public get UserId(): string { return this.user.uid; }
 
   public get profileData(): UserData { return this.user.data; }
 
@@ -42,24 +43,13 @@ export class ProfileComponent {
       .then( () => ref.close(true) );
   }
 
-  public updatePhoto(file: File) {
+  public updatePhoto(photo: string) {
 
-    if(!file) { return; }
-
-    const folder = this.storage.ref(`${this.user.uid}/${file.name}`);
-
-    folder.put(file)
-      .then( snap => snap.ref.getDownloadURL() )
-      .then( photo => this.user.update( { photo } ));
+    this.user.update( { photo } );
   }
 
   public deletePhoto() {
 
-    if(!this.profilePhoto) { return; }
-
-    const ref = this.storage.refFromURL(this.profilePhoto);
-
-    this.user.update({ photo: '' })
-      .then( () => ref.delete() );
+    this.user.update({ photo: '' });
   }
 }

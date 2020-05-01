@@ -1,5 +1,5 @@
 import { Directive, Input, Optional, ElementRef, HostBinding, HostListener, NgZone } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @Directive({
   selector: '[scrollHide]',
@@ -40,7 +40,7 @@ export class ScrollHeight {
     // Inform the parent scrollHide directive about the visible height
     this.scrollHide.height = this.value = value;
     // Computes the extra padding/margin as soon as change detection ended
-    this.zone.onStable.pipe( first() ).subscribe( () => this.update() );
+    this.zone.onStable.pipe( take(1) ).subscribe( () => this.update() );
   }
   /** Updates the extra margin/padding for the scrollbar to hide */
   private update() {

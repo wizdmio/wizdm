@@ -3,7 +3,7 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { SelectorResolver } from './selector-resolver.service';
 import { ContentLoader } from '../loader/content-loader.service';
 import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 /** Builds a content resolver instance for the specified source file on the fly */
 export function contentResolver<T = any>(source: string, providedIn: 'root'|Type<T> = 'root') {
@@ -25,6 +25,6 @@ export class ContentResolver implements Resolve<any> {
     const lang = this.selector.resolve(route);
     // Loads the specified module from the language forlder
     return this.loader.loadModule(lang, this.source)
-      .pipe( first() );
+      .pipe( take(1) );
   }
 }

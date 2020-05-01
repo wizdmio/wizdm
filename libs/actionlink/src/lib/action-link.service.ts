@@ -1,44 +1,93 @@
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Observable, Subject, ReplaySubject, isObservable, from, of } from 'rxjs';
+import { filter, tap, take, pluck, switchMap, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ParamMap } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+
+/** ActionLink optional data */
+export interface ActionData<T = any> { 
+  // Optional parameters
+  [key: string]: any;
+  // Return handler
+  return: (value: ActionResult<T>) => void;
+};
+
+/** ActionLink result returned by the ActionLinkExecuter */
+export type ActionResult<T = any> = void|T|Promise<T>|Observable<T>;
 
 /** Actinng as a CanActivate guard to intercept routing actions */
 @Injectable({ providedIn: 'root' })
 export class ActionLinkObserver implements CanActivate {
 
-  private observers$ = new Subject<ActivatedRouteSnapshot>();
+  private observers$ = new Subject<{ action: string, data?: ActionData }>();
 
+  /** Register the observer returning the observable emitting on the specified action(s) */
+  public register(action: string): Observable<ActionData> {
+    // Filters the request based on the action code
+    return this.observers$.pipe(       
+      filter( data => data.action === action ),
+      pluck('data')
+    );
+  }
+ 
   // Implements single route user authentication guarding
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    // Pushes the snapshot for observers to react, eventually
-    this.observers$.next(route);
+
+    // Computes the action code from the route data
+    const action = route.data.actionMatch || route.routeConfig.path;
+
+    // Computes the data object from the route's query parameters
+    const data = route.queryParamMap.keys.reduce( (data, key) => {
+      // Adds the single key, value pair
+      data[key] = route.queryParamMap.get(key);
+      // Returns the object
+      return data;
+    // Adds a dummy return handler
+    }, { return: () => {} } );
+  
+    // Pushes the request using data coming from the route
+    this.observers$.next( { action, data } );
+
     // Always prevents the real routing
     return false;
   }
 
-  /** Turns a ParamMap into an object */
-  private extract(params: ParamMap, action?: string): { [key: string]: string } | undefined {
-    // Skips when no params are present
-    if(!params || params.keys.length <= 0) { return undefined; }
-    // Reduces the keys arrayn into the resulting object
-    return params.keys.reduce( (obj, key) => {
-      // Adds the single key, value pair
-      obj[key] = params.get(key);
-      return obj;
-    }, { action });
-  }
+  /** Activate a link programmatically */
+  public activate<T>(action: string, data?: ActionData<T>): Observable<T> {
 
-  /** Register the observer returning the observable emitting on the specified action(s) */
-  public register(...actions: string[]): Observable<{ [key: string]: string } | undefined> {
+    // Builds a ReplaySubject to be used for returning values asynchronously
+    const return$ = new ReplaySubject<ActionResult<T>>(1);
 
-    return this.observers$.pipe( 
-      // Filters the request based on the action code
-      filter( route => {
-        return actions.some( action => action === (route.data.actionMatch || route.routeConfig.path));
+    // Pushes the request including a return handler
+    this.observers$.next({ action, data: { 
+      ...data, 
+      return: (value) => return$.next(value) 
+    }});
+
+    // Returns an Observavble resolving into the returned value
+    return return$.pipe( 
+
+      // Completes the observable with the next link activation (worst case)
+      takeUntil(this.observers$),
+      
+      // Transfors the given result
+      switchMap( result => {
+
+        if(isObservable(result)) {
+          return result as Observable<T>;
+        }
+
+        if(Promise.resolve(result) == result) {
+          return from(result as Promise<T>);
+        }
+
+        return of(result as T);
       }),
-      // Emits the route's quesy parameters' map as an object
-      map( route => this.extract(route.queryParamMap, route.data.actionMatch || route.routeConfig.path) )
+      
+      // Takes a single emission at max
+      take(1),
+
+      // Debug
+      tap( () => {}, () => {}, () => { console.log("completed:", return$); })
     );
   }
 }

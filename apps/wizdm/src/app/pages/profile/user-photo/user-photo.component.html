@@ -3,24 +3,31 @@
 
   <label class="label mat-small">{{ msgs.label || 'Profile picture' }}</label>
 
-  <div class="frame">
+  <div class="frame" fxLayout="column" fxLayoutGap="16px">
 
     <!-- Displays the image as an Avatar -->
-    <wm-avatar color="primary" shape="squared" [src]="photo"></wm-avatar>
+    <wm-avatar color="primary" shape="squared" [src]="url"></wm-avatar>
 
-    <button mat-icon-button class="buttons" (click)="delete.emit()" *ngIf="!!photo; else uploadBtn">
+    <!-- Uploading progress bar -->
+    <mat-progress-bar *ngIf="progress$ | async as progress" 
+      color="primary"
+      [mode]="progress < 100 ? 'determiante' : 'indeterminate'" 
+      [value]="progress">
+    </mat-progress-bar>
+    
+    <!-- Upload/Delete button -->
+    <button mat-icon-button class="buttons" (click)="deleteFile()" *ngIf="!!url; else uploadBtn">
       <wm-icon [icon]="msgs.delete?.icon || 'delete'"></wm-icon>
     </button>
 
     <ng-template #uploadBtn>
 
-      <wm-openfile accept="image/*" (files)="upload($event)">
+      <!-- Native OpenFile dialog -->
+      <wm-openfile accept="image/*" (files)="uploadFile($event)" #openfile></wm-openfile>
 
-        <button mat-icon-button class="buttons">
-          <wm-icon [icon]="msgs.upload?.icon || 'cloud_upload'"></wm-icon>
-        </button>
-
-      </wm-openfile>
+      <button mat-icon-button class="buttons" (click)="openfile.open()">
+        <wm-icon [icon]="msgs.upload?.icon || 'cloud_upload'"></wm-icon>
+      </button>
 
     </ng-template>
 

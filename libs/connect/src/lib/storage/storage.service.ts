@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '../connect.module';
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
@@ -22,19 +22,19 @@ export class StorageService {
 
   readonly storage: FirebaseStorage;
 
-  constructor(@Inject(APP) app: FirebaseApp) {
+  constructor(@Inject(APP) app: FirebaseApp, private zone: NgZone) {
     // Gets the Storage instance 
     this.storage = app.storage();
   }
 
   /** Returns a reference to the storage object identified by its path */
   public ref(path: string|StorageRef): StorageReference {
-    return new StorageReference( typeof path === 'string' ? this.storage.ref(path) : path );
+    return new StorageReference( typeof path === 'string' ? this.storage.ref(path) : path, this.zone );
   }
 
   /** Returns a reference to the storage object identified by its download URL */
   public refFromURL(url: string): StorageReference {
-    return new StorageReference(this.storage.refFromURL(url));
+    return new StorageReference(this.storage.refFromURL(url), this.zone);
   }
 
   /** Returns a file object from a varaiety of references */

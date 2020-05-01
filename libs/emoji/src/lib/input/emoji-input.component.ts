@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnDestroy, HostBinding, HostListener, Inject, ElementRef, ViewEncapsulation, NgZone } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { filter, map, timeInterval, first } from 'rxjs/operators';
+import { filter, map, timeInterval, take } from 'rxjs/operators';
 import { EmojiText, emSegment } from '../text';
 import { Subject, Subscription, animationFrameScheduler } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
@@ -213,7 +213,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
 
   /** Wait for the current queue of microtaks to be emptied. The async funtion will than be called after the rendering completed */
   private whenDone(async: () => void) { 
-    this.zone.onStable.pipe( first() ).subscribe( () => async() ); 
+    this.zone.onStable.pipe( take(1) ).subscribe( () => async() ); 
   }
 
   /** Selects the text between start and end when specified. 

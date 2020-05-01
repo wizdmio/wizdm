@@ -1,7 +1,7 @@
 import { Injectable, ElementRef, NgZone, Inject, Optional } from '@angular/core';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { Observable, BehaviorSubject, of, OperatorFunction } from 'rxjs';
-import { map, startWith, distinctUntilChanged, first, scan, switchMap, debounceTime, shareReplay } from 'rxjs/operators';
+import { map, startWith, distinctUntilChanged, take, scan, switchMap, debounceTime, shareReplay } from 'rxjs/operators';
 import { AnimateConfig, ANIMATE_CONFIG, animateConfigFactory } from './animate.config'
 
 /** Configures alternative containers for AOS triggering */
@@ -75,7 +75,7 @@ export class AnimateService {
     // Waits until the zone is stable once, aka the render is complete so the element to measure is there 
     return source => this.zone.onStable.pipe( 
       // Waits just once
-      first(),
+      take(1),
       // Triggers the play and replay requests
       switchMap( () => source ),
       // Triggers upon the most suitable method

@@ -1,11 +1,11 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
-import { switchMap, map, first } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 import { DateAdapter } from '@angular/material/core';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Injectable } from '@angular/core';
 import { $languageMap } from './lang-map';
-import { UserProfile } from 'app/auth';
+import { UserProfile } from 'app/auth/user-profile';
 import { of } from 'rxjs';
 import moment from 'moment';
 
@@ -81,7 +81,7 @@ export class LanguageSelector extends ContentSelector {
       }),
 
       // Makes sure the observable completes
-      first()
+      take(1)
       
     ) as AllowedContent;
   }

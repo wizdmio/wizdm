@@ -1,4 +1,4 @@
-import { first, startWith, map, tap, filter, switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { take, startWith, map, tap, filter, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { Component, AfterViewInit, Inject, ViewChild, NgZone } from '@angular/core';
 import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
@@ -8,7 +8,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { $animations } from './chat.animations';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { runInZone } from 'app/utils/rxjs';
-import { UserProfile } from 'app/auth';
+import { UserProfile } from 'app/auth/user-profile';
 
 @Component({
   selector: 'wm-chat',
@@ -107,7 +107,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
 
   /** Calls fn right after the last rederign has completed */
   private afterRender( fn: () => void ) {
-    this.zone.onStable.pipe( first() ).subscribe(fn);
+    this.zone.onStable.pipe( take(1) ).subscribe(fn);
   }
 
   /** Scrolls te view to the bottom to make the latest message visible */

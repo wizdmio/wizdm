@@ -5,7 +5,7 @@ import { ActionLinkObserver } from '@wizdm/actionlink';
 import { NavigatorComponent } from './navigator.component';
 import { LanguageSelector } from './lang-selector';
 import { BackLinkObserver } from './back-link';
-import { Oauth2Handler } from './oauth2';
+import { Oauth2Handler } from '../auth/oauth2-handler';
 
 const routes: RoutesWithContent = [
 
