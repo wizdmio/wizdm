@@ -7,9 +7,12 @@ import { Injectable } from '@angular/core';
 export interface ActionData<T = any> { 
   // Optional parameters
   [key: string]: any;
+};
+
+export interface ActionDataWithReturn<T = any> extends ActionData<T> {
   // Return handler
   return: (value: ActionResult<T>) => void;
-};
+}
 
 /** ActionLink result returned by the ActionLinkExecuter */
 export type ActionResult<T = any> = void|T|Promise<T>|Observable<T>;
@@ -18,10 +21,10 @@ export type ActionResult<T = any> = void|T|Promise<T>|Observable<T>;
 @Injectable({ providedIn: 'root' })
 export class ActionLinkObserver implements CanActivate {
 
-  private observers$ = new Subject<{ action: string, data?: ActionData }>();
+  private observers$ = new Subject<{ action: string, data?: ActionDataWithReturn }>();
 
   /** Register the observer returning the observable emitting on the specified action(s) */
-  public register(action: string): Observable<ActionData> {
+  public register(action: string): Observable<ActionDataWithReturn> {
     // Filters the request based on the action code
     return this.observers$.pipe(       
       filter( data => data.action === action ),
@@ -30,7 +33,7 @@ export class ActionLinkObserver implements CanActivate {
   }
  
   // Implements single route user authentication guarding
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): false {
 
     // Computes the action code from the route data
     const action = route.data.actionMatch || route.routeConfig.path;

@@ -11,6 +11,7 @@ import { ReadmeModule } from '@wizdm/elements/readme';
 import { IllustrationModule } from '@wizdm/elements/illustration';
 import { BackgroundModule } from 'app/navigator/background';
 import { HomeComponent } from './home.component';
+import { AuthGuardModule } from 'app/auth/auth-guard';
 
 const routes: RoutesWithContent = [
   {
@@ -33,6 +34,7 @@ const routes: RoutesWithContent = [
     ReadmeModule,
     IllustrationModule,
     BackgroundModule,
+    AuthGuardModule,
     ContentRouterModule.forChild(routes)
   ]
 })
