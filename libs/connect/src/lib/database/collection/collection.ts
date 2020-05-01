@@ -1,9 +1,10 @@
 import { CollectionRef, QueryDocumentSnapshot, QuerySnapshot, QueryFn, Query } from './types';
 import { map, tap, scan, switchMap, expand, takeWhile } from 'rxjs/operators';
-import { DatabaseApplication, runInZone } from '../database-application';
 import { DatabaseDocument, DocumentRef, DocumentData } from '../document';
 import { fromRef, mapDocumentChanges, mapSnaphotData } from './utils';
 import { Observable, of, from, throwError } from 'rxjs';
+import { DatabaseApplication } from '../database-application';
+import { runInZone } from '../../utils';
 
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends DocumentData> {

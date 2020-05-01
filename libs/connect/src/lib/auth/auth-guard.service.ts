@@ -1,21 +1,23 @@
 import { Router, UrlTree,CanActivate,ActivatedRouteSnapshot, RouterStateSnapshot, NavigationExtras } from '@angular/router';
-import { Observable, of, pipe, UnaryFunction } from 'rxjs';
-import { AuthService, User } from '@wizdm/connect/auth';
+import { Observable, UnaryFunction } from 'rxjs';
+import { AuthService, User } from './auth.service';
 import { Injectable } from '@angular/core';
 import { take, map } from 'rxjs/operators';
 
+/** AuthGuard pipe operator */
 export type AuthPipe = UnaryFunction<Observable<User|null>, Observable<boolean|AuthRedirect>>;
 
+/** AuthGuard redirection */
 export interface AuthRedirect { commands: any[], extras?: NavigationExtras };
 
+/** AuthGuard redirection helper */
 export const authRedirect = (commands: any[], extras?:NavigationExtras ) => ({ commands, extras });
 
+/** AuthGuard pipe redirection factory */
 export type AuthPipeFactory = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => AuthPipe;
 
-
-@Injectable({
-  providedIn: 'root'
-})
+/** Authentication Guard */
+@Injectable()
 export class AuthGuard implements CanActivate {
 
   constructor(readonly router: Router, readonly auth: AuthService) { }
@@ -23,16 +25,22 @@ export class AuthGuard implements CanActivate {
   // Implements single route user authentication guarding
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean|UrlTree> {
 
+    // Gets the AuthPipeFactory from the route data
     const authPipeFactory: AuthPipeFactory = route.data.authGuardPipe || (() => map(user => !!user));
 
-    return this.auth.user$.pipe(
+    // Returns an observable resolving the AuthState
+    return this.auth.state$.pipe(
 
+      // Builds the Auth pipe according to the route
       authPipeFactory(route, state),
 
+      // Maps the Auth pipe results
       map( proceedOrRedirect => {
 
+        // Returns the boolean fvalue to prevent or proceed with the navigation
         if(typeof proceedOrRedirect === 'boolean') { return proceedOrRedirect; }
 
+        // Redirect according to the AuthRedirect
         return this.router.createUrlTree(proceedOrRedirect.commands || ['/'], proceedOrRedirect.extras);
       }),
 
@@ -41,33 +49,14 @@ export class AuthGuard implements CanActivate {
   }
 }
 
+/** canActivate helper function */
 export const canActivate = (pipe: AuthPipeFactory) => ({
   canActivate: [ AuthGuard ], data: { authGuardPipe: pipe }
 });
 
-export const redirectToLogin = (state: RouterStateSnapshot, mode?: string) => {
+/** Checks the user for being authenticated */
+export const loggedIn: AuthPipeFactory = (route, state) => map( user => !!user );
 
-  // Reverts navigation to the login page on invalid user profile
-  console.log('canActivate: Authentication required');
-
-  // Keeps the same language as the current url
-  const lang = state.url.split('/')[1];
-
-  // Stores the requested url
-  const url = state.url;
-
-  // Redirects to the login page passing along the target url for redirection
-  return authRedirect([lang, 'login'], { queryParams: { mode, url } }); 
-}
-
-
-export const loggedIn: AuthPipeFactory = (route, state) => map( user => !!user || redirectToLogin(state) );
-
-export const emailVerified: AuthPipeFactory = (route, state) => map( user => {
-
-  if(!!user && user.emailVerified) { return true; }
-
-  return redirectToLogin(state, user.emailVerified ? 'sendEmailVerification' : undefined);
-
-});
+/** Checks the user for having the email verified */
+export const emailVerified: AuthPipeFactory = (route, state) => map( user => !!user && user.emailVerified );
 

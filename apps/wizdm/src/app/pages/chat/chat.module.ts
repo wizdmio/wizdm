@@ -15,8 +15,8 @@ import { ReadmeModule } from '@wizdm/elements/readme';
 import { DialogModule } from '@wizdm/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/can-leave';
-import { AuthGuard } from 'app/auth/auth-guard';
+import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+import { AuthGuard, emailVerified } from 'app/auth/auth-guard';
 import { ChatConversationModule } from './conversation';
 import { ChatMessageModule } from './message';
 import { ChatComposerModule } from './composer';
@@ -27,7 +27,7 @@ const routes: RoutesWithContent = [
     path: '',
     content: ['chat', 'emoji-keys'],
     component: ChatComponent,
-    canActivate: [ AuthGuard ],
+    canActivate: [ AuthGuard ], data: { authGuardPipe: emailVerified },
     canDeactivate: [ CanLeaveGuard ]
   }
 ];

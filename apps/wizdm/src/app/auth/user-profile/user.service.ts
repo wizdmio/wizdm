@@ -24,21 +24,21 @@ export interface UserData extends DocumentData {
 export class UserProfile<T extends UserData = UserData> extends DatabaseDocument<T> implements OnDestroy {
 
   /** Current user profile snapshot */
-  private snapshot: T = null;
+  private snapshot: T = {} as T;
   private sub: Subscription;
 
   /** The authenticated user's id */
   public get uid(): string { return this.auth.userId; } 
 
   /** The user's profile data  */
-  public get data(): T { return this.snapshot || {} as T; }
+  public get data(): T { return this.snapshot; }
   
   constructor(readonly auth: AuthService, db: DatabaseService) {
     // Extends the DatabaseDocument with a null reference
     super(db, null);
 
     // Persists the user profile snapshot making sure the document reference is always up to date
-    this.sub = this.stream().subscribe( profile => this.snapshot = profile );
+    this.sub = this.stream().subscribe( profile => this.snapshot = profile || {} as T);
   }
 
   // Disposes of the subscription

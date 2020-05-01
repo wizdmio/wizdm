@@ -2,10 +2,11 @@ import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } f
 import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { MediaObserver } from '@angular/flex-layout';
+import { UserProfile } from 'app/auth/user-profile';
 import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
 import { runInZone } from 'app/utils/rxjs';
-import { UserProfile } from 'app/auth/user-profile';
+
 
 @Component({
   selector: 'wm-navigator',

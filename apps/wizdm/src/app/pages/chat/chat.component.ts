@@ -5,10 +5,10 @@ import { DatabaseService } from '@wizdm/connect/database';
 import { dbChatter, dbConversation, dbMessage } from './chat-types';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import { UserProfile } from 'app/auth/user-profile';
 import { $animations } from './chat.animations';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { runInZone } from 'app/utils/rxjs';
-import { UserProfile } from 'app/auth/user-profile';
 
 @Component({
   selector: 'wm-chat',

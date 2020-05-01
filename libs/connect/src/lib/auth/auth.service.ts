@@ -2,23 +2,13 @@ import { Injectable, Inject, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '../connect.module';
 import { shareReplay } from 'rxjs/operators';
 import { auth, User } from 'firebase/app';
-import { Observable, OperatorFunction } from 'rxjs';
+import { runInZone } from '../utils';
+import { Observable } from 'rxjs';
+
 //--
 export type FirebaseAuth = auth.Auth;
 export { User } from 'firebase/app';
 
-/** Returns an observable mirroring the source while running within the given zone */
-export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {
-  return source => {
-    return new Observable( observer => {
-      return source.subscribe(
-        (value: T) => zone.run(() => observer.next(value)),
-        (e: any) => zone.run(() => observer.error(e)),
-        () => zone.run(() => observer.complete())
-      );
-    });
-  };
-}
 
 /** Wraps the Firebase Auth as a service */
 @Injectable()

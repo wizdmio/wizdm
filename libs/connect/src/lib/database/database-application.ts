@@ -4,7 +4,6 @@ import { DatabaseDocument, DocumentRef } from './document'
 import { NgZone } from '@angular/core';
 import { PagedCollection } from './paged-collection';
 import { APP, FirebaseApp } from '../connect.module';
-import { Observable, OperatorFunction } from 'rxjs';
 import { firestore } from 'firebase/app';
 
 export type PersistenceSettings = firestore.PersistenceSettings;
@@ -94,17 +93,4 @@ export abstract class DatabaseApplication {
   public abstract collection<T>(path: string|CollectionRef<T>): DatabaseCollection<T>;
   public abstract pagedCollection<T>(path: string|CollectionRef<T>): PagedCollection<T>;
   public abstract counter(path: string|CollectionRef<CounterShard>, shards: number): DistributedCounter;
-}
-
-/** Returns an observable mirroring the source while running within the given zone */
-export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {
-  return source => {
-    return new Observable( observer => {
-      return source.subscribe(
-        (value: T) => zone.run(() => observer.next(value)),
-        (e: any) => zone.run(() => observer.error(e)),
-        () => zone.run(() => observer.complete())
-      );
-    });
-  };
 }

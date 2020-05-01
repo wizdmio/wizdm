@@ -3,7 +3,6 @@ import { DatabaseApplication } from '../database-application';
 import { mapSnaphotData } from '../collection/utils';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, scan } from 'rxjs/operators';
-import { firestore } from 'firebase/app';
 
 export interface PageConfig {
   field?   : string,  // Sorting field

@@ -21,9 +21,7 @@ const routes: RoutesWithContent = [{
   path: '',
   //content: 'static',
   component: StaticComponent,
-  resolve: { document: StaticResolver },
-  //canActivate: [ AuthGuard ],
-  //canDeactivate: [ PageGuard ]
+  resolve: { document: StaticResolver }
 }];
 
 @NgModule({

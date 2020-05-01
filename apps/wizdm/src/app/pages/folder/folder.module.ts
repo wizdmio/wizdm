@@ -12,8 +12,7 @@ import { ReadmeModule } from '@wizdm/elements/readme';
 import { ThumbnailModule } from '@wizdm/elements/thumbnail';
 import { SpinnerModule } from '@wizdm/elements/spinner';
 import { ActionbarModule } from 'app/navigator/actionbar';
-//import { CanLeaveGuard } from 'app/navigator/can-leave';
-import { AuthGuard } from 'app/auth/auth-guard';
+import { AuthGuard, loggedIn } from 'app/auth/auth-guard';
 import { FolderComponent } from './folder.component';
 
 const routes: RoutesWithContent = [
@@ -21,7 +20,7 @@ const routes: RoutesWithContent = [
     path: '',
     content: 'folder',
     component: FolderComponent,
-    canActivate: [ AuthGuard ],
+    canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },
     //canDeactivate: [ CanLeaveGuard ]
   }
 ];

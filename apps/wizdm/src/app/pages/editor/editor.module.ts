@@ -10,8 +10,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableModule } from '@wizdm/editable';
 import { ReadmeModule } from '@wizdm/elements/readme';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/can-leave';
-import { AuthGuard } from 'app/auth/auth-guard';
+import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+import { AuthGuard, loggedIn } from 'app/auth/auth-guard';
 import { EditorComponent } from './editor.component';
 import { ToolboxComponent } from './toolbox/toolbox.component';
 import { ContextMenuComponent } from './menu/context-menu.component';
@@ -22,7 +22,7 @@ const routes: RoutesWithContent = [
     path: '',
     content: 'editor',
     component: EditorComponent,
-    canActivate: [ AuthGuard ],
+    canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },
     canDeactivate: [ CanLeaveGuard ],
   }
 ];

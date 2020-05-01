@@ -10,10 +10,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/can-leave';
+import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { ReadmeModule } from '@wizdm/elements/readme';
-import { AuthGuard } from 'app/auth/auth-guard';
+import { AuthGuard, loggedIn } from 'app/auth/auth-guard';
 import { ApplyComponent } from './apply.component';
 import { DialogModule } from '@wizdm/dialog';
 
@@ -22,7 +22,7 @@ const routes: RoutesWithContent = [
     path: '',
     content: 'apply', 
     component: ApplyComponent,
-    canActivate: [ AuthGuard ],
+    canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },
     canDeactivate: [ CanLeaveGuard ]
   }
 ];

@@ -1,8 +1,9 @@
-import { DatabaseApplication, Timestamp, runInZone } from '../database-application';
 import { DocumentRef, DocumentSnapshot, SnapOptions, DocumentData } from './types';
+import { DatabaseApplication, Timestamp } from '../database-application';
 import { DatabaseCollection, CollectionRef } from '../collection';
 import { DistributedCounter, CounterShard } from '../counter';
 import { fromRef, mapSnaphotData } from './utils';
+import { runInZone } from '../../utils';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 

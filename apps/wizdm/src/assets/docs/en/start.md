@@ -23,7 +23,6 @@ The main application code is located at [/apps/wizdm/src](https://github.com/wiz
 /apps/wizdm/src
 ├──/app
 |  ├──/auth
-|  |  └── user.service.ts
 |  ├──/dialogs
 |  ├──/navigator
 |  |  ├── ...
@@ -54,7 +53,7 @@ The main application code is located at [/apps/wizdm/src](https://github.com/wiz
 As for any Angular application, the `main.ts` file bootstraps the `AppModule` loading and initializing all the common root level feature modules to be available across the application. The `AppComponent` impersonates the `body` element using `ViewEncapsulation.None`, so, for its styling to be applied globally and delegates the `NavigatorModule` to take over and manage the application routing inits `NavigationRoutingModule`.
 
 ### Auth
-The `/auth` folder contains the `UserProfile` service, a sigleton providing the currently authenticated user information across the overall application. User authentication, howewver, is handled by the `AuthService` belonging to the [@wizdm/connect](docs/connect) package and it is explained in full under the [Authentication section](docs/auth).  
+The `/auth` folder contains the main components and services implementing the user authentication pattern. User authentication, is handled by the `AuthService` belonging to the [@wizdm/connect](docs/connect) package and it is explained in full under the [Authentication section](docs/auth).  
 
 ### Dialogs
 The `/dialogs` folder contains the application's shared modal dialogs the most important of which are the login dialog, providing all the user interactions needed for user authentication and managemet, and the feedback dialog, providing a form to collect the user's feedbacks.  

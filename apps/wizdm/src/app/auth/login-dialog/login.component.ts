@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { UserProfile } from 'app/auth/user-profile';
 import { RedirectService } from '@wizdm/redirect';
 import { DialogComponent } from '@wizdm/dialog';
 import { $animations } from './login-animations';
 import { GtagService } from '@wizdm/gtag';
-import { UserProfile } from 'app/auth/user-profile';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
 
@@ -61,9 +61,6 @@ export class LoginComponent extends DialogComponent<LoginData> {
   /** Returns the optional code value passed along with the input data */
   private get code(): string { return this.data && this.data.code || ''; }
 
-  /** Returns the optional url value passed along with the input data */
-  private get redirectTo(): string { return this.data && this.data.url || undefined; }
-
   /** Opens the Login dialog */
   public open(data?: LoginData) {
 
@@ -84,7 +81,12 @@ export class LoginComponent extends DialogComponent<LoginData> {
     this.switchPage(data && data.mode || 'social');
 
     // Opens the login dialog
-    return super.open(data);
+    super.open(data).beforeClosed()
+      // Navigate towards the data url on closing
+      .subscribe( () => this.navigate(data.url) );
+    
+    // Returns the dialog ref for further use
+    return this.ref;
   }
 
   private switchPage(page: loginAction) {
@@ -245,10 +247,10 @@ export class LoginComponent extends DialogComponent<LoginData> {
       .then( user => {
         // Tracks the activity with analytics
         this.gtag.login(user?.providerId);
-        // Jumps to the requested target...
-        this.navigate(this.redirectTo)
-          //...prior to close the fialog
-          .then( () => this.close(user) );  
+
+        
+        // Closes the dialog 
+        this.close(user);        
       })
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
@@ -262,8 +264,6 @@ export class LoginComponent extends DialogComponent<LoginData> {
         this.gtag.login(user?.providerId);
         // Creates the new user user if needed, keeps the existing one otherwise 
         this.user.register(user)
-          // Jumps to the requested target...
-          .then( () => this.navigate(this.redirectTo) )
           // Closes the dialog returning the user
           .then( () => this.close(user) );
       })
@@ -292,8 +292,6 @@ export class LoginComponent extends DialogComponent<LoginData> {
   private resetPassword(code: string, newPassword: string) {
     
     this.auth.confirmPasswordReset(code, newPassword)
-      // Jumps to the requested target...
-      .then( () => this.navigate(this.redirectTo) )
       // Closes the dialog returning null
       .then( () => this.close(null) )
       // Dispays the error code, eventually

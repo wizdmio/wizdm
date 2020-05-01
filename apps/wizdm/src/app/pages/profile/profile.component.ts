@@ -13,9 +13,9 @@ export class ProfileComponent {
 
   private newProfile: UserData;
 
-  constructor(private user: UserProfile) {}
+  constructor(readonly user: UserProfile) { }
 
-  public get UserId(): string { return this.user.uid; }
+  public get userId(): string { return this.user.uid; }
 
   public get profileData(): UserData { return this.user.data; }
 
@@ -23,7 +23,7 @@ export class ProfileComponent {
 
   public get User(): User { return this.user.auth.user || {} as User };
 
-  public get created(): string { return moment(!!this.User ? this.User.metadata.creationTime : null).format('ll'); }
+  public get created(): string { return moment(this.User.metadata?.creationTime).format('ll'); }
 
   public get emailVerified(): boolean { return this.User.emailVerified || false; }
 
@@ -33,6 +33,8 @@ export class ProfileComponent {
   }
 
   public updateProfile() {
+
+    if(!this.newProfile) { return; }
 
     return this.user.update(this.newProfile);
   }

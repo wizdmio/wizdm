@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
+import { UserProfile, UserData } from 'app/auth/user-profile';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { EditableConverter } from 'app/utils/doc-converter';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -10,7 +11,7 @@ import { ContentStreamer } from '@wizdm/content';
 import { RedirectService } from '@wizdm/redirect';
 import { Observable, Subscription } from 'rxjs';
 import { wmDocument } from '@wizdm/editable';
-import { UserProfile, UserData } from 'app/auth/user-profile';
+
 
 export interface wmApplication {
 

@@ -2,10 +2,10 @@ import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/ro
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { switchMap, map, take } from 'rxjs/operators';
 import { DateAdapter } from '@angular/material/core';
+import { UserProfile } from 'app/auth/user-profile';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Injectable } from '@angular/core';
 import { $languageMap } from './lang-map';
-import { UserProfile } from 'app/auth/user-profile';
 import { of } from 'rxjs';
 import moment from 'moment';
 

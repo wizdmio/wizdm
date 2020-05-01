@@ -1,8 +1,8 @@
-import { Component, OnDestroy, Output, EventEmitter, Input, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserData } from 'app/auth/user-profile';
+import moment, { defaultFormat, Moment } from 'moment';
 import { Subscription } from "rxjs";
-import moment, { defaultFormat } from 'moment';
 
 @Component({
   selector: 'wm-user-form',
@@ -12,9 +12,6 @@ import moment, { defaultFormat } from 'moment';
 export class UserFormComponent extends FormGroup implements OnDestroy {
 
   private sub: Subscription;
-  //readonly form: FormGroup;
-
-  //get modified(): boolean { return this.form.touched; }
 
   constructor() {
     // Builds the form controls
@@ -28,47 +25,34 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
       lang   : new FormControl('')
     });
 
-    // Builds the form controls group
-    /*this.form = builder.group({
-      name   : ['', Validators.required ],
-      motto  : [''],
-      email  : ['', Validators.email ],
-      birth  : [''],
-      phone  : [''],
-      gender : [''],
-      lang   : [''],
-    });*/
-
-    this.sub = this.valueChanges.subscribe( value => this.submit(value) );
+    this.sub = this.valueChanges.subscribe( value => {
+      
+      const birth = moment.isMoment(value.birth) ? (value.birth as Moment).format(defaultFormat) : '';
+      // Emits the update
+      this.formValueChange.emit({ ...value, birth } as UserData);
+    } );
   }
 
   ngOnDestroy() { !!this.sub && this.sub.unsubscribe(); }
 
   @Input('value') set formValue(value: UserData) { 
 
-     if(!value) { return; }
+    if(!value || value == this.value) { return; }
 
     // Turns the birthdate into a moment
     const birth = value.birth ? moment(value.birth, defaultFormat) : null;
+    
     // Fills up the form with user data
     this.patchValue({ ...value, birth });
+    
     // Marks the form as pristine right after the view updated
     Promise.resolve().then( () => this.markAsPristine() );
   }
 
+  @Output('valueChange') formValueChange = new EventEmitter<UserData>();
+
   public genderIcon(options: { icon, value }[]) {
 
-    const gender = options.find(g => this.value.gender === g.value);
-    return gender && gender.icon;
+    return options.find(icon => icon.value === this.value?.gender)?.icon;
   }
-
-  public submit(value: UserData) {
-
-    // Birthday: turns the moment object to a string
-    const birth = moment.isMoment(value.birth) ? (value.birth as any).format(defaultFormat) : '';
-    // Emits the update
-    this.formValueChange.emit({ ...value, birth } as UserData);
-  }
-
-  @Output('valueChange') formValueChange = new EventEmitter<UserData>();
 }

@@ -18,8 +18,8 @@ import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
-
 import { AppComponent } from './app.component';  
+
 import { appname, content, teleport, emoji, router, ipinfo } from '../environments/common';
 import { firebase, doorbell, gtag } from '../environments/secrets';
 

@@ -17,12 +17,12 @@ import { IconModule } from '@wizdm/elements/icon';
 import { RedirectModule } from '@wizdm/redirect';
 import { DialogModule } from '@wizdm/dialog';
 import { GtagModule } from '@wizdm/gtag';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/can-leave';
+import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UserPhotoComponent } from './user-photo/user-photo.component';
 import { UserFormComponent } from './user-form/user-form.component';
+import { AuthGuard, loggedIn } from 'app/auth/auth-guard';
 import { ProfileComponent } from './profile.component';
-import { AuthGuard, loggedIn, canActivate } from 'app/auth/auth-guard';
 
 const routes: RoutesWithContent = [
   {

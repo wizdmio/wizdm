@@ -1,6 +1,6 @@
 
 <!-- Localized content -->
-<ng-container *wmContent="let msgs select 'profile'"  gtag="profile">
+<ng-container *wmContent="let msgs select 'profile'" gtag="profile">
 
   <!-- Action Bar (projected in the top toolbar) -->
   <ng-template wmActionbar let-mobile="isMobile">
@@ -10,7 +10,7 @@
         {{ actions.signOut?.caption || 'Sign-out' }}
       </wm-action>
 
-      <wm-action color="primary" [icon]="actions.save?.icon || 'save'" [disabled]="form.invalid || form.pristine" (click)="updateProfile()">
+      <wm-action color="primary" [icon]="actions.save?.icon || 'save'" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
         {{ actions.save?.caption || 'Save' }}
       </wm-action>
 
@@ -119,7 +119,7 @@
   </div>
 
   <!-- CanLeave Popup Dialog (based on MatDialog) -->
-  <wm-dialog [dontLeave]="form.dirty" *ngIf="msgs.canLeave as leave" #canLeave>
+  <wm-dialog [dontLeave]="form?.dirty" *ngIf="msgs.canLeave as leave" #canLeave>
 
     <h2 mat-dialog-title><b>{{ leave.title || 'Unsaved changes' }}</b></h2>
   
