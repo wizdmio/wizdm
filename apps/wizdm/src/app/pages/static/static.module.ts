@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDividerModule } from '@angular/material/divider';
+import { UrlSegment, UrlMatchResult } from '@angular/router';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { ActionLinkModule } from '@wizdm/actionlink';
 import { GtagModule } from '@wizdm/gtag';
@@ -17,8 +18,24 @@ import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 import { TocModule } from './toc';
 
+/** Static content route matcher */
+export function staticMatcher(url: UrlSegment[]): UrlMatchResult {
+
+  // Builds teh posParams from the url sub segments
+  const posParams = url.reduce( (params, url, index) => {
+
+    params[`path${index}`] = url;
+    return params;
+
+  }, {});
+
+  // Matches all the routes passing along the sub segments as pos parameters
+  return { consumed: url, posParams };
+}
+
 const routes: RoutesWithContent = [{
-  path: '',
+  //path: '',
+  matcher: staticMatcher,
   //content: 'static',
   component: StaticComponent,
   resolve: { document: StaticResolver }

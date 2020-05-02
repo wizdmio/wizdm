@@ -1,6 +1,6 @@
 
 <!-- Gets the document content while reporting the page name with gtag -->
-<ng-container *wmContent="let document select 'document'" [gtag]="page$ | async">
+<ng-container *wmContent="let document select 'document'" [gtag]="path$ | async">
 
   <!-- Checks for an optional Table Of Contents -->
   <ng-container *ngIf="!!document.toc">
@@ -11,7 +11,7 @@
       <!-- Renders the Table Of Content using an ActionLink to navigate back/forward -->
       <div #toc
         [wm-toc]="document.toc" 
-        [page]="page$ | async" 
+        [path]="path$ | async" 
         (navigate)="navigate($event, mobile)" 
         color="primary" 
         wmActionLink="toc" 

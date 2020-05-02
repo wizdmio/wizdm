@@ -1,5 +1,5 @@
+import { Router, Resolve, ActivatedRouteSnapshot, ParamMap } from '@angular/router';
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
-import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, tap, catchError, switchMap } from 'rxjs/operators';
 import { SelectorResolver } from '@wizdm/content';
@@ -23,6 +23,18 @@ export interface StaticContent {
 export interface StaticCache {
   lang: string;
   [key:string]: string;
+}
+
+/** Path resolver helper */
+export function resolvePath(params: ParamMap): string {
+  
+  return params && params.keys
+  // Matches all the params starting with 'path'
+  .filter( key => !!key.match(/^path\d*$/) )
+  // Gets the corresponding values
+  .map( key => params.get(key) )
+  // Joins the parameters into the full path
+  .join('/');
 }
 
 @Injectable()
@@ -50,12 +62,14 @@ export class StaticResolver implements Resolve<StaticContent> {
 
   /** Resolves the content loading the requested source file */
   public resolve(route: ActivatedRouteSnapshot): Observable<StaticContent> {
+
+    console.log(route);
     
     // Resolves the language code from the route using the content selector resolver
     const lang = this.selector.resolve(route);
-    
-    // Resolves the file name source from the route
-    const page = route.paramMap.get('page');
+
+    // Resolves the source file path from the route
+    const path = resolvePath(route.paramMap);
 
     // Resets the cache whenever the requested language changes
     // Caching the content results in the following advantages:
@@ -64,7 +78,7 @@ export class StaticResolver implements Resolve<StaticContent> {
     if(lang !== this.cache?.lang) { this.cache = { lang }; }
     
     // Loads the main .md file
-    return this.loadFile(lang, page, 'text').pipe(
+    return this.loadFile(lang, path, 'text').pipe(
       // Gets the body contents...
       switchMap( body => {
 
@@ -96,6 +110,7 @@ export class StaticResolver implements Resolve<StaticContent> {
     );
   }
 
+  /** Load the file from the specified language sub-folder */
   private loadFile(lang: string, name: string, responseType: 'text'|'json' = 'text'): Observable<any> {
 
     // Returns the cached version of the content, if any
@@ -131,6 +146,7 @@ export class StaticResolver implements Resolve<StaticContent> {
     );
   }
 
+  /** Parses the comments from source md file */
   private parseComments(source): { [key:string]: string } {
 
     const out = {};

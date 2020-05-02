@@ -25,19 +25,19 @@
   { "label": "Elements", "items": [
       
     { "label": "Introduction", "link": "docs/elements" },
-    { "label": "Avatar", "link": "docs/avatar" },
-    { "label": "Balloon", "link": "docs/balloon" },
-    { "label": "Flip", "link": "docs/flip" },
-    { "label": "Icon", "link": "docs/icon" },
-    { "label": "Illustration", "link": "docs/illustration" },
-    { "label": "Inkbar", "link": "docs/inkbar" },
-    { "label": "Logo", "link": "docs/logo" },
-    { "label": "Open File", "link": "docs/openfile" },
-    { "label": "Read Me", "link": "docs/readme" },
-    { "label": "Router Inkbar", "link": "docs/router-inkbar" },
-    { "label": "Spinner", "link": "docs/spinner" },
-    { "label": "Thumbnail", "link": "docs/thumbnail" },
-    { "label": "Toggler", "link": "docs/toggler" }
+    { "label": "Avatar", "link": "docs/elements/avatar" },
+    { "label": "Balloon", "link": "docs/elements/balloon" },
+    { "label": "Flip", "link": "docs/elements/flip" },
+    { "label": "Icon", "link": "docs/elements/icon" },
+    { "label": "Illustration", "link": "docs/elements/illustration" },
+    { "label": "Inkbar", "link": "docs/elements/inkbar" },
+    { "label": "Logo", "link": "docs/elements/logo" },
+    { "label": "Open File", "link": "docs/elements/openfile" },
+    { "label": "Read Me", "link": "docs/elements/readme" },
+    { "label": "Router Inkbar", "link": "docs/elements/router/inkbar" },
+    { "label": "Spinner", "link": "docs/elements/spinner" },
+    { "label": "Thumbnail", "link": "docs/elements/thumbnail" },
+    { "label": "Toggler", "link": "docs/elements/toggler" }
   ]},
 
   { "label": "Extensions", "items": [

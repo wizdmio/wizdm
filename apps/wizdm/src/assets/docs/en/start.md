@@ -2,8 +2,6 @@
 
 <!-- toc: toc.json -->
 
-[Go Back](back) - [Next Topic](docs/toc?go=next)
-
 Wizdm is an evolving boilerplate designed to help developers getting started with their single page applications. It is based upon the [Angular Framework](https://angular.io) and utilizes several well known packages and technologies:
 
 * [Material Design](https://material.io) as the design and styling system backed by the [Angular Material](https://material.angular.io) package. This includes the [Component Dev Kit (CDK)](https://material.angular.io/cdk) to implement common interaction patterns. Additionally, the [Font Awsome](https://fontawesome.com) icons are widely used to complement the essential [Material Icon set](https://material.io/resources/icons).
@@ -76,5 +74,5 @@ The `/styles` folder containes the `scss` files making up the application themin
 
 ---
 ->
-[Top](docs/start#getting-started) - [Continue Next](docs/toc?go=next) 
-<-
+[Continue Next ⮕](docs/toc?go=next) 
+->

@@ -54,9 +54,9 @@ export class TocComponent {
   @Input() color: ThemePalette = 'accent';
 
   /** Selects the toc item by the page */
-  @Input() set page(page: string) {
+  @Input() set path(path: string) {
     // Seeks for the page from the index
-    this.selected = this.findPage(page);
+    this.selected = this.findPage(path);
   }
 
   /** Selects the given item */
@@ -95,9 +95,9 @@ export class TocComponent {
   }
 
   /** Returns the requested page */
-  public findPage(page: string): TocItem {
+  public findPage(path: string): TocItem {
    // Seeks for the page within the linear index
-   return this.index.find( item => item.link && item.link.endsWith(page) );
+   return this.index.find( item => item.link && item.link.endsWith(path) );
   }
 
   /** Returns the next page from the given position */

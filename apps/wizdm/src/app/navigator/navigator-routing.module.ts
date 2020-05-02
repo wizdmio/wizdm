@@ -44,7 +44,7 @@ const routes: RoutesWithContent = [
       // Reference
       { path: 'docs',        redirectTo: 'docs/start', pathMatch: 'full' },
       { path: 'docs/toc',    canActivate: [ ActionLinkObserver ], data: { actionMatch: 'toc' } },
-      { path: 'docs/:page',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
+      { path: 'docs/:path',  loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Intercepts routing "action-links" to execute a non-routing action
       { path: 'login',       canActivate: [ ActionLinkObserver ] },
@@ -55,7 +55,7 @@ const routes: RoutesWithContent = [
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
 
       // Static content pages, redirecting to NotFound when no content is available
-      { path: ':page',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
+      { path: ':path',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Anything else will route to not found
       { path: '**',          redirectTo: 'not-found' }

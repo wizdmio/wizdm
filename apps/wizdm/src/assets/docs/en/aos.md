@@ -1,8 +1,8 @@
-# Animate
-
 <!-- toc: toc.json -->
 
-[Back](back) - [API Reference](docs/aos#api-reference) - [Github](https://github.com/wizdmio/wizdm/tree/master/libs/animate)
+# Animate 
+
+[⬇ Go to the API Reference](docs/aos#api-reference)
 
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
@@ -24,12 +24,12 @@ Attention seekers animate starting and ending with the original element's style.
 `beat`, `bounce`, `flip`, `headShake`, `heartBeat`, `jello`, `pulse`, `rubberBand`, `shake`, `swing`, `tada`, `wobble`.
 
 ### Entrances
-Entrances animate starting with opacity level set to '0' (invisible) and animates ending with the original element's style. Possible entrance values are: 
+Entrances start with opacity level set to '0' (invisible) and animate ending with the original element's style. Possible entrance values are: 
 
 `bumpIn`, `bounceIn`, `bounceInDown`, `bounceInLeft`, `bounceInUp`, `bounceInRight`, `fadeIn`, `fadeInRight`, `fadeInLeft`, `fadeInUp`, `fadeInDown`, `flipInX`, `flipInY`, `jackInTheBox`, `landing`, `rollIn`, `zoomIn`, `zoomInDown`, `zoomInLeft`, `zoomInUp`, `zoomInRight`.
 
 ### Exists
-Exits animate starting from the original element's style ending with the opacity level set to '0' (invisible). Possible exit values are: 
+Exits start from the original element's style ending with the opacity level set to '0' (invisible). Possible exit values are: 
 
 `bounceOut`, `bounceOutDown`, `bounceOutUp`, `bounceOutRight`, `bounceOutLeft`, `fadeOut`, `fadeOutRight`, `fadeOutLeft`, `fadeOutDown`, `fadeOutUp`, `hinge`, `rollOut`, `zoomOut`, `zoomOutDown`, `zoomOutRight`, `zoomOutUp`, `zoomOutLeft`.
 
@@ -37,12 +37,12 @@ Exits animate starting from the original element's style ending with the opacity
 The animation will trigger as soon as the component renders if not specified otherwise. 
 
 ### Replay
-The animation can be triggered again using the `replay` input. Every change in this input value will trigger the animation again provided the value can be coerced into a truthful boolean. Use the `paused` flag to prevevnt the animation from triggering at first, so, you'll get the full control about when the triggering will happen.  
+The animation can be triggered again using the `replay` input. Every change in this input value will trigger the animation again provided the value can be coerced into a truthful boolean. Use the `paused` flag to prevevnt the animation from triggering at first in order to get the full control about when the triggering will happen.  
 
 ### Animate On Scroll
 Setting the `aos` flag enables the "Animate On Scroll" mechanism with a default threshold of `0.5`, so, the animation triggers as soon as the 50% of the element area intersects the viewport area. The triggering threshold can be customized setting the `aos` input to a different numeric value from `0` (escluded) up to `1` (included). Setting `aos=0` disables the trigger. 
 
-When the element scrolls out completely, the trigger resets, so, the animation will trigger as soon as the element enters the visible portion of the viewport again. Use the `once` flag to prevent the trigger to reset, so, the animation will run just once.
+When the element scrolls out completely, the trigger resets, so, the animation will trigger as soon as the element enters the visible portion of the viewport again. Use the `once` flag to prevent the trigger to reset for the animation to run just once.
 
 ## Timing
 By default every animation applies the optimal timing. However, timing can be overridden with the `speed` input. Possible values are:
@@ -259,7 +259,6 @@ Observable operator to be used for triggering the animation on scroll.
 The returned `OperatorFunction` accepts an input trigger to emit an output trigger. In case the threshold value is 0, the output trigger simply mirrors the input one. For values greater than 0, the service checks the given element's area against the animation view emitting **true** when the two rectangles intersect for an area equal or greater than the threshold value, emitting **false** when the element's area is totally out of the view area. 
 
 ---
-
-[Back](back) 
-
-[Top](docs/aos#animate)
+->
+[Next Topic ⮕](docs/toc?go=next) 
+->
