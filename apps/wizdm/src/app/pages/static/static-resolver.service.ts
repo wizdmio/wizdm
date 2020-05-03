@@ -25,18 +25,6 @@ export interface StaticCache {
   [key:string]: string;
 }
 
-/** Path resolver helper */
-export function resolvePath(params: ParamMap): string {
-  
-  return params && params.keys
-  // Matches all the params starting with 'path'
-  .filter( key => !!key.match(/^path\d*$/) )
-  // Gets the corresponding values
-  .map( key => params.get(key) )
-  // Joins the parameters into the full path
-  .join('/');
-}
-
 @Injectable()
 export class StaticResolver implements Resolve<StaticContent> {
 
@@ -62,14 +50,12 @@ export class StaticResolver implements Resolve<StaticContent> {
 
   /** Resolves the content loading the requested source file */
   public resolve(route: ActivatedRouteSnapshot): Observable<StaticContent> {
-
-    console.log(route);
     
     // Resolves the language code from the route using the content selector resolver
     const lang = this.selector.resolve(route);
 
     // Resolves the source file path from the route
-    const path = resolvePath(route.paramMap);
+    const path = this.resolvePath(route.paramMap);
 
     // Resets the cache whenever the requested language changes
     // Caching the content results in the following advantages:
@@ -86,12 +72,12 @@ export class StaticResolver implements Resolve<StaticContent> {
         const options = this.parseComments(body);
 
         // Returns the body plus the options when no toc is found
-        if(!options.toc) { return of({ body, ...options }); }
+        if(!options.toc) { return of({ body, path, ...options }); }
         
         // Loads the toc file if any
         return this.loadFile(lang, options.toc, 'json').pipe( 
           // And returns the body, the toc and the options
-          map( toc => ({ body, ...options, toc }) 
+          map( toc => ({ body, path, ...options, toc }) 
         ));
       }),
       
@@ -144,6 +130,18 @@ export class StaticResolver implements Resolve<StaticContent> {
       // Caches the content for further use
       tap( data => this.cache[name] = data )
     );
+  }
+
+  /** Path resolver helper */
+  private resolvePath(params: ParamMap): string {
+  
+    return params && params.keys
+    // Matches all the params starting with 'path'
+    .filter( key => !!key.match(/^path\d*$/) )
+    // Gets the corresponding values
+    .map( key => params.get(key) )
+    // Joins the parameters into the full path
+    .join('/');
   }
 
   /** Parses the comments from source md file */

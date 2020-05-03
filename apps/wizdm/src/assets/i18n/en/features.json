@@ -7,7 +7,8 @@
     { 
       "icon": "fas:fa-mobile-alt",
       "title": "Responsive navigation",
-      "description": "Navigation smoothly adapts to the device the application renders to."
+      "description": "Navigation smoothly adapts to the device the application renders to.",
+      "reference": "docs/navigator"
     },
     { 
       "icon": "far:fa-clone",
@@ -28,7 +29,8 @@
     { 
       "icon": "far:fa-kiss-beam",
       "title": "Emoji Support",
-      "description": "Universal emoji rendering capabilities to always offer the best user experience no matter the platform."
+      "description": "Universal emoji rendering capabilities to always offer the best user experience no matter the platform.",
+      "reference": "docs/emoji"
     },
     { 
       "icon": "fas:fa-box-open",
@@ -39,27 +41,32 @@
     { 
       "icon": "fas:fa-swatchbook",
       "title": "Theming",
-      "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)"
+      "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)",
+      "reference": "docs/styling"
     },
     { 
       "icon": "fas:fa-language",
       "title": "Internationalization",
-      "description": "Thanks to a flexible content manager at its core, wizdm handles as many lanuages as you need at once."
+      "description": "Thanks to a flexible content manager at its core, wizdm handles as many lanuages as you need at once.",
+      "reference": "docs/content"
     },
     { 
       "icon": "fas:fa-globe-europe",
       "title": "IP geolocation",
-      "description": "Country level and City level IP info localization supported by [IpList](https://iplist.cc/) and [IpInfo](https://ipinfo.io/) *API*s."
+      "description": "Country level and City level IP info localization supported by [IpList](https://iplist.cc/) and [IpInfo](https://ipinfo.io/) *API*s.",
+      "reference": "docs/ipinfo"
     },
     { 
       "icon": "fas:fa-user-circle",
       "title": "Account management",
-      "description": "User authetication, email verification and recovery, rich user profile data and account cancellation."
+      "description": "User authetication, email verification and recovery, rich user profile data and account cancellation.",
+      "reference": "docs/auth"
     },
     { 
       "icon": "fas:fa-sync-alt",
       "title": "Data synchronization",
-      "description": "Real-time online and offline data sync based on severless *NoSQL* database ready for global level scale."
+      "description": "Real-time online and offline data sync based on severless *NoSQL* database ready for global level scale.",
+      "reference": "docs/connect"
     },
     { 
       "icon": "fas:fa-folder-open",
@@ -69,12 +76,14 @@
     { 
       "icon": "fab:fa-markdown",
       "title": "Static content",
-      "description": "*Markdown* rendering to quickly set up static contents such as terms of service and privacy without extra coding."
+      "description": "*Markdown* rendering to quickly set up static contents such as terms of service and privacy without extra coding.",
+      "reference": "docs/markdown"
     },
     { 
       "icon": "fas:fa-highlighter",
       "title": "Syntax Highlighting",
-      "description": "Code syntax highlighting powered by [PrismJS](https://prismjs.com/)"
+      "description": "Code syntax highlighting powered by [PrismJS](https://prismjs.com/)",
+      "reference": "docs/prism"
     },
     { 
       "icon": "far:fa-edit",
@@ -85,7 +94,8 @@
     { 
       "icon": "far:fa-comment",
       "title": "Feedback form",
-      "description": "Direct feedback support powered by [Doorbell.io](https://doorbell.io) to immediately collect user's suggestions."
+      "description": "Direct feedback support powered by [Doorbell.io](https://doorbell.io) to immediately collect user's suggestions.",
+      "reference": "docs/doorbell"
     },
     { 
       "icon": "fas:fa-directions",
@@ -96,7 +106,7 @@
       "icon": "fas:fa-search",
       "title": "Simple search",
       "description": "Simple data search performed server side with no need of expensive third party serivces.",
-      "comingSoon": true  
+      "reference": "docs/redirect"
     },
     { 
       "icon": "fab:fa-algolia",
@@ -113,7 +123,8 @@
     { 
       "icon": "fas:fa-chart-bar",
       "title": "Google Analytics",
-      "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience."
+      "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience.",
+      "reference": "docs/gtag"
     },
     { 
       "icon": "fas:fa-camera",
@@ -125,12 +136,14 @@
       "icon": "fab:fa-paypal",
       "title": "Paypal",
       "description": "Payment processing powered by [Paypal](https://www.paypal.com).",
+      "reference": "docs/paypal",
       "experimental": true
     },
     { 
       "icon": "fab:fa-stripe-s",
       "title": "Payments",
       "description": "Payment processing powered by [Stripe](https://stripe.com).",
+      "reference": "docs/stripe",
       "experimental": true
     },
     { 

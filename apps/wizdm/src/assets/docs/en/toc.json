@@ -15,11 +15,11 @@
   { "label": "Navigation", "items": [
 
     { "label": "Overview", "link": "docs/navigator" },
-    { "label": "Guarding", "link": "docs/guards" },
-    { "label": "Action Bar", "link": "docs/actionbar" },
-    { "label": "Action Links", "link": "docs/actionlink" },
-    { "label": "Background", "link": "docs/background" },
-    { "label": "Side Panel", "link": "docs/sidenav" }
+    { "label": "Guarding", "link": "docs/navigator/guards" },
+    { "label": "Action Bar", "link": "docs/navigator/actionbar" },
+    { "label": "Action Links", "link": "docs/navigator/actionlink" },
+    { "label": "Background", "link": "docs/navigator/background" },
+    { "label": "Side Panel", "link": "docs/navigator/sidenav" }
   ]},
 
   { "label": "Elements", "items": [

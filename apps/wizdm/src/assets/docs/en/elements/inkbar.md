@@ -1,38 +1,11 @@
 <!-- toc: toc.json -->
 
-# <<Component>>
+# We Are Sorry
 
-[⬇ Go to the API Reference](docs/elements-<<component>>#api-reference) 
+[Start](docs) - [Back](back) - [Home](home)
 
-Tells about it
+Wizdm is a young project and some of the documentation is still missing. 
 
-## Usage example
-Displays how to use it
+If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
 
-```html
-<!-- Starts with a material icon button -->
-<button mat-icon-button (click)="doSomething()">
-
-  <!-- Use the wm-avatar component like an icon -->
-  <wm-avatar [src]="pathToImage" color="accent" shape="rounded"></wm-avatar>
-
-</button>
-```
-Explains the example.
-
-# API Reference
-
-[<<Component>>Module](docs/elements-<<component>>#<<component>>module) - [<<Component>>Component](docs/elements-<<component>>#<<component>>component) 
-
-&nbsp;  
-
-## <<Component>>Module 
-
-```typescript
-import { <<Component>>Module } from '@wizdm/elements/<<component>>';
-```
-
---- 
-->
-[Continue Next ⮕](docs/toc?go=next) 
-->
+Simply [get in touch with us](contact), we'll be happy to have you on board!

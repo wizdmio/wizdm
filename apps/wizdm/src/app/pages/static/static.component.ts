@@ -1,11 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { RedirectService } from '@wizdm/redirect';
 import { SidenavDirective } from 'app/navigator/sidenav';
-import { resolvePath } from './static-resolver.service';
-import { map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { TocItem } from './toc';
 
 @Component({
   selector: 'wm-static',
@@ -18,13 +13,7 @@ export class StaticComponent {
   /** The sidenav panel */
   @ViewChild(SidenavDirective) sidenav: SidenavDirective;
 
-  readonly path$: Observable<string>;
-
-  constructor(private redirect: RedirectService, route: ActivatedRoute) {
-
-    // Resolves the requested page
-    this.path$ = route.paramMap.pipe( map( params => resolvePath(params) ) );
-  }
+  constructor(private redirect: RedirectService) {}
 
   public navigate(url: string, closeSidenav?: boolean) { 
 
