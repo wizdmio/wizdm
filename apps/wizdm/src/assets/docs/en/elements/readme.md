@@ -1,13 +1,5 @@
 <!-- toc: toc.json -->
 
-# <<Component>>
-
-[⬇ Go to the API Reference](docs/elements-<<component>>#api-reference) 
-
-Tells about it
-
-<!-- toc: toc.json -->
-
 # We Are Sorry
 
 [Start](docs) - [Back](back) - [Home](home)
