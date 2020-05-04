@@ -83,7 +83,7 @@ export class TocComponent {
     // Skips to the parent index
     if(!!this.parent) { return this.parent.index; }
     // Computes the index otherwise
-    return items.reduce( (index, item) => {
+    return items && items.reduce( (index, item) => {
       // Concatenates the index from the next level
       if('items' in item) {
 

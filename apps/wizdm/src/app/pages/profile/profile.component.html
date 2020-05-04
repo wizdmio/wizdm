@@ -56,7 +56,7 @@
       </p>
 
       <!-- Email Verify -->
-      <ng-container *ngIf="account.verifyEmail as verify">
+      <ng-container *ngIf="usePassword && account.verifyEmail as verify">
       
         <h3>{{ verify.title || 'Verify Email' }}</h3>
         
@@ -73,7 +73,7 @@
       </ng-container>
 
       <!-- Email / Password change -->
-      <ng-container *ngIf="account.changeCredentials as credentials">
+      <ng-container *ngIf="usePassword && account.changeCredentials as credentials">
       
         <h3>{{ credentials.title || 'Change email / password' }}</h3>
         

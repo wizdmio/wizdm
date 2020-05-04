@@ -57,6 +57,10 @@
       "description": "Supporto *markdown* integrato per impostare subito i contenuti statici come i termini e la privacy senza dover riccorrere a programmazione extra."
     },
     { 
+      "title": "Evidenziatore di sintassi",
+      "description": "Sintassi del codice evidenziata grazie a [PrismJS](https://prismjs.com/)"
+    },
+    { 
       "title": "Contenuti modificabili",
       "description": "Potente editor *WYSIWYG* per la modifica online dei tuoi contenuti."
     },

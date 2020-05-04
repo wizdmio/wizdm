@@ -135,9 +135,14 @@ export class LoginComponent extends DialogComponent<LoginData> {
       this.form.addControl('newEmail', this.newEmail);
       break;
 
-      case 'sendEmailVerification': break;
+      case 'sendEmailVerification':
+      case 'verifyEmail':
+      case 'recoverEmail':
+      break;
 
       case 'delete':
+      // Skips asking for the password for federeted providers
+      if(this.auth.providerId !== 'password') { break; }
       this.form.addControl('password', this.password);      
       break;
 
@@ -300,7 +305,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
   
   private updateEmail(password: string, newEmail: string) {
     // Refreshes the authentication
-    this.auth.refresh(password)
+    this.auth.reauthenticate(password)
       // Updates the email returning the new user object
       .then( user => user.updateEmail(newEmail).then( () => this.close(user) ) )
       // Dispays the error code, eventually
@@ -309,17 +314,17 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
   private updatePassword(password: string, newPassword: string) {
     // Refreshes the authentication
-    this.auth.refresh(password)
+    this.auth.reauthenticate(password)
       // Updates the password returning the new user object
       .then( user => user.updatePassword(newPassword).then( () => this.close(user) ) )
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }
 
-  private deleteAccount(password: string) {
+  private deleteAccount(password?: string) {
 
     // Refreshes the authentication
-    this.auth.refresh(password)
+    this.auth.reauthenticate(password)
       .then( user => {
         // Navigates home first
         this.navigate('/')

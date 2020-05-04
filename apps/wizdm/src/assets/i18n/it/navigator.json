@@ -13,8 +13,7 @@
             { "label": "Esplora", "menu": [
                 { "label": "Funzionalità" },
                 { "label": "Documentazione" }
-            ]},
-            { "label": "Community" }
+            ]}
         ]
     },
 
@@ -31,7 +30,6 @@
                 { "label": "Funzionalità" },
                 { "label": "Documentazione" }
             ]},
-            { "label": "Community" },
             { "label": "Profilo" },
             { "label": "Esci" }
         ]

@@ -57,6 +57,8 @@ export class StaticResolver implements Resolve<StaticContent> {
     // Resolves the source file path from the route
     const path = this.resolvePath(route.paramMap);
 
+    console.log("Static requesting:", path);
+
     // Resets the cache whenever the requested language changes
     // Caching the content results in the following advantages:
     // 1. Skipping http.get() requests for already cached content provided the static module hasn't been reloaded
@@ -83,13 +85,10 @@ export class StaticResolver implements Resolve<StaticContent> {
       
       // Redirects to NotFound when no content is found
       catchError( (e: HttpErrorResponse) => {
+  
+        console.error('Unable to load, edirecting to not-found', e);
 
-        if(e.status === 404) { 
-          
-          console.log('404 File not found, redirecting to not-found');
-          // Redirects to not-found
-          this.router.navigate(['/not-found']); 
-        }
+        this.router.navigate(['/not-found']); 
         
         return of({ body: '' });
       })
@@ -107,6 +106,8 @@ export class StaticResolver implements Resolve<StaticContent> {
     // Computes the full path removing the extension, if any
     const fullPath = this.path + lang + '/' + name.replace(/\.\w+$/, '') + fileExt;
 
+    console.log("Static loading:", fullPath);
+
     // Loads the requested file first
     return this.http.request('GET', fullPath, { observe: 'body', responseType }).pipe( 
 
@@ -117,7 +118,7 @@ export class StaticResolver implements Resolve<StaticContent> {
         if(lang !== this.defaultLang && e.status === 404) { 
         
           // Reverts to the default language
-          const defaultPath = this.path + this.defaultLang + '/' + name + '.md';
+          const defaultPath = this.path + this.defaultLang + '/' + name.replace(/\.\w+$/, '') + fileExt;
           
           console.log('404 File not found, reverting to default language:', defaultPath);
           

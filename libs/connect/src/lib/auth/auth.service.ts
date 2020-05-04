@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 
 //--
 export type FirebaseAuth = auth.Auth;
+export type AuthProvider = auth.AuthProvider;
 export { User } from 'firebase/app';
-
 
 /** Wraps the Firebase Auth as a service */
 @Injectable()
@@ -58,6 +58,11 @@ export class AuthService {
     return this.authenticated ? this.user.uid : '';
   }
 
+  /** Returns the provider id the current user authenticated with */
+  public get providerId(): string {
+    return this.authenticated ? this.user.providerData[0].providerId : '';
+  }
+
   /** Sets/Gets the code for the language to be used during the authentication */
   public get locale(): string { return this.auth.languageCode; }
   public setLocale(code: string) { this.auth.languageCode = code; }
@@ -95,19 +100,25 @@ export class AuthService {
       .then( credential => credential.user );
   }
 
-  /** 
-   * Refreshes the current authentication repeating the secret password 
-   * @param password the secret password 
-   * @returns the authenticated User object
-   */
-  public refresh(password: string): Promise<User> {
+  /** Initializes the requested provider for further use */
+  public setupProvider(providerId: string): AuthProvider {
 
-    console.log("Refreshing authentication: ", this.user.email);
-    // Gets fresh credentials for the current user
-    const credential = auth.EmailAuthProvider.credential(this.user.email, password);
-    // Re-authenticate the user with the fresh credentials
-    return this.user.reauthenticateWithCredential(credential)
-      .then( credential => credential.user );
+    switch(providerId) {
+
+      case 'google': case 'google.com':
+      return new auth.GoogleAuthProvider();
+
+      case 'facebook': case 'facebook.com':
+      return new auth.FacebookAuthProvider();
+ 
+      case 'twitter': case 'twitter.com':
+      return new auth.TwitterAuthProvider();
+      
+      case 'github': case 'github.com':
+      return new auth.GithubAuthProvider();
+    }
+
+    return null;
   }
 
   /** 
@@ -115,42 +126,53 @@ export class AuthService {
    * @param provider the name of the provider to sign in with
    * @returns the authenticated User object
    */
-  public signInWith(provider: string): Promise<User> {
+  public signInWith(providerId: string): Promise<User> {
 
-    console.log("Signing-in using: ", provider);
+    console.log("Signing-in using: ", providerId);
 
-    let authProvider = null;
-
-    switch(provider) {
-
-      case 'google':
-      authProvider = new auth.GoogleAuthProvider();
-      break;
-
-      case 'facebook':
-      authProvider = new auth.FacebookAuthProvider();
-      break;
- 
-      case 'twitter':
-      authProvider = new auth.TwitterAuthProvider();
-      break;
-      
-      case 'github':
-      authProvider = new auth.GithubAuthProvider();
-      break;
-      
-      case 'linkedin':// TODO
-      break;
-    }
-
-   if(authProvider === null) {
+    // Setup the provider 
+    const authProvider = this.setupProvider(providerId);
+    if(authProvider === null) {
       return Promise.reject({
         code: 'auth/unsupported-provider',
         message: 'Unsupported provider'
       });
     }
 
+    // Authenticate the user with the provider
     return this.auth.signInWithPopup(authProvider)
+      .then( credential => credential.user );
+  }
+
+  /** 
+   * Refreshes the current authentication repeating the secret password 
+   * @param password the secret password 
+   * @returns the authenticated User object
+   */
+  public reauthenticate(password?: string): Promise<User> {
+
+    // Checks the provider the user lastly authenticated with
+    if(this.providerId !== 'password') {
+
+      // Setup the provider 
+      const authProvider = this.setupProvider(this.providerId);
+      if(authProvider === null) {
+        return Promise.reject({
+          code: 'auth/unsupported-provider',
+          message: 'Unsupported provider'
+        });
+      }
+
+      // Re-authenticate the user with the same provider
+      return this.user.reauthenticateWithPopup(authProvider)
+        .then( credentials => credentials.user );  
+    }
+
+    console.log("Refreshing authentication: ", this.user.email);
+    // Gets fresh credentials for the current user
+    const credential = auth.EmailAuthProvider.credential(this.user.email, password);
+    // Re-authenticate the user with the fresh credentials
+    return this.user.reauthenticateWithCredential(credential)
       .then( credential => credential.user );
   }
 

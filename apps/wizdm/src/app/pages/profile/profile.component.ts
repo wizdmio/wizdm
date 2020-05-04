@@ -27,6 +27,14 @@ export class ProfileComponent {
 
   public get emailVerified(): boolean { return this.User.emailVerified || false; }
 
+  public get providers(): string[] {
+    return this.user ? this.User.providerData.map( data => data.providerId ) : [];
+  }
+
+  public get usePassword(): boolean {
+    return this.providers.some( id => id === 'password' );
+  }
+
   public set profileData(user: UserData) { 
     
     this.newProfile = user;

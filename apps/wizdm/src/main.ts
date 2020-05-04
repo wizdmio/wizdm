@@ -12,9 +12,14 @@ import 'app/utils/augment/string/select'
 //import 'app/utils/augment/math/normal';
 //import 'app/utils/augment/array/shuffle';
 
-if (environment.production) {
+if(environment.production) {
+
+  // Disables logs to console
+  window['console']['log'] = () => {};
+  
+  // Enables Angular's production mode
   enableProdMode();
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule/*, { ngZoneEventCoalescing: true }*/)
-  .catch(err => console.log(err));
+  .catch(err => console.error(err));
