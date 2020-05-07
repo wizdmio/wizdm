@@ -92,6 +92,9 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 
 |**Properties**|**Description**|
 |:--|:--|
+|`template: TemplateRef<any>`|The reference to the template used to render the dialog|
+|`ref: DialogRef<D,R>`|The dialog reference once the dialog has been rendered|
+|`data: D`|The optional fgeneric data passed along when opening the dialog|
 |`@Input() id: string`|ID for the dialog. If omitted, a unique one will be generated|
 |`@Input() role: DialogRole`|The ARIA role of the dialog element|
 |`@Input() panelClass: string\|string[]`|Custom class for the overlay pane|
