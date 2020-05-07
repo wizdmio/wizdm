@@ -42,6 +42,8 @@ import { DialogModule } from '@wizdm/dialog';
 The `wmAnimate` component enables the animation of the target element.
 
 ```typescript
+export type DialogRef<D=any, R=any> = MatDialogRef<D, R>;
+
 @Component({
   selector: 'wm-dialog',
   template: '<ng-template><ng-content></ng-content></ng-template>'
@@ -90,55 +92,51 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 
 |**Properties**|**Description**|
 |:--|:--|
-|`animating: boolean`|**True** when the animation is running|
-|`animated: boolean`|**True** after the animation completed. False while the animation is running|
-|`@Input('wmAnimate') animate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
-|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
-|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
-|`@Input() disabled: boolean`|Disables the animation|
-|`@Input() paused: boolean`|When **true**, keeps the animation idle until the next replay triggers|
-|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
-|`@Input() once: boolean`|When **true**, prevents the animation to run again|
-|`@Input() set replay(replay: any)`|Replays the animation|
-|`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
-|`@Output() done: EventEmitter<void>`|Emits at the end of the animation|  
+|`@Input() id: string`|ID for the dialog. If omitted, a unique one will be generated|
+|`@Input() role: DialogRole`|The ARIA role of the dialog element|
+|`@Input() panelClass: string|string[]`|Custom class for the overlay pane|
+|`@Input() hasBackdrop: boolean`|Whether the dialog has a backdrop|
+|`@Input() backdropClass: string`|Custom class for the backdrop|
+|`@Input() disableClose: boolean`|Whether the user can use escape or clicking on the backdrop to close the modal|  
+|`@Input() width: string`|Width of the dialog|  
+|`@Input() height: string`|Height of the dialog|
+|`@Input() minWidth: number|string`|Min-width of the dialog. If a number is provided, assumes pixel units|
+|`@Input() minHeight: number|string`|Min-height of the dialog. If a number is provided, assumes pixel units|
+|`@Input() maxWidth: number|string`|Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw|
+|`@Input() maxHeight: number|string`|Max-height of the dialog. If a number is provided, assumes pixel units|
+|`@Input() position: DialogPosition`|Position overrides|
+|`@Input() direction: Direction`|Layout direction for the dialog's content|
+|`@Input() ariaDescribedBy: string`|ID of the element that describes the dialog|
+|`@Input() ariaLabelledBy: string`|ID of the element that labels the dialog|
+|`@Input() ariaLabel: string`|Aria label to assign to the dialog element|
+|`@Input() autoFocus: boolean`|Whether the dialog should focus the first focusable element on open|
+|`@Input() restoreFocus: boolean`|Whether the dialog should restore focus to the previously-focused element, after it's closed|
+|`@Input() scrollStrategy: ScrollStrategy`|Scroll strategy to be used for the dialog|
+|`@Input() closeOnNavigation: boolean`|Whether the dialog should close when the user goes backwards/forwards in history|
+|`@Input() set opened(open: boolean)`|Opens the dialog when the passed condition is true|
+|`@Output() openedChange: EventEmitter<boolean>`|Reports the open status|
+|`@Input() set closed(value: R)`|Forces the dialog closing with the given value|
+|`@Output() closedChange: EventEmitter<R>`|Reports the value the dialog as been closed with|
 
-### Methods
-
----
-
-```typescript
-public setup(options: AnimateOptions)
-```
-Configures the service with the given **options**:
-
-```typescript
-export interface AnimateOptions {
-  
-  root?: Element;
-  left?: number;
-  top?: number;
-  right?: number;
-  bottom?: number;
-}
-```
-
-* `root`: An optional element which bounding rectanlge will be used as the animation view. When undefined or null, the overall viewport will be used.
-* `left`: An offset, expressed in **pixels**, to shrink the triggering area from the left with. This value overrides the global `offsetLeft` value.
-* `top`: An offset, expressed in **pixels**, to shrink the triggering area from the top with. This value overrides the global `offsetTop` value.
-* `right`: An offset, expressed in **pixels**, to shrink the triggering area from the right with. This value overrides the global `offsetRight` value.
-* `bottom`: An offset, expressed in **pixels**, to shrink the triggering area from the bottom with. This value overrides the global `offsetBottom` value.
+### Methods 
 
 ---
 
 ```typescript
-public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
+public open(data?: D): DialogRef<D,R>;
 ```
-Observable operator to be used for triggering the animation on scroll. 
-* `elm`: The element for which the animation will be triggered.
-* `threshold`: The visibility ratio to trigger the animation with. 
+Opens the dialog returning the reference.
+* `data`: Optional generic data for the dialog to be consumed.
 
-The returned `OperatorFunction` accepts an input trigger to emit an output trigger. In case the threshold value is 0, the output trigger simply mirrors the input one. For values greater than 0, the service checks the given element's area against the animation view emitting **true** when the two rectangles intersect for an area equal or greater than the threshold value, emitting **false** when the element's area is totally out of the view area. 
+Returns a DialogRef corresponding to the underlying [MatDialogRef](https://material.angular.io/components/dialog/api#MatDialogRef) object. 
+
+---
+
+```typescript
+public close(value: R): void;
+```
+Closes the dialog passing along the output value.
+* `value`: The generic returning value.
 
 ---
 ->
