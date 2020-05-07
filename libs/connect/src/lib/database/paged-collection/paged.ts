@@ -34,10 +34,6 @@ export class PagedCollection<T> extends DatabaseCollection<T> {
   protected _done$ = new BehaviorSubject<boolean>(false);
   public done$: Observable<boolean> = this._done$.asObservable();
 
-  constructor(db: DatabaseApplication, ref: string|CollectionRef<T>) { 
-    super(db, ref);
-  }
-
   // Merges page configuration default values with the optional ones
   protected init(opts?: PageConfig): PageConfig {
     return {

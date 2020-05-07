@@ -45,7 +45,8 @@ export class AnimateComponent implements OnInit, OnDestroy {
 
   constructor(private elm: ElementRef, private scroll: AnimateService) {}
 
-  @HostBinding('@animate') private trigger;
+  @HostBinding('@animate') 
+  public trigger;
 
   private get idle() { return { value: `idle-${this.animate}` }; }
   private get play() {
@@ -95,12 +96,12 @@ export class AnimateComponent implements OnInit, OnDestroy {
   /** Emits at the end of the animation */
   @Output() start = new EventEmitter<void>();  
   @HostListener('@animate.start') 
-  private animationStart() { this.animating = true; this.animated = false; this.start.emit(); }
+  public animationStart() { this.animating = true; this.animated = false; this.start.emit(); }
 
   /** Emits at the end of the animation */
   @Output() done = new EventEmitter<void>();  
   @HostListener('@animate.done') 
-  private animationDone() { this.animating = false; this.animated = true; this.done.emit(); }
+  public animationDone() { this.animating = false; this.animated = true; this.done.emit(); }
 
   /** When true, keeps the animation idle until the next replay triggers */
   @Input('paused') set pauseAnimation(value: boolean) { this.paused = coerceBooleanProperty(value); }

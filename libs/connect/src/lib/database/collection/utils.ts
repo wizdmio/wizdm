@@ -1,13 +1,21 @@
 import { CollectionRef, Query, QuerySnapshot, QueryDocumentSnapshot, DocumentChange } from './types';
 import { Observable, throwError } from 'rxjs';
 import { DocumentData } from '../document';
+import { NgZone } from '@angular/core';
 
 /** Builds an Observable of QuerySnaphots from a collection (or query) ref*/
-export function fromRef<T>(ref: CollectionRef<T>|Query<T>): Observable<QuerySnapshot<T>> {
+export function fromRef<T>(ref: CollectionRef<T>|Query<T>, zone: NgZone): Observable<QuerySnapshot<T>> {
   // Throw an error when the referencec is missing
   if(!ref) { return throwError(new Error("Missing Reference") ); }
   // Returns an obsevable wrapping the onSnapshot observer
-  return new Observable<QuerySnapshot<T>>( subscriber => ref.onSnapshot(subscriber) );
+  return new Observable<QuerySnapshot<T>>( subscriber => ref.onSnapshot(
+    // Runs the observable within the Angular's zone
+    (value: QuerySnapshot<T>) => zone.run( () => subscriber.next(value) ),
+    // Runs the observable within the Angular's zone
+    (error: any) => zone.run( () => subscriber.error(error) ),
+    // Runs the observable within the Angular's zone
+    () => zone.run( () => subscriber.complete() )
+  ));
 }
 
 /** Helper function to combine DocumentChange(s) requlting from a Query mapping them into QUeryDocumentSnapshots */

@@ -1,9 +1,8 @@
 import { DocumentRef, DocumentSnapshot, SnapOptions, DocumentData } from './types';
-import { DatabaseApplication, Timestamp } from '../database-application';
 import { DatabaseCollection, CollectionRef } from '../collection';
 import { DistributedCounter, CounterShard } from '../counter';
+import { DatabaseApplication } from '../database-application';
 import { fromRef, mapSnaphotData } from './utils';
-import { runInZone } from '../../utils';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -13,7 +12,7 @@ export class DatabaseDocument<T extends DocumentData> {
    /** The internal document reference */
   public ref: DocumentRef<T>;
 
-  constructor(readonly db: DatabaseApplication, ref: string|DocumentRef<T>) {
+  constructor(readonly db: DatabaseApplication, ref?: string|DocumentRef<T>) {
     this.from(ref);
   }
 
@@ -121,11 +120,9 @@ export class DatabaseDocument<T extends DocumentData> {
   /** Streams the document content with an observable */
   public stream(): Observable<T> {
     // Builds an Observable from the ref
-    return fromRef<T>(this.ref).pipe( 
+    return fromRef<T>(this.ref, this.db.zone).pipe( 
       // Maps the snapshot to the data content
-      map( snapshot => mapSnaphotData(snapshot) ),
-      // Ensures to trigger Angular's change detection
-      runInZone(this.db.zone)
+      map( snapshot => mapSnaphotData(snapshot) )
     );
   }
 

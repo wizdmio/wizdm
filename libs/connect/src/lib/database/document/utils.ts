@@ -1,12 +1,20 @@
 import { DocumentRef, DocumentSnapshot, DocumentData } from './types';
 import { Observable, throwError } from 'rxjs';
+import { NgZone } from '@angular/core';
 
 /** Builds an Observable od DocumentSnapshots from a Document ref */
-export function fromRef<T>(ref: DocumentRef<T>): Observable<DocumentSnapshot<T>> {
+export function fromRef<T>(ref: DocumentRef<T>, zone: NgZone): Observable<DocumentSnapshot<T>> {
   // Throw an error when the referencec is missing
   if(!ref) { return throwError(new Error("Missing Reference") ); }
-  // Returns an obsevable wrapping the onSnapshot observer
-  return new Observable<DocumentSnapshot<T>>( subscriber => ref.onSnapshot(subscriber) );
+  // Returns an obsevable wrapping the onSnapshot observer and running within Angular's zone
+  return new Observable<DocumentSnapshot<T>>( subscriber => ref.onSnapshot(
+    // Runs the observable within the Angular's zone
+    (value: DocumentSnapshot<T>) => zone.run( () => subscriber.next(value) ),
+    // Runs the observable within the Angular's zone
+    (error: any) => zone.run( () => subscriber.error(error) ),
+    // Runs the observable within the Angular's zone
+    () => zone.run( () => subscriber.complete() )
+  ));
 }
 
 /** Helper function to map a DocumetnSnapshot into its data payload */

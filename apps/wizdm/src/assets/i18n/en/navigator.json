@@ -13,7 +13,8 @@
             { "label": "Explore", "menu": [
                 { "label": "Features", "link": "features" },
                 { "label": "Reference", "link": "docs" }
-            ]}
+            ]},
+            { "label": "Community", "link": "chat" }
         ]
     },
 
@@ -30,6 +31,7 @@
                 { "label": "Features", "link": "features" },
                 { "label": "Reference", "link": "docs" }
             ]},
+            { "label": "Community", "link": "chat" },
             { "label": "Profile", "link": "profile" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
         ]

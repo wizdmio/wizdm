@@ -139,8 +139,20 @@
       "projectType": "library",
       "root": "libs/animate",
       "sourceRoot": "libs/animate/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/animate/tsconfig.lib.json",
+            "project": "libs/animate/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/animate/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -170,7 +182,7 @@
       "projectType": "library",
       "root": "libs/content",
       "sourceRoot": "libs/content/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -239,7 +251,7 @@
       "projectType": "library",
       "root": "libs/redirect",
       "sourceRoot": "libs/redirect/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -270,7 +282,7 @@
       "projectType": "library",
       "root": "libs/elements",
       "sourceRoot": "libs/elements/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -339,7 +351,7 @@
       "projectType": "library",
       "root": "libs/prism",
       "sourceRoot": "libs/prism/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -427,7 +439,7 @@
       "projectType": "library",
       "root": "libs/paypal",
       "sourceRoot": "libs/paypal/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -458,7 +470,7 @@
       "projectType": "library",
       "root": "libs/stripe",
       "sourceRoot": "libs/stripe/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -489,7 +501,7 @@
       "projectType": "library",
       "root": "libs/ipinfo",
       "sourceRoot": "libs/ipinfo/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -516,42 +528,11 @@
         }
       }
     },
-    "iplist": {
-      "projectType": "library",
-      "root": "libs/iplist",
-      "sourceRoot": "libs/iplist/src",
-      "prefix": "wizdm",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/iplist/tsconfig.lib.json",
-              "libs/iplist/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/iplist/**"]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/iplist/src/test.ts",
-            "tsConfig": "libs/iplist/tsconfig.spec.json",
-            "karmaConfig": "libs/iplist/karma.conf.js"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "styleext": "scss"
-        }
-      }
-    },
     "gtag": {
       "projectType": "library",
       "root": "libs/gtag",
       "sourceRoot": "libs/gtag/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -582,7 +563,7 @@
       "projectType": "library",
       "root": "libs/emoji",
       "sourceRoot": "libs/emoji/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -613,7 +594,7 @@
       "projectType": "library",
       "root": "libs/teleport",
       "sourceRoot": "libs/teleport/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -644,7 +625,7 @@
       "projectType": "library",
       "root": "libs/actionlink",
       "sourceRoot": "libs/actionlink/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -675,7 +656,7 @@
       "projectType": "library",
       "root": "libs/dialog",
       "sourceRoot": "libs/dialog/src",
-      "prefix": "wizdm",
+      "prefix": "wm",
       "architect": {
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -693,6 +674,49 @@
             "main": "libs/dialog/src/test.ts",
             "tsConfig": "libs/dialog/tsconfig.spec.json",
             "karmaConfig": "libs/dialog/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "test": {
+      "projectType": "library",
+      "root": "libs/test",
+      "sourceRoot": "libs/test/src",
+      "prefix": "wizdm",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/test/tsconfig.lib.json",
+            "project": "libs/test/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/test/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/test/tsconfig.lib.json",
+              "libs/test/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/test/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/test/src/test.ts",
+            "tsConfig": "libs/test/tsconfig.spec.json",
+            "karmaConfig": "libs/test/karma.conf.js"
           }
         }
       },

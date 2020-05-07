@@ -1,6 +1,6 @@
 import { DatabaseCollection, CollectionRef } from '../collection';
 import { map, tap, distinctUntilChanged } from 'rxjs/operators';
-import { DatabaseApplication } from '../database-application';
+import { DatabaseApplication, FieldValue } from '../database-application';
 import { Observable, BehaviorSubject, merge } from 'rxjs';
 import { DocumentData } from '../document';
 
@@ -16,8 +16,11 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
   readonly counter$: Observable<number>;
   private _counter$: BehaviorSubject<number>; 
 
-  constructor(db: DatabaseApplication, ref: string|CollectionRef<CounterShard>, public readonly shards) {
+  constructor(db: DatabaseApplication, ref: string|CollectionRef<CounterShard>, readonly shards) {
     super(db, ref);
+
+    // Makes sure shards are fine
+    if(shards <= 0) { throw new Error("Coounter shards must be a positive integer greater than 0"); }
 
     // Creates a local copy of the counter 
     this._counter$ = new BehaviorSubject<number>(0);
@@ -47,10 +50,11 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
   private create(start = 0): Promise<void> {
     // Uses firestore references directly
     const batch = this.db.batch();
-    // Loops to create the shards
-    for(let i = 0; i < this.shards; i++) {
-      const value = i === 0 ? start : 0;
-      batch.set(this.ref.doc(i.toString()), { count: value });
+    // Inits the first shard with the starting value
+    batch.set(this.ref.doc('0'), { count: start });
+    // Loops to create the additional shards
+    for(let i = 1; i < this.shards; i++) {
+      batch.set(this.ref.doc(i.toString()), { count: 0 });
     }
     // Commit the changes
     return batch.commit();

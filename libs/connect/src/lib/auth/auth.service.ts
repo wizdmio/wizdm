@@ -1,8 +1,6 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '../connect.module';
-import { shareReplay } from 'rxjs/operators';
 import { auth, User } from 'firebase/app';
-import { runInZone } from '../utils';
 import { Observable } from 'rxjs';
 
 //--
@@ -29,18 +27,24 @@ export class AuthService {
     this.auth = app.auth();
 
     // Builds the authentication state observable (sign-in/out)
-    this.state$ = new Observable<User>(subscriber =>
-      // Wraps the onAuthStaeChanged observer
-      this.auth.onAuthStateChanged(subscriber)
-      // Replay the same result to all subscribers
-    ).pipe( /*shareReplay({ bufferSize: 1, refCount: false }),*/ runInZone(zone) );
+    this.state$ = new Observable(subscriber => this.auth.onAuthStateChanged(
+      // Runs the observable within the Angular's zone
+      (value: User) => zone.run( () => subscriber.next(value) ),
+      // Runs the observable within the Angular's zone
+      (error: any) => zone.run( () => subscriber.error(error) ),
+      // Runs the observable within the Angular's zone
+      () => zone.run( () => subscriber.complete() )
+    ));
 
     // Builds the user observable (this includes it token refreshes)
-    this.user$ = new Observable<User>(subscriber => 
-      // Wraps the onIdTokenChanged observer
-      this.auth.onIdTokenChanged(subscriber)
-      // Replay the same result to all subscribers
-    ).pipe(/*shareReplay({ bufferSize: 1, refCount: false }),*/ runInZone(zone) );
+    this.user$ = new Observable(subscriber => this.auth.onIdTokenChanged(
+      // Runs the observable within the Angular's zone
+      (value: User) => zone.run( () => subscriber.next(value) ),
+      // Runs the observable within the Angular's zone
+      (error: any) => zone.run( () => subscriber.error(error) ),
+      // Runs the observable within the Angular's zone
+      () => zone.run( () => subscriber.complete() )
+    ));
   }
 
   /** Current user object snapshot */

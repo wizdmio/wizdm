@@ -1,53 +1,89 @@
+import { last, take, map, switchMap, startWith } from 'rxjs/operators';
+import { Observable, of, from, BehaviorSubject } from 'rxjs';
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
-import { take, last, map, flatMap, startWith } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
 
 /** Helper class to display stored files */
 export class StorageFile {
 
+  /** File name */
   readonly name$: Observable<string>;
-
+  /** Meta data */
   readonly meta$: Observable<any>;
-
+  /** Download URL */
   readonly url$: Observable<string>;
-  
+  /** Uploading progress */
   readonly progress$: Observable<number>;
 
-  constructor(ref: StorageReference|UploadObservable) {
+  /** Internal source */
+  private source$: BehaviorSubject<StorageReference|UploadObservable>;
 
-    // Builds the StorageReference set of observables
-    if(ref instanceof StorageReference) {
+  /** Returns the source value */
+  get source(): StorageReference|UploadObservable { 
+    return this.source$.value; 
+  }
 
-      this.name$ = of(ref.name);
+  /** Switches to a new source */
+  public from(source: StorageReference|UploadObservable) {
+    this.source$.next(source);
+  }
 
-      this.meta$ = of(ref).pipe( flatMap( ref => ref.getMetadata() ) );
+  /** Builds the StorageFile */
+  constructor(source?: StorageReference|UploadObservable) {
 
-      this.url$ = of(ref).pipe( flatMap( ref => ref.getDownloadURL() ) );
+    /** Initializes teh source first */
+    this.source$ = new BehaviorSubject<StorageReference|UploadObservable>(source);
 
-      this.progress$ = of(100);
+    /** Builds the file name observable */
+    this.name$ = this.fromSource(
 
-      return;
-    }
+      ref => of(ref.name),
 
-    // Builds the UploadObservable set of observables
-    if(ref instanceof UploadObservable) {
+      upl => upl.pipe( take(1), map( s => s.ref.name ) ),
 
-      this.name$ = ref.pipe( take(1), map( s => s.ref.name ) );
+      ''
+    );
 
-      this.meta$ = ref.pipe( last(), flatMap( s => s.ref.getMetadata() ), startWith({}) );
+    /** Builds the meta content observable */
+    this.meta$ = this.fromSource(
+      
+      ref => from( ref.getMetadata() ),
 
-      this.url$ = ref.pipe( last(), flatMap( s => s.ref.getDownloadURL() ), startWith('') );
+      upl => upl.pipe( last(), switchMap( s => s.ref.getMetadata() ), startWith({}) ),
 
-      this.progress$ = ref.pipe( map(s => s.bytesTransferred / s.totalBytes * 100) );
+      {}
+    );
 
-      return;
-    }
+    /** Build the download url observable */
+    this.url$ = this.fromSource(
+      
+      ref => from( ref.getDownloadURL() ),
 
-    // Something wrong
-    this.name$ = of('');
-    this.meta$ = of({});
-    this.url$ = of('');
-    this.progress$ = of(100);
+      upl => upl.pipe( last(), switchMap( s => s.ref.getDownloadURL() ), startWith('') ),
+
+      ''
+    );
+
+    /** Builds the uploading progress observable */
+    this.progress$ = this.fromSource(
+
+      ref => of(undefined),
+
+      upl => upl.pipe( map(s => Math.floor(s.bytesTransferred / s.totalBytes * 100)) )
+    );
+  }
+
+  /** Observable builder helper function */
+  private fromSource<T>(ref: (ref: StorageReference) => Observable<T>, upl: (upl: UploadObservable) => Observable<T>, none?: T): Observable<T> {
+    
+    return this.source$.pipe( switchMap( source => { 
+
+      if(source instanceof StorageReference) { return ref(source); }
+
+      if(source instanceof UploadObservable) { return upl(source); }
+
+      return of(none);
+
+    }));
   }
 }

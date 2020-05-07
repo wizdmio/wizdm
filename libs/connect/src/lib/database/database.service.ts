@@ -1,6 +1,6 @@
-import { DatabaseApplication, PersistenceSettings } from './database-application';
 import { Injectable, InjectionToken, Inject, Optional, NgZone } from '@angular/core';
-import { DatabaseCollection, CollectionRef } from './collection';
+import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './collection';
+import { DatabaseApplication, PersistenceSettings } from './database-application';
 import { DistributedCounter, CounterShard } from './counter';
 import { DatabaseDocument, DocumentRef } from './document'
 import { APP, FirebaseApp } from '../connect.module';
@@ -30,6 +30,14 @@ export class DatabaseService extends DatabaseApplication {
    */
   public collection<T>(path: string|CollectionRef<T>): DatabaseCollection<T> {
     return new DatabaseCollection<T>(this, path);
+  }
+
+  /**
+   * Creates and returns a DatabaseGroup object
+   * @param groupId the groupId to gather the group
+   */
+  public collectionGroup<T>(groupId: string|Query<T>): DatabaseGroup<T> {
+    return new DatabaseGroup<T>(this, groupId);
   }
 
   /**

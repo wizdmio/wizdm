@@ -39,7 +39,8 @@
       "@wizdm/ipinfo/*": ["libs/ipinfo/src/lib/*"],
       "@wizdm/gtag": ["libs/gtag/src/index.ts"],
       "@wizdm/emoji": ["libs/emoji/src/index.ts"],
-      "@wizdm/emoji/*": ["libs/emoji/src/lib/*"]
+      "@wizdm/emoji/*": ["libs/emoji/src/lib/*"],
+      "@wizdm/test": ["libs/test/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]

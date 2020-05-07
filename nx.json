@@ -8,16 +8,25 @@
     "nx.json": "*"
   },
   "projects": {
-    "wizdm-app": {
+    "wizdm": {
       "tags": []
     },
-    "wizdm-app-e2e": {
+    "wizdm-e2e": {
+      "tags": []
+    },
+    "animate": {
+      "tags": []
+    },
+    "content": {
       "tags": []
     },
     "connect": {
       "tags": []
     },
-    "content": {
+    "redirect": {
+      "tags": []
+    },
+    "elements": {
       "tags": []
     },
     "markdown": {
@@ -32,19 +41,7 @@
     "doorbell": {
       "tags": []
     },
-    "animate": {
-      "tags": []
-    },
-    "elements": {
-      "tags": []
-    },
     "paypal": {
-      "tags": []
-    },
-    "utils": {
-      "tags": []
-    },
-    "redirect": {
       "tags": []
     },
     "stripe": {
@@ -53,10 +50,10 @@
     "ipinfo": {
       "tags": []
     },
-    "iplist": {
+    "gtag": {
       "tags": []
     },
-    "gtag": {
+    "emoji": {
       "tags": []
     },
     "teleport": {
@@ -66,6 +63,9 @@
       "tags": []
     },
     "dialog": {
+      "tags": []
+    },
+    "test": {
       "tags": []
     }
   }

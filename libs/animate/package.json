@@ -1,0 +1,20 @@
+{
+  "name": "@wizdm/animate",
+  "description": "On Scroll Animation for Angular",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["Angular", "Animation", "aos"],
+  "homepage": "https://wizdm.io/docs/aos",
+  "peerDependencies": {
+    "@angular/core": "^9.1.4",
+    "@angular/cdk": "^9.2.2",
+    "tslib": "^1.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/libs/animate"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
+  }
+}

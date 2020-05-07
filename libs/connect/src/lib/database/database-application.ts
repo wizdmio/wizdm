@@ -1,10 +1,10 @@
-import { DatabaseCollection, CollectionRef, Query, QueryFn } from './collection';
+import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './collection';
 import { DistributedCounter, CounterShard } from './counter';
 import { DatabaseDocument, DocumentRef } from './document'
-import { NgZone } from '@angular/core';
 import { PagedCollection } from './paged-collection';
-import { APP, FirebaseApp } from '../connect.module';
+import { FirebaseApp } from '../connect.module';
 import { firestore } from 'firebase/app';
+import { NgZone } from '@angular/core';
 
 export type PersistenceSettings = firestore.PersistenceSettings;
 export type FirebaseFirestore = firestore.Firestore;
@@ -88,9 +88,14 @@ export abstract class DatabaseApplication {
     return !!ref ? (typeof ref === 'string' ? this.firestore.collection(ref) as CollectionRef<T> : ref) : null;
   }
 
+  public group<T>(ref: string|Query<T>): Query<T> {
+    return !!ref ? (typeof ref === 'string' ? this.firestore.collectionGroup(ref) as Query<T> : ref) : null;
+  }
+
   /** Database Objects Factories */
   public abstract document<T>(path: string|DocumentRef<T>): DatabaseDocument<T>;
   public abstract collection<T>(path: string|CollectionRef<T>): DatabaseCollection<T>;
+  public abstract collectionGroup<T>(groupId: string|Query<T>): DatabaseGroup<T>;
   public abstract pagedCollection<T>(path: string|CollectionRef<T>): PagedCollection<T>;
   public abstract counter(path: string|CollectionRef<CounterShard>, shards: number): DistributedCounter;
 }

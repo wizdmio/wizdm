@@ -1,15 +1,11 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AnimateComponent } from './animate.component';
 import { AnimateDirective } from './animate.directive';
 import { AnimateConfig, ANIMATE_CONFIG } from './animate.config'
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ScrollingModule
-  ],
+  imports: [ ScrollingModule ],
   declarations: [ AnimateComponent, AnimateDirective ],
   exports: [ AnimateComponent, AnimateDirective ]
 })
