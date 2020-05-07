@@ -2,7 +2,7 @@
 
 # Animate 
 
-[⬇ Go to the API Reference](docs/aos#api-reference)
+[Go to the API Reference](docs/aos#api-reference)
 
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
@@ -159,7 +159,7 @@ export class AnimateComponent {
 |:--|:--|
 |`animating: boolean`|**True** when the animation is running|
 |`animated: boolean`|**True** after the animation completed. False while the animation is running|
-|`@Input('wmAnimate') animate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
+|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
 |`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
 |`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
 |`@Input() disabled: boolean`|Disables the animation|
@@ -260,5 +260,5 @@ The returned `OperatorFunction` accepts an input trigger to emit an output trigg
 
 ---
 ->
-[Next Topic ⮕](docs/toc?go=next) 
+[Next Topic](docs/toc?go=next) 
 ->
