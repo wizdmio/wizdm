@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ContentConfig, ContentConfigToken } from './loader/content-configurator.service';
 import { ContentConfigurator } from './loader/content-configurator.service';
-import { ContentLoader, DefaultLoader } from './loader/content-loader.service';
+import { ContentLoader, FileLoader } from './loader/content-loader.service';
 import { SelectorResolver } from './router/selector-resolver.service';
 import { ContentDirective } from './streamer/content.directive';
 
@@ -22,9 +22,9 @@ export class ContentModule {
         // Content configurator providing default values when missing 
         ContentConfigurator,
         // Standard content loader provided only at root level
-        { provide: ContentLoader, useExisting: DefaultLoader }, 
+        { provide: ContentLoader, useExisting: FileLoader }, 
         // Default content loader provided as the standard when not overriden
-        DefaultLoader,
+        FileLoader,
         // Standard selector resolver provided only at root level
         SelectorResolver
       ]

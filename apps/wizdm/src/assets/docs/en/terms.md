@@ -14,6 +14,6 @@ You may be willing to look at our [Privacy Statement](privacy).
 ## Contact Us
 If you have any questions about these Terms, please [contact us](contact). 
  
-[Back](back)
+---
 
-[Home](home)
+[Back](back) - [Home](home)

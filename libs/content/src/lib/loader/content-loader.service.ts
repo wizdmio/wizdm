@@ -29,7 +29,7 @@ export abstract class ContentLoader {
 
 /** Loader to load the content dynamically from JSON files */
 @Injectable()
-export class DefaultLoader extends ContentLoader {
+export class FileLoader extends ContentLoader {
 
   constructor(config: ContentConfigurator, readonly http: HttpClient) {
     super(config);

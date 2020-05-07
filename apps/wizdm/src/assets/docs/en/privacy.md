@@ -15,6 +15,6 @@ User feedbacks is powered by by Doorebell.io. You may want referring to [Doorbel
 ## Contact Us
 If you have any questions about these Privacy Statement, please [contact us](contact).
  
-[Back](back)
+---
 
-[Home](home)
+[Back](back) - [Home](home)

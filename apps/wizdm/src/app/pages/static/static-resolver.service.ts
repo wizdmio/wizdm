@@ -1,5 +1,5 @@
 import { Router, Resolve, ActivatedRouteSnapshot, ParamMap } from '@angular/router';
-import { SelectorResolver, ContentLoader } from '@wizdm/content';
+import { SelectorResolver, FileLoader } from '@wizdm/content';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -20,7 +20,7 @@ export class StaticResolver implements Resolve<StaticContent> {
 
   private cache: StaticCache;
   
-  constructor(private router: Router, private selector: SelectorResolver, private loader: ContentLoader) { }
+  constructor(private router: Router, private selector: SelectorResolver, private loader: FileLoader) { }
 
   /** The default language of the content manager */
   get defaultLang() { return this.selector.config.defaultValue; }
