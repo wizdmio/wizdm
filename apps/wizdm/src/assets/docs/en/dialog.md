@@ -3,7 +3,7 @@
 # Dialog 
 [Go to the API Reference](docs/dialog#api-reference)
 
-Dialog is a package providing a declarative dialog component by extending the [Angular Material Dialog](https://material.angular.io/components/dialog/api). 
+Dialog is a package providing a declarative version of the [Angular Material Dialog](https://material.angular.io/components/dialog/api). 
 
 ## Usage example
 `<wm-dialog>` is a component designed to display a popup dialog on request. The example below illustrates how the component is used to design the dialog content by using the very same [MatDialog directives](https://material.angular.io/components/dialog/api#directives): 
@@ -30,7 +30,7 @@ Dialog is a package providing a declarative dialog component by extending the [A
 
 </wm-dialog>
 ```
-By itself the component does not render anything until its `open()` method is called. 
+By itself the component does not render anything until its `open()` method is called, in this case by a button click event. 
 
 &nbsp;  
 
@@ -66,7 +66,7 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
   @Input() width: string = '';
   @Input() height: string = '';
   @Input() minWidth: number | string;
-  @Input() minHeight?: number | string;
+  @Input() minHeight: number | string;
   @Input() maxWidth: number | string = '80vw';
   @Input() maxHeight: number | string;
   @Input() position: DialogPosition;
@@ -119,7 +119,8 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 |`@Input() set opened(open: boolean)`|Opens the dialog when the passed condition is true|
 |`@Output() openedChange: EventEmitter<boolean>`|Reports the open status|
 |`@Input() set closed(value: R)`|Forces the dialog closing with the given value|
-|`@Output() closedChange: EventEmitter<R>`|Reports the value the dialog as been closed with|
+|`@Output() closedChange: EventEmitter<R>`|Reports the value the dialog as been closed with| 
+
 
 ### Methods 
 
@@ -128,7 +129,7 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 ```typescript
 public open(data?: D): DialogRef<D,R>;
 ```
-Opens the dialog returning the reference.
+Opens the dialog returning its reference.
 * `data`: Optional generic data for the dialog to be consumed.
 
 Returns a DialogRef corresponding to the underlying [MatDialogRef](https://material.angular.io/components/dialog/api#MatDialogRef) object. 
@@ -139,7 +140,7 @@ Returns a DialogRef corresponding to the underlying [MatDialogRef](https://mater
 public close(value: R): void;
 ```
 Closes the dialog passing along the output value.
-* `value`: The generic returning value.
+* `value`: The generic value returned by the dialog reference after closin the dialogg. This same value is emitted by the `closedChange` event.
 
 ---
 ->

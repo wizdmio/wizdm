@@ -9,7 +9,7 @@ export const appname: string = 'wizdm';
 
 export const content: ContentConfig = {
   selector: 'lang', 
-  contentRoot: 'assets/i18n',
+  source: 'assets/i18n',
   supportedValues: ['en', 'it', 'ru'],
   defaultValue: 'en'
 };

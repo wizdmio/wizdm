@@ -24,7 +24,7 @@ export abstract class ContentLoader {
   }
 
   /** Abstract loading module funciton */
-  public abstract loadModule(lang: string, moduleName: string): Observable<any>;
+  public abstract loadFile(path: string, lang: string, name: string): Observable<any>;
 }
 
 /** Loader to load the content dynamically from JSON files */
@@ -39,24 +39,33 @@ export class DefaultLoader extends ContentLoader {
    * param lang the two digit language ContentLoader
    * param moduleName the json file name to load
    */
-  public loadModule(lang: string, moduleName: string): Observable<any> {
+  public loadFile(path: string, lang: string, name: string): Observable<any> {
 
-    console.log('loading:', moduleName, lang);
+    console.log('loading:', path, lang, name);
 
-    // Resets the data snapshot while switching language
+    // Resets the cache when switching language
     if(lang !== this.language) { this.data = { lang }; }
 
-    // Returns the module from the data whenever possible
-    if(!!this.content[moduleName]) { return of(this.content[moduleName]); }
+    // Returns the module from the cache whenever possible
+    if(!!this.content[name]) { return of(this.content[name]); }
     
+    // Extract the file name in case the extension has been specified
+    const fileName = name.split('.')[0];
+
+    // Extracts the file extension defaulting to 'json'
+    const fileExt = name.split('.')[1] || 'json';
+
+    // Detects the responseType from the file extennsion
+    const responseType = fileExt.replace(/md|txt/, 'text') as 'json'|'text';
+
     // Always load the default module together with the requested one
     return forkJoin(
       // Default language file (full)
-      this.http.get<any>(`${this.config.contentRoot}/${this.config.defaultValue}/${moduleName}.json`),
+      this.http.request('GET',`${path}/${this.config.defaultValue}/${fileName}.${fileExt}`, { observe: 'body', responseType }),
       // Loads the requested language file only when differs from he default language
       this.language !== this.config.defaultValue ? 
         // Requested language file (partial)
-        this.http.get<any>(`${this.config.contentRoot}/${this.language}/${moduleName}.json`).pipe(
+        this.http.request('GET', `${path}/${this.language}/${fileName}.${fileExt}`, { observe: 'body', responseType }).pipe(
         // Reverts to the default language in case of errors (basically it pass an empty object 
         // since default content will be merged in the next map() )
           catchError( () => of({}) )
@@ -67,7 +76,7 @@ export class DefaultLoader extends ContentLoader {
       // Packs the result by merging the modules whenever necessary
       zip( data => this.language === this.config.defaultValue ? data[0] : this.merge(data[1], data[0]) ),
       // Caches the content for further requests
-      tap( data => this.content[moduleName] = data ),
+      tap( data => this.content[name] = data ),
       // Whereve happens (the requested file does not exist) returns an empty object
       catchError( () => of({}) )
     );

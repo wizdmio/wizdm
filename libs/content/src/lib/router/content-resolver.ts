@@ -6,25 +6,25 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 /** Builds a content resolver instance for the specified source file on the fly */
-export function contentResolver<T = any>(source: string, providedIn: 'root'|Type<T> = 'root') {
+export function contentResolver<T = any>(source: string, file: string, providedIn: 'root'|Type<T> = 'root') {
 
-  return new InjectionToken(`wizdm.content.${source}`, {
+  return new InjectionToken(`wizdm.content.${file}`, {
     providedIn,
-    factory: () => new ContentResolver(inject(SelectorResolver), inject(ContentLoader as any), source)
+    factory: () => new ContentResolver(inject(ContentLoader as any), inject(SelectorResolver), source,file)
   });
 }
 
 /** Base resolver loading the page content according to the requested language */
 export class ContentResolver implements Resolve<any> {
 
-  constructor(readonly selector: SelectorResolver, readonly loader: ContentLoader, readonly source: string) { }
+  constructor(readonly loader: ContentLoader, readonly selector: SelectorResolver, readonly source: string, readonly file: string) { }
 
   /** Resolves the content loading the requested source file */
   public resolve(route: ActivatedRouteSnapshot): Observable<any> {
     // Resolves the language code from the route
     const lang = this.selector.resolve(route);
     // Loads the specified module from the language forlder
-    return this.loader.loadModule(lang, this.source)
+    return this.loader.loadFile(this.source, lang, this.file)
       .pipe( take(1) );
   }
 }

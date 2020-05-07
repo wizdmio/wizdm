@@ -1,11 +1,227 @@
 <!-- toc: toc.json -->
 
-# We Are Sorry
+# Content 
 
-[Start](docs) - [Back](back) - [Home](home)
+[Go to the API Reference](docs/content#api-reference)
 
-Wizdm is a young project and some of the documentation is still missing. 
+Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load json files from assets while routing lazily loaded modules. The content is then rendered accessible within the same module components' template via the `wmContent` structural directive.
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+## Usage example
+Use the `wmContent` structural directive to select the relevant content within the template: 
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+```html
+<!-- Use wmContent to select the relevant data -->
+<ng-container *wmContent="let msgs select 'home'"> 
+
+  <h1>{{ msgs.title || 'Get your app done right' }}</h1>
+
+  <p>{{ msgs.body || 'Wizdm provides all the key features of a modern single page application ready to use' }}</p>
+  
+  <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption || 'Get started' }}</button>
+
+</ng-container>
+```
+
+---
+
+```typescript
+// HomeModule.ts
+...
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+
+const routes: RoutesWithContent = [
+  {
+    path: '',
+    content: 'home',
+    component: HomeComponent
+  }
+];
+
+@NgModule({
+  declarations: [ HomeComponent ],
+  imports: [
+    CommonModule,
+    ...,
+    ContentRouterModule.forChild(routes)
+  ]
+})
+export class HomeModule { }
+```
+
+&nbsp;  
+
+# API Reference
+[AnimateModule](docs/aos#animatemodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
+
+&nbsp;  
+
+## AnimateModule 
+
+```typescript
+import { AnimateModule } from '@wizdm/animate';
+```
+
+The main module provides an optional `init()` static function to customize the module behvior:
+```typescript
+static init(config?: AnimateConfig): ModuleWithProviders<AnimateModule>
+```
+**config**
+```typescript
+interface AnimateConfig {
+  triggerMode?: 'scrolling'|intersectionObserver'|'auto';
+  offsetTop?: number;
+  offsetLeft?: number;
+  offsetRight?: number;
+  offsetBottom?: number;
+}
+```
+* `triggerMode`: Specifies wich mechanism is going to be used for trigggering the animations while scrolling.
+
+|**Value**|**Description**|
+|:--|:--|
+|`'scrolling'`|Computes the visibility upon scrolling with the help of the [CdkScrolling](https://material.angular.io/cdk/scrolling/overview) package. In order to work the animate elements must belong to the main scrolling window or within a `cdkScrollable` child container|
+|`'intersectionObserver'`|Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method|
+|`'auto'`|(The default value). Tells the package to check for the best mode to be used|
+
+* `offsetTop`: A global offset, expressed in **pixels**, to shrink the triggering area from the top with.
+* `offsetLeft`: A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
+* `offsetRight`: A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
+* `offsetBottom`: A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.  
+
+&nbsp;  
+
+## AnimateComponent
+The `wmAnimate` component enables the animation of the target element.
+
+```typescript
+@Component({
+ selector: '[wmAnimate]',
+ template: '<ng-content></ng-content>',
+ animations: [...]
+})
+export class AnimateComponent {
+
+  public animating;
+  public animated;
+
+  @Input('wmAnimate') animate: wmAnimations;
+  @Input() set speed(speed: wmAnimateSpeed);
+  @Input() set delay(delay: string);
+  @Input() disabled: boolean;
+  @Input() paused: boolean;
+  @Input() set aos(threashold: number);
+  @Input() once: boolean;
+  @Input() set replay(replay: any);
+  
+  @Output() start: EventEmitter<void>;  
+  @Output() done: EventEmitter<void>; 
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|`animating: boolean`|**True** when the animation is running|
+|`animated: boolean`|**True** after the animation completed. False while the animation is running|
+|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
+|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
+|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
+|`@Input() disabled: boolean`|Disables the animation|
+|`@Input() paused: boolean`|When **true**, keeps the animation idle until the next replay triggers|
+|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
+|`@Input() once: boolean`|When **true**, prevents the animation to run again|
+|`@Input() set replay(replay: any)`|Replays the animation|
+|`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
+|`@Output() done: EventEmitter<void>`|Emits at the end of the animation|  
+
+&nbsp;  
+
+## AnimateDirective
+The `wmAnimateView` directive to customize the triggering viewport.
+
+```typescript
+@Directive({
+  selector: '[wmAnimateView]'
+})
+export class AnimateDirective {
+
+  @Input() useElement: boolean;
+  @Input() top: number;
+  @Input() left: number;
+  @Input() bottom: number;
+  @Input() right: number;
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|`@Input() useElement: boolean`|When **true** uses the element's bounding rect as the animation view|
+|`@Input() top: number`|Optional top offset|
+|`@Input() left: number`|Optional left offset|
+|`@Input() bottom: number`|Optional bottom offset|
+|`@Input() right: number`|Optional right offset|  
+
+&nbsp;  
+
+## AnimateService
+The service providing the triggering logic.
+
+```typescript
+@Injectable({
+  providedIn: 'root'
+})
+export class AnimateService {
+
+  public get useIntersectionObserver(): boolean;
+  public get useScrolling(): boolean;
+
+  public setup(options: AnimateOptions);
+  public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>;
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|`get useIntersectionObserver(): boolean`|**True** when the trigger is provided using the IntersectionObserver API|
+|`get useScrolling(): boolean`|**True** when the trigger is provided using cdk/scrolling package|
+
+### Methods
+
+---
+
+```typescript
+public setup(options: AnimateOptions)
+```
+Configures the service with the given **options**:
+
+```typescript
+export interface AnimateOptions {
+  
+  root?: Element;
+  left?: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+}
+```
+
+* `root`: An optional element which bounding rectanlge will be used as the animation view. When undefined or null, the overall viewport will be used.
+* `left`: An offset, expressed in **pixels**, to shrink the triggering area from the left with. This value overrides the global `offsetLeft` value.
+* `top`: An offset, expressed in **pixels**, to shrink the triggering area from the top with. This value overrides the global `offsetTop` value.
+* `right`: An offset, expressed in **pixels**, to shrink the triggering area from the right with. This value overrides the global `offsetRight` value.
+* `bottom`: An offset, expressed in **pixels**, to shrink the triggering area from the bottom with. This value overrides the global `offsetBottom` value.
+
+---
+
+```typescript
+public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
+```
+Observable operator to be used for triggering the animation on scroll. 
+* `elm`: The element for which the animation will be triggered.
+* `threshold`: The visibility ratio to trigger the animation with. 
+
+The returned `OperatorFunction` accepts an input trigger to emit an output trigger. In case the threshold value is 0, the output trigger simply mirrors the input one. For values greater than 0, the service checks the given element's area against the animation view emitting **true** when the two rectangles intersect for an area equal or greater than the threshold value, emitting **false** when the element's area is totally out of the view area. 
+
+---
+->
+[Next Topic](docs/toc?go=next) 
+->

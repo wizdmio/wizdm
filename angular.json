@@ -184,6 +184,18 @@
       "sourceRoot": "libs/content/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/content/tsconfig.lib.json",
+            "project": "libs/content/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/content/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

@@ -41,7 +41,7 @@
   ]},
 
   { "label": "Extensions", "items": [
-    { "label": "Animate On Scroll", "link": "docs/aos" },
+    { "label": "Animate On Scroll", "link": "docs/animate" },
     { "label": "Declarative Dialog", "link": "docs/dialog" },
     { "label": "Emoji Support", "link": "docs/emoji" },
     { "label": "IP Geolocation", "link": "docs/ipinfo" },

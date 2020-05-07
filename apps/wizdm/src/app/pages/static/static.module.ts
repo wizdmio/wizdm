@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDividerModule } from '@angular/material/divider';
 import { UrlSegment, UrlMatchResult } from '@angular/router';
@@ -38,6 +37,7 @@ const routes: RoutesWithContent = [{
   matcher: staticMatcher,
   //content: 'static',
   component: StaticComponent,
+  data: { source: 'assets/docs' },
   resolve: { document: StaticResolver }
 }];
 
@@ -45,7 +45,6 @@ const routes: RoutesWithContent = [{
   declarations: [ StaticComponent ],
   imports: [
     CommonModule,
-    HttpClientModule,
     ScrollingModule,
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),

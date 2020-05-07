@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Animation", "aos"],
-  "homepage": "https://wizdm.io/docs/aos",
+  "homepage": "https://wizdm.io/docs/animate",
   "peerDependencies": {
     "@angular/core": "^9.1.4",
     "@angular/cdk": "^9.2.2",

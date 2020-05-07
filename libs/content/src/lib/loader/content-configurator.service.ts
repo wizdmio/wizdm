@@ -4,7 +4,7 @@ export const ContentConfigToken = new InjectionToken<ContentConfig>('wizdm.conte
 
 export interface ContentConfig {
   selector?: string;          // 'lang'
-  contentRoot?: string;       // 'assets/i18n'
+  source?: string;            // 'assets/i18n'
   defaultValue?: string;      // 'en'
   supportedValues?: string[]; // ['en']
 }
@@ -20,7 +20,7 @@ export class ContentConfigurator implements ContentConfig {
   public get selector(): string { return !!this.config && this.config.selector || 'lang'; }
 
   /** Returns the root path of the content json files as per the config */
-  public get contentRoot(): string { return !!this.config && this.config.contentRoot || 'assets/i18n'; }
+  public get source(): string { return !!this.config && this.config.source || 'assets/i18n'; }
   
   /** Returns the default language code as per the config */
   public get defaultValue(): string { return !!this.config && this.config.defaultValue || 'en'; }
