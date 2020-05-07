@@ -1,7 +1,6 @@
 <!-- toc: toc.json -->
 
 # Dialog 
-
 [Go to the API Reference](docs/dialog#api-reference)
 
 Dialog is a package providing a declarative dialog component by extending the [Angular Material Dialog](https://material.angular.io/components/dialog/api). 
@@ -36,12 +35,9 @@ By itself the component does not render anything until its `open()` method is ca
 &nbsp;  
 
 # API Reference 
-
 ```typescript
 import { DialogModule } from '@wizdm/dialog';
 ```
-&nbsp; 
-
 ## DialogComponent
 The `wmAnimate` component enables the animation of the target element.
 
