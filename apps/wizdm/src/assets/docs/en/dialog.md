@@ -6,7 +6,7 @@
 Dialog is a package providing a declarative dialog component by extending the [Angular Material Dialog](https://material.angular.io/components/dialog/api). 
 
 ## Usage example
-`<wm-dialog>` is a component designed to display a popup dialog on request. The example below illustrates how the `<wm-dialog>` is used to design the dialog content by using the very same `MatDialog` directives: 
+`<wm-dialog>` is a component designed to display a popup dialog on request. The example below illustrates how the component is used to design the dialog content by using the very same [MatDialog directives](https://material.angular.io/components/dialog/api#directives): 
 
 ```html
 <!-- Opens the dialog on click -->
