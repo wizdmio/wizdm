@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef, forwardRef } from '@angular/core';
 import { MatDialog, MatDialogRef, MatDialogConfig, DialogRole, DialogPosition } from '@angular/material/dialog';
+import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef, forwardRef } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollStrategy } from '@angular/cdk/overlay';
 import { Direction } from '@angular/cdk/bidi';
@@ -27,6 +27,8 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 
   /** The dialog reference, when openend */
   public ref: DialogRef<D,R>;
+  /** Data available for injection into the child component. */
+  public data: D;
 
   constructor(readonly dialog: MatDialog/*, readonly viewContainerRef: ViewContainerRef*/) {}
 
@@ -34,48 +36,71 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
   
   /** ID for the dialog. If omitted, a unique one will be generated. */
   @Input() id: string;
+
   /** The ARIA role of the dialog element. */
   @Input() role: DialogRole = 'dialog';
+  
   /** Custom class for the overlay pane. */
   @Input() panelClass: string | string[] = ''
+  
   /** Whether the dialog has a backdrop. */
-  @Input() hasBackdrop: boolean = true;
+  @Input('hasBackdrop') set _hasBackdrop(value: boolean) { this.hasBackdrop = coerceBooleanProperty(value); }
+  hasBackdrop = true;
+  
   /** Custom class for the backdrop. */
   @Input() backdropClass: string = '';
+  
   /** Whether the user can use escape or clicking on the backdrop to close the modal. */
-  @Input() disableClose: boolean = false;
+  @Input('disableClose') set _disableClose(value: boolean) { this.disableClose = coerceBooleanProperty(value); }
+  disableClose: boolean = false;
+  
   /** Width of the dialog. */
   @Input() width: string = '';
+  
   /** Height of the dialog. */
   @Input() height: string = '';
+  
   /** Min-width of the dialog. If a number is provided, assumes pixel units. */
   @Input() minWidth: number | string;
+  
   /** Min-height of the dialog. If a number is provided, assumes pixel units. */
   @Input() minHeight?: number | string;
+  
   /** Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw. */
   @Input() maxWidth: number | string = '80vw';
+  
   /** Max-height of the dialog. If a number is provided, assumes pixel units. */
   @Input() maxHeight: number | string;
+  
   /** Position overrides. */
   @Input() position: DialogPosition;
+  
   /** Layout direction for the dialog's content. */
   @Input() direction: Direction;
+  
   /** ID of the element that describes the dialog. */
   @Input() ariaDescribedBy: string | null = null;
+  
   /** ID of the element that labels the dialog. */
   @Input() ariaLabelledBy: string | null = null;
+  
   /** Aria label to assign to the dialog element. */
   @Input() ariaLabel: string | null = null;
+  
   /** Whether the dialog should focus the first focusable element on open. */
-  @Input() autoFocus: boolean = true;
+  @Input('autoFocus') set _autoFocus(value: boolean) { this.autoFocus = coerceBooleanProperty(value); }
+  autoFocus: boolean = true;
+  
   /** Whether the dialog should restore focus to the previously-focused element, after it's closed. */
-  @Input() restoreFocus: boolean = false;
+  @Input('restoreFocus') set _restoreFocus(value: boolean) { this.restoreFocus = coerceBooleanProperty(value); }
+  restoreFocus: boolean = false;
+  
   /** Scroll strategy to be used for the dialog. */
   @Input() scrollStrategy: ScrollStrategy;
-   /** Whether the dialog should close when the user goes backwards/forwards in history. */
-  @Input() closeOnNavigation: boolean = true;
-  /** Data available for injection into the child component. */
-  public data: D;
+  
+  /** Whether the dialog should close when the user goes backwards/forwards in history. */
+  @Input('closeOnNavigation') set _closeOnNavigation(value: boolean) { this.closeOnNavigation = coerceBooleanProperty(value); }
+  closeOnNavigation: boolean = true;
 
   // -- End of MatDialogConfig implementaiton -- 
 
