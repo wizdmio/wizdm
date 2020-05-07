@@ -39,7 +39,7 @@ By itself the component does not render anything until its `open()` method is ca
 import { DialogModule } from '@wizdm/dialog';
 ```
 ## DialogComponent
-The `wmAnimate` component enables the animation of the target element.
+The `<wm-dialog>` component defines a pop-up dialog.
 
 ```typescript
 export type DialogRef<D=any, R=any> = MatDialogRef<D, R>;
