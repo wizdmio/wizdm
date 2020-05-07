@@ -23,7 +23,7 @@ export const FAKE_REF_FOR_CLOSE: any = {
 })
 export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 
-  @ViewChild(TemplateRef, { static: true }) template: TemplateRef<any>;
+  @ViewChild(TemplateRef) template: TemplateRef<any>;
 
   /** The dialog reference, when openend */
   public ref: DialogRef<D,R>;
