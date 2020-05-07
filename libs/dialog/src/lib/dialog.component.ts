@@ -45,7 +45,7 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
   
   /** Whether the dialog has a backdrop. */
   @Input('hasBackdrop') set _hasBackdrop(value: boolean) { this.hasBackdrop = coerceBooleanProperty(value); }
-  hasBackdrop = true;
+  hasBackdrop: boolean = true;
   
   /** Custom class for the backdrop. */
   @Input() backdropClass: string = '';
