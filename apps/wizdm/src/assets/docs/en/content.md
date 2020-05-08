@@ -50,45 +50,44 @@ const routes: RoutesWithContent = [
 export class HomeModule { }
 ```
 
+The package is designed to provide runtime content in multiple languages selecting the proper language by means of a route parameter placed at the very root of the url like https://mycooldomain.io/**en**/home” for English and “https://mycooldomain.io/**it**/home” for italian:
+
+->
+![Routing Diagram](assets/docs/images/routing-diagram.png#80)
+<-
+
 &nbsp;  
 
 # API Reference
-[AnimateModule](docs/aos#animatemodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
+[ContentModule](docs/content#contentmodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
 
 &nbsp;  
 
-## AnimateModule 
+## ContentModule 
 
 ```typescript
-import { AnimateModule } from '@wizdm/animate';
+import { ContentModule } from '@wizdm/content';
 ```
 
 The main module provides an optional `init()` static function to customize the module behvior:
 ```typescript
-static init(config?: AnimateConfig): ModuleWithProviders<AnimateModule>
+static init(config?: ContentConfig): ModuleWithProviders<ContentModule>
 ```
 **config**
 ```typescript
-interface AnimateConfig {
-  triggerMode?: 'scrolling'|intersectionObserver'|'auto';
-  offsetTop?: number;
-  offsetLeft?: number;
-  offsetRight?: number;
-  offsetBottom?: number;
+export interface ContentConfig {
+  selector?: string;
+  source?: string;
+  defaultValue?: string;
+  supportedValues?: string[];
 }
 ```
-* `triggerMode`: Specifies wich mechanism is going to be used for trigggering the animations while scrolling.
-
 |**Value**|**Description**|
 |:--|:--|
-|`'scrolling'`|Computes the visibility upon scrolling with the help of the [CdkScrolling](https://material.angular.io/cdk/scrolling/overview) package. In order to work the animate elements must belong to the main scrolling window or within a `cdkScrollable` child container|
-|`'intersectionObserver'`|Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method|
-|`'auto'`|(The default value). Tells the package to check for the best mode to be used|
-
-* `offsetTop`: A global offset, expressed in **pixels**, to shrink the triggering area from the top with.
-* `offsetLeft`: A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
-* `offsetRight`: A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
-* `offsetBottom`: A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.  
+|`'selector: string`|The route parameter used to catch the language. Defaults to 'lang' when unspecified|
+|`source: string`|The path from wich the loader will load the content files. Defaults to 'assets/i18n' when unspecified|
+|`defaultValue: string`|The defaultl selector value to be used when none is provided by the current route. Defaults to 'en' when unspecified|
+|`supportedValues: string[]`|An array of possible selector values to accept as valid. Any selector values not matching one of the suported ones will be automatically reverted to the `defaultValue`|
 
 &nbsp;  
 
