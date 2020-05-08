@@ -57,7 +57,10 @@ To achieve it, the package assumes the app complies with the following routing p
 ![Routing Diagram](assets/docs/images/routing-diagram.png#80)
 <-
 
-&nbsp;  
+The AppComponent template contains the first `<router-outlet>` where the Router will load a NavigatorComponent.
+The routing path of the NavigatorComponent is the `:lang` token, so, the Router will store the language code within a parameter (named lang) in the activated route.
+The NavigatorComponent template contains the second `<router-outlet>` where the router will load the actual pages, so, both the navigator and the pages we’ll have the opportunity to dynamically load their content based on the language code.
+&nbsp; 
 
 # API Reference
 [ContentModule](docs/content#contentmodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
