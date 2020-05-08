@@ -24,6 +24,8 @@ Use the `wmContent` structural directive to select the relevant content within t
 
 ---
 
+Includes the `content` in the routes using the `ContentRouterModule` in place of the regular `RouterModule` in the lazy loaded child modules:
+
 ```typescript
 // HomeModule.ts
 ...
