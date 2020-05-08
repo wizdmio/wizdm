@@ -1,4 +1,4 @@
-<!-- toc: toc.json -->
+<!-- toc: reference.json -->
 
 # Elements 
 [@wizdm/elements](https://github.com/wizdmio/wizdm/tree/master/libs/elements/src/lib) 

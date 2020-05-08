@@ -44,7 +44,7 @@ export class LanguageSelector extends ContentSelector {
         // Gets the language code from the route
         const requested = route.paramMap.get( this.config.selector );
         // Whenever the requested language is allowed...
-        if( this.isLanguageAllowed(requested) ) { 
+        if( this.isValueAllowed(requested) ) { 
 
           console.log('Requested language:', requested);
 
@@ -60,7 +60,7 @@ export class LanguageSelector extends ContentSelector {
         if( requested === 'auto' ) {
 
           // Gets the preferred user language from the profile, when authenticated, or the browser otherwise
-          const preferred = this.languageAllowed( detected );
+          const preferred = this.valueAllowed( detected );
           console.log('User preferred language:', preferred);
 
           // Patches the state url with the new language code

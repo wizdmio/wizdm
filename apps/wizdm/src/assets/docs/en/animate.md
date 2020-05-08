@@ -1,8 +1,8 @@
-<!-- toc: toc.json -->
+<!-- toc: reference.json -->
 
 # Animate 
 
-[Go to the API Reference](docs/aos#api-reference)
+[Go to the API Reference](docs/animate#api-reference)
 
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
@@ -88,7 +88,7 @@ The customizations above will affect the container's children elements only, so,
 &nbsp;  
 
 # API Reference
-[AnimateModule](docs/aos#animatemodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
+[AnimateModule](docs/animate#animatemodule) - [AnimateComponent](docs/animate#animatecomponent) - [AnimateDirective](docs/animate#animatedirective) - [AnimateService](docs/animate#animateservice)  
 
 &nbsp;  
 
@@ -159,12 +159,12 @@ export class AnimateComponent {
 |:--|:--|
 |`animating: boolean`|**True** when the animation is running|
 |`animated: boolean`|**True** after the animation completed. False while the animation is running|
-|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
-|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
-|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
+|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](docs/animate#supported-animations)| 
+|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/animate/#timing)|
+|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/animate/#timing)|
 |`@Input() disabled: boolean`|Disables the animation|
 |`@Input() paused: boolean`|When **true**, keeps the animation idle until the next replay triggers|
-|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
+|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/animate#animate-on-scroll)|
 |`@Input() once: boolean`|When **true**, prevents the animation to run again|
 |`@Input() set replay(replay: any)`|Replays the animation|
 |`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
