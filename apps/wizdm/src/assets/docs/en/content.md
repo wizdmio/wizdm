@@ -61,7 +61,7 @@ The package is designed to provide runtime content in multiple languages selecti
 # API Reference
 [ContentModule](docs/content#contentmodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
 
-&nbsp;  
+&nbsp;   
 
 ## ContentModule 
 
