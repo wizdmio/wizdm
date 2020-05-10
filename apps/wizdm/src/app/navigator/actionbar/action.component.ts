@@ -11,7 +11,7 @@ import { ActionbarDirective } from './actionbar.directive';
 })
 export class ActionComponent {
 
-  constructor(/*private actionbar: ActionbarDirective,*/ private media: MediaObserver) { }
+  constructor(private actionbar: ActionbarDirective, private media: MediaObserver) { }
 
   // Media queries to switch between desktop/mobile views
   public get mobile(): boolean { return this.media.isActive('xs'); }
@@ -27,5 +27,14 @@ export class ActionComponent {
   public disabled = false;
 
   /** Emits when clicked */
-  @Output() activate = new EventEmitter<MouseEvent>();
+  @Output() click = new EventEmitter<MouseEvent>();
+
+  public onClick(event: MouseEvent) {
+
+    event.stopPropagation();
+    this.click.emit(event);
+
+    // Notifies teh actionbar about the action that has been activated
+    this.actionbar.activate(this);
+  }
 }
