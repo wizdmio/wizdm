@@ -31,7 +31,7 @@ export abstract class ContentLoader {
     return this.config.supportedValues.find( allowed => allowed === lang ) || this.config.defaultValue;
   }
 
-  /** Abstract loading module funciton */
+  /** Abstract loading module function */
   public abstract loadFile(path: string, lang: string, name: string): Observable<any>;
 }
 
