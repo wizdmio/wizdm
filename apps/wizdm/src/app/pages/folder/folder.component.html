@@ -5,11 +5,11 @@
   <ng-template wmActionbar>
     <ng-container *ngIf="msgs.actions || {} as actions">
 
-      <wm-action color="primary" [icon]="actions.delete?.icon || 'delete'" [disabled]="" (click)="dlgDelete.open()">
+      <wm-action color="primary" [icon]="actions.delete?.icon || 'delete'" [disabled]="" (activate)="dlgDelete.open()">
         {{ actions.delete?.caption || 'Delete' }}
       </wm-action>
 
-      <wm-action color="primary" [icon]="actions.upload?.icon || 'cloud_upload'" (click)="openfile.open()">
+      <wm-action color="primary" [icon]="actions.upload?.icon || 'cloud_upload'" (activate)="openfile.open()">
         {{ actions.upload?.caption || 'Upload' }}
       </wm-action>
 

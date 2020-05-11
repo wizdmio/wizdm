@@ -6,7 +6,7 @@
   <ng-template wmActionbar>
     <ng-container *ngIf="msgs.actions || {} as actions">
       
-      <wm-action color="primary" [icon]="actions.clear?.icon || 'delete_forever'" [disabled]="!application" (click)="dlgClear.open()">
+      <wm-action color="primary" [icon]="actions.clear?.icon || 'delete_forever'" [disabled]="!application" (activate)="dlgClear.open()">
         {{ actions.clear?.caption || 'Clear Application' }}
       </wm-action>
 

@@ -10,7 +10,7 @@
         {{ actions.signOut?.caption || 'Sign-out' }}
       </wm-action>
 
-      <wm-action color="primary" [icon]="actions.save?.icon || 'save'" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
+      <wm-action color="primary" [icon]="actions.save?.icon || 'save'" [disabled]="form?.invalid || form?.pristine" (activate)="updateProfile()">
         {{ actions.save?.caption || 'Save' }}
       </wm-action>
 
