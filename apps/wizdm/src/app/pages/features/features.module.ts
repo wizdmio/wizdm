@@ -6,7 +6,7 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { RedirectModule } from '@wizdm/redirect';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { FeaturesComponent } from './features.component';
 

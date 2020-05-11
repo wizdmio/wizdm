@@ -11,7 +11,7 @@ import { RedirectModule } from '@wizdm/redirect';
 import { GtagModule } from '@wizdm/gtag';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { DialogModule } from '@wizdm/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';

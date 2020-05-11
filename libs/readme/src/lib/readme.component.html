@@ -1,21 +1,31 @@
+
+<!-- Projects the parent's content when no rendering occurs -->
 <ng-content *ngIf="segments.length === 0"></ng-content>
 
+<!-- Loops on the segments -->
 <ng-container *ngFor="let segment of segments">
 
   <ng-container [ngSwitch]="segment.type">
 
-    <ng-container *ngSwitchCase="'text'">{{ interpolate(segment.content) }}</ng-container>
+    <!-- Renders the text with emoji support from EmojiTextModule -->
+    <span *ngSwitchCase="'text'" [wm-emoji-text]="interpolate(segment.content)"></span>
 
+    <!-- Styles the text as Bold -->
     <b *ngSwitchCase="'bold'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></b>
 
+    <!-- Styles the text as Italic -->
     <i *ngSwitchCase="'italic'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></i>
 
+    <!-- Styles the text as Undelined -->
     <u *ngSwitchCase="'underline'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></u>
 
+    <!-- Styles the text as Strikethrough -->
     <s *ngSwitchCase="'strikethrough'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></s>
 
+    <!-- Stles teh text as an Anchor -->
     <a *ngSwitchCase="'link'" [href]="segment.url" [context]="context" [wm-readme]="segment.content" (click)="navigate(segment.url)"></a>
 
+    <!-- Adds a line break -->
     <br *ngSwitchCase="'break'" />
 
   </ng-container>

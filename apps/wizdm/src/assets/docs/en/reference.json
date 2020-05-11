@@ -14,7 +14,9 @@
     { "label": "Introduction", "link": "docs/content/intro" },
     { "label": "Markdown rendering", "link": "docs/content/markdown" },
     { "label": "Syntax highlighting", "link": "docs/content/prism" },
-    { "label": "Dynamic content", "link": "docs/content/content" }
+    { "label": "Dynamic content", "link": "docs/content/content" },
+    { "label": "Text formatting", "link": "docs/content/readme" },
+    { "label": "Emoji support", "link": "docs/content/emoji" }
   ]},
 
   { "label": "Navigation", "items": [

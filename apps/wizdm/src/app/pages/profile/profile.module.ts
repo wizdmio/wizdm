@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { OpenFileModule } from '@wizdm/elements/openfile';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
 import { RedirectModule } from '@wizdm/redirect';

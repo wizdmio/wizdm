@@ -9,7 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableModule } from '@wizdm/editable';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
 import { AuthGuard, loggedIn } from 'app/auth/auth-guard';
 import { EditorComponent } from './editor.component';

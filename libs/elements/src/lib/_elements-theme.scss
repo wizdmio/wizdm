@@ -5,7 +5,6 @@
 @import './spinner/spinner-theme';
 @import './thumbnail/thumbnail-theme';
 @import './inkbar/inkbar-theme';
-@import './readme/readme-theme';
 @import './illustration/illustration-theme';
 @import './balloon/balloon-theme';
 @import './highlight/highlight-theme';
@@ -19,7 +18,6 @@
   @include wm-spinner-theme($theme);
   @include wm-thumbnail-theme($theme);
   @include wm-inkbar-theme($theme);
-  @include wm-readme-theme($theme);
   @include wm-balloon-theme($theme);
   @include wm-highlight-theme($theme);
   @include wm-illustration-theme($theme, ('stroke', 'fill', 'stop-color'));

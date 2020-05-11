@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { OpenFileModule } from '@wizdm/elements/openfile';
 import { DialogModule } from '@wizdm/dialog';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { ThumbnailModule } from '@wizdm/elements/thumbnail';
 import { SpinnerModule } from '@wizdm/elements/spinner';
 import { ActionbarModule } from 'app/navigator/actionbar';

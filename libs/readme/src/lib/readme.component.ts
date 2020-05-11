@@ -1,6 +1,4 @@
 import { Component, Input, Output, EventEmitter, Optional } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ThemePalette } from '@angular/material/core'
 import { rmSegment } from './readme-types';
 
 /** Navigation service token */
@@ -35,11 +33,6 @@ export class ReadmeComponent {
   /** Emits the url to navigate to */
   @Output('navigate') nav = new EventEmitter<string>();
 
-  /*
-  @Input() color: ThemePalette;
-  @Input('disabled') set disabling(value: boolean) { this.disabled = coerceBooleanProperty(value); }
-  public disabled = false;
-*/
   /** Compiles the input text into segments */
   private compile(source: string): rmSegment[] {
 

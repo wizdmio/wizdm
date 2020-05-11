@@ -13,7 +13,7 @@ import { DatabaseModule } from '@wizdm/connect/database';
 import { StorageModule } from '@wizdm/connect/storage';
 import { TeleportModule } from '@wizdm/teleport';
 import { DoorbellModule } from '@wizdm/doorbell';
-import { ReadmeNavigator } from '@wizdm/elements/readme';
+import { ReadmeNavigator } from '@wizdm/readme';
 import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';

@@ -1,6 +1,5 @@
-import { Injectable, InjectionToken, Inject } from '@angular/core';
+import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
 import { EmojiRegex, EmojiNative } from './emoji-utils';
-import { DOCUMENT } from '@angular/common';
 
 export interface EmojiConfig {
 
@@ -16,7 +15,7 @@ export class EmojiUtils {
   private readonly filePath: string;
   private readonly fileExt: string;
 
-  constructor(@Inject(EmojiConfigToken) private config: EmojiConfig, 
+  constructor(@Optional() @Inject(EmojiConfigToken) config: EmojiConfig, 
               @Inject(EmojiNative) readonly native: boolean,
               @Inject(EmojiRegex) readonly regex: RegExp) { 
 
@@ -72,30 +71,4 @@ export class EmojiUtils {
       callbackfn(match[0], match.index);
     }
   }
-
-  /*
-  public loadEmojiFile(path: string): Observable<string> {
-
-    return this.http.get(path, { responseType: "blob" })
-      .pipe( switchMap( blob => this.encodeDataURI(blob) ) );
-  }
-
-  private encodeDataURI(blob: Blob): Observable<string> {
-
-    return new Observable( subscriber => {
-
-      const fr = new FileReader();
-
-      fr.onerror = () => subscriber.error(fr.error);
-      fr.onloadend = () => {
-        subscriber.next(fr.result as string);
-        subscriber.complete();
-      }
-      fr.readAsDataURL(blob);
-
-      return () => fr.abort();
-    });
-  }
-  */
-
 }

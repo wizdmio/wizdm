@@ -12,7 +12,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { AuthGuard, loggedIn } from 'app/auth/auth-guard';
 import { ApplyComponent } from './apply.component';
 import { DialogModule } from '@wizdm/dialog';

@@ -7,7 +7,7 @@ import { GtagModule } from '@wizdm/gtag';
 import { RedirectModule } from '@wizdm/redirect';
 import { AnimateModule } from '@wizdm/animate';
 import { IconModule } from '@wizdm/elements/icon';
-import { ReadmeModule } from '@wizdm/elements/readme';
+import { ReadmeModule } from '@wizdm/readme';
 import { IllustrationModule } from '@wizdm/elements/illustration';
 import { BackgroundModule } from 'app/navigator/background';
 import { HomeComponent } from './home.component';
