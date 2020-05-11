@@ -11,7 +11,7 @@
   { "label": "Authentication", "link": "docs/auth" },
 
   { "label": "Content Management", "items": [
-    { "label": "Introduction", "link": "link": "docs/content/intro" },
+    { "label": "Introduction", "link": "docs/content/intro" },
     { "label": "Markdown rendering", "link": "docs/content/markdown" },
     { "label": "Syntax highlighting", "link": "docs/content/prism" },
     { "label": "Dynamic content", "link": "docs/content/content" }
