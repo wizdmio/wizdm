@@ -365,6 +365,18 @@
       "sourceRoot": "libs/prism/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "libs/prism/tsconfig.lib.json",
+            "project": "libs/prism/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/prism/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -577,6 +589,18 @@
       "sourceRoot": "libs/emoji/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/emoji/tsconfig.lib.json",
+            "project": "libs/emoji/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/emoji/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

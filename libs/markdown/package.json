@@ -1,6 +1,10 @@
 {
   "name": "@wizdm/markdown",
+  "description": "Markdown renderer for Angular",
   "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["Angular", "Markdown"],
+  "homepage": "https://wizdm.io/docs/content/markdown",
   "peerDependencies": {
     "@angular/common": "^9.1.4",
     "@angular/core": "^9.1.4",
@@ -11,5 +15,12 @@
     "remark-parse": "^7.0.2",
     "remark-sub-super": "^1.0.19",
     "unified": "^8.4.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/libs/markdown"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
   }
 }
