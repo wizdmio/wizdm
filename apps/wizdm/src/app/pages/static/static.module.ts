@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDividerModule } from '@angular/material/divider';
 import { UrlSegment, UrlMatchResult } from '@angular/router';
-import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { ContentRouterModule, RoutesWithContent, FileLoader } from '@wizdm/content';
 import { ActionLinkModule } from '@wizdm/actionlink';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
@@ -61,6 +61,7 @@ const routes: RoutesWithContent = [{
     TocModule,
     ContentRouterModule.forChild(routes)
   ],
-  providers: [ StaticResolver ]
+  // Provides the @content/FileLoder locally to avoid mixing up Dynamic content and Static content within the same cache
+  providers: [ FileLoader, StaticResolver ]
 })
 export class StaticModule { }

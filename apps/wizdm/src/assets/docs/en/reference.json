@@ -21,7 +21,7 @@
 
   { "label": "Navigation", "items": [
 
-    { "label": "Overview", "link": "docs/navigator" },
+    { "label": "Overview", "link": "docs/navigator/overview" },
     { "label": "Guarding", "link": "docs/navigator/guards" },
     { "label": "Action Bar", "link": "docs/navigator/actionbar" },
     { "label": "Action Links", "link": "docs/navigator/actionlink" },

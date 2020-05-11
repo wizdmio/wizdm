@@ -6,7 +6,7 @@ Data content in Wizdm is divided in *Static* content and *Dynamic* content.
 ## Static Content
 For static content we mean pages of informative content with minimal to no interaction capabilities such as the *About* or the *Terms and Conditions* page. This very reference guide belongs to the static content as well. 
 
-The rendering engine is the [@wizdm/markdowmn](docs/content/markdown) package processing source md files statically hosted in the */assets/docs* folder. Syntax highlighting is provided by the [@wizdm/prism](docs/content/prism) package when needed. 
+The rendering engine is the [@wizdm/markdown](docs/content/markdown) package processing source md files statically hosted in the */assets/docs* folder. Syntax highlighting is provided by the [@wizdm/prism](docs/content/prism) package when needed. 
 
 ### Routing
 Every route configuration not matching any of the dynamic page routes will end up feeding the *StaticPageModule*. While loading the module, the *Router* will invoke the [StaticResolver]() attempting to load the content from a md file matching the given route segments. 
@@ -40,7 +40,7 @@ With this matcher, the module matches every input url, no matter the depth, and 
 In the eventuality the loader will fail to load the requested file, the routing will be redirected to the *NotFound* page.
 
 ### Table Of Content
-Optionally, static content files may belong to a *Table Of Content* object. The table of content is a json file, located in the *assets/docs* folder too, describing the relationship among static content files and enabling foreward and backward navigation: 
+Optionally, static content files may refer to a *Table Of Content* object. The table of content is a json file, located in the *assets/docs* folder too, describing the relationship among static content files and enabling foreward and backward navigation: 
 
 ->
 
