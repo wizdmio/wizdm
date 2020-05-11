@@ -57,6 +57,20 @@ Optionally, static content files may belong to a *Table Of Content* object. The 
 ###### Example of toc.json file
 <-
 
+Once the table of content is load, navigation is possible by means of the following [ActionLinks](docs/navigator/actionlink):
+* `docs/toc?go=next` - to navigate towards the next topic.
+* `docs/toc?go=back` - to navigate back to the previous topic.
+
+Static content files use comments to declare which *table of content* they belong to:
+```markdown
+<!--- toc: global.json --->
+
+# Title
+This is the static content...
+```
+->
+###### How to declare the *table of content*
+<-
 
 ## Dynamic Content
 managed in two ways:
