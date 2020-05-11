@@ -13,6 +13,8 @@ Every route configuration not matching any of the dynamic page routes will end u
 
 To do so, a custom [url matcher](https://angular.io/api/router/UrlMatcher) is used by the module:
 
+->
+
 ```typescript
 /** Static content route matcher */
 export function staticMatcher(url: UrlSegment[]): UrlMatchResult {
@@ -29,14 +31,16 @@ export function staticMatcher(url: UrlSegment[]): UrlMatchResult {
   return { consumed: url, posParams };
 }
 ```
-->
 ###### The staticMatcher function
+
 <-
 
 With this matcher, the module matches every input url, no matter the depth, and turns the segments into enumerated position parameters. These parameters will then be chained by the *StaticResolver* to build the full path of the file to load.
 
 ### Table Of Content
 Optionally, static content files may belong to a *Table Of Content* object. The table of content is a json file, located in the *assets/docs* folder too, describing the relationship among static content files and enabling foreward and backward navigation: 
+
+->
 
 ```javascript
 [
@@ -53,8 +57,8 @@ Optionally, static content files may belong to a *Table Of Content* object. The 
 ...
 ]
 ```
-->
 ###### Example of toc.json file
+
 <-
 
 Once the table of content is load, navigation is possible by means of the following [ActionLinks](docs/navigator/actionlink):
@@ -62,17 +66,18 @@ Once the table of content is load, navigation is possible by means of the follow
 * `docs/toc?go=back` - to navigate back to the previous topic.
 
 Static content files use comments to declare which *table of content* they belong to:
+
+->
+
 ```markdown
 <!--- toc: global.json --->
 
 # Title
 This is the static content...
 ```
-->
 ###### How to declare the *table of content*
+
 <-
 
 ## Dynamic Content
-managed in two ways:
-1. Dynamic content is loaded at run-time during routing for the target page to consume it within the template.
-1. Static content
+Dynamic content...
