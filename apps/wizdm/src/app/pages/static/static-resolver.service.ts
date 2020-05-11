@@ -86,6 +86,8 @@ export class StaticResolver implements Resolve<StaticContent> {
 
       this.parse(pairs, comment[1], pair => {
 
+        if( out[ pair[1] ] ) { return; }
+
         out[ pair[1] ] = pair[2];
 
       });

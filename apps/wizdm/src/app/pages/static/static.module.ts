@@ -10,6 +10,7 @@ import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
 import { PrismTsModule } from '@wizdm/prism/languages';
 import { PrismScssModule } from '@wizdm/prism/languages';
+import { PrismMdModule } from '@wizdm/prism/languages';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { SizeLockModule } from 'app/utils/size-lock';
 import { TeleportModule } from '@wizdm/teleport';
@@ -51,6 +52,7 @@ const routes: RoutesWithContent = [{
     ActionLinkModule,
     PrismTsModule,
     PrismScssModule,
+    PrismMdModule,
     GtagModule,
     AnimateModule,
     SidenavModule,
