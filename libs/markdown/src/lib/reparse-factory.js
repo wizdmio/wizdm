@@ -22,14 +22,14 @@
 	const unified = require('unified');
 	const parse   = require('remark-parse');
 	const subsup  = require('remark-sub-super');
-  const align   = require('remark-align');
+	const align   = require('remark-align');
 
   // Setupd the markdown parser configured with the given options @see {https://github.com/remarkjs/remark/tree/master/packages/remark-parse}
   function reparseFactory(options) {
     return unified()
-  	  .use(parse, options)
-  	  .use(subsup)
-      .use(align)
+			.use(parse, options)
+			.use(subsup)
+			.use(align)
   	  .freeze();
   }
 

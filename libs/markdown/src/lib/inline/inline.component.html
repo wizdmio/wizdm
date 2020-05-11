@@ -23,8 +23,8 @@
     <!-- Footnote Reference -->
     <sup *ngSwitchCase="'footnoteReference'">[{{ tree.footnoteIndex(child) }}]</sup>
     
-    <!-- Plain text -->
-    <ng-container *ngSwitchCase="'text'">{{ _T(child.value) }}</ng-container>
+    <!-- Plain text with emoji support by EmojiTextModule-->
+    <span *ngSwitchCase="'text'" [wm-emoji-text]="_T(child.value)"></span>
 
     <!-- Line Break -->
     <br *ngSwitchCase="'break'" />

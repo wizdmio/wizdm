@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders, Inject, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PrismModule } from '@wizdm/prism';
+import { EmojiTextModule } from '@wizdm/emoji/text';
 import { MarkdownRoot } from './markdown.component';
 import { MarkdownBlock } from './block/block.component';
 import { MarkdownInline } from './inline/inline.component';
@@ -10,7 +11,8 @@ import { reparseFactory } from './reparse-factory';
 @NgModule({
   imports: [ 
     CommonModule,
-    PrismModule
+    PrismModule,
+    EmojiTextModule
   ],
   declarations: [
     MarkdownRoot,

@@ -7,9 +7,9 @@
     "@wizdm/emoji": "^1.0.0",
     "@wizdm/prism": "^1.0.0",
     "path": "^0.12.7",
-    "remark-align": "^1.2.2",
-    "remark-parse": "^5.0.0",
-    "remark-sub-super": "^1.0.13",
-    "unified": "^7.0.0"
+    "remark-align": "^1.2.13",
+    "remark-parse": "^7.0.2",
+    "remark-sub-super": "^1.0.19",
+    "unified": "^8.4.2"
   }
 }
