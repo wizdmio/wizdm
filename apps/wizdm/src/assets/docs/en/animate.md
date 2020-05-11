@@ -120,10 +120,10 @@ interface AnimateConfig {
 |`'intersectionObserver'`|Triggers the animation with the help of the [IntersectionObserver API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), whenever available. In the unlikely event the browser does not support this API, the triggering service will revert to the `scrolling` method|
 |`'auto'`|(The default value). Tells the package to check for the best mode to be used|
 
-* `offsetTop`: A global offset, expressed in **pixels**, to shrink the triggering area from the top with.
-* `offsetLeft`: A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
-* `offsetRight`: A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
-* `offsetBottom`: A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.  
+* `offsetTop?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the top with.
+* `offsetLeft?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
+* `offsetRight?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
+* `offsetBottom?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.  
 
 &nbsp;  
 
@@ -241,11 +241,11 @@ export interface AnimateOptions {
 }
 ```
 
-* `root`: An optional element which bounding rectanlge will be used as the animation view. When undefined or null, the overall viewport will be used.
-* `left`: An offset, expressed in **pixels**, to shrink the triggering area from the left with. This value overrides the global `offsetLeft` value.
-* `top`: An offset, expressed in **pixels**, to shrink the triggering area from the top with. This value overrides the global `offsetTop` value.
-* `right`: An offset, expressed in **pixels**, to shrink the triggering area from the right with. This value overrides the global `offsetRight` value.
-* `bottom`: An offset, expressed in **pixels**, to shrink the triggering area from the bottom with. This value overrides the global `offsetBottom` value.
+* `root?: Element` - An optional element which bounding rectanlge will be used as the animation view. When undefined or null, the overall viewport will be used.
+* `left?: number` - An offset, expressed in **pixels**, to shrink the triggering area from the left with. This value overrides the global `offsetLeft` value.
+* `top?: number` - An offset, expressed in **pixels**, to shrink the triggering area from the top with. This value overrides the global `offsetTop` value.
+* `right?: number` - An offset, expressed in **pixels**, to shrink the triggering area from the right with. This value overrides the global `offsetRight` value.
+* `bottom?: number` - An offset, expressed in **pixels**, to shrink the triggering area from the bottom with. This value overrides the global `offsetBottom` value.
 
 ---
 
@@ -253,8 +253,8 @@ export interface AnimateOptions {
 public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
 ```
 Observable operator to be used for triggering the animation on scroll. 
-* `elm`: The element for which the animation will be triggered.
-* `threshold`: The visibility ratio to trigger the animation with. 
+* `elm: ElementRef<HTMLElement>` - The element for which the animation will be triggered.
+* `threshold: number` - The visibility ratio to trigger the animation with. 
 
 The returned `OperatorFunction` accepts an input trigger to emit an output trigger. In case the threshold value is 0, the output trigger simply mirrors the input one. For values greater than 0, the service checks the given element's area against the animation view emitting **true** when the two rectangles intersect for an area equal or greater than the threshold value, emitting **false** when the element's area is totally out of the view area. 
 

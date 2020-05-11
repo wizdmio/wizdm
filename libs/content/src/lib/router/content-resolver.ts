@@ -2,8 +2,8 @@ import { InjectionToken, inject, Type } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { SelectorResolver } from './selector-resolver.service';
 import { ContentLoader } from '../loader/content-loader.service';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 /** Builds a content resolver instance for the specified source file on the fly */
 export function contentResolver<T = any>(source: string, file: string, providedIn: 'root'|Type<T> = 'root') {
@@ -25,6 +25,11 @@ export class ContentResolver implements Resolve<any> {
     const lang = this.selector.resolve(route);
     // Loads the specified module from the language forlder
     return this.loader.loadFile(this.source, lang, this.file)
-      .pipe( take(1) );
+      .pipe( 
+        // Makes sure the loading always completes to avoid the routing got stuck
+        take(1),
+        // Whereve happens (the requested file does not exist) returns an empty object
+        catchError( () => of({}) ) 
+      );
   }
 }

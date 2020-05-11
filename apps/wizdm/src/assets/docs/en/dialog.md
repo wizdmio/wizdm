@@ -130,9 +130,9 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 public open(data?: D): DialogRef<D,R>;
 ```
 Opens the dialog returning its reference.
-* `data`: Optional generic data for the dialog to be consumed.
+* `data: D` - Optional generic data for the dialog to be consumed.
 
-Returns a DialogRef corresponding to the underlying [MatDialogRef](https://material.angular.io/components/dialog/api#MatDialogRef) object. 
+Returns a 'DialogRef<D,R>' corresponding to the underlying [MatDialogRef](https://material.angular.io/components/dialog/api#MatDialogRef) object. 
 
 ---
 
@@ -140,7 +140,7 @@ Returns a DialogRef corresponding to the underlying [MatDialogRef](https://mater
 public close(value: R): void;
 ```
 Closes the dialog passing along the output value.
-* `value`: The generic value returned by the dialog reference after closin the dialogg. This same value is emitted by the `closedChange` event.
+* `value: R` - The generic value returned by the dialog reference after closin the dialogg. This same value is emitted by the `closedChange` event.
 
 ---
 ->

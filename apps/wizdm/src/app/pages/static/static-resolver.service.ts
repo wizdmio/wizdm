@@ -10,15 +10,8 @@ export interface StaticContent {
   ref?: string;
 }
 
-export interface StaticCache {
-  lang: string;
-  [key:string]: string;
-}
-
 @Injectable()
 export class StaticResolver implements Resolve<StaticContent> {
-
-  private cache: StaticCache;
   
   constructor(private router: Router, private selector: SelectorResolver, private loader: FileLoader) { }
 
@@ -37,16 +30,8 @@ export class StaticResolver implements Resolve<StaticContent> {
     // Resolves the source file path from the route
     const path = this.resolvePath(route.paramMap);
 
-    console.log("Static requesting:", root, lang, path);
-
-    // Resets the cache whenever the requested language changes
-    // Caching the content results in the following advantages:
-    // 1. Skipping http.get() requests for already cached content provided the static module hasn't been reloaded
-    // 2. Skipping markdown re-rendering of unchanged content (likely the toc) since the cached string doesn't change
-    if(lang !== this.cache?.lang) { this.cache = { lang }; }
-    
     // Loads the main .md file
-    return this.loader.loadFile(root, lang, path.replace(/\.\w+$/, '') + '.md').pipe(
+    return this.loader.loadFile(root, lang, path + '.md').pipe(
       // Gets the body contents...
       switchMap( body => {
 

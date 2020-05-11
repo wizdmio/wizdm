@@ -4,7 +4,7 @@
 
 [Go to the API Reference](docs/content#api-reference)
 
-Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load json files from assets while routing lazily loaded modules. The content is then rendered accessible within the same module components' template via the `wmContent` structural directive.
+Content is loaded at runtime by the [Router](https://angular.io/api/router/Router). `@wizdm/content` package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
 
 ## Usage example
 Use the `wmContent` structural directive to select the relevant content within the template: 
@@ -50,20 +50,27 @@ const routes: RoutesWithContent = [
 export class HomeModule { }
 ```
 
+## Multiple Languages
+
 The package is designed to provide runtime content in multiple languages selecting the proper language by means of a route parameter placed at the very root of the url like "https\://mycooldomain.io/**en**/home” for English and “https\://mycooldomain.io/**it**/home” for italian. 
-To achieve it, the package assumes the app complies with the following routing pattern:
+
+To achieve it, the package assumes the app complies with the following pattern:
 
 ->
 ![Routing Diagram](assets/docs/images/routing-diagram.png#80)
 <-
 
-The AppComponent template contains the first `<router-outlet>` where the Router will load a NavigatorComponent.
-The routing path of the NavigatorComponent is the `:lang` token, so, the Router will store the language code within a parameter (named lang) in the activated route.
-The NavigatorComponent template contains the second `<router-outlet>` where the router will load the actual pages, so, both the navigator and the pages we’ll have the opportunity to dynamically load their content based on the language code.
+The AppComponent template contains the first `<router-outlet>` where the *Router* will load a *NavigatorComponent*. 
+The routing path of the *NavigatorComponent* is the `:lang` token, so, the *Router* will store the language code within a parameter (named *lang*) in the activated route. 
+The *NavigatorComponent* template contains the second `<router-outlet>` where the router will load the actual pages, so, both the navigator and the pages we’ll have the opportunity to dynamically load their content based on the language code. 
+
+## Content Loading
+The requested content is loaded by means of [resolvers](https://angular.io/guide/router#resolvers) during routing. Which content to load is specified in the [RoutesWithContent]() array of each routed feature module. The proper resolvers are created at run-time while lazily loading the module.
+
 &nbsp; 
 
 # API Reference
-[ContentModule](docs/content#contentmodule) - [AnimateComponent](docs/aos#animatecomponent) - [AnimateDirective](docs/aos#animatedirective) - [AnimateService](docs/aos#animateservice)  
+[ContentModule](docs/content#contentmodule) - [ContentDirective](docs/content#contentdirective) - [ContentLoader](docs/content#contentloader) - [FileLoader](docs/content#fileloader) - [ContentConfigurator](docs/content#contentconfigurator) - [SelectorResolver](docs/content#selectorresolver) - [ContentSelector](docs/content#contentselector) - [ContentResolver](docs/content#contentresolver) - [ContentRouterModule](docs/content#contentroutermodule)
 
 &nbsp;   
 
@@ -88,143 +95,252 @@ export interface ContentConfig {
 ```
 |**Value**|**Description**|
 |:--|:--|
-|`'selector: string`|The route parameter used to catch the language. Defaults to 'lang' when unspecified|
-|`source: string`|The path from wich the loader will load the content files. Defaults to 'assets/i18n' when unspecified|
-|`defaultValue: string`|The defaultl selector value to be used when none is provided by the current route. Defaults to 'en' when unspecified|
-|`supportedValues: string[]`|An array of possible selector values to accept as valid. Any selector values not matching one of the suported ones will be automatically reverted to the `defaultValue`|
+|`selector: string`|The route parameter used to catch the language. Defaults to *lang* when unspecified|
+|`source: string`|The path from wich the loader will load the content files. Defaults to *assets/i18n* when unspecified|
+|`defaultValue: string`|The defaultl selector value to be used when none is provided by the current route. Defaults to *en* when unspecified|
+|`supportedValues: string[]`|An array of possible selector values to accept as valid. Any selector value not matching a suported one will be automatically reverted to the `defaultValue`|
 
 &nbsp;  
 
-## AnimateComponent
-The `wmAnimate` component enables the animation of the target element.
+## ContentDirective
+The `wmContent` directive selects the loaded content providing it to the template under the requested name. The syntax is similar to `*ngIf`: 
 
-```typescript
-@Component({
- selector: '[wmAnimate]',
- template: '<ng-content></ng-content>',
- animations: [...]
-})
-export class AnimateComponent {
+->
+`*wmContent="let msgs select 'home'"`
+<-
 
-  public animating;
-  public animated;
-
-  @Input('wmAnimate') animate: wmAnimations;
-  @Input() set speed(speed: wmAnimateSpeed);
-  @Input() set delay(delay: string);
-  @Input() disabled: boolean;
-  @Input() paused: boolean;
-  @Input() set aos(threashold: number);
-  @Input() once: boolean;
-  @Input() set replay(replay: any);
-  
-  @Output() start: EventEmitter<void>;  
-  @Output() done: EventEmitter<void>; 
-}
-```
-
-|**Properties**|**Description**|
-|:--|:--|
-|`animating: boolean`|**True** when the animation is running|
-|`animated: boolean`|**True** after the animation completed. False while the animation is running|
-|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](docs/aos#supported-animations)| 
-|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/aos/#timing)|
-|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/aos/#timing)|
-|`@Input() disabled: boolean`|Disables the animation|
-|`@Input() paused: boolean`|When **true**, keeps the animation idle until the next replay triggers|
-|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/aos#animate-on-scroll)|
-|`@Input() once: boolean`|When **true**, prevents the animation to run again|
-|`@Input() set replay(replay: any)`|Replays the animation|
-|`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
-|`@Output() done: EventEmitter<void>`|Emits at the end of the animation|  
-
-&nbsp;  
-
-## AnimateDirective
-The `wmAnimateView` directive to customize the triggering viewport.
+selects the property `home` from the resolved content data making it available within the template as `msgs`. 
 
 ```typescript
 @Directive({
-  selector: '[wmAnimateView]'
+  selector: '[wmContent]',
+  providers: [ ContentStreamer ]
 })
-export class AnimateDirective {
+export class ContentDirective {
 
-  @Input() useElement: boolean;
-  @Input() top: number;
-  @Input() left: number;
-  @Input() bottom: number;
-  @Input() right: number;
+  public $implicit: any;
+  public get language(): string;
+
+  @Input() wmContentOr: any;
+  @Input() set wmContentSelect(selector: string);
+  @Input() set wmContentStream(selector: string);
 }
 ```
 
 |**Properties**|**Description**|
 |:--|:--|
-|`@Input() useElement: boolean`|When **true** uses the element's bounding rect as the animation view|
-|`@Input() top: number`|Optional top offset|
-|`@Input() left: number`|Optional left offset|
-|`@Input() bottom: number`|Optional bottom offset|
-|`@Input() right: number`|Optional right offset|  
+|`$implicit: any`|The `$implicit` variable provided within the context ov the child view|
+|`language: string`|Read-only value returning the currently loaded language|
+|`@Input() wmContentSelect: string`|Name of the property to select the content from fo be resolved as an Object| 
+|`@Input() wmContentStream: string`|Name of the property to select the content from to be returned as an Observable|
+|`@Input() wmContentOr: any`|Default value to return in case the requested selection isn't defined| 
 
 &nbsp;  
 
-## AnimateService
-The service providing the triggering logic.
+## ContentStreamer
+The service, provided within the ContentDirective, extracting the resolved data from the [ActivatedRoute](https://angular.io/api/router/ActivatedRoute).
 
 ```typescript
-@Injectable({
-  providedIn: 'root'
-})
-export class AnimateService {
+@Injectable()
+export class ContentStreamer {
 
-  public get useIntersectionObserver(): boolean;
-  public get useScrolling(): boolean;
+  constructor(readonly route: ActivatedRoute, readonly config: ContentConfigurator) {}
+  
+  get data(): any;
+  get data$(): Observable<any>;
 
-  public setup(options: AnimateOptions);
-  public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>;
+  get language(): string;
+  get language$(): Observable<string>;
+
+  public select(selector: string, data: any): any;
+  public stream(selector: string): Observable<any>;
 }
 ```
 
 |**Properties**|**Description**|
 |:--|:--|
-|`get useIntersectionObserver(): boolean`|**True** when the trigger is provided using the IntersectionObserver API|
-|`get useScrolling(): boolean`|**True** when the trigger is provided using cdk/scrolling package|
+|`route: ActivatedRoute`|The activated route the service is going to exrtact the data from. Make sure the service is provided within the target component for the ActivateRoute to be the correct one|
+|`config: ContentConfigurator`|The content configurator service|
+|`data: any`|The data payload extracted from the activated route snapshot|
+|`data$: Observable<any>`|An observable resolving to the data payload from the activated route|
+|`language: string`|The current language locale as from the route snapshot|
+|`language$: Obseravble<string>`|An observable resolving to the current language locale resolving form the route| 
+
+### Methods 
+
+---
+
+```typescript
+public select(selector: string, data?: any): any;
+```
+
+Extracts the requested content from the routing data.
+* `selector: string` - The path to the property to extract the data from. Use the dot syntax (*'root.child.child'*) to dig several levels deep.
+* `data?: any` - Optional object to extract the requested data from. Defaults to the data coming from the activated route when left undefined.
+
+---
+
+```typescript
+public stream(selector: string): Observable<any>;
+```
+
+Returns an observable extracting the requested content from the routing data.
+* `selector: string` - The path to the property to extract the data from. Use the dot syntax (*'root.child.child'*) to dig several levels deep.
+
+---
+
+&nbsp; 
+
+## ContentLoader
+The abstract class defining the content loading interface.
+
+```typescript
+
+export interface LoaderCache {
+  [key:string]: string;
+  lang: string;
+}
+
+export abstract class ContentLoader {
+
+  constructor(readonly config: ContentConfigurator);
+
+  public get cache(): LoaderCache;
+  public get language(): string;
+
+  public flush(lang: string): LoaderCache;
+
+  public languageAllowed(lang: string): string;
+  public abstract loadFile(path: string, lang: string, name: string): Observable<any>;
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
 
 ### Methods
 
 ---
 
 ```typescript
-public setup(options: AnimateOptions)
 ```
-Configures the service with the given **options**:
+
+---
+
+&nbsp; 
+
+## FileLoader
 
 ```typescript
-export interface AnimateOptions {
-  
-  root?: Element;
-  left?: number;
-  top?: number;
-  right?: number;
-  bottom?: number;
+@Injectable()
+export class FileLoader extends ContentLoader {
+
+  constructor(readonly http: HttpClient);
+
+  public loadFile(path: string, lang: string, name: string): Observable<any>;
 }
 ```
 
-* `root`: An optional element which bounding rectanlge will be used as the animation view. When undefined or null, the overall viewport will be used.
-* `left`: An offset, expressed in **pixels**, to shrink the triggering area from the left with. This value overrides the global `offsetLeft` value.
-* `top`: An offset, expressed in **pixels**, to shrink the triggering area from the top with. This value overrides the global `offsetTop` value.
-* `right`: An offset, expressed in **pixels**, to shrink the triggering area from the right with. This value overrides the global `offsetRight` value.
-* `bottom`: An offset, expressed in **pixels**, to shrink the triggering area from the bottom with. This value overrides the global `offsetBottom` value.
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
+
+### Methods
 
 ---
 
 ```typescript
-public trigger(elm: ElementRef<HTMLElement>, threshold: number): OperatorFunction<boolean, boolean>
 ```
-Observable operator to be used for triggering the animation on scroll. 
-* `elm`: The element for which the animation will be triggered.
-* `threshold`: The visibility ratio to trigger the animation with. 
 
-The returned `OperatorFunction` accepts an input trigger to emit an output trigger. In case the threshold value is 0, the output trigger simply mirrors the input one. For values greater than 0, the service checks the given element's area against the animation view emitting **true** when the two rectangles intersect for an area equal or greater than the threshold value, emitting **false** when the element's area is totally out of the view area. 
+
+## ContentConfigurator
+
+```typescript
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
+
+### Methods
+
+---
+
+```typescript
+```
+
+
+## SelectorResolver
+
+```typescript
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
+
+### Methods
+
+---
+
+```typescript
+```
+
+## ContentSelector
+
+```typescript
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
+
+### Methods
+
+---
+
+```typescript
+```
+
+## ContentResolver
+
+```typescript
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
+
+### Methods
+
+---
+
+```typescript
+```
+
+## ContentRouterModule
+
+```typescript
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|``||
+|``||
+
+### Methods
+
+---
+
+```typescript
+```
 
 ---
 ->

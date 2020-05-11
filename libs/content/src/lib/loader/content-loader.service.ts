@@ -1,22 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { zip, tap, catchError } from 'rxjs/operators';
-import { Observable, of, forkJoin } from 'rxjs';
+import { Observable, of, forkJoin, throwError } from 'rxjs';
 import { ContentConfigurator } from './content-configurator.service';
+
+export interface LoaderCache {
+  [key:string]: string;
+  lang: string;
+}
 
 /** Abstract ContentLoader class && DI token. Use is as a base class when creating your own custom loaders */
 export abstract class ContentLoader {
 
   // Data snapshot keeps track of the currenlty selected language as well
-  protected data: any;
+  protected data: LoaderCache;
 
   constructor(readonly config: ContentConfigurator) {}
 
-  /** Returns the content snapshot */
-  public get content(): any { return this.data || (this.data = { lang: this.config.defaultValue }); }
+  /** Returns the cached data */
+  public get cache(): LoaderCache { return this.data || this.flush(); }
   
   /** Returns the current language as a two digit code */
-  public get language(): string { return this.content.lang; }
+  public get language(): string { return this.cache.lang; }
+
+  /** Flushes the cache */
+  public flush(lang: string = this.config.defaultValue): LoaderCache { return this.data = { lang }; }
 
   /** Checks if the requested language is allowed reverting to the default one otherwise  */
   public languageAllowed(lang: string): string {
@@ -41,22 +49,28 @@ export class FileLoader extends ContentLoader {
    */
   public loadFile(path: string, lang: string, name: string): Observable<any> {
 
-    console.log('loading:', path, lang, name);
-
-    // Resets the cache when switching language
-    if(lang !== this.language) { this.data = { lang }; }
-
-    // Returns the module from the cache whenever possible
-    if(!!this.content[name]) { return of(this.content[name]); }
+    // Flushes the cache when switching language
+    if(lang !== this.language) { this.flush(lang); }
     
     // Extract the file name in case the extension has been specified
     const fileName = name.split('.')[0];
 
+    // Returns the data from the cache whenever possible
+    if(!!this.cache[fileName]) { return of(this.cache[fileName]); }
+
     // Extracts the file extension defaulting to 'json'
     const fileExt = name.split('.')[1] || 'json';
 
+    // Checks for supported file types only
+    if(!fileExt.match(/^(?:md|txt|json)$/)) {
+      return throwError( new Error('Invalid file extension: ' + fileExt) );
+    }
+
     // Detects the responseType from the file extennsion
-    const responseType = fileExt.replace(/md|txt/, 'text') as 'json'|'text';
+    const responseType = fileExt.replace(/md|txt/, 'text') as 'text'|'json';
+
+    // Let's load
+    console.log('loading:', path, lang, name);
 
     // Always load the default module together with the requested one
     return forkJoin(
@@ -76,9 +90,7 @@ export class FileLoader extends ContentLoader {
       // Packs the result by merging the modules whenever necessary
       zip( data => this.language === this.config.defaultValue ? data[0] : this.merge(data[1], data[0]) ),
       // Caches the content for further requests
-      tap( data => this.content[name] = data ),
-      // Whereve happens (the requested file does not exist) returns an empty object
-      catchError( () => of({}) )
+      tap( data => this.cache[fileName] = data )
     );
   }
 
