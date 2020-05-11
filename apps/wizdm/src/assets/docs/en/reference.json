@@ -10,7 +10,12 @@
 
   { "label": "Authentication", "link": "docs/auth" },
 
-  { "label": "Content Management", "link": "docs/content" },
+  { "label": "Content Management", "items": [
+    { "label": "Introduction", "link": "link": "docs/content/intro" },
+    { "label": "Markdown rendering", "link": "docs/content/markdown" },
+    { "label": "Syntax highlighting", "link": "docs/content/prism" },
+    { "label": "Dynamic content", "link": "docs/content/content" }
+  ]},
 
   { "label": "Navigation", "items": [
 
@@ -56,13 +61,6 @@
     { "label": "Google Analytics", "link": "docs/gtag" },
     { "label": "Paypal", "link": "docs/paypal" },
     { "label": "Stripe", "link": "docs/stripe" }
-  ]},
-
-  { "label": "Static content", "items": [
-
-    { "label": "Introduction", "link": "docs/static" },
-    { "label": "Markdown rendering", "link": "docs/markdown" },
-    { "label": "Syntax highlighting", "link": "docs/prism" }
   ]},
 
   { "label": "Utilities", "link": "docs/utils" }
