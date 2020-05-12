@@ -14,6 +14,7 @@ import { OpenFileModule } from '@wizdm/elements/openfile';
 import { ReadmeModule } from '@wizdm/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
+import { ButtonChangerModule } from '@wizdm/elements/button';
 import { RedirectModule } from '@wizdm/redirect';
 import { DialogModule } from '@wizdm/dialog';
 import { GtagModule } from '@wizdm/gtag';
@@ -56,6 +57,7 @@ const routes: RoutesWithContent = [
     AvatarModule,
     ReadmeModule,
     DialogModule,
+    ButtonChangerModule,
     OpenFileModule,
     ActionbarModule,
     CanLeaveModule,
