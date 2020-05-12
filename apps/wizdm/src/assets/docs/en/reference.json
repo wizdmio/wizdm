@@ -5,17 +5,16 @@
 
     { "label": "Environment", "link": "docs/environment" },
     { "label": "Styling", "link": "docs/styling" },
+    { "label": "Background", "link": "docs/background" }
     { "label": "Scrolling", "link": "docs/scrolling" }
   ]},
 
-  { "label": "Authentication", "link": "docs/auth" },
-
   { "label": "Content Management", "items": [
-    { "label": "Introduction", "link": "docs/content/intro" },
+    { "label": "Overview", "link": "docs/content/intro" },
     { "label": "Markdown rendering", "link": "docs/content/markdown" },
     { "label": "Syntax highlighting", "link": "docs/content/prism" },
     { "label": "Dynamic content", "link": "docs/content/content" },
-    { "label": "Text formatting", "link": "docs/content/readme" },
+    { "label": "Text rendering", "link": "docs/content/readme" },
     { "label": "Emoji support", "link": "docs/content/emoji" }
   ]},
 
@@ -25,8 +24,13 @@
     { "label": "Guarding", "link": "docs/navigator/guards" },
     { "label": "Action Bar", "link": "docs/navigator/actionbar" },
     { "label": "Action Links", "link": "docs/navigator/actionlink" },
-    { "label": "Background", "link": "docs/navigator/background" },
+    { "label": "Redirection", "link": "docs/navigator/redirect" },
     { "label": "Side Panel", "link": "docs/navigator/sidenav" }
+  ]},
+  
+  { "label": "User Management", "items": [
+    { "label": "Authentication", "link": "docs/user/auth" },
+    { "label": "User profile", "link": "docs/user/profile" }
   ]},
 
   { "label": "Elements", "items": [
@@ -40,7 +44,6 @@
     { "label": "Inkbar", "link": "docs/elements/inkbar" },
     { "label": "Logo", "link": "docs/elements/logo" },
     { "label": "Open File", "link": "docs/elements/openfile" },
-    { "label": "Read Me", "link": "docs/elements/readme" },
     { "label": "Router Inkbar", "link": "docs/elements/router/inkbar" },
     { "label": "Spinner", "link": "docs/elements/spinner" },
     { "label": "Thumbnail", "link": "docs/elements/thumbnail" },
@@ -50,9 +53,7 @@
   { "label": "Extensions", "items": [
     { "label": "Animate On Scroll", "link": "docs/animate" },
     { "label": "Declarative Dialog", "link": "docs/dialog" },
-    { "label": "Emoji Support", "link": "docs/emoji" },
     { "label": "IP Geolocation", "link": "docs/ipinfo" },
-    { "label": "Smart Redirection", "link": "docs/redirect" },
     { "label": "Teleportation", "link": "docs/teleport" }
   ]},
 
