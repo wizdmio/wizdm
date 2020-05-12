@@ -16,7 +16,7 @@
     { "label": "Dynamic content", "link": "docs/content/content" },
     { "label": "Text rendering", "link": "docs/content/readme" },
     { "label": "Emoji support", "link": "docs/content/emoji" },
-    { "label": "Language" "link": "docs/content/language" }
+    { "label": "Language", "link": "docs/content/language" }
   ]},
 
   { "label": "Navigation", "items": [
