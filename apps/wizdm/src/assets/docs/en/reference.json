@@ -15,13 +15,13 @@
     { "label": "Syntax highlighting", "link": "docs/content/prism" },
     { "label": "Dynamic content", "link": "docs/content/content" },
     { "label": "Text rendering", "link": "docs/content/readme" },
-    { "label": "Emoji support", "link": "docs/content/emoji" }
+    { "label": "Emoji support", "link": "docs/content/emoji" },
+    { "label": "Language" "link": "docs/content/language" }
   ]},
 
   { "label": "Navigation", "items": [
 
     { "label": "Overview", "link": "docs/navigator/overview" },
-    { "label": "Guarding", "link": "docs/navigator/guards" },
     { "label": "Action Bar", "link": "docs/navigator/actionbar" },
     { "label": "Action Links", "link": "docs/navigator/actionlink" },
     { "label": "Redirection", "link": "docs/navigator/redirect" },
@@ -32,6 +32,8 @@
     { "label": "Authentication", "link": "docs/user/auth" },
     { "label": "User profile", "link": "docs/user/profile" }
   ]},
+  
+  { "label": "Guarding", "link": "docs/navigator/guards" },
 
   { "label": "Elements", "items": [
       
