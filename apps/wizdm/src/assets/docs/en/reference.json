@@ -5,12 +5,12 @@
 
     { "label": "Environment", "link": "docs/environment" },
     { "label": "Styling", "link": "docs/styling" },
-    { "label": "Background", "link": "docs/background" }
+    { "label": "Background", "link": "docs/background" },
     { "label": "Scrolling", "link": "docs/scrolling" }
   ]},
 
   { "label": "Content Management", "items": [
-    { "label": "Overview", "link": "docs/content/intro" },
+    { "label": "Overview", "link": "docs/content/overview" },
     { "label": "Markdown rendering", "link": "docs/content/markdown" },
     { "label": "Syntax highlighting", "link": "docs/content/prism" },
     { "label": "Dynamic content", "link": "docs/content/content" },
@@ -21,11 +21,11 @@
 
   { "label": "Navigation", "items": [
 
-    { "label": "Overview", "link": "docs/navigator/overview" },
-    { "label": "Action Bar", "link": "docs/navigator/actionbar" },
-    { "label": "Action Links", "link": "docs/navigator/actionlink" },
-    { "label": "Redirection", "link": "docs/navigator/redirect" },
-    { "label": "Side Panel", "link": "docs/navigator/sidenav" }
+    { "label": "Overview", "link": "docs/navigation/overview" },
+    { "label": "Action Bar", "link": "docs/navigation/actionbar" },
+    { "label": "Action Links", "link": "docs/navigation/actionlink" },
+    { "label": "Redirection", "link": "docs/navigation/redirect" },
+    { "label": "Side Panel", "link": "docs/navigation/sidenav" }
   ]},
   
   { "label": "User Management", "items": [
@@ -33,13 +33,14 @@
     { "label": "User profile", "link": "docs/user/profile" }
   ]},
   
-  { "label": "Guarding", "link": "docs/navigator/guards" },
+  { "label": "Guarding", "link": "docs/guards" },
 
-  { "label": "Elements", "items": [
+  { "label": "Elements", "items": [ 
       
     { "label": "Introduction", "link": "docs/elements" },
     { "label": "Avatar", "link": "docs/elements/avatar" },
     { "label": "Balloon", "link": "docs/elements/balloon" },
+    { "label": "Button changer", "link": "docs/elements/button" },
     { "label": "Flip", "link": "docs/elements/flip" },
     { "label": "Icon", "link": "docs/elements/icon" },
     { "label": "Illustration", "link": "docs/elements/illustration" },

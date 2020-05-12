@@ -15,7 +15,7 @@ export let $animations = [
   // Actionbar's activation of actions
   trigger('actionActivate', [
     transition('* => *', [
-      query('wm-action:enter', [
+      query('button:enter, a:enter', [
         style({ opacity: 0 }),
         stagger('-100ms', 
           animate('250ms ease-out', style('*'))
