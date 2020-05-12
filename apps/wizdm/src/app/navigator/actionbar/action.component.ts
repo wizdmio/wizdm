@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { MediaObserver } from '@angular/flex-layout';
 import { ThemePalette } from '@angular/material/core';
@@ -23,8 +23,10 @@ export class ActionComponent {
   @Input() color: ThemePalette;
 
   /** Disables the action */
-  @Input('disabled') set disableAction(value: boolean) { this.disabled = coerceBooleanProperty(value); }
+  @Input('disabled') set disableAction(value: any) { this.disabled = coerceBooleanProperty(value); }
   public disabled = false;
+
+  @HostBinding('style.pointer-events') get isActionDisabled(): string { return this.disabled ? 'none' : ''; }
 
   public onClick(event: MouseEvent) {
 
