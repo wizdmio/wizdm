@@ -13,21 +13,15 @@
       {{ msgs.actions?.save?.caption || 'Save' }}
     </wm-action>
     
-    <!-- Sign-out action -->
-    <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" wmRedirect="login?mode=signOut">
-      <!-- Use the icon on small screens -->
+    <!--button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" wmRedirect="login?mode=signOut">
       <wm-icon *ngIf="mobile; else signOut" [icon]="msgs.actions?.signOut?.icon || 'exit_to_app'"></wm-icon>
-      <!-- Go with a full text otherwise -->
       <ng-template #signOut>{{ msgs.actions?.signOut?.caption || 'Sign-out' }}</ng-template>
     </button>
 
-    <!-- Save profile action -->
     <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
-      <!-- Use the icon on small screens -->
       <wm-icon *ngIf="mobile; else saveProfile" [icon]="msgs.actions?.save?.icon || 'save'"></wm-icon>
-      <!-- Go with a full text otherwise -->
       <ng-template #saveProfile>{{ msgs.actions?.save?.caption || 'Save' }}</ng-template>
-    </button>
+    </button-->
 
   </ng-template>
 

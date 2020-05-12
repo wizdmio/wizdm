@@ -2,7 +2,6 @@ import { Component, Input, HostBinding } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { MediaObserver } from '@angular/flex-layout';
 import { ThemePalette } from '@angular/material/core';
-import { ActionbarDirective } from './actionbar.directive';
 
 @Component({
   selector: 'wm-action',
@@ -11,7 +10,7 @@ import { ActionbarDirective } from './actionbar.directive';
 })
 export class ActionComponent {
 
-  constructor(private actionbar: ActionbarDirective, private media: MediaObserver) { }
+  constructor(/*private actionbar: ActionbarDirective,*/ private media: MediaObserver) { }
 
   // Media queries to switch between desktop/mobile views
   public get mobile(): boolean { return this.media.isActive('xs'); }
@@ -26,11 +25,7 @@ export class ActionComponent {
   @Input('disabled') set disableAction(value: any) { this.disabled = coerceBooleanProperty(value); }
   public disabled = false;
 
-  @HostBinding('style.pointer-events') get isActionDisabled(): string { return this.disabled ? 'none' : ''; }
-
-  public onClick(event: MouseEvent) {
-
-    // Notifies teh actionbar about the action that has been activated
-    this.actionbar.activate(this);
+  @HostBinding('style.pointer-events') get isActionDisabled(): string { 
+    return this.disabled ? 'none' : undefined; 
   }
 }
