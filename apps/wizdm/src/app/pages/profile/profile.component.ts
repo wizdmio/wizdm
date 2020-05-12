@@ -42,8 +42,6 @@ export class ProfileComponent {
 
   public updateProfile() {
 
-    if(!this.newProfile) { return; }
-
     return this.user.update(this.newProfile);
   }
 

@@ -4,6 +4,14 @@
 
   <!-- Action Bar (projected in the top toolbar) -->
   <ng-template wmActionbar let-mobile="isMobile">
+
+    <wm-action color="primary" [icon]="msgs.actions?.signOut?.icon || 'exit_to_app'" wmRedirect="login?mode=signOut">
+      {{ msgs.actions?.signOut?.caption || 'Sign-out' }}
+    </wm-action>
+
+    <wm-action color="primary" [icon]="msgs.actions?.save?.icon || 'save'" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
+      {{ msgs.actions?.save?.caption || 'Save' }}
+    </wm-action>
     
     <!-- Sign-out action -->
     <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" wmRedirect="login?mode=signOut">
