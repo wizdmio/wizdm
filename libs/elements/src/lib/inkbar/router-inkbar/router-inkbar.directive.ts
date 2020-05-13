@@ -1,6 +1,6 @@
 import { Directive, Input, Optional, ElementRef, Renderer2 } from '@angular/core';
 import { Router, RouterLinkActive, RouterLink, RouterLinkWithHref } from '@angular/router';
-import { InkbarItem } from '../inkbar/inkbar.directive';
+import { InkbarItem } from '../base-inkbar/inkbar.directive';
 
 @Directive({
   selector: '[wmInkbarLink], [routerLinkInkbar]',

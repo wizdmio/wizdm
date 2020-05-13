@@ -1,16 +1,16 @@
 import { Component, AfterViewInit, OnDestroy, ContentChildren, QueryList, ViewEncapsulation } from '@angular/core';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { RouterInkbarDirective } from './router-inkbar.directive';
-import { InkbarComponent } from '../inkbar/inkbar.component';
-import { InkbarItem, InkbarDirective } from '../inkbar/inkbar.directive';
+import { InkbarComponent } from '../base-inkbar/inkbar.component';
+import { InkbarItem, InkbarDirective } from '../base-inkbar/inkbar.directive';
 import { Subscription, animationFrameScheduler } from 'rxjs';
 import { filter, observeOn } from 'rxjs/operators';
-import { $animations } from '../inkbar/inkbar.animations';
+import { $animations } from '../base-inkbar/inkbar.animations';
 
 @Component({
   selector: 'wm-router-inkbar',
-  templateUrl: '../inkbar/inkbar.component.html',
-  styleUrls: ['../inkbar/inkbar.component.scss'],
+  templateUrl: '../base-inkbar/inkbar.component.html',
+  styleUrls: ['../base-inkbar/inkbar.component.scss'],
   host: { "class": 'wm-inkbar' },
   animations: $animations,
   encapsulation: ViewEncapsulation.None 

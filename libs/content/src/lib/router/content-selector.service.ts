@@ -14,7 +14,7 @@ export class ContentSelector implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): AllowedContent {
 
     // Gets the language code requested from the route 
-    const requested = route.paramMap.get( this.config.selector );
+    const requested = this.requestedValue(route);
     console.log('Requested language:', requested);
 
     // Selects the best language among the allowed ones 
@@ -25,30 +25,35 @@ export class ContentSelector implements CanActivate {
     this.config.currentValue = selected;
 
     // Redirects to the selected whenever differs from the requested
-    return(requested !== selected ? this.router.createUrlTree([selected]) : true) as AllowedContent;
+    return (requested === selected || this.router.createUrlTree([selected])) as AllowedContent;
+  }
+
+  /** Gets the requested language value from the route */
+  public requestedValue(route: ActivatedRouteSnapshot): string {
+    return route.paramMap.get( this.config.selector );
   }
 
   /** Checks if the language code is among the allowed ones */
-  protected isValueAllowed(value: string): boolean {
+  public isValueAllowed(value: string): boolean {
     return !!this.config.supportedValues.find( allowed => allowed === value );
   }
 
   /** Filters the language code ensuring is among the allowed ones returning the default value otherwise*/
-  protected valueAllowed(value: string): string {
+  public valueAllowed(value: string): string {
     return this.config.supportedValues.find( allowed => allowed === value ) || this.config.defaultValue;
   }
 
   /** Two digits browser language code */
-  protected get browserLanguage(): string { 
+  public get browserLanguage(): string { 
     
     const detected = this.detectLanguage().split('-')[0];
-    console.log("Detected language:", detected);
+    console.log("Browser language:", detected);
 
     return detected;
   }
 
   /** Detects the preferred language according to the browser, whenever possible */
-  protected detectLanguage(): string {
+  private detectLanguage(): string {
 
     const navigator: any = !!window && window.navigator || {};
 

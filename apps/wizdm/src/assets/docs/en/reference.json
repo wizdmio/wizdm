@@ -46,8 +46,7 @@
     { "label": "Illustration", "link": "docs/elements/illustration" },
     { "label": "Inkbar", "link": "docs/elements/inkbar" },
     { "label": "Logo", "link": "docs/elements/logo" },
-    { "label": "Open File", "link": "docs/elements/openfile" },
-    { "label": "Router Inkbar", "link": "docs/elements/router/inkbar" },
+    { "label": "Open file", "link": "docs/elements/openfile" },
     { "label": "Spinner", "link": "docs/elements/spinner" },
     { "label": "Thumbnail", "link": "docs/elements/thumbnail" },
     { "label": "Toggler", "link": "docs/elements/toggler" }

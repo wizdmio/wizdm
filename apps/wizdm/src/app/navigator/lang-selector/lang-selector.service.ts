@@ -42,7 +42,7 @@ export class LanguageSelector extends ContentSelector {
         console.log("Detected language:", detected);
 
         // Gets the language code from the route
-        const requested = route.paramMap.get( this.config.selector );
+        const requested = this.requestedValue(route);
         // Whenever the requested language is allowed...
         if( this.isValueAllowed(requested) ) { 
 
