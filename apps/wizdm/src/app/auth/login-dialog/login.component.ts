@@ -58,35 +58,39 @@ export class LoginComponent extends DialogComponent<LoginData> {
     this.form = new FormGroup({});
   }
 
-  /** Returns the optional code value passed along with the input data */
-  private get code(): string { return this.data && this.data.code || ''; }
-
   /** Opens the Login dialog */
   public open(data?: LoginData) {
+    
+    // Gets the requested loginAction, if any
+    const mode = data && data.mode;
 
     // Shortcuts for signing-out
-    if(data && data.mode === 'signOut') { return this.signOut(), null; }
-
-    // Shortcuts for applying the one time code confirmation 
-    if(data && data.mode === 'verifyEmail' || data && data.mode === 'recoverEmail' ) {
-      // Applies the one-time code confirmation
-      this.auth.applyActionCode(this.code)
-        // Refreshes the current user
-        .then( () => this.auth.user.reload() )
-        // Dispays the error code, eventually
-        .catch( error => this.showError(error.code) );
-    }
+    if(mode === 'signOut') { return this.signOut(), null; }
 
     // Populates the form according to the requested action
-    this.switchPage(data && data.mode || 'social');
-
-    // Opens the login dialog
-    super.open(data).beforeClosed()
-      // Navigate towards the data url on closing
-      .subscribe( () => this.navigate(data.url) );
+    this.switchPage(mode || 'social');
     
+    // Opens the login dialog
+    const ref = super.open(data);
+
+    // Applies the one time code confirmation (if any) on opening 
+    ref.afterOpened().subscribe(() => {
+      // Allows verifyEmail and recoverEmail only
+      if(mode === 'verifyEmail' || mode === 'recoverEmail') {
+        // Applies the one-time code confirmation
+        this.auth.applyActionCode(this.code)
+          // Refreshes the current user
+          .then( () => this.auth.user.reload() )
+          // Dispays the error code, eventually
+          .catch( error => this.showError(error.code) );
+      }
+    });
+    
+    // Navigates towards the data url on closing
+    ref.beforeClosed().subscribe( () => this.navigate(data.url) );
+   
     // Returns the dialog ref for further use
-    return this.ref;
+    return ref;
   }
 
   private switchPage(page: loginAction) {
@@ -191,7 +195,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
       break;
 
       case 'resetPassword':
-      this.resetPassword( this.code, this.newPassword.value );
+      this.resetPassword( this.newPassword.value );
       break;
 
       case 'changePassword':
@@ -276,8 +280,16 @@ export class LoginComponent extends DialogComponent<LoginData> {
       .catch( error => this.showError(error.code) );
   }
 
-  private sendEmailVerification(url?: string) {
+  private sendEmailVerification() {
+                        
+    // Grabs the url value passed along with the dialog data
+    const url = this.data && this.data.url || ''; 
 
+    // Removes the url from data preventing the redirection while closing the dialog
+    if('url' in this.data) { delete this.data.url; } 
+
+    // Sends the email verification request passing along the destination url for the user
+    // to be redirected towards the desiderd destination once the verification will be completed
     return this.auth.user.sendEmailVerification({ url })
       // Closes the dialog returning null
       .then( () => this.close(null) )
@@ -294,7 +306,10 @@ export class LoginComponent extends DialogComponent<LoginData> {
       .catch( error => this.showError(error.code) );
   }
 
-  private resetPassword(code: string, newPassword: string) {
+  private resetPassword(newPassword: string) {
+
+    // Grabs the code value passed along with the dialog data
+    const code = this.data && this.data.code || '';
     
     this.auth.confirmPasswordReset(code, newPassword)
       // Closes the dialog returning null
