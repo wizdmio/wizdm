@@ -9,16 +9,16 @@
       {{ msgs.actions?.signOut?.caption || 'Sign-out' }}
     </wm-action>
 
-    <wm-action color="primary" [icon]="msgs.actions?.save?.icon || 'save'" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
-      {{ msgs.actions?.save?.caption || 'Save' }}
-    </wm-action>
-    
     <!--button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" wmRedirect="login?mode=signOut">
       <wm-icon *ngIf="mobile; else signOut" [icon]="msgs.actions?.signOut?.icon || 'exit_to_app'"></wm-icon>
       <ng-template #signOut>{{ msgs.actions?.signOut?.caption || 'Sign-out' }}</ng-template>
-    </button>
+    </button-->
 
-    <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
+    <wm-action color="primary" [icon]="msgs.actions?.save?.icon || 'save'" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
+      {{ msgs.actions?.save?.caption || 'Save' }}
+    </wm-action>
+  
+    <!--button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" [disabled]="form?.invalid || form?.pristine" (click)="updateProfile()">
       <wm-icon *ngIf="mobile; else saveProfile" [icon]="msgs.actions?.save?.icon || 'save'"></wm-icon>
       <ng-template #saveProfile>{{ msgs.actions?.save?.caption || 'Save' }}</ng-template>
     </button-->

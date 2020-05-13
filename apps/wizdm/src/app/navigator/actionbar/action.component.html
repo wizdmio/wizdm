@@ -1,15 +1,11 @@
 
-
 <!-- Displays the icon button on small screen devices -->
-<button mat-icon-button [color]="color" [disabled]="disabled" *ngIf="!!icon && mobile; else desktopVersion">
-  <wm-icon [icon]="icon"></wm-icon>
-</button>
-
-<ng-template #desktopVersion>
-
-  <!-- Displays the regular button otherwise -->
-  <button mat-button [color]="color" [disabled]="disabled">
-    <ng-content></ng-content>
-  </button>
+<button mat-button [color]="color" [disabled]="disabled" [type]="(!!icon && mobile) ? 'icon' : 'basic'" #btn=matButton>
   
-</ng-template>
+  <!-- Displays just the icon on mat-icon-button -->
+  <wm-icon *ngIf="btn.isIconButton; else fullVersion" [icon]="icon"></wm-icon>
+  
+  <!-- Displays the transcluded content otherwise -->
+  <ng-template #fullVersion><ng-content></ng-content></ng-template>
+
+</button>
