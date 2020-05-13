@@ -9,8 +9,8 @@ import { Oauth2Handler } from '../auth/oauth2-handler';
 
 const routes: RoutesWithContent = [
 
-  // Redirects handler page (for firebase password confirmation/reset and stuff)
-  { path: 'handler', canActivate: [ Oauth2Handler ] },
+  // Auth handler (for firebase password confirmation/reset and stuff)
+  { path: 'auth/action', pathMatch: 'full', canActivate: [ Oauth2Handler ] },
 
   // External links redirection helper
   { path: 'redirect', canActivate: [ RedirectService ] },
