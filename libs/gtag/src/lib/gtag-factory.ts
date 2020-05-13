@@ -16,7 +16,7 @@ export const GtagConfigToken = new InjectionToken<GtagConfig>('wizdm.gtag.config
  * @see: https://developers.google.com/analytics/devguides/collection/gtagjs */
 export function gtagFactory(config: GtagConfig): Gtag {
 
-  if((window as any).gtag) { return (window as any).gtag; }
+  if('gtag' in window) { return window['gtag']; }
 
   const script = document.createElement('script');
 

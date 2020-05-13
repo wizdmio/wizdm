@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken, Inject, Optional, NgZone } from '@angular/core';
+import { Injectable, InjectionToken, Inject, NgZone } from '@angular/core';
 import { Gtag, EventParams, CustomParams, Product, Promotion, Action, Content } from './gtag-definitions';
 import { GtagConfigToken, GtagConfig } from './gtag-factory';
 
@@ -7,7 +7,16 @@ export const GTAG = new InjectionToken<Gtag>('wizdm.gtag.instance');
 @Injectable()
 export class GtagService {
 
-  constructor(@Inject(GTAG) private gtag: Gtag, @Optional() @Inject(GtagConfigToken) private config: GtagConfig, private zone: NgZone) { }
+  constructor(@Inject(GTAG) private gtag: Gtag, @Inject(GtagConfigToken) private config: GtagConfig, private zone: NgZone) { }
+
+  /** Disables the analytics for the given measurement id. Defaults to the targetId from the global confguration when unspecified.
+   * @see: https://developers.google.com/analytics/devguides/collection/gtagjs/user-opt-out */
+  public disable(value: boolean = true, id: string = this.config.targetId) {
+    window[`ga-disable-${id}`] = value;
+  }
+
+  /** Helper function to re-enable analytics after it was disabled */
+  public enable() { return this.disable(false); }
 
   /** @see: https://developers.google.com/analytics/devguides/collection/gtagjs/setting-values */
   public set(params: CustomParams): void {
@@ -20,7 +29,7 @@ export class GtagService {
     return this.zone.runOutsideAngular( () => new Promise( (resolve, reject) => {
       try { 
         // Triggers a 1s time-out timer 
-        const tmr = setTimeout( () => reject( new Error('gtag call timed-out')), this.config?.timeout || 10000 );
+        const tmr = setTimeout( () => reject( new Error('gtag call timed-out')), this.config.timeout || 10000 );
         // Performs the event call resolving with the event callback
         this.gtag('event', action, { ...params, event_callback: () => { clearTimeout(tmr); resolve(); }}); } 
       // Rejects the promise on errors
