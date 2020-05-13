@@ -34,9 +34,8 @@ export class LoginComponent extends DialogComponent<LoginData> {
   private newPassword: FormControl;  
   
   public error = null;
-  public hide = true;
   public progress = false;
-
+  public showPassword = false;
   public page: loginAction;
 
   get auth() { return this.user.auth; }
@@ -78,7 +77,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
       // Allows verifyEmail and recoverEmail only
       if(mode === 'verifyEmail' || mode === 'recoverEmail') {
         // Applies the one-time code confirmation
-        this.auth.applyActionCode(this.code)
+        this.auth.applyActionCode(data && data.code)
           // Refreshes the current user
           .then( () => this.auth.user.reload() )
           // Dispays the error code, eventually
@@ -96,8 +95,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
   private switchPage(page: loginAction) {
 
     // Resets the status
-    this.progress = false;
-    this.hide = true;
+    this.showPassword = this.progress = false;
     this.error = null;
 
     // Removes all the controls from the form group

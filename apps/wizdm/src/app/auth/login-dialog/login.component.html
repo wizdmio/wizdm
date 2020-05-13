@@ -48,8 +48,8 @@
       <!-- PASSWORD -->
       <mat-form-field appearance="legacy" *ngIf="form.contains('password')" @morph>
         <mat-label>{{ msgs.labels?.password }}</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
-        <wm-icon matSuffix [icon]="hide ? 'visibility_off' : 'visibility'" (click)="hide = !hide"></wm-icon>
+        <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password">
+        <wm-icon matSuffix class="pwd" [icon]="showPassword ? 'visibility' : 'visibility_off'" (click)="showPassword = !showPassword"></wm-icon>
         <mat-error *ngIf="form.controls['password'].errors?.required">
           {{ msgs.errors?.passwordRequired }}
         </mat-error>
