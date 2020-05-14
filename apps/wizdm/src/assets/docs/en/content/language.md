@@ -1,11 +1,19 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Multiple Languages
+Wizdm is designed to provide runtime content in multiple languages selecting the proper language by means of a route parameter placed at the very root of the url like "https\://mycooldomain.io/**en**/home” for English and “https\://mycooldomain.io/**it**/home” for italian. 
 
-[Start](docs) - [Back](back) - [Home](home)
+To achieve it, the app complies with the following pattern:
 
-Wizdm is a young project and some of the documentation is still missing. 
+->
+![Routing Diagram](assets/docs/images/routing-diagram.png#80)
+<-
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+The AppComponent template contains the first `<router-outlet>` where the *Router* will load a *NavigatorComponent*. 
+The routing path of the *NavigatorComponent* is the `:lang` token, so, the *Router* will store the language code within a parameter (named *lang*) in the activated route. 
+The *NavigatorComponent* template contains the second `<router-outlet>` where the router will load the actual pages, so, both the navigator and the pages we’ll have the opportunity to dynamically load their content based on the language code. 
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+---
+->
+[Next Topic](docs/toc?go=next) 
+->
