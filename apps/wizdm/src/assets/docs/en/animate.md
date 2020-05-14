@@ -102,7 +102,7 @@ The main module provides an optional `init()` static function to customize the m
 ```typescript
 static init(config?: AnimateConfig): ModuleWithProviders<AnimateModule>
 ```
-**config**
+* `config: AnimateConfig`
 ```typescript
 interface AnimateConfig {
   triggerMode?: 'scrolling'|intersectionObserver'|'auto';
