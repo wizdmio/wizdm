@@ -1,7 +1,7 @@
 <!-- toc: reference.json -->
 
 # Multiple Languages
-Wizdm is designed to provide runtime content in multiple languages selecting the proper language by means of a route parameter placed at the very root of the url like "\h\t\t\p\s\://mycooldomain.io/**en**/home” for English and “https\://mycooldomain.io/**it**/home” for italian. 
+Wizdm is designed to provide runtime content in multiple languages selecting the proper language by means of a route parameter placed at the very root of the url like "https\:\/\/mycooldomain.io/**en**/home” for English and “https\://mycooldomain.io/**it**/home” for italian. 
 
 To achieve it, the app complies with the following pattern:
 
