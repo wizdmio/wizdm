@@ -67,7 +67,7 @@ Once the table of content is load, navigation is possible by means of the follow
 * `docs/toc?go=next` - to navigate towards the next topic.
 * `docs/toc?go=back` - to navigate back to the previous topic.
 
-Static content files use comments, within the markdown formatted text, to declare which *table of content* they belong to. Something like `<!-- toc: global.json -->` to refer to a *global.json* file.
+Static content files use comments, within the markdown formatted text, to declare which *table of content* they belong to. Something like `<!-- toc: global.json -->` refers to a *global.json* file.
 
 ## Dynamic Content
 Dynamic content refers to the data loaded while routing to serve custom pages. Every caption, label, icon, link or text rendered by the page template is provided as dynamic content, so, to keep the template and the content isolated facilitating the management of multiple languages at run-time. 
@@ -116,7 +116,7 @@ export class HomeModule { }
 ```
 
 ### Content Loading
-The requested content is loaded by means of [resolvers](https://angular.io/guide/router#resolvers) during routing. Which content to load is specified in the [RoutesWithContent]() array of each routed feature module. The proper resolvers are created at run-time while lazily loading the module.
+The requested content is loaded by means of [resolvers](https://angular.io/guide/router#resolvers) during routing. Which content to load is specified in the *RoutesWithContent* array of each routed feature module. The proper resolvers are created at run-time while lazily loading the module. 
 
 ---
 ->
