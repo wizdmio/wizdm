@@ -46,4 +46,4 @@ const routes: RoutesWithContent = [
 export class HomeModule { }
 ```
 
-The requested content is loaded by means of [resolvers](https://angular.io/guide/router#resolvers) during routing. Which content to load is specified in the [RoutesWithContent]() array of each routed feature module. The proper resolvers are created at run-time while lazily loading the module. 
+The requested content is loaded by means of [resolvers](https://angular.io/guide/router#resolvers) during routing. Which content to load is specified in the *RoutesWithContent* array of each routed feature module. The proper resolvers are created at run-time while lazily loading the module. 
