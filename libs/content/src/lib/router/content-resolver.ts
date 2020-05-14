@@ -5,17 +5,17 @@ import { ContentLoader } from '../loader/content-loader.service';
 import { take, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
-/** Builds a content resolver instance for the specified source file on the fly */
-export function contentResolver<T = any>(source: string, file: string, providedIn: 'root'|Type<T> = 'root') {
-
-  return new InjectionToken(`wizdm.content.${file}`, {
-    providedIn,
-    factory: () => new ContentResolver(inject(ContentLoader as any), inject(SelectorResolver), source,file)
-  });
-}
-
 /** Base resolver loading the page content according to the requested language */
 export class ContentResolver implements Resolve<any> {
+
+  /** Builds a content resolver instance for the specified source file on the fly */
+  static create<T = any>(source: string, file: string, providedIn: 'root'|Type<T> = 'root') {
+
+    return new InjectionToken(`wizdm.content.${file}`, {
+      providedIn,
+      factory: () => new ContentResolver(inject(ContentLoader as any), inject(SelectorResolver), source,file)
+    });
+  }
 
   constructor(readonly loader: ContentLoader, readonly selector: SelectorResolver, readonly source: string, readonly file: string) { }
 

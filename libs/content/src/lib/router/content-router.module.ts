@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders, Inject } from '@angular/core';
 import { RouterModule, Route, Routes, ROUTES, provideRoutes } from '@angular/router';
 import { ContentConfigurator } from '../loader/content-configurator.service';
 import { SelectorResolver } from './selector-resolver.service';
-import { contentResolver } from './content-resolver';
+import { ContentResolver } from './content-resolver';
 import { ContentModule } from '../content.module';
 
 /** Extends routes with content */
@@ -38,7 +38,7 @@ export function resolveRoutesWithContent(routes: RoutesWithContent, source: stri
         // Gets the file name without extension, if any
         const name = file.split('.')[0];
         // Construct a resolver for every source file
-        resolve[ name ] = contentResolver(path, file, ContentRouterModule);
+        resolve[ name ] = ContentResolver.create(path, file, ContentRouterModule);
         // Next
         return resolve; 
 
