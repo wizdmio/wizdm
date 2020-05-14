@@ -4,70 +4,7 @@
 
 [Go to the API Reference](docs/content#api-reference)
 
-Content is loaded at runtime by the [Router](https://angular.io/api/router/Router). `@wizdm/content` package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
-
-## Usage example
-Use the `wmContent` structural directive to select the relevant content within the template: 
-
-```html
-<!-- Use wmContent to select the relevant data -->
-<ng-container *wmContent="let msgs select 'home'"> 
-
-  <h1>{{ msgs.title || 'Get your app done right' }}</h1>
-
-  <p>{{ msgs.body || 'Wizdm provides all the key features of a modern single page application ready to use' }}</p>
-  
-  <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption || 'Get started' }}</button>
-
-</ng-container>
-```
-
----
-
-Includes the `content` in the routes using the `ContentRouterModule` in place of the regular `RouterModule` in the lazy loaded child modules:
-
-```typescript
-// HomeModule.ts
-...
-import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-
-const routes: RoutesWithContent = [
-  {
-    path: '',
-    content: 'home',
-    component: HomeComponent
-  }
-];
-
-@NgModule({
-  declarations: [ HomeComponent ],
-  imports: [
-    CommonModule,
-    ...,
-    ContentRouterModule.forChild(routes)
-  ]
-})
-export class HomeModule { }
-```
-
-## Multiple Languages
-
-The package is designed to provide runtime content in multiple languages selecting the proper language by means of a route parameter placed at the very root of the url like "https\://mycooldomain.io/**en**/home” for English and “https\://mycooldomain.io/**it**/home” for italian. 
-
-To achieve it, the package assumes the app complies with the following pattern:
-
-->
-![Routing Diagram](assets/docs/images/routing-diagram.png#80)
-<-
-
-The AppComponent template contains the first `<router-outlet>` where the *Router* will load a *NavigatorComponent*. 
-The routing path of the *NavigatorComponent* is the `:lang` token, so, the *Router* will store the language code within a parameter (named *lang*) in the activated route. 
-The *NavigatorComponent* template contains the second `<router-outlet>` where the router will load the actual pages, so, both the navigator and the pages we’ll have the opportunity to dynamically load their content based on the language code. 
-
-## Content Loading
-The requested content is loaded by means of [resolvers](https://angular.io/guide/router#resolvers) during routing. Which content to load is specified in the [RoutesWithContent]() array of each routed feature module. The proper resolvers are created at run-time while lazily loading the module.
-
-&nbsp; 
+Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
 
 # API Reference
 [ContentModule](docs/content#contentmodule) - [ContentDirective](docs/content#contentdirective) - [ContentLoader](docs/content#contentloader) - [FileLoader](docs/content#fileloader) - [ContentConfigurator](docs/content#contentconfigurator) - [SelectorResolver](docs/content#selectorresolver) - [ContentSelector](docs/content#contentselector) - [ContentResolver](docs/content#contentresolver) - [ContentRouterModule](docs/content#contentroutermodule)
@@ -217,18 +154,35 @@ export abstract class ContentLoader {
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
+|`config: ContentConfigurator`|The instance of the [ContentConfigurator](docs/content#contentconfigurator)|
+|`language: string`|The currernt language the laoder is loading data for|
+|`cache: LoaderCache`|The object caching the data while loading to avoid loading the same content multiple times|
 
 ### Methods
 
 ---
-
 ```typescript
+public flush(lang: string): LoaderCache;
 ```
+Empties the cache for the specified language. The `defaultValue` from the global configuration is used when left undefined. 
 
 ---
+```typescript
+public languageAllowed(lang: string): string;
+```
+Checks whenever the given language locale code exists within the *supportedValues* from the global configuration returning the *defaultValue* if not.
+* `lang: string` - the language locate code to check
 
+---
+```typescript
+public abstract loadFile(path: string, lang: string, name: string): Observable<any>;
+```
+Defines the file loading function returning an *Observable* resolving to the loaded content.
+* `path: string` - the path from which loading the content file
+* `lang: string` - the language locale code for which loading the content file
+* `name: string` - the file name to load the content from
+
+---
 &nbsp; 
 
 ## FileLoader
@@ -245,20 +199,47 @@ export class FileLoader extends ContentLoader {
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
+|`http: HttpClient`|Instance of [HttpClient](https://angular.io/api/common/http/HttpClient) service|
 
 ### Methods
 
 ---
-
 ```typescript
+public loadFile(path: string, lang: string, name: string): Observable<any>;
 ```
+Loads the requested content returning an *Observable*.
+* `path: string` - the path from which loading the content file
+* `lang: string` - the language locale code for which loading the content file
+* `name: string` - the file name to load the content from. Optionally, `name` can specify an extension among: `md`, `txt`, `json`. The extension defaults to `json` when unspecified
 
+---
+&nbsp; 
 
 ## ContentConfigurator
 
+The content configurator is a singleton service managing the configuration parameters of the package.
+
 ```typescript
+
+export interface ContentConfig {
+  selector?: string;
+  source?: string;
+  defaultValue?: string;
+  supportedValues?: string[];
+}
+
+@Injectable()
+export class ContentConfigurator implements ContentConfig {
+
+  public currentValue: string;
+
+  constructor(readonly config: ContentConfig);
+
+  public get selector(): string;
+  public get source(): string; 
+  public get defaultValue(): string;
+  public get supportedValues(): string[];
+}
 ```
 
 |**Properties**|**Description**|
