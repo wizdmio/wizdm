@@ -1,10 +1,12 @@
 <!-- toc: reference.json -->
 
-# Content 
+# Dynamic Content 
 
 [Go to the API Reference](docs/content#api-reference)
 
 Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
+
+&nbsp;
 
 # API Reference
 [ContentModule](docs/content#contentmodule) - [ContentDirective](docs/content#contentdirective) - [ContentLoader](docs/content#contentloader) - [FileLoader](docs/content#fileloader) - [ContentConfigurator](docs/content#contentconfigurator) - [SelectorResolver](docs/content#selectorresolver) - [ContentSelector](docs/content#contentselector) - [ContentResolver](docs/content#contentresolver) - [ContentRouterModule](docs/content#contentroutermodule)
@@ -419,7 +421,7 @@ export type RoutesWithContent = RouteWithContent[];
 |**Value**|**Description**|
 |:--|:--|
 |`source?: string`|Optional source path to alternatively load the content file from|
-|`content?: string|string[]`|A string, or an array of strings, with the name(s) of the file(s) to load the content from|
+|`content?: string`\|`string[]`|A string, or an array of strings, with the name(s) of the file(s) to load the content from|
 |`children?: RoutesWithContent`|Array of child RoutesWithContent objects that specifies a nested route configuration|
 
 ---

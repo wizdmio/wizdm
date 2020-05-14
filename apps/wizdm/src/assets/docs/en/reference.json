@@ -11,12 +11,12 @@
 
   { "label": "Content Management", "items": [
     { "label": "Overview", "link": "docs/content/overview" },
+    { "label": "Dynamic content", "link": "docs/content/content" },
     { "label": "Markdown rendering", "link": "docs/content/markdown" },
     { "label": "Syntax highlighting", "link": "docs/content/prism" },
-    { "label": "Dynamic content", "link": "docs/content/content" },
     { "label": "Text rendering", "link": "docs/content/readme" },
     { "label": "Emoji support", "link": "docs/content/emoji" },
-    { "label": "Language", "link": "docs/content/language" }
+    { "label": "Multiple languages", "link": "docs/content/language" }
   ]},
 
   { "label": "Navigation", "items": [

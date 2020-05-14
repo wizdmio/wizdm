@@ -97,16 +97,16 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 |`data: D`|The optional generic data passed along when opening the dialog|
 |`@Input() id: string`|ID for the dialog. If omitted, a unique one will be generated|
 |`@Input() role: DialogRole`|The ARIA role of the dialog element|
-|`@Input() panelClass: string\|string[]`|Custom class for the overlay pane|
+|`@Input() panelClass: string`\|`string[]`|Custom class for the overlay pane|
 |`@Input() hasBackdrop: boolean`|Whether the dialog has a backdrop|
 |`@Input() backdropClass: string`|Custom class for the backdrop|
 |`@Input() disableClose: boolean`|Whether the user can use escape or clicking on the backdrop to close the modal|  
 |`@Input() width: string`|Width of the dialog|  
 |`@Input() height: string`|Height of the dialog|
-|`@Input() minWidth: number\|string`|Min-width of the dialog. If a number is provided, assumes pixel units|
-|`@Input() minHeight: number\|string`|Min-height of the dialog. If a number is provided, assumes pixel units|
-|`@Input() maxWidth: number\|string`|Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw|
-|`@Input() maxHeight: number\|string`|Max-height of the dialog. If a number is provided, assumes pixel units|
+|`@Input() minWidth: number`\|`string`|Min-width of the dialog. If a number is provided, assumes pixel units|
+|`@Input() minHeight: number`\|`string`|Min-height of the dialog. If a number is provided, assumes pixel units|
+|`@Input() maxWidth: number`\|`string`|Max-width of the dialog. If a number is provided, assumes pixel units. Defaults to 80vw|
+|`@Input() maxHeight: number`\|`string`|Max-height of the dialog. If a number is provided, assumes pixel units|
 |`@Input() position: DialogPosition`|Position overrides|
 |`@Input() direction: Direction`|Layout direction for the dialog's content|
 |`@Input() ariaDescribedBy: string`|ID of the element that describes the dialog|

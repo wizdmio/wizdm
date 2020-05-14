@@ -1,7 +1,7 @@
 <!-- toc: reference.json -->
 
 # Content Management
-Data content in Wizdm is divided in *Static* content and *Dynamic* content. 
+ Content data in Wizdm is divided in *Static* content and *Dynamic* content. 
 
 ## Static Content
 For static content we mean pages of informative content with minimal to no interaction capabilities such as the *About* or the *Terms and Conditions* page. This very reference guide belongs to the static content as well. 
