@@ -15,9 +15,6 @@ export class StaticResolver implements Resolve<StaticContent> {
   
   constructor(private router: Router, private selector: SelectorResolver, private loader: FileLoader) { }
 
-  /** The default language of the content manager */
-  get defaultLang() { return this.selector.config.defaultValue; }
-
   /** Resolves the content loading the requested source file */
   public resolve(route: ActivatedRouteSnapshot): Observable<StaticContent> {
 
