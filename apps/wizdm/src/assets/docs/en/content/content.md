@@ -171,7 +171,7 @@ Empties the cache for the specified language. The `defaultValue` from the global
 public languageAllowed(lang: string): string;
 ```
 Checks whenever the given language locale code exists within the *supportedValues* from the global configuration returning the *defaultValue* if not.
-* `lang: string` - the language locate code to check
+* `lang: string` - the language locale code to check
 
 ---
 ```typescript
@@ -216,7 +216,6 @@ Loads the requested content returning an *Observable*.
 &nbsp; 
 
 ## ContentConfigurator
-
 The content configurator is a singleton service managing the configuration parameters of the package.
 
 ```typescript
@@ -244,84 +243,184 @@ export class ContentConfigurator implements ContentConfig {
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
-
-### Methods
-
----
-
-```typescript
-```
-
+|`currentValue: string`|The currently selected language value stored within the configurator to be shared across services|
+|`selector: string`|The route selector (aka param name) as per the config object|
+|`source: string`|The source path of the content json files as per the config object|
+|`defaultValue: string`|The default language code as per the config object|
+|`supportedValues: string[]`|The array of suported language codes as per the config object|
 
 ## SelectorResolver
-
+Default language code resolver. The language code is expected to be a *:lang* token of the root route first child.
+E.g. https\://whatever.io/:lang/home where *:lang* is a two digit country code: 'en', 'it', 'ru', ... 
+ 
 ```typescript
+/@Injectable()
+ export class SelectorResolver implements Resolve<string> {
+
+  constructor(readonly config: ContentConfigurator);
+
+  public resolve(route: ActivatedRouteSnapshot): string;
+}
 ```
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
+|`config: ConfigResolver`|The common [ContentConfigurator](docs/content#contentconfigurator) instance|
 
 ### Methods
 
 ---
 
 ```typescript
+public resolve(route: ActivatedRouteSnapshot): string;
 ```
+
+The resolving method, as per the [Resolve](https://angular.io/api/router/Resolve) interface, returning the requested language locale code detected from the route.
+
+---
 
 ## ContentSelector
+The router guard in charge of selecting the content language to load according to the requested locale from the route. It implements the [CanActivate](https://angular.io/api/router/CanActivate) interface.
 
 ```typescript
+export type AllowedContent = Observable<true|UrlTree>|Promise<true|UrlTree>|true|UrlTree;
+
+@Injectable()
+export class ContentSelector implements CanActivate {
+
+  constructor(readonly router: Router, readonly config: ContentConfigurator);
+
+  public get browserLanguage(): string;
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): AllowedContent;
+  
+  public requestedValue(route: ActivatedRouteSnapshot): string;
+  public isValueAllowed(value: string): boolean;
+  public valueAllowed(value: string): string;
+}
 ```
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
+|`router: Router`|The [Router](https://angular.io/api/router/Router) instance|
+|`config: ContentConfigurator`|The common [ContentConfigurator](docs/content#contentconfigurator) instance|
+|`browserLanguage: string`|Returns the language locale code detected from the browser|
 
 ### Methods
 
 ---
 
 ```typescript
+canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): AllowedContent;
 ```
+The canActivate method according to the [CanActivate](https://angular.io/api/router/CanActivate) interface. Returns *true* allowing the resolution of the requested content when falling within the supported languages or an UrlTree to redirect the routing. 
+
+---
+
+```typescript
+public requestedValue(route: ActivatedRouteSnapshot): string;
+```
+Extract the requested language locale from the route.
+* `route: ActivatedRouteSnapshot` the route snapshot to extract the language locale from
+
+---
+
+```typescript
+public isValueAllowed(value: string): boolean;
+```
+Compares the given language value with the supported ones.
+* `value: string` - the language locale to check
+
+Returns *true* whenever the rewuested locale is supported,  *false* otherwise.
+
+---
+
+```typescript
+public valueAllowed(value: string): string;
+```
+Checks whenever the given language locale value is supported returning the *defaultValue* otherwise.
+* `value: string` - the language locale code to check
+
+---
 
 ## ContentResolver
-
+The resolver in charge of loading the content files while routing. It implements the [Resolve](https://angular.io/api/router/Resolve) interface.
 ```typescript
+
+export class ContentResolver implements Resolve<any> {
+
+  static create<T = any>(source: string, file: string, providedIn: 'root'|Type<T> = 'root'): InjectionToken<ContentResolver>;
+
+  constructor(readonly loader: ContentLoader, readonly selector: SelectorResolver, readonly source: string, readonly file: string) { }
+
+  public resolve(route: ActivatedRouteSnapshot): Observable<any>;
+}
 ```
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
+|`loader: ContentLoader`|The [ContentLoader](docs/content#contentloader) instance to load the content while resolving the route|
+|`selector: SelectorResolver`|The [SelectorResolver](docs/content#selectorresolver) instance to detect the language for which loading the content while resolving th route|
+|`source: string`|The source path to load the content file from|
+|`file: string`|The name of the content file to load|
 
 ### Methods
 
 ---
 
 ```typescript
+static create<T = any>(source: string, file: string, providedIn: 'root'|Type<T> = 'root'): InjectionToken<ContentResolver>;
 ```
+Static creation function. Retunrs an injectable content resolver, in the form of an [InjectionToken](https://angular.io/api/core/InjectionToken), to load the specified file.
+* `source: string` - the source path to load the content file from
+* `file: string` - the file name to load the content from 
+* `providedIn: 'root'|Type<T>` - determines which injector will provide the resolver. Defaultls to 'root' when left unspecified
+
+---
+
+```typescript
+public resolve(route: ActivatedRouteSnapshot): Observable<any>;
+```
+The resolving method, as per the [Resolve](https://angular.io/api/router/Resolve) interface, returning the dynamic content asynchronously.
+
+---
 
 ## ContentRouterModule
+Replaces the standard [RouterModule](https://angular.io/api/router/RouterModule), within child lazily loaded modules, to install the  resolvers suitable for loading the requested content.
 
 ```typescript
-```
+@NgModule()
+export class ContentRouterModule {
 
-|**Properties**|**Description**|
-|:--|:--|
-|``||
-|``||
+  static forChild(routes: RoutesWithContent): ModuleWithProviders<ContentRouterModule>;
+}
+```
 
 ### Methods
 
 ---
 
 ```typescript
+static forChild(routes: RoutesWithContent): ModuleWithProviders<ContentRouterModule>;
 ```
+
+Creates the module suitable to handle routes with content. This is equivalento to the Angular's Router [forChild](https://angular.io/api/router/RouterModule#forChild).
+* `routes: RoutesWithContent` - the array of routes including the requested content 
+```typescript
+export interface RouteWithContent extends Route {
+  source?: string;
+  content?: string|string[];
+  children?: RoutesWithContent;
+}
+
+export type RoutesWithContent = RouteWithContent[];
+```
+
+|**Value**|**Description**|
+|:--|:--|
+|`source?: string`|Optional source path to alternatively load the content file from|
+|`content?: string|string[]`|A string, or an array of strings, with the name(s) of the file(s) to load the content from|
+|`children?: RoutesWithContent`|Array of child RoutesWithContent objects that specifies a nested route configuration|
 
 ---
 ->
