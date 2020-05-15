@@ -1,7 +1,11 @@
+import { map, filter, distinctUntilChanged, delay } from 'rxjs/operators';
+import { UserFormComponent } from './user-form/user-form.component'
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { UserProfile, UserData } from 'app/auth/user-profile';
 import { User } from '@wizdm/connect/auth';
 import { DialogRef } from '@wizdm/dialog';
-import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import moment from 'moment';
 
 @Component({
@@ -9,11 +13,40 @@ import moment from 'moment';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent {
+export class ProfileComponent /*implements OnDestroy*/ {
+
+  @ViewChild(UserFormComponent) form: UserFormComponent;
 
   private newProfile: UserData;
+  //private sub: Subscription;
 
-  constructor(readonly user: UserProfile) { }
+  constructor(readonly user: UserProfile, router: Router) {
+/*
+    // Detects the user's preferred language changes
+    this.sub = this.user.data$.pipe(
+      // Gets the language
+      map( profile => profile && profile.lang ),  
+      // Filters for changes only
+      distinctUntilChanged(),
+      // Filters uneccessary changes..
+      filter( lang => {    
+        // ...undefined values (user logged out or language preferences undefined)
+        if(!lang) { return false; }
+        // Debug
+        console.log('Profile language:', lang);
+        // Catches the current locale from the route
+        const locale = router.url.match(/^\/(\w{2})/)?.[1];
+        // Go on in case the user language differs from the current locale
+        return lang !== locale;
+      }),
+      // Waits 1s before redirecting. This llikely ensures the page view updated, so, canLeave dialog will agree
+      delay(1000)
+      // Redirects to the current url with the new language
+    ).subscribe( lang => router.navigateByUrl( router.url.replace(/^\/\w{2}/, `/${lang}`) ) );*/
+  }
+
+  // Disposes of the observable
+  //ngOnDestroy() { this.sub.unsubscribe(); }
 
   public get userId(): string { return this.user.uid; }
 
@@ -42,7 +75,10 @@ export class ProfileComponent {
 
   public updateProfile() {
 
-    return this.user.update(this.newProfile);
+    if(!this.newProfile) { return; }
+
+    return this.user.update(this.newProfile)
+      .then(() => this.form.markAsPristine() );
   }
 
   public updateProfileAndLeave(ref: DialogRef<boolean>) {

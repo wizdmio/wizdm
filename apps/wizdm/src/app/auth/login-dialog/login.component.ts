@@ -254,8 +254,6 @@ export class LoginComponent extends DialogComponent<LoginData> {
       .then( user => {
         // Tracks the activity with analytics
         this.gtag.login(user?.providerId);
-
-        
         // Closes the dialog 
         this.close(user);        
       })
@@ -279,13 +277,10 @@ export class LoginComponent extends DialogComponent<LoginData> {
   }
 
   private sendEmailVerification() {
-                        
     // Grabs the url value passed along with the dialog data
     const url = this.data && this.data.url || ''; 
-
     // Removes the url from data preventing the redirection while closing the dialog
     if('url' in this.data) { delete this.data.url; } 
-
     // Sends the email verification request passing along the destination url for the user
     // to be redirected towards the desiderd destination once the verification will be completed
     return this.auth.user.sendEmailVerification({ url })

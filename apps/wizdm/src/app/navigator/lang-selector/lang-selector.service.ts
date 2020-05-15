@@ -1,12 +1,12 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
-import { switchMap, map, take } from 'rxjs/operators';
+import { switchMap, map, take, distinctUntilChanged } from 'rxjs/operators';
 import { DateAdapter } from '@angular/material/core';
 import { UserProfile } from 'app/auth/user-profile';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Injectable } from '@angular/core';
 import { $languageMap } from './lang-map';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import moment from 'moment';
 
 /**
@@ -17,20 +17,26 @@ export class LanguageSelector extends ContentSelector {
 
   private get auth() { return this.user.auth; }
 
+  private userLang: Observable<string>;
+
   constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, router: Router, config: ContentConfigurator) { 
     super(router, config); 
+
+    // Gets the user's preferred language filtering for real changes only
+    this.userLang = this.user.data$.pipe( map( profile => profile && profile.lang ), distinctUntilChanged() );
   }
 
+  // Implements CanActivate guarding to detect the most appropriate language to apply
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     // Resolves user profile data, when authenticated. This also prevents page flickering by delaying routing until authentication is completed
-    return this.user.stream().pipe( 
+    return this.userLang.pipe( 
 
       // Detects the language from the user profile
-      switchMap( profile => {
+      switchMap( lang => {
 
         // Whenever authenticated, returns the user preferred language
-        if(profile && profile.lang) { return of(profile.lang) }; 
+        if(lang) { return of(lang) }; 
         
         // Detects the location from the IP and returns the coresponding language falling back to the browser language
         // Note; IpInfo service caches the last value to avoid multiple API calls unless requested.
@@ -43,6 +49,7 @@ export class LanguageSelector extends ContentSelector {
 
         // Gets the language code from the route
         const requested = this.requestedValue(route);
+        
         // Whenever the requested language is allowed...
         if( this.isValueAllowed(requested) ) { 
 

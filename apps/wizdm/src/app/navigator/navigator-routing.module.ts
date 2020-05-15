@@ -5,6 +5,7 @@ import { ActionLinkObserver } from '@wizdm/actionlink';
 import { NavigatorComponent } from './navigator.component';
 import { LanguageSelector } from './lang-selector';
 import { BackLinkObserver } from './back-link';
+import { CloseLinkObserver } from './close-link';
 import { Oauth2Handler } from '../auth/oauth2-handler';
 
 const routes: RoutesWithContent = [
@@ -50,6 +51,7 @@ const routes: RoutesWithContent = [
       { path: 'login',       canActivate: [ ActionLinkObserver ] },
       { path: 'contact',     canActivate: [ ActionLinkObserver ] },
       { path: 'back',        canActivate: [ BackLinkObserver ] },
+      { path: 'close',       canActivate: [ CloseLinkObserver ] },
       
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },

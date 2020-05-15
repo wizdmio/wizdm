@@ -3,7 +3,7 @@ import { DatabaseService } from '@wizdm/connect/database';
 import { AuthService, User as authUser} from '@wizdm/connect/auth';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subscription, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, shareReplay } from 'rxjs/operators';
 
 export interface UserData extends DocumentData {
   name?    : string;
@@ -23,6 +23,9 @@ export interface UserData extends DocumentData {
 })
 export class UserProfile<T extends UserData = UserData> extends DatabaseDocument<T> implements OnDestroy {
 
+  /** User profile data observable */
+  readonly data$: Observable<T>;
+
   /** Current user profile snapshot */
   private snapshot: T = {} as T;
   private sub: Subscription;
@@ -30,15 +33,24 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
   /** The authenticated user's id */
   public get uid(): string { return this.auth.userId; } 
 
-  /** The user's profile data  */
+  /** The user's profile data snapshot */
   public get data(): T { return this.snapshot; }
   
   constructor(readonly auth: AuthService, db: DatabaseService) {
     // Extends the DatabaseDocument with a null reference
     super(db, null);
 
+    this.data$ = this.auth.user$.pipe(
+      // Resolves the authenticated user attaching the corresponding document reference    
+      tap( user => this.fromUser(user) ),
+      // Streams the document with the authenticated user profile
+      switchMap( user => !!user ? super.stream() : of(null) ),
+      // Replays the value to avoid multiple database reads if unnecessary
+      shareReplay({ bufferSize: 1, refCount: false }) 
+    );
+
     // Persists the user profile snapshot making sure the document reference is always up to date
-    this.sub = this.stream().subscribe( profile => this.snapshot = profile || {} as T);
+    this.sub = this.data$.subscribe( profile => this.snapshot = profile || {} as T);
   }
 
   // Disposes of the subscription
@@ -48,20 +60,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
   private fromUser(user: authUser): this {
 
     // Updates the user profile's reference
-    this.ref = !!user ? this.db.doc(`users/${user.uid}`) : null;
-    
-    return this;
-  }
-
-  // Extends the streaming function to resolve the authenticated user first
-  public stream(): Observable<T> {
-
-     return this.auth.user$.pipe(
-      // Resolves the authenticated user attaching the corresponding document reference    
-      tap( user => this.fromUser(user) ),
-      // Streams the document with the authenticated user profile
-      switchMap( user => !!user ? super.stream() : of(null) )
-    );
+    return this.from(!!user ? `users/${user.uid}` : null), this;
   }
 
   /** Creates the user profile from a User object */

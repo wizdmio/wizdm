@@ -17,8 +17,8 @@ export class DatabaseDocument<T extends DocumentData> {
   }
 
   /** Applies the given reference to this object */
-  public from(ref: string|DocumentRef<T>): this {
-    return (this.ref = this.db.doc(ref)), this;
+  public from(ref: string|DocumentRef<T>): DocumentRef<T> {
+    return this.ref = this.db.doc(ref);
   }
 
   /** Returns the document object id */

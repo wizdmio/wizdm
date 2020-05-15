@@ -46,7 +46,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
     this.patchValue({ ...value, birth });
     
     // Marks the form as pristine right after the view updated
-    Promise.resolve().then( () => this.markAsPristine() );
+    //Promise.resolve().then( () => this.markAsPristine() );
   }
 
   @Output('valueChange') formValueChange = new EventEmitter<UserData>();
