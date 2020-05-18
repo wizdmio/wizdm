@@ -1,7 +1,4 @@
 # Emoji Support
-
-[Go to the API Reference](docs/emoji#api-reference)
-
 Universal emoji support for Angular. The package provides utilities and components rendering emoji as images whenever the native support were missing.
 
 ## Usage Example
