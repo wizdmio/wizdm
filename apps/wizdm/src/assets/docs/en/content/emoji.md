@@ -9,11 +9,11 @@ Universal emoji support for Angular. The package provides utilities and componen
 &nbsp;
 
 # API Reference
-[EmojiModule](docs/emoji#emojimodule)
+[EmojiSupportModule](docs/emoji#emojisupportmodule)
 
 &nbsp;   
 
-## EmojiModule 
+## EmojiSupportModule 
 
 ```typescript
 import { EmojiSupportModule } from '@wizdm/emoji';
