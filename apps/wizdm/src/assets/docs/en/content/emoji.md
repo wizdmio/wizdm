@@ -37,7 +37,7 @@ Use the `matEmoji` directive to enable the component working within a [MatFormFi
 &nbsp;
 
 # API Reference
-[EmojiSupportModule](#emojisupportmodule) - [EmojiImageModule](#emojiimagemodule) - [EmojiTextModule](#emojitextmodule)
+[EmojiSupportModule](#emojisupportmodule) - [EmojiImageModule](#emojiimagemodule) - [EmojiTextModule](#emojitextmodule) - [EmojiInputModule](#emojiinputmodule)
 
 &nbsp;   
 
