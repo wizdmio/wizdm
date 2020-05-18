@@ -270,6 +270,54 @@ Deletes the character (or the emoji sequence) preceding the current cursor posit
 
 ---
 
+&nbsp;
+
+## EmojiUtils Service
+Utility service providing common tools to the package components and directives.
+
+```typescript
+@Injectable()
+export class EmojiUtils {
+
+  constructor(config: EmojiConfig, readonly native: boolean, readonly regex: RegExp);
+
+  public imageFilePath(emoji: string): string;
+  public isEmoji(source: string): boolean;
+  public parseEmojiCodes(source: string, callbackfn: (match: string, index: number) => void);
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|`config: EmojiConfig`|The configuration object|
+|`native: boolean`|**True** whenever a native emoji support has been detected|
+|`regex: RegExp`|A regular expression to match all the emoji symbols according to the Unicode standard. See [emoji-regex](https://www.npmjs.com/package/emoji-regex)|
+
+**Methods**
+
+---
+
+```typescript
+public imageFilePath(emoji: string): string;
+```
+Returns the full path to load the emoji image file according to the given code points sequence.
+* `emoji: string` - the emoji code points sequence.
+
+---
+
+```typescript
+public isEmoji(source: string): boolean;
+```
+Returns **true** when the given input matches an emoji sequence according to the Unicode standard.
+* `source: string` - an emoji codepoints sequence
+
+```typescript
+public parseEmojiCodes(source: string, callbackfn: (match: string, index: number) => void);
+```
+Parses a string for occurrences of emoji sequences.
+* `source: string` - The inpus text to parse.
+* `callbackfn: (match: string, index: number) => void` - a callback function called each time a valid emoji sequence has been detected  
+
 ->
 [Next Topic](docs/toc?go=next) 
 ->
