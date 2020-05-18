@@ -1,10 +1,10 @@
 <!-- toc: reference.json -->
 
-# Universal Emoji Support
+# Emoji Support
 
 [Go to the API Reference](docs/emoji#api-reference)
 
-Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
+Universal emoji support for Angular. The package provides utilities and components rendering emoji as images whenever the native support were missing.
 
 &nbsp;
 
@@ -21,8 +21,23 @@ import { EmojiSupportModule } from '@wizdm/emoji';
 
 The main module provides an optional `init()` static function to customize the module behvior:
 ```typescript
+@NgModule({
+  providers: [ EmojiUtils ]
+})
+export class EmojiSupportModule { 
+
+   static init(config: EmojiConfig): ModuleWithProviders<EmojiSupportModule>;
+}
+```
+
+### Methods
+
+---
+
+```typescript
 static init(config?: EmojiConfig): ModuleWithProviders<EmojiSupportModule>
 ```
+Static module initialization function to customize the module behavior. It returns the customized module instance. 
 * `config: EmojiConfig` - the configuration object.
 ```typescript
 export interface EmojiConfig {
@@ -35,4 +50,7 @@ export interface EmojiConfig {
 |:--|:--|
 |`emojiPath: string`||
 |`emojiExt: string`||
+
+---
+
 &nbsp;  
