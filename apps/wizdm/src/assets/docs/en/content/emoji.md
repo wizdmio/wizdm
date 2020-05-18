@@ -19,7 +19,7 @@ Universal emoji support for Angular. The package provides utilities and componen
 import { EmojiSupportModule } from '@wizdm/emoji';
 ```
 
-The main module provides an optional `init()` static function to customize the module behvior:
+Import the *EmojiSupportModule* in your app to enable universal emoji support. Use the static `init()` function to setup the module according to your needs.  
 ```typescript
 @NgModule({
   providers: [ EmojiUtils ]
