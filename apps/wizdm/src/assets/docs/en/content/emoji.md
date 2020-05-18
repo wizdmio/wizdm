@@ -167,7 +167,7 @@ export class EmojiText {
 |`segments: emSegment[]`|The array of segments the input text has been splitted into|
 |`behavior: 'native'`\|`'web'`|Read-only properties returning the current rendering mode. When in *native* mode, the text is rendered as it is. When in *web* mode the emoji(s) are rendered as `<img/>` elements|
 |`@Input() value: string`|The input text for the component to be rendered. The input is aliased `wm-emoji-text`|
-|`@Input() mode: 'native'`\|`'web'`\|`'auto'`|Sets the rendering mode. When in *native* mode, the text is rendered as it is. When in *web* mode the emoji(s) are rendered as `<img/>` elements. When in *auto* mode the rendering is automatically selected to *native* mode  whenever a native support for emoji is detected or to *web* mode otherwise|
+|`@Input() mode: 'native'`\|`'web'`\|`'auto'`|Sets the rendering mode. When in *native* mode, the text is rendered as it is. When in *web* mode the emoji(s) are rendered as `<img/>` elements. When in *auto* mode the rendering is automatically selected to *native* mode  whenever a native support for emoji is detected or to *web* mode otherwise. Default mode is *auto*|
 
 &nbsp;
 
@@ -216,16 +216,16 @@ export class EmojiInput extends EmojiText {
 
 |**Properties**|**Description**|
 |:--|:--|
-|``||
-|``||
-|``||
-|``||
-|``||
-|``||
-|``||
-|``||
-|``||
-|``||
+|`collapsed: boolean`|**True** whenever the current selection is collapsed into a cursor|
+|`focused: boolean`|**True** whenever the control has the input focus|
+|`@Input() placeholder: string`|The placeholder text as in a regular input control|
+|`@Input() value: string`|The input text value|
+|`@Output() valueChange: EventEmitter<string>`|Emits the new input value whenever it changes|
+|`@Input() disabled: boolea`|When **true** disables the control|
+|`@Input() required: boolean`|When **true** marks the control as required|
+|`@Input() newline: 'none'`\|`'always'`\|`'shift'`|Selects the way to handle the *return* key. When *none* no new lines are allowed. This makes the control behave similarly to a native `<input>`. When *always* new lines are allowed making the control behave similarly to a native `<textarea>`. When *shift* new lines are allowed when the *return* key is pressed together with the *shift* key or ignored otherwise|
+|`historyTime: number`|History (undo) throttle time in milliseconds. New changes are saved only after *historyTime* has passed since the last saved change. Defaults to *1s*|
+|`historyLimit: number`|Lenght of the history buffer prior to start overwriting the oldest records. Defaults to *128*|
 
 
 **Methods**
@@ -233,12 +233,43 @@ export class EmojiInput extends EmojiText {
 ---
 
 ```typescript
+public focus() void;
 ```
-bla bla
+Focuses the control for input.
 
 ---
 
+```typescript
+public blur() void;
+```
+Clears the focus.
+
 ---
+
+```typescript
+public select(start: number, end?: number): this;
+```
+Selects the given portion of the text.
+* `start: number` - the selection start offset
+* `end: number` - the selection end offset. Defaults to the *start* value when undefined collapsing the selection.
+
+---
+
+```typescript
+public insert(key: string): this;
+```
+Inserts a new text at the current selection.
+* `key: string` - the new text. When empty, the current selection is deleted.
+
+---
+
+```typescript
+public backspace(): this;
+```
+Deletes the character (or the emoji sequence) preceding the current cursor position. If the selection isn't collapsed, deletes the current selection.
+
+---
+
 ->
 [Next Topic](docs/toc?go=next) 
 ->
