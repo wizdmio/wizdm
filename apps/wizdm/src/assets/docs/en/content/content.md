@@ -2,14 +2,14 @@
 
 # Dynamic Content 
 
-[Go to the API Reference](docs/content#api-reference)
+[Go to the API Reference](#api-reference)
 
 Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
 
 &nbsp;
 
 # API Reference
-[ContentModule](docs/content#contentmodule) - [ContentDirective](docs/content#contentdirective) - [ContentLoader](docs/content#contentloader) - [FileLoader](docs/content#fileloader) - [ContentConfigurator](docs/content#contentconfigurator) - [SelectorResolver](docs/content#selectorresolver) - [ContentSelector](docs/content#contentselector) - [ContentResolver](docs/content#contentresolver) - [ContentRouterModule](docs/content#contentroutermodule)
+[ContentModule](#contentmodule) - [ContentDirective](#contentdirective) - [ContentLoader](#contentloader) - [FileLoader](#fileloader) - [ContentConfigurator](#contentconfigurator) - [SelectorResolver](#selectorresolver) - [ContentSelector](#contentselector) - [ContentResolver](#contentresolver) - [ContentRouterModule](#contentroutermodule)
 
 &nbsp;   
 
@@ -173,7 +173,7 @@ export abstract class ContentLoader {
 
 |**Properties**|**Description**|
 |:--|:--|
-|`config: ContentConfigurator`|The instance of the [ContentConfigurator](docs/content#contentconfigurator)|
+|`config: ContentConfigurator`|The instance of the [ContentConfigurator](#contentconfigurator)|
 |`language: string`|The currernt language the laoder is loading data for|
 |`cache: LoaderCache`|The object caching the data while loading to avoid loading the same content multiple times|
 
@@ -284,7 +284,7 @@ E.g. https\://whatever.io/:lang/home where *:lang* is a two digit country code: 
 
 |**Properties**|**Description**|
 |:--|:--|
-|`config: ConfigResolver`|The common [ContentConfigurator](docs/content#contentconfigurator) instance|
+|`config: ConfigResolver`|The common [ContentConfigurator](#contentconfigurator) instance|
 
 ### Methods
 
@@ -322,7 +322,7 @@ export class ContentSelector implements CanActivate {
 |**Properties**|**Description**|
 |:--|:--|
 |`router: Router`|The [Router](https://angular.io/api/router/Router) instance|
-|`config: ContentConfigurator`|The common [ContentConfigurator](docs/content#contentconfigurator) instance|
+|`config: ContentConfigurator`|The common [ContentConfigurator](#contentconfigurator) instance|
 |`browserLanguage: string`|Returns the language locale code detected from the browser|
 
 ### Methods
@@ -378,8 +378,8 @@ export class ContentResolver implements Resolve<any> {
 
 |**Properties**|**Description**|
 |:--|:--|
-|`loader: ContentLoader`|The [ContentLoader](docs/content#contentloader) instance to load the content while resolving the route|
-|`selector: SelectorResolver`|The [SelectorResolver](docs/content#selectorresolver) instance to detect the language for which loading the content while resolving th route|
+|`loader: ContentLoader`|The [ContentLoader](#contentloader) instance to load the content while resolving the route|
+|`selector: SelectorResolver`|The [SelectorResolver](#selectorresolver) instance to detect the language for which loading the content while resolving th route|
 |`source: string`|The source path to load the content file from|
 |`file: string`|The name of the content file to load|
 
