@@ -6,7 +6,9 @@ export interface RedirectionExtras extends NavigationExtras {
   target?: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RedirectService implements CanActivate {
 
   constructor(@Inject(DOCUMENT) readonly document: Document, readonly router: Router) { }
@@ -29,6 +31,18 @@ export class RedirectService implements CanActivate {
     return /^http(?:s)?:\/{2}\S+$/.test(url);
   }
 
+  /** Parses the given url for extenral redirection */
+  private externalUrl(url: string, target?: string): string {
+    // Builds the redirection url for canActivate() to handle it
+    return "redirect?url=" + url + (!!target ? "&=" + target : '');
+  }
+
+  /** Parses the given url for internal routing */
+  private internalUrl(url: string): string {
+    // Handles '#' anchors and '.' relative urls by prepending the current url from the router
+    return url && url.startsWith('#') ? (this.router.url + url) : (url && url.replace(/^\./, this.router.url));
+  }
+
   /** Navigates to the given url, redirecting when necessary 
    * @param url An absolute URL. The function does not apply any delta to the current URL. 
    * When starting with 'http(s)://' triggers the external redirection. 
@@ -37,11 +51,10 @@ export class RedirectService implements CanActivate {
    */
   public navigate(url: string, extras?: RedirectionExtras): Promise<boolean> {
 
-    // Extracts the target from the extras
-    const target = extras && extras.target;
     // Compose the url link for redirection
-    const link = this.external(url) ? "redirect?url=" + url + (!!target ? "&=" + target : '') : url;
-    // Navigates with the router activat the redirection guard
+    const link = this.external(url) ? this.externalUrl(url, extras.target) : this.internalUrl(url);
+
+    // Navigates with the router activating the redirection guard
     return this.router.navigateByUrl(link, extras);
   }
 
