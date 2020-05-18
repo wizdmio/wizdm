@@ -37,6 +37,7 @@ export class ContentModule {
 ```typescript
 static init(config?: ContentConfig): ModuleWithProviders<ContentModule>
 ```
+Static module initialization function to customize the module behavior. It returns the customized module instance.
 * `config: ContentConfig` - the configuration object.
 ```typescript
 export interface ContentConfig {
