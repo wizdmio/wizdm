@@ -318,6 +318,8 @@ Parses a string for occurrences of emoji sequences.
 * `source: string` - The inpus text to parse.
 * `callbackfn: (match: string, index: number) => void` - a callback function called each time a valid emoji sequence has been detected  
 
+---
+
 ->
 [Next Topic](docs/toc?go=next) 
 ->
