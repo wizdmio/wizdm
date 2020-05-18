@@ -19,7 +19,21 @@ Runtime content management by the [Angular Router](https://angular.io/api/router
 import { ContentModule } from '@wizdm/content';
 ```
 
-The main module provides an optional `init()` static function to customize the module behvior:
+Import the ContentModule in your root app module to enable content resolving. Use the static `init()` function to setup the module according to your needs.
+
+```typescript
+@NgModule({
+  exports: [ ContentDirective ]
+})
+export class ContentModule { 
+  static init(config: ContentConfig): ModuleWithProviders<ContentModule>;
+}
+```
+
+### Methods
+
+---
+
 ```typescript
 static init(config?: ContentConfig): ModuleWithProviders<ContentModule>
 ```
@@ -38,6 +52,8 @@ export interface ContentConfig {
 |`source: string`|The path from wich the loader will load the content files. Defaults to *assets/i18n* when unspecified|
 |`defaultValue: string`|The defaultl selector value to be used when none is provided by the current route. Defaults to *en* when unspecified|
 |`supportedValues: string[]`|An array of possible selector values to accept as valid. Any selector value not matching a suported one will be automatically reverted to the `defaultValue`|
+
+---
 
 &nbsp;  
 
