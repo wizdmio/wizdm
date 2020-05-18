@@ -4,7 +4,9 @@
 
 [Go to the API Reference](docs/emoji#api-reference)
 
-Universal emoji support for Angular. The package provides utilities and components rendering emoji as images whenever the native support were missing.
+Universal emoji support for Angular. The package provides utilities and components rendering emoji as images whenever the native support were missing. 
+
+The package is designed to work with images following [emoji-datasource](https://www.npmjs.com/package/emoji-datasource) naming convention.
 
 ## Usage Example
 The package can be used to both render text or to capture input with emoji:
@@ -74,8 +76,8 @@ export interface EmojiConfig {
 ```
 |**Value**|**Description**|
 |:--|:--|
-|`emojiPath: string`||
-|`emojiExt: string`||
+|`emojiPath: string`|Path to load the emoji images from|
+|`emojiExt: string`|Image file extension. Defaults to `PNG` when left undefined|
 
 ---
 
