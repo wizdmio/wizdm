@@ -1,11 +1,38 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Universal Emoji Support
 
-[Start](docs) - [Back](back) - [Home](home)
+[Go to the API Reference](docs/emoji#api-reference)
 
-Wizdm is a young project and some of the documentation is still missing. 
+Runtime content management by the [Angular Router](https://angular.io/api/router/Router). The package provides a set of features for automatically install content resolvers to load content files from assets while routing lazily loaded modules. The content is then accessible within the same module components' template via the `wmContent` structural directive.
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+&nbsp;
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+# API Reference
+[EmojiModule](docs/emoji#emojimodule)
+
+&nbsp;   
+
+## EmojiModule 
+
+```typescript
+import { EmojiSupportModule } from '@wizdm/emoji';
+```
+
+The main module provides an optional `init()` static function to customize the module behvior:
+```typescript
+static init(config?: EmojiConfig): ModuleWithProviders<EmojiSupportModule>
+```
+* `config: EmojiConfig` - the configuration object.
+```typescript
+export interface EmojiConfig {
+
+  emojiPath?: string;  
+  emojiExt?: string;
+};
+```
+|**Value**|**Description**|
+|:--|:--|
+|`emojiPath: string`||
+|`emojiExt: string`||
+&nbsp;  
