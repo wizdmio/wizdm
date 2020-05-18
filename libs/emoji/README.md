@@ -1,6 +1,22 @@
 # Emoji Support
 Universal emoji support for Angular. The package provides utilities and components rendering emoji as images whenever the native support were missing.
 
+## Installation
+Import the *EmojiSupport* module in your root module calling the static `init()` function to setup the source path for the image files:
+```typescript
+import { EmojiSupportModule } from '@wizdm/emoji';
+
+@NgModule({
+  imports: [
+    ...
+    EmojiSupportModule.init( { emojiPath: "https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/" })
+  ]
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+The package is designed to work with images following [emoji-datasource](https://www.npmjs.com/package/emoji-datasource) naming convention.
+
 ## Usage Example
 The package can be used to both render text or to capture input with emoji:
 
