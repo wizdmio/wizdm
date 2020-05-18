@@ -9,7 +9,9 @@ import { EmojiSupportModule } from '@wizdm/emoji';
 @NgModule({
   imports: [
     ...
-    EmojiSupportModule.init( { emojiPath: "https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/" })
+    EmojiSupportModule.init( { 
+      emojiPath: "https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/" 
+    })
   ]
   bootstrap: [AppComponent]
 })
