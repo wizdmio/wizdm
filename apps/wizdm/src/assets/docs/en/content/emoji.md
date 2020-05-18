@@ -279,7 +279,7 @@ Utility service providing common tools to the package components and directives.
 @Injectable()
 export class EmojiUtils {
 
-  constructor(config: EmojiConfig, readonly native: boolean, readonly regex: RegExp);
+  constructor(readonly native: boolean, readonly regex: RegExp);
 
   public imageFilePath(emoji: string): string;
   public isEmoji(source: string): boolean;
@@ -289,7 +289,6 @@ export class EmojiUtils {
 
 |**Properties**|**Description**|
 |:--|:--|
-|`config: EmojiConfig`|The configuration object|
 |`native: boolean`|**True** whenever a native emoji support has been detected|
 |`regex: RegExp`|A regular expression to match all the emoji symbols according to the Unicode standard. See [emoji-regex](https://www.npmjs.com/package/emoji-regex)|
 
