@@ -98,11 +98,28 @@ The customizations above will affect the container's children elements only, so,
 import { AnimateModule } from '@wizdm/animate';
 ```
 
-The main module provides an optional `init()` static function to customize the module behvior:
+Import the AnimateModule in your modules to enable on scroll animations. Use the static `init()` function within your root module to setup the module according to your needs.
+
+```typescript
+@NgModule({
+  exports: [ AnimateComponent, AnimateDirective ]
+})
+export class AnimateModule { 
+
+  static init(config: AnimateConfig): ModuleWithProviders<AnimateModule>;
+
+}
+```
+
+### Methods
+
+---
+
 ```typescript
 static init(config?: AnimateConfig): ModuleWithProviders<AnimateModule>
 ```
-* `config: AnimateConfig`
+Static module initialization function to customize the module behavior. It returns the customized module instance.
+* `config: AnimateConfig` - the configuration object.
 ```typescript
 interface AnimateConfig {
   triggerMode?: 'scrolling'|intersectionObserver'|'auto';
@@ -124,6 +141,8 @@ interface AnimateConfig {
 * `offsetLeft?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the left with.
 * `offsetRight?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the right with.
 * `offsetBottom?: number` - A global offset, expressed in **pixels**, to shrink the triggering area from the bottom with.  
+
+---
 
 &nbsp;  
 
