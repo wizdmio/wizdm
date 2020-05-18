@@ -37,7 +37,7 @@ Use the `matEmoji` directive to enable the component working within a [MatFormFi
 &nbsp;
 
 # API Reference
-[EmojiSupportModule](#emojisupportmodule), [EmojiImageModule](#emojiimagemodule) - [EmojiTextModule](#emojitextmodule)
+[EmojiSupportModule](#emojisupportmodule) - [EmojiImageModule](#emojiimagemodule) - [EmojiTextModule](#emojitextmodule)
 
 &nbsp;   
 
@@ -58,7 +58,7 @@ export class EmojiSupportModule {
 }
 ```
 
-### Methods
+**Methods**
 
 ---
 
@@ -164,7 +164,81 @@ export class EmojiText {
 |**Properties**|**Description**|
 |:--|:--|
 |`utils: EmojiUtils`|The [EmojiUtils](#emojiutils) service instance|
-|`segments: emSegment[]`||
+|`segments: emSegment[]`|The array of segments the input text has been splitted into|
+|`behavior: 'native'`\|`'web'`|Read-only properties returning the current rendering mode. When in *native* mode, the text is rendered as it is. When in *web* mode the emoji(s) are rendered as `<img/>` elements|
+|`@Input() value: string`|The input text for the component to be rendered. The input is aliased `wm-emoji-text`|
+|`@Input() mode: 'native'`\|`'web'`\|`'auto'`|Sets the rendering mode. When in *native* mode, the text is rendered as it is. When in *web* mode the emoji(s) are rendered as `<img/>` elements. When in *auto* mode the rendering is automatically selected to *native* mode  whenever a native support for emoji is detected or to *web* mode otherwise|
+
+&nbsp;
+
+## EmojiInputModule
+
+```typescript
+import { EmojiIinputModule } from '@wizdm/emoji/input';
+```
+
+### EmojiInput Component 
+The `EmojiInputModule` exports the `EmojiInput` component. Use the `<wm-emoji-input>` the same way you'd use a `textarea` control. 
+
+The component implements the [ControlValueAccessor](https://angular.io/api/forms/ControlValueAccessor) interface supporting the Angular's form API. 
+
+Use the `matEmoji` directive to enable the component working within a [MatFormField](https://material.angular.io/components/form-field/overview) the same way native controls do.
+
+```typescript
+@Component({
+  selector: 'wm-emoji-input'
+})
+export class EmojiInput extends EmojiText {
+
+  public get collapsed(): boolean;
+  public get focused(): boolean;
+
+  public focus();
+  public blur();
+
+  @Input() placeholder: string;
+  @Input() value: string;
+
+  @Output() valueChange: EventEmitter<string>;
+  
+  @Input() disabled: boolean; 
+  @Input() required: boolean; 
+  @Input() newline: 'none'|'always'|'shift';
+
+  @Input() historyTime: number;
+  @Input() historyLimit: number;
+
+  public select(start: number, end?: number): this;
+  public insert(key: string): this;
+  public backspace(): this;
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
 |``||
 |``||
 |``||
+|``||
+|``||
+|``||
+|``||
+|``||
+|``||
+|``||
+
+
+**Methods**
+
+---
+
+```typescript
+```
+bla bla
+
+---
+
+---
+->
+[Next Topic](docs/toc?go=next) 
+->
