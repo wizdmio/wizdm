@@ -1,7 +1,7 @@
 <!-- toc: reference.json -->
 
 # Dialog 
-[Go to the API Reference](docs/dialog#api-reference)
+[Go to the API Reference](#api-reference)
 
 Dialog is a package providing a declarative version of the [Angular Material Dialog](https://material.angular.io/components/dialog/api). 
 
