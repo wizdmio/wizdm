@@ -9,7 +9,7 @@ Universal emoji support for Angular. The package provides utilities and componen
 ## Usage Example
 The package can be used to both render text or to capture input with emoji:
 
-```typescript
+```html
   <!-- Displays a text with emoji --> 
   <h1 wm-emoji-text="Send a message 😉"></h1>
   
