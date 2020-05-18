@@ -88,7 +88,7 @@ The customizations above will affect the container's children elements only, so,
 &nbsp;  
 
 # API Reference
-[AnimateModule](docs/animate#animatemodule) - [AnimateComponent](docs/animate#animatecomponent) - [AnimateDirective](docs/animate#animatedirective) - [AnimateService](docs/animate#animateservice)  
+[AnimateModule](#animatemodule) - [AnimateComponent](#animatecomponent) - [AnimateDirective](#animatedirective) - [AnimateService](#animateservice)  
 
 &nbsp;  
 
@@ -178,12 +178,12 @@ export class AnimateComponent {
 |:--|:--|
 |`animating: boolean`|**True** when the animation is running|
 |`animated: boolean`|**True** after the animation completed. False while the animation is running|
-|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](docs/animate#supported-animations)| 
-|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](docs/animate/#timing)|
-|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](docs/animate/#timing)|
+|`@Input() wmAnimate: wmAnimations`|Selects the animation to play. See [supported animations](#supported-animations)| 
+|`@Input() set speed(speed: wmAnimateSpeed)`|Speeds up or slows down the animation. See [timing](#timing)|
+|`@Input() set delay(delay: string)`|Delays the animation execution. See [timing](#timing)|
 |`@Input() disabled: boolean`|Disables the animation|
 |`@Input() paused: boolean`|When **true**, keeps the animation idle until the next replay triggers|
-|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](docs/animate#animate-on-scroll)|
+|`@Input() set aos(threshold: number)`|When defined, triggers the animation on element scrolling in the viewport by the specified amount. Amount defaults to 50% when not specified. See [Animate On Scroll](#animate-on-scroll)|
 |`@Input() once: boolean`|When **true**, prevents the animation to run again|
 |`@Input() set replay(replay: any)`|Replays the animation|
 |`@Output() start: EventEmitter<void>`|Emits at the beginning of the animation|
