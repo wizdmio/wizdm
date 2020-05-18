@@ -23,7 +23,7 @@ The main module provides an optional `init()` static function to customize the m
 ```typescript
 static init(config?: ContentConfig): ModuleWithProviders<ContentModule>
 ```
-**config**
+* `config: ContentConfig` - the configuration object.
 ```typescript
 export interface ContentConfig {
   selector?: string;
