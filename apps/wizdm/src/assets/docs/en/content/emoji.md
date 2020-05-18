@@ -37,7 +37,7 @@ Use the `matEmoji` directive to enable the component working within a [MatFormFi
 &nbsp;
 
 # API Reference
-[EmojiSupportModule](docs/emoji#emojisupportmodule)
+[EmojiSupportModule](#emojisupportmodule), [EmojiImageModule](#emojiimagemodule) - [EmojiTextModule](#emojitextmodule)
 
 &nbsp;   
 
@@ -79,6 +79,92 @@ export interface EmojiConfig {
 |`emojiPath: string`|Path to load the emoji images from|
 |`emojiExt: string`|Image file extension. Defaults to `PNG` when left undefined|
 
+The package is designed to work with images following [emoji-datasource](https://www.npmjs.com/package/emoji-datasource) naming convention.
+
 ---
 
 &nbsp;  
+
+## EmojiImageModule
+
+```typescript
+import { EmojiImageModule } from '@wizdm/emoji/image';
+```
+
+### EmojiImage Directive
+The `EmojiImageModule` exports the `EmojiImage` directive taking care of loading the most appropriate image to render the given emoji. 
+
+```typescript
+@Directive({
+  selector: 'img[wm-emoji]'
+})
+export class EmojiImage {
+
+  public error: boolean; 
+  public load: boolean; 
+  public emoji: string;
+  
+  get loading(): boolean;
+
+  @Input('wm-emoji') set value(emoji: string);
+  
+  @Input() size: string;
+  @Input() spacing: string;
+
+  @Output() hit: EventEmitter<'left'|'right'>;
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|`error: boolean`|**True** whenever there was an error while loading the image|
+|`load: boolean`|**True** when the image has been load. **False** while loading|
+|`loading: boolean`|**True** while loading the image|
+|`emoji: string`|The requested emoji sequence| 
+|`@Input() value: string`|Sets the requested emoji triggering the image loading. This input is aliased as `wm-emoji`|
+|`@Input() size: string`|Customizes the size for the emoji. Defaults to *1.25em* when left undefined|
+|`@Input() spacing: string`|Customizes the spacing, applying both a left and right margin. Defaults to *0.05em* when undefined |
+|`@Output() hit: EventEmitter<'left'`\|`'right'>`|Emits when the image is clicked. The emitted value depends on which side the image has been clicked on|
+
+&nbsp;
+
+## EmojiTextModule
+
+```typescript
+import { EmojiTextModule } from '@wizdm/emoji/text';
+```
+
+### EmojiText Component
+The `EmojiTextModule` exports the `EmojiText` component suitable to render a text containing emoji(s). If native support is available, the component simply renders the text as it is. In case of native support missing, the component uses [EmojiImage directive](#emojiimagedirective) to render the emoji as images. 
+
+```typescript
+
+export interface emSegment {
+  type: 'text'|'emoji';
+  content: string;
+}
+
+@Component({
+  selector: '[wm-emoji-text]'
+})
+export class EmojiText {
+
+  constructor(readonly utils: EmojiUtils);
+  
+  readonly segments: emSegment[];
+  
+  get behavior(): 'native'|'web';
+
+  @Input('wm-emoji-text') value: string;
+    
+  @Input() mode: 'auto'|'native'|'web';
+}
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|`utils: EmojiUtils`|The [EmojiUtils](#emojiutils) service instance|
+|`segments: emSegment[]`||
+|``||
+|``||
+|``||
