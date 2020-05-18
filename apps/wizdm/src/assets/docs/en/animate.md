@@ -2,7 +2,7 @@
 
 # Animate 
 
-[Go to the API Reference](docs/animate#api-reference)
+[Go to the API Reference](#api-reference)
 
 Animate is a package providing a directive-like component designed to animate its transcluded content. The animation can be selected among a series of attention seekers, entrances and exists inspired by the famous [Animate.css](https://daneden.github.io/animate.css/). The main purpose of the package, however, is to trigger the selected animation when the element is scrolling into the view.  
 
