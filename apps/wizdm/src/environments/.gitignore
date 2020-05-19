@@ -1,2 +1,2 @@
-# Configurations
-*secrets.ts
+# Private configurations
+*.private.*

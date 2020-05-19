@@ -38,7 +38,13 @@
             "stylePreprocessorOptions": {
               "includePaths": ["apps/wizdm/src/styles", "libs/elements/src/lib"]
             },
-            "scripts": []
+            "scripts": [],
+            "fileReplacements": [
+              {
+                "replace": "apps/wizdm/src/environments/secrets.ts",
+                "with": "apps/wizdm/src/environments/secrets.private.ts"
+              }
+            ]
           },
           "configurations": {
             "production": {
