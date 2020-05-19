@@ -21,7 +21,7 @@ The `wm-prism` selector on a `<pre>` element instantiates a [PrismHighlighter](#
 When disabled the highlighter renders its translcluded content giving the user the ability to decide how to better handle the outcome.  The example above shows how to revert to a plain code without highlighting.
 
 ## Installation
-Import the [PrismModule](#prismmodule) in your target feature module. Notes that by PrismJS natively supports *Markup*, *CSS*, *C-like* and *JavaScript* languages while more languages can be imported separaterly. 
+Import the [PrismModule](#prismmodule) in your target feature module. Notes that by *PrismJS* natively supports *Markup*, *CSS*, *C-like* and *JavaScript* languages while more languages can be imported separaterly. 
 
 ### Installing Languages
 Simply import the relevant language module from `@wizdm/prism/languages` righ after the main module. Examples of available modules are *PrismTsModule* for *Typescript* or *PrismScssModule* for *Scss*. 
