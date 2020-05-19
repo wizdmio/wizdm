@@ -1,3 +1,7 @@
+import { ConnectConfig } from '@wizdm/connect';
+import { DoorbellConfig } from '@wizdm/doorbell';
+import { GtagConfig } from '@wizdm/gtag';
+
 export const firebase: ConnectConfig = {
   apiKey: "<< YOUR FIREBASE API KEY HERE >>",
   authDomain: "<< your firebase auth domain here >>",
