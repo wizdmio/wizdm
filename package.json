@@ -40,7 +40,6 @@
     "@angular/platform-browser": "9.1.5",
     "@angular/platform-browser-dynamic": "9.1.5",
     "@angular/router": "9.1.5",
-    "core-js": "^2.6.11",
     "emoji-datasource-google": "^5.0.1",
     "emoji-regex": "^9.0.0",
     "faker": "^4.1.0",
@@ -85,6 +84,6 @@
     "ts-node": "~7.0.0",
     "tsickle": "^0.38.1",
     "tslint": "~6.1.0",
-    "typescript": "^3.8.3"
+    "typescript": "~3.8.3"
   }
 }
