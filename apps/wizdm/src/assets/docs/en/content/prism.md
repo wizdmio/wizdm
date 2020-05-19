@@ -1,11 +1,69 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Syntax Highlighting
 
-[Start](docs) - [Back](back) - [Home](home)
+[Go to the API Reference](#api-reference)
 
-Wizdm is a young project and some of the documentation is still missing. 
+Code syntax highlighting for Angular powered by [Prism](https://prismjs.com). The package rely on PrismJS to tokenize the input string accodring to the selected language while the redering is performed with regular Angular's directives.
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+## Usage Example
+Simply use the `wm-prism` component on a `<pre>` element:
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+```html
+  <!-- Renders myCode applying syntax highlighting for 'typescript' --> 
+  <pre [wm-prism]=myCode [disabled]="disabled" language="typescript">
+    <!-- This is rendered when disabled -->
+    <code>{{ myCode }}</code>
+  </pre>
+```
+The `wm-prism` selector on a `<pre>` element instantiates a [PrismHighlighter](#prismhighlighter) component. When enabled, the component renders an inner `<code>` element to which a [PrismTokenizer](#prismtokenizer) is attached.
+
+When disabled the highlighter renders its translcluded content giving the user the ability to decide how to better handle the outcome.  The example above shows how to revert to a plain code without highlighting.
+
+## Installation
+Import the [PrismModule](#prismmodule) in your target feature module. Notes that by PrismJS natively supports *Markup*, *CSS*, *C-like* and *JavaScript* languages while more languages can be imported separaterly. 
+
+### Installing Languages
+Simply import the relevant language module from `@wizdm/prism/languages` righ after the main module. Examples of available modules are *PrismTsModule* for *Typescript* or *PrismScssModule* for *Scss*. 
+
+The languages modules are Angular's module wrapping the original `prism/components` taking care of the dependencies, if any.
+
+&nbsp;
+
+# API Reference
+[PrismModule](#emojisupportmodule) - [PrismHighlighter](#prismhighlighter) - [PrismTokenizer](#prismtokenizer)
+
+&nbsp;   
+
+## PrismModule 
+
+```typescript
+import { PrismModule } from '@wizdm/prism';
+```
+
+&nbsp;  
+
+## PrismHighlighter
+
+## PrismTokenizer
+
+```typescript
+
+```
+
+|**Properties**|**Description**|
+|:--|:--|
+|` `||
+
+**Methods**
+
+---
+
+```typescript
+```
+
+---
+
+->
+[Next Topic](docs/toc?go=next) 
+->
