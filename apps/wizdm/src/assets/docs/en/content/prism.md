@@ -11,7 +11,7 @@ Simply use the `wm-prism` component on a `<pre>` element:
 
 ```html
   <!-- Renders myCode applying syntax highlighting for 'typescript' --> 
-  <pre [wm-prism]=myCode [disabled]="disabled" language="typescript">
+  <pre [wm-prism]="myCode" [disabled]="disabled" language="typescript">
     <!-- This is rendered when disabled -->
     <code>{{ myCode }}</code>
   </pre>
