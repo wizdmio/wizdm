@@ -4,7 +4,7 @@
 
 [Go to the API Reference](#api-reference)
 
-Code syntax highlighting for Angular powered by [Prism](https://prismjs.com). The package rely on PrismJS to tokenize the input string accodring to the selected language while the redering is performed with regular Angular's directives.
+Code syntax highlighting for Angular powered by [Prism](https://prismjs.com). The package rely on *PrismJS* to tokenize the input string accodring to the selected language while the redering is performed with regular Angular's directives.
 
 ## Usage Example
 Simply use the `wm-prism` component on a `<pre>` element:
