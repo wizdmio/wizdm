@@ -30,7 +30,7 @@ export class ContentModule {
 }
 ```
 
-### Methods
+**Methods**
 
 ---
 
