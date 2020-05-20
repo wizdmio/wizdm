@@ -38,13 +38,9 @@ Another extended feature enabled by the [remark-sub-super](https://github.com/ze
 - `19^th^` turns into 19^th^
 - `H~2~O` turns into H~2~O
 
-&nbsp;  
-
 ### Newline
 
 Use `&nbsp;` whenever you'd want to add a new empty line for spacing. 
-
-&nbsp;  
 
 ### **Lists**
 As usual both unordered lists, here, and ordered lists, next, are supported:  
@@ -57,28 +53,23 @@ As usual both unordered lists, here, and ordered lists, next, are supported:
     - Nulla volutpat aliquam velit
 + Very easy!  
 
-&nbsp;  
 You can use sequential numbers...  
 
 1. Lorem ipsum dolor sit amet
 2. Consectetur adipiscing elit
 3. Integer molestie lorem at massa
 
-&nbsp;  
 ...keep all the numbers as `1`...  
 
 1. Lorem ipsum dolor sit amet
 1. Consectetur adipiscing elit
 1. Integer molestie lorem at massa  
 
-&nbsp;  
 ...and start numbering with an offset:  
 
 74. Lorem ipsum dolor sit amet
 1. Consectetur adipiscing elit
 1. Integer molestie lorem at massa  
-
-&nbsp;  
 
 ### **Code**
 
@@ -109,9 +100,7 @@ var foo = function (bar) {
 
 console.log(foo(5));
 ```
-
-&nbsp;  
-
+  
 ### **Tables**
 Tables with cell alignment can be used in conjunction with block alignment, so, to center the table within the page for example:  
 &nbsp;
@@ -130,7 +119,6 @@ Tables with cell alignment can be used in conjunction with block alignment, so, 
 
 ## **Links**
 Links are supported both directly: [direct link](https://wizdm.io), referenced: [link reference][id], with title: [link with title](https://github.com/wizdmio/wizdm "title text!") and autoconverted: https://github.com/wizdmio/wizdm.  
-&nbsp;  
 
 ## **Images**
 Images are automatically limited to a maximum size of 100%. Eventually, the maximum size can be limited to 25, 33, 50, 66 and 75% by simply appending a corresponding segment to the image link such as: `https://octodex.github.com/images/minion.png#33` here below:
@@ -152,7 +140,6 @@ In this case using a reference later in the document defining the URL location.
 [id]: https://octodex.github.com/images/dojocat.jpg#icon "The Dojocat"
 
 Finally `#small` for 400px and `#regular` for 1024px sizes are available too.  
-&nbsp;  
 
 ### **Footnotes**
 
