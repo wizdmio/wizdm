@@ -26,6 +26,7 @@ Import the ContentModule in your root app module to enable content resolving. Us
   exports: [ ContentDirective ]
 })
 export class ContentModule { 
+  
   static init(config: ContentConfig): ModuleWithProviders<ContentModule>;
 }
 ```
