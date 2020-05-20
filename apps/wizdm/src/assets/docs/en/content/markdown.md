@@ -30,7 +30,6 @@ This is an added feature enabled by the [remark-align](https://github.com/zested
 >> ...with indentation... 
 
 ...followed by a **bold** paragraph with *italic text* ending with ~~strikethrough~~ and finnally **_~~all together~~_**.  
-&nbsp;  
 
 ### **Subscript and Superscript**
 Another extended feature enabled by the [remark-sub-super](https://github.com/zestedesavoir/zmarkdown/tree/master/packages/remark-sub-super) plugin.
