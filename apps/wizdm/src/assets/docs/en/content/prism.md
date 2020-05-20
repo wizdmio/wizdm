@@ -58,9 +58,9 @@ export class PrismHighlighter {
 ```
 |**Properties**|**Description**|
 |:--|:--|
-|`source: string`|The source text code to be highlighted. The input is aliased as `wm-prism`|
-|`disabled: boolean`|When **true** disables the highlighting. The component renders the transcluded content when disabled|
-|`language: string`|The language for which the highlighting is requested. The component renders the plain source text if the requested language is not available|
+|`@Input() source: string`|The source text code to be highlighted. The input is aliased as `wm-prism`|
+|`@Input() disabled: boolean`|When **true** disables the highlighting. The component renders the transcluded content when disabled|
+|`@Input() language: string`|The language for which the highlighting is requested. The component renders the plain source text if the requested language is not available|
 
 &nbsp; 
 
@@ -80,8 +80,8 @@ export class PrismTokenizer {
 ```
 |**Properties**|**Description**|
 |:--|:--|
-|`source: TokenStream`|The input stream for *PrismJS* to tokenize|
-|`language: string`|The language for whick the tokenization is requested|
+|`@Input() source: TokenStream`|The input stream for *PrismJS* to tokenize. The input is aliases as `wm-prism`|
+|`@Input() language: string`|The language for whick the tokenization is requested|
 
 ---
 
