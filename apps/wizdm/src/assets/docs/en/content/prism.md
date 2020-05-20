@@ -56,7 +56,6 @@ export class PrismHighlighter {
   @Input() language: string;
 }
 ```
-
 |**Properties**|**Description**|
 |:--|:--|
 |`source: string`|The source text code to be highlighted. The input is aliased as `wm-prism`|
@@ -79,7 +78,6 @@ export class PrismTokenizer {
 }
 
 ```
-
 |**Properties**|**Description**|
 |:--|:--|
 |`source: TokenStream`|The input stream for *PrismJS* to tokenize|
