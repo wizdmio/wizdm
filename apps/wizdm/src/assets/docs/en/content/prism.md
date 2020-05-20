@@ -34,17 +34,13 @@ Simply import your preferred theme from `prismjs/themes` into your main *style.s
 &nbsp;
 
 # API Reference
-[PrismModule](#prismmodule) - [PrismHighlighter](#prismhighlighter) - [PrismTokenizer](#prismtokenizer)
-
-&nbsp;   
+[PrismModule](#prismmodule) - [PrismHighlighter](#prismhighlighter) - [PrismTokenizer](#prismtokenizer) 
 
 ## PrismModule 
 
 ```typescript
 import { PrismModule } from '@wizdm/prism';
 ```
-
-&nbsp;  
 
 ## PrismHighlighter
 Syntax highlighter component. The component renders an inner <code> element where the tokenization with highlighting takes place.
