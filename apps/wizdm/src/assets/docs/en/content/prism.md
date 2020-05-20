@@ -23,7 +23,7 @@ When disabled the highlighter renders its translcluded content giving the user t
 ## Installation
 Import the [PrismModule](#prismmodule) in your target feature module. Notes that by *PrismJS* natively supports *Markup*, *CSS*, *C-like* and *JavaScript* languages while more languages can be imported separaterly. 
 
-### Installing Languages
+### Languages
 Simply import the relevant language module from `@wizdm/prism/languages` righ after the main module. Examples of available modules are *PrismTsModule* for *Typescript* language or *PrismScssModule* for *Scss* language. 
 
 The languages modules are Angular's module wrapping the original `prism/components` taking care of the dependencies, if any.
