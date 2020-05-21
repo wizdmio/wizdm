@@ -1,6 +1,6 @@
 import { mdRoot, mdContent, mdParent, mdTopLevelContent, mdDefinition, mdReference, mdFootnoteDefinition, mdFootnoteReference } from './tree-types';
 import { Injectable, Inject } from '@angular/core';
-import { EmojiMode } from '@wizdm/emoji/text';
+import { EmojiMode } from '@wizdm/emoji/utils';
 
 /** Parses a markdown text into an 'mdContent' syntax tree using Remark @see {https://github.com/remarkjs/remark} */
 @Injectable()
@@ -12,7 +12,7 @@ export class MarkdownTree {
 
   // Common mode flags piercing down the tree
   public disableHighlighting: boolean = false;
-  public emojiMode: EmojiMode = 'auto';
+  public emojiMode: EmojiMode;
   
   constructor(@Inject('reparse') private reparse) {}
   

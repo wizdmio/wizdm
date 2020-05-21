@@ -3,7 +3,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { mdContent, mdFootnoteDefinition } from './tree/tree-types';
 import { MarkdownBlock } from './block/block.component';
 import { MarkdownTree } from './tree/tree.service';
-import { EmojiMode } from '@wizdm/emoji/text';
+import { EmojiMode } from '@wizdm/emoji/utils';
 
 @Component({
   selector: '[wm-markdown]',

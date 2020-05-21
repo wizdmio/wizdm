@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, Optional } from '@angular/core';
-import { EmojiMode } from '@wizdm/emoji/text';
+import { EmojiMode } from '@wizdm/emoji/utils';
 import { rmSegment } from './readme-types';
 
 /** Navigation service token */
@@ -32,7 +32,7 @@ export class ReadmeComponent {
   @Input() context: any;
 
   /** Emoji Rendering Mode */
-  @Input() emojiMode: EmojiMode = 'auto';
+  @Input() emojiMode: EmojiMode;
 
   /** Emits the url to navigate to */
   @Output('navigate') nav = new EventEmitter<string>();
