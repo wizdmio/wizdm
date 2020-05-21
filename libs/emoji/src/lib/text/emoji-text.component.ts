@@ -6,6 +6,9 @@ export interface emSegment {
   content: string;
 }
 
+/** Emoji Rendering Mode */
+export type EmojiMode = 'auto'|'native'|'web';
+
 @Component({
   selector: '[wm-emoji-text]',
   templateUrl: './emoji-text.component.html',
@@ -27,10 +30,10 @@ export class EmojiText implements OnChanges {
    * 'native' renders the text as it is relying on the OS native support
    * 'auto' detects the availability of native support and chooses accordingly
    */
-  @Input() mode: 'auto'|'native'|'web' = 'auto';
+  @Input() mode: EmojiMode = 'auto';
 
   /** Behavior flag either returning 'web' or 'native' depending on the current behavior */
-  get behavior(): 'native'|'web' {
+  get behavior(): Exclude<EmojiMode, 'auto'> {
     return this.mode === 'auto' ? (this.utils.native ? 'native' : 'web') : this.mode;
   }
 

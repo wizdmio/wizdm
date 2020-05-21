@@ -35,18 +35,24 @@ export class InkbarComponent {
     };
   }
 
+  /** Force the inkbar update */
   @HostListener('window:resize') 
   public update() { this.activate(this.elm); }
 
+  /** Inkbar color */
   @HostBinding('attr.color')
   @Input() color: ThemePalette = 'accent';
 
+  /** inkbar thickness */
   @Input() thickness: number = 2;
 
+  /** side to apply the inkbar to */
   @Input() side: 'left'|'top'|'right'|'bottom' = 'bottom';
 
+  /** Emits when the shift is done */
   @Output() done = new EventEmitter<inkbarPosition>();
 
+  /** True when the inkbar slides vertically */
   public get vertical(): boolean {
     return this.side === 'left' || this.side === 'right';
   }

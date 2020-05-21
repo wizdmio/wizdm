@@ -10,6 +10,7 @@ import { EmojiUtils } from '../utils';
   selector: 'wm-emoji-input',
   templateUrl: './emoji-input.component.html',
   styleUrls: ['./emoji-input.component.scss'],
+  inputs: ['mode'],
   encapsulation: ViewEncapsulation.None,
   host: { "class": "wm-emoji-input" }
 })
