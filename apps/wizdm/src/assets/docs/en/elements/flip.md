@@ -1,11 +1,10 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Flip Animation
 
-[Start](docs) - [Back](back) - [Home](home)
+[Go to the API Reference](#api-reference)
 
-Wizdm is a young project and some of the documentation is still missing. 
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+## Usage example
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+# API Reference
