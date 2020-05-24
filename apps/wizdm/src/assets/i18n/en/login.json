@@ -64,7 +64,8 @@
     "delete": {
       "title": "Delete account",
       "message": "_*WARNING!*_\nBy proceeding you'll permanently delete your account.\nPlease confirm by _re-authenticating_",
-      "caption": "Delete forever"
+      "caption": "Delete forever",
+      "color": "warn"
     }
   },
 
@@ -82,7 +83,15 @@
       "weakPassword": "This password looks too weak",
       "networkRequestFailed": "There's some trouble with the network",
       "invalidActionCode": "The action code provided is no longer valid",
-      "unsupportedProvider": "The requestes provider is not supported"
+      "unsupportedProvider": "The requestes provider is not supported",
+      "accountExistsWithDifferentCredential": "The account exists with different credentials",
+      "authDomainConfigRequired": "The autheintication domain wasn't provided",
+      "cancelledPopupRequest": "Only one popup request is allowed at one time",
+      "operationNotAllowed": "This operation is not allowed",
+      "operationNotSupportedInThisEnvironment": "Operation not supported in this environment",
+      "popupBlocked": "The authentication popup was blocked by the browser",
+      "popupClosedByUser": "The authentication has been interrupted before completing",
+      "unauthorizedDomain": "Domain not authorized"
     }
   }
 }
