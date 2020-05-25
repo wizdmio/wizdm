@@ -1,4 +1,4 @@
-import { UploadTask, UploadTaskSnapshot } from './storage.service';
+import { UploadTask, UploadTaskSnapshot } from './storage-application';
 import { shareReplay } from 'rxjs/operators';
 import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';

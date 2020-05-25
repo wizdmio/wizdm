@@ -46,7 +46,7 @@ export class UserPhotoComponent {
 
     if(!this.url) { return; }
     // Gets the torage ref from the URL
-    const ref = this.storage.refFromURL(this.url);
+    const ref = this.storage.fromURL(this.url);
     // Deletes the file and notifies about it
     ref.delete().then( () => this.delete.emit() );
   }
