@@ -1,4 +1,5 @@
-import { PaymentMethodDetails, ShippingDetails, BillingDetails } from './payment-method';
+import { PaymentMethodDetails, BillingDetails } from './payment-method';
+import { ShippingDetails } from './payment-request';
 import { Refund } from './refund';
 import { Source } from './source';
 import { List } from './list';
