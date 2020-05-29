@@ -6,13 +6,20 @@
 
 ## Usage example
 
+
+
+## Attributes
+
+| **Properties**                     | **Description**                                                           |
+| :--------------------------------- | :------------------------------------------------------------------------ |
+| @Input() color: string             | style element in terms of the current theme color property                |
+  
+&nbsp;  
+
 # API Reference
 ```typescript
 import { LogoModule } from '@wizdm/elements/logo';
-
 ```
-
-# Directives
 
 --- 
 
