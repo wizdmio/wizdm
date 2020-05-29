@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, HostBinding, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { MarkdownTree } from '../tree/tree.service';
-import { mdPhrasingContent, mdDefinition, mdLink, mdLinkReference } from '../tree/tree-types';
+import { mdPhrasingContent } from '../tree/tree-types';
 import { MarkdownRoot } from '../markdown.component';
 
 @Component({
@@ -14,6 +14,8 @@ export class MarkdownInline {
   constructor(readonly tree: MarkdownTree, private root: MarkdownRoot) {}
 
   @Input('wm-inline') node: mdPhrasingContent;
+
+  
 
   // AOT safe children from the node
   get children() { return ("children" in this.node) ? this.node.children : [] }

@@ -12,6 +12,8 @@ import { $animations } from '../base-inkbar/inkbar.animations';
   templateUrl: '../base-inkbar/inkbar.component.html',
   styleUrls: ['../base-inkbar/inkbar.component.scss'],
   host: { "class": 'wm-inkbar' },
+  inputs: ['color', 'thickness', 'side'],
+  outputs: ['done'],
   animations: $animations,
   encapsulation: ViewEncapsulation.None 
 })

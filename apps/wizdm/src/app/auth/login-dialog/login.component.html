@@ -82,11 +82,9 @@
 
       <!-- ACTION BUTTON -->
       <button *ngIf="msgs.pages[page]?.caption as caption" 
-               mat-stroked-button 
-               color="primary" 
-               type="submit" 
+               mat-stroked-button type="submit" class="btn"
+               [color]="msgs.pages[page]?.color || 'primary'" 
                [disabled]="!!error || !form.valid" 
-               class="btn"
                @morph>{{ caption }}</button>
 
       <!-- PROGRESS -->

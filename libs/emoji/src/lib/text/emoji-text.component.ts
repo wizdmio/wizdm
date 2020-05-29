@@ -1,5 +1,5 @@
 import { Component, OnChanges, SimpleChanges, Input, ViewEncapsulation } from '@angular/core';
-import { EmojiUtils } from '../utils';
+import { EmojiUtils, EmojiMode } from '../utils';
 
 export interface emSegment {
   type: 'text'|'emoji';
@@ -15,8 +15,9 @@ export interface emSegment {
 })
 export class EmojiText implements OnChanges {
 
+  private _behavior: Exclude<EmojiMode, 'auto'>;
   readonly segments: emSegment[] = [];
-
+  
   constructor(readonly utils: EmojiUtils) { }
 
   /** Plain text source input */
@@ -27,12 +28,22 @@ export class EmojiText implements OnChanges {
    * 'native' renders the text as it is relying on the OS native support
    * 'auto' detects the availability of native support and chooses accordingly
    */
-  @Input() mode: 'auto'|'native'|'web' = 'auto';
+  @Input() set mode(mode: EmojiMode) {
+
+    switch(mode || this.utils.emojiMode || 'auto') {
+
+      case 'native': this._behavior = 'native'; 
+      return;
+      
+      case 'web': this._behavior = 'web'; 
+      return;
+    }
+
+    this._behavior = this.utils.native ? 'native' : 'web';
+  }
 
   /** Behavior flag either returning 'web' or 'native' depending on the current behavior */
-  get behavior(): 'native'|'web' {
-    return this.mode === 'auto' ? (this.utils.native ? 'native' : 'web') : this.mode;
-  }
+  get behavior(): Exclude<EmojiMode, 'auto'> { return this._behavior; }
 
   public ngOnChanges(changes: SimpleChanges) {
     

@@ -1,10 +1,14 @@
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
 import { EmojiRegex, EmojiNative } from './emoji-utils';
 
+/** Emoji Rendering Mode */
+export type EmojiMode = 'auto'|'native'|'web';
+
 export interface EmojiConfig {
 
   emojiPath?: string; //assets/...
   emojiExt?: string; //.png, .svg, ...
+  emojiMode?: EmojiMode; //'auto'
 };
 
 export const EmojiConfigToken = new InjectionToken<EmojiConfig>('wizdm-emoji-config');
@@ -12,6 +16,7 @@ export const EmojiConfigToken = new InjectionToken<EmojiConfig>('wizdm-emoji-con
 @Injectable()
 export class EmojiUtils {
 
+  public readonly  emojiMode: EmojiMode;
   private readonly filePath: string;
   private readonly fileExt: string;
 
@@ -19,9 +24,12 @@ export class EmojiUtils {
               @Inject(EmojiNative) readonly native: boolean,
               @Inject(EmojiRegex) readonly regex: RegExp) { 
 
-    // Grabs the source path and the igmage extension from the configuration object
+    // Grabs the source path and the image extension from the configuration object
     this.filePath = this.assessPath(config && config.emojiPath) || 'assets/emoji/';
     this.fileExt  = this.assessExt(config && config.emojiExt)  || '.png';
+    
+    // Keep track of the global emoji rendering mode
+    this.emojiMode = config.emojiMode || 'auto';
   }
 
   private assessPath(path: string): string {

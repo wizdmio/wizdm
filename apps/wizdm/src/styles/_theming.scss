@@ -47,7 +47,7 @@
       color: mat-color($primary); 
       text-decoration: none;
 
-      &:hover { text-decoration: underline; }
+      //&:hover { text-decoration: underline; }
 
       // Styles according the theme palette colors
       @each $color in ('accent', 'warn') {
@@ -79,8 +79,11 @@
       p, li, td { color: inherit; }
     }
 
-    // Overrides the PrismJS highlighting default theme color
-    pre { background-color: transparent !important; }
+    // Code blocks
+    pre { 
+      // Overrides the PrismJS highlighting default theme color
+      background-color: transparent !important; 
+    }
 
     // Ensures the inline-code breaks, eventually
     code { overflow-wrap: break-word; }

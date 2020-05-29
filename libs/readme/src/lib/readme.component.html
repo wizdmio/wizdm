@@ -8,7 +8,7 @@
   <ng-container [ngSwitch]="segment.type">
 
     <!-- Renders the text with emoji support from EmojiTextModule -->
-    <span *ngSwitchCase="'text'" [wm-emoji-text]="interpolate(segment.content)"></span>
+    <span *ngSwitchCase="'text'" [wm-emoji-text]="interpolate(segment.content)" [mode]="emojiMode"></span>
 
     <!-- Styles the text as Bold -->
     <b *ngSwitchCase="'bold'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></b>
