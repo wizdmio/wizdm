@@ -9,7 +9,7 @@ Both Material icons and Font Awesome icon set are natively supported to enrich y
 
 ## Usage Example
 
-1. Run `yarn add @wizdm/elements` or `npm install @wizdm/elements`.
+1. Run **`yarn add @wizdm/elements`** or `npm install @wizdm/elements`.
 2. Import `IconModule` into a module which declares a component intended to have a Wizdm Icon.
 3. Import `BrowserAnimationsModule` into `AppModule`  unless it is imported.
 ```typescript
@@ -45,7 +45,7 @@ import { MatIconRegistry } from '@angular/material';
 
 @Component({
   selector: 'icon-overview-example',
-  templateUrl: './icon-overview-example.html',**
+  templateUrl: './icon-overview-example.html',
 })**
 export class IconOverviewExample implements OnInit { 
 

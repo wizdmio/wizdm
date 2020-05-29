@@ -27,7 +27,7 @@ Animated toggler extending Angular Material components with selectable multiple 
 
 ## Attributes 
 
-| **Properties**                 | **Description**                                                s      |
+| **Properties**                 | **Description**                                                      |
 | :----------------------------- | :------------------------------------------------------------------- |
 | @Input() toggler-style: string | attribute set on the  `wm-toggler`. Default to **menu**              |
 | @Input() toggled: boolean      | set to **true/false** to keep track the state of the toggled element |
