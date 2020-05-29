@@ -1,11 +1,41 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Spinner
 
-[Start](docs) - [Back](back) - [Home](home)
+[Go to the API Reference](#api-reference)
 
-Wizdm is a young project and some of the documentation is still missing. 
+A responsive spinner component to automatically fit into the parent container.  `wm-spinner` is a circular indicator of progress and activity in an application. You can use this component to simulate a state for processing user's request by displaying `wm-spinner`.
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+## Usage example
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+```html
+<wm-spinner size="100" color="warn" strokeWidth="5"></wm-spinner>
+
+```
+You have access to the size property, color property of the theme class, and the strokeWidth attribute on the component.
+Also, you can customize these attributes as described in the [attributes section](#attributes).
+
+&nbsp;  
+
+
+## Attributes
+
+| **Properties**                 | **Description**                                                                                         |
+| :----------------------------- | :------------------------------------------------------------------------------------------------------ |
+| @input() size: number          | Set the width on the **wm-spinner** tag                                                                 |
+| @input()   color: string       | Set color property value from the theme pallete option                                                  |
+| @input()   strokeWidth: number | This attribute is a presentation attribute defining the width of the stroke to be applied to the shape. |
+  
+
+&nbsp;  
+# API Reference
+```typescript
+import { SpinnerModule } from '@wizdm/elements/spinner';
+
+```
+---
+
+
+->
+[Continue Next ⮕](docs/toc?go=next) 
+->  

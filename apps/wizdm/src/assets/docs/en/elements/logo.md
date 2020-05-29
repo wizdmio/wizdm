@@ -1,11 +1,22 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Logo
+[Go to the API Reference](#api-reference)
 
-[Start](docs) - [Back](back) - [Home](home)
 
-Wizdm is a young project and some of the documentation is still missing. 
+## Usage example
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+# API Reference
+```typescript
+import { LogoModule } from '@wizdm/elements/logo';
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+```
+
+# Directives
+
+--- 
+
+
+->
+[Continue Next ⮕](docs/toc?go=next) 
+->  

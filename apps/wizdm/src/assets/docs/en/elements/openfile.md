@@ -1,11 +1,16 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Openfile
+[Go to the API Reference](#api-reference)
+Simple component wrapping a file input to help in managing the file dialog window.
 
-[Start](docs) - [Back](back) - [Home](home)
 
-Wizdm is a young project and some of the documentation is still missing. 
+## Usage example
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
+# API Reference
+```typescript
+import { OpenfileModule } from '@wizdm/elements';
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+```
+
+# Directives

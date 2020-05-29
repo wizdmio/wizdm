@@ -50,6 +50,8 @@
     { "label": "Spinner", "link": "docs/elements/spinner" },
     { "label": "Thumbnail", "link": "docs/elements/thumbnail" },
     { "label": "Toggler", "link": "docs/elements/toggler" }
+    { "label": "Highlight", "link": "docs/elements/highlight" }
+
   ]},
 
   { "label": "Extensions", "items": [

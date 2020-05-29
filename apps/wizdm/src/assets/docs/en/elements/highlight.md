@@ -1,11 +1,35 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Highlight
+[Go to the API Reference](#api-reference)
 
-[Start](docs) - [Back](back) - [Home](home)
+This feature gives you the ability to call the attention of the user's of your application to vital information with a perfect blend to existing design/colors.
 
-Wizdm is a young project and some of the documentation is still missing. 
+## Usage example
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+
+## Directives
+&nbsp;  
+
+## Attributes
+
+| **Properties**                     | **Description**                                                           |
+| :--------------------------------- | :------------------------------------------------------------------------ |
+| @Input() wm-hightlight             | When attribute is set on container element it highlight the content of the element. |
+| @Input() color: string             | style element in terms of the current theme color property                |
+  
+&nbsp;  
+
+
+
+# API Reference
+```typescript
+import { HighlightModule } from '@wizdm/elements/highlight';
+
+```
+
+---
+->
+[Continue Next ⮕](docs/toc?go=next) 
+->  

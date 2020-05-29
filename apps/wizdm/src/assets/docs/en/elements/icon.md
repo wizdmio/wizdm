@@ -97,7 +97,7 @@ The **wm-icon directive** can be used within your template file using this synta
   
 ```
 
-### Theming
+## Theming
 By default, icons will use the current font color (`currentColor`). This color can be changed to
 match the current theme's colors using the `color` attribute. This can be changed to
 `'primary'`, `'accent'`, or `'warn'`.
@@ -115,9 +115,18 @@ Also, inline attribute is set to `false` by default in wizdm icon class. You can
 
 &nbsp;
 
+
+&nbsp;
+
+
 # API Reference
 
 ```typescript
 import { IconModule } from '@wizdm/elements/icon';
 ```
 
+
+--- 
+->
+[Continue Next ⮕](docs/toc?go=next) 
+->  
