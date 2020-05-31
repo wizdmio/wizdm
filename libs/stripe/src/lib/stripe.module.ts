@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, PLATFORM_ID, NgModule, ModuleWithProviders, Inject, Optional, forwardRef } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { StripeConfig, StripeConfigToken, loadStripeJS, getStripeJS, stripeFactory  } from './stripe-factory';
+import { StripeConfig, StripeConfigToken, loadStripeJS, stripeFactory  } from './stripe-factory';
+import { isPlatformBrowser } from '@angular/common';
 import { StripeControl } from './stripe-control';
 import { StripeConnect } from './stripe-connect';
 import { StripeMaterial } from './stripe-material';
