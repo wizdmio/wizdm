@@ -24,7 +24,8 @@
     { 
       "icon": "fas:fa-icons",
       "title": "Icon sets",
-      "description": "Both [Material](https://material.io/icons) icons font and [FontAwesome](https://fontawesome.com) icon set are natively supported to enrich you user interface."
+      "description": "Both [Material](https://material.io/icons) icons font and [FontAwesome](https://fontawesome.com) icon set are natively supported to enrich you user interface.",
+      "reference": "docs/elements/icon"
     },
     { 
       "icon": "far:fa-kiss-beam",
