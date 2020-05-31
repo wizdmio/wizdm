@@ -19,6 +19,21 @@ The component can be easily used like an `<img />` element or a `<mat-icon>` com
 </button>
 ```
 In the example above, we are using the `wm-avatar` component within a `mat-icon-button`.
+This component provides two types of shape that can be applied on the attribute **shape**:
+- rounded
+- squared
+
+&nbsp;  
+
+## Attributes
+
+| **Properties**         | **Description**                                                 |
+| :--------------------- | :-------------------------------------------------------------- |
+| @Input() shape: string | attribute value set on the  `wm-avatar`. Default to **rounded** |
+| @Input() color: string | element can be colored in terms of the current theme value      |
+
+
+&nbsp;  
 
 # API Reference
 
@@ -35,4 +50,4 @@ import { AvatarModule } from '@wizdm/elements/avatar';
 --- 
 ->
 [Continue Next ⮕](docs/toc?go=next) 
-->
+->                  

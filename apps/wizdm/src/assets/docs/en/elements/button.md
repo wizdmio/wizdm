@@ -1,11 +1,45 @@
 <!-- toc: reference.json -->
 
-# We Are Sorry
+# Button
+[Go to the API Reference](#api-reference)
 
-[Start](docs) - [Back](back) - [Home](home)
+`type` Directive is dynamic type change for MatButton. You can use this directive on `mat-button` to update some MatButton properties to reflect a new look.
 
-Wizdm is a young project and some of the documentation is still missing. 
 
-If you like the initiative and you're willing to use it for your ideas you may consider to join our team and contribute. 
 
-Simply [get in touch with us](contact), we'll be happy to have you on board!
+## Usage example
+```html 
+<button mat-button [color]="color"  [type]="icon">
+
+
+```
+The example above has  `button` tag with a `mat-button` attribute set on it to give the look and feel of [angular material design for buttons](https://material.angular.io/components/button/overview). With `type` directive provided by `@wizdm/elements/button` you can instruct the `mat-button` to you use a specific type (as described in the [Button Types](#button-types)) dynamically.
+
+
+## Directives
+
+### Button Types
+
+```typescript
+
+export type ButtonType = basic | raised | stroked | flat | icon | fab | mini-fab;
+
+```
+
+
+| **Properties** | **Description**                                                                |
+| :------------- | :----------------------------------------------------------------------------- |
+| @Input() type  | Set attribute to trigger change dynamically on the current `mat-button ` attribute. Default to *basic* when not defined. |
+
+&nbsp;
+
+# API Reference
+```typescript
+import { ButtonModule } from '@wizdm/elements/button';
+
+```
+ 
+--- 
+->
+[Continue Next ⮕](docs/toc?go=next) 
+->  
