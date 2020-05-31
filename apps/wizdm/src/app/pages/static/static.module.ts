@@ -13,7 +13,6 @@ import { PrismScssModule } from '@wizdm/prism/languages';
 import { PrismMdModule } from '@wizdm/prism/languages';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { SizeLockModule } from 'app/utils/size-lock';
-import { TeleportModule } from '@wizdm/teleport';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 import { TocModule } from './toc';
@@ -57,7 +56,6 @@ const routes: RoutesWithContent = [{
     AnimateModule,
     SidenavModule,
     SizeLockModule,
-    TeleportModule,
     TocModule,
     ContentRouterModule.forChild(routes)
   ],
