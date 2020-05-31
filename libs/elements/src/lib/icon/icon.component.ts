@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, ViewEncapsulation } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ThemePalette } from '@angular/material/core'
 
@@ -15,17 +15,17 @@ export class IconComponent {
   public fontIcon: string;
   public matIcon = "code";
 
-  /** Inlines the icon automatically sizing it to match the font size */
-  @Input('inline') set inlining(value: boolean) { this.inline = coerceBooleanProperty(value); }
-  public inline: boolean = false;
-
-  /** Enables extended material icons */
-  @Input('extended') set extending(value: boolean) { this.extended = coerceBooleanProperty(value); }
-  public extended: boolean;
-
   /** Theme color palette */
   @Input() color: ThemePalette;
 
+  /** Inlines the icon automatically sizing it to match the font size */
+  public inline: boolean = false;
+  @Input('inline') set inlining(value: boolean) { this.inline = coerceBooleanProperty(value); }
+  
+  /** Enables extended material icons */
+  public extended: boolean = false;
+  @Input('extended') set extending(value: boolean) { this.extended = coerceBooleanProperty(value); }
+  
   /** Icon name */
   @Input('icon') set setIcon(descriptor: string) {
    
@@ -39,11 +39,9 @@ export class IconComponent {
       this.fontIcon = segments[1];
     }
     else {
-      
+
       this.matIcon = segments[0];
-      // Switches to 'material-icons-extended' on request
-      this.fontSet = this.extended ? 'material-icons-extended': undefined;
-      this.fontIcon = undefined;
+      this.fontSet = this.fontIcon = undefined;
     }
   }
 }
