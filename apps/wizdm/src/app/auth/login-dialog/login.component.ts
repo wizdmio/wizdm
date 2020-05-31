@@ -143,9 +143,15 @@ export class LoginComponent extends DialogComponent<LoginData> {
       break;
 
       case 'delete':
-      // Skips asking for the password for federeted providers
-      if(this.auth.providerId !== 'password') { break; }
-      this.form.addControl('password', this.password);      
+      // Gets the provider the user authenticated with
+      this.auth.getProviderId().then( provider => {
+
+        // Asks for the password, eventually
+        if(provider == 'password') {
+
+          this.form.addControl('password', this.password);
+        }
+      });
       break;
 
       default:
@@ -224,7 +230,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
   private signOut() {
     // Navigates home prior to sign-out 
-    return this.navigate('home')
+    return this.navigate('/')
       .then( () => this.auth.signOut() );
   }
 
@@ -238,8 +244,6 @@ export class LoginComponent extends DialogComponent<LoginData> {
         this.user.register(user)
           // Sends the email verification
           .then( () => user.sendEmailVerification() )
-          // Jumps to the user page
-          .then( () => this.navigate('profile') )
           // Closes the dialog returning the user
           .then( () => this.close(user) );
       })

@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   /** Current user object snapshot */
-  public get user() { 
+  public get user(): User { 
     return this.auth.currentUser; 
   }
   
@@ -63,8 +63,11 @@ export class AuthService {
   }
 
   /** Returns the provider id the current user authenticated with */
-  public get providerId(): string {
-    return this.authenticated ? this.user.providerData[0].providerId : '';
+  public getProviderId(): Promise<string> {
+    // Resolves to '' when not authenticated
+    if(!this.authenticated) { return Promise.resolve(''); }
+    // Provides the id token result's related provider
+    return this.user.getIdTokenResult().then( result => result.signInProvider );
   }
 
   /** Sets/Gets the code for the language to be used during the authentication */
@@ -155,29 +158,40 @@ export class AuthService {
    */
   public reauthenticate(password?: string): Promise<User> {
 
-    // Checks the provider the user lastly authenticated with
-    if(this.providerId !== 'password') {
-
-      // Setup the provider 
-      const authProvider = this.setupProvider(this.providerId);
-      if(authProvider === null) {
-        return Promise.reject({
-          code: 'auth/unsupported-provider',
-          message: 'Unsupported provider'
-        });
-      }
-
-      // Re-authenticate the user with the same provider
-      return this.user.reauthenticateWithPopup(authProvider)
-        .then( credentials => credentials.user );  
+    // Dismiss the re-authentication attempt whenever the user isn't authenitcated
+    if(!this.authenticated) { 
+      return Promise.reject({
+        code: 'auth/user-not-authenticated',
+        message: 'User not authenticated'
+      });
     }
 
-    console.log("Refreshing authentication: ", this.user.email);
-    // Gets fresh credentials for the current user
-    const credential = auth.EmailAuthProvider.credential(this.user.email, password);
-    // Re-authenticate the user with the fresh credentials
-    return this.user.reauthenticateWithCredential(credential)
-      .then( credential => credential.user );
+    // Checks the provider the user lastly authenticated with
+    return this.user.getIdTokenResult().then( result => {
+
+      if(result.signInProvider !== 'password') {
+
+        // Setup the provider 
+        const authProvider = this.setupProvider(result.signInProvider);
+        if(authProvider === null) {
+          return Promise.reject({
+            code: 'auth/unsupported-provider',
+            message: 'Unsupported provider'
+          });
+        }
+
+        // Re-authenticate the user with the same provider
+        return this.user.reauthenticateWithPopup(authProvider)
+          .then( credentials => credentials.user );  
+      }
+
+      console.log("Refreshing authentication: ", this.user.email);
+      // Gets fresh credentials for the current user
+      const credential = auth.EmailAuthProvider.credential(this.user.email, password);
+      // Re-authenticate the user with the fresh credentials
+      return this.user.reauthenticateWithCredential(credential)
+        .then( credential => credential.user ); 
+    });
   }
 
   /** Signs out */
