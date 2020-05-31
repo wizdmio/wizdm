@@ -105,7 +105,7 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
   // -- End of MatDialogConfig implementaiton -- 
 
   /** Opens the dialog when the passed condition is true */
-  @Input() set opened(open: boolean) { if(coerceBooleanProperty(open)) { this.open(); } }  
+  @Input() set opened(open: D) { if(coerceBooleanProperty(open)) { this.open(open); } }  
   /** Reports the open status */
   @Output() openedChange = new EventEmitter<boolean>();
   /** Forces the dialog closing with the given value */
