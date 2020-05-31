@@ -1,7 +1,7 @@
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
+import { StorageFile, StorageFolder } from './extras';
 import { FirebaseApp } from '../connect.module';
-import { StorageFile } from './storage-file';
 import { NgZone } from '@angular/core';
 import { storage } from 'firebase/app';
 
@@ -12,6 +12,7 @@ export type ListOptions        = storage.ListOptions;
 export type ListResult         = storage.ListResult;
 export type UploadMetadata     = storage.UploadMetadata;
 export type SettableMetadata   = storage.SettableMetadata;
+export type FullMetadata       = storage.FullMetadata;
 export type StringFormat       = storage.StringFormat;
 export type UploadTask         = storage.UploadTask;
 export type UploadTaskSnapshot = storage.UploadTaskSnapshot;
@@ -37,9 +38,12 @@ export abstract class StorageApplication {
   /** Returns a reference to the storage object identified by its download URL */
   public abstract fromURL(url: string): StorageReference;
 
-  /** Returns a file object from a varaiety of references */
-  public abstract file(ref: string|StorageRef|StorageReference|UploadObservable): StorageFile;
-
   /** Shortcut to start an upload task of binary data */
   public abstract upload(path: string, data: Blob|Uint8Array|ArrayBuffer, metadata?: UploadMetadata): UploadObservable;
+
+  /** Returns a folder object from a reference */
+  public abstract folder(ref: string|StorageRef): StorageFolder;
+
+  /** Returns a file object from a varaiety of references */
+  public abstract file(ref: string|StorageRef|StorageReference|UploadObservable): StorageFile;
 }
