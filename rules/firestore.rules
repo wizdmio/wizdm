@@ -18,6 +18,13 @@ service cloud.firestore {
     //  let profile = get(/databases/$(database)/documents/users/$(userId));
     //	return profile.data;
     //}
+    
+    // Shared content from every collection
+    match /{path=**}/shared/{post} {
+    
+    	// Allows listing public posts for everyone
+    	allow list: if resource.data.public == true;
+    }
 
   	// User profiles.
   	match /users/{userId} {
@@ -31,15 +38,41 @@ service cloud.firestore {
     	// Allows only the user herself to update or delete the profile  
       allow update, delete: if itsMe(userId);
       
-      // User' uploads.
-    	match /uploads/{upload} {
+      // User's shared content
+    	match /shared/{post} {
+      
+      	// Allow reading user's posts for everyone
+      	allow read;
+      
+        // Allows only the author to write
+        allow write: if itsMe(userId);
         
-        // Allows everyone to view the uploaded files
-        allow read;
+        // Post likes.
+        match /likes/{shard} {
         
-    		// Allows only the user herself to upload, modify or delete contents
-        allow create, update, delete: if itsMe(userId);
-      }
+        	// Allows everyone to read post's likes
+        	allow read;
+
+          // Allows signed-in users to like other's posts
+          allow create, update: if authenticated();
+
+          // Only the owner is allowed to delete it (deleting the post)
+          allow delete: if itsMe(userId);
+        }
+
+        // Post's likers collection.
+        match /likers/{likerId} {
+        
+        	// Allows everyone to read post's likedBy 
+        	allow read;
+
+          // Allows signed-in users to like other's posts
+          allow create, update: if authenticated();
+
+          // Only the owner is allowed to unlike it (deleting itelf from likers)
+          allow delete: if itsMe(likerId);
+        }
+			}
     }
     
     // Conversations (group of users messaging).
@@ -77,44 +110,5 @@ service cloud.firestore {
         allow update, delete: if itsMe(resource.data.sender);
       }
 		}
-    
-    // Projects.
-    match /projects/{prjId} {
-    
-    	// Allows everyone to browse projects
-    	allow read;
-    
-    	// Allows signed-in users to create new projects
-      allow create: if authenticated();
-    
-    	// Allows only the project owner to update or delete them
-      allow update, delete: if itsMe(resource.data.author);
-      
-      // Project's likes.
-    	match /likes/{shard} {
-      
-      	// Allows everyone to read project's likes
-        allow read;
-        
-        // Allows signed-in users to like other's projects
-        allow create, update: if authenticated();
-        
-        // Only the owner is allowed to delete it (deleting the project)
-        allow delete: if itsMe(resource.data.author);
-      }
-      
-      // Project's likedBy.
-      match /likedBy/{likerId} {
-        
-        // Allows everyone to read project's likedBy 
-        allow read;
-        
-        // Allows signed-in users to like other's projects
-        allow create, update: if authenticated();
-        
-        // Only the owner is allowed to unlike it (deleting itelf from likers)
-        allow delete: if itsMe(likerId);
-      }
-    }    
   }
 }

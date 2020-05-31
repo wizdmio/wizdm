@@ -36,11 +36,10 @@ const routes: RoutesWithContent = [
       { path: 'home', redirectTo: '', pathMatch: 'full' },
 
       // Active pages
-      //{ path: 'apply',       loadChildren: () => import('../pages/apply/apply.module').then(m => m.ApplyModule) },
-      { path: 'profile',     loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
-      { path: 'features',     loadChildren: () => import('../pages/features/features.module').then(m => m.FeaturesModule) },
+      { path: 'settings',    loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule) },
+      { path: 'features',    loadChildren: () => import('../pages/features/features.module').then(m => m.FeaturesModule) },
+      { path: 'explore',     loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },      
       { path: 'chat',        loadChildren: () => import('../pages/chat/chat.module').then(m => m.ChatModule) },
-      //{ path: 'folder',      loadChildren: () => import('../pages/folder/folder.module').then(m => m.FolderModule) },
       
       // Reference
       { path: 'docs',        redirectTo: 'docs/start', pathMatch: 'full' },
@@ -56,7 +55,7 @@ const routes: RoutesWithContent = [
       // Not found page
       { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
 
-      // Static content pages, redirecting to NotFound when no content is available
+      // Static content pages (about, terms, ...), redirecting to NotFound when no content is available
       { path: ':path',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Anything else will route to not found

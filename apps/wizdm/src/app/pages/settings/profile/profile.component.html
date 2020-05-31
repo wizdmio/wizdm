@@ -1,0 +1,59 @@
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'profile'" gtag="profile">
+
+  <!-- Action Bar (projected in the top toolbar) -->
+  <ng-template wmActionbar let-mobile="isMobile">
+  
+    <!-- Update profile button -->
+    <button mat-button
+            [type]="mobile ? 'icon' : 'stroked'" 
+            [disabled]="form.invalid || form.pristine"
+            color="primary" 
+            (click)="user.update(form.userData)">
+
+      <wm-icon *ngIf="mobile; else saveProfile" [icon]="msgs.actions?.save?.icon || 'save'"></wm-icon>
+      
+      <ng-template #saveProfile>{{ msgs.actions?.save?.caption || 'Update Profile' }}</ng-template>
+
+    </button>
+
+  </ng-template>
+
+  <!-- Public profile -->
+  <h2>{{ msgs.title || 'Public Profile' }}</h2>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start center" fxLayoutGap="32px">
+
+    <!-- Profile form -->
+    <wm-user-form fxFlexOrder.lt-sm="2" [value]="user.data" #form></wm-user-form>
+
+    <!-- Profile photo w/ loader -->
+    <wm-user-photo fxFlexOrder.lt-sm="1"
+      [url]="user.data?.photo" 
+      [folder]="user.data?.id" 
+      (update)="user.update({ photo: $event })">
+    </wm-user-photo>
+  
+  </div>
+  
+  <!-- CanLeave Popup Dialog (based on MatDialog) -->
+  <wm-dialog [dontLeave]="form.dirty" (beforeClosed)="$event === 'save' && user.update(form.userData)">
+
+    <h2 mat-dialog-title><b>{{ msgs.canLeave?.title || 'Unsaved changes' }}</b></h2>
+  
+    <mat-dialog-content [wm-readme]="msgs.canLeave?.message">
+      <span>You're about to leave the page without saving the latest changes.<br>Please confirm.</span>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.canLeave?.cancel || 'Stay' }}</button>
+      <button mat-button color="accent" [mat-dialog-close]="'save'">{{ msgs.canLeave?.force || 'Save and leave' }}</button>
+      <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.canLeave?.ok || 'Leave anyhow' }}</button>
+    </mat-dialog-actions>
+  
+  </wm-dialog>
+
+</ng-container>
+

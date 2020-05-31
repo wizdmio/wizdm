@@ -1,0 +1,22 @@
+
+<section class="places" fxLayout="column" fxLayoutAlign="center center" fxFill>
+
+  <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column" fxFill>
+
+    <ng-container *ngFor="let post of shared$ | async">
+  
+      <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%">
+
+        <wm-post [post]="post"></wm-post>
+
+      </div>
+
+    </ng-container>
+    
+  </div>
+
+  <!--button *ngIf="authenticated" mat-fab class="add" (click)="addPlace()">
+    <mat-icon>add</mat-icon>
+  </button-->
+
+</section>

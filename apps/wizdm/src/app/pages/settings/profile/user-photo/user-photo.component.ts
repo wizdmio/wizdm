@@ -20,8 +20,6 @@ export class UserPhotoComponent {
 
   @Output() update = new EventEmitter<string>();
 
-  @Output() delete = new EventEmitter<void>();
-
   public uploadFile(files: FileList) {
 
     if(files.length <= 0) { return; }
@@ -48,6 +46,6 @@ export class UserPhotoComponent {
     // Gets the torage ref from the URL
     const ref = this.storage.fromURL(this.url);
     // Deletes the file and notifies about it
-    ref.delete().then( () => this.delete.emit() );
+    ref.delete().then( () => this.update.emit( null ) );
   }
 }

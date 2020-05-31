@@ -1,0 +1,31 @@
+{
+  "title": "Account Settings",
+  "description": "Your account has been created on *{{ created }}*.",
+  "providers": "Providers",
+
+  "verify": {
+
+    "title": "Verify Email",
+    "verified": "Your email has been *verified* already.",
+    "unverified": " Your email has *_not_* been verified yet. Please proceed at your convenience.",
+    "action": "Verify your email"
+  },
+
+  "credentials": {
+
+    "title": "Change email / password",
+    "description": "Here you can change the credentials used for signin-in.",
+    
+    "actions": {
+      "email": "Change your email",
+      "password": "Change your password"
+    }
+  },
+
+  "delete": {
+
+    "title": "Delete account",
+    "description": "Be aware that by proceeding you'll *permanently* delete all your data.",
+    "action": "Delete your account"
+  }
+}

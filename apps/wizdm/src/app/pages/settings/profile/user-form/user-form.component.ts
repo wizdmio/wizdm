@@ -25,17 +25,24 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
       lang   : new FormControl('')
     });
 
-    this.sub = this.valueChanges.subscribe( value => {
-      
-      const birth = moment.isMoment(value.birth) ? (value.birth as Moment).format(defaultFormat) : '';
+    this.sub = this.valueChanges.subscribe( value => {      
       // Emits the update
-      this.formValueChange.emit({ ...value, birth } as UserData);
+      this.formValueChange.emit( this.format(value) );
     } );
   }
 
-  ngOnDestroy() { !!this.sub && this.sub.unsubscribe(); }
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
-  @Input('value') set formValue(value: UserData) { 
+  private format(value: any): UserData {
+
+    const birth = moment.isMoment(value?.birth) ? (value?.birth as Moment).format(defaultFormat) : '';
+
+    return { ...value, birth };
+  }
+
+  get userData(): UserData { return this.format(this.value); }
+
+  @Input('value') set userData(value: UserData) { 
 
     if(!value || value == this.value) { return; }
 
@@ -46,7 +53,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
     this.patchValue({ ...value, birth });
     
     // Marks the form as pristine right after the view updated
-    //Promise.resolve().then( () => this.markAsPristine() );
+    Promise.resolve().then( () => this.markAsPristine() );
   }
 
   @Output('valueChange') formValueChange = new EventEmitter<UserData>();

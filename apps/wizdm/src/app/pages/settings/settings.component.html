@@ -1,0 +1,41 @@
+
+<!-- Localized content -->
+<ng-container *wmContent="let settigs select 'settings' or defaultSettings">
+
+  <!-- Teleports the TOC into the side panel persisting the status across navigation -->
+  <!--ng-template wmSidenav opened persist let-mobile="isMobile"-->
+
+    <mat-nav-list fxLayout="column" fxLayoutAlign="start end"> 
+
+      <wm-router-inkbar side="left" color="primary">
+
+        <a mat-list-item *ngFor="let page of settigs" 
+           class="mat-body"
+           [routerLink]="page.link" 
+           [queryParams]="page.params" 
+           [routerLinkActiveOptions]="{ exact: true }"
+           routerLinkInkbar>
+
+          <wm-icon matListIcon fxHide fxShow.lt-sm [icon]="page.icon"></wm-icon>
+
+          <span fxHide.lt-sm>{{ page.label }}</span>
+          
+        </a>
+
+      </wm-router-inkbar>
+
+    </mat-nav-list>
+
+  <mat-divider vertical></mat-divider>
+
+  <!--/ng-template-->
+
+  <div fxLayout="row" fxFlex="60%" fxFlex.lt-md="100%">
+
+    <div fxFlex="1 1 auto" class="margins">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+
+</ng-container>

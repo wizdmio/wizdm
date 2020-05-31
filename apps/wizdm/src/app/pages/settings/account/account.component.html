@@ -1,0 +1,72 @@
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'account'" gtag="account">
+
+  <!-- User's Account -->
+  <h2>{{ msgs.title || 'Account' }}</h2>
+  
+  <mat-divider fxFill></mat-divider>
+  
+  <!-- account creation -->
+  <p [wm-readme]="msgs.description" [context]="this">
+    <span>Your account has been created on <b>{{ created }}</b>.</span>
+  </p>
+
+  <!-- Account's provider(s) -->
+  <p>{{ msgs.providers || 'Providers' }}: <span *ngFor="let provider of providers; let last = last">
+    <i>"{{ provider }}"</i>
+    <ng-container *ngIf="!last"> - </ng-container>
+  </span></p>
+
+  <!-- Email/Password provider related actions -->
+  <ng-container *ngIf="usePassword">
+
+    <!-- Email Verify -->  
+    <h3>{{ msgs.verify?.title || 'Verify Email' }}</h3>
+    
+    <mat-divider fxFill></mat-divider>
+    
+    <p [wm-readme]="emailVerified ? msgs.verify?.verified : msgs.verify?.unverified">
+      <span>Your email {{ emailVerified ? 'has been verified already' : 'has not been verified yet '}}.</span>
+    </p>
+    
+    <button mat-stroked-button color="primary" fxFlexAlign.gt-xs="start" [disabled]="emailVerified" wmRedirect="login?mode=sendEmailVerification">
+      {{ msgs.verify?.action }}
+    </button>
+    
+    <!-- Email / Password change -->
+    <h3>{{ msgs.credentials?.title || 'Change email / password' }}</h3>
+    
+    <mat-divider fxFill></mat-divider>
+    
+    <p [wm-readme]="msgs.credentials?.description">
+      <span>Here you can change the credentials used for signin-in.</span>
+    </p>
+    
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px"> 
+    
+      <button mat-stroked-button color="primary" wmRedirect="login?mode=changeEmail">
+        {{ msgs.credentials?.actions?.email || 'Change your email' }}
+      </button>
+
+      <button mat-stroked-button color="primary" wmRedirect="login?mode=changePassword">
+        {{ msgs.credentials?.actions?.password || 'Change your password' }}
+      </button>
+
+    </div>
+
+  </ng-container>
+
+  <!-- Delete Account -->
+  <h3>{{ msgs.delete?.title || 'Delete account' }}</h3>
+  
+  <mat-divider fxFill></mat-divider>
+  
+  <p [wm-readme]="msgs.delete?.description">
+    <span>By proceeding you'll <b>permanently</b> delete all your data!</span>
+  </p>
+
+  <button mat-stroked-button color="warn" fxFlexAlign.gt-xs="start" wmRedirect="login?mode=delete">
+    {{ msgs.delete?.action || 'Delete your account' }}
+  </button>
+
+</ng-container>

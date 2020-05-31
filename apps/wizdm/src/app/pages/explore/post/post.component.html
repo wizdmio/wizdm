@@ -1,0 +1,10 @@
+
+<button mat-button class="likes" (authClick)="toggleFavorite()">
+
+  <wm-icon [@beat]="likes.counter$ | async" [icon]="(favorite$ | async) ? 'fas:fa-thumbs-up' : 'far:fa-thumbs-up'"></wm-icon>
+
+  <span class="mat-small" *ngIf="likes.counter$ | async as counter">{{ counter }}</span>
+
+</button>
+
+<span class="title">{{ title }}</span>

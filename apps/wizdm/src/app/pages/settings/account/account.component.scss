@@ -1,0 +1,10 @@
+
+:host {
+
+  display: flex;
+  position: relative;
+  flex-flow: column;
+  justify-content: center;
+
+  & > * { margin-bottom: 16px; }
+}

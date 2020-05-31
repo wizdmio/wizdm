@@ -1,0 +1,23 @@
+[
+  {
+    "icon": "fas:fa-user-circle",
+    "label": "Profile",
+    "link": "profile"
+  },
+  {
+    "icon": "fas:fa-user-lock",
+    "label": "Account",
+    "link": "account"
+  },
+  {
+    "icon": "fas:fa-cloud-upload-alt",
+    "label": "Uploads",
+    "link": "uploads"
+  },
+  {
+    "icon": "fas:fa-sign-out-alt",
+    "label": "SignOut",
+    "link": "../login",
+    "params": { "mode": "signOut" }
+  }
+]

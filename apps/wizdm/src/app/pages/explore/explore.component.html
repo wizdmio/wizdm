@@ -1,0 +1,31 @@
+
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'explore'">
+
+  <!-- Action Bar (projected in the top toolbar) -->
+  <ng-template wmActionbar let-mobile="isMobile">
+    
+    <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" [matMenuTriggerFor]="filterOptions">
+      
+      <!--span *ngIf="!mobile">{{ msgs.filter? || 'Sign-out' }}</ng-template-->
+
+      <wm-icon [icon]="msgs.filter?.icon || 'filter_list'"></wm-icon>
+      
+    </button>
+
+    <!-- Filter menu -->
+    <mat-menu #filterOptions="matMenu">
+
+      <button mat-menu-item routerLink="public">{{ msgs.filter?.public || 'All public' }}</button>
+      
+      <button mat-menu-item routerLink="private">{{ msgs.filter?.private || 'Shared with me' }}</button>
+      
+      <button mat-menu-item routerLink="personal">{{ msgs.filter?.mine || 'Mine' }}</button>
+
+    </mat-menu>
+
+  </ng-template>
+
+</ng-container> 
+
+<router-outlet></router-outlet>

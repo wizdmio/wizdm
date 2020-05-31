@@ -1,0 +1,8 @@
+{
+  "filter": {
+    "icon": "fas:fa-filter",
+    "public": "All public",
+    "private": "Shared with me",
+    "mine": " Personal" 
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Uploads",
+  "newBadge": "new",
+  "downloadTitle": "Download",
+
+  "actions": {
+    "upload": { "caption": "Upload Files", "icon": "fas:fa-cloud-upload-alt" },
+    "delete": { "caption": "Delete Files", "color": "warn", "icon": "fas:fa-trash-alt" }
+  },
+
+  "columns": {
+    "name": "Name",
+    "size": "Size",
+    "type": "Type",
+    "updated": "Last modified",
+    "download": "Download"
+  },
+
+  "confirmDelete": {
+    "title": "Deleting file(s)",
+    "message": "You're about to *permanently delete* the selected files.\nAre you sure to proceed?",
+    "cancel": "Abort",
+    "ok": "Proceed"
+  }
+}

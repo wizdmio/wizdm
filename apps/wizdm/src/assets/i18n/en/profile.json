@@ -2,8 +2,7 @@
   "title": "Public Profile",
 
   "actions": {
-    "save": { "caption": "Save", "icon": "fas:fa-save" },
-    "signOut": { "caption": "Sign-out", "icon": "fas:fa-sign-out-alt" }
+    "save": { "caption": "Update Profile", "icon": "fas:fa-save" }
   },
 
   "form": {
@@ -71,33 +70,6 @@
     "label": "Profile picture", 
     "delete": { "icon": "fas:fa-trash-alt" },
     "upload": { "icon": "fas:fa-cloud-upload-alt" }
-  },
-
-  "account": {
-    
-    "title": "Account Settings",
-    "description": "Your account has been created on *{{ created }}*.",
-    "verifyEmail": {
-      "title": "Verify Email",
-      "verified": "Your email has been *verified* already.",
-      "unverified": " Your email has *_not_* been verified yet. Please proceed at your convenience.",
-      "action": "Verify your email"
-    },
-    "changeCredentials": {
-
-      "title": "Change email / password",
-      "description": "Here you can change the credentials used for signin-in.",
-      "actions": {
-        "email": "Change your email",
-        "password": "Change your password"
-      }
-    },
-    "deleteAccount": {
-
-      "title": "Delete account",
-      "description": "Be aware that by proceeding you'll *permanently* delete all your data.",
-      "action": "Delete your account"
-    }
   },
 
   "canLeave": {
