@@ -34,9 +34,11 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
 
   /** True then the page is deleting files */
   public deleting: boolean = false;
+
+  public loading: boolean = true;
   
   /** True when the page is busy loading or deleting */
-  get busy(): boolean { return this.uploading || this.deleting; }
+  get busy(): boolean { return this.loading || this.uploading || this.deleting; }
 
   /** True on small screen devices */
   get mobile(): boolean { return this.media.isActive('xs'); }
@@ -99,7 +101,7 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
       }))),
       
       // Keeps track on the full list of records
-      tap( files => this.allRecords = files ) 
+      tap( files => { this.allRecords = files; this.loading = false; } ) 
     );
   }
 
@@ -145,7 +147,12 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
     forkJoin( allFiles.map( file => this.upload(file).pipe( catchError( () => of(null) ) ) ) ).toPromise().then( uploads => {
 
       // Checks for overrides or cancellations to re-list the files
-      if(overwrite || uploads.some( upload => upload === null)) { this.ls("."); }
+      if(overwrite || uploads.some( upload => upload === null)) { 
+        
+        this.ls("."); 
+        
+        this.loading = true; 
+      }
 
       this.uploading = false;
     });
@@ -165,6 +172,8 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
       
       // Re-lists the files
       this.ls(".");
+
+      this.loading = true;
 
       // Resets the flags
       this.deleting = false;

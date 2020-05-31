@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GtagModule } from '@wizdm/gtag';
 import { DialogModule } from '@wizdm/dialog';
 import { ReadmeModule } from '@wizdm/readme';
@@ -43,6 +44,7 @@ const routes: RoutesWithContent = [
     MatCheckboxModule,
     MatBadgeModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     GtagModule,
     DialogModule,
     ReadmeModule,

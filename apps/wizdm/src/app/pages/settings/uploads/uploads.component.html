@@ -4,6 +4,12 @@
   <!-- Action Bar (projected in the top toolbar) -->
   <ng-template wmActionbar let-mobile="isMobile">
 
+    <!-- Progress -->
+    <mat-progress-spinner *ngIf="busy"
+                          color="prinary" 
+                          mode="indeterminate" 
+                          diameter="20"></mat-progress-spinner>
+
     <!-- Confirm deleting files dialog -->
     <wm-dialog #confirmDelete (closedChange)="$event && deleteFiles()">
 
