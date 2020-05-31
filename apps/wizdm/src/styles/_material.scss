@@ -172,18 +172,26 @@ $wm-theme: extend-material-theme($wm-theme,
 }
 
 @mixin tweak-material-components() {
-  
+
   // Minifies the menu on request
   .mat-menu-panel.mini { min-width: unset !important; min-height: unset !important; }  
 
+  // Removes the fixed height of list items
   .mat-list-item.height-unset { height: unset !important; }
 
-  // Resets the padding on request
+  // Resets the padding for menu, dialog, expansion panel...
   .mat-menu-panel.padding-0 .mat-menu-content,
   .mat-dialog.padding-0 .mat-dialog-container,
   .mat-expansion-panel.padding-0 .mat-expansion-panel-body { 
     padding: 0;
   }
+
+  // Adds center alignement for material table
+  .mat-header-cell.center { 
+    text-align: center; 
+    .mat-sort-header-container { justify-content: center; } 
+  }
+  .mat-cell.center { text-align: center; }
 
   // Fix the mat-badge to better accomodate long texts
   .mat-badge-small { @include tweak-mat-badge-size($mat-badge-small-size); }

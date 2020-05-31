@@ -90,20 +90,20 @@
 
     // Defines a global style for tables
     table {
-      border-spacing: 0;
-      border-collapse: collapse;
-      margin-bottom: 16px;
 
-      tr:nth-child(2n) {
-        background-color: rgba(0,0,0,0.03); 
-      }
-      td {
-        position: relative;
-        padding: 6px 13px;
-        border: 1px solid #ddd;
+      border-collapse: collapse;
+
+      td { 
+        
+        padding: 8px;
+        
+        &:first-of-type { padding-left: 24px; }
+        &:last-of-type { padding-right: 24px; }
+
+        border-bottom: 1px solid map-get($foreground, divider); 
       }
     }
-    
+
     // Defines a global style for dividers
     hr { 
 
