@@ -12,21 +12,23 @@ import { $animations } from './avatar.animations';
 })
 export class AvatarComponent {
 
-  load: boolean;
-  url: string;
+  public load: boolean;
+  public url: string;
 
+  /** The source url */
   @Input() set src(src: string) {
     this.load = false;
-    this.url  = src;
+    this.url = src;
   }
 
+  /** The alt input */
   @Input() alt: string;
 
-  // Avatar color customization 
+  /** The color theme palette */
   @HostBinding('attr.color')
   @Input() color: ThemePalette;
 
-  // Avatar shape
+  /** The avatar shape */
   @HostBinding('attr.shape')
   @Input() shape: 'rounded'|'squared' = 'rounded';
 }
