@@ -25,5 +25,5 @@ import { LogoModule } from '@wizdm/elements/logo';
 
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

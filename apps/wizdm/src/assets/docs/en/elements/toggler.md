@@ -43,5 +43,5 @@ import { TogglerModule } from '@wizdm/elements/toggler';
 ---
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

@@ -11,6 +11,7 @@
         "private": [
             { "label": "Wizdm", "link": "." },
             { "label": "Explore", "menu": [
+                { "label": "Test", "link": "explore" },
                 { "label": "Features", "link": "features" },
                 { "label": "Reference", "link": "docs" }
             ]},

@@ -1,0 +1,12 @@
+
+<!-- Displays the image once loaded -->
+<img [style.display]="(!!source && load) ? undefined : 'none'" [src]="source" [alt]="alt" (load)="load = true" (error)="error = true" />
+
+<!-- Transcludes a placeholder content when source is null -->
+<ng-content select="[imagePlaceholder]" *ngIf="!source"></ng-content>
+
+<!-- Transcludes a loading content while loading -->
+<ng-content select="[imageLoading]" *ngIf="!!source && !load && !error"></ng-content>
+
+<!-- Transcludes an error content on error -->
+<ng-content select="[imageError]" *ngIf="error"></ng-content>

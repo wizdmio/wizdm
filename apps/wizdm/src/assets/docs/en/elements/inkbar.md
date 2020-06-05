@@ -91,5 +91,5 @@ Link to a helpful post by the Wizdm author on medium:
 
  
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

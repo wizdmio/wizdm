@@ -41,5 +41,5 @@ import { ButtonModule } from '@wizdm/elements/button';
  
 --- 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

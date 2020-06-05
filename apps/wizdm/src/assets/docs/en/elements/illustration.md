@@ -42,5 +42,5 @@ import { IllustrationModule } from '@wizdm/elements/illustration';
 ---
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

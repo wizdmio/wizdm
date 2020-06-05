@@ -7,34 +7,48 @@ import { MediaObserver } from '@angular/flex-layout';
 import { AuthService } from '@wizdm/connect/auth';
 import { Sort } from '@angular/material/sort';
 import { Component } from '@angular/core';
+import { $animations } from './upload.animations';
 
+/** Table record */
 export interface UploadRecord {
+  
+  /** File instance */
   file: StorageFile;
+  
+  /** Resolved file summary */
   data: FileSummary;
+
+  /** Preview flags */
+  previewDone?: boolean;
 }
 
 @Component({
   selector: 'wm-uploads',
   templateUrl: './uploads.component.html',
-  styleUrls: ['./uploads.component.scss']
+  styleUrls: ['./uploads.component.scss'],
+  animations: $animations
 })
 export class UploadsComponent extends StorageFolder implements DataSource<UploadRecord> {
 
-  public desktopColumns: string[] = ['select', 'name', 'size', 'type', 'updated', 'download'];
-  public mobileColumns: string[] = ['select', 'name', 'download'];
-
+  /** Sorting subject */
   readonly sortBy$ = new BehaviorSubject<Sort>({ active: 'name', direction: 'asc' });
   
+  /** Selection */
   private selection = new SelectionModel<UploadRecord>(true, []);
 
+  /** Copy of all records */
   private allRecords: UploadRecord[] = [];
+
+  /** Record to preview */
+  public previewRecord: UploadRecord = null;
 
   /** True when the page is uploading files */
   public uploading: boolean = false;
 
-  /** True then the page is deleting files */
+  /** True when the page is deleting files */
   public deleting: boolean = false;
 
+  /** True when the page is loading */
   public loading: boolean = true;
   
   /** True when the page is busy loading or deleting */
@@ -42,6 +56,14 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
 
   /** True on small screen devices */
   get mobile(): boolean { return this.media.isActive('xs'); }
+
+  /** List of columns to display  */
+  get displayedColumns(): string[] {
+    // Limited columns on small display
+    return this.mobile ? ['select', 'name', 'download'] 
+      // Full columns on large display
+      : ['select', 'name', 'size', 'type', 'updated', 'download'];
+  }
 
   constructor(store: StorageService, auth: AuthService, private media: MediaObserver) {
 
@@ -56,26 +78,14 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
     return this.files$.pipe( 
 
       // Combines the StorageFile[] into UploadRecord[]
-      switchMap( files => combineLatest( 
+      switchMap( files => files.length > 0 ? combineLatest( files.map( file => 
+        // Maps the file summary together with the file instance into records
+        file.summary$.pipe( map( data => ({ file, data } as UploadRecord) ) ))
+        // Skips on an empty arrays
+      ) : of([])),
 
-        // Turns each file into an observable for the outer combineLatest to resolve
-        files.map( file => ( 
-          
-          // Checks the source of the StorageFile
-          file.source instanceof UploadObservable ? 
-        
-          // Starts with empty summary to catch new file uploading progress
-          file.summary$.pipe( startWith({} as FileSummary) ) :
-
-          // Go straight with the summary for StorageReference
-          file.summary$
-
-          // Maps the file/summary into records
-        ).pipe( map( data => ({ file, data } as UploadRecord) ) ))
-      )),
-
-      // Clears the selection whenever the records changes
-      tap( () => this.selection.clear() ),
+      // Clears the selection whenever the records change
+      tap( () => { this.selection.clear(); this.previewRecord = null; } ),
 
       // Sorts the records by the given column
       switchMap( records => this.sortBy$.pipe( map( sortBy => {
@@ -98,10 +108,9 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
           return (valueA > valueB) ? dir : ( (valueA < valueB) ? -dir : 0);
         });
         
-      }))),
-      
+      }))),    
       // Keeps track on the full list of records
-      tap( files => { this.allRecords = files; this.loading = false; } ) 
+      tap( files => { this.allRecords = files; this.loading = false; } )
     );
   }
 
@@ -144,7 +153,7 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
     this.uploading = true;
 
     // Starts uploading the given files and waits for all to complete. Catch errors since it is likely a user cancellation
-    forkJoin( allFiles.map( file => this.upload(file).pipe( catchError( () => of(null) ) ) ) ).toPromise().then( uploads => {
+    forkJoin( allFiles.map( file => this.upload(file, { contentType: file.type }).pipe( catchError( () => of(null) ) ) ) ).toPromise().then( uploads => {
 
       // Checks for overrides or cancellations to re-list the files
       if(overwrite || uploads.some( upload => upload === null)) { 
@@ -209,5 +218,12 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
   /** Returns true when no files are selected */
   public isNoneSelected(): boolean {
     return this.allRecords.length === 0 || this.selection.selected.length <= 0;
+  }
+
+  /** Toggles the record preview */
+  public togglePreview(record: UploadRecord) {
+
+    // Previews only image files
+    this.previewRecord = this.previewRecord === record ? null : (record.data?.contentType?.startsWith('image') ? record : null );
   }
 }

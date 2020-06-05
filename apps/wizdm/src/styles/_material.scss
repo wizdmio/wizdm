@@ -171,7 +171,11 @@ $wm-theme: extend-material-theme($wm-theme,
   }
 }
 
-@mixin tweak-material-components() {
+@mixin tweak-material-components($theme) {
+
+  // Picks the foreground/background maps from the global theme 
+  $fore: map-get($theme, foreground);
+  $back: map-get($theme, background);
 
   // Minifies the menu on request
   .mat-menu-panel.mini { min-width: unset !important; min-height: unset !important; }  
@@ -184,6 +188,12 @@ $wm-theme: extend-material-theme($wm-theme,
   .mat-dialog.padding-0 .mat-dialog-container,
   .mat-expansion-panel.padding-0 .mat-expansion-panel-body { 
     padding: 0;
+  }
+
+  // Turns a material table row into an active item
+  .mat-row.active {
+    cursor: pointer;
+    &:hover { background: mat-color($back, 'hover'); }
   }
 
   // Adds center alignement for material table

@@ -31,5 +31,5 @@ import { HighlightModule } from '@wizdm/elements/highlight';
 
 ---
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

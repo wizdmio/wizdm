@@ -68,11 +68,8 @@ export class StorageFolder extends StorageReference {
     // Handles the '..' listing the parent content
     if(path === "..") { return this.source$.next( this.ref.parent ); }
 
-    // Handles './subfolder' listing the 'subfolder' child
-    if(typeof path === 'string' && path.startsWith('./')) {
-
-      return this.source$.next( this.ref.child( path.substring(2) ));
-    }
+    // Handles plain strings listing the 'subfolder' child
+    if(typeof path === 'string') { return this.source$.next( this.ref.child( path )); }
 
     // Lists the given reference otherwise
     this.source$.next( path );
@@ -80,6 +77,7 @@ export class StorageFolder extends StorageReference {
 
   /** Uploads new files in teh current folder */
   public upload(file: File, meta?: UploadMetadata): UploadObservable {
+    
     // Creates the UploadObservable
     const up = this.child(file.name).put(file, meta);
     // Pushes the objesvable along the uploading stream and returns it to the caller

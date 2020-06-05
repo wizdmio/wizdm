@@ -32,5 +32,5 @@ import { BallonModule } from '@wizdm/elements/balloon'
 ```
 ---
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

@@ -13,8 +13,10 @@ export type ThumbnailSize = 'xs'|'sm'|'md'|'lg';
 })
 export class ThumbnailComponent {
 
+  /** Image source */
   @Input() src: string;
 
+  /** Optional image name */
   @Input() name: string;
 
   // Size customization 

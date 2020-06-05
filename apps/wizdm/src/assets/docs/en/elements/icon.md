@@ -128,5 +128,5 @@ import { IconModule } from '@wizdm/elements/icon';
 
 --- 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

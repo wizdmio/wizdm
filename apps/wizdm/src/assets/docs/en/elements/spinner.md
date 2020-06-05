@@ -37,5 +37,5 @@ import { SpinnerModule } from '@wizdm/elements/spinner';
 
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  
