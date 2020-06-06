@@ -13,15 +13,49 @@ A multi-sized thumbnail component with ripple effect animation on them. You can 
  </wm-thumbnail>
 
 ```
-**wm-thumbnail** takes name attribute for displaying an interactive text that describes to the user's of your application the ongoing activity within the element. Also uses the **src** attribute you use to load the image for the thumbnail tag.
+**wm-thumbnail** takes name attribute for displaying an interactive text that describes to the user's of your application the ongoing activity within the element. Also uses the **src** attribute you to load the image for the thumbnail tag.
 The size attribute provides responsive customization which are: 
 
 
+&nbsp;
+
+# API Reference
+[ThumbnailModule](#thumbnailmodule) -  [ThumbnailComponent](#thumbnailcomponent)
+
+
+## ThumbnailModule
 ```typescript
-export type ThumbnailSize = 'xs'|'sm'|'md'|'lg';
+import { ThumbnailModule } from '@wizdm/elements/thumbnail';
 
 ```
+&nbsp;
 
+## ThumbnailComponent
+```typescript
+
+export type ThumbnailSize = 'xs'|'sm'|'md'|'lg';
+
+@Component({
+  selector: 'wm-thumbnail',
+})
+export class ThumbnailComponent {
+
+  public selected = false;
+
+  @Input() src: string;
+  @Input() name: string;
+
+  // Size customization 
+  @Input() size: ThumbnailSize = 'sm';
+
+  // Color customization 
+  @Input() color: ThemePalette = 'accent';
+
+  @Input('selected') selecting: boolean;
+}
+
+```
+&nbsp;
 
 ## Attributes
 
@@ -32,14 +66,6 @@ export type ThumbnailSize = 'xs'|'sm'|'md'|'lg';
 | @Input() size: string      | Select from the variations from thumbnail size options                 |
 | @Input() selected: boolean | Use attriubte to mark the selected item when in active state           |
 
-&nbsp;
-
-# API Reference
-```typescript
-import { ThumbnailModule } from '@wizdm/elements/logo';
-
-```
----
 
 
 ->

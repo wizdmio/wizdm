@@ -4,7 +4,7 @@
 
 [Go to the API Reference](#api-reference)
 
-Both Material icons and Font Awesome icon set are natively supported to enrich your user interface. This directive supports both icon fonts and SVG icons, but not bitmap-based formats(png, jpg, etc). 
+Both Material icons and Font Awesome icon set are natively supported to enrich your user interface. This directive supports both icon fonts and SVG icons, but not bitmap-based formats(png, jpg, etc). `wm-icon` component also makes available usage of [Material Icon Extended](https://petershaggynoble.github.io/MDI-Sandbox/extended/).
 
 
 ## Usage Example
@@ -60,6 +60,10 @@ export class IconOverviewExample implements OnInit {
       'far:fa-envelope',
       'fas:fa-language',
       'fas:fa-phone'
+
+      // Material Icon Extended
+      'all_inbox',
+      'add_to_drive',
   ];
 
   constructor(private icon: MatIconRegistry) {}
@@ -116,17 +120,46 @@ Also, inline attribute is set to `false` by default in wizdm icon class. You can
 &nbsp;
 
 
-&nbsp;
-
-
 # API Reference
+[IconModule](#iconmodule) - [IconComponent](#Iconcomponent) 
+
+
+&nbsp;  
+
+## IconModule 
 
 ```typescript
 import { IconModule } from '@wizdm/elements/icon';
 ```
 
+## IconComponent
 
---- 
+```typescript
+@Component({
+  selector: 'wm-icon'
+})
+export class IconComponent {
+
+  public extended: boolean;
+  public inline: boolean;
+  public fontSet: string;
+  public fontIcon: string;
+  public matIcon = "code";
+
+  @Input() color: ThemePallete
+  @Input('inline') inlining: boolean
+  @Input('icon') setIcon: string
+
+}
+```
+
+| **Properties**                 | **Description**                                                                                                   |
+| :----------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| `@Input() icon: string;`       | Attribute takes an icon set and name to be rendered in the template. Support both font awesome and material icons |
+| `@Input() color: ThemePalette` | icon(s) can be colored in terms of the current theme value                                                        |
+
+
+---  
 ->
 [Continue Next ⮕](docs/toc?go=next) 
 ->  
