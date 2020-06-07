@@ -32,23 +32,48 @@ A typical use case for  `wm-flip` element toggling between state of user's authe
 
 &nbsp;  
 
+
+# API Reference
+[FlipModule](#flipmodule) - [FlipComponent](#flipcomponent) 
+
+
+## FlipModule 
+```typescript
+import { FlipModule } from '@wizdm/elements';
+
+```
+
 &nbsp;  
+
+## FlipComponent
+```typescript
+
+@Component({
+  selector: 'wm-flip',
+  host: { class: 'wm-flip' },
+})
+export class FlipComponent {
+
+  public flipped = false;
+
+  @Input('flipped') set flipping: boolean
+  
+}
+
+```
+
+&nbsp;  
+
 
 ## Attributes
 
 | **Properties**                        | **Description**                                                                            |
 | :------------------------------------ | :----------------------------------------------------------------------------------------- |
 | @Input('flipped') flipping: boolean | Triggers animation to invert element                                                       |
-| front                               | Place on the content in the first state. When flipped attribute is set **false** |
-| back                                | Place  on the content in the last state. When flipped directive is set **true**   |
+| front                               | Place on the content in the first state when flipped attribute is set to **false** |
+| back                                | Place  on the content in the last state when flipped directive is set to **true**   |
   
 &nbsp;  
-
-# API Reference
-```typescript
-import { FlipModule } from '@wizdm/elements';
-
-```
 
 
 --- 

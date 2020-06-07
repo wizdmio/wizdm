@@ -13,6 +13,38 @@ Balloon is an Angular component that allows for the usage of customized Tooltip 
 
 ```
 
+  
+&nbsp;  
+
+
+# API Reference
+
+[BalloonModule](#balloonmodule) - [BalloonComponent](#ballooncomponent) 
+
+&nbsp;  
+
+## BalloonModule 
+
+```typescript
+import { BalloonModule } from '@wizdm/elements/balloon';
+```
+
+## balloonComponent
+
+```typescript
+@Component({
+  selector: 'wm-balloon'
+})
+export class balloonComponent {
+
+  @Input() side: string
+  @Input() anchor: string
+  @Input() color: ThemePalette;
+}
+```
+---
+
+
 ## Attributes
 
 | **Properties**  | **Description** |
@@ -21,16 +53,6 @@ Balloon is an Angular component that allows for the usage of customized Tooltip 
 | @Input() anchor: string |                 |
 | @Input() color: string  | Set current color using the angular material **ThemePallete** value                 |
 
-  
-&nbsp;  
-
-
-# API Reference
-```typescript
-import { BallonModule } from '@wizdm/elements/balloon'
-
-```
----
 ->
 [Continue Next ⮕](docs/toc?go=next) 
 ->  
