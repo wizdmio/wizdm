@@ -1,17 +1,13 @@
 
-$wm-logo-size: 48px !default;
-
 .wm-logo {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  box-sizing: border-box;
+  
+  display: inline-flex;
+  vertical-align: text-bottom;
   cursor: pointer;
   outline: none;
+  
+  &[inline="true"] {
 
-  svg {
-    width: $wm-logo-size;
-    height: $wm-logo-size;
+    svg { width: 1.5em; height: 1.5em; }
   }
 }
