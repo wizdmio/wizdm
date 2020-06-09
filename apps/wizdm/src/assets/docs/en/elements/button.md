@@ -57,5 +57,5 @@ export type ButtonType = basic | raised | stroked | flat | icon | fab | mini-fab
 
 &nbsp;
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

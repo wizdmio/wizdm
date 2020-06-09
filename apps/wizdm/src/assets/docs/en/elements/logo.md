@@ -43,5 +43,5 @@ export class LogoComponent {
 
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

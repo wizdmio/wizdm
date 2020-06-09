@@ -1,14 +1,15 @@
 {
   "name": "@wizdm/emoji",
   "description": "Universal Emoji Support for Angular",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "keywords": ["Angular", "Emoji"],
   "homepage": "https://wizdm.io/docs/content/emoji",
   "peerDependencies": {
     "@angular/common": "^9.1.4",
     "@angular/core": "^9.1.4",
-    "emoji-regex": "^9.0.0"
+    "emoji-regex": "^9.0.0",
+    "emoji-lib": "^2.4.0"
   },
   "repository": {
     "type": "git",

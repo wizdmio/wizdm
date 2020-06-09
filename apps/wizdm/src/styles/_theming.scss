@@ -19,7 +19,7 @@
   @include tweak-material-typo-margins();
 
   // Tweaks material compoment styles for improved flexibility
-  @include tweak-material-components();
+  @include tweak-material-components($theme);
 
   // Styles the elements according to the theme
   @include wm-elements-theme($theme);

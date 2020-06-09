@@ -53,6 +53,7 @@ export class balloonComponent {
 | @Input() anchor: string | Use attribute to show pointer arrow for the Tooltip element. The options include **start \| center \| end**                                                                                                                          |
 | @Input() color: string  | Set current color using the angular material **ThemePallete** value                                                                                                   |
 
+---
 ->
-[Continue Next ⮕](docs/toc?go=next) 
-->          
+[Continue Next](docs/toc?go=next) 
+->

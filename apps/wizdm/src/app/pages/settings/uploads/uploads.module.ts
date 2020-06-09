@@ -14,6 +14,7 @@ import { GtagModule } from '@wizdm/gtag';
 import { DialogModule } from '@wizdm/dialog';
 import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
+import { ImageModule } from '@wizdm/elements/image';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 //import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
@@ -49,6 +50,7 @@ const routes: RoutesWithContent = [
     DialogModule,
     ReadmeModule,
     IconModule,
+    ImageModule,
     ButtonChangerModule,
     //CanLeaveModule,
     ActionbarModule,

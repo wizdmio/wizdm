@@ -56,5 +56,5 @@ export class HighlightComponent implements OnChanges {
 
 ---
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

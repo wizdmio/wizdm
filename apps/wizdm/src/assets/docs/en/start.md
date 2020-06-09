@@ -1,4 +1,4 @@
-# Getting Started 🚀
+# Getting Started :rocket:
 
 <!-- toc: reference.json -->
 
@@ -73,5 +73,5 @@ The `/styles` folder containes the `scss` files making up the application themin
 
 ---
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->

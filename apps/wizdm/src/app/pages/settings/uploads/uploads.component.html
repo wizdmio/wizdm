@@ -59,11 +59,10 @@
     </wm-dialog>
   
     <!-- Upload files button -->
-    <button mat-button 
-            [color]="msgs.actions?.upload?.color || 'primary'"
-            [type]="mobile ? 'icon' : 'stroked'" 
-            [disabled]="busy"
-            (click)="openfile.click()">
+    <button mat-button [color]="msgs.actions?.upload?.color || 'primary'"
+                       [type]="mobile ? 'icon' : 'stroked'" 
+                       [disabled]="busy"
+                       (click)="openfile.value=''; openfile.click()">
 
       <wm-icon *ngIf="mobile; else uploadTemplate" [icon]="msgs.actions?.upload?.icon || 'backup'"></wm-icon>
       
@@ -79,10 +78,11 @@
   <mat-divider></mat-divider>
 
   <!-- Uploads table -->
-  <table mat-table matSort fxFill
+  <table mat-table multiTemplateDataRows matSort fxFill
          [dataSource]="this"
          [matSortActive]="sortBy$.value.active" 
          [matSortDirection]="sortBy$.value.direction" 
+         [matSortDisabled]="!!previewRecord"
          (matSortChange)="sortBy$.next($event)">
 
     <!-- Selection column -->
@@ -97,7 +97,7 @@
         </mat-checkbox>
   
       </th>
-      <td mat-cell *matCellDef="let record">
+      <td mat-cell *matCellDef="let record" (click)="$event.stopPropagation()">
   
         <!-- File selection check -->
         <mat-checkbox [checked]="isSelected(record)" 
@@ -112,36 +112,12 @@
       <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ msgs.columns?.name || 'Name' }}</th>
       <td mat-cell *matCellDef="let record">
 
-        <span fxLayout="row" fxLayoutAlign="start center">
-  
-          <!-- Uploading -->
-          <ng-container *ngIf="(record.file.progress$ | async) as progress; else nameTemplate">
-          
-            <!-- Progress bar -->
-            <mat-progress-bar [value]="progress" [mode]="progress < 100 ? 'determinate' : 'indeterminate'"></mat-progress-bar>
-    
-            <!-- Cancel button -->
-            <button mat-icon-button [disabled]="progress >= 100" (click)="record.file.cancel()">
-              <mat-icon inline>clear</mat-icon>
-            </button>
-    
-          </ng-container>
-    
-          <!-- File name (when not uploading) with a 'new' badge when uploaded less than 3 minutes ago-->
-          <ng-template #nameTemplate>
-
-            <!--wm-icon extended icon="drive_zip"></wm-icon-->
-            
-            <span [matBadge]="msgs.newBadge || 'new'"
-                  [matBadgeHidden]="!record.data.name || !(record.data.updated | olderThan: 'PT3M')"
-                  matBadgeSize="small"
-                  matBadgeOverlap="false" 
-                  matBadgeColor="warn">{{ record.data.name }}</span>
-
-          </ng-template>
-
-        </span>
-        
+        <!-- File name with 'new' badge whenever the file has less than 3 minutes -->
+        <span [matBadge]="msgs.newBadge || 'new'"
+              [matBadgeHidden]="!(record.data.updated | olderThan: 'PT3M')"
+               matBadgeSize="small"
+               matBadgeOverlap="false" 
+               matBadgeColor="warn">{{ record.data.name }}</span>
       </td>
     </ng-container>
   
@@ -160,13 +136,31 @@
     <!-- Last modified column -->
     <ng-container matColumnDef="updated">
       <th mat-header-cell mat-sort-header class="center" *matHeaderCellDef>{{ msgs.columns?.updated || 'Last modified' }}</th>
-      <td mat-cell class="center" *matCellDef="let record">{{ (record.data.updated | moment:'ll') || '-' }}</td>
+      <td mat-cell class="center" *matCellDef="let record">
+
+        <!-- Uploading -->
+        <span fxLayout="row" fxLayoutAlign="center center" *ngIf="(record.file.progress$ | async) as progress; else updatedTemplate">
+        
+          <!-- Progress bar -->
+          <mat-progress-bar [value]="progress" [mode]="progress < 100 ? 'determinate' : 'indeterminate'"></mat-progress-bar>
+  
+          <!-- Cancel button -->
+          <button mat-icon-button [disabled]="progress >= 100" (click)="record.file.cancel()">
+            <mat-icon inline>clear</mat-icon>
+          </button>
+    
+        </span>
+
+        <!-- Last modified time (when not uploading) -->
+        <ng-template #updatedTemplate>{{ (record.data.updated | moment:'ll') || '-' }}</ng-template>
+      
+      </td>
     </ng-container>
   
     <!-- Download column -->
     <ng-container matColumnDef="download">
       <th mat-header-cell class="center" *matHeaderCellDef>{{ msgs.columns?.download || 'Download' }}</th>
-      <td mat-cell class="center" *matCellDef="let record">
+      <td mat-cell class="center" *matCellDef="let record" (click)="$event.stopPropagation()">
   
         <!-- Using wmDownload directive to work around same host cors policy -->
         <a mat-icon-button
@@ -181,10 +175,36 @@
   
       </td>
     </ng-container>
+
+    <!-- Preview - The preview row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="preview">
+      <td mat-cell *matCellDef="let record" [attr.colspan]="displayedColumns.length">
+
+        <!-- Expanding preview frame -->
+        <div *ngIf="record === previewRecord" fxLayout="column" fxLayoutAlign="center center" class="preview" @expand>
+
+          <!-- Preview image -->
+          <wm-image [src]="record.data.url">
+
+            <!-- Loading progress -->
+            <mat-progress-spinner imageLoading color="prinary" mode="indeterminate"></mat-progress-spinner>
+
+          </wm-image>
+
+        </div>
+        
+      </td>
+    </ng-container>
   
     <!-- Renders the rows --> 
-    <tr mat-header-row *matHeaderRowDef="mobile ? mobileColumns : desktopColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: mobile ? mobileColumns : desktopColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <!-- Data row. Preview the row's record when clicked -->
+    <tr mat-row class="active" *matRowDef="let row; columns: displayedColumns" (click)="togglePreview(row)"></tr>
+    <!-- Preview row -->
+    <tr mat-row *matRowDef="let row; columns: ['preview']"></tr>
+    <!-- No data row -->
+    <!--tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">No data</td></tr-->
+
   </table>
 
 </ng-container>

@@ -8,4 +8,23 @@
   justify-content: center;
 
   & > * { margin-bottom: 16px; }
+
+  // Zeros the height of the preview rows
+  tr:nth-of-type(2n) { height: 0; }
+
+  // Zeros the cell's border on odd rows for continuity between data and preview rows 
+  tr:nth-of-type(2n+1) td { border-bottom-width: 0; }
+
+  // Preview
+  .preview { 
+    overflow: hidden; 
+    height: 240px;
+    margin: 16px 0;
+
+    .wm-image { 
+      
+      max-height: 240px; 
+      max-width: 100%;
+    }
+  }
 }

@@ -73,5 +73,5 @@ match the current theme's colors using the `color` attribute. This can be change
 &nbsp;  
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  
