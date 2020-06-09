@@ -5,7 +5,6 @@ import { dbChatter, dbConversation, dbMessage } from '../chat-types';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
 import { DatabaseService } from '@wizdm/connect/database';
 import { UserProfile } from 'app/auth/user-profile';
-import moment from 'moment';
 
 @Component({
   selector: 'wm-chat-conversation',
@@ -104,9 +103,5 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
 
       shareReplay(1) 
     );
-  }
-
-  time(timestamp: string) {
-    return moment(timestamp, 'x').format("HH:mm");
   }
 }

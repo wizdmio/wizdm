@@ -7,7 +7,7 @@ export class MomentPipe implements PipeTransform {
 
   transform(value: MomentInput, output: string = 'llll'): string {
 
-    return value ? moment(value).format(output) : '';
+    return moment(value || undefined).format(output);
   }
 }
 

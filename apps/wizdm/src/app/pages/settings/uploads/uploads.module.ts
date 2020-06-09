@@ -17,8 +17,9 @@ import { IconModule } from '@wizdm/elements/icon';
 import { ImageModule } from '@wizdm/elements/image';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { MomentPipesModule } from '@wizdm/pipes/moment';
+import { FileSizePipeModule } from '@wizdm/pipes/file-size';
 //import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
-import { FileSizePipeModule, MomentPipeModule } from 'app/utils/pipes';
 import { DownloadModule } from 'app/utils/download';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UploadsComponent } from './uploads.component';
@@ -55,7 +56,7 @@ const routes: RoutesWithContent = [
     //CanLeaveModule,
     ActionbarModule,
     FileSizePipeModule,
-    MomentPipeModule,
+    MomentPipesModule,
     DownloadModule,
     ContentRouterModule.forChild(routes)
   ]
