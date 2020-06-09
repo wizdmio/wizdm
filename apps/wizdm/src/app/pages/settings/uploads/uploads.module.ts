@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GtagModule } from '@wizdm/gtag';
 import { DialogModule } from '@wizdm/dialog';
 import { ReadmeModule } from '@wizdm/readme';
+import { DownloadModule } from '@wizdm/download';
 import { IconModule } from '@wizdm/elements/icon';
 import { ImageModule } from '@wizdm/elements/image';
 import { ButtonChangerModule } from '@wizdm/elements/button';
@@ -20,7 +21,6 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { FileSizePipeModule } from '@wizdm/pipes/file-size';
 //import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
-import { DownloadModule } from 'app/utils/download';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UploadsComponent } from './uploads.component';
 
