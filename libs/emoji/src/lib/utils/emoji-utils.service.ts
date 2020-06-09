@@ -1,5 +1,5 @@
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
-import { EmojiRegex, EmojiNative } from './emoji-utils';
+import { EmojiRegex, EmojiNames, EmojiName, EmojiNative } from './emoji-utils';
 
 /** Emoji Rendering Mode */
 export type EmojiMode = 'auto'|'native'|'web';
@@ -22,6 +22,7 @@ export class EmojiUtils {
 
   constructor(@Optional() @Inject(EmojiConfigToken) config: EmojiConfig, 
               @Inject(EmojiNative) readonly native: boolean,
+              @Inject(EmojiNames) readonly names: { [name:string]: EmojiName },
               @Inject(EmojiRegex) readonly regex: RegExp) { 
 
     // Grabs the source path and the image extension from the configuration object
@@ -78,5 +79,16 @@ export class EmojiUtils {
     while(match = this.regex.exec(source)) {
       callbackfn(match[0], match.index);
     }
+  }
+
+  /** Replaces emoji names between colons with the corresponding emoji sequence */
+  public replaceShortNames(source: string): string {
+    
+    return source ? source.replace(/:(\w+):/g, (match, name) => {
+
+      const emoji = this.names[name]; 
+
+      return emoji && emoji.char || name;
+    }) : '';
   }
 }
