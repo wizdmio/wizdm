@@ -10,4 +10,21 @@
 
     svg { width: 1.5em; height: 1.5em; }
   }
+
+  &.animate {
+
+    path:nth-of-type(3) {
+      animation: 500ms ease-in-out infinite alternate animate;
+    }
+
+    path:nth-of-type(2) {
+      animation: 500ms ease-in-out 125ms infinite alternate animate;
+    }
+
+    path:nth-of-type(1) {
+      animation: 500ms ease-in-out 250ms infinite alternate animate;
+    }
+
+    @keyframes animate { from { opacity: 0; } to { opacity: 1; } }
+  }
 }
