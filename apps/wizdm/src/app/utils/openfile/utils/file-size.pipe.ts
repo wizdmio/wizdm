@@ -17,7 +17,7 @@ const FILE_SIZE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 })
 export class FileSizePipe implements PipeTransform {
   transform(sizeInBytes: number, longForm?: boolean): string {
-    const units = !!longForm ? FILE_SIZE_UNITS_LONG : FILE_SIZE_UNITS;
+    const units = !!longForm ? FILE_SIZE_UNITS_LONG : FILE_SIZE_UNITS; 
 
     // Computes the power of 1024
     let power = Math.min(

@@ -8,7 +8,6 @@ import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { ThumbnailModule } from '@wizdm/elements/thumbnail';
 import { SpinnerModule } from '@wizdm/elements/spinner';
-import { OpenFileModule } from '@wizdm/elements/openfile';
 import { FolderComponent } from './folder.component';
 
 @NgModule({
@@ -23,7 +22,6 @@ import { FolderComponent } from './folder.component';
     IconModule,
     ThumbnailModule,
     SpinnerModule,
-    OpenFileModule
   ],
   exports: [
     FolderComponent

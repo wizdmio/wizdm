@@ -18,6 +18,33 @@ Also, you can customize these attributes as described in the [attributes section
 &nbsp;  
 
 
+
+&nbsp;  
+# API Reference
+[SpinnerModule](#spinnermodule) - [SpinnerComponent](#spinnercomponent)
+
+
+## SpinnerModule 
+```typescript
+import { SpinnerModule } from '@wizdm/elements/spinner';
+
+```
+
+## SpinnerComponent 
+```typescript
+
+@Component({
+  selector: 'wm-spinner',
+})
+export class SpinnerComponent {
+
+  @Input() color: ThemePalette = 'accent';
+  @Input() size: number;
+  @Input() strokeWidth: number;
+}
+
+```
+
 ## Attributes
 
 | **Properties**                 | **Description**                                                                                         |
@@ -26,14 +53,6 @@ Also, you can customize these attributes as described in the [attributes section
 | @input()   color: string       | Set color property value from the theme pallete option                                                  |
 | @input()   strokeWidth: number | This attribute is a presentation attribute defining the width of the stroke to be applied to the shape. |
   
-
-&nbsp;  
-# API Reference
-```typescript
-import { SpinnerModule } from '@wizdm/elements/spinner';
-
-```
----
 
 
 ->
