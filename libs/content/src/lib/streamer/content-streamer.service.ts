@@ -34,8 +34,8 @@ export class ContentStreamer {
     if(selector === '') { return data; }
 
     return selector.split('.').reduce((value, token) => {
-      
-      return value && value[token];
+
+      return (value === undefined || value === null) ? value : value[token];
     
     }, data);
   }

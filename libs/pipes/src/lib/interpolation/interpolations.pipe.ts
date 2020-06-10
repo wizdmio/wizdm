@@ -3,25 +3,30 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'pluck' })
 export class PluckPipe implements PipeTransform {
 
-  transform(value: any, key?: string, defaultValue?: any): any {
+  transform(key: string, value?: any, defaultValue?: any): any {
 
-    if(!(value instanceof Object) || !key) { return value || defaultValue; }
+    if(!(value instanceof Object) || !key) { return value; }
 
-    return key.split(/[.\/]/).reduce( (obj, token) => { 
-      return obj && obj[token];
-    }, value) || defaultValue;
+    return key.split(/[.\/]/).reduce( (value, key) => { 
+
+      if(value === null || value === undefined) {
+        return defaultValue;
+      }
+
+      return value[key];
+    }, value);
   }
 }
 
-@Pipe({ name: 'interpolate' })
+@Pipe({ name: 'interpolate', pure: false })
 export class InterpolatePipe extends PluckPipe {
 
   transform(value: any, context?: any): string {
 
-    if(typeof value !== 'string') { return ''; }
+    if(typeof value !== 'string') { return value; }
     
-    return value ? value.replace(/{{\s*([.\w]+)\s*}}/g, (match, capture) => 
-      super.transform(context, capture, match) ) : '';
+    return value.replace(/{{\s*([.\w]+)\s*}}/g, (match, capture) => 
+      super.transform(capture, context, capture) );
   }
 }
 
