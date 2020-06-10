@@ -16,7 +16,7 @@ export class FromNowPipe implements PipeTransform {
 
   transform(value: MomentInput, withoutSuffix?: boolean): string {
 
-    return value ? moment(value).fromNow(withoutSuffix) : '';
+    return moment(value || undefined).fromNow(withoutSuffix);
   }
 }
 
@@ -25,7 +25,7 @@ export class ToNowPipe implements PipeTransform {
 
   transform(value: MomentInput, withoutSuffix?: boolean): string {
 
-    return value ? moment(value).toNow(withoutSuffix) : '';
+    return moment(value || undefined).toNow(withoutSuffix);
   }
 }
 
@@ -34,7 +34,7 @@ export class CalendarPipe implements PipeTransform {
 
   transform(value: MomentInput, referenceDay?: MomentInput): string {
 
-    return value ? moment(value).calendar(referenceDay || '') : '';
+    return moment(value || undefined).calendar(referenceDay || '');
   }
 }
 
@@ -43,6 +43,6 @@ export class OlderThanPipe implements PipeTransform {
 
   transform(value: MomentInput, duration: string = 'PT5M'): boolean {
 
-    return moment().diff( moment(value).add( moment.duration(duration) ) ) < 0;
+    return moment().diff( moment(value || undefined).add( moment.duration(duration) ) ) < 0;
   }
 }
