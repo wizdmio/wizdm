@@ -151,7 +151,7 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "libs/animate/tsconfig.lib.json",
-            "project": "libs/animate/ng-package.json"
+            "project": "libs/animate/package.json"
           },
           "configurations": {
             "production": {
