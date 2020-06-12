@@ -16,10 +16,12 @@ export interface emSegment {
 })
 export class EmojiText implements OnChanges {
 
-  private _behavior: Exclude<EmojiMode, 'auto'>;
   readonly segments: emSegment[] = [];
   
-  constructor(readonly utils: EmojiUtils) { }
+  constructor(readonly utils: EmojiUtils) { 
+    // Setup the default mode
+    this.mode = undefined;
+  }
 
   /** Plain text source input */
   @Input('wm-emoji-text') value: string;
@@ -29,22 +31,13 @@ export class EmojiText implements OnChanges {
    * 'native' renders the text as it is relying on the OS native support
    * 'auto' detects the availability of native support and chooses accordingly
    */
-  @Input() set mode(mode: EmojiMode) {
-
-    switch(mode || this.utils.emojiMode || 'auto') {
-
-      case 'native': this._behavior = 'native'; 
-      return;
-      
-      case 'web': this._behavior = 'web'; 
-      return;
-    }
-
-    this._behavior = this.utils.native ? 'native' : 'web';
-  }
+  @Input() mode: EmojiMode;
 
   /** Behavior flag either returning 'web' or 'native' depending on the current behavior */
-  get behavior(): Exclude<EmojiMode, 'auto'> { return this._behavior; }
+  get behavior(): Exclude<EmojiMode, 'auto'> { 
+    // Returns the best suitable emoji mode according to the global config
+    return this.utils.emojiMode(this.mode); 
+  }
 
   public ngOnChanges(changes: SimpleChanges) {
     
