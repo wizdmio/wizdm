@@ -1,5 +1,5 @@
 import { Directive, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
-import { EmojiUtils } from '../utils';
+import { EmojiUtils } from '@wizdm/emoji';
 
 // 1x1px transparent image placeholder
 export const fakeImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";

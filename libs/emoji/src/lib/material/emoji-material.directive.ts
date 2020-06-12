@@ -1,8 +1,8 @@
 import { Directive, forwardRef, Optional, Self } from '@angular/core';
 import { MatFormField, MatFormFieldControl } from '@angular/material/form-field';
 import { Observable, merge, fromEvent } from 'rxjs';
+import { EmojiInput } from '@wizdm/emoji/input';
 import { NgControl } from '@angular/forms';
-import { EmojiInput } from '../input';
 
 @Directive({
   selector: 'wm-emoji-input[matEmoji]',

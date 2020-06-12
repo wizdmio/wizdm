@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, Inject, ViewChild } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { EmojiNative } from '@wizdm/emoji/utils';
 import { HasTouchScreen } from 'app/utils/has-touchscreen';
 import { TypeinAdapter } from './typein-adapter';
+import { EmojiNative } from '@wizdm/emoji';
 
 @Component({
   selector: 'wm-chat-composer',

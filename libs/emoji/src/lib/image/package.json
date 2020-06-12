@@ -1,3 +1,8 @@
 {
-  "name": "@wizdm/emoji/image"
+  "$schema": "../../../../../node_modules/ng-packagr/package.schema.json",
+  "ngPackage": {
+    "lib": {
+      "entryFile": "index.ts"
+    }
+  }
 }

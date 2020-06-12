@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { ContentStreamer } from '@wizdm/content';
-import { EmojiUtils } from '@wizdm/emoji/utils';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { EmojiUtils } from '@wizdm/emoji';
 
 @Component({
   selector: 'wm-emoji-keyboard',

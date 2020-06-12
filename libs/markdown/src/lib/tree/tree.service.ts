@@ -1,6 +1,6 @@
 import { mdRoot, mdContent, mdParent, mdTopLevelContent, mdDefinition, mdReference, mdFootnoteDefinition, mdFootnoteReference } from './tree-types';
 import { Injectable, Inject } from '@angular/core';
-import { EmojiMode } from '@wizdm/emoji/utils';
+import { EmojiMode } from '@wizdm/emoji';
 
 /** Parses a markdown text into an 'mdContent' syntax tree using Remark @see {https://github.com/remarkjs/remark} */
 @Injectable()

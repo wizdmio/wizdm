@@ -20,10 +20,10 @@ export class EmojiUtils {
   private readonly filePath: string;
   private readonly fileExt: string;
 
-  constructor(@Optional() @Inject(EmojiConfigToken) config: EmojiConfig, 
-              @Inject(EmojiNative) readonly native: boolean,
-              @Inject(EmojiNames) readonly names: { [name:string]: EmojiName },
-              @Inject(EmojiRegex) readonly regex: RegExp) { 
+  constructor(@Inject(EmojiNative) readonly native: boolean,
+              @Inject(EmojiRegex) readonly regex: RegExp,
+              @Inject(EmojiNames) readonly names: any,
+              @Optional() @Inject(EmojiConfigToken) config: EmojiConfig) { 
 
     // Grabs the source path and the image extension from the configuration object
     this.filePath = this.assessPath(config && config.emojiPath) || 'assets/emoji/';
@@ -86,9 +86,7 @@ export class EmojiUtils {
     
     return source ? source.replace(/:(\w+):/g, (match, name) => {
 
-      const emoji = this.names[name]; 
-
-      return emoji && emoji.char || name;
+      return this.names[name] || name;
     }) : '';
   }
 }

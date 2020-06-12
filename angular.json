@@ -599,7 +599,7 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "libs/emoji/tsconfig.lib.json",
-            "project": "libs/emoji/ng-package.json"
+            "project": "libs/emoji/src/lib/package.json"
           },
           "configurations": {
             "production": {

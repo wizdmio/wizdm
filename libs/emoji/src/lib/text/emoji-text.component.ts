@@ -1,5 +1,6 @@
 import { Component, OnChanges, SimpleChanges, Input, ViewEncapsulation } from '@angular/core';
-import { EmojiUtils, EmojiMode } from '../utils';
+import { EmojiUtils } from '@wizdm/emoji';
+import { EmojiMode } from '@wizdm/emoji';
 
 export interface emSegment {
   type: 'text'|'emoji';

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { EmojiUtils } from '../utils';
+import { EmojiUtils } from '@wizdm/emoji';
 
 /** Replaces emoji colons short names into their corresponding code-points sequence */
 @Pipe({ name: 'emojiNames' })

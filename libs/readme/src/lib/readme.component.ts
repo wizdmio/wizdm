@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, Optional } from '@angular/core';
 import { rmSegment, rmText, rmLink } from './readme-types';
-import { EmojiMode } from '@wizdm/emoji/utils';
+import { EmojiMode } from '@wizdm/emoji';
 
 /** Navigation service token */
 export abstract class ReadmeNavigator {
