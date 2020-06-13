@@ -1,5 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { InterpolationPipesModule } from '@wizdm/pipes/interpolation';
 import { ContentConfig, ContentConfigToken } from './loader/content-configurator.service';
 import { ContentConfigurator } from './loader/content-configurator.service';
 import { ContentLoader, FileLoader } from './loader/content-loader.service';
@@ -7,9 +8,9 @@ import { SelectorResolver } from './router/selector-resolver.service';
 import { ContentDirective } from './streamer/content.directive';
 
 @NgModule({
-  imports: [ HttpClientModule ],
   declarations: [ ContentDirective ],
-  exports: [ ContentDirective ]
+  imports: [ HttpClientModule, InterpolationPipesModule ],
+  exports: [ ContentDirective, InterpolationPipesModule ]
 })
 export class ContentModule { 
   /** Initializes the content module with loaders. Call this once in the app root module */

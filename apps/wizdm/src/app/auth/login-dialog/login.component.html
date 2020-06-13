@@ -7,7 +7,7 @@
     <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 
     <!-- ERROR MESSAGE -->
-    <p class="mat-error" *ngIf="error" @morph>{{ errorMessage(error, msgs.errors) }}</p>
+    <p class="mat-error" *ngIf="errorCode" @morph>{{ (errorCode | camelize) | pluck: msgs.errors: errorCode }}</p>
 
     <!-- MESSAGE -->
     <p class="mat-small" [wm-readme]="msgs.pages[page]?.message" [@vanish]="page"></p>
@@ -84,7 +84,7 @@
       <button *ngIf="msgs.pages[page]?.caption as caption" 
                mat-stroked-button type="submit" class="btn"
                [color]="msgs.pages[page]?.color || 'primary'" 
-               [disabled]="!!error || !form.valid" 
+               [disabled]="!!errorCode || !form.valid" 
                @morph>{{ caption }}</button>
 
       <!-- PROGRESS -->

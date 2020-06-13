@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 //import { MatDividerModule } from '@angular/material/divider';
 import { ContentModule } from '@wizdm/content';
+import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { IconModule } from '@wizdm/elements/icon';
 import { FooterComponent } from './footer.component';
 
@@ -19,6 +20,7 @@ import { FooterComponent } from './footer.component';
     MatButtonModule,
     MatMenuModule,
     ContentModule,
+    MomentPipesModule,
     IconModule
   ],
   declarations: [

@@ -151,7 +151,7 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "libs/animate/tsconfig.lib.json",
-            "project": "libs/animate/ng-package.json"
+            "project": "libs/animate/package.json"
           },
           "configurations": {
             "production": {
@@ -611,7 +611,7 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "libs/emoji/tsconfig.lib.json",
-            "project": "libs/emoji/ng-package.json"
+            "project": "libs/emoji/src/lib/package.json"
           },
           "configurations": {
             "production": {
@@ -826,6 +826,80 @@
             "main": "libs/readme/src/test.ts",
             "tsConfig": "libs/readme/tsconfig.spec.json",
             "karmaConfig": "libs/readme/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "pipes": {
+      "projectType": "library",
+      "root": "libs/pipes",
+      "sourceRoot": "libs/pipes/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/pipes/tsconfig.lib.json",
+              "libs/pipes/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/pipes/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/pipes/src/test.ts",
+            "tsConfig": "libs/pipes/tsconfig.spec.json",
+            "karmaConfig": "libs/pipes/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
+    },
+    "download": {
+      "projectType": "library",
+      "root": "libs/download",
+      "sourceRoot": "libs/download/src",
+      "prefix": "wizdm",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/download/tsconfig.lib.json",
+            "project": "libs/download/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/download/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/download/tsconfig.lib.json",
+              "libs/download/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/download/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/download/src/test.ts",
+            "tsConfig": "libs/download/tsconfig.spec.json",
+            "karmaConfig": "libs/download/karma.conf.js"
           }
         }
       },

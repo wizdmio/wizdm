@@ -1,8 +1,7 @@
 import { Component, OnDestroy, Inject, Optional, ViewEncapsulation, NgZone } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
 import { Router, ResolveStart, NavigationEnd, Scroll, ExtraOptions, ROUTER_CONFIGURATION } from '@angular/router';
-import { filter, map, sample, distinctUntilChanged } from 'rxjs/operators';
-import { MatIconRegistry } from '@angular/material/icon';
+import { filter, map, sample, startWith, distinctUntilChanged, takeWhile } from 'rxjs/operators';
 import { ViewportScroller } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 
@@ -26,11 +25,7 @@ export class AppComponent implements OnDestroy {
   readonly loading$: Observable<boolean>;
   private sub: Subscription;
 
-  constructor(icon: MatIconRegistry, router: Router, scroller: ViewportScroller, zone: NgZone, 
-              @Optional() @Inject(ROUTER_CONFIGURATION) config: ExtraOptions) {
-
-    // Registers font awesome among the available sets of icons for mat-icon component
-    icon.registerFontClassAlias('fontawesome', 'fa');
+  constructor(router: Router, scroller: ViewportScroller, zone: NgZone, @Optional() @Inject(ROUTER_CONFIGURATION) config: ExtraOptions) {
 
     // Grabs the router scrolling options
     const scrollPositionRestoration = config?.scrollPositionRestoration || 'top';
@@ -40,7 +35,7 @@ export class AppComponent implements OnDestroy {
     config.scrollPositionRestoration = config.anchorScrolling = 'disabled';
 
     // Overrides the router scrolling mechanism to ensure scroll events get fired when the rendering is actually done
-    this.sub = router.events.pipe( filter( e => e instanceof Scroll ), sample( zone.onStable ), ).subscribe( (e: Scroll) => {
+    this.sub = router.events.pipe( filter( e => e instanceof Scroll ), sample( zone.onStable ) ).subscribe( (e: Scroll) => {
 
       if(e.position) { // Routing backwards
 
@@ -64,8 +59,12 @@ export class AppComponent implements OnDestroy {
       filter( e => e instanceof ResolveStart || e instanceof NavigationEnd ),
       // Maps the event to the boolean value
       map( e => e instanceof ResolveStart ),
+      // Makes sure to start properly
+      startWith(true),
       // Filters unchanged values
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      // Completes when done loading
+      takeWhile( value => value, true)
     );
   }
 

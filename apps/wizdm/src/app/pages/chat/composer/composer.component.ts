@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, Inject, ViewChild } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { EmojiNative } from '@wizdm/emoji/utils';
 import { HasTouchScreen } from 'app/utils/has-touchscreen';
 import { TypeinAdapter } from './typein-adapter';
+import { EmojiUtils } from '@wizdm/emoji';
 
 @Component({
   selector: 'wm-chat-composer',
@@ -34,7 +34,7 @@ export class ChatComposer {
   /** Send message event */
   @Output() send = new EventEmitter<string>();
 
-  constructor(@Inject(EmojiNative) readonly native: boolean, @Inject(HasTouchScreen) readonly touch: boolean) { }
+  constructor(private utils: EmojiUtils, @Inject(HasTouchScreen) readonly touch: boolean) { }
 
   /** Types in the input the specified key */
   public typein(key: string) {
@@ -46,6 +46,12 @@ export class ChatComposer {
   public toggleEmojiKeys() {
     // Prevents default to avoid loosing focus (mousedown)
     return this.emojiKeysPanel.toggle(), false;
+  }
+
+  /** True when the native emoji support is requested */
+  public get native(): boolean {
+    // Use the very same emoji mode from EmojiSupportModule
+    return this.utils.emojiMode() === 'native'; 
   }
 
   /** Selectes how inputs respond to 'Enter' key. */

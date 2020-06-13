@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { ContentStreamer } from '@wizdm/content';
-import { EmojiUtils } from '@wizdm/emoji/utils';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { EmojiUtils, EmojiMode } from '@wizdm/emoji';
 
 @Component({
   selector: 'wm-emoji-keyboard',
@@ -46,8 +46,8 @@ export class EmojiKeyboard {
   }
 
   /** Behavior flag either returning 'web' or 'native' depending on the current behavior */
-  get behavior(): 'native'|'web' {
-    return this.mode === 'auto' ? (this.utils.native ? 'native' : 'web') : this.mode;
+  get behavior(): Exclude<EmojiMode, 'auto'> {
+    return this.utils.emojiMode(this.mode);
   }
 
   /** The number of rows */
@@ -63,7 +63,7 @@ export class EmojiKeyboard {
    * 'native' renders the text as it is relying on the OS native support
    * 'auto' detects the availability of native support and chooses accordingly
    */
-  @Input() mode: 'auto'|'native'|'web' = 'auto';
+  @Input() mode: EmojiMode;
 
   @Input() favorites: string[];
 

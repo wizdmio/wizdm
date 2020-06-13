@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, Optional } from '@angular/core';
-import { EmojiMode } from '@wizdm/emoji/utils';
-import { rmSegment } from './readme-types';
+import { rmSegment, rmText, rmLink } from './readme-types';
+import { EmojiMode } from '@wizdm/emoji';
 
 /** Navigation service token */
 export abstract class ReadmeNavigator {
@@ -28,14 +28,16 @@ export class ReadmeComponent {
     this.compile(source); 
   }
 
-  /** (Optional) The context object to interpolate the variable from. */
-  @Input() context: any;
-
   /** Emoji Rendering Mode */
   @Input() emojiMode: EmojiMode;
 
   /** Emits the url to navigate to */
   @Output('navigate') nav = new EventEmitter<string>();
+
+  // Tracking function to render the segments by content preventing re-rendering segments where content is unchanged
+  public trackByFn(index: number, item: rmSegment) {
+    return item.type + (item as rmText).content || '' + (item as rmLink).url || '';
+  }
 
   /** Compiles the input text into segments */
   private compile(source: string): rmSegment[] {
@@ -91,15 +93,6 @@ export class ReadmeComponent {
     }
 
     return this.segments;
-  }
-
-  /** Interpolates the source text using the given context */
-  public interpolate(source: string): string {
-    return source.replace(/{{\s*([.\w]+)\s*}}/g, (match, capture) => {
-      return capture.split(".").reduce( (obj, token) => { 
-        return obj && obj[token];
-      }, this.context || {});
-    });
   }
 
   /** True whenever the navigate output is used */

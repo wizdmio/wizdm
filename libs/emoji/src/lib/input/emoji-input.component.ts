@@ -1,10 +1,12 @@
-import { Component, Input, Output, EventEmitter, OnDestroy, HostBinding, HostListener, Inject, ElementRef, ViewEncapsulation, NgZone } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { filter, map, timeInterval, take } from 'rxjs/operators';
-import { EmojiText, emSegment } from '../text';
+import { Component, Input, Output, EventEmitter, HostBinding, HostListener, Inject } from '@angular/core';
+import { ElementRef, ViewEncapsulation, NgZone } from '@angular/core';
 import { Subject, Subscription, animationFrameScheduler } from 'rxjs';
+import { filter, map, timeInterval, take } from 'rxjs/operators';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { EmojiText, emSegment } from '@wizdm/emoji/text';
+import { EmojiUtils } from '@wizdm/emoji';
 import { DOCUMENT } from '@angular/common';
-import { EmojiUtils } from '../utils';
+import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'wm-emoji-input',
@@ -16,11 +18,13 @@ import { EmojiUtils } from '../utils';
 })
 export class EmojiInput extends EmojiText implements OnDestroy {
 
+  // Internal value
+  private _value: string;
   // Current selection
   private start: number;
   private end: number;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private elref: ElementRef<HTMLElement>, private zone: NgZone, utils: EmojiUtils) {
+  constructor(@Inject(DOCUMENT) private document: any, private elref: ElementRef<HTMLElement>, private zone: NgZone, utils: EmojiUtils) {
     super(utils);
   }
 
@@ -63,18 +67,18 @@ export class EmojiInput extends EmojiText implements OnDestroy {
   @Input() placeholder: string;
 
   /** The input value */
-  get value(): string { return super.value || ''; }
+  get value(): string { return this._value || ''; }
   @Input() set value(value: string) {
     // Avoids unecessary changes
     if(value === this.value) { return; }
     // Restarts the undo history whenevevr the input value changes.
     this.enableHistory(this.historyTime, this.historyLimit); 
     // Compiles the new text and emits the update
-    this.compile( super.value = value );
+    this.compile( this._value = value );
   }
 
   // Clears the history while leaving 
-  public ngOnDestroy() { this.clearHistory(); }
+  ngOnDestroy() { this.clearHistory(); }
 
    /** Emits the new text on changes */
   @Output() valueChange = new EventEmitter<string>();
@@ -279,7 +283,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
     // Restores the selection
     this.start = start; this.end = end;
     // Restores the content
-    this.compile(super.value = value);
+    this.compile(this._value = value);
     // Applies the selection back when rendering is done
     this.focused && this.whenDone( () => this.apply() );
     // Emits the ne value

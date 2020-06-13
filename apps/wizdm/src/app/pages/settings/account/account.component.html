@@ -7,8 +7,8 @@
   <mat-divider fxFill></mat-divider>
   
   <!-- account creation -->
-  <p [wm-readme]="msgs.description" [context]="this">
-    <span>Your account has been created on <b>{{ created }}</b>.</span>
+  <p [wm-readme]="msgs.description | interpolate: { 'created': user.metadata?.creationTime | moment:'ll' }">
+    <span>Your account has been created on <b>{{ user.metadata?.creationTime | moment: 'll' }}</b>.</span>
   </p>
 
   <!-- Account's provider(s) -->
@@ -25,11 +25,11 @@
     
     <mat-divider fxFill></mat-divider>
     
-    <p [wm-readme]="emailVerified ? msgs.verify?.verified : msgs.verify?.unverified">
-      <span>Your email {{ emailVerified ? 'has been verified already' : 'has not been verified yet '}}.</span>
+    <p [wm-readme]="user.emailVerified ? msgs.verify?.verified : msgs.verify?.unverified">
+      <span>Your email {{ user.emailVerified ? 'has been verified already' : 'has not been verified yet '}}.</span>
     </p>
     
-    <button mat-stroked-button color="primary" fxFlexAlign.gt-xs="start" [disabled]="emailVerified" wmRedirect="login?mode=sendEmailVerification">
+    <button mat-stroked-button color="primary" fxFlexAlign.gt-xs="start" [disabled]="user.emailVerified" wmRedirect="login?mode=sendEmailVerification">
       {{ msgs.verify?.action }}
     </button>
     

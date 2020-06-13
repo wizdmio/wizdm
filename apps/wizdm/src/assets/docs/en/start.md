@@ -1,4 +1,4 @@
-# Getting Started 🚀
+# Getting Started :rocket:
 
 <!-- toc: reference.json -->
 

@@ -14,6 +14,42 @@ The usage of this component gives you the flexibility of dynamically loading svg
 
 &nbsp;  
 
+# API Reference
+[IllustrationModule](#illustrationmodule) - [IllustrationComponent](#illustrationcomponent) - [Theming](#theming)
+
+## IllustrationModule
+&nbsp;  
+
+```typescript
+import { IllustrationModule } from '@wizdm/elements/illustration';
+
+```
+&nbsp;  
+
+## IllustrationComponent
+&nbsp;
+
+```typescript
+@Component({
+  selector: 'wm-illustration',
+})
+export class IllustrationComponent {
+
+  public svg$: Observable<SafeHtml>;
+
+  @Input() src: string
+  @Input() baseHref: string
+  @Input() color: ThemePalette;
+
+  @Output() load = new EventEmitter<void>();
+  @Output() error = new EventEmitter<Error>();
+
+}
+
+```
+
+&nbsp;  
+
 ## Attributes
 
 | **Properties**                    | **Description**                                                            |
@@ -30,16 +66,11 @@ By default, svg element will use the current font color (`currentColor`). This c
 match the current theme's colors using the `color` attribute. This can be changed to
 `'primary'`, `'accent'`, or `'warn'`.
 
-&nbsp;  
 
 
-# API Reference
-
-```typescript
-import { IllustrationModule } from '@wizdm/elements/illustration';
-
-```
 ---
+
+&nbsp;  
 
 ->
 [Continue Next](docs/toc?go=next) 

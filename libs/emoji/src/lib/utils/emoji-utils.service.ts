@@ -1,5 +1,5 @@
 import { Injectable, InjectionToken, Inject, Optional } from '@angular/core';
-import { EmojiRegex, EmojiNative } from './emoji-utils';
+import { EmojiRegex, EmojiNames, EmojiName, EmojiNative } from './emoji-utils';
 
 /** Emoji Rendering Mode */
 export type EmojiMode = 'auto'|'native'|'web';
@@ -16,20 +16,17 @@ export const EmojiConfigToken = new InjectionToken<EmojiConfig>('wizdm-emoji-con
 @Injectable()
 export class EmojiUtils {
 
-  public readonly  emojiMode: EmojiMode;
   private readonly filePath: string;
   private readonly fileExt: string;
 
-  constructor(@Optional() @Inject(EmojiConfigToken) config: EmojiConfig, 
-              @Inject(EmojiNative) readonly native: boolean,
-              @Inject(EmojiRegex) readonly regex: RegExp) { 
+  constructor(@Inject(EmojiNative) readonly native: boolean,
+              @Inject(EmojiRegex) readonly regex: RegExp,
+              @Inject(EmojiNames) readonly names: any,
+              @Optional() @Inject(EmojiConfigToken) private config: EmojiConfig) { 
 
     // Grabs the source path and the image extension from the configuration object
     this.filePath = this.assessPath(config && config.emojiPath) || 'assets/emoji/';
     this.fileExt  = this.assessExt(config && config.emojiExt)  || '.png';
-    
-    // Keep track of the global emoji rendering mode
-    this.emojiMode = config.emojiMode || 'auto';
   }
 
   private assessPath(path: string): string {
@@ -38,6 +35,21 @@ export class EmojiUtils {
 
   private assessExt(ext: string): string {
     return ext ? (ext.startsWith('.') ? ext : ('.' + ext)) : '';
+  }
+
+  /** Returns the most suitable emoji mode based on the request */
+  public emojiMode(mode?: EmojiMode): Exclude<EmojiMode, 'auto'> {
+
+    switch(mode || (this.config?.emojiMode) || 'auto') {
+
+      case 'native': 
+      return 'native';
+      
+      case 'web': 
+      return 'web';
+    }
+
+    return this.native ? 'native' : 'web';
   }
 
   /** Computes the full path to load the image corersponding to the given emoji */
@@ -78,5 +90,14 @@ export class EmojiUtils {
     while(match = this.regex.exec(source)) {
       callbackfn(match[0], match.index);
     }
+  }
+
+  /** Replaces emoji names between colons with the corresponding emoji sequence */
+  public replaceShortNames(source: string): string {
+    
+    return source ? source.replace(/:(\w+):/g, (match, name) => {
+
+      return this.names[name] || name;
+    }) : '';
   }
 }

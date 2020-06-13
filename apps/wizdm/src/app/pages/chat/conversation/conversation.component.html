@@ -13,7 +13,7 @@
 
     <div class="last mat-body" [wm-emoji-text]="(last$ | async)?.body || '\n'"></div>
 
-    <div class="time mat-small">{{ time((last$ | async)?.created) }}</div>
+    <div class="time mat-small">{{ (last$ | async)?.created?.toDate() | moment:'HH:mm' }}</div>
 
   </div>
 

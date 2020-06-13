@@ -1,17 +1,30 @@
 
-$wm-logo-size: 48px !default;
-
 .wm-logo {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  box-sizing: border-box;
+  
+  display: inline-flex;
+  vertical-align: text-bottom;
   cursor: pointer;
   outline: none;
+  
+  &[inline="true"] {
 
-  svg {
-    width: $wm-logo-size;
-    height: $wm-logo-size;
+    svg { width: 1.5em; height: 1.5em; }
+  }
+
+  &.animate {
+
+    path:nth-of-type(3) {
+      animation: 500ms ease-in-out infinite alternate animate;
+    }
+
+    path:nth-of-type(2) {
+      animation: 500ms ease-in-out 125ms infinite alternate animate;
+    }
+
+    path:nth-of-type(1) {
+      animation: 500ms ease-in-out 250ms infinite alternate animate;
+    }
+
+    @keyframes animate { from { opacity: 0; } to { opacity: 1; } }
   }
 }

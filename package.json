@@ -45,7 +45,6 @@
     "@angular/platform-browser-dynamic": "~9.1.7",
     "@angular/router": "~9.1.7",
     "emoji-datasource-google": "^5.0.1",
-    "emoji-regex": "^9.0.0",
     "faker": "^4.1.0",
     "firebase": "^7.14.2",
     "moment": "^2.24.0",

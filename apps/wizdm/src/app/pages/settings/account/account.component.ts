@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AuthService, User } from '@wizdm/connect/auth';
-import { default as moment } from 'moment';
 
 @Component({
   selector: 'wm-account',
@@ -17,13 +16,12 @@ export class AccountComponent {
     auth.getProviderId().then( provider => this.providerId = provider );
   }
 
+  /** The user object */
   get user(): User { return this.auth.user || {} as User; }
 
-  get created(): string { return moment(this.user.metadata?.creationTime).format('ll'); }
-
+  /** The array of providers */
   get providers(): string[] { return (this.user.providerData || []).map( data => data.providerId ); }
 
+  /** True whenever the provider we logged-in with requires a password */
   get usePassword(): boolean { return this.providerId === 'password'; }
-
-  get emailVerified(): boolean { return this.user.emailVerified || false; }
 }

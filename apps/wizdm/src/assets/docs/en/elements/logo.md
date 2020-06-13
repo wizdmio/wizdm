@@ -17,10 +17,28 @@
 &nbsp;  
 
 # API Reference
+[LogoModule](#logomodule) - [LogoComponent](#logocomponent)
+
+## LogoModule
 ```typescript
 import { LogoModule } from '@wizdm/elements/logo';
 ```
+&nbsp;
 
+## LogoComponent
+```typescript
+
+@Component({
+  selector: 'wm-logo',
+})
+export class LogoComponent {
+
+  // Color customization 
+  @Input() color: ThemePalette;
+}
+
+
+```
 --- 
 
 

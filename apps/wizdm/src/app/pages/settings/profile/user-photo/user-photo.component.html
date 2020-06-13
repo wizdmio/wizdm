@@ -22,10 +22,8 @@
 
     <ng-template #uploadBtn>
 
-      <!-- Native OpenFile dialog -->
-      <wm-openfile accept="image/*" (files)="uploadFile($event)" #openfile></wm-openfile>
 
-      <button mat-icon-button class="buttons" (click)="openfile.open()">
+      <button mat-icon-button class="buttons" (click)="uploadFile($event)">
         <wm-icon [icon]="msgs.upload?.icon || 'cloud_upload'"></wm-icon>
       </button>
 

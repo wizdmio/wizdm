@@ -7,8 +7,8 @@ import { of, Observable, BehaviorSubject } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { UserProfile } from 'app/auth/user-profile';
 import { $animations } from './chat.animations';
-import { EmojiRegex } from '@wizdm/emoji/utils';
 import { runInZone } from 'app/utils/rxjs';
+import { EmojiRegex } from '@wizdm/emoji';
 
 @Component({
   selector: 'wm-chat',

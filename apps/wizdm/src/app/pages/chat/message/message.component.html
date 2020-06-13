@@ -5,6 +5,6 @@
 
   <span class="spacer"></span>
   
-  <span class="time mat-small">{{ time }}</span>
+  <time class="time mat-small">{{ message?.created?.toDate() | moment:'HH:mm' }}</time>
 
 </wm-balloon>

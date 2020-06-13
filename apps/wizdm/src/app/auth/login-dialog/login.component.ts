@@ -33,7 +33,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
   private newEmail: FormControl;
   private newPassword: FormControl;  
   
-  public error = null;
+  public errorCode = null;
   public progress = false;
   public showPassword = false;
   public page: loginAction;
@@ -96,7 +96,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
     // Resets the status
     this.showPassword = this.progress = false;
-    this.error = null;
+    this.errorCode = null;
 
     // Removes all the controls from the form group
     Object.keys(this.form.controls).forEach( control => {
@@ -167,17 +167,9 @@ export class LoginComponent extends DialogComponent<LoginData> {
     // Stops the progress, if any
     this.progress = false;
     // Sets the error code to be displayed
-    this.error = error;
+    this.errorCode = error;
     // Makes sure to turn off the error message after 3s
-    setTimeout(() => this.error = '', 3000);
-  }
-
-  /** Turns the error code into the relevant error message */
-  public errorMessage(code: string, msgs: any = {}): void {    
-    // Turns the error code into camelCase
-    const key = code.camelize().replace('/','.');
-    // Look up the available error messages or return the error code itself if not found
-    return key.select(msgs, code);
+    setTimeout(() => this.errorCode = null, 3000);
   }
 
   public activate(action: loginAction) {

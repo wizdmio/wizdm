@@ -18,9 +18,9 @@ import { runInZone } from 'app/utils/rxjs';
 export class NavigatorComponent {
 
   // Background style 
-  readonly background$: Observable<any>;
   private bkStyler$ = new BehaviorSubject<any>(undefined);
-
+  readonly background$: Observable<any>;
+  
   // Scrolled observable
   readonly scrolled$: Observable<boolean> = of(false);
 
@@ -84,7 +84,7 @@ export class NavigatorComponent {
       distinctUntilChanged(),
       // Enters the zone since cdk/scrolling observables run out of angular zone
       runInZone(this.zone)
-    )
+    );
   }
 
   // Signed In status

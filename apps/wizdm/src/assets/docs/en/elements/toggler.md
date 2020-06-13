@@ -22,24 +22,49 @@ Animated toggler extending Angular Material components with selectable multiple 
 
 &nbsp;
 
+# API Reference
+[TogglerModule](#togglermodule) -  [TogglerComponent](#togglercomponent)
+
+## TogglerModule
+```typescript
+import { TogglerModule } from '@wizdm/elements/toggler';
+
+```
+
+## TogglerComponent
+```typescript
+
+export type wmTogglerStyle = 'menu' | 'more_vert' | 'more_horiz';
+
+@Component({
+  selector: 'wm-toggler',
+})
+export class TogglerComponent {
+
+  public toggled = false;
+
+  @Input('toggled') toggling: boolean;
+  @Input() color: ThemePalette;
+  @Input('toggler-style') style: wmTogglerStyle = 'menu';
+  
+  // Trigger the animations based on current style
+  public get trigger() {}
+}
+
+```
 ## Directives
 &nbsp;
 
 ## Attributes 
 
-| **Properties**                 | **Description**                                                      |
-| :----------------------------- | :------------------------------------------------------------------- |
-| @Input() toggler-style: string | attribute set on the  `wm-toggler`. Default to **menu**              |
-| @Input() toggled: boolean      | set to **true/false** to keep track the state of the toggled element |
-| @Input() color: string         | element can be colored in terms of the current theme property        |
+| **Properties**                 | **Description**                                                                  |
+| :----------------------------- | :------------------------------------------------------------------------------- |
+| @Input() toggler-style: string | attribute set on the  `wm-toggler` to select icon of choice. Default to **menu** |
+| @Input() toggled: boolean      | set to **true/false** to keep track the state of the toggled element             |
+| @Input() color: string         | element can be colored in terms of the current theme property                    |
   
 &nbsp;  
 
-# API Reference
-```typescript
-import { TogglerModule } from '@wizdm/elements/toggler';
-
-```
 ---
 
 ->

@@ -3,27 +3,27 @@
 <ng-content *ngIf="segments.length === 0"></ng-content>
 
 <!-- Loops on the segments -->
-<ng-container *ngFor="let segment of segments">
+<ng-container *ngFor="let segment of segments; trackBy: trackByFn">
 
   <ng-container [ngSwitch]="segment.type">
 
     <!-- Renders the text with emoji support from EmojiTextModule -->
-    <span *ngSwitchCase="'text'" [wm-emoji-text]="interpolate(segment.content)" [mode]="emojiMode"></span>
+    <span *ngSwitchCase="'text'" [wm-emoji-text]="segment.content" [mode]="emojiMode"></span>
 
     <!-- Styles the text as Bold -->
-    <b *ngSwitchCase="'bold'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></b>
+    <b *ngSwitchCase="'bold'" [wm-readme]="segment.content" (navigate)="navigate($event)"></b>
 
     <!-- Styles the text as Italic -->
-    <i *ngSwitchCase="'italic'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></i>
+    <i *ngSwitchCase="'italic'" [wm-readme]="segment.content" (navigate)="navigate($event)"></i>
 
     <!-- Styles the text as Undelined -->
-    <u *ngSwitchCase="'underline'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></u>
+    <u *ngSwitchCase="'underline'" [wm-readme]="segment.content" (navigate)="navigate($event)"></u>
 
     <!-- Styles the text as Strikethrough -->
-    <s *ngSwitchCase="'strikethrough'" [context]="context" [wm-readme]="segment.content" (navigate)="navigate($event)"></s>
+    <s *ngSwitchCase="'strikethrough'" [wm-readme]="segment.content" (navigate)="navigate($event)"></s>
 
     <!-- Stles teh text as an Anchor -->
-    <a *ngSwitchCase="'link'" [href]="segment.url" [context]="context" [wm-readme]="segment.content" (click)="navigate(segment.url)"></a>
+    <a *ngSwitchCase="'link'" [href]="segment.url" [wm-readme]="segment.content" (click)="navigate(segment.url)"></a>
 
     <!-- Adds a line break -->
     <br *ngSwitchCase="'break'" />

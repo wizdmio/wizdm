@@ -2,7 +2,6 @@ import { Component, ElementRef, NgZone } from '@angular/core';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import moment from 'moment';
 
 @Component({
   selector: 'footer[wm-footer]',
@@ -12,7 +11,7 @@ import moment from 'moment';
 })
 export class FooterComponent {
 
-  readonly year = moment().year().toString();
+  /** Media-like observable */
   readonly xsmall$: Observable<boolean>;
 
   /** Host element */
@@ -26,11 +25,6 @@ export class FooterComponent {
     this.xsmall$ = zone.onStable.pipe( map(() => (this.element?.clientWidth || 0) <= 599 ), distinctUntilChanged() );
     // NOTE: we're using NgZone.onStable to make sure the element's width is "sampled" when the rendering has been completed
     // to avoid raising the valueChangedAfterItHasBeenChecked() exception
-  }
-
-  copyright(msg: string): string {
-    // Interpolates the copyright message to dynamically change the current year
-    return msg.replace(/{{\s*year\s*}}/, this.year);
   }
 
   public languageLink(lang: string): any[] {

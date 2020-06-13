@@ -1,7 +1,6 @@
 import { UserProfile } from 'app/auth/user-profile';
 import { Component, Input } from '@angular/core';
 import { dbMessage } from '../chat-types';
-import moment from 'moment';
 
 @Component({
   selector: 'wm-message',
@@ -24,11 +23,6 @@ export class ChatMessage {
 
   get sender(): string {
     return this.message && this.message.sender || ''; 
-  }
-
-  get time(): string {
-    const stamp = this.message && this.message.created || '0';
-    return moment(stamp, 'x').format('HH:mm');
   }
 
   get dir(): 'in'|'out' {

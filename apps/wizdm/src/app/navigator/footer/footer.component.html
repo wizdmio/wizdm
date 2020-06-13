@@ -58,7 +58,7 @@
 
   <!-- Copyright banner -->
   <section fxLayout="row" fxLayoutAlign="center center" class="copyright background-color-darker color-100 primary">
-    <span class="mat-small">{{ copyright(msgs.copyright) }}</span>
+    <span class="mat-small">{{ ( msgs.copyright || 'Copyright \{\{ year \}\}' ) | interpolate: { year: '' | moment:'YYYY' } }}</span>
   </section>
 
 </ng-container> 

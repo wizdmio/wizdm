@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmojiImageModule } from '../image';
+import { EmojiImageModule } from '@wizdm/emoji/image';
 import { EmojiText } from './emoji-text.component';
 
 @NgModule({
