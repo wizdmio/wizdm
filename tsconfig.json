@@ -40,7 +40,8 @@
       "@wizdm/gtag": ["libs/gtag/src/index.ts"],
       "@wizdm/emoji": ["libs/emoji/src/index.ts"],
       "@wizdm/emoji/*": ["libs/emoji/src/lib/*"],
-      "@wizdm/readme": ["libs/readme/src/index.ts"]
+      "@wizdm/readme": ["libs/readme/src/index.ts"],
+      "@wizdm/elements-sample": ["libs/elements-sample/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]

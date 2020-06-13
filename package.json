@@ -10,6 +10,10 @@
     "lint": "./node_modules/.bin/nx lint && ng lint",
     "e2e": "ng e2e",
     "postinstall": "ngcc",
+    
+    "build:lib": "ng build dev --prod && npm run build:lib:scss",
+    "build:lib:scss": "tsc ./build",
+
     "affected:apps": "./node_modules/.bin/nx affected:apps",
     "affected:libs": "./node_modules/.bin/nx affected:libs",
     "affected:build": "./node_modules/.bin/nx affected:build",
