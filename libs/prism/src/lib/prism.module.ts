@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PrismHighlighter } from './highlighter/highlighter.component';
 import { PrismTokenizer } from './tokenizer/tokenizer.component';
-import { prism } from './prism-module';
+import './prism-manual-mode';
+import * as ManualModePrism from 'prismjs';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { prism } from './prism-module';
     PrismHighlighter,
     PrismTokenizer
   ],
-  providers: [ { provide: 'prism', useFactory: () => prism }]
+  providers: [{ provide: 'prism', useValue: ManualModePrism }]
 })
 export class PrismModule { }

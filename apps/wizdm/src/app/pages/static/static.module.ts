@@ -8,14 +8,16 @@ import { ActionLinkModule } from '@wizdm/actionlink';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
-import { PrismTsModule } from '@wizdm/prism/languages';
-import { PrismScssModule } from '@wizdm/prism/languages';
-import { PrismMdModule } from '@wizdm/prism/languages';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { SizeLockModule } from 'app/utils/size-lock';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
 import { TocModule } from './toc';
+
+// Imports the extra languages for prismjs used by MarkdownModule
+import 'prismjs/components/prism-scss';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-markdown';
 
 /** Static content route matcher */
 export function staticMatcher(url: UrlSegment[]): UrlMatchResult {
@@ -37,7 +39,7 @@ const routes: RoutesWithContent = [{
   matcher: staticMatcher,
   //content: 'static',
   component: StaticComponent,
-  data: { source: 'assets/docs' },
+  data: { source: 'assets/static' },
   resolve: { document: StaticResolver }
 }];
 
@@ -49,9 +51,6 @@ const routes: RoutesWithContent = [{
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
     ActionLinkModule,
-    PrismTsModule,
-    PrismScssModule,
-    PrismMdModule,
     GtagModule,
     AnimateModule,
     SidenavModule,

@@ -1,16 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { EmojiUtils } from '@wizdm/emoji';
+import { emojiNames } from './emoji-names';
 
 /** Replaces emoji colons short names into their corresponding code-points sequence */
 @Pipe({ name: 'emojiNames' })
 export class EmojiNamesPipe implements PipeTransform {
 
-  constructor(private utils: EmojiUtils) {}
-
   transform(value: any): string {
 
     if(typeof value !== 'string') { return value; }
 
-    return this.utils.replaceShortNames(value);
+    return value.replace(/:(100|1234|\w+):/g, (_, name) => {
+
+      return emojiNames[name] || name;
+    });
   }
 }

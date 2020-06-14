@@ -15,8 +15,6 @@ export class MarkdownInline {
 
   @Input('wm-inline') node: mdPhrasingContent;
 
-  
-
   // AOT safe children from the node
   get children() { return ("children" in this.node) ? this.node.children : [] }
 

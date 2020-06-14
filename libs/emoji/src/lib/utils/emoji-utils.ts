@@ -1,25 +1,11 @@
 import { InjectionToken, inject } from '@angular/core';
-import { emojiRegex } from './emoji-regex';
-import { emojiNames } from './emoji-names';
+import emojiRegexFactory from 'emoji-regex';
 import { DOCUMENT } from '@angular/common';
 
 export const EmojiRegex = new InjectionToken<RegExp>('wizdm-emoji-regex', {
   providedIn: 'root',
-  factory: () => emojiRegex
+  factory: emojiRegexFactory
 });
-
-export interface EmojiName {
-  keywords: string[];
-  char: string;
-  fitzpatrick_scale: boolean;
-  category: string;
-}
-
-export const EmojiNames = new InjectionToken<{ [name:string]: string }>('wizdm-emoji-names', {
-  providedIn: 'root',
-  factory: () => emojiNames
-});
-
 
 export const EmojiNative = new InjectionToken<boolean>('wizdm-native-emoji-support', {
   providedIn: 'root',

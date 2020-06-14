@@ -1,14 +1,14 @@
 {
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/dialog",
   "description": "A declarative dialog for Angular Material",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "keywords": ["Angular", "Material", "Dialog"],
   "homepage": "https://wizdm.io/docs/dialog",
   "peerDependencies": {
-    "@angular/core": "^9.1.4",
-    "@angular/material": "^9.2.2",
-    "tslib": "^1.10.0"
+    "@angular/core": "^9.1.7",
+    "@angular/material": "^9.2.2"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,11 @@
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"
+  },
+  "ngPackage": {
+    "dest": "../../dist/libs/dialog",
+    "lib": {
+      "entryFile": "src/index.ts"
+    }
   }
 }

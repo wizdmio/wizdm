@@ -2,10 +2,13 @@
   "$schema": "../../../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/emoji",
   "description": "Universal Emoji Support for Angular",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "license": "MIT",
   "keywords": ["Angular", "Emoji"],
   "homepage": "https://wizdm.io/docs/content/emoji",
+  "dependencies": {
+    "emoji-regex": "^9.0.0"
+  },
   "peerDependencies": {
     "@angular/core": "^9.1.7",
     "@angular/cdk": "^9.2.2"
@@ -23,7 +26,13 @@
   "ngPackage": {
     "dest": "../../../../dist/libs/emoji",
     "lib": {
-      "entryFile": "index.ts"
-    }
+      "entryFile": "index.ts",
+      "umdModuleIds": {
+        "emoji-regex": "emojiRegexFactory"
+      }
+    },
+    "whitelistedNonPeerDependencies": [
+      "emoji-regex"
+    ]
   }
 }

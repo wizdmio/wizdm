@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["jasmine"]
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "**/*.js"]
 }

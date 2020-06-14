@@ -77,7 +77,7 @@ export class StaticResolver implements Resolve<StaticContent> {
     if(!source) { return out; }
 
     const comments = /<!--([\s\S]*?)-->/g;
-    const pairs = /\s*(\w+):\s*([\w-_.]*)\s*/g;
+    const pairs = /\s*(\w+):\s*([\w-_.\/]*)\s*/g;
 
     this.parse(comments, source, comment => {
 
