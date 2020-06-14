@@ -6,14 +6,12 @@
     "ng": "ng",
     "start": "ng serve --ssl true",
     "build": "ng build --prod",
+    "1": "Run this command in the directory where the scss-config.json file exist for bundling purpose only: <sccs-bunlde -c path-to-scss-config.json-file>",
+    "2": "We recommend you install the scss-bundle CLI globally: <npm i -g scss-bundle> for bundling the (individual) scss files for the libraries",
     "test": "ng test",
     "lint": "./node_modules/.bin/nx lint && ng lint",
     "e2e": "ng e2e",
     "postinstall": "ngcc",
-    
-    "build:lib": "ng build dev --prod && npm run build:lib:scss",
-    "build:lib:scss": "tsc ./build",
-
     "affected:apps": "./node_modules/.bin/nx affected:apps",
     "affected:libs": "./node_modules/.bin/nx affected:libs",
     "affected:build": "./node_modules/.bin/nx affected:build",
@@ -29,7 +27,7 @@
     "workspace-schematic": "./node_modules/.bin/nx workspace-schematic",
     "dep-graph": "./node_modules/.bin/nx dep-graph",
     "help": "./node_modules/.bin/nx help"
-  },
+  }, 
   "private": true,
   "dependencies": {
     "@angular/animations": "~9.1.7",
