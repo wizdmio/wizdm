@@ -349,7 +349,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "libs/markdown/tsconfig.lib.json",
-            "project": "libs/markdown/ng-package.json"
+            "project": "libs/markdown/package.json"
           },
           "configurations": {
             "production": {
@@ -387,7 +387,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "libs/prism/tsconfig.lib.json",
-            "project": "libs/prism/ng-package.json"
+            "project": "libs/prism/package.json"
           },
           "configurations": {
             "production": {
@@ -716,7 +716,7 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "libs/dialog/tsconfig.lib.json",
-            "project": "libs/dialog/ng-package.json"
+            "project": "libs/dialog/package.json"
           },
           "configurations": {
             "production": {
@@ -740,49 +740,6 @@
             "main": "libs/dialog/src/test.ts",
             "tsConfig": "libs/dialog/tsconfig.spec.json",
             "karmaConfig": "libs/dialog/karma.conf.js"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "styleext": "scss"
-        }
-      }
-    },
-    "test": {
-      "projectType": "library",
-      "root": "libs/test",
-      "sourceRoot": "libs/test/src",
-      "prefix": "wizdm",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/angular:package",
-          "options": {
-            "tsConfig": "libs/test/tsconfig.lib.json",
-            "project": "libs/test/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "libs/test/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/test/tsconfig.lib.json",
-              "libs/test/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/test/**"]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "libs/test/src/test.ts",
-            "tsConfig": "libs/test/tsconfig.spec.json",
-            "karmaConfig": "libs/test/karma.conf.js"
           }
         }
       },

@@ -1,20 +1,23 @@
 {
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/markdown",
   "description": "Markdown renderer for Angular",
   "version": "1.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Markdown"],
   "homepage": "https://wizdm.io/docs/content/markdown",
-  "peerDependencies": {
-    "@angular/common": "^9.1.4",
-    "@angular/core": "^9.1.4",
-    "@wizdm/emoji": "^1.0.0",
-    "@wizdm/prism": "^1.0.0",
+  "dependencies": {
     "path": "^0.12.7",
     "remark-align": "^1.2.13",
-    "remark-parse": "^7.0.2",
+    "remark-parse": "^8.0.2",
     "remark-sub-super": "^1.0.19",
-    "unified": "^8.4.2"
+    "unified": "^9.0.0"
+  },
+  "peerDependencies": {
+    "@angular/common": "^9.1.7",
+    "@angular/core": "^9.1.7",
+    "@wizdm/emoji": "^1.0.0",
+    "@wizdm/prism": "^1.0.0"
   },
   "repository": {
     "type": "git",
@@ -22,5 +25,27 @@
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"
+  },
+  "ngPackage": {
+    "dest": "../../dist/libs/markdown",
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "@wizdm/prism": "wizdm-prism",
+        "@wizdm/emoji/text": "wizdm-emoji-text",
+        "@wizdm/emoji/names": "wizdm-emoji-names",
+        "remark-parse": "remark-parse",
+        "remark-align": "remark-align",
+        "remark-sub-super": "remark-sub-super",
+        "unified": "unified"
+      }
+    },
+    "whitelistedNonPeerDependencies": [
+      "path", 
+      "remark-align", 
+      "remark-parse", 
+      "remark-sub-super", 
+      "unified"
+    ]
   }
 }

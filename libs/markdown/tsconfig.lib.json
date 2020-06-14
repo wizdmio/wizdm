@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc/libs/markdown",
+    "allowJs": true,
     "target": "es2015",
     "module": "es2015",
     "moduleResolution": "node",
@@ -11,11 +12,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "types": [],
-    "lib": [
-      "dom",
-      "es2015"
-    ]
+    "types": [ "node" ],
+    "lib": [ "dom", "es2015" ],
+    "paths": {
+      "@wizdm/emoji": ["dist/libs/emoji"],
+      "@wizdm/emoji/*": ["dist/libs/emoji/*"],
+      "@wizdm/prism": ["dist/libs/prism"]
+    }
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
@@ -24,8 +27,5 @@
     "strictInjectionParameters": true,
     "enableResourceInlining": true
   },
-  "exclude": [
-    "src/test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": [ "src/test.ts", "**/*.spec.ts" ]
 }

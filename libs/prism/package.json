@@ -1,14 +1,17 @@
 {
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/prism",
   "description": "Syntax Highlighting in Angular",
   "version": "1.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Prism", "Syntax highlighting"],
   "homepage": "https://wizdm.io/docs/content/prism",
-  "peerDependencies": {
-    "@angular/common": "^9.1.4",
-    "@angular/core": "^9.1.4",
+  "dependencies": {
     "prismjs": "^1.17.1"
+  },
+  "peerDependencies": {
+    "@angular/common": "^9.1.7",
+    "@angular/core": "^9.1.7"
   },
   "repository": {
     "type": "git",
@@ -16,5 +19,17 @@
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"
+  },
+  "ngPackage": {
+    "dest": "../../dist/libs/prism",
+    "lib": {
+      "entryFile": "src/index.ts",
+      "umdModuleIds": {
+        "prismjs": "prismjs"
+      }
+    },
+    "whitelistedNonPeerDependencies": [
+      "prismjs"
+    ]
   }
 }
