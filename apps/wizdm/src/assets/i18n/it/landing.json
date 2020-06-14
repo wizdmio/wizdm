@@ -1,0 +1,122 @@
+{
+  "title": "Realizza la tua app subito",
+  "pitch": "Wizdm fornisce tutte le funzionalità importanti di una applicazione su singola pagina moderna pronte all'uso così che tu possa concentrarti sul lancio della tua idea!",
+  "action": { "caption": "Esplora" },
+  "join": "Unisciti a noi 🙏🏻 e partecipa alla rivoluzione di [Wizdm](about)>",
+  "features": [
+    { 
+      "title": "Design responsivo",
+      "description": "La navigazione si adegua elegantemente al dispositivo utilizzato."
+    },
+    { 
+      "title": "Architettura modulare",
+      "description": "Realizzato con la massima modularità così da agevolare la collaborazione, ridurre le dimensioni ed accorciare il tempo di caricamento."
+    },
+    { 
+      "title": "Interfaccia utente",
+      "description": "Ricca collezione di componenti pronti all'uso per evitarti di dover reinventare la ruota."
+    },
+    { 
+      "title": "Icone",
+      "description": "Sia il font di [Material](https://material.io/icons) che il set d'icone di [FontAwesome](https://fontawesome.com) sono disponibili nativamente per arricchire la tua interfaccia utente."
+    },
+    { 
+      "title": "Supporto Emoji",
+      "description": "Capacità di rendering universale per emoji per offrire sempre la migliore epserienza utente indipendentemente dalla piattaforma autilizzata."
+    },
+    { 
+      "title": "Animazione allo scorrimento",
+      "description": "Animazioni pronte all'uso complete di esecuizione allo scorrimento per arricchire i tuoi contenuti di movimento accattivante."
+    },
+    { 
+      "title": "Temi",
+      "description": "Definisci facilmente il tema dell'applicazione grazie alle capacità di personalizzazione basate sulle linee guida di [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)"
+    },
+    { 
+      "title": "Internazionalizzazione",
+      "description": "Grazie al flessibile gestore dei contenuti alla propria base, wizdm gestisce contemporaneamente tante lingue quante te ne servono."
+    },
+    { 
+      "title": "Geo-localizzazione IP",
+      "description": "Rileva il paese e la città in base all'indirizzo IP grazie ai servizi *API* di [IpList](https://iplist.cc/) e [IpInfo](https://ipinfo.io/)."
+    },
+    { 
+      "title": "Gestione utenti",
+      "description": "Autenticazione degli utenti, verifica e recupero dell'email, profilo utente e cancellazione dell'account."
+    },
+    { 
+      "title": "Sincronizzazione dati",
+      "description": "Sincronizzazione in tempo reali dei dati online e offline basata su potenti database *NoSQL* pronti a garantire copertura globale."
+    },
+    { 
+      "title": "Memorizzazione file",
+      "description": "Caricamento dei file nel cloud per l'immagine del profile utente e molto altro."
+    },
+    { 
+      "title": "Contenuti statici",
+      "description": "Supporto *markdown* integrato per impostare subito i contenuti statici come i termini e la privacy senza dover riccorrere a programmazione extra."
+    },
+    { 
+      "title": "Evidenziatore di sintassi",
+      "description": "Sintassi del codice evidenziata grazie a [PrismJS](https://prismjs.com/)"
+    },
+    { 
+      "title": "Contenuti modificabili",
+      "description": "Potente editor *WYSIWYG* per la modifica online dei tuoi contenuti.",
+      "experimental": "Sperimentale"
+    },
+    { 
+      "title": "Modulo feedback",
+      "description": "Raccolta diretta ed immediata dei suggerimenti degli utenti con il supporto di [Doorbell.io](https://doorbell.io)."
+    },
+    { 
+      "title": "Redirezione intelligente",
+      "description": "Previene la redirezione involontaria ad altri siti per mantenere alto l'ingaggio dell'utente."
+    },
+    { 
+      "title": "Ricerca semplice",
+      "description": "Semplice ricerca dei dati lto server senza l'ausilio di costosi servizi di terze parti."
+    },
+    { 
+      "title": "Ricerca di testo libero",
+      "description": "Potente ricerca di testo libero garantita da [Algolia](https://www.algolia.com) per quando la tua applicazione avrà successo.",
+      "comingSoon": "In arrivo"
+    },
+    { 
+      "title": "Concenso ai cookie",
+      "description": "Informa i tuoi utenti di come la tua app traccia ed utilizza i cookie in conformitaà con le leggi.",
+      "comingSoon": "In arrivo"
+    },
+    { 
+      "title": "Google Analytics",
+      "description": "Misura come i tuoi utenti interagiscono con la tua applicazione prima ancora che siano pronti a dirti cosa ne pensano."
+    },
+    { 
+      "title": "Unsplash",
+      "description": "Bellissime immagini royaltiy free da [Unsplash](https://unsplash.com/).",
+      "comingSoon": "In arrivo"
+    },
+    { 
+      "title": "Paypal",
+      "description": "Esecuzione dei pagamenti con [Paypal](https://www.paypal.com).",
+      "experimental": "Sperimentale"
+    },
+    { 
+      "title": "Payments",
+      "description": "Esecuzione dei pagamenti con [Stripe](https://stripe.com).",
+      "experimental": "Sperimentale"
+    },
+    { 
+      "title": "Realizzato con Angular",
+      "description": "Realizzato utilizzando le piuù moderne tecnologie per massimizzare le performance e la compatibilità delle tue applicazioni."
+    },
+    { 
+      "title": "Open source",
+      "description": "Wizdm è *100%* open source e supportato da una crescente cominità."
+    },
+    { 
+      "title": "Per bootstrapper",
+      "description": "Progettato e mantenuto dagli stessi aspiranti imprenditori digitali che lo utilizzano per alimentare le proprie iniziative."
+    }
+  ]
+}

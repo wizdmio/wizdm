@@ -1,20 +1,13 @@
-import { DocumentData } from '@wizdm/connect/database/document';
+import { DatabaseGroup, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
+import { AuthService } from '@wizdm/connect/auth';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'wm-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss']
 })
-export class ExploreComponent {
-
-  //readonly places$: Observable<QueryDocumentSnapshot<PlaceData>[]>;
-
-  constructor(db: DatabaseService) { 
-    
-    // Streams the array of places ordering them by ascending names 
-    //this.places$ = this.query();//this.stream();//paging({ limit: 10, field: 'name' });
-  }
-
-}
+export class ExploreComponent { }

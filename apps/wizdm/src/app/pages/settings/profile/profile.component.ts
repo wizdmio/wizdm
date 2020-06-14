@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserProfile } from 'app/auth/user-profile';
+import { UserProfile } from 'app/core/user-profile';
 
 @Component({
   selector: 'wm-profile',

@@ -1,31 +1,31 @@
 
 <!-- Localized content -->
-<ng-container *wmContent="let msgs select 'explore'">
+<ng-container *wmContent="let menu select 'explore'">
 
-  <!-- Action Bar (projected in the top toolbar) -->
-  <ng-template wmActionbar let-mobile="isMobile">
-    
-    <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary" [matMenuTriggerFor]="filterOptions">
-      
-      <!--span *ngIf="!mobile">{{ msgs.filter? || 'Sign-out' }}</ng-template-->
+  <!-- Checks if the menu has been defined -->
+  <ng-container *ngIf="!!menu.length">
 
-      <wm-icon [icon]="msgs.filter?.icon || 'filter_list'"></wm-icon>
-      
-    </button>
+    <!-- Side navigation menu -->
+    <ng-template wmSidenav opened persist let-mobile="isMobile">
 
-    <!-- Filter menu -->
-    <mat-menu #filterOptions="matMenu">
+      <mat-nav-list>
+        <a mat-list-item *ngFor="let item of menu" 
+           [routerLink]="item.link"
+           routerLinkActive="primary color-default"
+        >{{ item.label }}</a>
+      </mat-nav-list>
 
-      <button mat-menu-item routerLink="public">{{ msgs.filter?.public || 'All public' }}</button>
-      
-      <button mat-menu-item routerLink="private">{{ msgs.filter?.private || 'Shared with me' }}</button>
-      
-      <button mat-menu-item routerLink="personal">{{ msgs.filter?.mine || 'Mine' }}</button>
-
-    </mat-menu>
-
-  </ng-template>
+    </ng-template>
+ 
+  </ng-container>
 
 </ng-container> 
 
-<router-outlet></router-outlet>
+<!-- Loads the child page here -->
+<div fxLayout="row" fxFlex="60%" fxFlex.lt-sm="100%">
+
+  <div fxFlex="1 1 auto" class="margins">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

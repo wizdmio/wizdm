@@ -20,10 +20,10 @@ service cloud.firestore {
     //}
     
     // Shared content from every collection
-    match /{path=**}/shared/{post} {
+    match /{path=**}/feed/{post} {
     
     	// Allows listing public posts for everyone
-    	allow list: if resource.data.public == true;
+    	allow list: if 'public' in resource.data.tags;
     }
 
   	// User profiles.
@@ -39,7 +39,7 @@ service cloud.firestore {
       allow update, delete: if itsMe(userId);
       
       // User's shared content
-    	match /shared/{post} {
+    	match /feed/{post} {
       
       	// Allow reading user's posts for everyone
       	allow read;

@@ -20,7 +20,7 @@ import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { FileSizePipeModule } from '@wizdm/pipes/file-size';
-//import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+//import { CanLeaveModule, CanLeaveGuard } from 'app/navigator/guards/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UploadsComponent } from './uploads.component';
 

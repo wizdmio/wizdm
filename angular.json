@@ -821,7 +821,7 @@
           "builder": "@nrwl/angular:package",
           "options": {
             "tsConfig": "libs/download/tsconfig.lib.json",
-            "project": "libs/download/ng-package.json"
+            "project": "libs/download/package.json"
           },
           "configurations": {
             "production": {

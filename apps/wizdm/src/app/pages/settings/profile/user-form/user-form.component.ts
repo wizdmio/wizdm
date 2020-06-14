@@ -1,6 +1,6 @@
 import { Component, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserData } from 'app/auth/user-profile';
+import { UserData } from 'app/core/user-profile';
 import moment, { defaultFormat, Moment } from 'moment';
 import { Subscription } from "rxjs";
 

@@ -1,8 +1,19 @@
-{
-  "filter": {
-    "icon": "fas:fa-filter",
-    "public": "All public",
-    "private": "Shared with me",
-    "mine": " Personal" 
+[
+  { 
+    "icon": "",
+    "label": "Feed", 
+    "link": "feed" 
+  },
+
+  { 
+    "icon": "",
+    "label": "People", 
+    "link": "users" 
+  },
+
+  { 
+    "icon": "",
+    "label": "Groups", 
+    "link": "groups" 
   }
-}
+]
