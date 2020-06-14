@@ -1,16 +1,11 @@
-import { Directive, OnDestroy, Input, Inject, InjectionToken, HostBinding, HostListener, ElementRef } from '@angular/core';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Directive, Input, Inject, HostBinding, HostListener, ElementRef } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
+import { SAMEORIGIN } from './same-origin';
+import { OnDestroy } from '@angular/core';
 import { Subscription, of } from 'rxjs';
-
-/** Same Origin regular expression */
-export const SAMEORIGIN = new InjectionToken<RegExp>("wizdm.sameorigin.regex", { factory: () => {
-
-  // Test the given URL to start with "data:" or "blob:" or the current hostname
-  return new RegExp(`^data:|^blob:|^http(?:s)?:\/\/${(window?.location?.hostname) || ''}`);
-
-}});
 
 @Directive({
   selector: 'a[download]',

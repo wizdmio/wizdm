@@ -19,8 +19,8 @@ export const teleport: TeleportConfig = {
 
 export const emoji: EmojiConfig = {
   emojiPath: 'assets/emoji',
-  emojiExt: '.png'
-  //emojiMode: 'auto'
+  emojiExt: '.png',
+  emojiMode: 'auto'
 };
 
 export const ipinfo: IpInfoConfig = {

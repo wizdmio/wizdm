@@ -5,7 +5,7 @@ import { DatabaseService } from '@wizdm/connect/database';
 import { dbChatter, dbConversation, dbMessage } from './chat-types';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { UserProfile } from 'app/auth/user-profile';
+import { UserProfile } from 'app/core/user-profile';
 import { $animations } from './chat.animations';
 import { runInZone } from 'app/utils/rxjs';
 import { EmojiRegex } from '@wizdm/emoji';

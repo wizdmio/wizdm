@@ -11,7 +11,7 @@
       <!-- Top level link buttons -->
       <button mat-button [routerLink]="item.link" 
                          [queryParams]="item.params" 
-                         [routerLinkActiveOptions]="{ exact: true }"
+                         [routerLinkActiveOptions]="{ exact: item.exact }"
                          routerLinkInkbar *ngIf="item.link">{{ item.label }}</button>
 
       <!-- Top level menus -->

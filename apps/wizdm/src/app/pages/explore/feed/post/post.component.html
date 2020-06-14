@@ -1,0 +1,57 @@
+
+<!-- Cover -->
+<div class="cover" fxFlex="0 0 auto">
+ 
+  <img [src]="data?.photo" style="object-fit: cover;"/>
+
+</div>
+
+<!-- Body -->
+<div class="body" fxFlex="1 1 auto" fxLayout="column">
+
+  <div class="tools" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="4px">
+
+    <button mat-icon-button color="primary" class="mat-elevation-z4">
+      <wm-icon icon="more_vert"></wm-icon>
+    </button>
+
+    <button mat-icon-button color="primary" class="mat-elevation-z4">
+      <wm-icon icon="bookmark_border"></wm-icon>
+    </button>
+
+    <!-- Likes -->
+    <button mat-icon-button color="primary" class="mat-elevation-z4" (authClick)="toggleFavorite()"
+            [matBadge]="likes.counter$ | async" [matBadgeHidden]="(likes.counter$ | async) === 0">
+
+      <wm-icon [icon]="(favorite$ | async) ? 'fas:fa-thumbs-up' : 'far:fa-thumbs-up'" [@beat]="likes.counter$ | async"></wm-icon>
+    </button>
+  </div>
+
+  <!-- Meta -->
+  <div class="meta" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+
+    <a mat-button color="primary">{{ data?.channel || 'Wizdm' }}</a>
+
+    <time class="time">{{ data?.updated | moment:'ll' }}</time>
+
+  </div>
+
+  <!-- Content -->
+  <article fxFlex="1 1 auto" fxLayout="column">
+
+    <h2>{{ data?.title }}</h2>
+
+    <p>{{ data?.text }}</p>
+
+  </article>
+
+</div>
+
+<!-- Author -->
+<div class="footer" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
+
+  <wm-avatar></wm-avatar>
+
+  <span>Wizdm</span>
+
+</div>

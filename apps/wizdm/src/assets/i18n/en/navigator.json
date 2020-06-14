@@ -4,36 +4,31 @@
 
     "navbar": {
         "public": [
-            { "label": "Wizdm", "link": "." },
+            { "label": "Wizdm", "link": ".", "exact": true },
             { "label": "About", "link": "about" },
-            { "label": "Features", "link": "features" }
+            { "label": "Reference", "link": "docs" }
         ],
         "private": [
-            { "label": "Wizdm", "link": "." },
-            { "label": "Explore", "menu": [
-                { "label": "Test", "link": "explore" },
-                { "label": "Features", "link": "features" },
-                { "label": "Reference", "link": "docs" }
-            ]},
-            { "label": "Community", "link": "chat" }
+            { "label": "Wizdm", "link": ".", "exact": true },
+            { "label": "Explore", "link": "explore" },
+            { "label": "Community", "link": "chat" },
+            { "label": "Reference", "link": "docs" }
         ]
     },
 
     "menu": {
         "public": [
-            { "label": "Home", "link": "." },
+            { "label": "Wizdm", "link": ".", "exact": true },
             { "label": "About", "link": "about" },
-            { "label": "Features", "link": "features" },
+            { "label": "Reference", "link": "docs" },
             { "label": "Register/Sign-in", "link": "login", "params": { "mode": "signIn" } }
         ],
         "private": [
-            { "label": "Home", "link": "." },
-            { "label": "Explore", "menu": [
-                { "label": "Features", "link": "features" },
-                { "label": "Reference", "link": "docs" }
-            ]},
+            { "label": "Wizdm", "link": ".", "exact": true },
+            { "label": "Explore", "link": "explore" },
             { "label": "Community", "link": "chat" },
-            { "label": "Profile", "link": "profile" },
+            { "label": "Reference", "link": "docs" },
+            { "label": "Settings", "link": "settings" },
             { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
         ]
     },

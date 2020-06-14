@@ -8,7 +8,7 @@ import { ReadmeModule } from '@wizdm/readme';
 import { RedirectModule } from '@wizdm/redirect';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
-//import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+//import { CanLeaveModule, CanLeaveGuard } from 'app/navigator/guards/can-leave';
 import { AccountComponent } from './account.component';
 
 const routes: RoutesWithContent = [
@@ -19,7 +19,6 @@ const routes: RoutesWithContent = [
     //canDeactivate: [ CanLeaveGuard ]
   }
 ];
-
 
 @NgModule({
   declarations: [ AccountComponent ],
