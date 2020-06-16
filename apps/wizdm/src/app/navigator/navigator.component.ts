@@ -1,8 +1,8 @@
 import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } from 'rxjs';
 import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
+import { UserProfile } from 'app/navigator/providers/user-profile';
 import { MediaObserver } from '@angular/flex-layout';
-import { UserProfile } from 'app/core/user-profile';
 import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
 import { runInZone } from 'app/utils/rxjs';

@@ -20,7 +20,7 @@ import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-markdown';
 
 /** Static content route matcher */
-export function staticMatcher(url: UrlSegment[]): UrlMatchResult {
+export function matchFullPath(url: UrlSegment[]): UrlMatchResult {
 
   // Builds teh posParams from the url sub segments
   const posParams = url.reduce( (params, url, index) => {
@@ -35,8 +35,8 @@ export function staticMatcher(url: UrlSegment[]): UrlMatchResult {
 }
 
 const routes: RoutesWithContent = [{
-  //path: '',
-  matcher: staticMatcher,
+  path: '',
+  //matcher: matchFullPath,
   //content: 'static',
   component: StaticComponent,
   data: { source: 'assets/static' },

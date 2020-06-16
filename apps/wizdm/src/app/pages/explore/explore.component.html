@@ -9,10 +9,13 @@
     <ng-template wmSidenav opened persist let-mobile="isMobile">
 
       <mat-nav-list>
-        <a mat-list-item *ngFor="let item of menu" 
-           [routerLink]="item.link"
+        
+        <a *ngFor="let item of menu" 
+           mat-list-item 
+           [routerLink]="item.link" 
            routerLinkActive="primary color-default"
         >{{ item.label }}</a>
+
       </mat-nav-list>
 
     </ng-template>

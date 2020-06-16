@@ -1,12 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { GroupsComponent } from './groups.component';
 
-
+const routes: RoutesWithContent = [
+  {
+    path: '',
+    content: 'groups',
+    component: GroupsComponent
+  }
+];
 
 @NgModule({
-  declarations: [],
+  declarations: [ GroupsComponent ],
   imports: [
-    CommonModule
+    CommonModule,
+    ContentRouterModule.forChild(routes)
   ]
 })
 export class GroupsModule { }

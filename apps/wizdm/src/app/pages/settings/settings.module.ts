@@ -8,7 +8,7 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { IconModule } from '@wizdm/elements/icon';
 import { NavInkbarModule } from '@wizdm/elements/inkbar';
 import { SidenavModule } from 'app/navigator/sidenav';
-import { AuthGuard, loggedIn } from 'app/navigator/guards/auth-guard';
+import { AuthGuard, loggedIn } from 'app/pages/guards/auth-guard';
 import { SettingsComponent } from './settings.component';
 
 const routes: RoutesWithContent = [

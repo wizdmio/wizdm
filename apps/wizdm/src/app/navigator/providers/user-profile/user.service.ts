@@ -14,6 +14,7 @@ export interface UserData extends DocumentData {
   gender?  : string;
   motto?   : string;
   lang?    : string;
+  userName?: string;
 
   searchIndex?   : string[];
 };
@@ -71,32 +72,37 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
     console.log("Creating user profile for: ", user.email);
 
     // Checks for document existance first
-    return this.fromUser(user).exists()
-      // Sets the document content whenever missing
-      .then( exists => !exists ? this.set({
-          // Inherits teh basics from the user object
-          name: user.displayName,
-          email: user.email,
-          photo: user.photoURL,
-          // Applies the current locale as the user's language
-          lang: this.auth.locale,
-          // Builds the search index
-          searchIndex: this.searchIndex( user.displayName )
-        } as T) : null
-      );
+    return this.fromUser(user).exists().then( exists => !exists ? this.set({
+        // Inherits teh basics from the user object
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        // Applies the current locale as the user's language
+        lang: this.auth.locale,
+        // Builds the search index
+        searchIndex: this.searchIndex( user.displayName )
+      } as T) : Promise.resolve() );
   }
 
   // Extends the update function to include the search index
   public update(data: T): Promise<void> {
 
-    // Computes the new search index
-    const searchIndex = this.searchIndex(data.name);
+    // Formats the user name properly 
+    if(data.userName) { data.userName = this.formatUserName(data.userName); }
+
+    // Computes the search index
+    if(data.name) { data.searchIndex = this.searchIndex(data.name); }
+
     // Updates the profile
-    return super.update({...data, searchIndex });
+    return super.update(data);
+  }
+
+  public formatUserName(userName: string): string {
+    return userName.replace(/\s*/g, '').toLowerCase();
   }
 
   /** Build a simple search index based on the user name */
-  private searchIndex(name: string): string[] {
+  public searchIndex(name: string): string[] {
 
     if(!name) { return [""]; }
 

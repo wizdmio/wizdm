@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UserProfile } from 'app/navigator/providers/user-profile';
 import { MatDialog } from '@angular/material/dialog';
-import { UserProfile } from 'app/core/user-profile';
 import { RedirectService } from '@wizdm/redirect';
 import { DialogComponent } from '@wizdm/dialog';
 import { $animations } from './login-animations';

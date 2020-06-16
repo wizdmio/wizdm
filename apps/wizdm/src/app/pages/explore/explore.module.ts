@@ -13,7 +13,8 @@ import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
-import { AuthGuardModule } from 'app/navigator/guards/auth-guard';
+import { AuthGuardModule } from 'app/pages/guards/auth-guard';
+import { ValidProfile } from 'app/pages/guards/valid-profile';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { ExploreComponent } from './explore.component';
 
@@ -22,11 +23,11 @@ const routes: RoutesWithContent = [
     path: '',
     content: 'explore',
     component: ExploreComponent,
+    canActivate: [ ValidProfile ],
     children: [
-
-      { path: '', redirectTo: 'feed', pathMatch: 'full' },
-      { path: 'feed', loadChildren: () => import('./feed/feed.module').then(m => m.FeedModule) },
-      { path: 'people', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
+      { path: '',       redirectTo: 'feed', pathMatch: 'full' },
+      { path: 'feed',   loadChildren: () => import('./feed/feed.module').then(m => m.FeedModule) },
+      { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
       { path: 'groups', loadChildren: () => import('./groups/groups.module').then(m => m.GroupsModule) }
     ]
   }

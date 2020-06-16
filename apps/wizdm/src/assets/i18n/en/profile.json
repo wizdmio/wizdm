@@ -6,18 +6,22 @@
   },
 
   "form": {
-    "name": {
-      "label": "Name",
+    "userName": {
+      "label": "User name",
+      "icon": "fas:fa-user-secret",
+      "errors": {
+        "required": "Username is mandatory",
+        "format" : "Only letters, numbers, underscores and dashes are allowed",
+        "exists": "This username is already taken"
+      }
+    },
+    "fullName": {
+      "label": "Full name",
       "icon": "far:fa-user",
       "hint": "How you'd like to be called",
       "errors": {
         "required": "A name is mandatory"
       }
-    },
-    "motto": {
-      "label": "About me",
-      "icon": "far:fa-comment",
-      "hint": "Tell us about you"
     },
     "email": {
       "label": "Email",
@@ -27,6 +31,11 @@
         "required": "An email is mandatory",
         "format" : "There's something wrong with this email"
       }
+    },
+    "motto": {
+      "label": "About me",
+      "icon": "far:fa-comment",
+      "hint": "Tell us about you"
     },
     "phone": {
       "label": "Phone",

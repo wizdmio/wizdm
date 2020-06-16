@@ -1,9 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserProfile } from 'app/navigator/providers/user-profile';
 import { MatDialog } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
 import { DialogComponent } from '@wizdm/dialog';
-import { UserProfile } from 'app/core/user-profile';
 
 export interface DorbellSubmit {
   email        : string,

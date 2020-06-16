@@ -46,16 +46,37 @@
           </div>
 
           <!-- Sign-in / User profile button -->
-          <button mat-icon-button [routerLink]="signedIn ? 'settings' : 'login'">
+          <button mat-icon-button>
             
             <!-- Flip button (top lifted up by 2px to workround mat-icon vertical misalignement @see{https://github.com/angular/components/issues/8842}) -->
             <wm-flip [flipped]="signedIn" [style.top.px]="-2">
             
-              <!-- Shows a generic signIn icon on the front -->
-              <wm-icon front icon="fas:fa-sign-in-alt"></wm-icon>
-            
-              <!-- Shows the loggedIn avatar on the back -->
-              <wm-avatar back color="primary" [src]="userImage"></wm-avatar>
+              <!-- Flip[front] - Shows a generic signIn icon when logged off -->
+              <wm-icon front [icon]="msgs.settings?.public?.icon || 'login'" 
+                             [routerLink]="msgs.settings?.public?.link || 'login'">
+              </wm-icon>
+
+              <!-- Flip[back] - Shows the plain avatar on mobile -->
+              <wm-avatar back color="primary" [src]="userImage" *ngIf="mobile; else settingsMenuTemplate"></wm-avatar>
+              <ng-template #settingsMenuTemplate>
+
+                <!-- Shows the avatar as the setting menu trigger on big screens -->
+                <wm-avatar back color="primary" [src]="userImage" [matMenuTriggerFor]="menuSettings"></wm-avatar>
+
+                <!-- Builds the settings menu -->
+                <mat-menu #menuSettings="matMenu">
+
+                  <ng-container *ngFor="let item of msgs.settings?.private || []">
+
+                    <mat-divider *ngIf="item.divider"></mat-divider>
+                
+                    <button mat-menu-item [routerLink]="item.link" [queryParams]="item.params">{{ item.label }}</button>
+
+                  </ng-container>
+
+                </mat-menu>
+
+              </ng-template>
             
             </wm-flip>
 
@@ -99,22 +120,17 @@
                   [opened]="sideOpened$ | async" 
                   (openedChange)="openSidenav($event)">
 
-      <!-- Wraps the sidenav content within a secondary scrolling container -->
-      <div class="mat-drawer-inner-container" cdkScrollable name="sidenav">
+      <!-- Side panel toggler to stay visible even when the panel is closed -->
+      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
+        <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
+      </button>
 
-        <!-- Side panel toggler to stay visible even when the panel is closed -->
-        <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
-          <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
-        </button>
-
-        <!-- Side panel content is teleported here -->
-        <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
-          <!-- Secondary router outlet named "side" as the default side content -->
-          <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/18271 -->
-          <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
-        </ng-template>
-
-      </div><!-- End of sidenav scrolling container -->
+      <!-- Side panel content is teleported here -->
+      <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
+        <!-- Secondary router outlet named "side" as the default side content -->
+        <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/18271 -->
+        <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
+      </ng-template>
         
     </mat-sidenav>
   
