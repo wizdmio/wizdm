@@ -9,7 +9,7 @@
             [type]="mobile ? 'icon' : 'stroked'" 
             [disabled]="form.invalid || form.pristine"
             color="primary" 
-            (click)="user.update(form.userData)">
+            (click)="updateProfile(form.userData)">
 
       <wm-icon *ngIf="mobile; else saveProfile" [icon]="msgs.actions?.save?.icon || 'save'"></wm-icon>
       
@@ -27,19 +27,19 @@
   <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start center" fxLayoutGap="32px">
 
     <!-- Profile form -->
-    <wm-user-form fxFlexOrder.lt-sm="2" [value]="user.data" #form></wm-user-form>
+    <wm-user-form fxFlexOrder.lt-sm="2" [value]="profile" #form></wm-user-form>
 
     <!-- Profile photo w/ loader -->
     <wm-user-photo fxFlexOrder.lt-sm="1"
-      [url]="user.data?.photo" 
-      [folder]="user.data?.id" 
-      (update)="user.update({ photo: $event })">
+      [url]="profile?.photo" 
+      [folder]="profile?.id" 
+      (update)="updatePhoto($event)">
     </wm-user-photo>
   
   </div>
   
   <!-- CanLeave Popup Dialog (based on MatDialog) -->
-  <wm-dialog [dontLeave]="form.dirty || form.error" (beforeClosed)="$event === 'save' && user.update(form.userData)">
+  <wm-dialog [dontLeave]="form.dirty || form.error" (beforeClosed)="$event === 'save' && updateProfile(form.userData)">
 
     <h2 mat-dialog-title><b>{{ msgs.canLeave?.title || 'Unsaved changes' }}</b></h2>
   
