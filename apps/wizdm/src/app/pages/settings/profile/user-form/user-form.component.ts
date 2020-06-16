@@ -76,9 +76,6 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
 
     // Force userName control validation when empty
     if(!value.userName) { this.controls.userName.markAsTouched(); }
-    
-    // Marks the form as pristine right after the view updated
-    Promise.resolve().then( () => this.markAsPristine() );
   }
 
   @Output('valueChange') formValueChange = new EventEmitter<UserData>();

@@ -27,8 +27,7 @@ export class Users extends DatabaseCollection<UserData> {
     if(cached) { return cached; }
 
     const streamed = this.document(userId).stream().pipe( 
-      takeWhile( data => data != null, true )/*,
-      finalize( () => { delete this.cache[userName]; })*/,
+      takeWhile( data => data != null, true ),
       shareReplay({ bufferSize: 1, refCount: false })
     );
 
@@ -46,31 +45,18 @@ export class Users extends DatabaseCollection<UserData> {
 
     if(!userName) { return null; }
 
-    if(userName === this.me.data.userName) { 
-      
-      console.log('Resolving user name as me', userName);
-      return this.me.data$;   
-    }
+    if(userName === this.me.data.userName) { return this.me.data$; }
 
     const cached = this.cache[userName];
-    if(cached) { 
-      
-      console.log('Resolving user name from cache', userName);
-      return cached; 
-    }
-
-    console.log('Resolving user name from db...', userName);
+    if(cached) { return cached; }
 
     const streamed = this.stream( qf => qf.where('userName', '==', userName) ).pipe( 
       map( users => users.length ? users[0] : null ), 
-      takeWhile( data => data != null, true )/*,
-      finalize( () => { delete this.cache[userName]; })*/,
+      takeWhile( data => data != null, true ),
       shareReplay({ bufferSize: 1, refCount: false })
     );
 
     streamed.pipe( take(1), filter( data => !!data ) ).subscribe( data => {
-
-      console.log('Caching the user profile for furhter use', userName);
       this.cache[userName] = this.cache[data.id] = streamed;
     });
 
