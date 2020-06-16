@@ -1,6 +1,8 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { BackLinkObserver, CloseLinkObserver } from './providers/action-links';
 import { LanguageSelector, WelcomeBack } from './providers/lang-selector';
+import { matchUserNameOnly } from 'app/pages/profile/profile.module';
+import { matchFullPath } from 'app/pages/static/static.module';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from './providers/oauth2-handler';
 import { ActionLinkObserver } from '@wizdm/actionlink';
@@ -31,37 +33,40 @@ const routes: RoutesWithContent = [
     children: [
 
       // Landing page
-      { path: '',            loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule) },
-      { path: 'home',        redirectTo: '', pathMatch: 'full' },
+      { path: '', loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule) },
+      { path: 'home', redirectTo: '', pathMatch: 'full' },
       
       // Content browsing
-      { path: 'explore',     loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },
-      { path: 'welcome-back',redirectTo: 'explore', pathMatch: 'full' },      
+      { path: 'explore', loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },
+      { path: 'welcome-back', redirectTo: 'explore', pathMatch: 'full' },      
 
       // Instant messaging
-      { path: 'chat',        loadChildren: () => import('../pages/chat/chat.module').then(m => m.ChatModule) },
+      { path: 'chat', loadChildren: () => import('../pages/chat/chat.module').then(m => m.ChatModule) },
 
-      // Profile settings
-      { path: 'settings',    loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule) },
+      // Profile matching @username
+      { matcher: matchUserNameOnly, loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
+
+      // Settings
+      { path: 'settings', loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule) },
 
       // Action links
-      { path: 'login',       canActivate: [ ActionLinkObserver ] },
-      { path: 'contact',     canActivate: [ ActionLinkObserver ] },
-      { path: 'back',        canActivate: [ BackLinkObserver ] },
-      { path: 'close',       canActivate: [ CloseLinkObserver ] },
+      { path: 'login',   canActivate: [ ActionLinkObserver ] },
+      { path: 'contact', canActivate: [ ActionLinkObserver ] },
+      { path: 'back',    canActivate: [ BackLinkObserver ] },
+      { path: 'close',   canActivate: [ CloseLinkObserver ] },
       
       // Not found page
-      { path: 'not-found',   loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
+      { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
 
       // Reference (using static docs subfolder)
-      { path: 'docs',        redirectTo: 'docs/start', pathMatch: 'full' },
-      { path: 'docs/toc',    canActivate: [ ActionLinkObserver ], data: { actionMatch: 'toc' } },
+      { path: 'docs', redirectTo: 'docs/start', pathMatch: 'full' },
+      { path: 'docs/toc', canActivate: [ ActionLinkObserver ], data: { actionMatch: 'toc' } },
 
       // Static content pages (about, terms, docs/...), redirecting to NotFound when no content is available
-      { path: ':path',       loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
+      { matcher: matchFullPath, loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 
       // Anything else will route to not found
-      { path: '**',          redirectTo: 'not-found' }
+      { path: '**', redirectTo: 'not-found' }
     ]
   }
 ];

@@ -2,71 +2,82 @@
 <!-- Profile form w/ localized content -->
 <form [formGroup]="this" fxLayout="column" fxLayoutGap="32px" *wmContent="let msgs select 'profile.form'">
 
-  <!-- Name -->
-  <mat-form-field *ngIf="msgs.name as name">
-    <mat-label>{{ name.label || 'Name' }}</mat-label>
-    <input matInput formControlName="name" cdkFocusInitial>
-    <wm-icon matPrefix [icon]="name.icon"></wm-icon>
-    <mat-hint>{{ name.hint }}</mat-hint>
-    <mat-error *ngIf="controls['name'].errors?.required">{{ name.errors.required }}</mat-error>
+  <!-- User name -->
+  <mat-form-field>
+    <mat-label>{{ msgs.userName?.label || 'Username' }}</mat-label>
+    <input matInput formControlName="userName">
+    <wm-icon matPrefix [icon]="msgs.userName?.icon"></wm-icon>
+    <mat-hint>{{'https://wizdm.io/@' + value.userName | lowercase }}</mat-hint>
+    <mat-error *ngIf="controls.userName.errors?.required">{{ msgs.userName?.errors?.required }}</mat-error>
+    <mat-error *ngIf="controls.userName.errors?.pattern">{{ msgs.userName?.errors?.format }}</mat-error>
+    <mat-error *ngIf="controls.userName.errors?.exists">{{ msgs.userName?.errors?.exists }}</mat-error>
   </mat-form-field>
 
-  <!-- Motto -->
-  <mat-form-field *ngIf="msgs.motto as motto">
-    <mat-label>{{ motto.label || 'Motto' }}</mat-label>
-    <textarea matInput formControlName="motto" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
-    <wm-icon matPrefix [icon]="motto.icon"></wm-icon>
-    <mat-hint>{{ motto.hint }}</mat-hint>
+
+  <!-- Full name -->
+  <mat-form-field>
+    <mat-label>{{ msgs.fullName?.label || 'Full name' }}</mat-label>
+    <input matInput formControlName="name" cdkFocusInitial>
+    <wm-icon matPrefix [icon]="msgs.fullName?.icon"></wm-icon>
+    <mat-hint>{{ msgs.fullName?.hint }}</mat-hint>
+    <mat-error *ngIf="controls.name.errors?.required">{{ msgs.fullName?.errors?.required }}</mat-error>
   </mat-form-field>
 
   <!-- Email -->
-  <mat-form-field *ngIf="msgs.email as email">
-    <mat-label>{{ email.label || 'Email' }}</mat-label>
+  <mat-form-field>
+    <mat-label>{{ msgs.email?.label || 'Email' }}</mat-label>
     <input matInput formControlName="email">
-    <wm-icon matPrefix [icon]="email.icon"></wm-icon>
-    <mat-hint>{{ email.hint }}</mat-hint>
-    <mat-error *ngIf="controls['email'].errors?.email">{{ email.errors.format }}</mat-error>
+    <wm-icon matPrefix [icon]="msgs.email?.icon"></wm-icon>
+    <mat-hint>{{ msgs.email?.hint }}</mat-hint>
+    <mat-error *ngIf="controls.email.errors?.email">{{ msgs.email?.errors?.format }}</mat-error>
+  </mat-form-field>
+
+  <!-- Motto -->
+  <mat-form-field>
+    <mat-label>{{ msgs.motto?.label || 'Motto' }}</mat-label>
+    <textarea matInput formControlName="motto" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+    <wm-icon matPrefix [icon]="msgs.motto?.icon"></wm-icon>
+    <mat-hint>{{ msgs.motto?.hint }}</mat-hint>
   </mat-form-field>
 
   <!-- Phone -->
-  <mat-form-field *ngIf="msgs.phone as phone">
-    <mat-label>{{ phone.label || 'Phone' }}</mat-label>
+  <mat-form-field>
+    <mat-label>{{ msgs.phone?.label || 'Phone' }}</mat-label>
     <input matInput formControlName="phone">
-    <wm-icon matPrefix [icon]="phone.icon"></wm-icon>
-    <mat-hint>{{ phone.hint }}</mat-hint>
-    <mat-error *ngIf="controls['phone'].errors?.phone">{{ phone.errors.format }}</mat-error>
+    <wm-icon matPrefix [icon]="msgs.phone?.icon"></wm-icon>
+    <mat-hint>{{ msgs.phone?.hint }}</mat-hint>
+    <mat-error *ngIf="controls.phone.errors?.phone">{{ msgs.phone?.errors?.format }}</mat-error>
   </mat-form-field>
 
   <!-- Birthday -->
-  <mat-form-field *ngIf="msgs.birth as birth">
-    <mat-label>{{ birth.label || 'Birthday' }}</mat-label>
+  <mat-form-field>
+    <mat-label>{{ msgs.birth?.label || 'Birthday' }}</mat-label>
     <input matInput formControlName="birth" [matDatepicker]="picker">
-    <!--wm-icon matPrefix [icon]="birth.icon"></wm-icon-->
     <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker [touchUi]="isMobile" #picker></mat-datepicker>
-    <mat-hint>{{ birth.hint }}</mat-hint>
+    <mat-hint>{{ msgs.birth?.hint }}</mat-hint>
   </mat-form-field>
 
   <!-- Gender -->
-  <mat-form-field *ngIf="msgs.gender as gender">  
-    <mat-label>{{ gender.label }}</mat-label>
-    <wm-icon matPrefix [icon]="genderIcon(gender.options) || gender.icon"></wm-icon>
+  <mat-form-field>  
+    <mat-label>{{ msgs.gender?.label || 'Gender' }}</mat-label>
+    <wm-icon matPrefix [icon]="genderIcon(msgs.gender?.options) || msgs.gender?.icon"></wm-icon>
     <mat-select formControlName="gender">
-      <mat-option *ngFor="let option of gender.options" [value]="option.value">
+      <mat-option *ngFor="let option of msgs.gender?.options" [value]="option.value">
       <span><wm-icon [icon]="option.icon"></wm-icon>{{ option.label }}</span>
       </mat-option>
     </mat-select> 
-    <mat-hint>{{ gender.hint }}</mat-hint>
+    <mat-hint>{{ msgs.gender?.hint }}</mat-hint>
   </mat-form-field>
 
   <!-- Language -->
-  <mat-form-field *ngIf="msgs.language as lang">  
-    <mat-label>{{ lang.label }}</mat-label>
-    <wm-icon matPrefix [icon]="lang.icon"></wm-icon>
+  <mat-form-field>  
+    <mat-label>{{ msgs.language?.label }}</mat-label>
+    <wm-icon matPrefix [icon]="msgs.language?.icon"></wm-icon>
     <mat-select formControlName="lang">
-      <mat-option *ngFor="let option of lang.options" [value]="option.value">{{ option.label }}</mat-option>
+      <mat-option *ngFor="let option of msgs.language?.options" [value]="option.value">{{ option.label }}</mat-option>
     </mat-select>
-    <mat-hint>{{ lang.hint }}</mat-hint>
+    <mat-hint>{{ msgs.language?.hint }}</mat-hint>
   </mat-form-field>
 
 </form>

@@ -2,6 +2,15 @@
     "title": "Wizdm - Get your app done right",
     "description": "The fully featured boilerplate to launch your web application quickly",
 
+    "settings": {
+        "public": { "icon":"fas:fa-sign-in-alt", "link": "login" },
+        "private": [
+            { "label": "My profile", "icon": "", "link": "@me" },
+            { "label": "Settings", "icon": "", "link": "settings" },
+            { "label": "Sign Out", "icon": "", "link": "login", "params": { "mode": "signOut" }, "divider": true }
+        ]
+    },
+
     "navbar": {
         "public": [
             { "label": "Wizdm", "link": ".", "exact": true },

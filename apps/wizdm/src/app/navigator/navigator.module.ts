@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { AnimateModule } from '@wizdm/animate';
 import { TeleportModule } from '@wizdm/teleport';
 import { LogoModule } from '@wizdm/elements/logo';
@@ -28,10 +29,11 @@ import { NavigatorComponent } from './navigator.component';
   imports: [
     CommonModule,
     FlexLayoutModule,
-    ScrollingModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
     AnimateModule,
     TeleportModule,
     TogglerModule,
