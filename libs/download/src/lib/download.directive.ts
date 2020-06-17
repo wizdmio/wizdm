@@ -54,7 +54,7 @@ export class DownloadDirective implements OnDestroy {
   @HostListener('click') onClick() {
 
     // Do nothing on empty href
-    if(!this.href) { return false; }
+    if(!this.href || this.busy) { return false; }
 
     // Proceed with the download on files from the same origin
     if(this.error || this.sameOrigin.test(this.href)) { return true; }
