@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { UsersComponent } from './users.component';
+import { PeopleComponent } from './people.component';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'users',
-    component: UsersComponent
+    content: 'explore/people',
+    component: PeopleComponent
   }
 ];
 
 @NgModule({
-  declarations: [ UsersComponent ],
+  declarations: [ PeopleComponent ],
   imports: [
     CommonModule,
     ContentRouterModule.forChild(routes)
   ]
 })
-export class UsersModule { }
+export class PeopleModule { }

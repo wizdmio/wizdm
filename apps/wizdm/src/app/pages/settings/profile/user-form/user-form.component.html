@@ -13,15 +13,27 @@
     <mat-error *ngIf="controls.userName.errors?.exists">{{ msgs.userName?.errors?.exists }}</mat-error>
   </mat-form-field>
 
-
   <!-- Full name -->
-  <mat-form-field>
-    <mat-label>{{ msgs.fullName?.label || 'Full name' }}</mat-label>
-    <input matInput formControlName="name" cdkFocusInitial>
-    <wm-icon matPrefix [icon]="msgs.fullName?.icon"></wm-icon>
-    <mat-hint>{{ msgs.fullName?.hint }}</mat-hint>
-    <mat-error *ngIf="controls.name.errors?.required">{{ msgs.fullName?.errors?.required }}</mat-error>
-  </mat-form-field>
+  <div fxLayout="row"fxLayout.lt-sm="column" fxLayoutGap="16px">
+
+    <!-- First name -->
+    <mat-form-field fxFlex="50">
+      <mat-label>{{ msgs.firstName?.label || 'First name' }}</mat-label>
+      <input matInput formControlName="name" cdkFocusInitial>
+      <wm-icon matPrefix [icon]="msgs.firstName?.icon"></wm-icon>
+      <mat-hint>{{ msgs.firstName?.hint }}</mat-hint>
+      <mat-error *ngIf="controls.name.errors?.required">{{ msgs.firstName?.errors?.required }}</mat-error>
+    </mat-form-field>
+
+    <!-- Last name -->
+    <mat-form-field fxFlex="50">
+      <mat-label>{{ msgs.lastName?.label || 'Last name' }}</mat-label>
+      <input matInput formControlName="lastName" cdkFocusInitial>
+      <wm-icon matPrefix [icon]="msgs.lastName?.icon"></wm-icon>
+      <mat-hint>{{ msgs.lastName?.hint }}</mat-hint>
+    </mat-form-field>
+
+  </div>
 
   <!-- Email -->
   <mat-form-field>
@@ -32,14 +44,6 @@
     <mat-error *ngIf="controls.email.errors?.email">{{ msgs.email?.errors?.format }}</mat-error>
   </mat-form-field>
 
-  <!-- Motto -->
-  <mat-form-field>
-    <mat-label>{{ msgs.motto?.label || 'Motto' }}</mat-label>
-    <textarea matInput formControlName="motto" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
-    <wm-icon matPrefix [icon]="msgs.motto?.icon"></wm-icon>
-    <mat-hint>{{ msgs.motto?.hint }}</mat-hint>
-  </mat-form-field>
-
   <!-- Phone -->
   <mat-form-field>
     <mat-label>{{ msgs.phone?.label || 'Phone' }}</mat-label>
@@ -47,6 +51,22 @@
     <wm-icon matPrefix [icon]="msgs.phone?.icon"></wm-icon>
     <mat-hint>{{ msgs.phone?.hint }}</mat-hint>
     <mat-error *ngIf="controls.phone.errors?.phone">{{ msgs.phone?.errors?.format }}</mat-error>
+  </mat-form-field>
+
+  <!-- Bio -->
+  <mat-form-field>
+    <mat-label>{{ msgs.bio?.label || 'Bio' }}</mat-label>
+    <textarea matInput formControlName="bio" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+    <wm-icon matPrefix [icon]="msgs.bio?.icon"></wm-icon>
+    <mat-hint>{{ msgs.bio?.hint }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Location -->
+  <mat-form-field>
+    <mat-label>{{ msgs.location?.label || 'Location' }}</mat-label>
+    <input matInput formControlName="location">
+    <wm-icon matPrefix [icon]="msgs.location?.icon"></wm-icon>
+    <mat-hint>{{ msgs.location?.hint }}</mat-hint>
   </mat-form-field>
 
   <!-- Birthday -->

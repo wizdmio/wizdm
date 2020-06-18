@@ -6,17 +6,21 @@ import { Observable, Subscription, of } from 'rxjs';
 import { switchMap, tap, shareReplay } from 'rxjs/operators';
 
 export interface UserData extends DocumentData {
-  name?    : string;
-  email?   : string;
-  photo?   : string;
-  phone?   : string;
-  birth?   : string;
-  gender?  : string;
-  motto?   : string;
-  lang?    : string;
-  userName?: string;
 
-  searchIndex?   : string[];
+  name?     : string;
+  lastName? : string;
+  email?    : string;
+  photo?    : string;
+  phone?    : string;
+  birth?    : string;
+  gender?   : string;
+  bio?      : string;
+  lang?     : string;
+  location? : string;
+
+  userName? : string;
+
+  searchIndex?: string[];
 };
 
 @Injectable({
@@ -72,16 +76,24 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
     console.log("Creating user profile for: ", user.email);
 
     // Checks for document existance first
-    return this.fromUser(user).exists().then( exists => !exists ? this.set({
+    return this.fromUser(user).exists().then( exists => {
+
+      if(exists) { return Promise.resolve(); }
+
+      const displayName = (user.displayName || '').split(' ');
+      
+      return this.set({
         // Inherits teh basics from the user object
-        name: user.displayName,
+        name: displayName[0],
+        lastName: displayName[1] || '',
         email: user.email,
         photo: user.photoURL,
         // Applies the current locale as the user's language
         lang: this.auth.locale,
         // Builds the search index
         searchIndex: this.searchIndex( user.displayName )
-      } as T) : Promise.resolve() );
+      } as T);
+    });
   }
 
   // Extends the update function to include the search index
@@ -91,7 +103,9 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
     if(data.userName) { data.userName = this.formatUserName(data.userName); }
 
     // Computes the search index
-    if(data.name) { data.searchIndex = this.searchIndex(data.name); }
+    if(data.name || data.lastName) { 
+      data.searchIndex = this.searchIndex(`${data.name} ${data.lastName}`); 
+    }
 
     // Updates the profile
     return super.update(data);

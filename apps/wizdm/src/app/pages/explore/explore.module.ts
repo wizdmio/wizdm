@@ -27,7 +27,7 @@ const routes: RoutesWithContent = [
     children: [
       { path: '',       redirectTo: 'feed', pathMatch: 'full' },
       { path: 'feed',   loadChildren: () => import('./feed/feed.module').then(m => m.FeedModule) },
-      { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
+      { path: 'people', loadChildren: () => import('./people/people.module').then(m => m.PeopleModule) },
       { path: 'groups', loadChildren: () => import('./groups/groups.module').then(m => m.GroupsModule) }
     ]
   }

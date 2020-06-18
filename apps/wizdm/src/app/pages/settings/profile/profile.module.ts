@@ -17,7 +17,7 @@ import { ProfileComponent } from './profile.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'profile',
+    content: 'settings/profile',
     component: ProfileComponent,
     canDeactivate: [ CanLeaveGuard ]
   }
