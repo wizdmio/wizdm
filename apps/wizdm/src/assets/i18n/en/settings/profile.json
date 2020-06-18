@@ -1,0 +1,101 @@
+{
+  "title": "Public Profile",
+
+  "actions": {
+    "save": { "caption": "Update Profile", "icon": "fas:fa-save" }
+  },
+
+  "form": {
+    "userName": {
+      "label": "User name",
+      "icon": "fas:fa-user-secret",
+      "errors": {
+        "required": "Username is mandatory",
+        "format" : "Only letters, numbers, underscores and dashes are allowed",
+        "exists": "This username is already taken"
+      }
+    },
+    "firstName": {
+      "label": "First name",
+      "icon": "far:fa-user",
+      "hint": "How do we call you",
+      "errors": {
+        "required": "A name is mandatory"
+      }
+    },
+    "lastName": {
+      "label": "Last name",
+      "icon": "far:fa-user",
+      "hint": "If you want to get serious"
+    },
+    "email": {
+      "label": "Email",
+      "icon": "far:fa-envelope",
+      "hint": "We wish to stay in touch",
+      "errors": {
+        "required": "An email is mandatory",
+        "format" : "There's something wrong with this email"
+      }
+    },
+    "phone": {
+      "label": "Phone",
+      "icon": "fas:fa-phone",
+      "hint": "It's not that we are calling you every moment...",
+      "errors": {
+        "required": "A phone number would be useful",
+        "format" : "There's something wrong with this number"
+      }
+    },
+    "bio": {
+      "label": "About me",
+      "icon": "far:fa-comment",
+      "hint": "Tell us about you"
+    },
+    "location": {
+      "label": "Location",
+      "icon": "fas:fa-map-marker-alt",
+      "hint": "Where are you based"
+    },
+    "birth": {
+      "label": "Birthday",
+      "icon": "fas:fa-birthday-cake",
+      "hint": "We'll wish you happy birthday, eventually"
+    },
+    "gender": {
+      "label": "Gender",
+      "icon": "fas:fa-genderless",
+      "hint": "This is optional, if you wish to share",
+      "options": [
+        { "label": "Genderless", "icon": "fas:fa-genderless", "value": "u" },
+        { "label": "Male", "icon": "fas:fa-mars", "value": "m" },
+        { "label": "Female", "icon": "fas:fa-venus", "value": "f" },
+        { "label": "Beyond", "icon": "fas:fa-transgender-alt", "value": "x" }
+      ]
+    },
+    "language": {
+      "label": "Language",
+      "icon": "fas:fa-language",
+      "hint": "We'll try to adapt the content accordingly",
+      "options": [
+        { "label": "English", "image": "assets/img/gb.svg", "value": "en" },
+        { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
+        { "label": "Русский","image": "assets/img/ru.svg", "value": "ru" }
+      ]
+    },
+    "submit": { "label": "Update profile" }
+  },
+
+  "photo": {
+    "label": "Profile picture", 
+    "delete": { "icon": "fas:fa-trash-alt" },
+    "upload": { "icon": "fas:fa-cloud-upload-alt" }
+  },
+
+  "canLeave": {
+    "title": "Unsaved changes",
+    "message": "If you leave now, changes won't be saved",
+    "cancel": "Stay",
+    "force": "Save and leave",
+    "ok": "Leave anyhow"
+  }
+}

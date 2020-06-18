@@ -14,7 +14,7 @@ import { FeedComponent } from './feed.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'feed',
+    content: 'explore/feed',
     component: FeedComponent
   }
 ];
