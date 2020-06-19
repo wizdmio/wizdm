@@ -16,33 +16,53 @@ const BUTTON_HOST_ATTRIBUTES = {
   'fab': 'mat-fab'
 };
 
-@Directive({
-  selector: '[mat-button][type]',
-  exportAs: 'wmButtonType'
+/** Dynamically changes the MatButton type */
+@Directive({ 
+  selector: `[mat-button][type], 
+             [mat-flat-button][type], 
+             [mat-icon-button][type], 
+             [mat-raised-button][type], 
+             [mat-stroked-button][type], 
+             [mat-mini-fab][type], 
+             [mat-fab][type]`, 
+  exportAs: 'wmButtonType' 
 })
 export class ButtonTypeChanger {
 
-  private buttonType: ButtonType = 'basic';
+  private defaultType: ButtonType;
   private button: MatButton;
 
   constructor(@Optional() @Self() button: MatButton, @Optional() @Self() anchor: MatAnchor) {
 
+    // Tracks the MatButton (or MatAnchor) instance
     this.button = button || anchor;
 
     if(!this.button) {
       throw new Error("Can't get the instance of MatButton, make sure MatButtonModule is correclty imported");
     }
+
+    // Detects the initial button type 
+    this.defaultType = this.type;
   }
 
   // Returns the element shared with the MatButton
   private get element(): HTMLElement { return this.button._getHostElement() as HTMLElement; }
 
+  /** Returns the current button type based on the element's attributes */
+  get type(): ButtonType {
+
+    return (Object.keys(BUTTON_HOST_ATTRIBUTES).find( key => {
+      return this.button._hasHostAttributes( BUTTON_HOST_ATTRIBUTES[key] );
+    }) || 'basic') as ButtonType;
+  }
+
+  /** Switches to a different button type */
   @Input() set type(buttonType: ButtonType) {
 
-    // Translates teh inpu change into mat-button class/attribute changes
-    const prev = BUTTON_HOST_ATTRIBUTES[this.buttonType || 'basic'];
-    const curr = BUTTON_HOST_ATTRIBUTES[buttonType || 'basic'];
-
+    // Translates the input change into mat-button class/attribute changes
+    const curr = BUTTON_HOST_ATTRIBUTES[buttonType || this.defaultType];
+    const prev = BUTTON_HOST_ATTRIBUTES[this.type];
+    
     // Skips no changes
     if(curr === prev) { return; }
 
@@ -60,7 +80,5 @@ export class ButtonTypeChanger {
     if(this.button.isRoundButton && !this.button.color) {
       this.button.color = DEFAULT_ROUND_BUTTON_COLOR;
     }
-
-    this.buttonType = buttonType;
   }
 }
