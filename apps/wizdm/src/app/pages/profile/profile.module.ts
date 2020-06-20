@@ -2,6 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UrlSegment, UrlMatcher, UrlMatchResult } from '@angular/router';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { AvatarModule } from '@wizdm/elements/avatar';
+import { IconModule } from '@wizdm/elements/icon';
+import { ButtonChangerModule } from '@wizdm/elements/button';
+import { ActionbarModule } from 'app/navigator/actionbar';
 import { ProfileService } from './profile.service';
 import { ProfileComponent } from './profile.component';
 
@@ -38,7 +46,7 @@ export function matchUserNameOrId(url: UrlSegment[]): UrlMatchResult {
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: '',
+    content: 'profile',
     component: ProfileComponent,
     canActivate: [ ProfileService ]
   }
@@ -48,6 +56,13 @@ const routes: RoutesWithContent = [
   declarations: [ ProfileComponent ],
   imports: [
     CommonModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatButtonModule,
+    AvatarModule,
+    IconModule,
+    ButtonChangerModule,
+    ActionbarModule,
     ContentRouterModule.forChild(routes)
   ],
   providers: [ ProfileService ]

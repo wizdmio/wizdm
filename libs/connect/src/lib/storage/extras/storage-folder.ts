@@ -75,7 +75,7 @@ export class StorageFolder extends StorageReference {
     this.source$.next( path );
   }
 
-  /** Uploads new files in teh current folder */
+  /** Uploads new files in the current folder */
   public upload(file: File, meta?: UploadMetadata): UploadObservable {
     
     // Creates the UploadObservable

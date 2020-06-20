@@ -53,7 +53,7 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
 
     // Resolves the sender user profile
     this.sender$ = senderId$.pipe(
-      // Loads teh user's profile
+      // Loads the user's profile
       switchMap( senderId =>  db.document(`users/${senderId}`).stream() ),
       // Shares the same result to multiple subscribers
       shareReplay(1)

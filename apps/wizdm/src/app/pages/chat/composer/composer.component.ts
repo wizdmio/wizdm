@@ -61,7 +61,7 @@ export class ChatComposer {
     return this.touch ? 'always' : 'shift';
   }
 
-  /** Sends teh message on 'Enter' */
+  /** Sends the message on 'Enter' */
   public sendOnEnter(ev: KeyboardEvent) {
     // Sends on 'Enter' only on non-touch enabled devices
     return (this.touch || ev.shiftKey || ev.key !== 'Enter') || this.sendNow();

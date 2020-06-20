@@ -34,7 +34,7 @@ export class TypeinAdapter {
     if(this.hasFocus) { return; }
     // Focuses the element
     this.element.focus(); 
-    // Moves teh selection at the end of the current text
+    // Moves the selection at the end of the current text
     if(this.emoji) { this.emoji.select(this.value.length); }
     else { this.textarea.selectionStart = this.textarea.selectionEnd = this.value.length; }
   }

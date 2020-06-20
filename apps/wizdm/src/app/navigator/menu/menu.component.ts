@@ -40,7 +40,7 @@ export class MenuComponent {
 
   /** Menu trogger input */
   @Input('toggler') set toggleMenu(toggler: boolean) {
-    // Gets teh proper boolean value
+    // Gets the proper boolean value
     toggler = coerceBooleanProperty(toggler);
     // Skips meaningless values to avoid looping on double binding
     if(toggler === this.toggler) { return; }

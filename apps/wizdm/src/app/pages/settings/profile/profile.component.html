@@ -5,10 +5,10 @@
   <ng-template wmActionbar let-mobile="isMobile">
   
     <!-- Update profile button -->
-    <button mat-button
-            [type]="mobile ? 'icon' : 'stroked'" 
-            [disabled]="form.invalid || form.pristine"
+    <button mat-stroked-button
+            type.lt-sm="icon"
             color="primary" 
+            [disabled]="form.invalid || form.pristine"
             (click)="updateProfile(form.userData)">
 
       <wm-icon *ngIf="mobile; else saveProfile" [icon]="msgs.actions?.save?.icon || 'save'"></wm-icon>

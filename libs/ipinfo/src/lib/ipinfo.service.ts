@@ -31,7 +31,7 @@ export class IpInfo<T> extends Observable<T> {
 
     // Builds the inner observable to get the ip info
     this.inner$ = this.ip$.pipe( 
-      // Maps teh requested ip into the full end-point api call
+      // Maps the requested ip into the full end-point api call
       map( ip => this.endPoint(ip, config) ),
       // Debug
       tap( ep => console.log("Requesting ip info from:", ep) ),

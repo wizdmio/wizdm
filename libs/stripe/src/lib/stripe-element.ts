@@ -115,10 +115,10 @@ export abstract class StripeElement<T extends StripeElementType> implements OnIn
   /** Focus the element */
   public focus() { this.element && this.element.focus(); }
 
-  /** Blurs teh element */
+  /** Blurs the element */
   public blur() { this.element && this.element.blur(); }
 
-  /** Clears teh element */
+  /** Clears the element */
   public clear() { this.element && this.element.clear(); }
 
   /** Emits when fully loaded */

@@ -22,7 +22,7 @@
     <!-- Styles the text as Strikethrough -->
     <s *ngSwitchCase="'strikethrough'" [wm-readme]="segment.content" (navigate)="navigate($event)"></s>
 
-    <!-- Stles teh text as an Anchor -->
+    <!-- Stles the text as an Anchor -->
     <a *ngSwitchCase="'link'" [href]="segment.url" [wm-readme]="segment.content" (click)="navigate(segment.url)"></a>
 
     <!-- Adds a line break -->

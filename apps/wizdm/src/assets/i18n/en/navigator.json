@@ -34,6 +34,7 @@
         ],
         "private": [
             { "label": "Wizdm", "link": ".", "exact": true },
+            { "label": "Profile", "icon": "", "link": "@me" },
             { "label": "Explore", "link": "explore" },
             { "label": "Community", "link": "chat" },
             { "label": "Reference", "link": "docs" },

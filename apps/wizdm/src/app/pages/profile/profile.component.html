@@ -1,2 +1,70 @@
 
-<p *ngIf="user$ | async as userData">{{ userData | json }}</p>
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'profile'" gtag="profile">
+
+  <!-- Resolves user's data -->
+  <div class="banner" *ngIf="user$ | async as data"
+       fxLayout="row" fxLayoutAlign="start start" 
+       fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start center">
+
+    <!-- Action Bar (projected in the top toolbar) -->
+    <ng-template wmActionbar let-mobile="isMobile">
+
+      <!-- Edit profile button (my profile) -->
+      <button mat-stroked-button *ngIf="data.id === me"
+              type.lt-sm="icon"
+              color="primary" 
+              class="edit" 
+              [routerLink]="msgs.actions?.edit?.link || '/settings'">
+        
+        <!-- Use an icon button on small screens -->
+        <wm-icon *ngIf="mobile; else editProfile" [icon]="msgs.actions?.edit?.icon || 'edit'"></wm-icon>
+
+        <!-- Use a stroked button on large screens -->
+        <ng-template #editProfile>{{ msgs.actions?.edit?.caption || 'Edit profile' }}</ng-template>
+    
+      </button>
+
+    </ng-template>
+
+    <!-- User's picture -->
+    <wm-avatar class="photo" [src]="data.photo" color="primary" shape="squared"></wm-avatar>
+
+    <!-- User's name and bio -->
+    <div class="text" fxLayout="column">
+
+      <div class="title" fxLayout="row" fxLayoutAlign="space-between start">
+
+        <!-- Full User's name -->
+        <h1 ngClass.gt-xs="mat-display-1">{{ data.name }} {{ data.lastName }}</h1>
+
+        <!-- Follow button (not my profile) -->
+        <button mat-flat-button type.lt-sm="mini-fab" color="primary" class="edit" *ngIf="data.id !== me">
+
+          <!-- Always display an icon small/large screens -->
+          <wm-icon [icon]="msgs.actions?.follow?.icon || 'person_add'"></wm-icon>
+
+          <!-- No text for small screens -->
+          <span fxHide.lt-sm>{{ msgs.actions?.follow?.caption || 'Follow' }}</span>
+              
+        </button>
+      
+      </div>
+
+      <!-- User's location -->
+      <span class="location" fxLayout="row" fxLayoutAlign="start center">
+        
+        <wm-icon [icon]="msgs.location?.icon || 'location_on'" inline></wm-icon>
+
+        {{ data.location || msgs.location?.placeholder || 'Planet Earth' }}
+
+      </span>
+
+      <!-- User's bio -->
+      <div class="wrapper"><p>{{ data.bio || msgs.bio?.placeholder || 'Searching for wizdm' }}</p></div>
+
+    </div>
+
+  </div>
+
+</ng-container>

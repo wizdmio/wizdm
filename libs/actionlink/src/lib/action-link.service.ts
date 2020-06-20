@@ -75,13 +75,13 @@ export class ActionLinkObserver implements CanActivate {
       // Transfors the given result
       switchMap( result => {
 
-        // Returns tehe given observable
+        // Returns thee given observable
         if(isObservable(result)) { return result as Observable<T>; }
 
         // Converts the Promise into observable
         if(Promise.resolve(result) == result) { return from(result as Promise<T>); }
 
-        // Converts teh value into observable
+        // Converts the value into observable
         return of(result as T);
       }),
       
