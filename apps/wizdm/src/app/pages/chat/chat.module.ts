@@ -26,7 +26,7 @@ import { ChatComponent } from './chat.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: ['chat', 'emoji-keys'],
+    content: ['chat', 'chat/emoji-keys'],
     component: ChatComponent,
     canActivate: [ AuthGuard, ValidProfile ], data: { authGuardPipe: emailVerified },
     canDeactivate: [ CanLeaveGuard ]

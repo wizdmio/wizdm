@@ -22,7 +22,7 @@ import 'prismjs/components/prism-markdown';
 /** Static content route matcher */
 export function matchFullPath(url: UrlSegment[]): UrlMatchResult {
 
-  // Builds teh posParams from the url sub segments
+  // Builds the posParams from the url sub segments
   const posParams = url.reduce( (params, url, index) => {
 
     params[`path${index}`] = url;

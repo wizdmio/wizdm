@@ -28,7 +28,7 @@ const routes: RoutesWithContent = [
     
     canActivate: [ WelcomeBack, LanguageSelector ],
     
-    content: ['navigator', 'login', 'feedback'],
+    content: ['navigator', 'navigator/login', 'navigator/feedback'],
     
     children: [
 

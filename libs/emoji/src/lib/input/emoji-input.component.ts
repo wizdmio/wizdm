@@ -87,7 +87,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
   @Input('disabled') set disableInput(value: boolean) { this.disabled = coerceBooleanProperty(value); }
   public disabled = false; 
 
-  /** Marks teh input as required */
+  /** Marks the input as required */
   @Input('required') set requireInput(value: boolean) { this.required = coerceBooleanProperty(value); }
   public required = false; 
 
@@ -169,7 +169,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
 
       // Ctrl/Cmd Y -> Redo 
       case 'y': case 'Y': 
-      // Performs teh Redo unless its a Mac
+      // Performs the Redo unless its a Mac
       if(!this.mac) { return this.redo(), false; }
     }
     // Reverts to default
@@ -297,7 +297,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
     // Moving ahead requires to jump one or more character depending on the letngh of the emoji, if any.
     // So, search for a match with an emoij, first
     const match = this.utils.matchEmojiCodes(this.value.slice(pos));
-    // Updates teh position accordingly
+    // Updates the position accordingly
     return pos + ((match && match.index === 0) ? match[0].length : 1); 
   }
 
@@ -374,7 +374,7 @@ export class EmojiInput extends EmojiText implements OnDestroy {
   private abs(segment: emSegment, offset: number = 0): number {
     // Skips invalid segments
     if(!segment) { return 0; }
-    // Loops on all teh segments
+    // Loops on all the segments
     for(let seg of this.segments) {
       // Stops when the requested segment matches
       if(segment === seg) { break; }

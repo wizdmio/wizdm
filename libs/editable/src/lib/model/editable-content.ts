@@ -570,7 +570,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Gets the next sibling node
     const next = this.nextSibling();
     if(!!next) {
-      // Relocates teh node from the next sibling foreward to a new branch
+      // Relocates the node from the next sibling foreward to a new branch
       this.parent.insertNext( this.parent.clone(false) )
         .splice(0, 0, ...this.parent.splice(next, -1));
     }

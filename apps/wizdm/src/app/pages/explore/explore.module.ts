@@ -4,14 +4,12 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { RedirectModule } from '@wizdm/redirect';
 import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
-import { ButtonChangerModule } from '@wizdm/elements/button';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { AuthGuardModule } from 'app/pages/guards/auth-guard';
 import { ValidProfile } from 'app/pages/guards/valid-profile';
@@ -46,7 +44,6 @@ const routes: RoutesWithContent = [
     ReadmeModule,
     IconModule,
     AvatarModule,
-    ButtonChangerModule,
     AuthGuardModule,
     SidenavModule, 
     MomentPipesModule,

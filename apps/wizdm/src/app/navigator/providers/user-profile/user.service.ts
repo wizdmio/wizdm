@@ -83,7 +83,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
       const displayName = (user.displayName || '').split(' ');
       
       return this.set({
-        // Inherits teh basics from the user object
+        // Inherits the basics from the user object
         name: displayName[0],
         lastName: displayName[1] || '',
         email: user.email,

@@ -13,7 +13,7 @@ export class UriEncodePipe implements PipeTransform, OnDestroy {
 
   constructor(private http: HttpClient, private ref: ChangeDetectorRef) {}
 
-  /** Transforms teh input URL into the encoded data */
+  /** Transforms the input URL into the encoded data */
   public transform(url: string): string {
 
     // When the url is missing reverts to undefined
@@ -32,7 +32,7 @@ export class UriEncodePipe implements PipeTransform, OnDestroy {
       // Updates the encoded value
       this._encodedURI = uri;
 
-      // Forces teh change detection
+      // Forces the change detection
       this.ref.markForCheck();
     });
 

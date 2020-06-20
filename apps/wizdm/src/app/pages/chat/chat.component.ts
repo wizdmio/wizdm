@@ -92,7 +92,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
   private observeScroll(): Observable<boolean> {
     // Use the cdkScrollable child. WARNING this observable runs outside the Angular zone. 
     return this.scroller && this.scroller.elementScrolled().pipe(
-      // Measure tehe scrolling distance from the bottom 
+      // Measure thee scrolling distance from the bottom 
       map( () => this.scroller.measureScrollOffset('bottom') >= 50 ),
       // Distincts the value on changes only
       distinctUntilChanged(),

@@ -61,7 +61,7 @@ export class StorageFile {
         // Combines the upload metadata with the totalBytes to get a preview of the size
         upl.pipe( take(1), map( s => ({ ...s.metadata, size: s.totalBytes }) ) ), 
         
-        // Gets the FullMetadata from teh server
+        // Gets the FullMetadata from the server
         upl.pipe( last(), switchMap( s => s.ref.getMetadata() ))
       
         // Always cathces the errors to support uploading cancellation        
@@ -109,7 +109,7 @@ export class StorageFile {
     // Resolves the input source making sure to always complete
     return this.source$.pipe( take(1), switchMap( source => { 
 
-      // Builds the relevant obervable from teh StorageReference
+      // Builds the relevant obervable from the StorageReference
       if(source instanceof StorageReference) { return ref(source); }
 
       // Builds the relevan observable from the UploadObservable

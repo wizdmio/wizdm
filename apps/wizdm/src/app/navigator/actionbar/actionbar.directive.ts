@@ -14,7 +14,7 @@ export class ActionbarDirective implements OnInit, OnChanges, OnDestroy {
 
   // Activates the content towards the 'actionbar' portal with the given optional data
   public activate(data?: any) {
-    // NOTE: Activating the same template with different data do not renders teh content again
+    // NOTE: Activating the same template with different data do not renders the content again
     this.teleport.activate('actionbar', this.template, this.data = data);
   }
 

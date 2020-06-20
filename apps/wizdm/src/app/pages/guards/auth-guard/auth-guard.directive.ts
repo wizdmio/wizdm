@@ -37,7 +37,7 @@ export class AuthGuardDirective implements OnDestroy {
     // Activates the guard otherwise
     else {
 
-      // Prepares teh LoginAction according to the auth conditions
+      // Prepares the LoginAction according to the auth conditions
       const mode = this.auth.authenticated ? 'sendEmailVerification' : undefined;
 
       // Activates the 'login' actionlink programatically intercepting the returned value

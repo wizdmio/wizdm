@@ -13,6 +13,8 @@ export class ProfileComponent  {
 
   readonly user$: Observable<UserData>;
 
+  public get me(): string { return this.users.me.uid; }
+
   constructor(readonly users: Users, route: ActivatedRoute) { 
 
     this.user$ = route.paramMap.pipe( switchMap( params => 
