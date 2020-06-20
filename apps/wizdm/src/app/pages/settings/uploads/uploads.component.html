@@ -27,15 +27,14 @@
     </wm-dialog>
 
     <!-- Delete files button (opens the confirm dialog) --> 
-    <button mat-button 
+    <button mat-stroked-button type.lt-sm="icon" 
             [color]="msgs.actions?.delete?.color || 'warn'"
-            [type]="mobile ? 'icon' : 'stroked'" 
             [disabled]="busy || isNoneSelected()"
             (click)="confirmDelete.open()">
 
       <wm-icon *ngIf="mobile; else deleteTemplate" [icon]="msgs.actions?.delete?.icon || 'delete'"></wm-icon>
       
-      <ng-template #deleteTemplate>{{ msgs.actions?.delete?.caption || 'Delete Files' }}</ng-template>
+      <ng-template #deleteTemplate>{{ msgs.actions?.delete?.caption || 'Delete files' }}</ng-template>
 
     </button>
 
@@ -93,16 +92,16 @@
         <mat-checkbox [checked]="isAllSelected()" 
                       [indeterminate]="isPartlySelected()" 
                       [disabled]="busy"
-                      (change)="$event && toggleSelection()">
+                      (click)="toggleSelection()">
         </mat-checkbox>
-  
+
       </th>
       <td mat-cell *matCellDef="let record" (click)="$event.stopPropagation()">
   
         <!-- File selection check -->
         <mat-checkbox [checked]="isSelected(record)" 
                       [disabled]="record.file.uploading" 
-                      (change)="$event && toggleSelection(record)"></mat-checkbox>
+                      (click)="toggleSelection(record)"></mat-checkbox>
   
       </td>
     </ng-container>

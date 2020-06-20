@@ -195,8 +195,10 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
     if(record) { this.selection.toggle(record); }
     else {
 
-      if(this.isAllSelected()) { this.selection.clear(); }
-      else { this.allRecords.forEach( record => this.selection.select(record) ); }
+      if(this.isNoneSelected()) { 
+        this.allRecords.forEach( record => this.selection.select(record) ); 
+      }
+      else { this.selection.clear(); }
     }
   }
 
@@ -207,7 +209,7 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
 
   /** Returns true when all files are selected */
   public isAllSelected(): boolean {
-    return this.allRecords.length > 0 && (this.allRecords.length === this.selection.selected.length);
+    return (this.allRecords.length > 0) && (this.allRecords.length === this.selection.selected.length);
   }
 
   /** Returns true when some of the files are selected */
