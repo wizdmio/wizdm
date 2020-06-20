@@ -6,7 +6,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule, MAT_CHECKBOX_CLICK_ACTION } from '@angular/material/checkbox';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -59,6 +59,10 @@ const routes: RoutesWithContent = [
     MomentPipesModule,
     DownloadModule,
     ContentRouterModule.forChild(routes)
+  ],
+  providers:  [
+    // Disables the standard check-box behavior for the table to customize it
+    { provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'noop' }
   ]
 })
 export class UploadsModule { }
