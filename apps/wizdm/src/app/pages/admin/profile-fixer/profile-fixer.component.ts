@@ -1,7 +1,8 @@
 import { Users, UserData } from 'app/navigator/providers/user-profile';
 import { Observable, Subject, forkJoin, of, from, defer, concat, empty } from 'rxjs';
 import { AdminService, UserRecord } from '@wizdm/admin';
-import { map, scan, switchMap } from 'rxjs/operators';
+import { map, scan, tap, switchMap } from 'rxjs/operators';
+import { WriteBatch } from '@wizdm/connect/database';
 import { animationFrameScheduler } from 'rxjs';
 import { Component } from '@angular/core';
 import { append } from 'app/utils/rxjs';
@@ -14,7 +15,12 @@ export interface UserReport {
   missing?: UserRecord[];
   orphans?: UserData[];
 
-  incongruencies?: any;
+  incongruencies?: {
+    
+    userNameMissing: UserData[];
+    fullNameMissing: UserData[];
+    searchIndexMissing: UserData[];
+  };
   
   currentId?: string;
   currentIndex?: number;
@@ -30,214 +36,235 @@ export class ProfileFixerComponent {
 
   readonly report$: Observable<UserReport>;
   readonly run$ = new Subject<void>();
+  
+  public batch: WriteBatch;
 
   constructor(private admin: AdminService, private users: Users) { 
 
-    this.report$ = this.run$.pipe( switchMap( () => concat( 
-        
-      of({} as UserReport), 
+    this.report$ = this.run$.pipe( 
+
+      tap( () => { this.batch = null; }),
       
-      forkJoin( this.admin.listAllUsers(), this.loadAllProfiles() ).pipe( 
+      switchMap( () => concat( 
+        
+        of({} as UserReport), 
+        
+        forkJoin( this.admin.listAllUsers(), this.loadAllProfiles() ).pipe( 
 
-        map( ([users, profiles]) => ({ users, profiles, missing: [], orphans: [], currentId: '', errorsCount: 0 } as UserReport) ),
+          map( ([users, profiles]) => ({ users, profiles, missing: [], orphans: [], currentId: '', errorsCount: 0 } as UserReport) ),
 
-        switchMap( report => from(report.users, animationFrameScheduler).pipe(
+          switchMap( report => from(report.users, animationFrameScheduler).pipe(
 
-          scan( (report, user, index) => {
+            scan( (report, user, index) => {
 
-            const profile = report.profiles[index - report.missing.length + report.orphans.length];
+              const profile = report.profiles[index - report.missing.length + report.orphans.length];
 
-            report.currentId = user.uid;
-            report.currentIndex = index;
-            
-            if(!profile || profile.id > user.uid) { 
+              report.currentId = user.uid;
+              report.currentIndex = index;
               
-              report.missing.push( user ); 
-              report.errorsCount++;
-            }
-          
-            else if(profile.id < user.uid) { 
-
-              report.orphans.push( profile ); 
-              report.errorsCount++;
-            }
-
-            // TODO: analyze profile
-            if(profile) { }
-
-            return report;
-
-          }, report),
-
-          append( report => {
-
-            const start = report.users.length - report.missing.length + report.orphans.length;
-
-            if(start >= report.profiles.length) { return empty(); }
-
-            return from( report.profiles.slice(start), animationFrameScheduler).pipe(
-
-              scan( (report, profile) => {
-
-                report.currentId = profile.id;
-
-                report.orphans.push( profile );
-                report.currentIndex++;
+              if(!profile || profile.id > user.uid) { 
+                
+                report.missing.push( user ); 
                 report.errorsCount++;
+              }
+            
+              else if(profile.id < user.uid) { 
 
-                // TODO: analyze profile
+                report.orphans.push( profile ); 
+                report.errorsCount++;
+              }
 
-                return report;
+              if(profile) { this.analyzeProfile(profile, report); }
 
-              }, report)
-            );
-          }, report)
-        ))
-      )
-    )));
+              return report;
+
+            }, report),
+
+            append( report => {
+
+              const start = report.users.length - report.missing.length + report.orphans.length;
+
+              if(start >= report.profiles.length) { return empty(); }
+
+              return from( report.profiles.slice(start), animationFrameScheduler).pipe(
+
+                scan( (report, profile) => {
+
+                  report.currentId = profile.id;
+
+                  report.orphans.push( profile );
+                  report.currentIndex++;
+                  report.errorsCount++;
+
+                  this.analyzeProfile(profile, report);
+
+                  return report;
+
+                }, report)
+              );
+            }, report)
+          ))
+        )
+      ))
+    );
   }
 
   private loadAllProfiles(): Observable<UserData[]> {
 
     return defer( () => this.users.get( qf => qf.orderBy(this.users.db.sentinelId) ));
   }
-/*
-  private compareUsersVsProfiles(users: any[], profiles: UserData[]): UserReport {
 
-    let errorsCount = 0;
+  private fullName(profile: UserData) {
 
-    const orphans = [];
-    const missing = [];
+    const { fullName } = this.users.me.formatData({ lastName: '', ...profile });
 
-    users.forEach( (user, index) => {
+    return fullName;
+  }
 
-      const profile = profiles[index - missing.length + orphans.length];
+  private searchIndex(profile: UserData) {
 
-      // Detects incongruencies
-      if( user.uid !== profile?.id ) {
+    const { searchIndex } = this.users.me.formatData({ lastName: '', ...profile });
 
-        errorsCount++;
+    return searchIndex;
+  }
 
-        console.log("User vs profile incongruency", errorsCount);
+  private analyzeProfile(profile: UserData, report: UserReport) {
 
-        if(!profile || profile.id > user.uid) {
+    const incongruencies = report.incongruencies || (report['incongruencies'] = {} as any);
 
-          // Tracks the user with a missing profile
-          missing.push( user );
-
-          console.log("User " + user.uid + " does not have a profile");
-
-        } else if(profile.id < user.uid ) {
-
-          // Tracks the profile without a user
-          orphans.push( profile );
-
-          console.log("Profile " + profile.id + " does not match any user");
-        }
-      }
-    });
-
-    for(let i = users.length - missing.length + orphans.length; i < profiles.length; i++) {
-      errorsCount++; orphans.push( profiles[i] );
+    if(!profile.userName) { 
+        
+      incongruencies.userNameMissing = (incongruencies['userNameMissing'] || []).concat(profile); 
+      report.errorsCount++;
     }
 
-    return { users, missing, profiles, orphans, errorsCount };
-  }
-*/
-  private analyzeProfiles(report: UserReport) {
-
-    const incongruencies: { [key:string]: number } = report['incongruencies'] = {};
-
-    report.profiles.forEach( profile => {
-
-      if(!profile.userName) { 
+    if(!profile.fullName) { 
         
-        incongruencies.userName = (incongruencies['userName'] || 0) + 1; 
+      incongruencies.fullNameMissing = (incongruencies['fullNameMissing'] || []).concat(profile); 
+      report.errorsCount++;
+    } 
+
+    if(!profile.searchIndex) { 
+      
+      incongruencies.searchIndexMissing = (incongruencies['searchIndexMissing'] || []).concat(profile); 
+      report.errorsCount++;
+    }
+    else {
+
+      const searchIndex = this.searchIndex(profile);
+
+      if(searchIndex.length !== profile.searchIndex.length || searchIndex.some( (value, index) => value !== profile.searchIndex[index])) {
+
+        incongruencies.searchIndexMissing = (incongruencies['searchIndexMissing'] || []).concat(profile); 
         report.errorsCount++;
       }
-
-      if(!profile.name) { 
-        
-        incongruencies.name = (incongruencies['name'] || 0) + 1; 
-        report.errorsCount++;
-      }
-
-      if(!profile.searchIndex) { 
-        
-        incongruencies.searchIndex = (incongruencies['searchIndex'] || 0) + 1; 
-        report.errorsCount++;
-      }
-      else {
-
-        const { searchIndex } = this.users.me.formatData({ lastName: '', ...profile });
-
-        if(searchIndex.length !== profile.searchIndex.length || searchIndex.some( (value, index) => value !== profile.searchIndex[index])) {
-
-          incongruencies.searchIndexMismatch = (incongruencies['searchIndexMismatch'] || 0) + 1; 
-          report.errorsCount++;
-        }
-      }
-
-      if(profile.motto && !profile.bio) {
-
-        incongruencies.bio = (incongruencies['bio'] || 0) + 1; 
-        report.errorsCount++;
-      }
-    });
+    }
 
     return report;
   }
 
-  public createMissingProfile(user: any, report: UserReport) {
+  public createMissingProfile(user: UserRecord, report: UserReport) {
 
     const index = report.missing.findIndex( missing => missing === user);
-    if(index < 0) { return Promise.resolve(); }
 
-    return this.users.document(user.uid).set( this.users.me.userData(user) ).then( () => { 
+    if(index >= 0) { 
+
+      const batch = this.batch || ( this.batch = this.users.db.batch() );
+
+      batch.set(this.users.ref.doc(user.uid), this.users.me.userData(user as any));
 
       report.missing.splice(index, 1); 
-    });
+
+      report.errorsCount--;
+    }
   }
 
   public deleteOrphanProfile(profile: UserData, report: UserReport) {
 
     const index = report.orphans.findIndex(orphan => orphan === profile);
-    if(index < 0) { return Promise.resolve(); }
 
-    return this.users.document(profile.id).delete().then(() => {
+    if(index >= 0) { 
 
-      report.orphans.splice(index, 1); 
-    });
+      const batch = this.batch || ( this.batch = this.users.db.batch() );
+
+      batch.delete(this.users.ref.doc(profile.id));
+
+      report.orphans.splice(index, 1);
+
+      report.errorsCount--;
+    }
   }
 
-  public fixProfileInconguencies
+  public guessMissingUserNames(profiles: UserData[], report: UserReport) {
+
+    if(!profiles) { return; }
+
+    const batch = this.batch || ( this.batch = this.users.db.batch() );
+
+    profiles.forEach( profile => {
+
+      
+      report.errorsCount--;
+
+    });
+
+    delete report.incongruencies.userNameMissing;
+  }
+
+  public guessMissingFullNames(profiles: UserData[], report: UserReport) {
+
+    if(!profiles) { return; }
+
+    const batch = this.batch || ( this.batch = this.users.db.batch() );
+
+    profiles.forEach( profile => {
+
+      const fullName = this.fullName(profile);
+
+      batch.update(this.users.ref.doc(profile.id), { fullName });
+      
+      report.errorsCount--;
+
+    });
+
+    delete report.incongruencies.userNameMissing;
+  }
+
+  public computeMissingSearchIndex(profiles: UserData[], report: UserReport) {
+
+    if(!profiles) { return; }
+
+    const batch = this.batch || ( this.batch = this.users.db.batch() );
+
+    profiles.forEach( profile => {
+
+      const searchIndex = this.searchIndex(profile);
+
+      batch.update(this.users.ref.doc(profile.id), { searchIndex });
+
+      report.errorsCount--;
+
+    });
+
+    delete report.incongruencies.searchIndexMissing;
+  }
 
   public fixAllAnomalies(report: UserReport) {
 
-    if(report.missing?.length > 0) {
+    report.missing?.forEach( user => this.createMissingProfile(user, report) );
 
-      const createMissingProfiles = (report: UserReport) => {
+    report.orphans?.forEach( profile => this.deleteOrphanProfile(profile, report) );
 
-        if(report.missing.length <= 0 ) { return; }
+    this.guessMissingUserNames(report.incongruencies?.userNameMissing, report);
 
-          this.createMissingProfile(report.missing[0], report)
-            .then( () => createMissingProfiles(report) );
-      }
+    this.computeMissingSearchIndex(report.incongruencies?.searchIndexMissing, report);
+  }
 
-      createMissingProfiles(report);
-    }
+  public applyAllFixes() {
 
-    if(report.orphans?.length > 0) {
+    if(this.batch) {
 
-      const deleteOrhpanProfiles = (report: UserReport) => {
-
-        if(report.orphans.length <= 0 ) { return; }
-
-          this.deleteOrphanProfile(report.orphans[0], report)
-            .then( () => deleteOrhpanProfiles(report) );
-      }
-
-      deleteOrhpanProfiles(report);
+      this.batch.commit().then( () => this.batch = null );
     }
   }
 }

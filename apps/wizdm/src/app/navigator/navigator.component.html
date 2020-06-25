@@ -66,8 +66,12 @@
                 <!-- Builds the settings menu -->
                 <mat-menu #menuSettings="matMenu">
 
-                  <button mat-menu-item routerLink="admin" *ngIf="user.admin$ | async">Admin</button>
+                  <!-- The Admin button first -->
+                  <button mat-menu-item [routerLink]="msgs.setings?.admin?.link || 'admin'" *ngIf="user.admin$ | async">
+                    {{ msgs.setings?.admin?.label || 'Admin' }}
+                  </button>
 
+                  <!-- The rest of the settings next -->
                   <ng-container *ngFor="let item of msgs.settings?.private || []">
 
                     <mat-divider *ngIf="item.divider"></mat-divider>
