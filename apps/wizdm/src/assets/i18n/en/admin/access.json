@@ -1,0 +1,16 @@
+{
+  "email": {
+    "label": "Email",
+    "hint": "User's email to grant admin priviledges to",
+    "errors": {
+      "required": "You need this",
+      "email": "It doesn't look right"
+    }
+  },
+
+  "actions": { 
+    "view": { "caption": "View proviledges", "color": "primary" },
+    "grant": { "caption": "Grant admin proviledges", "color": "accent" },
+    "revoke": { "caption": "Revoke admin proviledges", "color": "warn" } 
+  } 
+}

@@ -54,7 +54,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
     const result$ = value$.pipe(
       debounceTime(500),
       switchMap( value => value ? this.users.doesUserNameExists( value ) : of(false) ),
-      map( exists => exists ? ({ alreadyExist: true }) : null ),
+      map( exists => exists ? ({ exists: true }) : null ),
       take(1)
     );
     
@@ -72,18 +72,21 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
 
     // Turns the birthdate into a moment
     const birth = value.birth ? moment(value.birth, defaultFormat) : null;
+
+    // Replaces the old 'motto' with the new 'bio' field
+    if(value.motto && !value.bio) { value.bio = value.motto; }
     
     // Fills up the form with user data
     this.patchValue({ ...value, birth });
 
-    // Force name the control validation when empty. This will build the search index as well
-    if(!value.name) { this.controls.name.markAsTouched(); }
+    // Force userName control validation when empty
+    if(!value.userName) { this.controls.userName.markAsTouched(); }
+
+    // Force name control validation when fullName is empty. This will build the search index as well
+    if(!value.fullName) { this.controls.name.markAsTouched(); }
 
     // Force the name update whenever the searchIndex is missing
     else if(!value.searchIndex) { this.controls.name.markAsDirty(); }
-
-    // Force userName control validation when empty
-    if(!value.userName) { this.controls.userName.markAsTouched(); }
   }
 
   @Output('valueChange') formValueChange = new EventEmitter<UserData>();

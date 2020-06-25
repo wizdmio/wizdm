@@ -17,7 +17,7 @@
     },
     "firstName": {
       "label": "First name",
-      "icon": "far:fa-user",
+      "icon": "far:fa-id-badge",
       "hint": "How do we call you",
       "errors": {
         "required": "A name is mandatory"
@@ -25,7 +25,7 @@
     },
     "lastName": {
       "label": "Last name",
-      "icon": "far:fa-user",
+      "icon": "fas:fa-signature",
       "hint": "If you want to get serious"
     },
     "email": {

@@ -13,6 +13,11 @@ service cloud.firestore {
   		return authenticated() && request.auth.uid == userId;
 		}
     
+    // Checks the current authenticated user's token claims for role-based priviledges
+    function itsRole(role) {
+    	return authenticated() && request.auth.token[role] == true;
+    }
+    
     // Gets the specified user's profile 
     //function profile(userId) {
     //  let profile = get(/databases/$(database)/documents/users/$(userId));
@@ -36,7 +41,7 @@ service cloud.firestore {
       allow create: if authenticated();
       
     	// Allows only the user herself to update or delete the profile  
-      allow update, delete: if itsMe(userId);
+      allow update, delete: if itsMe(userId) || itsRole("admin");
       
       // User's shared content
     	match /feed/{post} {

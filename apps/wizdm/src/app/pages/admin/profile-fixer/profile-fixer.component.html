@@ -1,0 +1,75 @@
+
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'fixer'">
+
+  <!-- Action Bar (projected in the top toolbar) -->
+  <ng-template wmActionbar let-mobile="isMobile">
+  
+    <!-- Update profile button --> 
+    <button mat-stroked-button
+            type.lt-sm="icon"
+            color="primary" 
+            (click)="run$.next()">
+
+      <wm-icon *ngIf="mobile; else runAnalisys" [icon]="msgs.actions?.run?.icon || 'assignment'"></wm-icon>
+      
+      <ng-template #runAnalisys>{{ msgs.actions?.run?.caption || 'Analyze users' }}</ng-template>
+
+    </button>
+
+  </ng-template>
+
+  <section *ngIf="report$ | async as report">
+
+    <ng-template #fetchingUsers><p>Fetching user data...</p></ng-template>
+
+    <ng-container *ngIf="report.users; else fetchingUsers">
+
+      <p>Analysing user {{ report.currentIndex + 1 }} of {{ report.users.length || '0' }}, uid: {{ report.currentId }}</p>
+
+      <ng-template #allFine><p>No anomalies found</p></ng-template>
+
+      <ng-container *ngIf="report.errorsCount > 0; else allFine">
+
+        <p>{{ report.errorsCount }} anomalies detected so far:</p>
+
+        <ul>
+
+          <li *ngFor="let missing of report.missing" fxLayoutGap="8px">
+
+            <span>User <b>{{ missing.uid }}</b> do not have a profile document</span>
+            
+            <button mat-stroked-button color="accent" (click)="createMissingProfile(missing, report)">Create profile</button>
+          
+          </li>
+
+          <li *ngFor="let orphan of report.orphans">
+
+            <span>Document <b>{{ orphan.id }}</b> do not have a matching user</span>
+
+            <button mat-stroked-button color="warn" (click)="deleteOrphanProfile(orphan, report)">Delete profile</button>
+          
+          </li>
+
+          <li *ngIf="report.incongruencies?.name">{{ report.incongruencies.name }} user(s) with an empty name field</li>
+
+          <li *ngIf="report.incongruencies?.userName">{{ report.incongruencies.userName }} user(s) miss a unique user name</li>
+
+          <li *ngIf="report.incongruencies?.searchIndex">{{ report.incongruencies.searchIndex }} user(s) aren't searchable</li>
+
+          <li *ngIf="report.incongruencies?.searchIndexMismatch">{{ report.incongruencies.searchIndexMismatch }} user(s) with a search index not matching the name</li>
+
+          <li *ngIf="report.incongruencies?.bio">{{ report.incongruencies.bio }} users didn't migrate the motto into the bio field</li>
+        
+        </ul>
+
+        <button mat-stroked-button color="warn" (click)="fixAllAnomalies(report)">Fix all anomalies</button>
+
+      </ng-container>
+
+  </ng-container>
+
+  </section>
+
+</ng-container> 
+

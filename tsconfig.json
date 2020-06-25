@@ -16,6 +16,7 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "app/*": ["apps/wizdm/src/app/*"],
+      "env/*":["apps/wizdm/src/environments/*"],
       "@wizdm/actionlink": ["libs/actionlink/src/index.ts"],
       "@wizdm/animate": ["libs/animate/src/index.ts"],
       "@wizdm/content": ["libs/content/src/index.ts"],
@@ -42,7 +43,8 @@
       "@wizdm/emoji/*": ["libs/emoji/src/lib/*"],
       "@wizdm/readme": ["libs/readme/src/index.ts"],
       "@wizdm/pipes/*": ["libs/pipes/src/lib/*"],
-      "@wizdm/download": ["libs/download/src/index.ts"]
+      "@wizdm/download": ["libs/download/src/index.ts"],
+      "@wizdm/admin": ["libs/admin/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]

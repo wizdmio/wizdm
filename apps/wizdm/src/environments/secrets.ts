@@ -2,6 +2,9 @@ import { ConnectConfig } from '@wizdm/connect';
 import { DoorbellConfig } from '@wizdm/doorbell';
 import { GtagConfig } from '@wizdm/gtag';
 
+export const adminAPI = "https://your-cloud-function/wizdm";
+export const rootEmail = 'rootEmail@your-domain.io';
+
 export const firebase: ConnectConfig = {
   apiKey: "<< YOUR FIREBASE API KEY HERE >>",
   authDomain: "<< your firebase auth domain here >>",

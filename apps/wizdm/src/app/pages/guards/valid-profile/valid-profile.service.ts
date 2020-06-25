@@ -3,6 +3,7 @@ import { UserProfile } from 'app/navigator/providers/user-profile';
 import { Injectable } from '@angular/core';
 import { take, map } from 'rxjs/operators';
 
+/** Checks the user's profile for basic validity prior to grant access  */
 @Injectable({ 
   providedIn: 'root'
 })
@@ -14,7 +15,7 @@ export class ValidProfile implements CanActivate {
 
     return this.profile.data$.pipe( take(1), map( data => {
 
-      if(data && (!data.userName || !data.searchIndex) ) { 
+      if(data && (!data.userName || !data.fullName || !data.searchIndex) ) { 
 
         // Keeps the same language as the current url
         const lang = state.url.split('/')[1];

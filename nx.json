@@ -73,6 +73,9 @@
     },
     "download": {
       "tags": []
+    },
+    "admin": {
+      "tags": []
     }
   }
 }

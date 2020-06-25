@@ -1,9 +1,8 @@
-<img [src]="url" 
-     [alt]="alt"
-     (load)="load = true"
-     (error)="url = null"
-     *ngIf="!!url"/>
 
+<!-- Image to load -->
+<img [src]="url" [alt]="alt" (load)="load = true" (error)="url = null" *ngIf="!!url" />
+
+<!-- Placeholder to fade out once load -->
 <svg [attr.color]="color" version="1.1" xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" *ngIf="!load" @fadeOut>
   <g>
     <rect id="background" width="512" height="512" x="0" y="0" />

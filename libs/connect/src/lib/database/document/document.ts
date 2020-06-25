@@ -109,7 +109,7 @@ export class DatabaseDocument<T extends DocumentData> {
   /** Returns the document snapshot immediately */
   public snap(options?: SnapOptions): Promise<DocumentSnapshot<T>> {
     // Short-circuits the undefined ref
-    return !!this.ref ? this.ref.get(options) : Promise.reject();
+    return this.ref ? this.ref.get(options) : Promise.reject( new Error("Document reference null or undefined") );
   }
 
   /** Returns the document content immediately */

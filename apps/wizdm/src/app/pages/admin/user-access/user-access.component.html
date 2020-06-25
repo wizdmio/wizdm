@@ -1,0 +1,38 @@
+
+<!-- Localized content -->
+<div *wmContent="let msgs select 'access'" 
+      fxLayout="row" fxLayoutAlign="center start" 
+      fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" 
+      fxLayoutGap="16px">
+
+  <!-- Users email form field -->
+  <mat-form-field>
+
+    <mat-label>{{ msgs.email?.label || 'Email' }}</mat-label>
+    <input matInput [(ngModel)]="email" name="email" email required #input="ngModel">
+    <mat-hint>{{ msgs.email?.hint }}</mat-hint>
+    <mat-error *ngIf="input.errors?.required">{{ msgs.email?.errors?.required }}</mat-error>
+    <mat-error *ngIf="input.errors?.email">{{ msgs.email?.errors?.email }}</mat-error>
+
+  </mat-form-field>
+
+  <!-- Actions -->
+  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
+
+    <button mat-button fxFlex="33" [color]="msgs.actions?.view?.color || 'primary'" [disabled]="input.invalid" (click)="viewAccess(email)">
+      {{ msgs.actions?.view?.caption || 'View priviledges' }}
+    </button>
+
+    <button mat-button fxFlex="33" [color]="msgs.actions?.grant?.color || 'accent'" [disabled]="input.invalid" (click)="grantAccess(email)">
+      {{ msgs.actions?.grant?.caption || 'Grant admin priviledges' }}
+    </button>
+
+    <button mat-button fxFlex="33" [color]="msgs.actions?.revoke?.color || 'warn'" [disabled]="input.invalid" (click)="revokeAccess(email)">
+      {{ msgs.actions?.reoke?.caption || 'Revoke admin proviledges' }}
+    </button>
+
+  </div>
+
+</div> 
+
+<p>{{ result | json }}</p>

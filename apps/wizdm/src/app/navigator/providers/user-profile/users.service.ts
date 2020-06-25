@@ -3,7 +3,7 @@ import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
 import { UserProfile, UserData } from './user.service';
 import { Injectable } from '@angular/core';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -66,7 +66,7 @@ export class Users extends DatabaseCollection<UserData> {
   /** Returns true wheneve the given user name is taken */
   public doesUserNameExists(userName: string): Observable<boolean> {
 
-    return this.fromUserName( this.me.formatUserName(userName) ).pipe( 
+    return this.fromUserName( userName.replace(/\s*/g, '').toLowerCase() ).pipe( 
       take(1), map( data => !!data && data.id !== this.me.uid )
     )
   }

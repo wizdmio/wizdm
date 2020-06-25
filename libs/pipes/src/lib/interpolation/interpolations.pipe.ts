@@ -1,5 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/** Uses the input string as a key to pluck a value from an object. 
+ * Dotted separated keys are supoprted to pluck values deeper.
+ * @example 'errors.required' | pluck: errorMessages */
 @Pipe({ name: 'pluck' })
 export class PluckPipe implements PipeTransform {
 
@@ -18,6 +21,9 @@ export class PluckPipe implements PipeTransform {
   }
 }
 
+/** Replace keys embedded into the input string withing double brackets 
+ * with their corresponding values pluck from the conteext object 
+ * @example 'Counting {{ count }}' | interpolate: this */
 @Pipe({ name: 'interpolate', pure: false })
 export class InterpolatePipe extends PluckPipe {
 
@@ -30,6 +36,32 @@ export class InterpolatePipe extends PluckPipe {
   }
 }
 
+/** Evaluate the expressions embedded into the input string 
+ * withing double brackets similarly to eval() with a context limited
+ * to the sole variables passed along in the context object 
+ * @example 'Double counting {{ count * 2 }}' | eval: this */
+@Pipe({ name: 'eval', pure: false })
+export class EvalPipe {
+
+  transform(value: any, context?: any): string {
+    // Simply return the input as it is when other than string 
+    if(typeof value !== 'string') { return value; }
+    // Declares intermediate variables 
+    let keys: string[], vals: any[];
+    // Searches for the expressions within double brackets
+    return value.replace(/{{(.*)}}/g, (match, capture) => {
+      // Gets context's keys and values
+      keys = keys || Object.keys(context);
+      vals = vals || keys.map( key => context[key] );
+      // Dynamically creates a function with limited scope passing along the 
+      // keys as the argument names to be referenced withing the function body,
+      // to simply return the evaluated expression value, and calls it. 
+      return Function(...keys, `'use strict'; return ${capture};`)(...vals);
+    });
+  }
+}
+
+/** Converts the input string from camelCase to kebab-case*/
 @Pipe({ name: 'hyphenize' })
 export class HyphenizePipe implements PipeTransform {
 
@@ -43,6 +75,7 @@ export class HyphenizePipe implements PipeTransform {
   }
 }
 
+/** Converts the input string from kebab-case to camelCase*/
 @Pipe({ name: 'camelize' })
 export class CamelizePipe implements PipeTransform {
 
@@ -56,6 +89,7 @@ export class CamelizePipe implements PipeTransform {
   }
 }
 
+/** C-like printf() formatting */
 @Pipe({ name: 'printf' })
 export class PrintfPipe implements PipeTransform {
 

@@ -11,21 +11,20 @@ import { SidenavModule } from 'app/navigator/sidenav';
 import { AuthGuard, loggedIn } from 'app/pages/guards/auth-guard';
 import { SettingsComponent } from './settings.component';
 
-const routes: RoutesWithContent = [
-  {
-    path: '',
-    content: 'settings',
-    component: SettingsComponent,
-    canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },
-    children: [
+const routes: RoutesWithContent = [{
+  
+  path: '',
+  content: 'settings',
+  component: SettingsComponent,
+  canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },
+  children: [
 
-      { path: '', redirectTo: 'profile', pathMatch: 'full' },
-      { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
-      { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
-      { path: 'uploads', loadChildren: () => import('./uploads/uploads.module').then(m => m.UploadsModule) }
-    ]
-  }
-];
+    { path: '', redirectTo: 'profile', pathMatch: 'full' },
+    { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule) },
+    { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
+    { path: 'uploads', loadChildren: () => import('./uploads/uploads.module').then(m => m.UploadsModule) }
+  ]
+}];
 
 @NgModule({
   declarations: [

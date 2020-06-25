@@ -1,5 +1,5 @@
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthPipeFactory, authRedirect } from '@wizdm/connect/auth';
+import { RouterStateSnapshot } from '@angular/router';
 export { AuthGuard } from "@wizdm/connect/auth"; 
 import { map } from 'rxjs/operators';
 
@@ -25,10 +25,10 @@ export const redirectToLogin = (state: RouterStateSnapshot, mode?: string) => {
 }
 
 /** AuthPipe operator to check user for authentication redirecting to login */
-export const loggedIn: AuthPipeFactory = (route, state) => map( user => !!user || redirectToLogin(state) );
+export const loggedIn: AuthPipeFactory = (_, state) => map( user => !!user || redirectToLogin(state) );
 
 /** AuthPipe operator to check user for emailVerified redirecting to login */
-export const emailVerified: AuthPipeFactory = (route, state) => map( user => {
+export const emailVerified: AuthPipeFactory = (_, state) => map( user => {
 
   if(!!user && user.emailVerified) { return true; }
 
