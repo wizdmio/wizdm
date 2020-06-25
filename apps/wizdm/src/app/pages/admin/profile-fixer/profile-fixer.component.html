@@ -6,32 +6,43 @@
   <ng-template wmActionbar let-mobile="isMobile">
   
     <!-- Update profile button --> 
-    <button mat-stroked-button
-            type.lt-sm="icon"
-            color="primary" 
-            (click)="run$.next()">
+    <button mat-flat-button type.lt-sm="icon" color="primary" (click)="applyAllFixes()" *ngIf="batch">
 
-      <wm-icon *ngIf="mobile; else runAnalisys" [icon]="msgs.actions?.run?.icon || 'assignment'"></wm-icon>
+      <wm-icon *ngIf="mobile; else applyFixes" [icon]="msgs.actions?.apply?.icon || 'save'"></wm-icon>
       
-      <ng-template #runAnalisys>{{ msgs.actions?.run?.caption || 'Analyze users' }}</ng-template>
+      <ng-template #applyFixes>{{ msgs.actions?.apply?.caption || 'Apply fixes' }}</ng-template>
 
     </button>
 
   </ng-template>
 
+  <!-- Run button -->
+  <button mat-stroked-button color="primary" (click)="run$.next()">
+
+    <wm-icon [icon]="msgs.actions?.run?.icon || 'assignment'"></wm-icon>
+
+    <span>{{ msgs.actions?.run?.caption || 'Analyze users' }}</span>
+
+  </button>
+
   <section *ngIf="report$ | async as report">
+
+    <mat-progress-bar color="primary" 
+                      [mode]="report.users ? 'determinate' : 'query'" 
+                      [value]="100 * ((report.currentIndex || 0) + 1) / (report.users?.length || 1)">
+    </mat-progress-bar>
 
     <ng-template #fetchingUsers><p>Fetching user data...</p></ng-template>
 
     <ng-container *ngIf="report.users; else fetchingUsers">
 
-      <p>Analysing user {{ report.currentIndex + 1 }} of {{ report.users.length || '0' }}, uid: {{ report.currentId }}</p>
+      <p>Analysing uid {{ report.currentId }}</p>
 
       <ng-template #allFine><p>No anomalies found</p></ng-template>
 
       <ng-container *ngIf="report.errorsCount > 0; else allFine">
 
-        <p>{{ report.errorsCount }} anomalies detected so far:</p>
+        <p>{{ report.errorsCount }} anomalies detected:</p>
 
         <ul>
 
@@ -39,27 +50,41 @@
 
             <span>User <b>{{ missing.uid }}</b> do not have a profile document</span>
             
-            <button mat-stroked-button color="accent" (click)="createMissingProfile(missing, report)">Create profile</button>
+            <button mat-button color="accent" (click)="createMissingProfile(missing, report)">Create profile</button>
           
           </li>
 
-          <li *ngFor="let orphan of report.orphans">
+          <li *ngFor="let orphan of report.orphans" fxLayoutGap="8px">
 
             <span>Document <b>{{ orphan.id }}</b> do not have a matching user</span>
 
-            <button mat-stroked-button color="warn" (click)="deleteOrphanProfile(orphan, report)">Delete profile</button>
+            <button mat-button color="warn" (click)="deleteOrphanProfile(orphan, report)">Delete profile</button>
           
           </li>
 
-          <li *ngIf="report.incongruencies?.name">{{ report.incongruencies.name }} user(s) with an empty name field</li>
+          <li *ngIf="report.incongruencies?.userNameMissing as missing" fxLayoutGap="8px">
 
-          <li *ngIf="report.incongruencies?.userName">{{ report.incongruencies.userName }} user(s) miss a unique user name</li>
+            <span>{{ missing.length }} user(s) miss a unique user name</span>
 
-          <li *ngIf="report.incongruencies?.searchIndex">{{ report.incongruencies.searchIndex }} user(s) aren't searchable</li>
+            <button mat-button color="accent" (click)="guessMissingUserNames(missing, report)">Guess user names</button>
 
-          <li *ngIf="report.incongruencies?.searchIndexMismatch">{{ report.incongruencies.searchIndexMismatch }} user(s) with a search index not matching the name</li>
+          </li>
 
-          <li *ngIf="report.incongruencies?.bio">{{ report.incongruencies.bio }} users didn't migrate the motto into the bio field</li>
+          <li *ngIf="report.incongruencies?.fullNameMissing as missing" fxLayoutGap="8px">
+
+            <span>{{ missing.length }} user(s) miss the fullName field</span>
+
+            <button mat-button color="accent" (click)="guessMissingFullNames(missing, report)">Guess full names</button>
+
+          </li>
+
+          <li *ngIf="report.incongruencies?.searchIndexMissing as indexes" fxLayoutGap="8px">
+
+            <span>{{ indexes.length }} user(s) aren't searchable or the search index mismatches the user's name</span>
+
+            <button mat-button color="accent" (click)="computeMissingSearchIndex(indexes, report)">Fix search indexes</button>
+
+          </li>
         
         </ul>
 
@@ -70,6 +95,22 @@
   </ng-container>
 
   </section>
+
+  <!-- CanLeave Popup Dialog (based on MatDialog) -->
+  <wm-dialog [dontLeave]="batch">
+
+    <h2 mat-dialog-title><b>{{ msgs.canLeave?.title || 'Unsaved fixes' }}</b></h2>
+  
+    <mat-dialog-content [wm-readme]="msgs.canLeave?.message">
+      <span>You're about to leave the page without saving the applied fixes.<br>Please confirm.</span>
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+      <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.canLeave?.cancel || 'Stay' }}</button>
+      <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.canLeave?.ok || 'Leave anyhow' }}</button>
+    </mat-dialog-actions>
+  
+  </wm-dialog>
 
 </ng-container> 
 

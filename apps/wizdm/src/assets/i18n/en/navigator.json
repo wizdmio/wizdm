@@ -3,6 +3,7 @@
     "description": "The fully featured boilerplate to launch your web application quickly",
 
     "settings": {
+        "admin": { "label": "Admin", "icon": "", "link": "admin" },
         "public": { "icon":"fas:fa-sign-in-alt", "link": "login" },
         "private": [
             { "label": "My profile", "icon": "", "link": "@me" },
