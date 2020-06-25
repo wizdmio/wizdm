@@ -1,0 +1,7 @@
+{
+  "title": "Admin tools",
+  "menu": [
+    { "label": "User's access", "icon": "",  "link": "access" },
+    { "label": "Profile fixer", "icon": "",  "link": "fixer" }
+  ]
+}

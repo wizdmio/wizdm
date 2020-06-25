@@ -37,8 +37,8 @@ export function resolveRoutesWithContent(routes: RoutesWithContent, source: stri
       route.resolve = content.reduce( (resolve, file) => {
         // Gets the file name without folder(s) and extension, if any
         const name = file.replace(/^\w+\/|\.\w+$/g, '');
-        // Construct a resolver for every source file
-        resolve[ name ] = ContentResolver.create(path, file, ContentRouterModule);
+         // Adds a resolver for the given name 
+        if(name) { resolve[ name ] = ContentResolver.create(path, file, ContentRouterModule); }
         // Next
         return resolve; 
 

@@ -32,22 +32,29 @@ const routes: RoutesWithContent = [
     
     children: [
 
+      // Not found page
+      { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
+      { path: '404', redirectTo: 'not-found', pathMatch: 'full' },
+
       // Landing page
       { path: '', loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule) },
       { path: 'home', redirectTo: '', pathMatch: 'full' },
       
       // Content browsing
       { path: 'explore', loadChildren: () => import('../pages/explore/explore.module').then(m => m.ExploreModule) },
-      { path: 'welcome-back', redirectTo: 'explore', pathMatch: 'full' },      
+      { path: 'welcome-back', redirectTo: 'explore', pathMatch: 'full' }, 
 
       // Instant messaging
       { path: 'chat', loadChildren: () => import('../pages/chat/chat.module').then(m => m.ChatModule) },
 
-      // Profile matching @username
+      // User's profile (matching @username)
       { matcher: matchUserNameOnly, loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
 
       // Settings
       { path: 'settings', loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule) },
+
+      // Admin tools
+      { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
 
       // Action links
       { path: 'login',   canActivate: [ ActionLinkObserver ] },
@@ -55,10 +62,7 @@ const routes: RoutesWithContent = [
       { path: 'back',    canActivate: [ BackLinkObserver ] },
       { path: 'close',   canActivate: [ CloseLinkObserver ] },
       
-      // Not found page
-      { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
-
-      // Reference (using static docs subfolder)
+      // Docs (using static docs subfolder)
       { path: 'docs', redirectTo: 'docs/start', pathMatch: 'full' },
       { path: 'docs/toc', canActivate: [ ActionLinkObserver ], data: { actionMatch: 'toc' } },
 

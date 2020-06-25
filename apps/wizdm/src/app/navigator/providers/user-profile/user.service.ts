@@ -1,9 +1,11 @@
 import { DatabaseDocument, DocumentData } from '@wizdm/connect/database/document';
+import { switchMap, tap, shareReplay } from 'rxjs/operators';
 import { DatabaseService } from '@wizdm/connect/database';
-import { AuthService, User as authUser} from '@wizdm/connect/auth';
+import { AuthService, User } from '@wizdm/connect/auth';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subscription, of } from 'rxjs';
-import { switchMap, tap, shareReplay } from 'rxjs/operators';
+import { authorized } from '@wizdm/admin';
+import { rootEmail } from 'env/secrets';
 
 export interface UserData extends DocumentData {
 
@@ -19,7 +21,7 @@ export interface UserData extends DocumentData {
   location? : string;
 
   userName? : string;
-
+  fullName? : string;
   searchIndex?: string[];
 };
 
@@ -30,6 +32,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
 
   /** User profile data observable */
   readonly data$: Observable<T>;
+  readonly admin$: Observable<boolean>;
 
   /** Current user profile snapshot */
   private snapshot: T = {} as T;
@@ -44,6 +47,8 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
   constructor(readonly auth: AuthService, db: DatabaseService) {
     // Extends the DatabaseDocument with a null reference
     super(db, null);
+
+    this.admin$ = this.auth.user$.pipe( authorized(['admin'], rootEmail) );
 
     this.data$ = this.auth.user$.pipe(
       // Resolves the authenticated user attaching the corresponding document reference    
@@ -62,14 +67,14 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
   ngOnDestroy() { this.sub.unsubscribe(); }
 
   // Creates the firestore document reference from the User object 
-  private fromUser(user: authUser): this {
+  private fromUser(user: User): this {
 
     // Updates the user profile's reference
     return this.from(!!user ? `users/${user.uid}` : null), this;
   }
 
   /** Creates the user profile from a User object */
-  public register(user: authUser): Promise<void> {
+  public register(user: User): Promise<void> {
 
     if(!user) { return Promise.reject( new Error("Can't create a profile from a null user object") ); }
 
@@ -79,64 +84,76 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseDocument
     return this.fromUser(user).exists().then( exists => {
 
       if(exists) { return Promise.resolve(); }
-
-      const displayName = (user.displayName || '').split(' ');
       
-      return this.set({
-        // Inherits the basics from the user object
-        name: displayName[0],
-        lastName: displayName[1] || '',
-        email: user.email,
-        photo: user.photoURL,
-        // Applies the current locale as the user's language
-        lang: this.auth.locale,
-        // Builds the search index
-        searchIndex: this.searchIndex( user.displayName )
-      } as T);
+      // Inherits the basics from the user object
+      return this.set( this.userData(user) );
     });
   }
 
-  // Extends the update function to include the search index
-  public update(data: T): Promise<void> {
+  /** Formats the user data from a User object  */
+  public userData(user: User) {
 
-    // Formats the user name properly 
-    if(data.userName) { data.userName = this.formatUserName(data.userName); }
-
-    // Computes the search index
-    if(data.name || data.lastName) { 
-      data.searchIndex = this.searchIndex(`${data.name} ${data.lastName}`); 
-    }
-
-    // Updates the profile
-    return super.update(data);
+    return this.formatData({
+      // Extracts the first name
+      name: (user.displayName || '').replace(/\s.*$/,''),
+      // Extracts the last name
+      lastName: (user.displayName || '').replace(/^.*\s/, ''),
+      // Copies email, phone and photo
+      email: user.email || '',
+      phone: user.phoneNumber || '',
+      photo: user.photoURL || '',
+      // Applies the current locale as the user's language
+      lang: this.auth.locale
+    } as T)
   }
 
-  public formatUserName(userName: string): string {
-    return userName.replace(/\s*/g, '').toLowerCase();
+  // Extends the update function to properly format the user data
+  public update(data: T): Promise<void> {
+
+    // Updates the profile
+    return super.update( this.formatData(data)) ;
+  }
+
+  /** Formats the user data */
+  public formatData(data: T): T {
+
+    // Formats the user name properly 
+    if(data.userName) { data.userName = data.userName.replace(/\s*/g, '').toLowerCase(); }
+
+    // Updates fullName and searchIndex
+    if(typeof data.name === 'string') { 
+
+      if(typeof data.lastName === 'undefined') {
+        throw new Error("User name and lastName fields must be updated together");
+      }
+
+      // Ensures the full name excludes unnecessary spaces
+      data.fullName = `${data.name} ${data.lastName}`.replace(/^\s*|\s*$|(\s)\s+/g, '$1');
+
+      // Computes the search index based on a lowered case full name
+      data.searchIndex = this.searchIndex(data.fullName.toLowerCase()); 
+    }
+
+    return data;
   }
 
   /** Build a simple search index based on the user name */
-  public searchIndex(name: string): string[] {
+  public searchIndex(value: string): string[] {
 
-    if(!name) { return [""]; }
+    return value && value.split(/\s/).reduce( (out, token) => {
+      // Splits the token in UTF-16 compatible substrings.
+      let sub = "";        
+      for(let ch of token) {
 
-    return name
-      .toLowerCase()
-      .replace(/^\s+|\s+$/g,'')
-      .split(/\s/)
-      .reduce( (out, token) => {
-        // Splits the token in UTF-16 compatible substrings.
-        let sub = "";        
-        for(let ch of token) {
-
-          sub += ch;
-          // Adds the subscring provided is unique
-          if(out.findIndex( index => index === sub ) < 0) {
-            out.push(sub);
-          }
+        sub += ch;
+        // Adds the subscring provided is unique
+        if(out.findIndex( index => index === sub ) < 0) {
+          out.push(sub);
         }
+      }
 
-        return out;
-      }, []);
+      return out;
+      
+    }, []) || [""];
   }
 }

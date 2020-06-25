@@ -1,4 +1,4 @@
-import { CollectionRef, QueryDocumentSnapshot, QueryFn, Query } from './types';
+import { CollectionRef, QuerySnapshot, QueryDocumentSnapshot, QueryFn, Query } from './types';
 import { fromRef, mapDocumentChanges, mapSnaphotData } from './utils';
 import { DatabaseApplication } from '../database-application';
 import { DocumentData } from '../document';
@@ -11,14 +11,23 @@ export class DatabaseQuery<T extends DocumentData> {
   constructor(readonly db: DatabaseApplication, public ref: CollectionRef<T>|Query<T>) {}
 
   /**
-   * Returns a promise of the collection content as an array.
+   * Returns a Promise of the collection content as a snapshot
+   * @param qf the optional query funciton
+   */
+  public snap(qf?: QueryFn<T>): Promise<QuerySnapshot<T>> {
+    // Assosiates the query to the collection ref, if any
+    const ref = qf ? qf(this.ref) : this.ref;
+    // Gets the document snapshot
+    return ref ? ref.get() : Promise.reject( new Error("Collection reference null or undefined") );
+  }
+
+  /**
+   * Returns a Promise of the collection content as an array.
    * @param qf the optional query funciton
    */
   public get(qf?: QueryFn<T>): Promise<T[]> {
-    // Assosiates the query to the collection ref, if any
-    const ref = !!qf ? qf(this.ref) : this.ref;
     // Gets the document snapshot
-    return ref.get().then( snapshot => { 
+    return this.snap(qf).then( snapshot => { 
       // Maps the snapshot in the DocumentData-like content
       return snapshot.docs.map( doc => mapSnaphotData(doc) ); 
     });

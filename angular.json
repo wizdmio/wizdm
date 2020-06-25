@@ -853,6 +853,37 @@
           "styleext": "scss"
         }
       }
+    },
+    "admin": {
+      "projectType": "library",
+      "root": "libs/admin",
+      "sourceRoot": "libs/admin/src",
+      "prefix": "wizdm",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/tsconfig.lib.json",
+              "libs/admin/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/**"]
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "libs/admin/src/test.ts",
+            "tsConfig": "libs/admin/tsconfig.spec.json",
+            "karmaConfig": "libs/admin/karma.conf.js"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "styleext": "scss"
+        }
+      }
     }
   },
   "cli": {

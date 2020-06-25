@@ -36,7 +36,7 @@
       <div class="title" fxLayout="row" fxLayoutAlign="space-between start">
 
         <!-- Full User's name -->
-        <h1 ngClass.gt-xs="mat-display-1">{{ data.name }} {{ data.lastName }}</h1>
+        <h1 ngClass.gt-xs="mat-display-1">{{ data.fullName || data.name }}</h1>
 
         <!-- Follow button (not my profile) -->
         <button mat-flat-button type.lt-sm="mini-fab" color="primary" class="edit" *ngIf="data.id !== me">

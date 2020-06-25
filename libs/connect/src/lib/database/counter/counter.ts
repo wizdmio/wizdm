@@ -46,8 +46,30 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
     );
   }
 
+  /** Updates the counter by the given increment (or decrement) */
+  public update(increment: number): Promise<any> {
+    // Updates the local copy first to improve reactivity
+    this._counter$.next(this._counter$.value + increment);
+    // Pick a shard randomly
+    const rnd = Math.floor(Math.random() * this.shards);
+    const shard = this.ref.doc(rnd.toString());
+    // Runs the shard update within a transaction
+    return this.db.transaction( trx => {
+      // Tests if the single shard exists (1 read)
+      return trx.get(shard).then( snap => {
+        // Updates the shard value (1 write)
+        if(snap.exists) { 
+          // Uses the special FieldValue as increment
+          return trx.update(shard, { count: this.db.increment(increment) });
+        }
+        // Creates the shard with the given initial value (1 write)
+        return trx.set(shard, { count: increment }, { merge: true });
+      });
+    });
+  }
+
   // Creates the shards in a batch initializing the counter value
-  private create(start = 0): Promise<void> {
+  public create(start = 0): Promise<void> {
     // Uses firestore references directly
     const batch = this.db.batch();
     // Inits the first shard with the starting value
@@ -58,24 +80,5 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
     }
     // Commit the changes
     return batch.commit();
-  }
-
-  /** Updates the counter by the given increment (or decrement) */
-  public update(increment: number): Promise<void> {
-    // Updates the local copy first to improve reactivity
-    this._counter$.next(this._counter$.value + increment);
-    // Loads the counter' shards
-    return this.get().then( counter => {
-      // Check for counter existance
-      if(counter && counter.length > 0) {
-        // Select a single shard randomly
-        const rnd = Math.floor(Math.random() * this.shards);
-        // Updates the shard using an increment FieldValue
-        const count = this.db.increment(increment) as any;
-        return this.ref.doc(rnd.toString()).update({ count });        
-      }
-      // Or create the counter if needed
-      return this.create(increment);
-    });
   }
 }

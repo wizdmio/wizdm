@@ -1,1 +1,33 @@
-<p>users works!</p>
+
+<!-- Localized content -->
+<ng-container *wmContent="let msgs select 'people'" gtag="people">
+
+  <!-- User's search form -->
+  <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px" autocomplete="off">
+
+    <mat-form-field>
+
+      <mat-label>{{ msgs.search?.label || 'Name' }}</mat-label>
+      
+      <input matInput name="name" [ngModel]="name" (ngModelChange)="search$.next(name = $event)" #formName="ngModel">
+
+      <!--mat-error *ngIf="!formName.valid"></mat-error-->
+      
+      <mat-hint>{{ msgs.search?.hint || 'Type the name to search for' }}</mat-hint>
+  
+    </mat-form-field>
+
+  </form>
+
+  <div *ngFor="let result of results$ | async">
+
+    <span *ngIf="result.data() as data"
+          wm-highlight="{{ data.fullName || data.name }}"
+          [pattern]="highlight" 
+          color="primary">
+    </span>
+
+  </div>
+
+  
+</ng-container>
