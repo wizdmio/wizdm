@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 export class ContentDirective implements OnInit, OnDestroy {
 
   private sub: Subscription;
-  public $implicit: any = {};
+  public $implicit: any = [];
 
   constructor(private content: ContentStreamer, private tpl: TemplateRef<ContentDirective>, private vcr: ViewContainerRef) { }
 
@@ -29,7 +29,7 @@ export class ContentDirective implements OnInit, OnDestroy {
   get language(): string { return this.content.language; }
 
   /** Defines the default value to use whenever the requested content were missing */
-  @Input() wmContentOr: any = {};
+  @Input() wmContentOr: any = [];
 
   /** Binds the requested content as an object directly:
    * Usage: 

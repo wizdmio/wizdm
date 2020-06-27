@@ -94,22 +94,39 @@ export class FileLoader extends ContentLoader {
     );
   }
 
+  /** Deep merges the localModule with the defaultModule */
   private merge(localModule: any, defaultModule?: any): any {
-    // Skips recurring when no default module is available
+
+    // Done recurring when default module is no longer available
     if(!!defaultModule) {
-      // Loops on the keys of the default object
-      Object.keys(defaultModule).forEach( key => {
-        // Add the property when undefined
-        if(!localModule[key]) { localModule[key] = defaultModule[key]; }
-        // Override the property on array length mismatch
-        else if(defaultModule[key] instanceof Array && (!(localModule[key] instanceof Array) || localModule[key].length !== defaultModule[key].length)) {
-          localModule[key] = defaultModule[key]; 
+
+      // Treat arrays as a special case, so, to keep them as array
+      if( Array.isArray(defaultModule) ) {
+
+        // Overrides the locale array with tht default when they do not match
+        if(!Array.isArray(localModule) || localModule.length !== defaultModule.length) {
+          localModule = defaultModule; 
         }
-        // Recurs down the inner objects when needed
-        else if(typeof localModule[key] === 'object') {
-          localModule[key] = this.merge(localModule[key], defaultModule[key]);
+        else { 
+          // Recurs down the tree merging the array content
+          defaultModule.forEach( (_, index) =>  localModule[index] = this.merge(localModule[index], defaultModule[index]) ); 
         }
-      });
+      }
+      else {
+
+        // Merges the object properties otherwise
+        Object.keys(defaultModule).forEach( key => {
+
+          // Copies each missing property
+          if(!localModule[key]) { localModule[key] = defaultModule[key]; }
+
+          // Recurs down the children properties otherwise
+          else if(typeof localModule[key] === 'object') {
+
+            localModule[key] = this.merge(localModule[key], defaultModule[key]);
+          }
+        });
+      }
     }
     // Returns the merged object
     return localModule;
