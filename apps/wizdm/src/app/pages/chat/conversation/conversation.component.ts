@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject, of, from, combineLatest } from 'rxjs';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { dbChatter, dbConversation, dbMessage } from '../chat-types';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
-import { UserProfile } from 'app/navigator/providers/user-profile';
+import { UserProfile } from 'app/utils/user-profile';
 import { DatabaseService } from '@wizdm/connect/database';
 
 @Component({

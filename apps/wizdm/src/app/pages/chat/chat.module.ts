@@ -15,9 +15,9 @@ import { ReadmeModule } from '@wizdm/readme';
 import { DialogModule } from '@wizdm/dialog';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
-import { AuthGuard, emailVerified } from 'app/pages/guards/auth-guard';
-import { ValidProfile } from 'app/pages/guards/valid-profile';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
+import { AuthGuard, emailVerified } from 'app/utils/auth-guard';
+import { ValidProfile } from 'app/utils/user-profile';
 import { ChatConversationModule } from './conversation';
 import { ChatMessageModule } from './message';
 import { ChatComposerModule } from './composer';
@@ -51,7 +51,6 @@ const routes: RoutesWithContent = [
     DialogModule,
     ActionbarModule,
     SidenavModule,
-    //ScrollModule,
     CanLeaveModule,
     ChatConversationModule,
     ChatMessageModule,

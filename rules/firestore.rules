@@ -18,12 +18,6 @@ service cloud.firestore {
     	return authenticated() && request.auth.token[role] == true;
     }
     
-    // Gets the specified user's profile 
-    //function profile(userId) {
-    //  let profile = get(/databases/$(database)/documents/users/$(userId));
-    //	return profile.data;
-    //}
-    
     // Shared content from every collection
     match /{path=**}/feed/{post} {
     

@@ -11,8 +11,10 @@ export async function addUser(req: Request, res: Response) {
    
    try {
 
+      const auth = admin.auth();
+
       // Creates the user first
-      const user = await admin.auth().createUser({
+      const user = await auth.createUser({
          displayName,
          email,
          password,
@@ -23,7 +25,7 @@ export async function addUser(req: Request, res: Response) {
       });
 
       // Sets the user's custom claims if requested
-      if(customClaims) { await admin.auth().setCustomUserClaims(user.uid, customClaims); }
+      if(customClaims) { await auth.setCustomUserClaims(user.uid, customClaims); }
 
       // Returns the newely created user record
       return res.status(201).send(user);
@@ -60,13 +62,15 @@ export async function updateUser(req: Request, res: Response) {
    
    try {
 
+      const auth = admin.auth();
+
       // Updates the custom user claims first, if needed. Note that null is a valid value for the claims to be reset
-      if(customClaims !== undefined) { await admin.auth().setCustomUserClaims(uid, customClaims); }
+      if(customClaims !== undefined) { await auth.setCustomUserClaims(uid, customClaims); }
 
       // Updates the user wheneven needed
       if(needUpdate) {
 
-         const user = await admin.auth().updateUser(uid, {
+         const user = await auth.updateUser(uid, {
             displayName,
             email,
             password,
@@ -82,7 +86,7 @@ export async function updateUser(req: Request, res: Response) {
       else {
 
          // Gets the updated user otherwise
-         const user = await admin.auth().getUser(uid);
+         const user = await auth.getUser(uid);
 
          // Returns the user with the updated claims
          return res.status(201).send(user);

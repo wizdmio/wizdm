@@ -1,10 +1,9 @@
 import { FormGroup, FormControl, AbstractControl, Validators, ValidationErrors } from '@angular/forms';
 import { Component, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
-import { Users, UserData } from 'app/navigator/providers/user-profile';
+import { UserProfile, UserData } from 'app/utils/user-profile';
 import { Observable, Subscription, BehaviorSubject, of } from 'rxjs';
 import { map, take, debounceTime, switchMap } from 'rxjs/operators';
 import moment, { defaultFormat, Moment } from 'moment';
-import {} from 'app/navigator/providers/user-profile'
 
 @Component({
   selector: 'wm-user-form',
@@ -15,7 +14,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
 
   private sub: Subscription;
 
-  constructor(private users: Users) {
+  constructor(private user: UserProfile) {
     // Builds the form controls
     super({
       userName : new FormControl('', Validators.compose( [ Validators.required, Validators.pattern(/^[\w\d-_]+\s*$/) ]) ),
@@ -53,7 +52,7 @@ export class UserFormComponent extends FormGroup implements OnDestroy {
     const value$ = new BehaviorSubject<string>('');
     const result$ = value$.pipe(
       debounceTime(500),
-      switchMap( value => value ? this.users.doesUserNameExists( value ) : of(false) ),
+      switchMap( value => value ? this.user.doesUserNameExists( value, true ) : of(false) ),
       map( exists => exists ? ({ exists: true }) : null ),
       take(1)
     );

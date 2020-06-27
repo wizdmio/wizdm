@@ -1,5 +1,5 @@
 import { PagedCollection } from '@wizdm/connect/database/paged-collection';
-import { UserProfile } from 'app/navigator/providers/user-profile';
+import { UserProfile } from 'app/utils/user-profile';
 import { DatabaseService } from '@wizdm/connect/database';
 import { map, take, debounceTime } from 'rxjs/operators';
 import { Injectable } from '@angular/core';

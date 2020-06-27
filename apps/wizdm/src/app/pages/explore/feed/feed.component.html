@@ -1,6 +1,6 @@
 
 <!-- Localized content -->
-<ng-container *wmContent="let msgs select 'feed'">
+<!--ng-container *wmContent="let msgs select 'feed'"-->
 
   <!-- Action Bar (projected in the top toolbar) -->
   <!--ng-template wmActionbar let-mobile="isMobile">
@@ -15,7 +15,7 @@
 
   </ng-template-->
 
-</ng-container>
+<!--/ng-container-->
 
 <!-- List all posts in descending order -->
 <wm-post class="mat-elevation-z3" *ngFor="let post of feed$ | async" [post]="post"></wm-post>

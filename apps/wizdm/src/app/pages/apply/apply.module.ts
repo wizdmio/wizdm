@@ -10,10 +10,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { ReadmeModule } from '@wizdm/readme';
-import { AuthGuard, loggedIn } from 'app/pages/guards/auth-guard';
+import { AuthGuard, loggedIn } from 'app/utils/auth-guard';
 import { ApplyComponent } from './apply.component';
 import { DialogModule } from '@wizdm/dialog';
 

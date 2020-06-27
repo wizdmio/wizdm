@@ -1,22 +1,7 @@
-
 <!-- Localized content -->
 <ng-container *wmContent="let msgs select 'fixer'">
 
-  <!-- Action Bar (projected in the top toolbar) -->
-  <ng-template wmActionbar let-mobile="isMobile">
-  
-    <!-- Update profile button --> 
-    <button mat-flat-button type.lt-sm="icon" color="primary" (click)="applyAllFixes()" *ngIf="batch">
-
-      <wm-icon *ngIf="mobile; else applyFixes" [icon]="msgs.actions?.apply?.icon || 'save'"></wm-icon>
-      
-      <ng-template #applyFixes>{{ msgs.actions?.apply?.caption || 'Apply fixes' }}</ng-template>
-
-    </button>
-
-  </ng-template>
-
-  <!-- Run button -->
+  <!-- Run report button -->
   <button mat-stroked-button color="primary" (click)="run$.next()">
 
     <wm-icon [icon]="msgs.actions?.run?.icon || 'assignment'"></wm-icon>
@@ -25,44 +10,84 @@
 
   </button>
 
+  <!-- Report body -->
   <section *ngIf="report$ | async as report">
 
+    <!-- Apply all fixes button projected to the top toolbar -->
+    <ng-container *ngIf="batch || report.folders?.length">
+
+      <ng-template wmActionbar let-mobile="isMobile">
+        
+        <button mat-flat-button type.lt-sm="icon" color="primary" [disabled]="!report.done" (click)="applyAllFixes(report)">
+
+          <wm-icon *ngIf="mobile; else applyFixes" [icon]="msgs.actions?.apply?.icon || 'save'"></wm-icon>
+          
+          <ng-template #applyFixes>{{ msgs.actions?.apply?.caption || 'Apply fixes' }}</ng-template>
+
+        </button>
+
+      </ng-template>
+
+    </ng-container>
+
+    <!-- Report running progress -->
     <mat-progress-bar color="primary" 
                       [mode]="report.users ? 'determinate' : 'query'" 
                       [value]="100 * ((report.currentIndex || 0) + 1) / (report.users?.length || 1)">
     </mat-progress-bar>
 
+    <!-- Data querying message -->
     <ng-template #fetchingUsers><p>Fetching user data...</p></ng-template>
 
+    <!-- Report analysis -->
     <ng-container *ngIf="report.users; else fetchingUsers">
 
       <p>Analysing uid {{ report.currentId }}</p>
 
+      <!-- Done, no anomalies -->
       <ng-template #allFine><p>No anomalies found</p></ng-template>
 
+      <!-- Anomalies found -->
       <ng-container *ngIf="report.errorsCount > 0; else allFine">
 
         <p>{{ report.errorsCount }} anomalies detected:</p>
 
+        <!-- List of anomalies -->
         <ul>
 
+          <!-- Listing missing profiles (user exists without a profile) -->
           <li *ngFor="let missing of report.missing" fxLayoutGap="8px">
 
             <span>User <b>{{ missing.uid }}</b> do not have a profile document</span>
             
-            <button mat-button color="accent" (click)="createMissingProfile(missing, report)">Create profile</button>
+            <button mat-button color="accent" [disabled]="!report.done" (click)="createMissingProfile(missing, report)">Create profile</button>
           
           </li>
 
+          <!-- Listing orphan profiles (profile exists without a user) -->
           <li *ngFor="let orphan of report.orphans" fxLayoutGap="8px">
 
             <span>Document <b>{{ orphan.id }}</b> do not have a matching user</span>
 
-            <button mat-button color="warn" (click)="deleteOrphanProfile(orphan, report)">Delete profile</button>
+            <button mat-button color="warn" [disabled]="!report.done" (click)="deleteOrphanProfile(orphan, report)">Delete profile</button>
           
           </li>
 
-          <li *ngIf="report.incongruencies?.userNameMissing as missing" fxLayoutGap="8px">
+          <!-- Listing remainng folders (when done) -->
+          <ng-container *ngIf="report.done">
+
+            <li *ngFor="let folder of report.folders" fxLayoutGap="8px">
+
+              <span>Folder <b>{{ folder.name }}</b> do not have a matching user</span>
+
+              <button mat-button color="warn" (click)="deleteOrphanFolder(folder, report)">Delete folder</button>
+            
+            </li>
+
+          </ng-container>
+
+          <!-- Reporting userName missing count -->
+          <li *ngIf="report.userNameMissing as missing" fxLayoutGap="8px">
 
             <span>{{ missing.length }} user(s) miss a unique user name</span>
 
@@ -70,7 +95,8 @@
 
           </li>
 
-          <li *ngIf="report.incongruencies?.fullNameMissing as missing" fxLayoutGap="8px">
+          <!-- Reporting fullName missing count -->
+          <li *ngIf="report.fullNameMissing as missing" fxLayoutGap="8px">
 
             <span>{{ missing.length }} user(s) miss the fullName field</span>
 
@@ -78,7 +104,8 @@
 
           </li>
 
-          <li *ngIf="report.incongruencies?.searchIndexMissing as indexes" fxLayoutGap="8px">
+          <!-- Reporting searchIndex missing count or mismatch -->
+          <li *ngIf="report.searchIndexMissing as indexes" fxLayoutGap="8px">
 
             <span>{{ indexes.length }} user(s) aren't searchable or the search index mismatches the user's name</span>
 
@@ -88,13 +115,18 @@
         
         </ul>
 
-        <button mat-stroked-button color="warn" (click)="fixAllAnomalies(report)">Fix all anomalies</button>
+        <!-- Fix all button at the bottom of the report -->
+        <button mat-stroked-button color="warn" [disabled]="!report.done" (click)="fixAllAnomalies(report)">
 
-      </ng-container>
+          <span>{{ msgs.actions?.fix?.caption || 'Fix all anomalies' }}</span>
+        
+        </button>
 
-  </ng-container>
+      </ng-container><!-- Anomalies list -->
 
-  </section>
+    </ng-container><!-- Anomalies report -->
+
+  </section><!-- Report body -->
 
   <!-- CanLeave Popup Dialog (based on MatDialog) -->
   <wm-dialog [dontLeave]="batch">
@@ -112,5 +144,4 @@
   
   </wm-dialog>
 
-</ng-container> 
-
+</ng-container><!-- Localized content -->

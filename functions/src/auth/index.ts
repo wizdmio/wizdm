@@ -3,7 +3,7 @@ import { isAuthenticated, isAuthorized } from "./auth-guards";
 import { addUser, getUser, updateUser, deleteUser, listUsers, listAllUsers } from './user-admin';
 
 /** wizdm API routing */
-export function wizdmAPI(app: Application, config?: { [key:string]: any }) {
+export function usersAPI(app: Application, config?: { [key:string]: any }) {
 
 	// List all users: GET /users
 	app.get('/users', 

@@ -3,7 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { DatabaseCollection, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
-import { UserProfile, UserData } from 'app/navigator/providers/user-profile';
+import { UserProfile, UserData } from 'app/utils/user-profile';
 import { autocomplete } from 'app/utils/rxjs';
 
 @Component({

@@ -1,13 +1,13 @@
 
 <!-- Localized content -->
-<ng-container *wmContent="let settigs select 'settings' or defaultSettings">
+<ng-container *wmContent="let settigns select 'settings' or defaultSettings">
 
   <!-- Navigation menu (on the left) -->
   <mat-nav-list fxLayout="column" fxLayoutAlign="start end"> 
 
     <wm-router-inkbar side="left" color="primary">
 
-      <a mat-list-item *ngFor="let page of settigs" 
+      <a mat-list-item *ngFor="let page of settigns" 
           class="mat-body"
           [routerLink]="page.link" 
           [queryParams]="page.params" 

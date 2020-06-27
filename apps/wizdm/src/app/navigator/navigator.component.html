@@ -67,7 +67,7 @@
                 <mat-menu #menuSettings="matMenu">
 
                   <!-- The Admin button first -->
-                  <button mat-menu-item [routerLink]="msgs.setings?.admin?.link || 'admin'" *ngIf="user.admin$ | async">
+                  <button mat-menu-item [routerLink]="msgs.setings?.admin?.link || 'admin'" *ngIf="admin$ | async">
                     {{ msgs.setings?.admin?.label || 'Admin' }}
                   </button>
 

@@ -21,7 +21,7 @@ service firebase.storage {
     match /{userId}/{imageId} {
     
     	// Allows writing to the individual user only
-      allow write: if itsMe(userId);
+      allow write: if itsMe(userId) || itsRole('admin');
     }
   }
   
@@ -32,6 +32,11 @@ service firebase.storage {
   
   // Checks the authenticated user matches the given one
   function itsMe(userId) {
-  	return request.auth.uid == userId;
+  	return authenticated() && request.auth.uid == userId;
+  }
+  
+  // Checks the current authenticated user's token claims for role-based priviledges
+  function itsRole(role) {
+    return authenticated() && request.auth.token[role] == true;
   }
 }

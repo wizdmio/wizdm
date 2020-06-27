@@ -8,7 +8,7 @@ import { ReadmeModule } from '@wizdm/readme';
 import { DialogModule } from '@wizdm/dialog';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { ProfileFixerComponent } from './profile-fixer.component';
 

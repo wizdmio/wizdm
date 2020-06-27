@@ -2,7 +2,7 @@ import { take, startWith, map, tap, filter, switchMap, distinctUntilChanged } fr
 import { Component, AfterViewInit, Inject, ViewChild, NgZone } from '@angular/core';
 import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { dbChatter, dbConversation, dbMessage } from './chat-types';
-import { UserProfile } from 'app/navigator/providers/user-profile';
+import { UserProfile } from 'app/utils/user-profile';
 import { DatabaseService } from '@wizdm/connect/database';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
