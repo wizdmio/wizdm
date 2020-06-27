@@ -1,7 +1,7 @@
-import { OperatorFunction, merge } from 'rxjs';
 import { filter, pluck, auditTime, timeInterval } from 'rxjs/operators';
+import { MonoTypeOperatorFunction, merge } from 'rxjs';
 
-export function autocomplete<T>(time: number): OperatorFunction<T, T> {
+export function autocomplete<T>(time: number): MonoTypeOperatorFunction<T> {
   
   return source => merge( 
     // Pick the first value immediately whenever 'time' elapsed since last emission

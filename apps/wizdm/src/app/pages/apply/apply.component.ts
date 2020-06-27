@@ -1,6 +1,6 @@
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Component, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
-import { UserProfile, UserData } from 'app/navigator/providers/user-profile';
+import { UserProfile, UserData } from 'app/utils/user-profile';
 import { tap, switchMap, catchError } from 'rxjs/operators';
 import { EditableConverter } from 'app/utils/doc-converter';
 import { HttpErrorResponse } from '@angular/common/http';

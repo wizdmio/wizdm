@@ -1,4 +1,4 @@
-import { UserProfile } from 'app/navigator/providers/user-profile';
+import { UserProfile } from 'app/utils/user-profile';
 import { Component, Input } from '@angular/core';
 import { dbMessage } from '../chat-types';
 

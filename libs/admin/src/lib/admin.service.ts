@@ -50,4 +50,10 @@ export class AdminService {
 
     return this.http.delete<UserRecord>(`${this.endPoint}/users/${uid}`);
   }
+
+  /** Deletes a storage folder from the default bucket */
+  public deleteFolder(prefix: string): Observable<void> {
+
+    return this.http.delete<void>(`${this.endPoint}/folders/${prefix}`);
+  }
 }

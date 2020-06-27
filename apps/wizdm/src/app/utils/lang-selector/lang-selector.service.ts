@@ -1,7 +1,7 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { switchMap, map, take, distinctUntilChanged } from 'rxjs/operators';
-import { UserProfile } from 'app/navigator/providers/user-profile';
+import { UserProfile } from 'app/utils/user-profile';
 import { DateAdapter } from '@angular/material/core';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Injectable } from '@angular/core';

@@ -1,10 +1,10 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { BackLinkObserver, CloseLinkObserver } from './providers/action-links';
-import { LanguageSelector, WelcomeBack } from './providers/lang-selector';
+import { BackLinkObserver, CloseLinkObserver } from 'app/utils/action-links';
+import { LanguageSelector, WelcomeBack } from 'app/utils/lang-selector';
 import { matchUserNameOnly } from 'app/pages/profile/profile.module';
 import { matchFullPath } from 'app/pages/static/static.module';
 import { NavigatorComponent } from './navigator.component';
-import { Oauth2Handler } from './providers/oauth2-handler';
+import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from '@wizdm/actionlink';
 import { RedirectService } from '@wizdm/redirect';
 import { NgModule } from '@angular/core';

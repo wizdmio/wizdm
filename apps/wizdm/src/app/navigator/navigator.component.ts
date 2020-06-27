@@ -1,10 +1,11 @@
 import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } from 'rxjs';
 import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
-import { UserProfile } from 'app/navigator/providers/user-profile';
+import { UserProfile } from 'app/utils/user-profile';
 import { MediaObserver } from '@angular/flex-layout';
 import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
+import { AdminObservable } from 'app/utils/admin';
 import { runInZone } from 'app/utils/rxjs';
 
 
@@ -49,7 +50,8 @@ export class NavigatorComponent {
   constructor(private media: MediaObserver, 
               private scroller: ScrollDispatcher,
               private ruler: ViewportRuler,
-              readonly user: UserProfile, 
+              readonly user: UserProfile,
+              readonly admin$: AdminObservable,
               private zone: NgZone) {
 
     // Ensures the style being applied according to the animationFrameScheduler (so to say in-sync with the rendering)

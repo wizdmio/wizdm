@@ -1,4 +1,4 @@
-import { UserData, Users } from 'app/navigator/providers/user-profile';
+import { UserData, UserProfile } from 'app/utils/user-profile';
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
@@ -13,13 +13,13 @@ export class ProfileComponent  {
 
   readonly user$: Observable<UserData>;
 
-  public get me(): string { return this.users.me.uid; }
+  public get me(): string { return this.user.uid; }
 
-  constructor(readonly users: Users, route: ActivatedRoute) { 
+  constructor(readonly user: UserProfile, route: ActivatedRoute) { 
 
     this.user$ = route.paramMap.pipe( switchMap( params => 
-      users.fromUserName(params.get('userName')) || 
-      users.fromUserId(params.get('userId'))
+      user.fromUserName(params.get('userName')) || 
+      user.fromUserId(params.get('userId'))
     ));
   }
 }

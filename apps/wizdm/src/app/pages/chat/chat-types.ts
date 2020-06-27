@@ -1,5 +1,5 @@
 import { DocumentData } from '@wizdm/connect/database/document';
-import { UserData } from 'app/navigator/providers/user-profile';
+import { UserData } from 'app/utils/user-profile';
 
 export interface dbChatter extends UserData {
   lastConversation?: string;

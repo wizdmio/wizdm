@@ -9,7 +9,7 @@ import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { CanLeaveModule, CanLeaveGuard } from 'app/pages/guards/can-leave';
+import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UserPhotoModule } from './user-photo/user-photo.module';
 import { UserFormModule } from './user-form/user-form.module';

@@ -1,4 +1,4 @@
-import { UserProfile, UserData } from 'app/navigator/providers/user-profile';
+import { UserProfile, UserData } from 'app/utils/user-profile';
 import { UserFormComponent } from './user-form/user-form.component';
 import { Component, ViewChild } from '@angular/core';
 

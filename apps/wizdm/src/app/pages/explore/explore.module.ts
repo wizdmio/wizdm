@@ -11,8 +11,8 @@ import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
-import { AuthGuardModule } from 'app/pages/guards/auth-guard';
-import { ValidProfile } from 'app/pages/guards/valid-profile';
+import { AuthGuardModule } from 'app/utils/auth-guard';
+import { ValidProfile } from 'app/utils/user-profile';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { ExploreComponent } from './explore.component';
 

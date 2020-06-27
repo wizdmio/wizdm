@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { AuthGuard } from 'app/pages/guards/auth-guard';
+import { AuthGuard } from 'app/utils/auth-guard';
 import { AdminModule as AdminApiModule, authorized } from '@wizdm/admin';
 import { AdminComponent } from './admin.component';
 import { adminAPI, rootEmail } from 'env/secrets';
