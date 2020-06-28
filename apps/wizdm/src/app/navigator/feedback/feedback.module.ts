@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +17,7 @@ import { FeedbackComponent } from './feedback.component';
   imports: [
     CommonModule,
     RouterModule,
-    ReactiveFormsModule,
+    FormsModule,
     FlexLayoutModule,
     MatButtonModule,
     MatFormFieldModule,

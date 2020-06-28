@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserProfile } from 'app/utils/user-profile';
 import { MatDialog } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
@@ -26,26 +25,21 @@ export interface DorbellSubmit {
 })
 export class FeedbackComponent extends DialogComponent {
 
-  readonly form : FormGroup;
-  
+  public name: string;
+  public email: string;
+  public message: string;
   public files: FileList;
   public success = false;
   public sending = false;
   public sent = false;
-  
-  constructor(dialog: MatDialog, private builder: FormBuilder, private user: UserProfile, private doorbell: DoorbellService) { 
+
+  constructor(dialog: MatDialog, private user: UserProfile, private doorbell: DoorbellService) { 
     super(dialog);
 
-    this.panelClass = ['wm-feedback', 'wm-theme-colors'];
-    
-    this.form = this.builder.group({
-      'name'   : [ '' ],
-      'email'  : [ '', [ Validators.required, Validators.email ] ],
-      'message': [ '', Validators.required ]
-    });
+    this.panelClass = ['wm-feedback', 'wm-theme-colors'];    
   }
 
-  get member() { return this.user.data || {}; }
+  get me() { return this.user.data || {}; }
   
   get authenticated() { return this.user.auth.authenticated; }
 
@@ -68,11 +62,10 @@ export class FeedbackComponent extends DialogComponent {
     this.sending = this.sent = false;
 
     // Initializes the form with the authenticated user name/email when available
-    this.form.setValue({
-      name: this.member.name || '',
-      email: this.member.email || '',
-      message: ''
-    });
+    this.name = this.me.fullName || this.me.name || '';
+    this.email = this.me.email || '';
+    this.message = '';
+    this.files = null;
 
     // Opens the form dialog
     const ref = super.open();
@@ -82,19 +75,6 @@ export class FeedbackComponent extends DialogComponent {
       // Call the Doorbell restful api and emit the result
       this.doorbell.ring().then( success => this.feedbackOpen.emit(success) ) 
     );
-
-    // Resets the form on closed
-    ref.afterClosed().subscribe( () => {
-      
-      // Resets the form fields
-      this.form.reset();
-
-      // Resets attachments
-      this.files = null;
-      
-      // Re-enables the form
-      this.form.enable();
-    });
 
     return ref;
   }
@@ -106,20 +86,19 @@ export class FeedbackComponent extends DialogComponent {
     // Turns the sending flag on
     this.sending = true;
 
-    // Disables the form whie sending
-    this.form.disable();
-
     // Submit the feedback report to Doorbell.io
     this.doorbell.submit({ 
 
-      // Spreads the feedback form data
-      ...this.form.value,
+      // Main form data
+      name: this.name,
+      email: this.email,
+      message: this.message,
       
       // Adds the current language
       language,
 
       // Includes the user id when available
-      properties: this.authenticated ? { userId: this.member.id } : undefined
+      properties: this.authenticated ? { userId: this.me.id } : undefined
     
     }, this.files).then( success => {
 
