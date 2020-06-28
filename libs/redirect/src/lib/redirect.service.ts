@@ -52,7 +52,7 @@ export class RedirectService implements CanActivate {
   public navigate(url: string, extras?: RedirectionExtras): Promise<boolean> {
 
     // Compose the url link for redirection
-    const link = this.external(url) ? this.externalUrl(url, extras.target) : this.internalUrl(url);
+    const link = this.external(url) ? this.externalUrl(url, extras?.target) : this.internalUrl(url);
 
     // Navigates with the router activating the redirection guard
     return this.router.navigateByUrl(link, extras);

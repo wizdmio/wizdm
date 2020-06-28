@@ -214,26 +214,23 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
     // Skips invalid user names
     if(!userName) { return of(null); }
 
-    return defer( () => {
+    // Returns the cached observable, if any
+    const cached = this.cache[userName];
+    if(cached) { return cached; }
 
-      // Returns the cached observable, if any
-      const cached = this.cache[userName];
-      if(cached) { return cached; }
+    // Streams a new observable from the user's collection acching a copy for further uses
+    const streamed = this.cache[userName] = this.stream( qf => qf.where('userName', '==', userName) ).pipe( 
 
-      // Streams a new observable from the user's collection acching a copy for further uses
-      const streamed = this.cache[userName] = this.stream( qf => qf.where('userName', '==', userName) ).pipe( 
+      // Gets the user's data
+      map( users => users[0] ), 
+      
+      // Caches the same observable under its uid whenever possible
+      tapOnce( data => { data && (this.cache[data.id] = this.cache[data.id] || streamed); } ),
 
-        // Gets the user's data
-        map( users => users[0] ), 
-        
-        // Caches the same observable under its uid whenever possible
-        tapOnce( data => { data && (this.cache[data.id] = this.cache[data.id] || streamed); } ),
+      // Replays the emission to avoid streaming multiple copies from the database when not needed
+      shareReplay({ bufferSize: 1, refCount: false })
+    );
 
-        // Replays the emission to avoid streaming multiple copies from the database when not needed
-        shareReplay({ bufferSize: 1, refCount: false })
-      );
-
-      return streamed;
-    });
+    return streamed;
   }
 }

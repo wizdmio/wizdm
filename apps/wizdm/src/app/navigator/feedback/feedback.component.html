@@ -31,40 +31,40 @@
     </ng-template>
 
     <!-- Feedback form to fill-in -->
-    <form [formGroup]="form" (ngSubmit)="send(lang)" *ngIf="!sent; else thankYou">
+    <form (ngSubmit)="send(lang)" *ngIf="!sent; else thankYou" [disabled]="sending" #form="ngForm">
 
       <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
 
         <!-- Name -->
-        <mat-form-field appearance="outline" [fxHide]="authenticated">
+        <mat-form-field appearance="outline">
           <mat-label>{{ msgs.name?.label || 'Name' }}</mat-label>
-          <input matInput formControlName="name">
+          <input matInput [(ngModel)]="name" name="name" [disabled]="authenticated">
           <mat-hint>{{ msgs.name?.hint }}</mat-hint>
         </mat-form-field>
     
         <!-- Email -->
-        <mat-form-field appearance="outline" [fxHide]="authenticated">
+        <mat-form-field appearance="outline">
           <mat-label>{{ msgs.email?.label || 'Email' }}</mat-label>
-          <input matInput formControlName="email">
+          <input matInput [(ngModel)]="email" name="email" [disabled]="authenticated && !!me.email" required email #emailInput="ngModel">
           <mat-hint>{{ msgs.email?.hint }}</mat-hint>
-          <mat-error *ngIf="form.controls['email'].errors?.required">{{ msgs.email?.errors?.required || 'Email required' }}</mat-error>
-          <mat-error *ngIf="form.controls['email'].errors?.email">{{ msgs.email?.errors?.invalid || 'Invalid email' }}</mat-error>
+          <mat-error *ngIf="emailInput.errors?.required">{{ msgs.email?.errors?.required || 'Email required' }}</mat-error>
+          <mat-error *ngIf="emailInput.errors?.email">{{ msgs.email?.errors?.invalid || 'Invalid email' }}</mat-error>
         </mat-form-field>
 
         <!-- Message -->
         <mat-form-field appearance="outline">
           <mat-label>{{ msgs.message?.label || 'Message' }}</mat-label>
-          <textarea matInput formControlName="message" rows="5" cdkFocusInitial></textarea>
+          <textarea matInput [(ngModel)]="message" name="message" rows="5" required cdkFocusInitial #messageInput="ngModel"></textarea>
           <mat-hint>{{ msgs.message?.hint }}</mat-hint>
-          <mat-error *ngIf="form.controls['message'].errors?.required">{{ msgs.message?.errors?.required || 'Message required' }}</mat-error>
+          <mat-error *ngIf="messageInput.errors?.required">{{ msgs.message?.errors?.required || 'Message required' }}</mat-error>
         </mat-form-field>
 
         <!-- Attachments -->
         <ng-container *ngIf="msgs.attachments && msgs.attachments.enable">
 
-          <input style="display:none" type="file" multiple (change)="files = $event.target?.files" #openfile />
+          <input style="display:none" type="file" multiple (change)="files = $event.target.files" #openfile />
           
-          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" (click)="openfile.click()" [attr.disabled]="sending">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" (click)="openfile.value=''; openfile.click()" [attr.disabled]="sending">
 
             <wm-icon [icon]="msgs.attachments.icon || 'attach_file'"></wm-icon>
 
