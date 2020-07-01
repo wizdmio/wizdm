@@ -1,50 +1,37 @@
-import { CollectionRef, QuerySnapshot, QueryDocumentSnapshot, QueryFn, Query } from './types';
-import { fromRef, mapDocumentChanges, mapSnaphotData } from './utils';
+import { QueryDocumentSnapshot, QueryFn, QueryRef } from './types';
 import { DatabaseApplication } from '../database-application';
+import { query, snap, stream, data } from'./operators';
 import { DocumentData } from '../document';
-import { map, scan } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { refError } from './utils';
 
 /** Query of Collection(s) object in the database */
-export class DatabaseQuery<T extends DocumentData> {
+export class DatabaseQuery<T extends DocumentData> extends Observable<QueryRef<T>> {
 
-  constructor(readonly db: DatabaseApplication, public ref: CollectionRef<T>|Query<T>) {}
+  public get ref(): QueryRef<T> { return this._ref; }
 
-  /**
-   * Returns a Promise of the collection content as a snapshot
-   * @param qf the optional query funciton
-   */
-  public snap(qf?: QueryFn<T>): Promise<QuerySnapshot<T>> {
-    // Assosiates the query to the collection ref, if any
-    const ref = qf ? qf(this.ref) : this.ref;
-    // Gets the document snapshot
-    return ref ? ref.get() : Promise.reject( new Error("Collection reference null or undefined") );
+  constructor(readonly db: DatabaseApplication, protected _ref: QueryRef<T>) {
+    super( observer => ( _ref ? of(_ref) : refError() ).subscribe(observer) );
+  }
+
+  public snap(qf?: QueryFn<T>): Promise<QueryDocumentSnapshot<T>[]> {
+    return this.pipe( query(qf), snap() ).toPromise();
   }
 
   /**
-   * Returns a Promise of the collection content as an array.
+   * Returns the collection content once.
    * @param qf the optional query funciton
    */
   public get(qf?: QueryFn<T>): Promise<T[]> {
-    // Gets the document snapshot
-    return this.snap(qf).then( snapshot => { 
-      // Maps the snapshot in the DocumentData-like content
-      return snapshot.docs.map( doc => mapSnaphotData(doc) ); 
-    });
+    return this.pipe( query(qf), snap(), data() ).toPromise();
   }
 
   /**
-   * Queries the collection content as an array into an observable of DocumentSnapshots.
+   * Queries the collection content as an array into an observable of snapshots
    * @param qf the optional filtering funciton
    */
-  public query(qf?: QueryFn<T>): Observable<QueryDocumentSnapshot<T>[]> {    
-    // Associates the query (if any) to the collection ref
-    return fromRef<T>(!!qf ? qf(this.ref) : this.ref, this.db.zone).pipe( 
-      // Maps the snapshot into document changes
-      map( snapshot => snapshot.docChanges() ),
-      // Combines the latest changes with the previous snapshots
-      scan( (combined, changes) => mapDocumentChanges(combined, changes), [] )
-    );
+  public query(qf?: QueryFn<T>): Observable<QueryDocumentSnapshot<T>[]> {
+    return this.pipe( query(qf), stream(this.db.zone) );
   }
 
   /**
@@ -52,14 +39,6 @@ export class DatabaseQuery<T extends DocumentData> {
    * @param qf the optional filtering funciton
    */
   public stream(qf?: QueryFn<T>): Observable<T[]> {
-    // Queries for the document snapshots
-    return this.query(qf).pipe( 
-      // Maps the snapshots into data content
-      map( snapshots => {
-        return snapshots.map( snapshot => {
-          return mapSnaphotData(snapshot);
-        }); 
-      }) 
-    );
+    return this.pipe( query(qf), stream(this.db.zone), data() );
   }
 }

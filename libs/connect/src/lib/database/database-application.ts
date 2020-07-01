@@ -1,7 +1,6 @@
 import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './collection';
 import { DistributedCounter, CounterShard } from './counter';
 import { DatabaseDocument, DocumentRef } from './document'
-import { PagedCollection } from './paged-collection';
 import { FirebaseApp } from '../connect.module';
 import { firestore } from 'firebase/app';
 import { NgZone } from '@angular/core';
@@ -96,6 +95,5 @@ export abstract class DatabaseApplication {
   public abstract document<T>(path: string|DocumentRef<T>): DatabaseDocument<T>;
   public abstract collection<T>(path: string|CollectionRef<T>): DatabaseCollection<T>;
   public abstract collectionGroup<T>(groupId: string|Query<T>): DatabaseGroup<T>;
-  public abstract pagedCollection<T>(path: string|CollectionRef<T>): PagedCollection<T>;
   public abstract counter(path: string|CollectionRef<CounterShard>, shards: number): DistributedCounter;
 }

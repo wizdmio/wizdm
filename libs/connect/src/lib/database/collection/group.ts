@@ -6,14 +6,10 @@ import { Query } from './types';
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseGroup<T extends DocumentData> extends DatabaseQuery<T> {
 
-  public ref: Query<T>;
+  public get ref(): Query<T> { return this._ref as Query<T>; }
 
-  constructor(db: DatabaseApplication, ref?: string|Query<T>) {
-    super(db, db.group(ref) );
-  }
-
-  /** Applies the given reference to this object */
-  public from(ref: string|Query<T>): Query<T> {
-    return this.ref = this.db.group(ref);
+  constructor(db: DatabaseApplication, pathOrRef?: string|Query<T>) {
+    
+    super(db, db.group(pathOrRef) );
   }
 }
