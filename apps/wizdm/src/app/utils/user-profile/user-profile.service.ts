@@ -143,7 +143,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
   public doesUserNameExists(userName: string, excludeMe?: boolean): Promise<boolean> {
 
     return this.snap( qf => qf.where('userName', '==', userName.replace(/\s*/g,'') ) )
-      .then( snap => snap.size > 0 && (snap.docs[0].id !== this.uid || !excludeMe) );
+      .then( docs => docs.length > 0 && (docs[0].id !== this.uid || !excludeMe) );
   }
 
   /** Guesses a plausible @username from the fullName */

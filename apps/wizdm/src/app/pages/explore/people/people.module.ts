@@ -7,9 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { GtagModule } from '@wizdm/gtag';
 import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
+import { AvatarModule } from '@wizdm/elements/avatar';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { HighlightModule } from '@wizdm/elements/highlight';
 import { ActionbarModule } from 'app/navigator/actionbar';
@@ -35,9 +37,11 @@ const routes: RoutesWithContent = [{
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatListModule,
     GtagModule,
     ReadmeModule,
     IconModule,
+    AvatarModule,
     ButtonChangerModule,
     HighlightModule,
     //ActionbarModule,

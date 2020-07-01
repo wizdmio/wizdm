@@ -46,7 +46,7 @@ export class PostComponent extends DatabaseDocument<PostData> {
   @Input() set post(snapshot: QueryDocumentSnapshot<PostData>) { 
 
     // Assosiates the document DB reference with this DatabaseDocument instance 
-    this.from(snapshot.ref);
+    this.ref = snapshot.ref;
 
     // Gets the data
     this.data = snapshot.data();

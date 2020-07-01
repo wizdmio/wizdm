@@ -7,27 +7,42 @@
 
     <mat-form-field>
 
-      <mat-label>{{ msgs.search?.label || 'Name' }}</mat-label>
+      <mat-label>{{ msgs.search?.label || 'Search' }}</mat-label>
+      
+      <wm-icon matPrefix [icon]="msgs.search?.icon || 'search'"></wm-icon>
       
       <input matInput name="name" [ngModel]="name" (ngModelChange)="search$.next(name = $event)" #formName="ngModel">
 
-      <!--mat-error *ngIf="!formName.valid"></mat-error-->
-      
       <mat-hint>{{ msgs.search?.hint || 'Type the name to search for' }}</mat-hint>
   
     </mat-form-field>
 
   </form>
 
-  <div *ngFor="let result of results$ | async">
+  <!-- Search result list -->
+  <mat-action-list>
 
-    <span *ngIf="result.data() as data"
-          wm-highlight="{{ data.fullName || data.name }}"
-          [pattern]="highlight" 
-          color="primary">
-    </span>
+    <mat-list-item *ngFor="let item of items$ | async; trackBy: trackById" [routerLink]="['/', '@' + item.userName]">
 
-  </div>
+      <wm-avatar matListAvatar [src]="item.photo" color="primary"></wm-avatar>
 
+      <h3 matLine [wm-highlight]="item.fullName || item.name" [pattern]="highlight" color="accent"></h3>
+      
+      <p matLine>{{ item.bio || item.motto }}</p>
+
+    </mat-list-item>
+
+    <!-- Loading skeleton items -->
+    <mat-list-item class="loading" *ngFor="let item of loading$ | async">
+  
+      <wm-avatar matListAvatar></wm-avatar>
+      
+      <h3 matLine class="text"><span></span></h3>
+      
+      <p matLine class="text"><span></span></p>
+  
+    </mat-list-item>
+    
+  </mat-action-list>
   
 </ng-container>
