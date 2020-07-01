@@ -37,7 +37,7 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
       // Filters null values
       filter( conv => !!conv ), 
       // Wraps the conversation as this
-      tap( conv => this.from(`conversations/${conv.id}`) ) 
+      tap( conv => this.ref = this.db.doc(`conversations/${conv.id}`) ) 
     ); 
 
     // The conversation's messages collection

@@ -1,0 +1,7 @@
+{
+  "search": { 
+    "label": "Search", 
+    "icon": "fas:fa-search",
+    "hint": "Type the name to search for" 
+  }
+}

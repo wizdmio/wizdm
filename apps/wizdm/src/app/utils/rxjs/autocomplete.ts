@@ -1,4 +1,4 @@
-import { filter, pluck, auditTime, timeInterval } from 'rxjs/operators';
+import { filter, pluck, skip, auditTime, timeInterval } from 'rxjs/operators';
 import { MonoTypeOperatorFunction, merge } from 'rxjs';
 
 export function autocomplete<T>(time: number): MonoTypeOperatorFunction<T> {
@@ -9,11 +9,11 @@ export function autocomplete<T>(time: number): MonoTypeOperatorFunction<T> {
       
       timeInterval(),
 
-      filter( payload => payload.interval >= time ),
+      filter( payload => payload.interval === 0 || payload.interval >= time ), 
 
       pluck('value')
     ),
     // Audits every 'time' than
-    source.pipe( auditTime(time) )
+    source.pipe( auditTime(time), skip(1) ) 
   );
 }
