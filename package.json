@@ -83,7 +83,6 @@
     "protractor": "^5.4.1",
     "scss-bundle": "^3.1.1",
     "ts-node": "~7.0.0",
-    "tsickle": "^0.38.1",
     "tslint": "~6.1.0",
     "typescript": "~3.8.3"
   }
