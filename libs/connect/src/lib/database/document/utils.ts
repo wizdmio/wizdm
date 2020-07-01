@@ -2,6 +2,10 @@ import { DocumentRef, DocumentSnapshot, DocumentData } from './types';
 import { Observable, throwError } from 'rxjs';
 import { NgZone } from '@angular/core';
 
+export function refReject(): Promise<never> {
+  return Promise.reject( new Error('Document reference is null or undefined') );
+}
+
 /** Builds an Observable od DocumentSnapshots from a Document ref */
 export function fromRef<T>(ref: DocumentRef<T>, zone: NgZone): Observable<DocumentSnapshot<T>> {
   // Throw an error when the referencec is missing

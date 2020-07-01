@@ -1,8 +1,8 @@
-import { DocumentRef, DocumentSnapshot, SnapOptions, DocumentData } from './types';
+import { DocumentRef, DocumentSnapshot, GetOptions, DocumentData } from './types';
 import { DatabaseCollection, CollectionRef } from '../collection';
 import { DistributedCounter, CounterShard } from '../counter';
 import { DatabaseApplication } from '../database-application';
-import { fromRef, mapSnaphotData } from './utils';
+import { fromRef, mapSnaphotData, refReject } from './utils';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -12,13 +12,8 @@ export class DatabaseDocument<T extends DocumentData> {
    /** The internal document reference */
   public ref: DocumentRef<T>;
 
-  constructor(readonly db: DatabaseApplication, ref?: string|DocumentRef<T>) {
-    this.from(ref);
-  }
-
-  /** Applies the given reference to this object */
-  public from(ref: string|DocumentRef<T>): DocumentRef<T> {
-    return this.ref = this.db.doc(ref);
+  constructor(readonly db: DatabaseApplication, pathOrRef?: string|DocumentRef<T>) {
+    this.ref = db.doc(pathOrRef);
   }
 
   /** Returns the document object id */
@@ -48,14 +43,11 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public set(data: T): Promise<void> {
 
-    // Short-circuits the undefined ref
-    if(!this.ref) { return Promise.reject(); }
-
     const timestamp = this.db.timestamp;
-    return this.ref.set({
+    return this.ref ? this.ref.set({
       ...data as any,
       created: timestamp
-    } as T);
+    } as T) : refReject();
   }
 
   /**
@@ -64,14 +56,11 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public merge(data: T): Promise<void> {
     
-    // Short-circuits the undefined ref
-    if(!this.ref) { return Promise.reject(); }
-
     const timestamp = this.db.timestamp;
-    return this.ref.set({
+    return this.ref ? this.ref.set({
       ...data as any,
       updated: timestamp
-    } as T, { merge: true } );
+    } as T, { merge: true } ) : refReject();
   }
 
   /**
@@ -80,20 +69,17 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public update(data: T): Promise<void> {
 
-    // Short-circuits the undefined ref
-    if(!this.ref) { return Promise.reject(); }
-
     const timestamp = this.db.timestamp;
-    return this.ref.update({
+    return this.ref ? this.ref.update({
       ...data as any,
       updated: timestamp
-    } as T);
+    } as T) : refReject();
   }
 
   /** Check for document existance */
   public exists(): Promise<boolean> {
     // Short-circuits the undefined ref
-    return !!this.ref ? this.ref.get().then(snap => snap.exists) : Promise.resolve(false);
+    return this.ref ? this.ref.get().then(snap => snap.exists) : Promise.resolve(false);
   }
 
   /**
@@ -107,27 +93,29 @@ export class DatabaseDocument<T extends DocumentData> {
   }
 
   /** Returns the document snapshot immediately */
-  public snap(options?: SnapOptions): Promise<DocumentSnapshot<T>> {
+  public snap(options?: GetOptions): Promise<DocumentSnapshot<T>> {
     // Short-circuits the undefined ref
-    return this.ref ? this.ref.get(options) : Promise.reject( new Error("Document reference null or undefined") );
+    return this.ref ? this.ref.get(options) : refReject();
   }
 
   /** Returns the document content immediately */
-  public get(): Promise<T> {
-    return this.snap().then( snapshot => mapSnaphotData(snapshot) );  
+  public get(options?: GetOptions): Promise<T> {
+    return this.snap(options).then( snapshot => mapSnaphotData(snapshot) );  
+  }
+
+  /** Applies the given reference to this object */
+  public from(pathOrRef: string|DocumentRef<T>): Observable<DocumentSnapshot<T>> {
+    return fromRef<T>(this.db.doc(pathOrRef), this.db.zone);
   }
 
   /** Streams the document content with an observable */
   public stream(): Observable<T> {
-    // Builds an Observable from the ref
-    return fromRef<T>(this.ref, this.db.zone).pipe( 
-      // Maps the snapshot to the data content
-      map( snapshot => mapSnaphotData(snapshot) )
-    );
+    // Maps the snapshot to the data content
+    return this.from(this.ref).pipe( map( snapshot => mapSnaphotData(snapshot) ));
   }
 
   /** Deletes the document */
   public delete(): Promise<void> {
-    return !!this.ref ? this.ref.delete() : Promise.reject();
+    return this.ref ? this.ref.delete() : refReject();
   }
 }

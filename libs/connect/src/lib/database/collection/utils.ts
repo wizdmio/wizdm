@@ -3,6 +3,10 @@ import { Observable, throwError } from 'rxjs';
 import { DocumentData } from '../document';
 import { NgZone } from '@angular/core';
 
+export function refError(): Observable<never> {
+  return throwError(new Error("Collection or query reference null or undefined") );
+}
+
 /** Builds an Observable of QuerySnaphots from a collection (or query) ref*/
 export function fromRef<T>(ref: CollectionRef<T>|Query<T>, zone: NgZone): Observable<QuerySnapshot<T>> {
   // Throw an error when the referencec is missing

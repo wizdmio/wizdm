@@ -4,7 +4,6 @@ import { DatabaseApplication, PersistenceSettings } from './database-application
 import { DistributedCounter, CounterShard } from './counter';
 import { DatabaseDocument, DocumentRef } from './document'
 import { APP, FirebaseApp } from '../connect.module';
-import { PagedCollection } from './paged-collection';
 
 export const PERSISTENCE_SETTINGS = new InjectionToken<PersistenceSettings>('wizdm.connect.database.persistence');
 
@@ -38,14 +37,6 @@ export class DatabaseService extends DatabaseApplication {
    */
   public collectionGroup<T>(groupId: string|Query<T>): DatabaseGroup<T> {
     return new DatabaseGroup<T>(this, groupId);
-  }
-
-  /**
-   * Creates and returns a collection paginating the stream of documents.
-   * @param path the path to the collection
-   */
-  public pagedCollection<T>(path: string|CollectionRef<T>): PagedCollection<T> {
-    return new PagedCollection<T>(this, path);
   }
 
   /**

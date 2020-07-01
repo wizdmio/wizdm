@@ -1,22 +1,19 @@
+import { DatabaseApplication } from '../database-application';
 import { switchMap, expand, takeWhile } from 'rxjs/operators';
 import { DatabaseDocument, DocumentData } from '../document';
-import { DatabaseApplication } from '../database-application';
-import { Observable, from, of } from 'rxjs';
-import { DatabaseQuery } from './query';
+import { limit, snap } from './operators';
 import { CollectionRef } from './types';
+import { DatabaseQuery } from './query';
+import { Observable } from 'rxjs';
 
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T> {
 
-  public ref: CollectionRef<T>;
+  public get ref(): CollectionRef<T>{ return this._ref as CollectionRef<T>; }
 
-  constructor(db: DatabaseApplication, ref?: string|CollectionRef<T>) {
-    super(db, db.col(ref) );
-  }
-
-  /** Applies the given reference to this object */
-  public from(ref: string|CollectionRef<T>): CollectionRef<T> {
-    return this.ref = this.db.col(ref);
+  constructor(db: DatabaseApplication, pathOrRef?: string|CollectionRef<T>) {
+    // Builds the query observalbe first
+    super(db, db.col(pathOrRef)); 
   }
 
   /** Returns the collection object id */
@@ -55,24 +52,24 @@ export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T>
    */
   public wipe(batchSize: number = 20): Promise<void> {
     // Starts by pushing whatever value
-    return of(batchSize).pipe(
+    return this.wipeBatch(batchSize).pipe(
       // Recursively delete the next batches 
       expand(() => this.wipeBatch(batchSize) ),
-      takeWhile( val => val >= batchSize )
-    ).toPromise().then( () => null );
+      // Stops when done
+      takeWhile( length => length >= batchSize )
+    // Returns as a promise
+    ).toPromise() as any;
   }
 
   // Detetes documents as batched transaction
   private wipeBatch(batchSize: number): Observable<number> {
     // Makes sure to limit the request up to bachSize documents
-    return from( this.ref.limit(batchSize).get() ).pipe( switchMap(snapshot => {
+    return this.pipe( limit(batchSize), snap(), switchMap( docs => {
       // Delete documents in a batch
       const batch = this.db.batch();
-      snapshot.forEach(doc => {
-        batch.delete(doc.ref);
-      });
+      docs.forEach( doc => batch.delete(doc.ref) );
       // Commits the batch write and returns the snapshot length
-      return batch.commit().then(() => snapshot.size);
+      return batch.commit().then( () => docs.length ) ;
     }));
   }
 }
