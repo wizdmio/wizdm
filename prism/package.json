@@ -1,0 +1,26 @@
+{
+  "name": "@wizdm/prism",
+  "description": "Syntax Highlighting in Angular",
+  "version": "2.0.0",
+  "license": "MIT",
+  "keywords": ["Angular", "Prism", "Syntax highlighting"],
+  "homepage": "https://wizdm.io/docs/content/prism",
+  "dependencies": {
+    "tslib": "^2.0.0",
+    "prismjs": "^1.17.1"
+  },
+  "peerDependencies": {
+    "@angular/common": "^10.0.2",
+    "@angular/core": "^10.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/libs/prism"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
+  }
+}

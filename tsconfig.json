@@ -1,51 +1,89 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "sourceMap": true,
-    "declaration": false,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "target": "es2015",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2018", "dom"],
-    "paths": {
-      "app/*": ["apps/wizdm/src/app/*"],
-      "env/*":["apps/wizdm/src/environments/*"],
-      "@wizdm/actionlink": ["libs/actionlink/src/index.ts"],
-      "@wizdm/animate": ["libs/animate/src/index.ts"],
-      "@wizdm/content": ["libs/content/src/index.ts"],
-      "@wizdm/connect": ["libs/connect/src/index.ts"],
-      "@wizdm/connect/*": ["libs/connect/src/lib/*"],
-      "@wizdm/dialog": ["libs/dialog/src/index.ts"],
-      "@wizdm/teleport": ["libs/teleport/src/index.ts"],
-      "@wizdm/redirect": ["libs/redirect/src/index.ts"],
-      "@wizdm/elements": ["libs/elements/src/lib/index.ts"],
-      "@wizdm/elements/*": ["libs/elements/src/lib/*"],
-      "@wizdm/markdown": ["libs/markdown/src/index.ts"],
-      "@wizdm/markdown/*": ["libs/markdown/src/lib/*"],
-      "@wizdm/prism": ["libs/prism/src/index.ts"],
-      "@wizdm/editable": ["libs/editable/src/index.ts"],
-      "@wizdm/editable/*": ["libs/editable/src/lib/*"],
-      "@wizdm/doorbell": ["libs/doorbell/src/index.ts"],
-      "@wizdm/doorbell/*": ["libs/doorbell/src/lib/*"],
-      "@wizdm/paypal": ["libs/paypal/src/index.ts"],
-      "@wizdm/stripe": ["libs/stripe/src/index.ts"],
-      "@wizdm/ipinfo": ["libs/ipinfo/src/index.ts"],
-      "@wizdm/ipinfo/*": ["libs/ipinfo/src/lib/*"],
-      "@wizdm/gtag": ["libs/gtag/src/index.ts"],
-      "@wizdm/emoji": ["libs/emoji/src/lib/index.ts"],
-      "@wizdm/emoji/*": ["libs/emoji/src/lib/*"],
-      "@wizdm/readme": ["libs/readme/src/index.ts"],
-      "@wizdm/pipes/*": ["libs/pipes/src/lib/*"],
-      "@wizdm/download": ["libs/download/src/index.ts"],
-      "@wizdm/admin": ["libs/admin/src/index.ts"]
+  "files": [],
+  "references": [
+    {
+      "path": "./wizdm/tsconfig.app.json"
+    },
+    {
+      "path": "./wizdm/tsconfig.spec.json"
+    },
+    {
+      "path": "./wizdm-e2e/tsconfig.e2e.json"
+    },
+    {
+      "path": "./actionlink/tsconfig.lib.json"
+    },
+    {
+      "path": "./admin/tsconfig.lib.json"
+    },
+    {
+      "path": "./animate/tsconfig.lib.json"
+    },
+    {
+      "path": "./connect/tsconfig.lib.json"
+    },
+    {
+      "path": "./content/tsconfig.lib.json"
+    },
+    {
+      "path": "./dialog/tsconfig.lib.json"
+    },
+    {
+      "path": "./doorbell/tsconfig.lib.json"
+    },
+    {
+      "path": "./download/tsconfig.lib.json"
+    },
+    {
+      "path": "./editable/tsconfig.lib.json"
+    },
+    {
+      "path": "./elements/tsconfig.lib.json"
+    },
+    {
+      "path": "./emoji/tsconfig.lib.json"
+    },
+    {
+      "path": "./gtag/tsconfig.lib.json"
+    },
+    {
+      "path": "./ipinfo/tsconfig.lib.json"
+    },
+    {
+      "path": "./markdown/tsconfig.lib.json"
+    },
+    {
+      "path": "./paypal/tsconfig.lib.json"
+    },
+    {
+      "path": "./pipes/tsconfig.lib.json"
+    },
+    {
+      "path": "./prism/tsconfig.lib.json"
+    },
+    {
+      "path": "./readme/tsconfig.lib.json"
+    },
+    {
+      "path": "./redirect/tsconfig.lib.json"
+    },
+    {
+      "path": "./stripe/tsconfig.lib.json"
+    },
+    {
+      "path": "./teleport/tsconfig.lib.json"
+    },
+    {
+      "path": "./test/tsconfig.lib.json"
+    },
+    {
+      "path": "./test/tsconfig.spec.json"
+    },
+    {
+      "path": "./emoji2/tsconfig.lib.json"
+    },
+    {
+      "path": "./emoji2/tsconfig.spec.json"
     }
-  },
-  "exclude": ["node_modules", "tmp", ".tmp", ".experiments"]
+  ]
 }
