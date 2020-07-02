@@ -1,0 +1,23 @@
+{
+  "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../dist/markdown",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "@wizdm/prism": "wizdm-prism",
+      "@wizdm/emoji/text": "wizdm-emoji-text",
+      "@wizdm/emoji/names": "wizdm-emoji-names",
+      "remark-parse": "remark-parse",
+      "remark-align": "remark-align",
+      "remark-sub-super": "remark-sub-super",
+      "unified": "unified"
+    }
+  },
+  "whitelistedNonPeerDependencies": [
+    "path", 
+    "remark-align", 
+    "remark-parse", 
+    "remark-sub-super", 
+    "unified"
+  ]
+}

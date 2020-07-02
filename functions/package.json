@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "tslint --project tsconfig.json",
+    "lint": "tslint --project tsconfig.base.json",
     "clean": "rm -rf lib/",
     "build": "npm run clean && tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
