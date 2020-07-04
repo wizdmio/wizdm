@@ -1,3 +1,4 @@
+
 :host {
   
   // Let's the navigator stretch to fill all the available space
@@ -7,9 +8,6 @@
 
   display: flex;
   flex-flow: column;
-
-  // Settle a lower general zindex (1)
-  z-index: 1;
 
   // Mobile menu backdrop
   .backdrop {
@@ -72,15 +70,19 @@
     width: 100%;
     min-height: 100%;
 
+    // Makes sure to see trought the background from the body
+    background-color: transparent;
+
     .mat-sidenav { 
-      min-width: 240px; 
+      //min-width: 240px; 
       overflow: visible;
       box-sizing: border-box;
 
       .sidenav-toggler {
         // Centers the toggler vertically
         position: absolute;
-        right: -20px; bottom: 50%;
+        right: -20px; 
+        bottom: 50%;
         // Keeps the toggler visible even while the panel is hidden
         visibility: visible;
         // Right side only shadow
@@ -107,6 +109,52 @@
       overflow: hidden; 
 
       .page { position: relative; }
+
+      // Overrides the mat-sidenav-content transition making sure to align with the sticky-footer
+      transition: { duration: 400ms; timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); property: margin; }
     }
   }
+
+  // Sticky footer adapting to the mat-sidenav-content
+  .sticky-footer {
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    // Applies the very same transition used by the mat-sidenav-content
+    transition: { duration: 400ms; timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); property: margin; }
+  }
+
+  // Page fab overlay
+  .fab-overlay {
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 2;
+
+    pointer-events: none;
+
+    .fab-container { 
+
+      position: absolute;
+      pointer-events: all; 
+      margin: 16px; 
+
+      &[side="left"] { left: 0; }
+      &[side="right"] { right: 0; }
+
+      &[edge="top"] { top: 0; }
+      &[edge="bottom"] { bottom: 0; }
+    }
+
+    // Applies the very same transition used by the mat-sidenav-content
+    transition: { duration: 400ms; timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); property: margin; }
+  }
 }
+

@@ -10,7 +10,6 @@ import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { IconModule } from '@wizdm/elements/icon';
 import { FooterComponent } from './footer.component';
 
-
 @NgModule({
   
   imports: [

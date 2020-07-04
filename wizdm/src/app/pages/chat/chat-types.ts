@@ -1,11 +1,11 @@
 import { DocumentData } from '@wizdm/connect/database/document';
 import { UserData } from 'app/utils/user-profile';
 
-export interface dbChatter extends UserData {
+export interface ChatterData extends UserData {
   lastConversation?: string;
 }
 
-export interface dbMessage  extends DocumentData {
+export interface MessageData extends DocumentData {
   
   body: string;
   
@@ -14,7 +14,7 @@ export interface dbMessage  extends DocumentData {
   timestamp?: string;
 }
 
-export interface dbConversation extends DocumentData {
+export interface ConversationData extends DocumentData {
   
   recipients: string[];
   

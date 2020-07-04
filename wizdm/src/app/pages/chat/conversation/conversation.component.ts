@@ -1,28 +1,28 @@
 import { map, tap, filter, switchMap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
 import { Observable, BehaviorSubject, of, from, combineLatest } from 'rxjs';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { dbChatter, dbConversation, dbMessage } from '../chat-types';
+import { ChatterData, ConversationData, MessageData } from '../chat-types';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
 import { UserProfile } from 'app/utils/user-profile';
 import { DatabaseService } from '@wizdm/connect/database';
 
 @Component({
-  selector: 'wm-chat-conversation',
+  selector: 'wm-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss']
 })
-export class ChatConversation extends DatabaseDocument<dbConversation> {
+export class Conversation extends DatabaseDocument<ConversationData> {
 
-  private input$ = new BehaviorSubject<dbConversation>(undefined);
+  private input$ = new BehaviorSubject<ConversationData>(undefined);
 
   /** The sender profile */
-  readonly sender$: Observable<dbChatter>;
+  readonly sender$: Observable<ChatterData>;
   /** The last message */
-  readonly last$: Observable<dbMessage>;
+  readonly last$: Observable<MessageData>;
   /** The unread messages count */
   readonly unread$: Observable<number>;
 
-  @Input() set data(conv: dbConversation) {
+  @Input() set data(conv: ConversationData) {
     this.input$.next(conv);
   }
 
@@ -41,7 +41,7 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
     ); 
 
     // The conversation's messages collection
-    const messages$ = conv$.pipe( map( () => this.collection<dbMessage>('messages') ) );
+    const messages$ = conv$.pipe( map( () => this.collection<MessageData>('messages') ) );
 
     // Builds a sender's id observable from conversation's recipients
     const senderId$ = conv$.pipe(
@@ -80,7 +80,7 @@ export class ChatConversation extends DatabaseDocument<dbConversation> {
         // Reverts to null when lastId is unknown
         if(!lastId) { return of(null); }
         // Gets the message collection
-        const messages = this.collection<dbMessage>('messages');
+        const messages = this.collection<MessageData>('messages');
         // Reads the document snapshot
         return from( messages.document(lastId).ref.get() );
       }) 

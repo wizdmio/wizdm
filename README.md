@@ -1,4 +1,3 @@
-
 <img src="apps/wizdm/src/assets/img/wmlogo.png" align="left" width="76" />
 
 Wizdm
@@ -22,7 +21,7 @@ The project revolves around a [web-app](apps/wizdm) running on [Angular][angular
 
 ## Firebase
 
-The app relies on several [firebase][firebase] services using [Angularfire 2][angularfire] to connect with:
+The app relies on several [firebase][firebase]:
 
 * Firebase Hosting to host the production demo app at https://wizdm.io
 * Firebase Auth for user authentication 
@@ -30,10 +29,6 @@ The app relies on several [firebase][firebase] services using [Angularfire 2][an
 * Cloud Storage for user's images and files
 
 Take a look on [@wizdm/connect](libs/connect) library abstracting the communication layer with all the firebase services. 
-
-## Monorepo
-
-The workspace has been converted from the original angular-cli to the monorepo format suggested by [Nrwl][nrwl] using their Nx Angular Extension [@nrwl/schematics][nrwl-schematics]. This means both the source code of the web application(s) and the external potentially shared libraries are stored in the same single repository under the `/apps` and `/libs` folders respectively.
 
 ## Internationalization
 
@@ -43,7 +38,7 @@ At first start, the resolver checks the authenticated user language preferences 
 
 The router is used to switch among languages, so, from the user perspective, it looks like having multiple apps in different languages (e.g. https://wizdm.io/en/home for English or https://wizdm.io/it/home for Italian).
 
-The localized content is provided by means of the *wmContent* resolving as an observable granting smooth transitions while switching languages without the need of reloading the full page nor the app.
+The localized content is provided by means of the *wmContent* directive granting smooth transitions while switching languages without the need of reloading the full page nor the app.
 
 Take a look on [@wizdm/content](libs/content) package for further information.
 
@@ -53,19 +48,33 @@ Run `ng serve` for a dev server. Navigate to `https://localhost:4200/`. The app 
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component to be added to the default project (apps/widm) or specify `--project=project-name` otherwise. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The workspace is arranged as a monorepo. This means both the source code of the web application(s) and the potentially shared libraries are stored in the same single repository.
 
-To generate a new library, run `ng generate lib library-name` that will be automatically added to libs.
+```
+/
+├──/animate  - Animate On Scroll
+├──/connect  - Firebase package
+├──/content  - Content resolving (multi-language)
+├──/elements - UI components
+├──/emoji    - Emoji support
+├──/markdown - Markdown renedrer
+├──/wizdm    - The main app
+:
+├── angular.json        ⎫
+├── firebase.json       ⎪
+├── package.json        ⎬ Config files
+├── tsconfig.json       ⎪
+├── tsconfig.base.json  ⎪
+└── tslint.json         ⎭
+ ```
 
-## Build
+Run `ng generate component component-name` to generate a new component to be added to the wizdm default project or specify `--project=project-name` otherwise. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+To generate a new library, run `ng generate lib library-name` that will be automatically added to the workspace as a publishable package.
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
-
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
@@ -75,19 +84,14 @@ Run `firebase deploy` to upload the last build.
 
 Source code is now mantained on [GitHub](https://github.com/wizdmio/wizdm).
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Resources
 
 [wizdm]: https://wizdm.io
 [angular]: https://angular.io
 [material]: https://material.io
 [angular-material]: https://material.angular.io
-[angularfire]: https://github.com/angular/angularfire2
 [flexlayout]: https://github.com/angular/flex-layout/wiki
 [firebase]: https://firebase.google.com
 [fontawesome]: https://fontawesome.com
 [hammerjs]: https://hammerjs.github.io
 [momentjs]: https://momentjs.com
-[nrwl]: https://nrwl.io
-[nrwl-schematics]: https://nrwl.io/nx/guide-getting-started

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
@@ -9,18 +8,21 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
 import { GtagModule } from '@wizdm/gtag';
-import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/readme';
 import { DialogModule } from '@wizdm/dialog';
+import { EmojiTextModule } from '@wizdm/emoji/text';
+import { BalloonModule } from '@wizdm/elements/balloon';
+import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';
+import { StickyFooterModule } from 'app/navigator/footer';
+import { FabModule } from 'app/navigator/fab';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { AuthGuard, emailVerified } from 'app/utils/auth-guard';
 import { ValidProfile } from 'app/utils/user-profile';
-import { ChatConversationModule } from './conversation';
-import { ChatMessageModule } from './message';
-import { ChatComposerModule } from './composer';
+import { ConversationModule } from './conversation';
+import { ComposerModule } from './composer';
 import { ChatComponent } from './chat.component';
 
 const routes: RoutesWithContent = [
@@ -38,7 +40,6 @@ const routes: RoutesWithContent = [
   imports: [
     CommonModule,
     FlexLayoutModule,
-    ScrollingModule,
     MatIconModule,
     MatButtonModule,
     MatListModule,
@@ -46,15 +47,18 @@ const routes: RoutesWithContent = [
     RedirectModule,
     GtagModule,
     IconModule, 
-    AvatarModule,
     ReadmeModule,
     DialogModule,
+    EmojiTextModule,
+    BalloonModule,
+    MomentPipesModule,
     ActionbarModule,
     SidenavModule,
+    StickyFooterModule,
+    FabModule,
     CanLeaveModule,
-    ChatConversationModule,
-    ChatMessageModule,
-    ChatComposerModule,
+    ConversationModule,
+    ComposerModule,
     ContentRouterModule.forChild(routes)
   ]
 })

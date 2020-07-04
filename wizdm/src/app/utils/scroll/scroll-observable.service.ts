@@ -1,6 +1,6 @@
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
+import { DOCUMENT, ViewportScroller } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -14,18 +14,32 @@ export interface ScrollInfo {
 })
 export class ScrollObservable extends Observable<ScrollInfo> {
 
-  constructor(@Inject(DOCUMENT) document: Document, dispatcher: ScrollDispatcher, ruler: ViewportRuler) { 
+  public get height(): number { return this.document.body.scrollHeight || 0; }
 
-    super( subscriber => dispatcher.scrolled(0).pipe( map( () => {
+  constructor(private scroller: ViewportScroller, dispatcher: ScrollDispatcher, private ruler: ViewportRuler, @Inject(DOCUMENT) private document: Document) { 
 
-      const rt = ruler.getViewportRect();
+    super( subscriber => dispatcher.scrolled(0).pipe( map( () => this.scrollInfo() ) ).subscribe( subscriber ) );
+  }
+
+  public scrollInfo(): ScrollInfo {
+
+    const rt = this.ruler.getViewportRect();
 
       return {
 
         top: rt.top,
-        bottom: document.body.scrollHeight - rt.height - rt.top
+        bottom: this.height - rt.height - rt.top
       };
+  }
 
-    })).subscribe( subscriber ) );
+  public scrollTo(pos: Partial<ScrollInfo>) {
+
+    if(pos.top !== undefined) { 
+      this.scroller.scrollToPosition([0, pos.top]); 
+    }
+
+    if(pos.bottom !== undefined) { 
+      this.scroller.scrollToPosition([0, this.height - pos.bottom]); 
+    }
   }
 }

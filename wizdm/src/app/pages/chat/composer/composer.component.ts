@@ -5,12 +5,12 @@ import { TypeinAdapter } from './typein-adapter';
 import { EmojiUtils } from '@wizdm/emoji/utils';
 
 @Component({
-  selector: 'wm-chat-composer',
+  selector: 'wm-composer',
   templateUrl: './composer.component.html',
   styleUrls: ['./composer.component.scss'],
-  host: { "class": "wm-chat-composer" }
+  host: { "class": "wm-composer" }
 })
-export class ChatComposer {
+export class MessageComposer {
 
   @ViewChild(MatExpansionPanel) private emojiKeysPanel: MatExpansionPanel;
   @ViewChild(TypeinAdapter) private typeinAdapter: TypeinAdapter;

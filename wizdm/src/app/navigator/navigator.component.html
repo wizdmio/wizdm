@@ -2,7 +2,7 @@
 <!-- Resolve the localized content -->
 <ng-container *wmContent="let msgs select 'navigator'">
 
-  <!-- Inserts a transparent backdrop panel to close the mobile menu when is open -->
+  <!-- Inserts a transparent backdrop panel to close the mobile menu -->
   <div class="backdrop" (click)="openMenu(false)" *ngIf="mobile && (menuOpened$ | async)"></div>
 
   <!-- Updates the Title and the description meta-tag -->
@@ -76,6 +76,7 @@
 
                     <mat-divider *ngIf="item.divider"></mat-divider>
                 
+                    <!-- Settings menu items -->
                     <button mat-menu-item [routerLink]="item.link" [queryParams]="item.params">{{ item.label }}</button>
 
                   </ng-container>
@@ -104,10 +105,11 @@
         
         <!-- Animated menu -->
         <wm-menu color="primary" 
-                  [items]="menus[signedIn ? 'private' : 'public']" 
-                  [toggler]="menuOpened$ | async" 
-                  (togglerChange)="openMenu($event)"
-                  (visible)="isMenuVisible = $event"></wm-menu>    
+                 [items]="menus[signedIn ? 'private' : 'public']" 
+                 [toggler]="menuOpened$ | async" 
+                 (togglerChange)="openMenu($event)"
+                 (visible)="isMenuVisible = $event">
+        </wm-menu>    
       
       </mat-toolbar-row>
 
@@ -115,42 +117,74 @@
 
   </header>
 
-  <!-- Main Navigation Container with dynamic background. Enables content's autosize when sidenav is active -->
-  <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [ngStyle]="background$ | async" [autosize]="sideActive$ | async">
+  <!-- Main Navigation Container. Enables content's autosize when sidenav is active -->
+  <mat-sidenav-container fxFlex="1 1 auto" fxLayout="column" [autosize]="sideActive$ | async" #container>
 
-    <!-- Side Navigation Panel -->
-    <mat-sidenav class="mat-elevation-z3" 
-                  fixedInViewport 
-                  [style.padding-top.px]="navbar?.clientHeight || 0" 
-                  [mode]="mobile ? 'over' : 'side'" 
-                  [opened]="sideOpened$ | async" 
-                  (openedChange)="openSidenav($event)">
-
-      <!-- Side panel toggler to stay visible even when the panel is closed -->
-      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
-        <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
-      </button>
+    <!-- Side Navigation Panel (fixed) -->
+    <mat-sidenav class="mat-elevation-z3" fixedInViewport 
+                 [style.padding-top.px]="navbar?.clientHeight || 0" 
+                 [mode]="mobile ? 'over' : 'side'" 
+                 [opened]="sideOpened$ | async" 
+                 (openedChange)="openSidenav($event)">
 
       <!-- Side panel content is teleported here -->
       <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
         <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/10726 -->
         <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
       </ng-template>
+
+      <!-- Side panel toggler to stay visible even when the panel is closed -->
+      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
+        <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
+      </button>
         
     </mat-sidenav>
   
     <!-- Main content wrapping page and footer -->
-    <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" [style.margin-top.px]="navbar?.clientHeight || 0">
+    <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" 
+                         [style.margin-top.px]="navbar?.clientHeight || 0" 
+                         [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0">
 
       <!-- Page container to fit all the available space setting the animation viewport -->
       <div class="page" fxFlex="1 1 auto" wmAnimateView [top]="navbar?.clientHeight || 0">
 
         <!-- Pages will fit here -->
         <router-outlet></router-outlet>
+        
       </div>
 
-      <!-- Footer always on the content's bottom -->
-      <footer wm-footer fxFlex="0 0 auto"></footer>
+      <!-- Footer always on the content's bottom unless the sticky footer has been activated -->
+      <footer wm-footer fxFlex="0 0 auto" *ngIf="!stickyFooter"></footer>
+
+      <!-- Sticky footer. Activates when content is teleported to the 'footer' portal -->
+      <footer class="sticky-footer background-color" fxLayout="column" [fxHide]="!stickyFooter" [style.margin-left.px]="container?._contentMargins.left || 0" #footer>
+
+        <!-- Custom content is teleported here -->
+        <ng-template wmPortal="footer" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="stickyFooter = $event"></ng-template>
+
+        <!-- Footer on the content's bottom -->
+        <div wm-footer fxFlex="0 0 auto" *ngIf="stickyFooter"></div>
+
+      </footer>
+
+      <!-- Fab overlay. Activates when content is teleported to the 'fab' portal -->
+      <div class="fab-overlay" [fxHide]="!fabOverlay"
+                               [style.margin-left.px]="container?._contentMargins.left || 0"
+                               [style.margin-top.px]="navbar?.clientHeight || 0"
+                               [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0">
+
+        <!-- Fab container positioned to the requested corner -->
+        <div class="fab-container" [fxLayout]="fabOverlayConfig?.direction || 'row'" 
+                                   [attr.side]="fabOverlayConfig?.side || 'right'"
+                                   [attr.edge]="fabOverlayConfig?.edge || 'bottom'">
+
+          <!-- Fab teleported content goes here -->
+          <ng-template wmPortal="fab" [wmPortalContext]="{ isMobile: mobile }" 
+                                      (wmPortalActive)="fabOverlay = $event"
+                                      (wmPortalData)="fabOverlayConfig = $event">
+          </ng-template>
+        </div>
+      </div>
 
     </mat-sidenav-content>
 

@@ -7,7 +7,7 @@ import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
 import { AdminObservable } from 'app/utils/admin';
 import { runInZone } from 'app/utils/rxjs';
-
+import { FabOptions } from './fab';
 
 @Component({
   selector: 'wm-navigator',
@@ -18,10 +18,6 @@ import { runInZone } from 'app/utils/rxjs';
 })
 export class NavigatorComponent {
 
-  // Background style 
-  private bkStyler$ = new BehaviorSubject<any>(undefined);
-  readonly background$: Observable<any>;
-  
   // Scrolled observable
   readonly scrolled$: Observable<boolean> = of(false);
 
@@ -43,6 +39,13 @@ export class NavigatorComponent {
   // Template variable to trigger the action animation
   public activateActions: any;
 
+  // Template variable to enable the sticky footer
+  public stickyFooter: any;
+
+  // Template variable to enable the fab overlay
+  public fabOverlay: any;
+  public fabOverlayConfig: FabOptions;
+
   // Media queries to switch between desktop/mobile views
   public get mobile(): boolean { return this.media.isActive('xs'); }
   public get desktop(): boolean { return !this.mobile; }
@@ -53,11 +56,6 @@ export class NavigatorComponent {
               readonly user: UserProfile,
               readonly admin$: AdminObservable,
               private zone: NgZone) {
-
-    // Ensures the style being applied according to the animationFrameScheduler (so to say in-sync with the rendering)
-    // preventing the notorious ExpressionChangedAfterItHasBeenChecked exception without introducing any delay the 
-    // user may otherwise perceive when navigating
-    this.background$ = scheduled(this.bkStyler$, animationFrameScheduler);
 
     // Builds the mobile menu status observable
     this.menuOpened$ = scheduled(this.openMenu$.pipe( distinctUntilChanged() ), animationFrameScheduler);
@@ -96,16 +94,6 @@ export class NavigatorComponent {
 
   public get userImage(): string {
     return this.user.data.photo || '';
-  }
-
-  /** Applies the given style to the navigator's content background */
-  public applyBackground(style: any) { 
-    this.bkStyler$.next(style); 
-  }
-
-  /** Clears the current background  */
-  public clearBackground() { 
-    this.bkStyler$.next(undefined); 
   }
 
   /** True when the mobile menu is open */

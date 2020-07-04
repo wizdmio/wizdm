@@ -123,7 +123,9 @@ export class ContentStreamer {
 |`language: string`|The current language locale as from the route snapshot|
 |`language$: Obseravble<string>`|An observable resolving to the current language locale resolving form the route| 
 
-### Methods 
+&nbsp;
+
+**Methods**
 
 ---
 
@@ -177,7 +179,9 @@ export abstract class ContentLoader {
 |`language: string`|The currernt language the laoder is loading data for|
 |`cache: LoaderCache`|The object caching the data while loading to avoid loading the same content multiple times|
 
-### Methods
+&nbsp;
+
+**Methods**
 
 ---
 ```typescript
@@ -220,7 +224,9 @@ export class FileLoader extends ContentLoader {
 |:--|:--|
 |`http: HttpClient`|Instance of [HttpClient](https://angular.io/api/common/http/HttpClient) service|
 
-### Methods
+&nbsp;
+
+**Methods**
 
 ---
 ```typescript
@@ -289,7 +295,9 @@ E.g. https\://whatever.io/:lang/home where *:lang* is a two digit country code: 
 |:--|:--|
 |`config: ConfigResolver`|The common [ContentConfigurator](#contentconfigurator) instance|
 
-### Methods
+&nbsp;
+
+**Methods**
 
 ---
 
@@ -329,7 +337,9 @@ export class ContentSelector implements CanActivate {
 |`config: ContentConfigurator`|The common [ContentConfigurator](#contentconfigurator) instance|
 |`browserLanguage: string`|Returns the language locale code detected from the browser|
 
-### Methods
+&nbsp;
+
+**Methods**
 
 ---
 
@@ -388,7 +398,9 @@ export class ContentResolver implements Resolve<any> {
 |`source: string`|The source path to load the content file from|
 |`file: string`|The name of the content file to load|
 
-### Methods
+&nbsp;
+
+**Methods**
 
 ---
 
@@ -421,7 +433,9 @@ export class ContentRouterModule {
 }
 ```
 
-### Methods
+&nbsp;
+
+**Methods**
 
 ---
 

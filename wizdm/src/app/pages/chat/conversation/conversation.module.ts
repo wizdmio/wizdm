@@ -5,7 +5,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { EmojiTextModule } from '@wizdm/emoji/text';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
-import { ChatConversation } from './conversation.component';
+import { Conversation } from './conversation.component';
 
 @NgModule({
   imports: [
@@ -16,7 +16,7 @@ import { ChatConversation } from './conversation.component';
     AvatarModule,
     MomentPipesModule
   ],
-  declarations: [ ChatConversation ],
-  exports: [ ChatConversation ],
+  declarations: [ Conversation ],
+  exports: [ Conversation ],
 })
-export class ChatConversationModule { }
+export class ConversationModule { }
