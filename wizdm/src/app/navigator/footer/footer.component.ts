@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'footer[wm-footer]',
+  selector: '[wm-footer]',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']/*,
   host: { 'class': 'wm-footer' }*/

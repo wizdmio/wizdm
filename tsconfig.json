@@ -72,18 +72,6 @@
     },
     {
       "path": "./teleport/tsconfig.lib.json"
-    },
-    {
-      "path": "./test/tsconfig.lib.json"
-    },
-    {
-      "path": "./test/tsconfig.spec.json"
-    },
-    {
-      "path": "./emoji2/tsconfig.lib.json"
-    },
-    {
-      "path": "./emoji2/tsconfig.spec.json"
     }
   ]
 }

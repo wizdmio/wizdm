@@ -1,9 +1,10 @@
 
 :host {
-  position: absolute;
-  top: 0; left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  margin-top: auto;
+  padding: 8px;
 
   display: flex;
   flex-direction: column;
@@ -11,8 +12,33 @@
 
   .mat-list-item { height: 72px; }
 
-  .wm-chat-composer { margin-top: 5px; }
+  .message {
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    padding: 0 2vw;
 
+    &.in { justify-content: flex-start; }
+    &.out { justify-content: flex-end; }
+
+    .spacer {
+      display: inline-block;
+      width: 32px;
+    }
+
+    .time {
+      position: absolute;
+      right: 5px;
+      bottom: 0;
+      opacity: 0.5;
+    }
+  }
+
+  // Customize the distance between messages
+  .in + .in, .out + .out { margin-top: 2px; }
+  .in + .out, .out + .in { margin-top: 12px; }
+
+/*
   // Outer container to fill the available space (display: flex)
   .viewer {
     position: relative;
@@ -23,7 +49,7 @@
     .back-to-bottom {
       position: absolute;
       right: 16px;
-      bottom: 16px;
+      top: 16px;
     }
 
     // Scrolling container to enable scroll (display: flex)
@@ -55,4 +81,5 @@
       }
     }
   }
+  */
 }

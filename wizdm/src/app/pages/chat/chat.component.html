@@ -15,16 +15,15 @@
   <!-- Sidenav panel -->
   <ng-template wmSidenav opened persist>
 
-    <!-- Normally, displays the list of active conversations -->
+    <!-- List of active conversations -->
     <mat-action-list>
 
-      <mat-list-item class="height-unset" *ngFor="let conversation of conversations$ | async">
+      <mat-list-item  *ngFor="let conv of conversations$ | async; trackBy: trackById"
+                      (click)="selectConversation(conv.id)"
+                      [fxHide]="conv.archived" 
+                      class="height-unset">
 
-        <wm-chat-conversation [data]="conversation" 
-                              [style.visibility.hidden]="conversation.archive"
-                              (unreadCount)="accumulateUnread(conversation.id, $event)"
-                              (click)="selectConversation(conversation.id)">
-        </wm-chat-conversation>
+        <wm-conversation [data]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>
       
       </mat-list-item>
 
@@ -32,30 +31,40 @@
 
   </ng-template>
 
-  <!-- Message list viewer accomidating the maximum space left from the composer -->
-  <div class="viewer" fxFlex="1 1 auto" fxLayout="column">
+  <!-- Message thread -->
+  <ng-container *ngFor="let msg of messages$ | async; trackBy: trackById">
 
-    <!-- Scrolling container using display: flex to ensure content end alignement with margin-top: auto -->
-    <div class="scroller" fxLayout="column" cdkScrollable>
+    <!-- Message row -->
+    <div class="message" [class.in]="msg.sender !== me" [class.out]="msg.sender === me">
 
-      <!-- Content inner container using display: block ensuring scrolling works on all browsers -->
-      <div class="content">
+      <wm-balloon [color]="msg.sender === me ? 'accent' : 'primary'"
+                  [side]="msg.sender === me ? 'right' : 'left'" 
+                  class="mat-elevation-z3"
+                  anchor="end">
 
-        <wm-message [message]="msg" *ngFor="let msg of messages$ | async; trackBy: trackById"></wm-message>
+        <span [wm-emoji-text]="msg.body"></span>
+      
+        <span class="spacer"></span>
+        
+        <time class="time mat-small">{{ msg.created?.toDate() | moment:'HH:mm' }}</time>
+      
+      </wm-balloon>
 
-      </div>
     </div>
 
-    <!-- Back to bottom button appearing when scrolled back enough -->
-    <button mat-mini-fab color="primary" class="back-to-bottom" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
+  </ng-container>
+
+  <!-- Back to bottom button appearing when scrolled back enough -->
+  <ng-container *wmFab>
+
+    <button mat-mini-fab side="right" edge="bottom" color="primary" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
       <mat-icon>expand_more</mat-icon>
     </button>
 
-  </div>
-
-  <!-- Message composer on the bottom -->
-  <wm-chat-composer fxFlex="0 0 auto" [(value)]="text" [keys]="keys" (expanded)="onKeyboardExpand()" (send)="send($event)">
-  </wm-chat-composer> 
+  </ng-container>
+  
+  <!-- Message composer on the navigator's sticky footer-->
+  <wm-composer *wmFooter [(value)]="text" [keys]="keys" (expanded)="onKeyboardExpand()" (send)="send($event)"></wm-composer> 
 
   <!-- Can Leave dialog -->
   <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">

@@ -7,15 +7,15 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "https://localhost:4200",
-			"webRoot": "${workspaceRoot}/apps/wizdm",
+			"webRoot": "${workspaceRoot}/wizdm",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
-			"sourceMaps": true/*,
-			"sourceMapPathOverrides": {
-        "webpack:/./*": "${webRoot}/*",
-        "webpack:/src/*": "${webRoot}/src/*",
-        "webpack:/*": "*",
-        "webpack:/./~/*": "${webRoot}/node_modules/*"
-      }*/
+			"sourceMaps": true,
+			/*"sourceMapPathOverrides": {
+				"webpack:///./*": "${webRoot}/*",
+				"webpack:///src/*": "${webRoot}/*",
+				"webpack:///*": "*",
+				"webpack:///./~/*": "${webRoot}/node_modules/*"
+			}*/
 			// Uncomment this to get diagnostic logs in the console
 			// "diagnosticLogging": true
 		},
@@ -24,7 +24,7 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "http://localhost:4200",
-			"webRoot": "${workspaceRoot}",
+			"webRoot": "${workspaceRoot}/wizdm",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
 			"sourceMaps": true/*,
 			"sourceMapPathOverrides": {

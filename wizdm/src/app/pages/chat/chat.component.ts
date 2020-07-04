@@ -1,15 +1,14 @@
 import { take, startWith, map, tap, filter, switchMap, distinctUntilChanged } from 'rxjs/operators';
-import { Component, AfterViewInit, Inject, ViewChild, NgZone } from '@angular/core';
+import { ChatterData, ConversationData, MessageData } from './chat-types';
 import { DatabaseCollection } from '@wizdm/connect/database/collection';
-import { dbChatter, dbConversation, dbMessage } from './chat-types';
-import { UserProfile } from 'app/utils/user-profile';
+import { Component, Inject, NgZone } from '@angular/core';
 import { DatabaseService } from '@wizdm/connect/database';
-import { of, Observable, BehaviorSubject } from 'rxjs';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { UserProfile } from 'app/utils/user-profile';
+import { tapOnce, runInZone } from 'app/utils/rxjs';
+import { ScrollObservable } from 'app/utils/scroll';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { $animations } from './chat.animations';
-import { runInZone } from 'app/utils/rxjs';
-
 
 @Component({
   selector: 'wm-chat',
@@ -17,61 +16,58 @@ import { runInZone } from 'app/utils/rxjs';
   styleUrls: ['./chat.component.scss'],
   animations: $animations
 })
-export class ChatComponent extends DatabaseCollection<dbConversation> implements AfterViewInit {
+export class ChatComponent extends DatabaseCollection<ConversationData> {
 
-  @ViewChild(CdkScrollable) scroller: CdkScrollable;
-
-  public   scrolled$: Observable<boolean> = of(false);
-  readonly conversations$:  Observable<dbConversation[]>;
-  readonly messages$:  Observable<dbMessage[]>;
-
-  private conversationId$: BehaviorSubject<string>;
-
-  private thread: DatabaseCollection<dbMessage>;
-
-  private  autoScroll: boolean = true;
-  public text = "";
- 
-  private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
-  public keys: string[];
-
-  public get conversationId(): string { return this.conversationId$.value; }
-
-  public selectConversation(id: string) { 
-    this.conversationId$.next(id); 
-  }
-
-  public trackById(msg: dbMessage) {
-    return msg.id;
-  }
+  private  conversationId$ = new BehaviorSubject<string>('');
+  readonly conversations$:  Observable<ConversationData[]>;
   
-  constructor(db: DatabaseService, private user: UserProfile<dbChatter>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
+  private  thread: DatabaseCollection<MessageData>;
+  readonly messages$:  Observable<MessageData[]>;
+  
+  readonly scrolled$: Observable<boolean>;
+  private  autoScroll: boolean = true;
+  
+  private  stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
+  public   keys: string[];
+  public   text = "";
+
+  public get me(): string { return this.user.uid; }  
+  
+  constructor(db: DatabaseService, private scroller: ScrollObservable, private user: UserProfile<ChatterData>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
 
     super(db, 'conversations');
 
-    this.conversationId$ = new BehaviorSubject<string>('');
-
-    // Streams all the conversations where recipients[] contains the user's id
-    this.conversations$ = this.stream( qf => qf.where('recipients', 'array-contains', this.user.id) ).pipe(
-
-      tap( convs => {
-
-        if(!this.conversationId) {
-          this.selectConversation( this.user.data.lastConversation || convs[0]?.id );
-        }
-      })
+    /** Builds an observable telling if the view has been scrolled */
+    this.scrolled$ = scroller.pipe( 
+      // Measure thee scrolling distance from the bottom 
+      map( scroll => scroll.bottom >= 50 ),
+      // Distincts the value on changes only
+      distinctUntilChanged(),
+      // Starts with false
+      startWith(false),
+      // Enables/disables the autoScroll accordingly
+      tap( scrolled => this.autoScroll = !scrolled ),
+      // Run within angular zone
+      runInZone(this.zone)
     );
 
-    // Streams up to the last 50 messages
+    // Streams all the conversations where recipients[] contains the user's id
+    this.conversations$ = this.stream( qf => qf.where('recipients', 'array-contains', this.user.uid) ).pipe(
+
+      // Selects the most appropriate conversation to start with
+      tapOnce( convs => this.selectConversation( this.user.data.lastConversation || convs[0]?.id ) )
+    );
+
+    // Streams up to the last 50 messages from the selected conversation
     this.messages$ = this.conversationId$.pipe( 
 
       filter( id => !!id ),
 
       distinctUntilChanged(),
 
-      map( id => this.thread = this.db.collection<dbMessage>(`conversations/${id}/messages`) ),
+      map( id => this.thread = this.document(id).collection<MessageData>('messages') ),
       
-      switchMap( thread => thread.stream( qf => qf.orderBy('created', 'asc').limitToLast(50) ) ),
+      switchMap( thread => thread.stream( qf => qf.orderBy('created').limitToLast(50) ) ),
   
       tap( msgs => {
 
@@ -82,28 +78,19 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
     );
 
     this.keys = this.sortFavorites(this.stats);
-  }
-
-  ngAfterViewInit() {
-    // Replaces the scrolled observable once the cdkScrollable is available
-    this.scrolled$ = this.observeScroll();
   }  
 
-  /** Returns an observable telling if the view has been scrolled */
-  private observeScroll(): Observable<boolean> {
-    // Use the cdkScrollable child. WARNING this observable runs outside the Angular zone. 
-    return this.scroller && this.scroller.elementScrolled().pipe(
-      // Measure thee scrolling distance from the bottom 
-      map( () => this.scroller.measureScrollOffset('bottom') >= 50 ),
-      // Distincts the value on changes only
-      distinctUntilChanged(),
-      // Starts with false
-      startWith(false),
-      // Enables/disables the autoScroll accordingly
-      tap( scrolled => this.autoScroll = !scrolled ),
-      // Run within angular zone
-      runInZone(this.zone)
-    ) || of(false);
+  public trackById(data: ConversationData|MessageData) { 
+    return data.id; 
+  }
+
+  public get conversationId(): string { 
+    return this.conversationId$.value; 
+  }
+
+  public selectConversation(id: string) {
+
+    this.conversationId$.next(id); 
   }
 
   /** Calls fn right after the last rederign has completed */
@@ -113,7 +100,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
 
   /** Scrolls te view to the bottom to make the latest message visible */
   public scrollToBottom() {
-    this.scroller?.scrollTo({ bottom: 0 });
+    this.scroller.scrollTo({ bottom: 0 });
   }
 
   /** Forces the view to scroll whenever the keyboard expanded */
@@ -155,7 +142,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
     this.updateFavorites(body);
     
     // Sends the message adding it to the current conversation thread
-    this.thread.add({ body, sender: this.user.id }).then( () => {
+    this.thread.add({ body, sender: this.me }).then( () => {
 
       // Enables automatic scrolling
       this.autoScroll = true;
@@ -163,8 +150,7 @@ export class ChatComponent extends DatabaseCollection<dbConversation> implements
       // Resets the last message text
       this.text = ""; 
     });
-    //this.chat.send({ body, sender: 'me' }, this.conversationId); 
-    
+  
     // Prevents default
     return false;
   }

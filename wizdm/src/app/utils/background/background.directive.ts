@@ -1,5 +1,5 @@
 import { Directive, Input, OnChanges, OnDestroy } from '@angular/core';
-import { NavigatorComponent } from '../navigator.component';
+import { BackgroundObservable } from './background.service';
 
 /** Background styling directive. Use this directive withing the page to apply the given style to the parent navigator's background */
 @Directive({
@@ -7,7 +7,7 @@ import { NavigatorComponent } from '../navigator.component';
 })
 export class BackgroundDirective implements OnChanges, OnDestroy {
 
-  constructor(private nav: NavigatorComponent) {}
+  constructor(private background: BackgroundObservable) {}
   
   /** Sets whether a background image's position is fixed within the viewport, or scrolls with its containing block.
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment} */
@@ -47,7 +47,7 @@ export class BackgroundDirective implements OnChanges, OnDestroy {
   // Applies back the collected properties to the Navigator's background via the service.
   ngOnChanges() {
 
-    this.nav.applyBackground({
+    this.background.applyBackground({
       "background-attachment": this.attachment,
       "backgroung-clip": this.clip,
       "background-color": this.color,
@@ -60,5 +60,5 @@ export class BackgroundDirective implements OnChanges, OnDestroy {
   }
 
   // Clears the background when disposed
-  ngOnDestroy() { this.nav.clearBackground(); }
+  ngOnDestroy() { this.background.clearBackground(); }
 }

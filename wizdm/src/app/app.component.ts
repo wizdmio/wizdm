@@ -1,8 +1,9 @@
-import { Component, OnDestroy, Inject, Optional, ViewEncapsulation, NgZone } from '@angular/core';
+import { Component, OnDestroy, Inject, Optional, ViewEncapsulation, ElementRef, KeyValueDiffers, Renderer2, NgZone, KeyValueDiffer } from '@angular/core';
 import { trigger, animate, style, transition } from '@angular/animations';
 import { Router, ResolveStart, NavigationEnd, Scroll, ExtraOptions, ROUTER_CONFIGURATION } from '@angular/router';
 import { filter, map, sample, startWith, distinctUntilChanged, takeWhile } from 'rxjs/operators';
-import { ViewportScroller } from '@angular/common';
+import { NgStyle, ViewportScroller } from '@angular/common';
+import { BackgroundObservable } from 'app/utils/background';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -20,19 +21,25 @@ import { Observable, Subscription } from 'rxjs';
     ])
   ]
 })
-export class AppComponent implements OnDestroy { 
+export class AppComponent extends NgStyle implements OnDestroy { 
   
   readonly loading$: Observable<boolean>;
   private sub: Subscription;
 
-  constructor(router: Router, scroller: ViewportScroller, zone: NgZone, @Optional() @Inject(ROUTER_CONFIGURATION) config: ExtraOptions) {
+  constructor(background$: BackgroundObservable,
+              el: ElementRef, diffs: KeyValueDiffers, renderer: Renderer2, 
+              router: Router, scroller: ViewportScroller, zone: NgZone, 
+              @Optional() @Inject(ROUTER_CONFIGURATION) config: ExtraOptions) {
+
+    // Builds the NgStyle directive
+    super(el, diffs, renderer);
 
     // Grabs the router scrolling options
     const scrollPositionRestoration = config?.scrollPositionRestoration || 'top';
     const anchorScrolling = config?.anchorScrolling || 'enabled';
 
     // Disables default router scolling to avoid racing conditions
-    config.scrollPositionRestoration = config.anchorScrolling = 'disabled';
+    config.scrollPositionRestoration = config.anchorScrolling = 'disabled';    
 
     // Overrides the router scrolling mechanism to ensure scroll events get fired when the rendering is actually done
     this.sub = router.events.pipe( filter( e => e instanceof Scroll ), sample( zone.onStable ) ).subscribe( (e: Scroll) => {
@@ -52,6 +59,11 @@ export class AppComponent implements OnDestroy {
         else if (scrollPositionRestoration !== 'disabled') { scroller.scrollToPosition([0, 0]); }
       }
     });
+
+    // Applies the styles coming from BackgroundObservable
+    this.sub.add( background$.subscribe( styles => {
+      this.ngStyle = styles;
+    }));
 
     // Uses router events to display the loading spinner
     this.loading$ = router.events.pipe( 

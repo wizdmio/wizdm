@@ -18,9 +18,8 @@ The workspace has been converted from the original angular-cli to the monorepo f
 ## Wizdm Demo App
 The main application code is located at [/apps/wizdm/src](https://github.com/wizdmio/wizdm/tree/master/apps/wizdm/src) and structured as per the following:
 ```
-/apps/wizdm/src
+/wizdm/src
 ├──/app
-|  ├──/core
 |  ├──/navigator
 |  |  ├── ...
 |  |  ├── navigator-routing.module.ts
@@ -48,9 +47,6 @@ The main application code is located at [/apps/wizdm/src](https://github.com/wiz
  ```
  ### Bootstrap and Routing
 As for any Angular application, the `main.ts` file bootstraps the `AppModule` loading and initializing all the common root level feature modules to be available across the application. The `AppComponent` impersonates the `body` element using `ViewEncapsulation.None`, so, for its styling to be applied globally and delegates the `NavigatorModule` to take over and manage the application routing in its `NavigationRoutingModule`.
-
-### Core
-The `/core` folder contains core services to be used across the application.
 
 ### Navigator
 The `/navigator` folder contains the `NavigatorModule` and its multiple dependencies. The Navigator is the back-bane of the application implementing the main window frame where all the page modules will load into. As per the name suggests, the Navigator allows user navigation by means of the multiple menus and bars.
