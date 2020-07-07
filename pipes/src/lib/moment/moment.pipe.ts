@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import moment, { MomentInput } from 'moment';
+import moment, { MomentInput, CalendarSpec } from 'moment';
 
 /** Formats the given input into a formatted string */
 @Pipe({ name: 'moment' })
@@ -32,9 +32,9 @@ export class ToNowPipe implements PipeTransform {
 @Pipe({ name: 'calendar' })
 export class CalendarPipe implements PipeTransform {
 
-  transform(value: MomentInput, referenceDay?: MomentInput): string {
+  transform(value: MomentInput, formats?: CalendarSpec): string {
 
-    return moment(value || undefined).calendar(referenceDay || '');
+    return moment(value || undefined).calendar(formats || {});
   }
 }
 
