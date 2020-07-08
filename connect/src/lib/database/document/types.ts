@@ -3,6 +3,8 @@ import { firestore } from 'firebase/app';
 
 export type DocumentSnapshot<T> = firestore.DocumentSnapshot<T>
 export type DocumentRef<T> = firestore.DocumentReference<T>;
+export type Transaction = firestore.Transaction;
+export type WriteBatch = firestore.WriteBatch;
 export type GetOptions = firestore.GetOptions;
 
 /** Common document content to extend from */

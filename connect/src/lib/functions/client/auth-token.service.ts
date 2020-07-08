@@ -1,27 +1,8 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { AuthService, AuthPipe, customClaims } from '@wizdm/connect/auth';
-import { switchMap, take, map } from 'rxjs/operators';
-import { Observable, from, of, pipe } from 'rxjs';
+import { AuthService } from '@wizdm/connect/auth';
+import { switchMap, take } from 'rxjs/operators';
+import { Observable, from, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-
-/** AuthPipe operator granting access based on roles */
-export const authorized = (roles: string[], rootEmail?: string) => {
-
-  return switchMap( user => {
-
-    // Rejects unauthenticated users
-    if(!user) { return of(false); }
-
-    // Root email grants access when specified
-    if(rootEmail && user.email === rootEmail) { 
-      return of(true);
-    }
-    
-    // Roles from custom claims are checked otherwise
-    return of(user).pipe(customClaims, map( claims => roles.some(role => claims[role] ) ) );
-    
-  }) as AuthPipe;
-}
 
 /** HTTP interceptor adding the authentication token to all the requests */
 @Injectable()

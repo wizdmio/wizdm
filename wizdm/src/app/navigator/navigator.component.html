@@ -122,13 +122,18 @@
 
     <!-- Side Navigation Panel (fixed) -->
     <mat-sidenav class="mat-elevation-z3" fixedInViewport 
-                 [style.padding-top.px]="navbar?.clientHeight || 0" 
-                 [mode]="mobile ? 'over' : 'side'" 
-                 [opened]="sideOpened$ | async" 
-                 (openedChange)="openSidenav($event)">
+                                          [style.padding-top.px]="navbar?.clientHeight || 0" 
+                                          [style.width]="sideOptions?.width"
+                                          [style.min-width]="sideOptions?.minWidth"
+                                          [style.max-width]="sideOptions?.maxWidth"
+                                          [mode]="mobile ? 'over' : 'side'" 
+                                          [opened]="sideOpened$ | async" 
+                                          (openedChange)="openSidenav($event)">
 
       <!-- Side panel content is teleported here -->
-      <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="activateSidenav($event)">
+      <ng-template wmPortal="sidenav" [wmPortalContext]="{ isMobile: mobile }" 
+                                      (wmPortalActive)="activateSidenav($event)"
+                                      (wmPortalData)="sideOptions = $event">
         <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/10726 -->
         <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
       </ng-template>
@@ -157,15 +162,15 @@
       <footer wm-footer fxFlex="0 0 auto" *ngIf="!stickyFooter"></footer>
 
       <!-- Sticky footer. Activates when content is teleported to the 'footer' portal -->
-      <footer class="sticky-footer background-color" fxLayout="column" [fxHide]="!stickyFooter" [style.margin-left.px]="container?._contentMargins.left || 0" #footer>
+      <div class="sticky-footer background-color" fxLayout="column" [fxHide]="!stickyFooter" [style.margin-left.px]="container?._contentMargins.left || 0" #footer>
 
         <!-- Custom content is teleported here -->
         <ng-template wmPortal="footer" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="stickyFooter = $event"></ng-template>
 
         <!-- Footer on the content's bottom -->
-        <div wm-footer fxFlex="0 0 auto" *ngIf="stickyFooter"></div>
+        <footer wm-footer fxFlex="0 0 auto" *ngIf="stickyFooter"></footer>
 
-      </footer>
+      </div>
 
       <!-- Fab overlay. Activates when content is teleported to the 'fab' portal -->
       <div class="fab-overlay" [fxHide]="!fabOverlay"

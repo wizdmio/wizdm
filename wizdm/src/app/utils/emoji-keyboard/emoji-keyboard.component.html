@@ -20,7 +20,7 @@
   <!-- Adjust the height to accomodate for the scrollbar -->
   <cdk-virtual-scroll-viewport orientation="horizontal" [itemSize]="keySize" [scrollHeight]="viewportHeight">
     
-    <div fxLayout="column" *cdkVirtualFor="let column of columns$">
+    <div fxLayout="column" *cdkVirtualFor="let column of columns$ | async">
 
       <button mat-icon-button *ngFor="let key of column" (mousedown)="press(key)">
 

@@ -1,12 +1,12 @@
 import { NgModule, Optional, Inject } from '@angular/core';
+import { FunctionsService } from './functions.service';
 import { APP, FirebaseApp } from '../connect.module';
-import { StorageService } from './storage.service';
-import 'firebase/storage';
+import 'firebase/functions';
 
 @NgModule({
-  providers: [ StorageService ]
+  providers: [ FunctionsService ]
 })
-export class StorageModule { 
+export class FunctionsModule {
 
   constructor(@Optional() @Inject(APP) app: FirebaseApp) {
 

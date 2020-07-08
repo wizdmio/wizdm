@@ -40,7 +40,7 @@ export class LanguageSelector extends ContentSelector {
         
         // Detects the location from the IP and returns the coresponding language falling back to the browser language
         // Note; IpInfo service caches the last value to avoid multiple API calls unless requested.
-        return this.iplist.pipe( map( list => $languageMap[list.countrycode][0] || this.browserLanguage ));
+        return this.iplist.pipe( map( list => $languageMap[list.countrycode]?.[0] || this.browserLanguage ));
       }), 
 
       map( detected => {

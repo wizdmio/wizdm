@@ -3,11 +3,11 @@
   position: relative;
   width: 100%;
   min-height: 100%;
-  margin-top: auto;
   padding: 8px;
 
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   box-sizing: border-box;
 
   .mat-list-item { height: 72px; }

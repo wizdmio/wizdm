@@ -39,7 +39,9 @@ const routes: Routes = [
     //AnimateModule.init({ triggerMode: 'scrolling' }),
     // Database tools (Firebase)
     ConnectModule.init(firebase, appname),
-    AuthModule, DatabaseModule, StorageModule,
+    AuthModule, 
+    DatabaseModule.enablePersistance({}),
+    StorageModule,
     // IP location info
     IpInfoModule.init(ipinfo),   
     // Dynamic content (i18n)

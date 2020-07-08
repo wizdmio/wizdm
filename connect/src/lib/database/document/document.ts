@@ -43,10 +43,10 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public set(data: T): Promise<void> {
 
-    const timestamp = this.db.timestamp;
+    const created = this.db.timestamp;
     return this.ref ? this.ref.set({
       ...data as any,
-      created: timestamp
+      created
     } as T) : refReject();
   }
 
@@ -56,10 +56,10 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public merge(data: T): Promise<void> {
     
-    const timestamp = this.db.timestamp;
+    const updated = this.db.timestamp;
     return this.ref ? this.ref.set({
       ...data as any,
-      updated: timestamp
+      updated
     } as T, { merge: true } ) : refReject();
   }
 
@@ -69,10 +69,10 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public update(data: T): Promise<void> {
 
-    const timestamp = this.db.timestamp;
+    const updated = this.db.timestamp;
     return this.ref ? this.ref.update({
       ...data as any,
-      updated: timestamp
+      updated
     } as T) : refReject();
   }
 
@@ -83,13 +83,20 @@ export class DatabaseDocument<T extends DocumentData> {
   }
 
   /**
-   * Updates an existing document or create a new one by using the relevant fuctions, so,
-   * timestamps are created and updated accordingly.
+   * Conditionally updates and existing document or creates a new one if not existing.
+   * Uses a transaction to ensure consisntency
    */
   public upsert(data: T): Promise<void> {
-    return this.exists().then(exists => {
-      return exists ? this.update(data) : this.set(data);
-    })
+
+    if(!this.ref) { return refReject(); }
+
+    return this.db.transaction( trx => {
+
+      return trx.snap(this.ref).then( ({ exists }) => {
+
+        exists ? trx.update(this.ref, data) : trx.set(this.ref, data);
+      });
+    });
   }
 
   /** Returns the document snapshot immediately */

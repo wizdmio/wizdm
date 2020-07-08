@@ -1,7 +1,8 @@
-import { AuthPipeFactory, authRedirect } from '@wizdm/connect/auth';
+import { AuthPipeFactory, authRedirect, customClaims } from '@wizdm/connect/auth';
 import { RouterStateSnapshot } from '@angular/router';
 export { AuthGuard } from "@wizdm/connect/auth"; 
-import { map } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 /**
  * The AuthGuard service is provided by the @wizdm/connect/auth package
@@ -35,3 +36,24 @@ export const emailVerified: AuthPipeFactory = (_, state) => map( user => {
   // Redirects to login (default) or to send the email verification request
   return redirectToLogin(state, !user.emailVerified ? 'sendEmailVerification' : undefined);
 });
+
+/** AuthPipe operator granting access based on roles */
+export function authorized(roles: string[], rootEmail?: string): AuthPipeFactory {
+  
+  return () => {
+
+    return switchMap( user => {
+
+      // Rejects unauthenticated users
+      if(!user) { return of(false); }
+
+      // Root email grants access when specified
+      if(rootEmail && user.email === rootEmail) { 
+        return of(true);
+      }
+      
+      // Roles from custom claims are checked otherwise
+      return of(user).pipe(customClaims, map( claims => roles.some(role => claims[role] ) ) );
+    });
+  };
+} 

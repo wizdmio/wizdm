@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { UserRecord, UserUpdate, UserIdentifier } from '../admin-types';
+import { FunctionsClient } from '@wizdm/connect/functions/client';
 import { AuthService } from '@wizdm/connect/auth';
-import { AdminService, UserRecord } from '@wizdm/admin';
 import { map, switchMap } from 'rxjs/operators';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,11 +15,23 @@ export class UserAccessComponent {
   public email: string;
   public result: any;
 
-  constructor(readonly auth: AuthService, private admin: AdminService) { }
+  constructor(readonly auth: AuthService, private client: FunctionsClient) { }
+
+  /** List users based on idntifiers (uid, email, phone... */
+  private listUsers(identifiers: UserIdentifier[]): Observable<UserRecord[]> {
+
+    return this.client.post<UserIdentifier[], UserRecord[]>('users', identifiers);
+  }
+
+  /** Updates a user record */
+  private updateUser(uid: string, data: UserUpdate): Observable<UserRecord> {
+
+    return this.client.patch<UserUpdate, UserRecord>(`users/${uid}`, data);
+  }
 
   private getUserByEmail(email: string): Observable<UserRecord> {
 
-    return this.admin.listUsers([{ email }]).pipe( map( users => users[0] ));
+    return this.listUsers([{ email }]).pipe( map( users => users[0] ));
   }
 
   public viewAccess(email: string) {
@@ -31,7 +44,7 @@ export class UserAccessComponent {
   public grantAccess(email: string) {
 
     return this.getUserByEmail(email).pipe(
-      switchMap( user => this.admin.updateUser(user.uid, { 
+      switchMap( user => this.updateUser(user.uid, { 
         customClaims: { 
           admin: true 
         }
@@ -42,7 +55,7 @@ export class UserAccessComponent {
   public revokeAccess(email: string) {
 
     return this.getUserByEmail(email).pipe(
-      switchMap( user => this.admin.updateUser(user.uid, { 
+      switchMap( user => this.updateUser(user.uid, { 
         customClaims: null 
       }))
     ).subscribe( user => this.result = user );

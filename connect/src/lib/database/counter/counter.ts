@@ -6,7 +6,7 @@ import { DocumentData } from '../document';
 
 /** The single shard composing the counter */
 export interface CounterShard extends DocumentData {
-  count: number
+  count: number | FieldValue
 }
 
 /** Implements a DistributedCounter extending a DatabaseCollection */
@@ -40,7 +40,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
     return this.stream().pipe( 
       map( counters => {
         return !!counters ? counters.reduce( (sum, shard) => {
-          return sum + shard.count || 0;
+          return sum + (shard.count as number) || 0;
         }, 0) : 0;
       })
     );
@@ -63,7 +63,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
           return trx.update(shard, { count: this.db.increment(increment) });
         }
         // Creates the shard with the given initial value (1 write)
-        return trx.set(shard, { count: increment }, { merge: true });
+        return trx.merge(shard, { count: increment });
       });
     });
   }

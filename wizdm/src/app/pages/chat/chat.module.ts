@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
 import { GtagModule } from '@wizdm/gtag';
@@ -28,7 +29,7 @@ import { ChatComponent } from './chat.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: ['chat', 'chat/emoji-keys'],
+    content: ['chat', 'emoji-keys'],
     component: ChatComponent,
     canActivate: [ AuthGuard, ValidProfile ], data: { authGuardPipe: emailVerified },
     canDeactivate: [ CanLeaveGuard ]
@@ -44,6 +45,7 @@ const routes: RoutesWithContent = [
     MatButtonModule,
     MatListModule,
     MatBadgeModule,
+    MatProgressSpinnerModule,
     RedirectModule,
     GtagModule,
     IconModule, 

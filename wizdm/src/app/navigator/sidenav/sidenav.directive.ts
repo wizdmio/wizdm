@@ -1,10 +1,16 @@
-import { Directive, OnInit, OnDestroy, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+import { Directive, OnInit, OnDestroy, OnChanges, SimpleChanges, Input, Output, EventEmitter, TemplateRef } from '@angular/core';
+import { skip, take, tap, map, filter, pluck } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ActivatedRoute } from '@angular/router';
 import { NavigatorComponent } from '../navigator.component';
 import { TeleportService } from '@wizdm/teleport';
-import { skip, take, tap, map, filter, pluck } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+export interface SidenavConfig {
+  minWidth?: string;
+  maxWidth?: string;
+  width?   : string;
+}
 
 /** Teleports the given content towards the 'sidenav' portal witihn the navigator */
 @Directive({
@@ -15,6 +21,15 @@ export class SidenavDirective implements OnInit, OnDestroy {
 
   private sub: Subscription;
   private _opened: boolean;
+
+  /** Sidenav panel width */
+  @Input() width: string;
+
+  /** Sidenav panel min width */
+  @Input() minWidth: string;
+
+  /** Sidenav panel max width */
+  @Input() maxWidth: string;
 
   /** When true persists the open/close status within the route configuration to restore it accordingly */
   @Input('persist') set persistValue(persist: boolean) { this.persist = coerceBooleanProperty(persist); } 
@@ -85,14 +100,29 @@ export class SidenavDirective implements OnInit, OnDestroy {
     ).subscribe( data => this.opened = data );
 
     // Activates the content towards the 'sidenav' portal
-    this.teleport.activate('sidenav', this.template);
+    this.teleport.activate('sidenav', this.template, {
+      width: this.width,
+      minWidth: this.minWidth,
+      maxWidth: this.maxWidth
+    } as SidenavConfig);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    // Asserts some width related inut changed...
+    if(changes.width || changes.minWidth || changes.maxWidth) {
+      // ...applies the changes
+      this.teleport.activate('sidenav', this.template, {
+        width: this.width,
+        minWidth: this.minWidth,
+        maxWidth: this.maxWidth
+      } as SidenavConfig);
+    }
   }
 
   ngOnDestroy() {
-
     // Unsubscribes from the observable
     this.sub.unsubscribe();
-    
     // Clears the content
     this.teleport.clear('sidenav');
   }

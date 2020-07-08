@@ -6,17 +6,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { AuthGuard } from 'app/utils/auth-guard';
-import { AdminModule as AdminApiModule, authorized } from '@wizdm/admin';
+import { ClientModule } from '@wizdm/connect/functions/client';
+import { AuthGuard, authorized } from 'app/utils/auth-guard';
 import { AdminComponent } from './admin.component';
-import { adminAPI, rootEmail } from 'env/secrets';
+import { rootEmail } from 'env/secrets';
 
 const routes: RoutesWithContent = [{
 
   path: '',
   content: 'admin',
   component: AdminComponent,
-  canActivate: [ AuthGuard ], data: { authGuardPipe: () => authorized(['admin'], rootEmail) },
+  canActivate: [ AuthGuard ], data: { authGuardPipe: authorized(['admin'], rootEmail) },
   children: [
 
     { path: '', redirectTo: 'access', pathMatch: 'full' },
@@ -34,7 +34,7 @@ const routes: RoutesWithContent = [{
     MatIconModule,
     MatButtonModule,
     MatTabsModule,
-    AdminApiModule.init(adminAPI),
+    ClientModule,
     ContentRouterModule.forChild(routes)
   ],
 

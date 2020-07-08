@@ -1,20 +1,36 @@
 
-<ng-container>
+<ng-container *wmContent="let msgs select 'chat.conversation'">
 
   <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) <= 0" matBadgeSize="small">
 
-    <wm-avatar [src]="(sender$ | async)?.img" color="primary"></wm-avatar>
+    <wm-avatar [src]="(sender$ | async)?.photo" color="primary"></wm-avatar>
     
   </div>
 
   <div fxFlex="1 1 auto" class="content">
 
-    <div class="name mat-title">{{ (sender$ | async)?.name || '\n' }}</div>
+    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="8px">
 
-    <div class="last mat-body" [wm-emoji-text]="(last$ | async)?.body || '\n'"></div>
+      <div fxFlex="1 1 auto" class="name mat-title">{{ (sender$ | async)?.fullName || '\n' }}</div>
 
-    <div class="time mat-small">{{ (last$ | async)?.created?.toDate() | moment:'HH:mm' }}</div>
+      <time fxFlex="0 0 auto" class="time mat-small">{{ (last$ | async)?.created?.toDate() | calendar:msgs.timeFormat }}</time>
 
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxFlex="1 1 auto" class="last mat-body" [class.unread]="data.unread > 0" [wm-emoji-text]="(last$ | async)?.body || '\n'"></div>
+    
+      <!--mat-icon fxFlex="0 0 auto" class="menu" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">expand_more</mat-icon>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Contact info</button>
+        <button mat-menu-item>Archive chat</button>
+        <button mat-menu-item>Delete chat</button>
+      </mat-menu-->
+    
+    </div>
+  
   </div>
 
 </ng-container>

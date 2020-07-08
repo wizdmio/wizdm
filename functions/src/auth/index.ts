@@ -1,49 +1,76 @@
-import { Application } from "express";
-import { isAuthenticated, isAuthorized } from "./auth-guards";
-import { addUser, getUser, updateUser, deleteUser, listUsers, listAllUsers } from './user-admin';
+import { Request, Response } from "express";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin'
 
-/** wizdm API routing */
-export function usersAPI(app: Application, config?: { [key:string]: any }) {
+/** Verifies the authentication status cheking the request header */
+export async function isAuthenticated(req: Request, res: Response, next: Function) {
+    const { authorization } = req.headers;
 
-	// List all users: GET /users
-	app.get('/users', 
-		isAuthenticated,
-		isAuthorized(['admin']),
-		listAllUsers
-	);
+    if (!authorization) {
 
-	// List users by identifiers POST /users (indentifiers[])
-	app.post('/users', 
-		isAuthenticated,
-		isAuthorized(['admin'], config && { rootEmail: config.root?.email }),
-		listUsers
-	);
+        console.log("Missing authentication header");
+        return res.status(401).send({ message: 'Authentication required' });
+    }
 
-	// Creates a new user POST /users/new (data)
-	app.post('/users/new', 
-		isAuthenticated,
-		isAuthorized(['admin']),
-		addUser
-	);
+    if (!authorization.startsWith('Bearer')) {
 
-	// Read a user record GET /users/uid
-	app.get('/users/:uid', 
-		isAuthenticated,
-		isAuthorized(['admin'], { allowSameUser: true }),
-		getUser
-	);
+        console.log("Missing bearer field");
+        return res.status(401).send({ message: 'Authentication required' });
+    }
 
-	// Updates a user PATCH /users/uid (data)
-	app.patch('/users/:uid', 
-		isAuthenticated,
-		isAuthorized(['admin'], { allowSameUser: true }),
-		updateUser
-	);
+    const split = authorization.split('Bearer ');
 
-	// Deletes a user DELETE /users/uid
-	app.delete('/users/:uid', 
-		isAuthenticated,
-		isAuthorized(['admin'], { allowSameUser: true }),
-		deleteUser
-	);
+    if (split.length !== 2) {
+
+        console.log("Invalid bearer format");
+        return res.status(401).send({ message: 'Authentication required' });
+    }
+
+   try {
+
+        // Decodes the token
+       const decodedToken: admin.auth.DecodedIdToken = await admin.auth().verifyIdToken( split[1] );
+       
+       console.log("decodedToken", JSON.stringify(decodedToken) );
+       
+       // Stores the decoded token within the locals for further provessing
+       res.locals = { ...res.locals, context: decodedToken };
+
+       return next();
+    }
+    catch (err) { return res.status(500).send({ message: `${err.code} - ${err.message}` }); }
+}
+
+/** Checks the user authorization level agains the given roles */
+export function isAuthorized(hasRole: string[], opts?: { allowSameUser?: boolean, allowRootEmail?: boolean }) {
+    return (req: Request, res: Response, next: Function) => {
+       
+        // Gets the authentication context
+        const { context } = res.locals;
+        const { uid } = req.params;
+       
+        // Authorize the user by root email. Use firebase functions:config:set root.email="value" to set the variables
+	    if (opts?.allowRootEmail && context.email && context.email === functions.config().root?.email) {
+
+            console.log("User authorized by root email");
+            return next();
+        }
+
+        // Authorize the user by matching id
+        if (opts?.allowSameUser && uid && context.uid === uid) {
+
+            console.log("User authorized by same uid");
+            return next();
+        }
+
+        // Authorize the user by role
+        if (hasRole.some( role => context[role] )) {
+
+            console.log("User authorized by role");
+            return next();
+        }
+
+        console.log("Unauthorized user");
+        return res.status(403).send({ message: 'Unauthorized user' });
+   }
 }

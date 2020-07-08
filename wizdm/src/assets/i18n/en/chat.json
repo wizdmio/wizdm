@@ -1,10 +1,19 @@
 {
 
+  "conversation": {
+
+    "timeFormat": {
+      "sameDay": "LT",
+      "lastDay": "[Yesterday]",
+      "lastWeek": "dddd",
+      "sameElse": "L"
+    }
+  },
+
   "canLeave": {
     "title": "Unsent message",
     "message": "You're about to leave the page _without_ sending the last message.",
     "cancel": "Wait",
     "ok": "Proceed"
   }
-  
 }

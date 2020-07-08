@@ -29,25 +29,25 @@ export function limitToLast<T extends DocumentData>(limit: number): MonoTypeOper
 export function startAt<T extends DocumentData>(snapshot: DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>>;
 export function startAt<T extends DocumentData>(...fieldValues: any[]): MonoTypeOperatorFunction<QueryRef<T>>;
 export function startAt<T extends DocumentData>(args: any[]|DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>> {
-  return map( ref => limit ? ref.startAt(args) : ref );
+  return map( ref => args ? ref.startAt(args) : ref );
 }
 
 export function startAfter<T extends DocumentData>(snapshot: DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>>;
 export function startAfter<T extends DocumentData>(...fieldValues: any[]): MonoTypeOperatorFunction<QueryRef<T>>;
 export function startAfter<T extends DocumentData>(args: any[]|DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>> {
-  return map( ref => limit ? ref.startAfter(args) : ref );
+  return map( ref => args ? ref.startAfter(args) : ref );
 }
 
 export function endBefore<T extends DocumentData>(snapshot: DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>>;
 export function endBefore<T extends DocumentData>(...fieldValues: any[]): MonoTypeOperatorFunction<QueryRef<T>>;
 export function endBefore<T extends DocumentData>(args: any[]|DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>> {
-  return map( ref => limit ? ref.endBefore(args) : ref );
+  return map( ref => args ? ref.endBefore(args) : ref );
 }
 
 export function endAt<T extends DocumentData>(snapshot: DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>>;
 export function endAt<T extends DocumentData>(...fieldValues: any[]): MonoTypeOperatorFunction<QueryRef<T>>;
 export function endAt<T extends DocumentData>(args: any[]|DocumentSnapshot<T>): MonoTypeOperatorFunction<QueryRef<T>> {
-  return map( ref => limit ? ref.endAt(args) : ref );
+  return map( ref => args ? ref.endAt(args) : ref );
 }
 
 export function snap<T extends DocumentData>(options?: GetOptions): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {

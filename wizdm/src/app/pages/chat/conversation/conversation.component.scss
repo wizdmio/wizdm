@@ -7,9 +7,7 @@
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
-  
   padding: 7px 0;
-  width: 260px;
 
   .wm-avatar {
     width: 56px;
@@ -18,33 +16,26 @@
   }
 
   .content {
-    position: relative;
     overflow: hidden;
 
-    .name { 
-      width: 100%; 
-      margin: 0;
+    .name, .last { 
+      margin: 0; 
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     
-    .last {
-      width: 100%; 
-      opacity: 0.5;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .unread {
+      font-weight: 600;
+    }
+  }
 
-      &.unread {
-        opacity: 1;
-        font-weight: 600;
-      }
-    }
-    .time { 
-      position: absolute; 
-      right: 10px; 
-      top: 0; 
-    }
+ .menu {
+    transform: translateX(100%);
+    transition: transform 100ms ease-in-out;
+  }
+
+  &:hover .menu {
+    transform: translateX(0);
   }
 }

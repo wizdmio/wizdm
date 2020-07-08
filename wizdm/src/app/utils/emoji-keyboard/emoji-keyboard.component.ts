@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ViewChild } from '@angular/core';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { EmojiUtils, EmojiMode } from '@wizdm/emoji/utils';
 import { ContentStreamer } from '@wizdm/content';
 import { Observable, BehaviorSubject } from 'rxjs';

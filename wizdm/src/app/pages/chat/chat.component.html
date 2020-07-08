@@ -12,24 +12,34 @@
 
   </ng-template>
 
-  <!-- Sidenav panel -->
-  <ng-template wmSidenav opened persist>
+  <ng-container *ngIf="conversations$ | async as conversations">
 
-    <!-- List of active conversations -->
-    <mat-action-list>
+    <!-- Sidenav panel -->
+    <ng-template wmSidenav opened persist minWidth="280px">
 
-      <mat-list-item  *ngFor="let conv of conversations$ | async; trackBy: trackById"
-                      (click)="selectConversation(conv.id)"
-                      [fxHide]="conv.archived" 
-                      class="height-unset">
+      <!-- List of active conversations -->
+      <mat-action-list>
 
-        <wm-conversation [data]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>
-      
-      </mat-list-item>
+        <ng-container *ngFor="let conv of conversations; trackBy: trackById">
 
-    </mat-action-list>
+          <mat-list-item class="height-unset" (click)="selectConversation(conv.id)">
 
-  </ng-template>
+            <wm-conversation [conv]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>
+          
+          </mat-list-item>
+
+        </ng-container>
+
+      </mat-action-list>
+
+    </ng-template>
+
+  </ng-container>
+
+  <!-- Loading spinner -->
+  <div fxLayout="row" fxLayoutAlign="center" *ngIf="loading">
+    <mat-spinner mode="indeterminate" diameter="40"></mat-spinner>
+  </div>
 
   <!-- Message thread -->
   <ng-container *ngFor="let msg of messages$ | async; trackBy: trackById">
@@ -37,6 +47,7 @@
     <!-- Message row -->
     <div class="message" [class.in]="msg.sender !== me" [class.out]="msg.sender === me">
 
+      <!-- Message balloon -->
       <wm-balloon [color]="msg.sender === me ? 'accent' : 'primary'"
                   [side]="msg.sender === me ? 'right' : 'left'" 
                   class="mat-elevation-z3"
@@ -64,7 +75,12 @@
   </ng-container>
   
   <!-- Message composer on the navigator's sticky footer-->
-  <wm-composer *wmFooter [(value)]="text" [keys]="keys" (expanded)="onKeyboardExpand()" (send)="send($event)"></wm-composer> 
+  <wm-composer *wmFooter [(value)]="text" 
+                         [keys]="keys" 
+                         [fxHide]="!(conversationId$ | async)"
+                         (expanded)="onKeyboardExpand()" 
+                         (send)="send($event)">
+  </wm-composer> 
 
   <!-- Can Leave dialog -->
   <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">

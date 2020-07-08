@@ -8,9 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { EmojiInputModule } from '@wizdm/emoji/input';
 import { EmojiMaterialModule } from '@wizdm/emoji/material';
-import { EmojiKeyboardModule } from './emoji-keyboard';
-import { TextareaNewline } from './textarea-newline';
-import { TypeinAdapter } from './typein-adapter';
+import { EmojiKeyboardModule } from 'app/utils/emoji-keyboard';
+import { TextareaModule } from 'app/utils/textarea';
 import { MessageComposer } from './composer.component';
 
 @NgModule({
@@ -24,9 +23,10 @@ import { MessageComposer } from './composer.component';
     MatExpansionModule,
     EmojiInputModule,
     EmojiMaterialModule,
-    EmojiKeyboardModule
+    EmojiKeyboardModule,
+    TextareaModule
   ],
-  declarations: [ MessageComposer, TextareaNewline, TypeinAdapter ],
+  declarations: [ MessageComposer ],
   exports: [ MessageComposer ]
 })
 export class ComposerModule { }

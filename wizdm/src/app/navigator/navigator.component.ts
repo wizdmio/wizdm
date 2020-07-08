@@ -7,6 +7,7 @@ import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
 import { AdminObservable } from 'app/utils/admin';
 import { runInZone } from 'app/utils/rxjs';
+import { SidenavConfig } from './sidenav';
 import { FabOptions } from './fab';
 
 @Component({
@@ -31,6 +32,7 @@ export class NavigatorComponent {
   /** Observale tracking the sidenav activation status */
   readonly sideActive$: Observable<boolean>;
   private activateSide$ = new BehaviorSubject<boolean>(false);
+  public sideOptions: SidenavConfig;
 
   /** Observale tracking the sidenav open/close status */
   readonly sideOpened$: Observable<boolean>;

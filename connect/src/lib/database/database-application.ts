@@ -1,14 +1,13 @@
+import { DatabaseDocument, DatabaseTransaction, DatabaseBatch, DocumentRef } from './document'
 import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './collection';
 import { DistributedCounter, CounterShard } from './counter';
-import { DatabaseDocument, DocumentRef } from './document'
 import { FirebaseApp } from '../connect.module';
 import { firestore } from 'firebase/app';
 import { NgZone } from '@angular/core';
 
 export type PersistenceSettings = firestore.PersistenceSettings;
 export type FirebaseFirestore = firestore.Firestore;
-export type WriteBatch = firestore.WriteBatch;
-export type Transaction = firestore.Transaction;
+
 export type Timestamp = firestore.Timestamp;
 export type FieldPath = firestore.FieldPath;
 export type FieldValue = firestore.FieldValue;
@@ -69,16 +68,6 @@ export abstract class DatabaseApplication {
     return new firestore.GeoPoint(lat, lng);
   }
 
-  /** Returns a firestore.WriteBatch re-typed into a WriteBatch to support batch operations */
-  public batch(): WriteBatch {
-    return this.firestore.batch();
-  }
-
-  /** Runs a firestore.Transaction to support atomic operations */
-  public transaction<T>( updateFn: (t: Transaction) => Promise<T> ): Promise<T> {
-    return this.firestore.runTransaction<T>(updateFn);
-  }
-
   public doc<T>(ref: string|DocumentRef<T>): DocumentRef<T> {
     return !!ref ? (typeof ref === 'string' ? this.firestore.doc(ref) as DocumentRef<T> : ref) : null;
   }
@@ -96,4 +85,6 @@ export abstract class DatabaseApplication {
   public abstract collection<T>(path: string|CollectionRef<T>): DatabaseCollection<T>;
   public abstract collectionGroup<T>(groupId: string|Query<T>): DatabaseGroup<T>;
   public abstract counter(path: string|CollectionRef<CounterShard>, shards: number): DistributedCounter;
+  public abstract transaction<T>( updateFn: (t: DatabaseTransaction) => Promise<T> ): Promise<T>;
+  public abstract batch(): DatabaseBatch;
 }

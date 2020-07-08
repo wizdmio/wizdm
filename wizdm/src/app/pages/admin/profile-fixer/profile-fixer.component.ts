@@ -1,10 +1,12 @@
 import { Observable, Subject, forkJoin, of, from, defer, concat, empty } from 'rxjs';
-import { WriteBatch, DatabaseService } from '@wizdm/connect/database';
+import { DatabaseService } from '@wizdm/connect/database';
+import { DatabaseBatch } from '@wizdm/connect/database/document';
 import { StorageService, StorageRef } from '@wizdm/connect/storage';
+import { FunctionsClient } from '@wizdm/connect/functions/client';
 import { UserProfile, UserData } from 'app/utils/user-profile';
 import { map, scan, tap, switchMap } from 'rxjs/operators';
-import { AdminService, UserRecord } from '@wizdm/admin';
 import { animationFrameScheduler } from 'rxjs';
+import { UserRecord } from '../admin-types';
 import { Component } from '@angular/core';
 import { append } from 'app/utils/rxjs';
 
@@ -43,12 +45,12 @@ export class ProfileFixerComponent {
   readonly run$ = new Subject<void>();
   
   /** WriteBatch collecting all the fixes to be applied over the database */
-  public batch: WriteBatch;
+  public batch: DatabaseBatch;
 
   /** The DatabaseService */
   private get db(): DatabaseService { return this.users.db; }
 
-  constructor(private admin: AdminService, private users: UserProfile, private st: StorageService ) { 
+  constructor(private client: FunctionsClient, private users: UserProfile, private st: StorageService ) { 
 
     // Builds the report observable to emit each step of the analysis
     this.report$ = this.run$.pipe( 
@@ -63,7 +65,7 @@ export class ProfileFixerComponent {
         of({} as UserReport), 
         
         // Second task starts by loading all the data from the server
-        forkJoin( this.admin.listAllUsers(), this.listAllProfiles(), this.listAllFolders() ).pipe( 
+        forkJoin( this.listAllUsers(), this.listAllProfiles(), this.listAllFolders() ).pipe( 
 
           // Collects the results to initialize the repoprt with the input data
           map( ([users, profiles, folders]) => ({ 
@@ -150,10 +152,22 @@ export class ProfileFixerComponent {
     );
   }
 
+  /** List all users returning them in ascending order sorted by uid */
+  private listAllUsers(): Observable<UserRecord[]> {
+
+    return this.client.get<UserRecord[]>('users');
+  }
+
   /** List all user's profile ordered by id */
   private listAllProfiles(): Observable<UserData[]> {
 
     return defer( () => this.users.get( qf => qf.orderBy(this.db.sentinelId) ));
+  }
+
+  /** Deletes a storage folder from the default bucket */
+  private deleteFolder(prefix: string): Observable<void> {
+
+    return this.client.delete<void>(`folders/${prefix}`);
   }
 
   /** List all storage folders */
@@ -240,7 +254,7 @@ export class ProfileFixerComponent {
     const index = report.folders.findIndex(orphan => orphan === folder);
     if(index >= 0) { 
 
-      this.admin.deleteFolder(folder.name).subscribe( () => {
+      this.deleteFolder(folder.name).subscribe( () => {
 
         report.folders.splice(index, 1);
         report.errorsCount--;
@@ -338,7 +352,7 @@ export class ProfileFixerComponent {
       
       from( this.batch ? this.batch.commit() : empty() ),
 
-      from( report.folders || [] ).pipe( switchMap( folder => this.admin.deleteFolder(folder.name) ) )  
+      from( report.folders || [] ).pipe( switchMap( folder => this.deleteFolder(folder.name) ) )  
       
     ).toPromise().then( () => this.batch = null );
   }

@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, Inject, ViewChild } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { HasTouchScreen } from 'app/utils/platform';
-import { TypeinAdapter } from './typein-adapter';
+import { TypeinAdapter } from 'app/utils/textarea';
 import { EmojiUtils } from '@wizdm/emoji/utils';
 
 @Component({
