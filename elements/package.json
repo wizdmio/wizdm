@@ -1,0 +1,23 @@
+{
+  "name": "@wizdm/elements",
+  "description": "Reusable elements with dynamic features",
+  "version": "0.0.1",
+  "license": "MIT",
+  "keywords": ["Angular", "Elements"],
+  "homepage": "https://wizdm.io/docs/elements",
+  
+  "peerDependencies": {
+    "@angular/core": "^10.0.2",
+    "@angular/cdk": "^10.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/elements"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
+  }
+}

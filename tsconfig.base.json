@@ -64,6 +64,9 @@
       "@wizdm/editable/*": [
         "editable/src/lib/*"
       ],
+      "@wizdm/elements": [
+        "elements/src/index.ts"
+      ],
       "@wizdm/elements/*": [
         "elements/src/lib/*"
       ],
