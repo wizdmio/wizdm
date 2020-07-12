@@ -108,6 +108,10 @@
       ],
       "@wizdm/teleport": [
         "teleport/src/index.ts"
+      ],
+      "play-sound": [
+        "dist/play-sound/play-sound",
+        "dist/play-sound"
       ]
     }
   },
