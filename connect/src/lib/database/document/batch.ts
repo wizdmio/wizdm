@@ -1,5 +1,5 @@
+import { WriteBatch, DocumentRef, DocumentData } from './types';
 import { DatabaseApplication } from '../database-application';
-import { WriteBatch, DocumentRef } from './types';
 
 export class DatabaseBatch {
 
@@ -9,7 +9,7 @@ export class DatabaseBatch {
    * Creates / destructively re-writes the document content.
    * Adds the 'created' timestamp
    */
-  public set<T>(ref: DocumentRef<T>, data: T): this {
+  public set<T extends DocumentData>(ref: DocumentRef<T>, data: T): this {
 
     const created = this.db.timestamp;
     return this.btc.set(ref, {
@@ -22,7 +22,7 @@ export class DatabaseBatch {
    * Updates the document content by merging the new data with the existing one including sub objects.
    * Adds / updates the 'updated' timestamp
    */
-  public merge<T>(ref: DocumentRef<T>, data: T): this {
+  public merge<T extends DocumentData>(ref: DocumentRef<T>, data: T): this {
     
     const updated = this.db.timestamp;
     return this.btc.set(ref, {
@@ -35,7 +35,7 @@ export class DatabaseBatch {
    * Updates the document content with the new data. Unlike merge, it overwrites sub objects.
    * Adds / updates the 'updated' timestamp
    */
-  public update<T>(ref: DocumentRef<T>, data: T): this {
+  public update<T extends DocumentData>(ref: DocumentRef<T>, data: T): this {
 
     const updated = this.db.timestamp;
     return this.btc.update(ref, {
@@ -45,7 +45,7 @@ export class DatabaseBatch {
   }
 
   /** Deletes the document */
-  public delete<T>(ref: DocumentRef<T>): this {
+  public delete<T extends DocumentData>(ref: DocumentRef<T>): this {
     return this.btc.delete(ref), this;
   }
 
