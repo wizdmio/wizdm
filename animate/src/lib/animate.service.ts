@@ -1,6 +1,7 @@
 import { Injectable, ElementRef, NgZone, Inject, Optional } from '@angular/core';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { Observable, BehaviorSubject, of, OperatorFunction } from 'rxjs';
+import { runInZone } from '@wizdm/rxjs';
 import { map, startWith, distinctUntilChanged, take, scan, switchMap, debounceTime, shareReplay } from 'rxjs/operators';
 import { AnimateConfig, ANIMATE_CONFIG, animateConfigFactory } from './animate.config'
 
@@ -151,7 +152,7 @@ export class AnimateService {
       // Distincts the resulting triggers 
       distinctUntilChanged(),
       // Runs within the angular zone to trigger change detection back on
-      source => new Observable( subscriber => source.subscribe( value => this.zone.run( () => subscriber.next(value) ) ))
+      runInZone(this.zone)
     );
   }
 

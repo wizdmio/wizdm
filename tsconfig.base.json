@@ -73,6 +73,9 @@
       "@wizdm/emoji/*": [
         "emoji/src/lib/*"
       ],
+      "@wizdm/emoji-keyboard": [
+        "emoji-keyboard/src/index.ts"
+      ],
       "@wizdm/gtag": [
         "gtag/src/index.ts"
       ],
@@ -109,9 +112,11 @@
       "@wizdm/teleport": [
         "teleport/src/index.ts"
       ],
-      "play-sound": [
-        "dist/play-sound/play-sound",
-        "dist/play-sound"
+      "@wizdm/play-sound": [
+        "play-sound/src/index.ts"
+      ],
+      "@wizdm/rxjs": [
+        "rxjs/src/index.ts"
       ]
     }
   },

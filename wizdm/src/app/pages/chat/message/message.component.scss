@@ -1,0 +1,46 @@
+
+:host {
+  position: relative;
+  display: flex;
+  flex-flow: row;
+  padding: 0 2vw;
+
+  &.in { justify-content: flex-start; }
+  &.out { justify-content: flex-end; }
+
+  .wm-balloon {
+
+    .deleted {
+      opacity: 0.5;
+      font-style: italic;
+    }
+
+    .spacer {
+      display: inline-block;
+      width: 48px;
+    }
+
+    .time {
+      position: absolute;
+      right: 5px;
+      bottom: 0;
+      opacity: 0.5;
+    }
+
+    .menu {
+      position: absolute;
+      right: 5px;
+      top: 0;
+
+      background-color: inherit;
+      cursor: pointer;
+
+      transform: translateX(100%);
+      transition: transform 100ms ease-in-out;
+    }
+
+    &:hover .menu {
+      transform: translateX(0);
+    }
+  }
+}

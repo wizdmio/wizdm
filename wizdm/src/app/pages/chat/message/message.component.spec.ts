@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EmojiKeyboard } from './emoji-keyboard.component';
+import { ChatMessage } from './message.component';
 
-describe('EmojiKeyboard', () => {
-  let component: EmojiKeyboard;
-  let fixture: ComponentFixture<EmojiKeyboard>;
+describe('ChatMessage', () => {
+  let component: ChatMessage;
+  let fixture: ComponentFixture<ChatMessage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EmojiKeyboard ]
+      declarations: [ ChatMessage ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EmojiKeyboard);
+    fixture = TestBed.createComponent(ChatMessage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

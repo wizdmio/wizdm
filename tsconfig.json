@@ -14,9 +14,6 @@
       "path": "./actionlink/tsconfig.lib.json"
     },
     {
-      "path": "./admin/tsconfig.lib.json"
-    },
-    {
       "path": "./animate/tsconfig.lib.json"
     },
     {
@@ -72,6 +69,18 @@
     },
     {
       "path": "./teleport/tsconfig.lib.json"
+    },
+    {
+      "path": "./play-sound/tsconfig.lib.json"
+    },
+    {
+      "path": "./play-sound/tsconfig.spec.json"
+    },
+    {
+      "path": "./rxjs/tsconfig.lib.json"
+    },
+    {
+      "path": "./emoji-keyboard/tsconfig.lib.json"
     }
   ]
 }

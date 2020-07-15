@@ -1,7 +1,7 @@
 
 <ng-container *wmContent="let msgs select 'chat.conversation'">
 
-  <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) <= 0" matBadgeSize="small">
+  <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) === '0'" matBadgeSize="small">
 
     <wm-avatar [src]="(sender$ | async)?.photo" color="primary"></wm-avatar>
     
@@ -13,7 +13,14 @@
 
       <div fxFlex="1 1 auto" class="name mat-title">{{ (sender$ | async)?.fullName || '\n' }}</div>
 
-      <time fxFlex="0 0 auto" class="time mat-small">{{ (last$ | async)?.created?.toDate() | calendar:msgs.timeFormat }}</time>
+      <time fxFlex="0 0 auto" class="time mat-small">
+        {{ (last$ | async)?.created?.toDate() | calendar:msgs.timeFormat || {
+          sameDay: "LT",
+          lastDay: "[Yesterday]",
+          lastWeek: "dddd",
+          sameElse: "L"
+        } }}
+      </time>
 
     </div>
 

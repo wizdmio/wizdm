@@ -1,86 +1,111 @@
 
+<!-- Loads the localized content -->
 <ng-container *wmContent="let msgs select 'chat'" gtag="chat">
 
   <!-- Actionbar -->
   <ng-template wmActionbar let-mobile="isMobile">
 
     <!-- Notification's button -->
-    <button mat-icon-button *ngIf="unreadCount" color="primary">
+    <button mat-icon-button *ngIf="unreadCount !== '0'" color="primary">
       <!-- Displays the icon with the overall unread count -->
       <wm-icon icon="far:fa-bell" [matBadge]="unreadCount" matBadgeSize="small"></wm-icon>
     </button>
 
   </ng-template>
 
-  <ng-container *ngIf="conversations$ | async as conversations">
+  <!-- Fills the side panel as soon as the conversations load -->
+  <ng-container *ngIf="(conversations$ | async) as conversations; else: loadingChat">
 
-    <!-- Sidenav panel -->
+    <!-- Teleports to the side panel -->
     <ng-template wmSidenav opened persist minWidth="280px">
 
       <!-- List of active conversations -->
       <mat-action-list>
 
-        <ng-container *ngFor="let conv of conversations; trackBy: trackById">
+        <mat-list-item  *ngFor="let conv of conversations; trackBy: trackById" 
+                        [attr.selected]="conv.id === (conversationId$ | async)" 
+                        (click)="selectConversation(conv.id)"
+                        class="height-unset primary">
 
-          <mat-list-item class="height-unset" (click)="selectConversation(conv.id)">
-
-            <wm-conversation [conv]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>
-          
-          </mat-list-item>
-
-        </ng-container>
+          <wm-conversation [conv]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>
+        
+        </mat-list-item>
 
       </mat-action-list>
 
     </ng-template>
 
-  </ng-container>
+    <!-- Message thread -->
+    <div fxFlex="100" fxLayout="column" fxLayoutAlign="end stretch"> 
 
-  <!-- Loading spinner -->
-  <div fxLayout="row" fxLayoutAlign="center" *ngIf="loading">
-    <mat-spinner mode="indeterminate" diameter="40"></mat-spinner>
-  </div>
+      <!-- Loading spinner -->
+      <div fxLayout="row" fxLayoutAlign="center" *ngIf="loadingMessages">
+        <mat-spinner mode="indeterminate" diameter="40"></mat-spinner>
+      </div>
 
-  <!-- Message thread -->
-  <ng-container *ngFor="let msg of messages$ | async; trackBy: trackById">
+      <ng-container *ngIf="messages$ | async as messages"> 
 
-    <!-- Message row -->
-    <div class="message" [class.in]="msg.sender !== me" [class.out]="msg.sender === me">
+        <!-- List all messages -->
+        <ng-container *ngFor="let msg of messages; let i = index; trackBy: trackById">
 
-      <!-- Message balloon -->
-      <wm-balloon [color]="msg.sender === me ? 'accent' : 'primary'"
-                  [side]="msg.sender === me ? 'right' : 'left'" 
-                  class="mat-elevation-z3"
-                  anchor="end">
+          <!-- Group messages by date (different day) -->
+          <ng-container *ngIf="i === 0 || (messages[i-1] | createdTime | moment:'D') !== (msg | createdTime | moment:'D')">
 
-        <span [wm-emoji-text]="msg.body"></span>
-      
-        <span class="spacer"></span>
-        
-        <time class="time mat-small">{{ msg.created?.toDate() | moment:'HH:mm' }}</time>
-      
-      </wm-balloon>
+            <!-- Displays a badge with the date -->
+            <div fxFlexAlign="center" class="group-label mat-elevation-z2">{{ 
+                
+              msg | createdTime | calendar:msgs.thread?.timeFormat || {
+                sameDay: "[Today]",
+                lastDay: "[Yesterday]",
+                lastWeek: "dddd",
+                sameElse: "L"
+              }
+
+            }}</div>
+
+          </ng-container>
+
+          <!-- Displays the next message reporting its lastRead time -->
+          <wm-message [message]="msg" (data)="lastRead($event.created)"></wm-message>
+
+        </ng-container>
+
+      </ng-container>
 
     </div>
 
+    <!-- Back to bottom button appearing when scrolled back enough -->
+    <ng-container *wmFab>
+
+      <button mat-mini-fab side="right" edge="bottom" color="primary" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
+        <mat-icon>expand_more</mat-icon>
+      </button>
+
+    </ng-container>
+
+    <!-- Dysplays the message composer once the conversation has loaded -->
+    <ng-container *ngIf="(conversationId$ | async)">
+    
+      <!-- Message composer on the navigator's sticky footer -->
+      <wm-composer *wmFooter [(value)]="text" 
+                             [keys]="keys" 
+                             [disabled]="loadingMessages"
+                             (expanded)="onKeyboardExpand()" 
+                             (send)="send($event)">
+      </wm-composer> 
+
+    </ng-container>
+
   </ng-container>
 
-  <!-- Back to bottom button appearing when scrolled back enough -->
-  <ng-container *wmFab>
+  <!-- Loading chat message -->
+  <ng-template #loadingChat>
 
-    <button mat-mini-fab side="right" edge="bottom" color="primary" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
-      <mat-icon>expand_more</mat-icon>
-    </button>
+    <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+      <span>Loading...</span>
+    </div>
 
-  </ng-container>
-  
-  <!-- Message composer on the navigator's sticky footer-->
-  <wm-composer *wmFooter [(value)]="text" 
-                         [keys]="keys" 
-                         [fxHide]="!(conversationId$ | async)"
-                         (expanded)="onKeyboardExpand()" 
-                         (send)="send($event)">
-  </wm-composer> 
+  </ng-template>
 
   <!-- Can Leave dialog -->
   <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">

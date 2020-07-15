@@ -1,0 +1,41 @@
+
+<!-- Loads the localized content -->
+<ng-container *wmContent="let msgs select 'chat.message'">
+
+  <!-- Message balloon -->
+  <wm-balloon [color]="data?.sender === me ? 'accent' : 'primary'" [side]="data?.sender === me ? 'right' : 'left'" 
+    class="mat-elevation-z2" anchor="end">
+
+    <!-- Deleted message -->
+    <span class="deleted" *ngIf="deleted$ | async; else messageBody">
+      <wm-icon [icon]="msgs.delete?.icon || 'error_outline'"></wm-icon>
+      <span>{{ msgs.delete?.message || 'This message has been deleted' }}</span>
+    </span>
+
+    <!-- Message body template -->
+    <ng-template #messageBody><span [wm-emoji-text]="data?.body"></span></ng-template>
+
+    <!-- Spaces the end of the text to clear the time -->
+    <span class="spacer"></span>
+
+    <!-- Message time -->
+    <time class="time mat-small">{{ data?.created | timestamp | moment:msgs.timeFormat || 'LT' }}</time>
+
+    <!-- Message action menu (visible to the sender only) -->
+    <ng-container *ngIf="data?.sender === me">
+
+      <!-- Menu button-->
+      <mat-icon class="menu" [matMenuTriggerFor]="menu">expand_more</mat-icon>
+
+      <mat-menu #menu="matMenu">
+
+        <!-- Delete message -->
+        <button mat-menu-item (click)="delete()">{{ msgs.delete?.label || 'Delete message' }}</button>
+
+      </mat-menu>
+  
+    </ng-container>
+
+  </wm-balloon>
+
+</ng-container>

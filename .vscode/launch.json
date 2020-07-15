@@ -10,14 +10,7 @@
 			"webRoot": "${workspaceRoot}/wizdm",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
 			"sourceMaps": true,
-			/*"sourceMapPathOverrides": {
-				"webpack:///./*": "${webRoot}/*",
-				"webpack:///src/*": "${webRoot}/*",
-				"webpack:///*": "*",
-				"webpack:///./~/*": "${webRoot}/node_modules/*"
-			}*/
-			// Uncomment this to get diagnostic logs in the console
-			// "diagnosticLogging": true
+			"timeout": 30000
 		},
 		{
 			"name": "Launch http://localhost with sourcemaps",
@@ -26,29 +19,16 @@
 			"url": "http://localhost:4200",
 			"webRoot": "${workspaceRoot}/wizdm",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
-			"sourceMaps": true/*,
-			"sourceMapPathOverrides": {
-        "webpack:/./*": "${webRoot}/*",
-        "webpack:/src/*": "${webRoot}/src/*",
-        "webpack:/*": "*",
-        "webpack:/./~/*": "${webRoot}/node_modules/*"
-      }*/
-			// Uncomment this to get diagnostic logs in the console
-			// "diagnosticLogging": true
+			"sourceMaps": true,
+			"timeout": 30000
 		},
 		{
 			"name": "Attach with sourcemaps",
 			"type": "chrome",
 			"request": "attach",
 			"port": 9222,
-			"webRoot": "${workspaceRoot}",
-			"sourceMaps": true/*,
-			"sourceMapPathOverrides": {
-        "webpack:/./*": "${webRoot}/*",
-        "webpack:/src/*": "${webRoot}/src/*",
-        "webpack:/*": "*",
-        "webpack:/./~/*": "${webRoot}/node_modules/*"
-      }*/
+			"webRoot": "${workspaceRoot}/wizdm",
+			"sourceMaps": true
 		}
 	]
 }

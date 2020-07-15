@@ -11,8 +11,17 @@
 
   margin-top: 5px;
 
-  wm-emoji-input, textarea {
+  .mat-form-field {
+    margin-left: 20px;
+  }
+
+  .wm-emoji-input, textarea {
     word-break: break-all;
+  }
+
+  .tools {
+    cursor: pointer;
+    vertical-align: middle;
   }
 
   .mat-icon-button {

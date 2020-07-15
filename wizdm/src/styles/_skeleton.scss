@@ -1,0 +1,38 @@
+
+@mixin skeleton-animation($color: lightgray) {
+
+  @keyframes load { 
+    from { background-position: 200% 0; } 
+    to { background-position: -100% 0; } 
+  }
+
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-size: 300% 100%;
+
+  background-image: linear-gradient(90deg, rgba($color, 0) 0, $color 50%, rgba($color, 0) 100%);
+
+  animation: load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+@mixin skeleton-loading($color: lightgray) {
+
+  .skeleton-loading {
+
+    @content;
+
+    &.text::after {
+      content: '';
+      position: relative;
+      display: inline-block;
+      background-color: $color;
+      border-radius: 4px;      
+      width: 100%;
+      height: 1em;
+
+      @include skeleton-animation($color);
+    }
+
+    &:not(.text) { @include skeleton-animation($color); }
+  }
+}

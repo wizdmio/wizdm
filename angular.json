@@ -32,14 +32,14 @@
                 "output": "/assets/emoji/"
               },
               {
-                "glob": "20.png",
+                "glob": "32.png",
                 "input": "./node_modules/emoji-datasource-google/img/google/sheets-clean/",
                 "output": "/assets/emoji/sheets/"
               }
             ],
             "styles": ["wizdm/src/styles.scss"],
             "stylePreprocessorOptions": {
-              "includePaths": ["wizdm/src/styles", "elements/src/lib"]
+              "includePaths": ["wizdm/src/styles", "elements/src/lib", "emoji-keyboard/src/lib"]
             },
             "scripts": [],
             "fileReplacements": [
@@ -49,7 +49,7 @@
               }
             ],
             "allowedCommonJsDependencies": [
-              "firebase/app", "@firebase/app", "@firebase/component", "@firebase/firestore", "@firebase/util",
+              "firebase/app", "@firebase/app", "@firebase/component", "@firebase/firestore", "@firebase/functions", "@firebase/util",
               "remark-align", "remark-parse", "unified"
             ]
           },
@@ -889,6 +889,126 @@
       "schematics": {
         "@schematics/angular:component": {
           "styleext": "scss"
+        }
+      }
+    },
+    "play-sound": {
+      "projectType": "library",
+      "root": "play-sound",
+      "sourceRoot": "play-sound/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "play-sound/tsconfig.lib.json",
+            "project": "play-sound/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "play-sound/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "play-sound/src/test.ts",
+            "tsConfig": "play-sound/tsconfig.spec.json",
+            "karmaConfig": "play-sound/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "play-sound/tsconfig.lib.json",
+              "play-sound/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "rxjs": {
+      "projectType": "library",
+      "root": "rxjs",
+      "sourceRoot": "rxjs/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "rxjs/tsconfig.lib.json",
+            "project": "rxjs/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "rxjs/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "rxjs/src/test.ts",
+            "tsConfig": "rxjs/tsconfig.spec.json",
+            "karmaConfig": "rxjs/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "rxjs/tsconfig.lib.json",
+              "rxjs/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "emoji-keyboard": {
+      "projectType": "library",
+      "root": "emoji-keyboard",
+      "sourceRoot": "emoji-keyboard/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "emoji-keyboard/tsconfig.lib.json",
+            "project": "emoji-keyboard/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "emoji-keyboard/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "emoji-keyboard/src/test.ts",
+            "tsConfig": "emoji-keyboard/tsconfig.spec.json",
+            "karmaConfig": "emoji-keyboard/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "emoji-keyboard/tsconfig.lib.json",
+              "emoji-keyboard/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
         }
       }
     }

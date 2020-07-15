@@ -1,12 +1,13 @@
 import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } from 'rxjs';
 import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
+import { DarkModeObserver } from 'app/utils/platform';
 import { UserProfile } from 'app/utils/user-profile';
 import { MediaObserver } from '@angular/flex-layout';
 import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';
 import { AdminObservable } from 'app/utils/admin';
-import { runInZone } from 'app/utils/rxjs';
+import { runInZone } from '@wizdm/rxjs';
 import { SidenavConfig } from './sidenav';
 import { FabOptions } from './fab';
 
@@ -57,6 +58,7 @@ export class NavigatorComponent {
               private ruler: ViewportRuler,
               readonly user: UserProfile,
               readonly admin$: AdminObservable,
+              readonly dark$: DarkModeObserver,
               private zone: NgZone) {
 
     // Builds the mobile menu status observable

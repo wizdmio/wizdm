@@ -1,6 +1,6 @@
 import { AuthService } from '@wizdm/connect/auth';
+import { authorized } from 'app/utils/auth-guard';
 import { Injectable } from '@angular/core';
-import { authorized } from '@wizdm/admin';
 import { rootEmail } from 'env/secrets';
 import { Observable } from 'rxjs';
 

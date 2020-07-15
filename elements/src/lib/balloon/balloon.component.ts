@@ -3,7 +3,7 @@ import { ThemePalette } from '@angular/material/core'
 
 @Component({
   selector: 'wm-balloon',
-  template: '<ng-content></ng-content>',
+  templateUrl: './balloon.component.html',
   styleUrls: ['./balloon.component.scss'],
   host: { 'class': 'wm-balloon' },
   encapsulation: ViewEncapsulation.None

@@ -5,7 +5,7 @@ import { DocumentData } from '@wizdm/connect/database/document';
 import { DatabaseService } from '@wizdm/connect/database';
 import { AuthService, User } from '@wizdm/connect/auth';
 import { Injectable, OnDestroy } from '@angular/core';
-import { tapOnce } from 'app/utils/rxjs';
+import { tapOnce } from '@wizdm/rxjs';
 
 export interface UserData extends DocumentData {
 

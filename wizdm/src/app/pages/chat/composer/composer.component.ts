@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, Inject, ViewChild } from '@angular/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { HasTouchScreen } from 'app/utils/platform';
 import { TypeinAdapter } from 'app/utils/textarea';
 import { EmojiUtils } from '@wizdm/emoji/utils';
@@ -25,6 +26,11 @@ export class MessageComposer {
   /** Favorites keys */
   @Input() keys: string[];
 
+  /** Disables the composer */
+  @Input() set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
+  get disabled(): boolean { return this._disabled; }
+  private _disabled: boolean = false;
+
   /** Value changes event */
   @Output() valueChange = new EventEmitter<string>();
 
@@ -48,10 +54,10 @@ export class MessageComposer {
     return this.emojiKeysPanel.toggle(), false;
   }
 
-  /** True when the native emoji support is requested */
-  public get native(): boolean {
+  /** Returns the globally used emoji mode */
+  public get mode(): 'native'|'web' {
     // Use the very same emoji mode from EmojiSupportModule
-    return this.utils.emojiMode() === 'native'; 
+    return this.utils.emojiMode(); 
   }
 
   /** Selectes how inputs respond to 'Enter' key. */

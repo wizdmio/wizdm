@@ -8,7 +8,7 @@ import { map, scan, tap, switchMap } from 'rxjs/operators';
 import { animationFrameScheduler } from 'rxjs';
 import { UserRecord } from '../admin-types';
 import { Component } from '@angular/core';
-import { append } from 'app/utils/rxjs';
+import { append } from '@wizdm/rxjs';
 
 /** Users Analysis Report */
 export interface UserReport {

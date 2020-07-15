@@ -1,5 +1,15 @@
 {
 
+  "thread": {
+    
+    "timeFormat": {
+      "sameDay": "[Today]",
+      "lastDay": "[Yesterday]",
+      "lastWeek": "dddd",
+      "sameElse": "L"
+    }
+  },
+
   "conversation": {
 
     "timeFormat": {
@@ -8,6 +18,22 @@
       "lastWeek": "dddd",
       "sameElse": "L"
     }
+  },
+
+  "message": {
+    "delete": {
+      "icon": "fas:fa-ban",
+      "label": "Delete message",
+      "message": "This message has been deleted"
+    }
+  },
+
+  "composer": {
+
+    "placeholder": "Type a message",
+    "emoji": { "icon": "far:fa-grin-wink", "tooltip": "Insert an emoji" },
+    "send": { "icon": "far:fa-paper-plane", "tooltip": "Send a message" }
+    
   },
 
   "canLeave": {

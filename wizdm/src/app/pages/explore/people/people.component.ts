@@ -5,7 +5,7 @@ import { DatabaseService } from '@wizdm/connect/database';
 import { ScrollObservable } from 'app/utils/scroll';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { UserData } from 'app/utils/user-profile';
-import { autocomplete } from 'app/utils/rxjs';
+import { autocomplete } from '@wizdm/rxjs';
 import { Component } from '@angular/core';
 
 @Component({
@@ -43,19 +43,21 @@ export class PeopleComponent extends DatabaseCollection<UserData> {
       // Triggers the next page when approaching the bottom
       map( scroll => scroll.bottom < 250 ),
       // Filters for truthfull changes
-      distinctUntilChanged(), filter( value => value ), startWith(true),
+      startWith(true), distinctUntilChanged(), filter( value => value ),
       // Shows the loading items
-      tap(() => this._loading$.next(20) )
+      tap( () => this._loading$.next(20) ),
+      // Asks for the next 20 contacts
+      map( () => 20 )
     );
 
     // All items paged result observable. 
     const paged$ = this.pipe( 
       // Pages 20 items at a time
-      orderBy('fullName'), page(more$, 20), data(), 
+      orderBy('fullName'), page(more$), data(), 
       // Buffers the results to avoid reloading after a search
       shareReplay(1),
       // Hides the loading items when done
-      tap(() => this._loading$.next(0) )
+      tap( () => this._loading$.next(0) )
     );
 
     // Searching term observable

@@ -1,4 +1,4 @@
-import { AuthPipeFactory, authRedirect, customClaims } from '@wizdm/connect/auth';
+import { AuthPipeFactory, AuthPipe, authRedirect, customClaims } from '@wizdm/connect/auth';
 import { RouterStateSnapshot } from '@angular/router';
 export { AuthGuard } from "@wizdm/connect/auth"; 
 import { switchMap, map } from 'rxjs/operators';
@@ -38,22 +38,19 @@ export const emailVerified: AuthPipeFactory = (_, state) => map( user => {
 });
 
 /** AuthPipe operator granting access based on roles */
-export function authorized(roles: string[], rootEmail?: string): AuthPipeFactory {
+export function authorized(roles: string[], rootEmail?: string): AuthPipe {
   
-  return () => {
+  return switchMap( user => {
 
-    return switchMap( user => {
+    // Rejects unauthenticated users
+    if(!user) { return of(false); }
 
-      // Rejects unauthenticated users
-      if(!user) { return of(false); }
-
-      // Root email grants access when specified
-      if(rootEmail && user.email === rootEmail) { 
-        return of(true);
-      }
-      
-      // Roles from custom claims are checked otherwise
-      return of(user).pipe(customClaims, map( claims => roles.some(role => claims[role] ) ) );
-    });
-  };
-} 
+    // Root email grants access when specified
+    if(rootEmail && user.email === rootEmail) { 
+      return of(true);
+    }
+    
+    // Roles from custom claims are checked otherwise
+    return of(user).pipe(customClaims, map( claims => roles.some(role => claims[role] ) ) );
+  });
+}

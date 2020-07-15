@@ -72,58 +72,58 @@ export function data<T extends DocumentData>(): OperatorFunction<QueryDocumentSn
   return source => source.pipe( map( docs => docs.map( doc => mapSnaphotData(doc) ) ) );
 }
 
-export function page<T extends DocumentData>(pager: Observable<any>, size: number): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
-
+export function page<T extends DocumentData>(pager: Observable<number>): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+  // Trggers loading with the pager observable
   return source => pager.pipe(
-    
-    mergeScan( internal => source.pipe( 
-
+    // Accumulates the pages
+    mergeScan( (internal, size) => source.pipe( 
+      // Loads the next page
       limit(size), startAfter(internal.cursor), snap(),
-      
+      // Tracks the result
       map( (results: QueryDocumentSnapshot<T>[]) => {
 
         return {
-
+          // Concatenates the last page 
           results: internal.results.concat(results),
-
+          // Keeps the last snapshot as a cursor for the next page
           cursor: results[results.length - 1],
-
+          // Checks when done
           done: results.length < size
         };
-
+      // Starts empty
       })), { results: [], cursor: null, done: false }
     ),
-
+    // Completes when done
     takeWhile(internal => !internal.done, true),
-
+    // Plucks the document snapshots
     pluck('results')
   );
 }
 
-export function pageReverse<T extends DocumentData>(pager: Observable<any>, size: number): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
-
+export function pageReverse<T extends DocumentData>(pager: Observable<number>, from?: DocumentSnapshot<T>): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+  // Trggers loading with the pager observable
   return source => pager.pipe(
-    
-    mergeScan( internal => source.pipe( 
-
+    // Accumulates the pages
+    mergeScan( (internal, size) => source.pipe( 
+      // Loads the previous page
       limitToLast(size), endBefore(internal.cursor), snap(),
-      
+      // Tracks the result
       map( (results: QueryDocumentSnapshot<T>[]) => {
 
         return {
-
+          // Concatenates the last page 
           results: results.concat(internal.results),
-
+          // Keeps the first snapshot as a cursor for the next page
           cursor: results[0],
-
+          // Checks when done
           done: results.length < size
         };
-
-      })), { results: [], cursor: null, done: false }
+      // Starts empty
+      })), { results: [], cursor: from, done: false }
     ),
-
+    // Completes when done
     takeWhile(internal => !internal.done, true),
-
+    // Plucks the document snapshots
     pluck('results')
   );
 }

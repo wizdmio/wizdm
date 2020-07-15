@@ -1,35 +1,46 @@
 
-<div fxLayout="row" fxLayoutAlign="center end" (keydown)="sendOnEnter($event)">
+<!-- Loads the localized content -->
+<ng-container *wmContent="let msgs select 'chat.composer'">
 
-  <!-- Toggles Emoji Keyboard -->
-  <button mat-icon-button (mousedown)="toggleEmojiKeys()">
-    <mat-icon>emoji_emotions</mat-icon>
-  </button>
+  <div fxLayout="row" fxLayoutAlign="center end" (keydown)="sendOnEnter($event)">
 
-  <!-- Native Input for platforms supporting Emoji natively -->
-  <mat-form-field appearance="legacy" fxFlex="1 1 auto" *ngIf="native; else webMode">
-    <mat-label>Type a message</mat-label>
-    <textarea matInput typein [(value)]="value" [newline]="enterMode" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
-  </mat-form-field>
-
-  <!-- Emoji Input for the Web -->
-  <ng-template #webMode>
-    <mat-form-field appearance="legacy" fxFlex="1 1 auto">
-      <mat-label>Type a message</mat-label>
-      <wm-emoji-input matEmoji typein [(value)]="value" [newline]="enterMode"></wm-emoji-input>
+    <!-- Native Input for platforms supporting Emoji natively -->
+    <mat-form-field appearance="legacy" fxFlex="1 1 auto" *ngIf="mode === 'native'; else webMode">
+      <mat-label>{{ msgs.placeholder || 'Type a message' }}</mat-label>
+      <textarea matInput typein [(value)]="value" [newline]="enterMode" [disabled]="disabled" cdkTextareaAutosize cdkAutosizeMinRows="1">
+      </textarea>
+      <wm-icon class="tools" inline matSuffix 
+                [icon]="msgs.emoji?.icon || 'insert_emoticon'"                
+                [matTooltip]="msgs.emoji?.tooltip || 'Insert an emoji'" 
+                (mousedown)="!disabled && toggleEmojiKeys()">
+        </wm-icon>
     </mat-form-field>
-  </ng-template>
 
-  <!-- Send button -->
-  <button mat-icon-button [disabled]="!valid" (mousedown)="sendNow()">
-    <mat-icon>send</mat-icon>
-  </button>
+    <!-- Emoji Input for the Web -->
+    <ng-template #webMode>
+      <mat-form-field appearance="legacy" fxFlex="1 1 auto">
+        <mat-label>{{ msgs.placeholder || 'Type a message' }}</mat-label>
+        <wm-emoji-input matEmoji typein [(value)]="value" [newline]="enterMode" [disabled]="disabled"></wm-emoji-input>
+        <wm-icon class="tools" inline matSuffix 
+                [icon]="msgs.emoji?.icon || 'insert_emoticon'"                
+                [matTooltip]="msgs.emoji?.tooltip || 'Insert an emoji'" 
+                (mousedown)="!disabled && toggleEmojiKeys()">
+        </wm-icon>
+      </mat-form-field>
+    </ng-template>
 
-</div>
+    <!-- Send button -->
+    <button mat-icon-button [disabled]="disabled || !valid" (mousedown)="sendNow()">
+      <wm-icon [icon]="msgs.send?.icon || 'send'" [matTooltip]="msgs.send?.tooltip || 'Send'" ></wm-icon>
+    </button>
 
-<!-- On Demand Emoji Keyboard -->
-<mat-expansion-panel class="padding-0 mat-elevation-z0" (afterExpand)="expanded.emit()" hideToggle>
- 
-  <wm-emoji-keyboard [favorites]="keys" rows="5" (keyPressed)="typein($event)"></wm-emoji-keyboard>
+  </div>
 
-</mat-expansion-panel>
+  <!-- On Demand Emoji Keyboard -->
+  <mat-expansion-panel class="padding-0 mat-elevation-z0" (afterExpand)="expanded.emit()" hideToggle>
+  
+    <wm-emoji-keyboard [favorites]="keys" [mode]="mode" (keyPressed)="typein($event)"></wm-emoji-keyboard>
+
+  </mat-expansion-panel>
+
+</ng-container>

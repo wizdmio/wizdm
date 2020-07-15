@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
+/** HasTouchScreen injection token */
 export const HasTouchScreen = new InjectionToken<boolean>('wizdm-has-touchscreen', {
   providedIn: 'root',
   factory: () => {

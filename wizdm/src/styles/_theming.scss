@@ -1,3 +1,5 @@
+$sheetFile: "/assets/emoji/sheets/32.png";
+@import 'emoji-keyboard-theme';
 @import 'elements-theme';
 
 // Initilize the global application theme
@@ -24,8 +26,18 @@
   // Styles the elements according to the theme
   @include wm-elements-theme($theme);
 
+  // Styles the emoji-keyboard component
+  @include wm-emoji-keyboard($theme);
+
   // Styles the theme colors globally
   @include wm-theme-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
+
+  // Styles the skeleton loading animation class
+  @include skeleton-loading(map-get($foreground, divider)) {
+    
+    // Patches the avatar element color
+    &.wm-avatar { fill: opacify(map-get($foreground, divider), 0.25); }
+  }
 
   // Applies a smooth scroll behaviour whenever supported
   html { scroll-behavior: smooth; }

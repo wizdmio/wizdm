@@ -33,13 +33,13 @@
     </mat-list-item>
 
     <!-- Loading skeleton items -->
-    <mat-list-item class="loading" *ngFor="let item of loading$ | async">
+    <mat-list-item *ngFor="let item of loading$ | async">
   
-      <wm-avatar matListAvatar></wm-avatar>
+      <wm-avatar matListAvatar class="skeleton-loading"></wm-avatar>
       
-      <h3 matLine class="text"><span></span></h3>
+      <h3 matLine class="skeleton-loading text"><span></span></h3>
       
-      <p matLine class="text"><span></span></p>
+      <p matLine class="skeleton-loading text"><span></span></p>
   
     </mat-list-item>
     

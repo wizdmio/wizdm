@@ -16,6 +16,11 @@ export class DatabaseDocument<T extends DocumentData> {
     this.ref = db.doc(pathOrRef);
   }
 
+  /** Unwraps a document snapshot assuming its reference and returning the data content */
+  public unwrap(snapshot: DocumentSnapshot<T>): T {
+    return this.ref = snapshot?.ref, mapSnaphotData(snapshot);
+  }
+
   /** Returns the document object id */
   public get id(): string { return this.ref && this.ref.id; }
 
@@ -83,8 +88,8 @@ export class DatabaseDocument<T extends DocumentData> {
   }
 
   /**
-   * Conditionally updates and existing document or creates a new one if not existing.
-   * Uses a transaction to ensure consisntency
+   * Conditionally updates an existing document or creates a new one if not existing.
+   * Uses a transaction to support concurrency
    */
   public upsert(data: T): Promise<void> {
 
@@ -99,6 +104,21 @@ export class DatabaseDocument<T extends DocumentData> {
     });
   }
 
+  /** 
+   * Tries to update and existing document falling back to create a new one on 'not-found' error.
+   * Unlike upsert(), concurrent writes may cause data loss. Use with caution when document access 
+   * is guarded by design.
+   */
+  public overwrite(data: T): Promise<void> {
+
+    return this.update(data).catch( e => { 
+
+      if(e.code !== 'not-found') { return Promise.reject(e); }
+
+      return this.set(data);      
+    });
+  }
+
   /** Returns the document snapshot immediately */
   public snap(options?: GetOptions): Promise<DocumentSnapshot<T>> {
     // Short-circuits the undefined ref
@@ -110,15 +130,15 @@ export class DatabaseDocument<T extends DocumentData> {
     return this.snap(options).then( snapshot => mapSnaphotData(snapshot) );  
   }
 
-  /** Applies the given reference to this object */
-  public from(pathOrRef: string|DocumentRef<T>): Observable<DocumentSnapshot<T>> {
-    return fromRef<T>(this.db.doc(pathOrRef), this.db.zone);
+  /** Returns an observable streaming this document snapshot */
+  public asObservable(): Observable<DocumentSnapshot<T>> {
+    return fromRef<T>(this.ref, this.db.zone);
   }
 
   /** Streams the document content with an observable */
   public stream(): Observable<T> {
     // Maps the snapshot to the data content
-    return this.from(this.ref).pipe( map( snapshot => mapSnaphotData(snapshot) ));
+    return this.asObservable().pipe( map( snapshot => mapSnaphotData(snapshot) ));
   }
 
   /** Deletes the document */

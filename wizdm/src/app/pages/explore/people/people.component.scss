@@ -1,28 +1,3 @@
-
-@mixin loading() {
-
-  position: relative;
-  overflow: hidden;
-
-  @keyframes load { from { left: -200%; } to { left: 200%; } }
-
-  &::before{
-    content: '';
-    display: block;
-    position: absolute;
-    left: -100%;
-    top: 0;
-    height: 100%;
-    width: 200%;
-    background: linear-gradient(90deg,  
-      rgba(lightgrey, 0) 0, 
-      rgba(lightgray, 1) 50%, 
-      rgba(lightgrey, 0) 100%
-    );
-    animation: load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
-  }
-}
-
 :host {
 
   position: relative;
@@ -35,26 +10,7 @@
     min-width: 300px;
   }
 
-  .loading {
-
-    .wm-avatar { fill: lightgrey; @include loading(); }
-
-    h3.text { width: 120px; }
-    p.text { width: 50%; }
-    .text {
-
-      max-width: 70%;
-
-      span {
-        display: inline-block;
-        overflow: hidden;
-        background-color: rgba(lightgray, 0.5);
-        border-radius: 3px;
-        height: 1em;
-        width: 100%;
-
-        @include loading();
-      }
-    }
-  }
+  .skeleton-loading.text { max-width: 70%; }
+  h3.skeleton-loading.text { width: 120px; }
+  p.skeleton-loading.text { width: 50%; }
 }

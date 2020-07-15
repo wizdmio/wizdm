@@ -30,8 +30,15 @@ $arrowSize: 12px;
   position: relative;
   display: inline-block;
   border-radius: $arrowSize/2;
-  padding: $arrowSize;
   box-sizing: border-box;
+
+  .balloon-content {
+    position: relative;
+    background-color: inherit;
+    border-radius: inherit;
+    padding: $arrowSize;
+    overflow: hidden;
+  }
   
   @include arrow(bottom, center) {
     left: calc(50% - #{$arrowSize/2}); bottom: -1px;

@@ -1,16 +1,17 @@
-import { take, startWith, map, tap, filter, switchMap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
-import { orderBy, pageReverse, limitToLast, endBefore, snap, data } from '@wizdm/connect/database/collection/operators';
+import { take, startWith, map, tap, filter, switchMap, distinctUntilChanged, shareReplay, debounceTime } from 'rxjs/operators';
 import { DatabaseCollection, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
+import { Subscription, Observable, Subject, BehaviorSubject, of, merge } from 'rxjs';
+import { orderBy, pageReverse } from '@wizdm/connect/database/collection/operators';
+import { DatabaseDocument, DocumentData } from '@wizdm/connect/database/document';
 import { ChatterData, ConversationData, MessageData } from './chat-types';
-import { Component, Inject, NgZone } from '@angular/core';
-import { DatabaseService } from '@wizdm/connect/database';
+import { Component, OnDestroy, Inject, NgZone } from '@angular/core';
+import { DatabaseService, Timestamp } from '@wizdm/connect/database';
 import { UserProfile } from 'app/utils/user-profile';
 import { ScrollObservable } from 'app/utils/scroll';
 import { ActivatedRoute } from '@angular/router';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { $animations } from './chat.animations';
-import { runInZone } from 'app/utils/rxjs';
-import { Observable, BehaviorSubject, of, merge } from 'rxjs';
+import { runInZone } from '@wizdm/rxjs';
 
 @Component({
   selector: 'wm-chat',
@@ -18,28 +19,36 @@ import { Observable, BehaviorSubject, of, merge } from 'rxjs';
   styleUrls: ['./chat.component.scss'],
   animations: $animations
 })
-export class ChatComponent extends DatabaseCollection<ConversationData> {
+export class ChatComponent extends DatabaseCollection<ConversationData> implements OnDestroy {
 
   // Conversation(s)
   readonly conversations$: Observable<QueryDocumentSnapshot<ConversationData>[]>;
 
   private  _conversationId$ = new BehaviorSubject<string>('');
   readonly conversationId$: Observable<string>;
+
+  // Current conversation and status
+  private conversation: DatabaseDocument<ConversationData>;
+  private status: DatabaseDocument<DocumentData>;
   
   // Messages thread
   private  thread: DatabaseCollection<MessageData>;
-  readonly messages$:  Observable<MessageData[]>;
+  readonly messages$: Observable<QueryDocumentSnapshot<MessageData>[]>;
+  public   loadingMessages: boolean = false;
+
+  private lastRead$ = new Subject<Timestamp>();
+  private sub: Subscription;
   
   // Scrolling
   readonly scrolled$: Observable<boolean>;
   private  autoScroll: boolean = true;
-
-  public loading: boolean = false;
   
   // Keys
   private stats = { "😂": 1, "👋🏻": 1, "👍": 1, "💕": 1, "🙏": 1 };
   public  keys: string[];
   public  text = "";
+
+  private unreadMap: { [id:string]: number } = { };
 
   public get me(): string { return this.user.uid; }  
   
@@ -50,13 +59,13 @@ export class ChatComponent extends DatabaseCollection<ConversationData> {
 
     // Gets or creates the conversation with the requested contact
     const contact$ = route.queryParamMap.pipe( 
-      
+      // Extracts the @username from the route
       map( params => params.get('contact') ), 
-
+      // Resolves the user, if any
       switchMap( userName => user.fromUserName(userName) ),
-
+      // Resolves the conversation id towards the given user
       switchMap( user => {
-
+        // No user found
         if(!user) return of('');
         // Computes the path for the requested conversation
         const cid = this.me < user.id ? this.me.concat(user.id) : user.id.concat(this.me);
@@ -73,7 +82,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> {
           });
         })
       }),
-      
+      // Filters emty values
       filter( value => !!value )
     );
 
@@ -85,28 +94,39 @@ export class ChatComponent extends DatabaseCollection<ConversationData> {
 
     // Paging observalbe to load the previous messages while scrolling up
     const more$ = scroller.pipe( 
-      // Triggers the previous 50 messages when approaching the top
+      // Triggers the previous page when approaching the top
       map( scroll => scroll.top < 50 ),
       // Filters for truthfull changes
-      distinctUntilChanged(), filter( value => value ), startWith(true),
+      startWith(true), distinctUntilChanged(), filter( value => value ),
       // Shows the loading spinner
-      tap(() => this.loading = true )
+      tap( () => this.loadingMessages = true ),
+      // Asks for the next 20 messages
+      map( () => 20 )
     );
 
-    // Streams up to the last 50 messages from the selected conversation
+    // Streams up to page size messages from the selected conversation
     this.messages$ = this.conversationId$.pipe( 
       // Filters for valid id
-      filter( id => !!id ), distinctUntilChanged(),
-      // Gets the message thread reference
-      map( id => this.thread = this.document(id).collection<MessageData>('messages') ),
-      // Pages the latest 50 messages
-      switchMap( thread => thread.pipe( orderBy('created'), pageReverse(more$, 50), data() ) ),
-      
+      filter( id => !!id ), distinctUntilChanged(), 
+      // Stores the curernt conversation
+      map( id => this.conversation = this.document(id) ),
+      // Retrives the current user conversation status
+      tap( conv => this.status = conv.collection('recipients').document(this.me) ),
+      // Gets the message thread
+      map( conv => this.thread = conv.collection<MessageData>('messages') ),
+      // Pages the past messages while scrolling up (note: pages statically load)
+      switchMap( thread => thread.pipe( orderBy('created'), pageReverse(more$) ).pipe(
+        // Queries for the next message starting from the end of the page to get realtime updates
+        switchMap( paged => thread.query( qf => qf.orderBy('created').startAfter( paged[paged.length-1] ) ).pipe(
+          // Appends the past paged messages with the latest gotten realtime
+          map( latest => paged.concat(latest) )
+        ))
+      )),
       tap( msgs => {
         // Scrolls for the last message to be visible  
         this.autoScroll && this.afterRender( () => this.scrollToBottom() );
         // Hides the loading spinner
-        this.loading = false;
+        this.loadingMessages = false;
       })
     );
 
@@ -124,11 +144,28 @@ export class ChatComponent extends DatabaseCollection<ConversationData> {
       runInZone(this.zone)
     );
 
-    this.keys = this.sortFavorites(this.stats);
-  }  
+    // Subscribes to the lastRead subject tracking the latest message timestamp
+    this.sub = this.lastRead$.pipe( filter( value => !!value), debounceTime(1000) ).subscribe( lastRead => {
+      // Saves the lastRead timestamp in the status. We can use overwrite() since no one else is suppose to write
+      // this very same document but the current user. The value saved here will be used to compute the covenrsation's
+      // unread message count
+      this.status.overwrite({ lastRead });
+    });
 
+    this.keys = this.sortFavorites(this.stats);
+  }
+
+  // Disposes of the subscriptions
+  ngOnDestroy() { this.sub.unsubscribe(); }
+
+  /** Switches to the given conversation */
   public selectConversation(id: string) {
     this._conversationId$.next(id);
+  }
+
+  /** Updates the lastRead status with the gien timestamp */
+  public lastRead(lastRead: Timestamp) {
+    this.lastRead$.next(lastRead);
   }
 
   /** Scrolls te view to the bottom to make the latest message visible */
@@ -183,21 +220,24 @@ export class ChatComponent extends DatabaseCollection<ConversationData> {
     return false;
   }
 
-  private unreadMap: { [id:string]: number } = { };
-
   public accumulateUnread(convId: number, count: number) {
 
     this.unreadMap[convId] = count;
   }
 
-  public get unreadCount(): number {
+  public get unreadCount(): string {
 
-    return Object.values(this.unreadMap).reduce( (count, value) => {
-      return count + value;
-    }, 0);
+    return Object.values(this.unreadMap).reduce( (result, value) => {
+
+      const count = +result.replace(/\++$/,'');
+
+      return (count + value).toString() + (value > 10 || result.endsWith('+') ? '+' : '');
+      
+    }, '0');
   }
 
-  public trackById(data: ConversationData|MessageData) { 
+  /** ngFor rtacking function */
+  public trackById(data: QueryDocumentSnapshot<any>) { 
     return data.id; 
   }
 
