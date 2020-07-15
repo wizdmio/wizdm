@@ -1,0 +1,18 @@
+@import './emoji-sheet-map';
+@import './emoji-keys';
+
+@mixin wm-emoji-keyboard($theme) {
+
+  .wm-emoji-keyboard {
+
+    $foregroud: map-get($theme, foreground);
+
+    color: map-get($foregroud, disabled);
+
+    .selected {
+      color: mat-color( map-get($theme, primary) );
+    }
+
+    @include defineKeys("key");
+  }
+}

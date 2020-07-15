@@ -1,0 +1,20 @@
+
+.wm-emoji-keyboard {
+  position: relative; 
+  display: flex;
+  flex-direction: column;
+  min-height: 240px;
+  height: 100%;
+  width: 100%;
+
+  .group { padding: 0 10px; }
+
+  .cdk-virtual-scroll-viewport {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .mat-button {
+    min-width: 40px;
+  }
+}
