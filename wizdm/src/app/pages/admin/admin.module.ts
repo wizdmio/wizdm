@@ -6,16 +6,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { ClientModule } from '@wizdm/connect/functions/client';
-import { AuthGuard, authorized } from 'app/utils/auth-guard';
 import { AdminComponent } from './admin.component';
-import { rootEmail } from 'env/secrets';
+import { AuthGuard } from 'app/utils/auth-guard';
+import { isAdmin } from 'app/utils/admin';
 
 const routes: RoutesWithContent = [{
 
   path: '',
   content: 'admin',
   component: AdminComponent,
-  canActivate: [ AuthGuard ], data: { authGuardPipe: () => authorized(['admin'], rootEmail) },
+  canActivate: [ AuthGuard ], data: { authGuardPipe: isAdmin },
   children: [
 
     { path: '', redirectTo: 'access', pathMatch: 'full' },

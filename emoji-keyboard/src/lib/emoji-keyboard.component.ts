@@ -50,10 +50,7 @@ export class EmojiKeyboardComponent {
       // Makes sure to start with a value
       startWith(null),
       // Waits for rendering to complete
-      sample(zone.onStable), 
-
-      tap( () => console.log(elref.nativeElement.scrollWidth ) ),
-
+      sample(zone.onStable),
       // Computes the number of columns based on the actual width
       map( () => Math.floor(elref.nativeElement.scrollWidth / this.keySize) ),
       // Filters for changes

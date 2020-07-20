@@ -33,6 +33,12 @@ export abstract class DatabaseApplication {
     }
   }
 
+  /** Returns a fieldpath from the provided field names. If more than one field name is provided, the path will point to a nested field 
+   * in a document */
+  public fieldPath(...fieldNames: string[]) {
+    return new firestore.FieldPath(...fieldNames);
+  }
+
   /** Returns an ID sentinel to be used in queries */
   public get sentinelId(): FieldPath {
     return firestore.FieldPath.documentId();

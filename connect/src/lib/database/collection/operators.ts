@@ -1,8 +1,9 @@
-import { QueryFn, QueryRef, QueryDocumentSnapshot, WhereFilterOp, OrderByDirection } from './types';
-import { Observable, defer, OperatorFunction, MonoTypeOperatorFunction } from 'rxjs';
-import { map, scan, pluck, switchMap, mergeScan, takeWhile } from 'rxjs/operators';
+import { QueryFn, QueryRef, QuerySnapshot, QueryDocumentSnapshot, DocumentChange, DocumentChangeType, WhereFilterOp, OrderByDirection, ListenOptions } from './types';
+import { tap, map, scan, filter, expand, take, pluck, switchMap, mergeScan, takeWhile } from 'rxjs/operators';
+import { Observable, pipe, defer, OperatorFunction, MonoTypeOperatorFunction } from 'rxjs';
 import { DocumentData, DocumentSnapshot, GetOptions } from '../document/types';
-import { fromRef, mapDocumentChanges, mapSnaphotData } from './utils';
+import { fromRef, combineDocumentChanges } from './utils';
+import { mapSnaphotData } from '../document/utils';
 import { FieldPath } from '../database-application';
 import { NgZone } from '@angular/core';
 
@@ -50,21 +51,55 @@ export function endAt<T extends DocumentData>(args: any[]|DocumentSnapshot<T>): 
   return map( ref => args ? ref.endAt(args) : ref );
 }
 
-export function snap<T extends DocumentData>(options?: GetOptions): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
-  return source => source.pipe( 
-    switchMap( ref => defer( () => ref.get(options) ) ),
-    map( snap => snap.docs )
-  );
+export function get<T extends DocumentData>(options?: GetOptions): OperatorFunction<QueryRef<T>, QuerySnapshot<T>> {
+  return switchMap( ref => defer( () => ref.get(options) ) );
 }
 
-export function stream<T extends DocumentData>(zone: NgZone): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
-  return source => source.pipe(
+export function docs<T extends DocumentData>(): OperatorFunction<QuerySnapshot<T>, QueryDocumentSnapshot<T>[]> {
+  return map( snap => snap.docs );
+}
 
-    switchMap( ref => fromRef<T>(ref, zone) ),
-    // Maps the snapshot into document changes
-    map( snap => snap.docChanges() ),
+export function snap<T extends DocumentData>(options?: GetOptions): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+  return pipe( get(options), docs() );
+}
+
+export function onSnapshot<T>(zone: NgZone, options?: ListenOptions): OperatorFunction<QueryRef<T>, QuerySnapshot<T>> {
+  return switchMap( ref => fromRef<T>(ref, zone, options) );
+}
+
+export function docChanges<T extends DocumentData>(options?: ListenOptions, ...changeTypes: DocumentChangeType[]): OperatorFunction<QuerySnapshot<T>, DocumentChange<T>[]> {
+  
+  return map( snap => {
+    
+    const changes = snap.docChanges(options);
+
+    console.log('Changes', changes);
+
+    return (!changeTypes || changeTypes.length <= 0) ? changes : changes.filter( change => changeTypes.indexOf(change.type) >= 0 );
+  });
+}
+
+export function combineChanges<T extends DocumentData>(seed: QueryDocumentSnapshot<T>[] = []): OperatorFunction<DocumentChange<T>[], QueryDocumentSnapshot<T>[]> {
+
+  return scan( (combined, changes) => combineDocumentChanges(combined, changes), seed );
+}
+
+export function stream<T extends DocumentData>(zone: NgZone, ...changeTypes: DocumentChangeType[]): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+
+  // When no changeTypes are defined...
+  if(!changeTypes || changeTypes.length <= 0) {
+    //...listens to snapshot changes and returns the resulting query document array
+    return pipe( onSnapshot<T>(zone), docs() );
+  }
+
+  // ...scans for the requested document changes otherwise
+  return pipe( 
+    // Listens for document changes
+    onSnapshot<T>(zone), docChanges<T>(undefined, ...changeTypes), 
+    // Filters out unwanted changed but the first emission to keep consistent with untyped stream call
+    filter( (changes, index) => index === 0 || changes.length > 0 ),
     // Combines the latest changes with the previous snapshots
-    scan( (combined, changes) => mapDocumentChanges(combined, changes), [] )
+    combineChanges()
   );
 }
 
@@ -72,7 +107,7 @@ export function data<T extends DocumentData>(): OperatorFunction<QueryDocumentSn
   return source => source.pipe( map( docs => docs.map( doc => mapSnaphotData(doc) ) ) );
 }
 
-export function page<T extends DocumentData>(pager: Observable<number>): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+export function page<T extends DocumentData>(pager: Observable<number>, after?: DocumentSnapshot<T>): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
   // Trggers loading with the pager observable
   return source => pager.pipe(
     // Accumulates the pages
@@ -91,7 +126,7 @@ export function page<T extends DocumentData>(pager: Observable<number>): Operato
           done: results.length < size
         };
       // Starts empty
-      })), { results: [], cursor: null, done: false }
+      })), { results: [], cursor: after, done: false }
     ),
     // Completes when done
     takeWhile(internal => !internal.done, true),
@@ -100,7 +135,7 @@ export function page<T extends DocumentData>(pager: Observable<number>): Operato
   );
 }
 
-export function pageReverse<T extends DocumentData>(pager: Observable<number>, from?: DocumentSnapshot<T>): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+export function pageReverse<T extends DocumentData>(pager: Observable<number>, before?: DocumentSnapshot<T>): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
   // Trggers loading with the pager observable
   return source => pager.pipe(
     // Accumulates the pages
@@ -119,11 +154,57 @@ export function pageReverse<T extends DocumentData>(pager: Observable<number>, f
           done: results.length < size
         };
       // Starts empty
-      })), { results: [], cursor: from, done: false }
+      })), { results: [], cursor: before, done: false }
     ),
     // Completes when done
     takeWhile(internal => !internal.done, true),
     // Plucks the document snapshots
     pluck('results')
+  );
+}
+
+export function fifo<T extends DocumentData>(zone: NgZone, waitForPendingWrites?: boolean): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+
+  return source => source.pipe( 
+
+    snap(), map( snaps => ({ cursor: snaps[snaps.length - 1], snaps })),
+
+    expand( ({ cursor, snaps }) => source.pipe(
+      
+      startAfter( cursor ),
+      
+      onSnapshot(zone, { includeMetadataChanges: waitForPendingWrites }), 
+
+      filter( snap => snap.size > 0 && !(waitForPendingWrites && snap.metadata.hasPendingWrites) ),
+      
+      docs(), take(1),
+
+      map( latest => ({ cursor: latest[snaps.length - 1], snaps: snaps.concat(latest) }) )
+    )),
+
+    pluck('snaps'),
+  );
+}
+
+export function stack<T extends DocumentData>(zone: NgZone, waitForPendingWrites?: boolean): OperatorFunction<QueryRef<T>, QueryDocumentSnapshot<T>[]> {
+  
+  return source => source.pipe( 
+
+    snap(), map( snaps => ({ cursor: snaps[0], snaps })),
+
+    expand( ({ cursor, snaps }) => source.pipe(
+      
+      endBefore( cursor ),
+
+      onSnapshot(zone, { includeMetadataChanges: waitForPendingWrites }), 
+
+      filter( snap => snap.size > 0 && !(waitForPendingWrites && snap.metadata.hasPendingWrites) ),
+      
+      docs(), take(1),
+
+      map( latest => ({ cursor: latest[0], snaps: latest.concat(snaps) }) )
+    )),
+
+    pluck('snaps'),
   );
 }

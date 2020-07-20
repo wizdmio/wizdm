@@ -29,7 +29,7 @@ export class CreatedTimePipe implements PipeTransform {
 
     const data = value instanceof firestore.DocumentSnapshot ? mapSnaphotData<T>(value) : value;
 
-    return data.created?.toDate();
+    return data?.created?.toDate();
   }
 }
 
@@ -40,6 +40,6 @@ export class UpdatedTimePipe implements PipeTransform {
 
     const data = value instanceof firestore.DocumentSnapshot ? mapSnaphotData<T>(value) : value;
 
-    return (data.updated || data.created)?.toDate();
+    return (data?.updated || data?.created)?.toDate();
   }
 }

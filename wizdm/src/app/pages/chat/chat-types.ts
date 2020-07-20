@@ -1,9 +1,6 @@
 import { DocumentData } from '@wizdm/connect/database/document';
+import { Timestamp } from '@wizdm/connect/database';
 import { UserData } from 'app/utils/user-profile';
-
-export interface ChatterData extends UserData {
-  lastConversation?: string;
-}
 
 export interface MessageData extends DocumentData {
   
@@ -17,13 +14,12 @@ export interface MessageData extends DocumentData {
 export interface ConversationData extends DocumentData {
   
   recipients: string[];
-  
-  lastRead?: LastRead;
-  
-  archived?: boolean;
-}
+};
 
-export interface LastRead {
+export interface ConversationStatus {
 
-  [userId:string]: string;
+  [userId: string]: {
+    lastRead?: Timestamp,
+    archived?: boolean;
+  };
 }

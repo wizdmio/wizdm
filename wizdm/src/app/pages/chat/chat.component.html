@@ -17,14 +17,13 @@
   <ng-container *ngIf="(conversations$ | async) as conversations; else: loadingChat">
 
     <!-- Teleports to the side panel -->
-    <ng-template wmSidenav opened persist minWidth="280px">
+    <ng-template wmSidenav opened persist minWidth="280px" maxWidth="350px">
 
       <!-- List of active conversations -->
       <mat-action-list>
 
         <mat-list-item  *ngFor="let conv of conversations; trackBy: trackById" 
                         [attr.selected]="conv.id === (conversationId$ | async)" 
-                        (click)="selectConversation(conv.id)"
                         class="height-unset primary">
 
           <wm-conversation [conv]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>

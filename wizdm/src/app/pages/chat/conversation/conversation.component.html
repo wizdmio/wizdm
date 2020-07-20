@@ -7,20 +7,20 @@
     
   </div>
 
-  <div fxFlex="1 1 auto" class="content">
+  <div fxFlex="1 1 auto" class="content" routerLink="." [queryParams]="{ with: (sender$ | async)?.userName }">
 
     <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="8px">
 
       <div fxFlex="1 1 auto" class="name mat-title">{{ (sender$ | async)?.fullName || '\n' }}</div>
 
-      <time fxFlex="0 0 auto" class="time mat-small">
-        {{ (last$ | async)?.created?.toDate() | calendar:msgs.timeFormat || {
+      <time fxFlex="0 0 auto" class="time mat-small">{{ 
+        last$ | async | updatedTime | calendar:msgs.timeFormat || {
           sameDay: "LT",
           lastDay: "[Yesterday]",
           lastWeek: "dddd",
           sameElse: "L"
-        } }}
-      </time>
+        }        
+      }}</time>
 
     </div>
 

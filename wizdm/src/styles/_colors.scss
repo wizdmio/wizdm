@@ -22,7 +22,7 @@
 
         // Styles a general selection 
         &[selected=true], [selected=true], &.selected, .selected { 
-          background-color: mat-color($palette, lighter, 0.25);
+          background-color: mat-color($palette, lighter, 0.5);
         }
 
         // Loops on each palette's color tone
