@@ -36,7 +36,7 @@ By itself the component does not render anything until its `open()` method is ca
 
 # API Reference 
 ```typescript
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 ```
 ## DialogComponent
 The `<wm-dialog>` component defines a pop-up dialog.

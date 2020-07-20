@@ -4,7 +4,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { GtagModule } from '@wizdm/gtag';
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { ButtonChangerModule } from '@wizdm/elements/button';

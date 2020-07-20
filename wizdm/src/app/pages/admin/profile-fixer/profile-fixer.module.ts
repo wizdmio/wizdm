@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/readme';
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';

@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserProfile } from 'app/utils/user-profile';
 import { MatDialog } from '@angular/material/dialog';
 import { RedirectService } from '@wizdm/redirect';
-import { DialogComponent } from '@wizdm/dialog';
+import { DialogComponent } from '@wizdm/elements/dialog';
 import { $animations } from './login-animations';
 import { GtagService } from '@wizdm/gtag';
 

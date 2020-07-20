@@ -12,7 +12,7 @@ import { GtagModule } from '@wizdm/gtag';
 import { IconModule } from '@wizdm/elements/icon';
 import { PipesModule } from '@wizdm/connect/database/pipes';
 import { ReadmeModule } from '@wizdm/readme';
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 import { TeleportModule } from '@wizdm/teleport';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';

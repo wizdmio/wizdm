@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentModule } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 import { IconModule } from '@wizdm/elements/icon';
 import { FeedbackComponent } from './feedback.component';
 

@@ -15,7 +15,7 @@ import { ActionbarModule } from 'app/navigator/actionbar';
 import { ReadmeModule } from '@wizdm/readme';
 import { AuthGuard, loggedIn } from 'app/utils/auth-guard';
 import { ApplyComponent } from './apply.component';
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 
 const routes: RoutesWithContent = [
   {

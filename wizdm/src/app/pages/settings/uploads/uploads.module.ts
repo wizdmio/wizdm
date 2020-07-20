@@ -11,7 +11,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GtagModule } from '@wizdm/gtag';
-import { DialogModule } from '@wizdm/dialog';
+import { DialogModule } from '@wizdm/elements/dialog';
 import { ReadmeModule } from '@wizdm/readme';
 import { DownloadModule } from '@wizdm/download';
 import { IconModule } from '@wizdm/elements/icon';
