@@ -13,6 +13,7 @@ import { IconModule } from '@wizdm/elements/icon';
 import { PipesModule } from '@wizdm/connect/database/pipes';
 import { ReadmeModule } from '@wizdm/readme';
 import { DialogModule } from '@wizdm/dialog';
+import { TeleportModule } from '@wizdm/teleport';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { StickyFooterModule } from 'app/navigator/footer';
@@ -52,6 +53,7 @@ const routes: RoutesWithContent = [
     IconModule, 
     ReadmeModule,
     DialogModule,
+    TeleportModule,
     ActionbarModule,
     SidenavModule,
     StickyFooterModule,

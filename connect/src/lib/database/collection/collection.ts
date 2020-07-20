@@ -38,11 +38,11 @@ export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T>
    * Adds a new document to the collection
    * @returns a promise of a DatabaseDocument
    */
-  public add(data: T): Promise<DatabaseDocument<T>> {
-    const timestamp = this.db.timestamp;
+  public add(data: Partial<T>): Promise<DatabaseDocument<T>> {
+    const created = this.db.timestamp;
     return this.ref.add({
       ...data as any,
-      created: timestamp
+      created
     }).then( ref => this.db.document<T>(ref) );
   }
 

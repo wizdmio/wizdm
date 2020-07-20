@@ -1,13 +1,13 @@
-import { take, startWith, map, tap, filter, switchMap, distinctUntilChanged, shareReplay, debounceTime } from 'rxjs/operators';
+import { take, startWith, map, tap, filter, expand, pluck, switchMap, distinctUntilChanged, shareReplay, debounceTime, finalize } from 'rxjs/operators';
+import { where, orderBy, startAfter, endBefore, snap, stream, stack, fifo, pageReverse, limit, limitToLast, onSnapshot, docs } from '@wizdm/connect/database/collection/operators';
 import { DatabaseCollection, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { Subscription, Observable, Subject, BehaviorSubject, of, merge } from 'rxjs';
-import { orderBy, pageReverse } from '@wizdm/connect/database/collection/operators';
 import { DatabaseDocument, DocumentData } from '@wizdm/connect/database/document';
-import { ChatterData, ConversationData, MessageData } from './chat-types';
+import { ConversationData, ConversationStatus, MessageData } from './chat-types';
 import { Component, OnDestroy, Inject, NgZone } from '@angular/core';
 import { DatabaseService, Timestamp } from '@wizdm/connect/database';
-import { UserProfile } from 'app/utils/user-profile';
-import { ScrollObservable } from 'app/utils/scroll';
+import { UserProfile, UserData } from 'app/utils/user-profile';
+import { ScrollObservable } from 'app/utils/scrolling';
 import { ActivatedRoute } from '@angular/router';
 import { EmojiRegex } from '@wizdm/emoji/utils';
 import { $animations } from './chat.animations';
@@ -29,7 +29,6 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
   // Current conversation and status
   private conversation: DatabaseDocument<ConversationData>;
-  private status: DatabaseDocument<DocumentData>;
   
   // Messages thread
   private  thread: DatabaseCollection<MessageData>;
@@ -52,11 +51,80 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
   public get me(): string { return this.user.uid; }  
   
-  constructor(db: DatabaseService, route: ActivatedRoute, private scroller: ScrollObservable, private user: UserProfile<ChatterData>, 
+  constructor(db: DatabaseService, route: ActivatedRoute, private scroller: ScrollObservable, private user: UserProfile<UserData>, 
     @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
 
     super(db, 'conversations');
 
+    // Lists all my active conversations
+    this.conversations$ = this.pipe( 
+      // Selects all the conversations where recipients[] contains my user's id
+      where('recipients', 'array-contains', this.me), orderBy('created', 'desc'), 
+      // Combines existing conversations with new comers
+      source => source.pipe( 
+        // Gets the list of existing conversations and sort them by updated value. 
+        // Note: we set the cursor apart to avoid messing up with the following queries 
+        // since the conversation array will be shuffled
+        snap(), map( convs => ({ cursor: convs[0], convs: this.sortByUpdated(convs, 'desc') })),
+        // Appends new comers to the top of the list
+        expand( ({ cursor, convs }) => source.pipe(
+          // Filters out the existing conversation to minimize reads
+          endBefore( cursor ),
+          // Listens to new conversations
+          onSnapshot(zone, { includeMetadataChanges: true }), 
+          // Filters out unwanted emissions
+          filter( snap => snap.size > 0 && !snap.metadata.hasPendingWrites ),
+          // Gets the new documents when available
+          docs(), take(1),
+          // Prepends the new comers to the existing ones
+          map( latest => ({ cursor: latest[0], convs: latest.concat(convs) }) )
+        )),
+        // Gets rid of the cursor
+        pluck('convs')
+      ),
+      shareReplay(1)
+    );
+
+    // Resolves the current conversation id from the query parameter
+    this.conversationId$ = route.queryParamMap.pipe(
+      // Extracts the @username from the route
+      map( params => params.get('with') ),
+      // Resolves the user, if any
+      switchMap( userName => user.fromUserName(userName) ),
+      // Resolves the conversation id towards the given user
+      switchMap( user => this.conversations$.pipe( switchMap( convs => {
+        // Computes the path for the requested conversation
+        const cid = user && (this.me < user.id ? this.me.concat(user.id) : user.id.concat(this.me) );
+        // Seeks for the requested conversation among the existing ones
+        const conv = cid && convs.find( conv => conv.id === cid ) || convs[0];
+        if(conv?.exists) { 
+          // Grabs some useful data from the current conversation
+          const data = conv.data();
+          // Gets the emoji usage stats from the conversation
+          this.stats = data[this.me]?.favorites || this.stats;
+          // Updates the favorites emoji based on the new stat
+          this.keys = this.sortFavorites(this.stats);
+          // Returns the id
+          return of(conv.id); 
+        }
+        //...creates a new conversation otherwise
+        const ref = this.ref.doc(cid);
+        // Runs a transaction
+        return this.db.transaction( trx => {
+          // Verifies the conversation still doesn't exists
+          return trx.snap(ref).then( ({ exists }) => {
+            // Creates it otherwise
+            if(!exists) { trx.set(ref, { recipients: [ this.user.uid, user.id ] }); }
+            // Returns the id
+            return cid;
+          });
+        });
+      }))),
+      // Filters emty values
+      filter( value => !!value ), distinctUntilChanged(), shareReplay(1)
+    );
+
+/*
     // Gets or creates the conversation with the requested contact
     const contact$ = route.queryParamMap.pipe( 
       // Extracts the @username from the route
@@ -74,9 +142,10 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
         // Runs a transaction
         return this.db.transaction( trx => {
           // Verifies the conversation actually exists
-          return trx.get(ref).then( ({ exists }) => {
+          return trx.snap(ref).then( snap => {
             // Creates it otherwise
-            if(!exists) { trx.set(ref, { recipients: [ this.user.uid, user.id ] }); }
+            if(!snap.exists) { trx.set(ref, { recipients: [ this.user.uid, user.id ] }); }
+            
             // Returns the id
             return cid;
           });
@@ -88,9 +157,11 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
     // Resolves the conversation id
     this.conversationId$ = merge(contact$, this._conversationId$).pipe( distinctUntilChanged(), shareReplay(1) );
-
+*/
     // Streams all the conversations where recipients[] contains the user's id
-    this.conversations$ = this.query( qf => qf.where('recipients', 'array-contains', this.user.uid) ).pipe( startWith(null) );
+    //this.conversations$ = this.query( qf => qf.where('recipients', 'array-contains', this.me).orderBy('updated', 'desc') ).pipe( startWith(null) );
+
+        
 
     // Paging observalbe to load the previous messages while scrolling up
     const more$ = scroller.pipe( 
@@ -106,22 +177,46 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
     // Streams up to page size messages from the selected conversation
     this.messages$ = this.conversationId$.pipe( 
-      // Filters for valid id
-      filter( id => !!id ), distinctUntilChanged(), 
       // Stores the curernt conversation
       map( id => this.conversation = this.document(id) ),
-      // Retrives the current user conversation status
-      tap( conv => this.status = conv.collection('recipients').document(this.me) ),
       // Gets the message thread
       map( conv => this.thread = conv.collection<MessageData>('messages') ),
-      // Pages the past messages while scrolling up (note: pages statically load)
+
+      switchMap( thread => thread.pipe( 
+        
+        orderBy('created'), 
+
+        //tap( q => console.log(q) ),
+
+        source => source.pipe( 
+          
+          pageReverse(more$), 
+        
+          expand( paged => source.pipe(
+
+            startAfter( paged[paged.length - 1] ), 
+
+            onSnapshot(this.db.zone, { includeMetadataChanges: true }), 
+            
+            filter( snap => snap.size > 0 && !snap.metadata.hasPendingWrites ),
+            
+            docs(), take(1),
+    
+            map( latest => paged.concat(latest) )
+    
+          ))
+        )
+      )),
+      
+      /* // Pages the past messages while scrolling up (note: pages statically load)
       switchMap( thread => thread.pipe( orderBy('created'), pageReverse(more$) ).pipe(
         // Queries for the next message starting from the end of the page to get realtime updates
-        switchMap( paged => thread.query( qf => qf.orderBy('created').startAfter( paged[paged.length-1] ) ).pipe(
+        switchMap( paged => thread.pipe( orderBy('created'), startAfter( paged[paged.length-1] ), stream(this.db.zone) ).pipe(
           // Appends the past paged messages with the latest gotten realtime
           map( latest => paged.concat(latest) )
         ))
-      )),
+      )),*/
+
       tap( msgs => {
         // Scrolls for the last message to be visible  
         this.autoScroll && this.afterRender( () => this.scrollToBottom() );
@@ -146,10 +241,14 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
     // Subscribes to the lastRead subject tracking the latest message timestamp
     this.sub = this.lastRead$.pipe( filter( value => !!value), debounceTime(1000) ).subscribe( lastRead => {
-      // Saves the lastRead timestamp in the status. We can use overwrite() since no one else is suppose to write
-      // this very same document but the current user. The value saved here will be used to compute the covenrsation's
-      // unread message count
-      this.status.overwrite({ lastRead });
+
+      // Saves the user's specific information within the conversation. Although this requires that both users
+      // concurrently update the same document, comes with the advantage of tracking the last conversation 
+      // activity within the updated timestamp to be used for sorting the conversations when listing them
+      this.conversation.merge({ [this.me]: { 
+        favorites: this.stats,
+        lastRead 
+      }});
     });
 
     this.keys = this.sortFavorites(this.stats);
@@ -159,8 +258,15 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
   ngOnDestroy() { this.sub.unsubscribe(); }
 
   /** Switches to the given conversation */
-  public selectConversation(id: string) {
-    this._conversationId$.next(id);
+  public selectConversation(conv: QueryDocumentSnapshot<ConversationData>) {
+    // Retrives the conversation's data
+    const data = conv.data();
+    // Gets the emoji uusage stats from the conversation
+    this.stats = data[this.me]?.favorites || this.stats;
+    // Sorts the favorites emoji based on the new stat
+    this.keys = this.sortFavorites(this.stats);
+    // Loads the new conversation
+    this._conversationId$.next(conv.id);
   }
 
   /** Updates the lastRead status with the gien timestamp */
@@ -177,6 +283,21 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
   public onKeyboardExpand() {
     // Scrolls to bottom wheneve the autoScroll mode is enabled
     this.autoScroll && this.scrollToBottom();
+  }
+
+  /** Send the current message */
+  public send(body: string) {    
+    // Updates the key usage statistics
+    this.updateFavorites(body);
+    // Sends the message adding it to the current conversation thread
+    this.thread.add({ body, sender: this.me }).then( () => {
+      // Enables automatic scrolling
+      this.autoScroll = true;
+      // Resets the last message text
+      this.text = ""; 
+    });
+    // Prevents default
+    return false;
   }
 
   /** Sorts the favorite keys based on usage */
@@ -205,21 +326,6 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
     }
   }
 
-  /** Send the current message */
-  public send(body: string) {    
-    // Updates the key usage statistics
-    this.updateFavorites(body);
-    // Sends the message adding it to the current conversation thread
-    this.thread.add({ body, sender: this.me }).then( () => {
-      // Enables automatic scrolling
-      this.autoScroll = true;
-      // Resets the last message text
-      this.text = ""; 
-    });
-    // Prevents default
-    return false;
-  }
-
   public accumulateUnread(convId: number, count: number) {
 
     this.unreadMap[convId] = count;
@@ -236,9 +342,25 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
     }, '0');
   }
 
-  /** ngFor rtacking function */
+  /** ngFor tracking function */
   public trackById(data: QueryDocumentSnapshot<any>) { 
     return data.id; 
+  }
+
+  private sortByUpdated(data: QueryDocumentSnapshot<any>[], dir?: 'asc'|'desc'): QueryDocumentSnapshot<any>[] {
+
+    const _dir = dir === 'desc' ? -1 : 1;
+
+    return data.sort((a,b) => {
+
+      const aDate = a?.data().updated?.toDate();
+      if(!aDate) { return _dir; }
+
+      const bDate = b?.data().updated?.toDate();
+      if(!bDate) { return -_dir; }
+      
+      return bDate < aDate ? _dir : (bDate > aDate ? -_dir : 0);
+    });
   }
 
   /** Calls fn right after the last rederign has completed */

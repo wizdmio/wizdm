@@ -2,7 +2,7 @@
 <!-- Loads the localized content -->
 <ng-container *wmContent="let msgs select 'chat.composer'">
 
-  <div fxLayout="row" fxLayoutAlign="center end" (keydown)="sendOnEnter($event)">
+  <div class="input" fxLayout="row" fxLayoutAlign="center end" (keydown)="sendOnEnter($event)">
 
     <!-- Native Input for platforms supporting Emoji natively -->
     <mat-form-field appearance="legacy" fxFlex="1 1 auto" *ngIf="mode === 'native'; else webMode">

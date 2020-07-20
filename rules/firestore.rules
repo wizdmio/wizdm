@@ -80,18 +80,15 @@ service cloud.firestore {
     	// Allow every signed-in user to create new conversations
     	allow create: if authenticated();
       
-      // Allow read/list of conversations only by recipients
-    	allow read: if authenticated() && (request.auth.uid in resource.data.recipients);
+      // Allow getting a single conversation by authenticated users. 
+      // This is needed to check conversation existance when starting up a new conversation.
+    	allow get: if authenticated();
       
-      // Allow delete/modify only by the conversation's owner (first recipient)
-      allow write: if itsMe(resource.data.recipients[0]);
+      // Allow list and update of conversations only by recipients
+      allow list, update: if authenticated() && (request.auth.uid in resource.data.recipients);
       
-      // Recipients status.
-      match /recipients/{userId} {
-      
-      	// Allow access to the sole user's status
-      	allow read, write: if itsMe(userId);
-      }
+      // Allow delete only by the conversation's owner (first recipient)
+      allow delete: if itsMe(resource.data.recipients[0]);
       
       // Messages.
       match /messages/{messageId} {

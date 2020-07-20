@@ -2,8 +2,7 @@
 
   "actions": {
     "edit": { "caption": "Edit profile", "icon": "fas:fa-user-edit", "link": "/settings" },
-    "follow": { "caption": "Follow", "icon": "fas:fa-user-plus" },
-    "unfollow": { "caption": "Unfollow", "icon": "fas:fa-user-minus" }
+    "message": { "caption": "Message", "icon": "far:fa-comment" }
   },
 
   "location": { "caption": "Location", "icon": "fas:fa-map-marker-alt", "placeholder": "Planet Earth" },

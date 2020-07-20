@@ -18,7 +18,6 @@ export class FeedComponent extends DatabaseGroup<PostData> {
     
     super(db, 'feed');
 
-    this.feed$ = this.query(qf => qf.where('tags', 'array-contains', 'public').orderBy('created', 'desc') )
-      .pipe( tap( snap => console.log(snap) ));
+    this.feed$ = this.query( qf => qf.where('tags', 'array-contains', 'public').orderBy('created', 'desc') );
   }
 }

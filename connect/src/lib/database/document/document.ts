@@ -1,7 +1,7 @@
 import { DocumentRef, DocumentSnapshot, GetOptions, DocumentData } from './types';
 import { DatabaseCollection, CollectionRef } from '../collection';
 import { DistributedCounter, CounterShard } from '../counter';
-import { DatabaseApplication } from '../database-application';
+import { DatabaseApplication, FieldPath } from '../database-application';
 import { fromRef, mapSnaphotData, refReject } from './utils';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -46,11 +46,11 @@ export class DatabaseDocument<T extends DocumentData> {
    * Creates / destructively re-writes the document content.
    * Adds the 'created' timestamp
    */
-  public set(data: T): Promise<void> {
+  public set(data: Partial<T>): Promise<void> {
 
     const created = this.db.timestamp;
     return this.ref ? this.ref.set({
-      ...data as any,
+      ...data,
       created
     } as T) : refReject();
   }
@@ -59,24 +59,33 @@ export class DatabaseDocument<T extends DocumentData> {
    * Updates the document content by merging the new data with the existing one including sub objects.
    * Adds / updates the 'updated' timestamp
    */
-  public merge(data: T): Promise<void> {
+  public merge(data: Partial<T>): Promise<void> {
     
     const updated = this.db.timestamp;
     return this.ref ? this.ref.set({
-      ...data as any,
+      ...data,
       updated
     } as T, { merge: true } ) : refReject();
+  }
+
+  public mergeFields(data: Partial<T>, ...fields: (string|FieldPath)[]): Promise<void> {
+    
+    const updated = this.db.timestamp;
+    return this.ref ? this.ref.set({
+      ...data,
+      updated
+    } as T, { mergeFields: [...fields, 'updated'] } ) : refReject();
   }
 
   /**
    * Updates the document content with the new data. Unlike merge, it overwrites sub objects.
    * Adds / updates the 'updated' timestamp
    */
-  public update(data: T): Promise<void> {
+  public update(data: Partial<T>): Promise<void> {
 
     const updated = this.db.timestamp;
     return this.ref ? this.ref.update({
-      ...data as any,
+      ...data,
       updated
     } as T) : refReject();
   }
@@ -91,7 +100,7 @@ export class DatabaseDocument<T extends DocumentData> {
    * Conditionally updates an existing document or creates a new one if not existing.
    * Uses a transaction to support concurrency
    */
-  public upsert(data: T): Promise<void> {
+  public upsert(data: Partial<T>): Promise<void> {
 
     if(!this.ref) { return refReject(); }
 
@@ -101,21 +110,6 @@ export class DatabaseDocument<T extends DocumentData> {
 
         exists ? trx.update(this.ref, data) : trx.set(this.ref, data);
       });
-    });
-  }
-
-  /** 
-   * Tries to update and existing document falling back to create a new one on 'not-found' error.
-   * Unlike upsert(), concurrent writes may cause data loss. Use with caution when document access 
-   * is guarded by design.
-   */
-  public overwrite(data: T): Promise<void> {
-
-    return this.update(data).catch( e => { 
-
-      if(e.code !== 'not-found') { return Promise.reject(e); }
-
-      return this.set(data);      
     });
   }
 
