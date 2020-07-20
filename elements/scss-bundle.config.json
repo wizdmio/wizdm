@@ -2,6 +2,8 @@
   "bundlerOptions": {
     "entryFile": "src/lib/_elements-theme.scss",
     "rootDir": "./",
-    "outFile": "dist/libs/elements/_theming.scss"
+    "outFile": "../dist/elements/_theming.scss",
+    "logLevel": "error",
+    "ignoredImports": ["~@angular/.*"]
   }
 }
