@@ -2,7 +2,7 @@ import { tap, map, filter, switchMap, distinctUntilChanged, startWith, shareRepl
 import { where, orderBy, limit, snap, page, data } from '@wizdm/connect/database/collection/operators';
 import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
-import { ScrollObservable } from 'app/utils/scroll';
+import { ScrollObservable } from 'app/utils/scrolling';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { UserData } from 'app/utils/user-profile';
 import { autocomplete } from '@wizdm/rxjs';

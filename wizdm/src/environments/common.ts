@@ -1,6 +1,5 @@
 import { ExtraOptions } from '@angular/router';
 import { ContentConfig } from '@wizdm/content';
-import { TeleportConfig } from '@wizdm/teleport';
 import { EmojiConfig } from '@wizdm/emoji/utils';
 import { IpInfoConfig, IP_LIST_CC } from '@wizdm/ipinfo';
 
@@ -11,10 +10,6 @@ export const content: ContentConfig = {
   source: 'assets/i18n',
   supportedValues: ['en', 'it', 'ru'],
   defaultValue: 'en'
-};
-
-export const teleport: TeleportConfig = {
-  bufferSize: 1
 };
 
 export const emoji: EmojiConfig = {
@@ -28,10 +23,10 @@ export const ipinfo: IpInfoConfig = {
   provider: IP_LIST_CC
 }
 
-export const router: ExtraOptions = { 
-  // Anchor scrolling and scroll position restoration are overidden by the AppComponent
+export const scroll: ExtraOptions = { 
+  // Anchor scrolling and scroll position restoration are implemented 'per page'
   // making sure the rendering is completed prior to perform the scrolling attempt
-  scrollPositionRestoration: 'top',
-  anchorScrolling: 'enabled',
+  scrollPositionRestoration: 'disabled',
+  anchorScrolling: 'disabled',
   scrollOffset: [0, 80]
 };

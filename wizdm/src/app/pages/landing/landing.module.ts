@@ -9,6 +9,7 @@ import { IconModule } from '@wizdm/elements/icon';
 import { ReadmeModule } from '@wizdm/readme';
 import { IllustrationModule } from '@wizdm/elements/illustration';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { ScrollingModule } from 'app/utils/scrolling';
 import { BackgroundModule } from 'app/utils/background';
 import { LandingComponent } from './landing.component';
 
@@ -32,6 +33,7 @@ const routes: RoutesWithContent = [
     IconModule, 
     ReadmeModule,
     IllustrationModule,
+    ScrollingModule,
     BackgroundModule,
     ContentRouterModule.forChild(routes)
   ]

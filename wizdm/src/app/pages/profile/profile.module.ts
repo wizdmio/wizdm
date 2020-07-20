@@ -10,6 +10,7 @@ import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ActionbarModule } from 'app/navigator/actionbar';
+import { ScrollingModule } from 'app/utils/scrolling';
 import { ProfileService } from './profile.service';
 import { ProfileComponent } from './profile.component';
 
@@ -62,6 +63,7 @@ const routes: RoutesWithContent = [
     AvatarModule,
     IconModule,
     ButtonChangerModule,
+    ScrollingModule,
     ActionbarModule,
     ContentRouterModule.forChild(routes)
   ],

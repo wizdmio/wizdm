@@ -1,3 +1,4 @@
+
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT, ViewportScroller } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
@@ -9,14 +10,15 @@ export interface ScrollInfo {
   bottom: number;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ScrollObservable extends Observable<ScrollInfo> {
 
-  public get height(): number { return this.document.body.scrollHeight || 0; }
+  public get height(): number { 
+    return this.document.body.scrollHeight || 0; 
+  }
 
-  constructor(private scroller: ViewportScroller, dispatcher: ScrollDispatcher, private ruler: ViewportRuler, @Inject(DOCUMENT) private document: Document) { 
+  constructor(private scroller: ViewportScroller, private ruler: ViewportRuler, @Inject(DOCUMENT) private document: Document, 
+    dispatcher: ScrollDispatcher) { 
 
     super( subscriber => dispatcher.scrolled(0).pipe( map( () => this.scrollInfo() ) ).subscribe( subscriber ) );
   }

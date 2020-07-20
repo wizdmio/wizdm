@@ -1,6 +1,6 @@
 
-<!-- Gets the document content while reporting the page name with gtag -->
-<ng-container *wmContent="let document select 'document'" gtag="static" [path]="document.path">
+<!-- Gets the document content, enables anchor scrolling and position restoration while reporting the page name with gtag -->
+<ng-container *wmContent="let document select 'document'" scrollPositionRestoration="enabled" anchorScrolling="enabled" gtag="static" [path]="document.path">
 
   <!-- Checks for an optional Table Of Contents -->
   <ng-container *ngIf="!!document.toc">

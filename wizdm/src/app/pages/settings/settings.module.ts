@@ -8,6 +8,7 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { IconModule } from '@wizdm/elements/icon';
 import { NavInkbarModule } from '@wizdm/elements/inkbar';
 import { SidenavModule } from 'app/navigator/sidenav';
+import { ScrollingModule } from 'app/utils/scrolling';
 import { AuthGuard, loggedIn } from 'app/utils/auth-guard';
 import { SettingsComponent } from './settings.component';
 
@@ -38,6 +39,7 @@ const routes: RoutesWithContent = [{
     MatListModule,
     IconModule, 
     NavInkbarModule,
+    ScrollingModule,
     SidenavModule,
     ContentRouterModule.forChild(routes)
   ]

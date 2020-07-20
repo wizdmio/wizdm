@@ -1,6 +1,6 @@
 
 <!-- Localized content -->
-<ng-container *wmContent="let msgs select 'profile'" gtag="profile">
+<ng-container *wmContent="let msgs select 'profile'" scrollPositionRestoration="top" gtag="profile">
 
   <!-- Resolves user's data -->
   <div class="banner" *ngIf="user$ | async as data"
@@ -38,14 +38,16 @@
         <!-- Full User's name -->
         <h1 ngClass.gt-xs="mat-display-1">{{ data.fullName || data.name }}</h1>
 
-        <!-- Follow button (not my profile) -->
-        <button mat-flat-button type.lt-sm="mini-fab" color="primary" class="edit" *ngIf="data.id !== me">
+        <!-- Message button (not my profile) -->
+        <button mat-flat-button type.lt-sm="mini-fab" color="primary" class="edit" 
+                routerLink="/chat" [queryParams]="{ with: data.userName }"
+                *ngIf="data.id !== me">
 
           <!-- Always display an icon small/large screens -->
-          <wm-icon [icon]="msgs.actions?.follow?.icon || 'person_add'"></wm-icon>
+          <wm-icon [icon]="msgs.actions?.message?.icon || 'chat_bubble_outline'"></wm-icon>
 
           <!-- No text for small screens -->
-          <span fxHide.lt-sm>{{ msgs.actions?.follow?.caption || 'Follow' }}</span>
+          <span fxHide.lt-sm>{{ msgs.actions?.message?.caption || 'Message' }}</span>
               
         </button>
       

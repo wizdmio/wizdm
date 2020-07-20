@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDividerModule } from '@angular/material/divider';
 import { UrlSegment, UrlMatchResult } from '@angular/router';
 import { ContentRouterModule, RoutesWithContent, FileLoader } from '@wizdm/content';
@@ -9,6 +8,7 @@ import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
 import { SidenavModule } from 'app/navigator/sidenav';
+import { ScrollingModule } from 'app/utils/scrolling';
 import { SizeLockModule } from 'app/utils/size-lock';
 import { StaticResolver } from './static-resolver.service';
 import { StaticComponent } from './static.component';
@@ -47,13 +47,13 @@ const routes: RoutesWithContent = [{
   declarations: [ StaticComponent ],
   imports: [
     CommonModule,
-    ScrollingModule,
     MatDividerModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
     ActionLinkModule,
     GtagModule,
     AnimateModule,
     SidenavModule,
+    ScrollingModule,
     SizeLockModule,
     TocModule,
     ContentRouterModule.forChild(routes)

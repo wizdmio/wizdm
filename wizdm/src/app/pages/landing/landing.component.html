@@ -1,5 +1,6 @@
 
-<ng-container *wmContent="let msgs select 'landing';let lang = language" gtag="landing">
+<!-- Localized content, restore scroll position, report gtag -->
+<ng-container *wmContent="let msgs select 'landing';let lang = language" scrollPositionRestoration="top" gtag="landing">
   
   <!-- Applies a scrolling background image to the navigator -->
   <wm-background [url]="msgs.banner" attachment="local" repeat="no-repeat" size="cover"></wm-background>

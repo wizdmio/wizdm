@@ -69,7 +69,7 @@ export class TocComponent {
     this.selectedChange.emit(this._selected = item);
 
     // Ensures the panels open whenever a children is currently selected
-    this.items.forEach( item => this.hasSelection(item) && this.open(item) );
+    this.items?.forEach( item => this.hasSelection(item) && this.open(item) );
   }
 
   /** Emits the currently selected item */

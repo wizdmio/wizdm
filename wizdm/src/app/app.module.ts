@@ -5,23 +5,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { MatIconRegistry } from '@angular/material/icon';
-import { AnimateModule } from '@wizdm/animate';
-import { ContentModule } from '@wizdm/content';
-import { ConnectModule } from '@wizdm/connect';
-import { AuthModule } from '@wizdm/connect/auth';
 import { DatabaseModule } from '@wizdm/connect/database';
 import { StorageModule } from '@wizdm/connect/storage';
-import { TeleportModule } from '@wizdm/teleport';
+import { AuthModule } from '@wizdm/connect/auth';
+import { ConnectModule } from '@wizdm/connect';
+import { ContentModule } from '@wizdm/content';
 import { DoorbellModule } from '@wizdm/doorbell';
 import { ReadmeNavigator } from '@wizdm/readme';
 import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
+import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
 // Environment
-import { appname, content, teleport, emoji, router, ipinfo } from '../environments/common';
+import { appname, content, emoji, scroll, ipinfo } from '../environments/common';
 import { firebase, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
@@ -35,19 +34,13 @@ const routes: Routes = [
     // Basics
     BrowserModule,
     BrowserAnimationsModule,
-    // Content animation module
-    //AnimateModule.init({ triggerMode: 'scrolling' }),
-    // Database tools (Firebase)
+    // Firebase integration
     ConnectModule.init(firebase, appname),
-    AuthModule, 
-    DatabaseModule.enablePersistance({}),
-    StorageModule,
+    AuthModule, DatabaseModule, StorageModule,
     // IP location info
     IpInfoModule.init(ipinfo),   
     // Dynamic content (i18n)
     ContentModule.init(content),
-    // Template teleport
-    TeleportModule.init(teleport),
     // Doorbell service (Feedback form)
     DoorbellModule.init(doorbell),
     // Google Analytics
@@ -55,7 +48,9 @@ const routes: Routes = [
     // Universal Emoji support
     EmojiSupportModule.init(emoji),
     // Angular's Router
-    RouterModule.forRoot(routes, router)
+    RouterModule.forRoot(routes),
+    // Enables 'per page' scrolling behaviors overriding the router's configuration
+    ScrollingModule.init(scroll)
   ],
   providers: [
     // Provides the redirection service globally
