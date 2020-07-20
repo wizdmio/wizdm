@@ -26,5 +26,5 @@ Similarly to material components, every Elements' component uses `ViewEncapsulat
 ---
 
 ->
-[Continue Next ⮕](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->  

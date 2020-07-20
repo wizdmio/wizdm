@@ -1,11 +1,12 @@
-import { Component, AfterViewInit, OnDestroy, ContentChildren, QueryList, ViewEncapsulation, NgZone } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ContentChildren, ViewEncapsulation } from '@angular/core';
+import { InkbarItem, InkbarDirective } from '../base-inkbar/inkbar.directive';
 import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { RouterInkbarDirective } from './router-inkbar.directive';
 import { InkbarComponent } from '../base-inkbar/inkbar.component';
-import { InkbarItem, InkbarDirective } from '../base-inkbar/inkbar.directive';
-import { Subscription, animationFrameScheduler } from 'rxjs';
-import { filter, observeOn, delay, map, startWith, sample } from 'rxjs/operators';
 import { $animations } from '../base-inkbar/inkbar.animations';
+import { filter, observeOn, startWith } from 'rxjs/operators';
+import { Subscription, animationFrameScheduler } from 'rxjs';
+import type { QueryList } from '@angular/core';
 
 @Component({
   selector: 'wm-router-inkbar',
