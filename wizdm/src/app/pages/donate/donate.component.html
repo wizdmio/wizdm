@@ -1,0 +1,71 @@
+
+<!-- Localized content, restore scroll position, report gtag -->
+<ng-container *wmContent="let msgs select 'donate';let lang = language" scrollPositionRestoration="top" gtag="donate">
+
+  <h1>Contribute to Wizdm</h1>
+
+  <p>Thanks to your generosity we are able to cover for the costs exceeding the free quotas of the various online services the project is based upon.</p>
+
+  <form fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" (ngSubmit)="pay()" #form="ngForm">
+
+    <!-- Name -->
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="name" name="name" required [disabled]="progress" #formName="ngModel">
+      <mat-error *ngIf="!formName.valid">Please provide your name for billing purposes</mat-error>
+      <mat-hint>How do we call you</mat-hint>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" name="email" email required [disabled]="progress" #formEmail="ngModel">
+      <mat-error *ngIf="!formEmail.valid">Please provide a valid email</mat-error>
+      <mat-hint>We'll send you the rececipt here</mat-hint>
+    </mat-form-field>
+
+    <!-- Amount -->
+    <mat-form-field floatLabel='always'>
+      <mat-label>Amount</mat-label> 
+
+      <mat-button-toggle-group [(ngModel)]="amount" name="amount">
+        <mat-button-toggle (mousedown)="false" value="5">5</mat-button-toggle>
+        <mat-button-toggle (mousedown)="false" value="25">25</mat-button-toggle>
+        <mat-button-toggle (mousedown)="false" value="100">100</mat-button-toggle>
+        <mat-button-toggle (mousedown)="false" value="">Other: </mat-button-toggle>
+
+        <input matInput [(ngModel)]="amount" name="amount" required [disabled]="progress" #formAmount="ngModel" placeholder="Enter the amount" autocomplete="off"/>
+
+      </mat-button-toggle-group>
+
+      <mat-hint>Choose the amount</mat-hint>
+      <mat-error *ngIf="!formAmount.valid">Please choose the amount</mat-error>
+
+      <button mat-icon-button matSuffix matTooltip="Switch currency" (mousedown)="false" (click)="toggleCurrency()" [disabled]="formAmount.disabled" type="button">
+        <mat-icon inline fontSet="fas" [fontIcon]="currency === 'eur' ? 'fa-euro-sign' : 'fa-dollar-sign'"></mat-icon>
+      </button> 
+      
+    </mat-form-field>
+
+    <!-- Credit card info -->
+    <mat-form-field>
+      <mat-label>Credit card</mat-label>
+      <!-- Configures Stripe Elements with the given locale -->
+      <wm-stripe-elements [locale]="lang">
+        <wm-stripe-card matStripe hidePostalCode [(ngModel)]="card" name="card" required [disabled]="progress" #formCard></wm-stripe-card>
+      </wm-stripe-elements>
+      <mat-error *ngIf="formCard.error">{{ formCard.error.message }}</mat-error>
+      <mat-hint>Powered by Stripe</mat-hint>
+    </mat-form-field>
+
+    <!-- Submit button -->
+    <button mat-flat-button type="submit" color="primary" [disabled]="!(form.valid && formCard.complete) || progress">
+      <mat-progress-spinner mode="indeterminate" diameter="30" *ngIf="progress"></mat-progress-spinner>
+      <span>Donate Now</span>
+    </button>
+
+  </form>
+
+  <!--p>{{ name }} - {{ email }} - {{ amount }} - {{ currency }}</p-->
+
+</ng-container>

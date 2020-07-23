@@ -10,9 +10,10 @@
       <textarea matInput typein [(value)]="value" [newline]="enterMode" [disabled]="disabled" cdkTextareaAutosize cdkAutosizeMinRows="1">
       </textarea>
       <wm-icon class="tools" inline matSuffix 
-                [icon]="msgs.emoji?.icon || 'insert_emoticon'"                
-                [matTooltip]="msgs.emoji?.tooltip || 'Insert an emoji'" 
-                (mousedown)="!disabled && toggleEmojiKeys()">
+               [class.color-disabled]="disabled"
+               [icon]="msgs.emoji?.icon || 'insert_emoticon'"                
+               [matTooltip]="msgs.emoji?.tooltip || 'Insert an emoji'" 
+               (mousedown)="!disabled && toggleEmojiKeys()">
         </wm-icon>
     </mat-form-field>
 
@@ -22,9 +23,10 @@
         <mat-label>{{ msgs.placeholder || 'Type a message' }}</mat-label>
         <wm-emoji-input matEmoji typein [(value)]="value" [newline]="enterMode" [disabled]="disabled"></wm-emoji-input>
         <wm-icon class="tools" inline matSuffix 
-                [icon]="msgs.emoji?.icon || 'insert_emoticon'"                
-                [matTooltip]="msgs.emoji?.tooltip || 'Insert an emoji'" 
-                (mousedown)="!disabled && toggleEmojiKeys()">
+                 [class.color-disabled]="disabled"
+                 [icon]="msgs.emoji?.icon || 'insert_emoticon'"                
+                 [matTooltip]="msgs.emoji?.tooltip || 'Insert an emoji'" 
+                 (mousedown)="!disabled && toggleEmojiKeys()">
         </wm-icon>
       </mat-form-field>
     </ng-template>

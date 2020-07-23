@@ -50,6 +50,9 @@ const routes: RoutesWithContent = [
       // User's profile (matching @username)
       { matcher: matchUserNameOnly, loadChildren: () => import('../pages/profile/profile.module').then(m => m.ProfileModule) },
 
+      // Donate
+      { path: 'donate', loadChildren: () => import('../pages/donate/donate.module').then(m => m.DonateModule) },
+
       // Settings
       { path: 'settings', loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule) },
 

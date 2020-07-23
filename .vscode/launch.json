@@ -10,7 +10,10 @@
 			"webRoot": "${workspaceRoot}/wizdm",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
 			"sourceMaps": true,
-			"timeout": 30000
+			"timeout": 30000,
+			"runtimeArgs": [
+				"--start-maximized"
+			]
 		},
 		{
 			"name": "Launch http://localhost with sourcemaps",

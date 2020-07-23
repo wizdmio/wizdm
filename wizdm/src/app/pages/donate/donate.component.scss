@@ -1,0 +1,27 @@
+
+:host {
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+
+  padding: 24px;
+
+  form { max-width: 80%; width: 400px; }
+
+  p { text-align: justify; }
+
+  .mat-button-toggle-group, .mat-button-toggle {
+    border: none;
+  }
+
+  .mat-progress-spinner {
+    position: absolute;
+    left: calc(50% - 15px); 
+    top: calc(50% - 15px);
+  }
+}

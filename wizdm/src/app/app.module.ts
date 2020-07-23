@@ -16,12 +16,13 @@ import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
+import { StripeModule } from '@wizdm/stripe';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
 // Environment
 import { appname, content, emoji, scroll, ipinfo } from '../environments/common';
-import { firebase, doorbell, gtag } from '../environments/secrets';
+import { firebase, stripe, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 
@@ -47,6 +48,8 @@ const routes: Routes = [
     GtagModule.init(gtag),
     // Universal Emoji support
     EmojiSupportModule.init(emoji),
+    // Stripe payments w/ elements
+    StripeModule.init(stripe),
     // Angular's Router
     RouterModule.forRoot(routes),
     // Enables 'per page' scrolling behaviors overriding the router's configuration

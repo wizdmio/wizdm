@@ -23,9 +23,6 @@
       "path": "./content/tsconfig.lib.json"
     },
     {
-      "path": "./dialog/tsconfig.lib.json"
-    },
-    {
       "path": "./doorbell/tsconfig.lib.json"
     },
     {

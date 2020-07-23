@@ -1,4 +1,5 @@
 import { ConnectConfig } from '@wizdm/connect';
+import { StripeConfig } from '@wizdm/stripe';
 import { DoorbellConfig } from '@wizdm/doorbell';
 import { GtagConfig } from '@wizdm/gtag';
 
@@ -11,6 +12,10 @@ export const firebase: ConnectConfig = {
   projectId: "<< your firebase project id here >>",
   storageBucket: "<< your firebase storage bucked here >>",
   messagingSenderId: "<< YOUR FIREBASE MESSAGE SENDER ID HERE >>"
+};
+
+export const stripe: StripeConfig = {
+  publicKey: 'pk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 };
 
 export const doorbell: DoorbellConfig = {

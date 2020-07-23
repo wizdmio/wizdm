@@ -12,6 +12,11 @@
     // Styles the background color
     &.background-color, .background-color { background-color: map-get($background, background); }
 
+    @each $prop in $props {
+
+      &.#{$prop}-disabled, .#{$prop}-disabled { #{$prop}: map-get($foreground, disabled); }
+    }
+
     // Styles the theme palettes
     @each $color in ('primary', 'accent', 'warn') {
 

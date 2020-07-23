@@ -1,10 +1,10 @@
 import { DatabaseApplication } from '../database-application';
-import { switchMap, expand, takeWhile } from 'rxjs/operators';
 import { DatabaseDocument, DocumentData } from '../document';
-import { limit, snap } from './operators';
-import { CollectionRef } from './types';
+import { switchMap, expand, scan } from 'rxjs/operators';
+import { CollectionRef, QueryFn } from './types';
+import { Observable, of, EMPTY } from 'rxjs';
+import { query, get } from './operators';
 import { DatabaseQuery } from './query';
-import { Observable } from 'rxjs';
 
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T> {
@@ -47,29 +47,35 @@ export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T>
   }
 
   /**
-   * Wipes the full collection in batches
-   * @param batchSize the number of document to be deleted each batch
+   * Wipes the all the documents matching the query
+   * @param query a number to limit the batch size or alternatively a query function
+   * selecting the documents to wipe. Just make sure to include a limit() to avoid
+   * exceeding the maximum writes limit during batch deletion.
    */
-  public wipe(batchSize: number = 20): Promise<void> {
+  public wipe(query: number|QueryFn<T> = 50): Promise<number> {
+    // Builds the query function according to the input value
+    const qf: QueryFn<T> = (typeof query === 'number') ? qf => qf.limit(query) : query;
     // Starts by pushing whatever value
-    return this.wipeBatch(batchSize).pipe(
+    return this.deleteBatch(qf).pipe(
       // Recursively delete the next batches 
-      expand(() => this.wipeBatch(batchSize) ),
-      // Stops when done
-      takeWhile( length => length >= batchSize )
-    // Returns as a promise
-    ).toPromise() as any;
+      expand(count => count > 0 ? this.deleteBatch(qf) : EMPTY ),
+      // Accumulates the total deletion count
+      scan((total, count) => total + count, 0)
+      // Returns as a promise
+    ).toPromise();
   }
 
-  // Detetes documents as batched transaction
-  private wipeBatch(batchSize: number): Observable<number> {
+  // Detetes documents in a batch
+  private deleteBatch(qf: QueryFn<T>): Observable<number> {
     // Makes sure to limit the request up to bachSize documents
-    return this.pipe( limit(batchSize), snap(), switchMap( docs => {
+    return this.pipe( query(qf), get(), switchMap( snap => {
+      // Skips when done
+      if(snap.empty) { return of(0); }
       // Delete documents in a batch
       const batch = this.db.batch();
-      docs.forEach( doc => batch.delete(doc.ref) );
-      // Commits the batch write and returns the snapshot length
-      return batch.commit().then( () => docs.length ) ;
+      snap.forEach( doc => batch.delete(doc.ref) );
+      // Commits the batch write and returns the snapshot size
+      return batch.commit().then( () => snap.size ) ;
     }));
   }
 }

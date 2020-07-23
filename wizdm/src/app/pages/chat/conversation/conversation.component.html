@@ -1,43 +1,85 @@
 
-<ng-container *wmContent="let msgs select 'chat.conversation'">
+<!-- Use a button for hover/focus/ripple effects -->
+<button mat-button routerLink="." [queryParams]="{ with: (sender$ | async)?.userName }">
 
-  <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) === '0'" matBadgeSize="small">
+  <!-- Gets the localized content -->
+  <div *wmContent="let msgs select 'chat.conversation'" fxLayout="row" fxLayoutAlign="start center">
 
-    <wm-avatar [src]="(sender$ | async)?.photo" color="primary"></wm-avatar>
-    
-  </div>
+    <!-- Displays the avatar of the sender on the left -->
+    <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) === '0'" matBadgeSize="small">
 
-  <div fxFlex="1 1 auto" class="content" routerLink="." [queryParams]="{ with: (sender$ | async)?.userName }">
-
-    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="8px">
-
-      <div fxFlex="1 1 auto" class="name mat-title">{{ (sender$ | async)?.fullName || '\n' }}</div>
-
-      <time fxFlex="0 0 auto" class="time mat-small">{{ 
-        last$ | async | updatedTime | calendar:msgs.timeFormat || {
-          sameDay: "LT",
-          lastDay: "[Yesterday]",
-          lastWeek: "dddd",
-          sameElse: "L"
-        }        
-      }}</time>
-
+      <wm-avatar [src]="(sender$ | async)?.photo" [class.skeleton-loading]="!(sender$ | async)" color="primary"></wm-avatar>
+      
     </div>
 
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <!-- Displays the conversation body on the right -->
+    <div fxFlex="1 1 auto" fxLayout="column" fxLayoutAlign="start stretch" class="content">
 
-      <div fxFlex="1 1 auto" class="last mat-body" [class.unread]="data.unread > 0" [wm-emoji-text]="(last$ | async)?.body || '\n'"></div>
-    
-      <!--mat-icon fxFlex="0 0 auto" class="menu" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">expand_more</mat-icon>
+      <!-- First body line -->
+      <div fxLayout="row" fxLayoutGap="8px">
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>Contact info</button>
-        <button mat-menu-item>Archive chat</button>
-        <button mat-menu-item>Delete chat</button>
-      </mat-menu-->
+        <!-- Sender full name -->
+        <div fxFlex="1 1 auto" class="name mat-title text" [class.skeleton-loading]="!(sender$ | async)">{{
+
+          (sender$ | async) ? ((sender$ | async).fullName || msgs.unknownUser || 'Unknown user') : ''
+          
+        }}</div>
+
+        <!-- Last message time (moment calendar) -->
+        <time fxFlex="0 0 auto" class="time mat-small">{{ 
+
+          ((last$ | async) || data) | updatedTime | calendar:msgs.timeFormat || {
+            sameDay: "LT",
+            lastDay: "[Yesterday]",
+            lastWeek: "dddd",
+            sameElse: "L"
+          }
+
+        }}</time>
+
+      </div>
+
+      <!-- Second body line -->
+      <div fxLayout="row">
+
+        <!-- Last message body -->
+        <div fxFlex="1 1 auto" class="last mat-body text" 
+                               [class.unread]="data.unread > 0" 
+                               [class.skeleton-loading]="!(sender$ | async)"
+                               [wm-emoji-text]="(last$ | async)?.body"></div>
+      
+        <!-- Options menu -->
+        <mat-icon fxFlex="0 0 auto" class="menu" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">expand_more</mat-icon>
+        <mat-menu #menu="matMenu">
+
+          <!-- Contact info -->
+          <button mat-menu-item routerLink="/@{{ (sender$ | async)?.userName }}">{{ msgs.info?.label || 'Contact info' }}</button>
+
+          <!-- Delete chat -->
+          <button mat-menu-item (click)="confirmDelete.open()">{{ msgs.delete?.label || 'Delete chat' }}</button>
+
+          <!-- Confirm deleting chat dialog -->
+          <wm-dialog #confirmDelete (closedChange)="$event && delete()">
+
+            <h2 mat-dialog-title><b>{{ msgs.confirmDelete?.title || 'Deleting chat' }}</b></h2>
+          
+            <mat-dialog-content [wm-readme]="msgs.confirmDelete?.message">
+              You're about to <b>delete</b> this conversation.<br>Are you sure?
+            </mat-dialog-content>
+          
+            <mat-dialog-actions align="end">
+              <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.confirmDelete?.cancel || 'Abort' }}</button>
+              <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.confirmDelete?.ok || 'Proceed' }}</button>
+            </mat-dialog-actions>
+
+          </wm-dialog>
+
+        </mat-menu>
+      
+      </div>
     
     </div>
-  
+
   </div>
 
-</ng-container>
+</button>

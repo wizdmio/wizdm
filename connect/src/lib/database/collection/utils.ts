@@ -1,4 +1,5 @@
-import { CollectionRef, Query, QuerySnapshot, QueryDocumentSnapshot, DocumentChange, ListenOptions } from './types';
+import { CollectionRef, Query, QuerySnapshot, QueryDocumentSnapshot, DocumentChange } from './types';
+import { ListenOptions } from '../document/types';
 import { Observable, throwError } from 'rxjs';
 import { NgZone } from '@angular/core';
 
@@ -11,7 +12,7 @@ export function fromRef<T>(ref: CollectionRef<T>|Query<T>, zone: NgZone, options
   // Throw an error when the referencec is missing
   if(!ref) { return throwError(new Error("Missing Reference") ); }
   // Returns an obsevable wrapping the onSnapshot observer
-  return new Observable<QuerySnapshot<T>>( subscriber => ref.onSnapshot(/*options || {}, */
+  return new Observable<QuerySnapshot<T>>( subscriber => ref.onSnapshot(options || {},
     // Runs the observable within the Angular's zone
     (value: QuerySnapshot<T>) => zone.run( () => subscriber.next(value) ),
     // Runs the observable within the Angular's zone

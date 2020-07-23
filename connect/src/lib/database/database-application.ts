@@ -61,12 +61,12 @@ export abstract class DatabaseApplication {
 
   /** Returns a special value that can be used with set() or update() telling the server to add the given elements to an array */
   public arrayUnion<T>(...elements: T[]): FieldValue {
-    return firestore.FieldValue.arrayUnion(elements);
+    return firestore.FieldValue.arrayUnion(...elements);
   }
 
   /** Returns a special value that can be used with set() or update() telling the server to remove the given elements from an array */
   public arrayRemove<T>(...elements: T[]): FieldValue {
-    return firestore.FieldValue.arrayRemove(elements);
+    return firestore.FieldValue.arrayRemove(...elements);
   }
 
   /** Creates a geopoint at the given lat and lng */

@@ -77,37 +77,39 @@ service cloud.firestore {
     // Conversations (group of users messaging).
     match /conversations/{convId} {
     
-    	// Allow every signed-in user to create new conversations
-    	allow create: if authenticated();
+    	// Allow signed-in user to create and update new conversations
+    	allow create, update: if authenticated();
       
-      // Allow getting a single conversation by authenticated users. 
-      // This is needed to check conversation existance when starting up a new conversation.
-    	allow get: if authenticated();
+      // Allow getting a single conversation. 
+      // This is needed to check conversation existance when:
+      //  - Starting up a new conversation.
+      //  - Deleting an existing conversation.
+      allow get: if authenticated();
       
-      // Allow list and update of conversations only by recipients
-      allow list, update: if authenticated() && (request.auth.uid in resource.data.recipients);
+      // Allow recipients to list conversations
+      allow list: if authenticated() && (request.auth.uid in resource.data.recipients);
       
-      // Allow delete only by the conversation's owner (first recipient)
-      allow delete: if itsMe(resource.data.recipients[0]);
+      // Allow delete only when orphaned (no recipients)
+      allow delete: if authenticated() && (resource.data.recipients.size() == 0);
       
       // Messages.
       match /messages/{messageId} {
       
       	// Returns the parent's recipients array
-      	function recipients() {
+      	//function recipients() {
         	// Uses a variable to make sure the following 'in' clause will work 
-        	let conv = get(/databases/$(database)/documents/conversations/$(convId));  
-          return conv.data.recipients;
-        }
+        //	let conv = get(/databases/$(database)/documents/conversations/$(convId));  
+        //  return conv.data.recipients;
+        //}
         
         // True whenever the requesting user is listed among the recipients
-        function amongRecipients() {
+        //function amongRecipients() {
         	// Skips to get the collection if not authenticated
-        	return authenticated() && (request.auth.uid in recipients());
-        }
+        //	return authenticated() && (request.auth.uid in recipients());
+        //}
         
-				// Allows reading/creating users listed in the parents recipients array 
-      	allow read, create: if amongRecipients();
+				// Allows authenticated users reading/creating messages
+      	allow read, create: if authenticated();
         
         // Allows only the sender to update and delete a message 
         allow update, delete: if itsMe(resource.data.sender);

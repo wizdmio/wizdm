@@ -186,10 +186,10 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
   }
 
   /**  Observes a user from the id */
-  public fromUserId(userId: string): Observable<T> {
+  public fromUserId(userId: string, defaultValue?: any): Observable<T> {
 
     // Skips invalid id
-    if(!userId) { return of(null); }
+    if(!userId) { return of(defaultValue); }
 
     // Returns the cached observable, if any
     const cached = this.cache[userId];
@@ -200,6 +200,8 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
 
       // Caches the same observable under its @username whenever possible
       tapOnce( data => { data && (this.cache[data.userName || userId] = this.cache[data.userName || userId] || streamed); }),
+
+      map( data => data || defaultValue ),
 
       // Replays the emission to avoid streaming multiple copies from the database when not needed
       shareReplay({ bufferSize: 1, refCount: false })

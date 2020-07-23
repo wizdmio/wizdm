@@ -1,7 +1,7 @@
-import { DocumentRef, DocumentSnapshot, GetOptions, DocumentData } from './types';
+import { DocumentRef, DocumentSnapshot, GetOptions, ListenOptions, DocumentData } from './types';
+import { DatabaseApplication, FieldPath } from '../database-application';
 import { DatabaseCollection, CollectionRef } from '../collection';
 import { DistributedCounter, CounterShard } from '../counter';
-import { DatabaseApplication, FieldPath } from '../database-application';
 import { fromRef, mapSnaphotData, refReject } from './utils';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -125,14 +125,14 @@ export class DatabaseDocument<T extends DocumentData> {
   }
 
   /** Returns an observable streaming this document snapshot */
-  public asObservable(): Observable<DocumentSnapshot<T>> {
-    return fromRef<T>(this.ref, this.db.zone);
+  public asObservable(options?: ListenOptions): Observable<DocumentSnapshot<T>> {
+    return fromRef<T>(this.ref, this.db.zone, options);
   }
 
   /** Streams the document content with an observable */
-  public stream(): Observable<T> {
+  public stream(options?: ListenOptions): Observable<T> {
     // Maps the snapshot to the data content
-    return this.asObservable().pipe( map( snapshot => mapSnaphotData(snapshot) ));
+    return this.asObservable(options).pipe( map( snapshot => mapSnaphotData(snapshot) ));
   }
 
   /** Deletes the document */

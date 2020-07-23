@@ -1,6 +1,6 @@
+import { ElementsOptions, ElementType, ElementOptions } from './definitions/element';
+import { StripeJS, Stripe, StripeOptions } from './definitions';
 import { InjectionToken } from '@angular/core';
-import { StripeJS, Stripe, StripeOptions } from './stripe-definitions';
-import { ElementsOptions, ElementType, ElementOptions } from './stripe-definitions/element';
 
 export interface StripeConfig<T extends ElementType = any> {
   publicKey: string;
@@ -27,8 +27,6 @@ export function stripeFactory(config: StripeConfig): Stripe {
   if(!config || typeof config.publicKey !== 'string') {
     throw new Error('A valid publicKey must be provided');
   }
-
-  console.log("Providing Stripe", config);
 
   return StripeJS( config.publicKey, config.options );
 }

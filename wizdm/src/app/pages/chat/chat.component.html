@@ -14,24 +14,20 @@
   </ng-template>
 
   <!-- Fills the side panel as soon as the conversations load -->
-  <ng-container *ngIf="(conversations$ | async) as conversations; else: loadingChat">
+  <!--ng-container *ngIf="(conversations$ | async) as conversations; else: loadingChat"-->
 
     <!-- Teleports to the side panel -->
     <ng-template wmSidenav opened persist minWidth="280px" maxWidth="350px">
 
       <!-- List of active conversations -->
-      <mat-action-list>
-
-        <mat-list-item  *ngFor="let conv of conversations; trackBy: trackById" 
-                        [attr.selected]="conv.id === (conversationId$ | async)" 
-                        class="height-unset primary">
-
-          <wm-conversation [conv]="conv" (unreadCount)="accumulateUnread(conv.id, $event)"></wm-conversation>
+      <wm-conversation *ngFor="let conv of conversations$ | async; trackBy: trackById" 
+                        class="primary"
+                        [content]="conv" 
+                        [attr.selected]="conv.id === (conversationId$ | async)"
+                        (deleted)="reload()"
+                        (unreadCount)="accumulateUnread(conv.id, $event)">
+      </wm-conversation>
         
-        </mat-list-item>
-
-      </mat-action-list>
-
     </ng-template>
 
     <!-- Message thread -->
@@ -51,7 +47,7 @@
           <ng-container *ngIf="i === 0 || (messages[i-1] | createdTime | moment:'D') !== (msg | createdTime | moment:'D')">
 
             <!-- Displays a badge with the date -->
-            <div fxFlexAlign="center" class="group-label mat-elevation-z2">{{ 
+            <div fxFlexAlign="center" class="background-color group-label mat-elevation-z2">{{ 
                 
               msg | createdTime | calendar:msgs.thread?.timeFormat || {
                 sameDay: "[Today]",
@@ -88,14 +84,14 @@
       <!-- Message composer on the navigator's sticky footer -->
       <wm-composer *wmFooter [(value)]="text" 
                              [keys]="keys" 
-                             [disabled]="loadingMessages"
+                             [disabled]="unknownRecipient || loadingMessages"
                              (expanded)="onKeyboardExpand()" 
                              (send)="send($event)">
       </wm-composer> 
 
     </ng-container>
 
-  </ng-container>
+  <!--/ng-container-->
 
   <!-- Loading chat message -->
   <ng-template #loadingChat>

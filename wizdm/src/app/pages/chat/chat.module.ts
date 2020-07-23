@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
@@ -46,6 +47,7 @@ const routes: RoutesWithContent = [
     MatButtonModule,
     MatListModule,
     MatBadgeModule,
+    MatDividerModule,
     MatProgressSpinnerModule,
     RedirectModule,
     PipesModule,

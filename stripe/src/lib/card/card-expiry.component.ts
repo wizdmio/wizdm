@@ -1,8 +1,8 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { CardFieldElementOptions } from '../stripe-definitions/element';
 import { StripeConfig, StripeConfigToken } from '../stripe-factory';
-import { StripeElements } from '../stripe-elements';
+import { CardFieldElementOptions } from '../definitions/element';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { StripeElements } from '../directives';
 import { StripeElement } from '../stripe-element';
 
 @Component({

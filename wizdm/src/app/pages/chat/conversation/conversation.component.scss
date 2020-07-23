@@ -1,14 +1,14 @@
 
 :host {
   position: relative;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  box-sizing: border-box;
+  display: block;
   width: 100%;
-  padding: 7px 0;
+
+  .mat-button { 
+    width: 100%;
+    text-align: left; 
+    padding: 8px 16px;
+  }
 
   .wm-avatar {
     width: 56px;

@@ -1,8 +1,9 @@
 import { OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Output, EventEmitter, Directive } from '@angular/core';
-import { Element, ElementType, ElementOptions, ChangeEventObject } from './stripe-definitions/element';
-import { StripeError } from './stripe-definitions/error';
-import { StripeElements } from './stripe-elements';
+import { Element, ElementType, ElementOptions, ChangeEventObject } from './definitions/element';
+import { StripeElements } from './directives/elements.directive';
+import { StripeError } from './definitions/error';
 import { StripeConfig } from './stripe-factory';
+
 
 /** StripeElement types */
 export type StripeElementType = Exclude<ElementType, 'paymentRequestButton'>;

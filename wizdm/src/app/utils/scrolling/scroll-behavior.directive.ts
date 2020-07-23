@@ -20,8 +20,6 @@ export class ScrollBehaviorDirective implements OnInit, OnDestroy {
 
     this.sub = this.routerScroll$.subscribe( e => {
 
-      console.log("Scroll", e);
-
       if(e.position) { // Routing backwards
 
         // Scrolls to top or...

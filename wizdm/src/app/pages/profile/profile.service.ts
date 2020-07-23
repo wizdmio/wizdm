@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { UserProfile } from 'app/utils/user-profile';
 import { take, map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ProfileService implements CanActivate {
@@ -9,8 +9,6 @@ export class ProfileService implements CanActivate {
   constructor(private profile: UserProfile, private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
-    console.log(state.url);
 
     return this.profile.data$.pipe( take(1), map(
       data => {
@@ -21,11 +19,7 @@ export class ProfileService implements CanActivate {
           return '@' + data.userName + trail;
         });
 
-        console.log(redirect);
-
-        return redirect !== state.url ? 
-          this.router.parseUrl(redirect) :
-            true;
+        return redirect !== state.url ? this.router.parseUrl(redirect) : true;
       }
     ));
   }

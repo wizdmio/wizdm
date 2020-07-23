@@ -1,7 +1,7 @@
-import { QueryFn, QueryRef, QuerySnapshot, QueryDocumentSnapshot, DocumentChange, DocumentChangeType, WhereFilterOp, OrderByDirection, ListenOptions } from './types';
+import { QueryFn, QueryRef, QuerySnapshot, QueryDocumentSnapshot, DocumentChange, DocumentChangeType, WhereFilterOp, OrderByDirection } from './types';
 import { tap, map, scan, filter, expand, take, pluck, switchMap, mergeScan, takeWhile } from 'rxjs/operators';
+import { DocumentData, DocumentSnapshot, GetOptions, ListenOptions } from '../document/types';
 import { Observable, pipe, defer, OperatorFunction, MonoTypeOperatorFunction } from 'rxjs';
-import { DocumentData, DocumentSnapshot, GetOptions } from '../document/types';
 import { fromRef, combineDocumentChanges } from './utils';
 import { mapSnaphotData } from '../document/utils';
 import { FieldPath } from '../database-application';

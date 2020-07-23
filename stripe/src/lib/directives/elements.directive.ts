@@ -1,7 +1,7 @@
 import { Directive, OnInit, OnChanges, SimpleChanges, Input, Inject } from '@angular/core';
-import { Elements, Element, ElementType, ElementOptions } from '../stripe-definitions/element';
+import { Elements, Element, ElementType, ElementOptions } from '../definitions/element';
 import { StripeConfig, StripeConfigToken } from '../stripe-factory';
-import { Stripe } from '../stripe-definitions';
+import { Stripe } from '../definitions';
 
 @Directive({
   selector: 'wm-stripe-elements, [StripeElements]',

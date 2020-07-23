@@ -1,9 +1,9 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { IdealElementOptions, IconStyle } from '../stripe-definitions/element';
 import { StripeConfig, StripeConfigToken } from '../stripe-factory';
-import { StripeElements } from '../stripe-elements';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { IdealElementOptions } from '../definitions/element';
 import { StripeElement } from '../stripe-element';
+import { StripeElements } from '../directives';
 
 @Component({
   selector: 'wm-stripe-ieal',

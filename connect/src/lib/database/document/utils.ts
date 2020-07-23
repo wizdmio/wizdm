@@ -1,4 +1,4 @@
-import { DocumentRef, DocumentSnapshot, DocumentData } from './types';
+import { DocumentRef, DocumentSnapshot, DocumentData, ListenOptions } from './types';
 import { Observable, throwError } from 'rxjs';
 import { NgZone } from '@angular/core';
 
@@ -7,11 +7,11 @@ export function refReject(): Promise<never> {
 }
 
 /** Builds an Observable od DocumentSnapshots from a Document ref */
-export function fromRef<T>(ref: DocumentRef<T>, zone: NgZone): Observable<DocumentSnapshot<T>> {
+export function fromRef<T>(ref: DocumentRef<T>, zone: NgZone, options?: ListenOptions): Observable<DocumentSnapshot<T>> {
   // Throw an error when the referencec is missing
   if(!ref) { return throwError(new Error("Missing Reference") ); }
   // Returns an obsevable wrapping the onSnapshot observer and running within Angular's zone
-  return new Observable<DocumentSnapshot<T>>( subscriber => ref.onSnapshot(
+  return new Observable<DocumentSnapshot<T>>( subscriber => ref.onSnapshot( options || {},
     // Runs the observable within the Angular's zone
     (value: DocumentSnapshot<T>) => zone.run( () => subscriber.next(value) ),
     // Runs the observable within the Angular's zone

@@ -7,7 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { EmojiTextModule } from '@wizdm/emoji/text';
+import { ReadmeModule } from '@wizdm/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
+import { DialogModule } from '@wizdm/elements/dialog';
 import { ContentModule } from '@wizdm/content';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { PipesModule } from '@wizdm/connect/database/pipes';
@@ -23,7 +25,9 @@ import { Conversation } from './conversation.component';
     MatIconModule,
     MatMenuModule,
     EmojiTextModule,
+    ReadmeModule,
     AvatarModule,
+    DialogModule,
     ContentModule,
     MomentPipesModule,
     PipesModule

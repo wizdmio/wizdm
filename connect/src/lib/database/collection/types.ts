@@ -27,7 +27,4 @@ export type QueryDocumentSnapshot<T> = firestore.QueryDocumentSnapshot<T>;
 /** Document Change */
 export type DocumentChange<T> = firestore.DocumentChange<T>;
 
-/** Query snapshot listening options */
-export type ListenOptions = firestore.SnapshotListenOptions;
-
 export type DocumentChangeType = firestore.DocumentChangeType;
