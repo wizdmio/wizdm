@@ -106,8 +106,8 @@
       "@wizdm/redirect": [
         "redirect/src/index.ts"
       ],
-      "@wizdm/stripe": [
-        "stripe/src/index.ts"
+      "@wizdm/stripe/*": [
+        "stripe/src/lib/*"
       ],
       "@wizdm/teleport": [
         "teleport/src/index.ts"
