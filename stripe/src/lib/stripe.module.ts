@@ -1,16 +1,16 @@
 import { APP_INITIALIZER, PLATFORM_ID, NgModule, ModuleWithProviders, Inject, Optional, forwardRef } from '@angular/core';
 import { StripeConfig, StripeConfigToken, loadStripeJS, getStripeJS, stripeFactory  } from './stripe-factory';
 import { StripeControl, StripeConnect, StripeElements } from './directives';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Stripe } from './defin./directives
-./material
+import { isPlatformBrowser } from '@angular/common';
+import { Stripe } from './definitions';
+
 @NgModule({
   imports: [ ],
   declarations: [ StripeControl, StripeConnect, StripeElements ],
   exports: [ StripeControl, StripeConnect, StripeElements ]
 })
-export class StripeModule {./iban
-./ideal
+export class StripeModule {
+
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     if( !isPlatformBrowser(platformId) ) {
       throw new Error('StripeModule package supports Browsers only');
