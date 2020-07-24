@@ -27,14 +27,17 @@ export class DonateComponent {
     { label: "100", value: 100 }
   ];
 
+  /** Toggles the curency between EUR and USD */
   public toggleCurrency() {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
   constructor(private stripe: Stripe, private functions: FunctionsService) { }
 
+  // createPaymentIntent runs server side on cloudFunctions
   private createPaymentIntent = this.functions.callable<any, PaymentIntent>('createPaymentIntent');
 
+  // Process the payment
   public pay() {
 
     this.progress = true;
@@ -42,8 +45,9 @@ export class DonateComponent {
 
     console.log("Creating payment intent for", this.amount, this.currency);
 
+    // Starts by creating the payment intent server side
     this.createPaymentIntent({
-
+      // Amount goes in cents
       amount: this.amount * 100,
       currency: this.currency
 
@@ -51,6 +55,8 @@ export class DonateComponent {
 
       console.log("Confirming payment intent", intent.id);
       
+      // Once creates, use the client_secret to confirm the intent with the credit card details
+      // from the card element
       return this.stripe.confirmCardPayment( intent.client_secret, {
       
         payment_method: {
@@ -65,11 +71,11 @@ export class DonateComponent {
     }).then( result => {
 
       console.log("Transaction completed", result.paymentIntent?.status);
-
+      // Traks the errors, if any
       this.error = result.error?.message;
-      
+      // Stops the progress
       this.progress = false; 
-
+      // Clears the card
       this.card.clear();
     });
   }
