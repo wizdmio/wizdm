@@ -1,46 +1,57 @@
 
-<!-- Localized content, restore scroll position, report gtag -->
-<ng-container *wmContent="let msgs select 'donate';let lang = language" scrollPositionRestoration="top" gtag="donate">
+<!-- Localized content, config StripeElements locale, restore scroll position, report gtag -->
+<ng-container *wmContent="let msgs select 'donate';let lang = language" [StripeElements]="lang" scrollPositionRestoration="top" gtag="donate">
 
-  <h1>Contribute to Wizdm</h1>
+  <h1>{{ msgs.title || 'Contribute to Wizdm' }}</h1>
 
-  <p>Thanks to your generosity we are able to cover for the costs exceeding the free quotas of the various online services the project is based upon.</p>
+  <p [wm-readme]="msgs.intro">
+    Thanks to your generosity we are able to cover for the costs exceeding the free quotas of the various online services the project is based upon.
+  </p>
 
   <form fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" (ngSubmit)="pay()" #form="ngForm">
 
     <!-- Name -->
     <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="name" name="name" required [disabled]="progress" #formName="ngModel">
-      <mat-error *ngIf="!formName.valid">Please provide your name for billing purposes</mat-error>
-      <mat-hint>How do we call you</mat-hint>
+      <mat-label>{{ msgs.form?.name?.label || 'Name' }}</mat-label>
+      <input matInput [(ngModel)]="name" name="name" required [disabled]="!ready || progress" #formName="ngModel">
+      <mat-error *ngIf="!formName.valid">{{ msgs.form?.name?.error || 'Please provide your name' }}</mat-error>
+      <mat-hint>{{ msgs.form?.name?.hint || 'Your name here' }}</mat-hint>
     </mat-form-field>
 
     <!-- Email -->
     <mat-form-field>
-      <mat-label>Email</mat-label>
-      <input matInput [(ngModel)]="email" name="email" email required [disabled]="progress" #formEmail="ngModel">
-      <mat-error *ngIf="!formEmail.valid">Please provide a valid email</mat-error>
-      <mat-hint>We'll send you the rececipt here</mat-hint>
+      <mat-label>{{ msgs.form?.email?.label || 'Email' }}</mat-label>
+      <input matInput [(ngModel)]="email" name="email" email required [disabled]="!ready || progress" #formEmail="ngModel">
+      <mat-error *ngIf="!formEmail.valid">{{ msgs.form?.email?.error || 'Please provide a valid email' }}</mat-error>
+      <mat-hint>{{ msgs.form?.email?.hint || 'We\'ll send you the rececipt here' }}</mat-hint>
     </mat-form-field>
 
     <!-- Amount -->
     <mat-form-field floatLabel='always'>
-      <mat-label>Amount</mat-label> 
+      <mat-label>{{ msgs.form?.amount?.label || 'Amount' }}</mat-label>
 
+      <!-- Fixed amount options -->
       <mat-button-toggle-group [(ngModel)]="amount" name="amount">
-        <mat-button-toggle (mousedown)="false" value="5">5</mat-button-toggle>
-        <mat-button-toggle (mousedown)="false" value="25">25</mat-button-toggle>
-        <mat-button-toggle (mousedown)="false" value="100">100</mat-button-toggle>
-        <mat-button-toggle (mousedown)="false" value="">Other: </mat-button-toggle>
+        <mat-button-toggle 
+          *ngFor="let option of msgs.form?.amount?.options || defaultAmoutOptions" 
+          (mousedown)="false" 
+          [value]="option.value"
+          >{{ option.label }}
+        </mat-button-toggle>
+        
+        <!-- Variable amount option -->
+        <mat-button-toggle (mousedown)="false" value="">{{ msgs?.form?.amount?.custom || 'Other:' }}&nbsp;</mat-button-toggle>
 
-        <input matInput [(ngModel)]="amount" name="amount" required [disabled]="progress" #formAmount="ngModel" placeholder="Enter the amount" autocomplete="off"/>
+        <input matInput [(ngModel)]="amount" name="amount" required autocomplete="off"
+                        [placeholder]="msgs.form?.amount?.placeholder || 'Enter the amount'" 
+                        [disabled]="!ready || progress" #formAmount="ngModel" />
 
       </mat-button-toggle-group>
 
-      <mat-hint>Choose the amount</mat-hint>
-      <mat-error *ngIf="!formAmount.valid">Please choose the amount</mat-error>
+      <mat-hint>{{ msgs.form?.amout?.hint || 'Choose the amount' }}</mat-hint>
+      <mat-error *ngIf="!formAmount.valid">{{ msgs.form?.amount?.error || 'Please choose the amount' }}</mat-error>
 
+      <!-- Currency switch button -->
       <button mat-icon-button matSuffix matTooltip="Switch currency" (mousedown)="false" (click)="toggleCurrency()" [disabled]="formAmount.disabled" type="button">
         <mat-icon inline fontSet="fas" [fontIcon]="currency === 'eur' ? 'fa-euro-sign' : 'fa-dollar-sign'"></mat-icon>
       </button> 
@@ -49,23 +60,25 @@
 
     <!-- Credit card info -->
     <mat-form-field>
-      <mat-label>Credit card</mat-label>
-      <!-- Configures Stripe Elements with the given locale -->
-      <wm-stripe-elements [locale]="lang">
-        <wm-stripe-card matStripe hidePostalCode [(ngModel)]="card" name="card" required [disabled]="progress" #formCard></wm-stripe-card>
-      </wm-stripe-elements>
+      <mat-label>{{ msgs.form?.card.label || 'Credit card' }}</mat-label>
+      <wm-stripe-card matStripe hidePostalCode  name="card" required 
+                      [(ngModel)]="card" 
+                      [disabled]="!ready || progress" 
+                      (ready)="ready = $event" #formCard>
+      </wm-stripe-card>
       <mat-error *ngIf="formCard.error">{{ formCard.error.message }}</mat-error>
-      <mat-hint>Powered by Stripe</mat-hint>
+      <mat-hint>{{ msgs.form?.card?.hint || 'Powered by Stripe' }}</mat-hint>
     </mat-form-field>
 
+    <!-- Payment error message -->
+    <p class="mat-error" *ngIf="error" @error>{{ error }}</p>
+
     <!-- Submit button -->
-    <button mat-flat-button type="submit" color="primary" [disabled]="!(form.valid && formCard.complete) || progress">
+    <button mat-flat-button type="submit" color="primary" [disabled]="!form.valid || !ready || progress">
       <mat-progress-spinner mode="indeterminate" diameter="30" *ngIf="progress"></mat-progress-spinner>
-      <span>Donate Now</span>
+      <span>{{ msgs.form?.action || 'Donate Now' }}</span>
     </button>
 
   </form>
-
-  <!--p>{{ name }} - {{ email }} - {{ amount }} - {{ currency }}</p-->
 
 </ng-container>

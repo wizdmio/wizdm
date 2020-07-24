@@ -1,5 +1,5 @@
 import { ElementsOptions, ElementType, ElementOptions } from './definitions/element';
-import { StripeJS, Stripe, StripeOptions } from './definitions';
+import { StripeJS, Stripe, StripeOptions } from './definitions/stripe';
 import { InjectionToken } from '@angular/core';
 
 export interface StripeConfig<T extends ElementType = any> {

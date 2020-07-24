@@ -1,10 +1,11 @@
 import { addUser, getUser, updateUser, deleteUser, listUsers, listAllUsers } from './user-admin';
 import { isAuthenticated, isAuthorized } from "../auth";
+import { https } from 'firebase-functions';
 import * as express from 'express';
 import * as cors from 'cors';
 
 // Initializes the Express app
-export const appUsers = express();
+const appUsers = express();
 
 // Installs the json body parser middleware
 appUsers.use(express.json());
@@ -29,3 +30,6 @@ appUsers.patch('/:uid', isAuthenticated, isAuthorized(['admin'], { allowSameUser
 
 // Deletes a user DELETE /users/uid
 appUsers.delete('/:uid',  isAuthenticated, isAuthorized(['admin'], { allowSameUser: true }), deleteUser );
+
+// Export the users API
+export const users = https.onRequest(appUsers);

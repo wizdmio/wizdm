@@ -1,70 +1,76 @@
 import { Component } from '@angular/core';
-import { Stripe, CardElement } from '@wizdm/stripe';
-import { FunctionsService, Callable } from '@wizdm/connect/functions';
+import { FunctionsService } from '@wizdm/connect/functions';
+import { Stripe, CardElement, PaymentIntent } from '@wizdm/stripe';
+import { $animations } from './donate.animations';
 
 @Component({
   selector: 'wm-donate',
   templateUrl: './donate.component.html',
-  styleUrls: ['./donate.component.scss']
+  styleUrls: ['./donate.component.scss'],
+  animations: $animations
 })
 export class DonateComponent {
 
-  public name: string = '';
-  public email: string = '';
-  public amount: number;
   public card: CardElement;
+  public email: string = '';
+  public name: string = '';
+  public amount: number;
   public currency: 'eur'|'usd' = 'eur';
+
+  public error: string;
+  public ready: boolean = false;
   public progress: boolean = false;
+  
+  readonly defaultAmoutOptions = [
+    { label: "5",   value: 5 },
+    { label: "25",  value: 25 },
+    { label: "100", value: 100 }
+  ];
 
   public toggleCurrency() {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
-  private createPaymentIntent = this.functions.callable('createPaymentIntent');
-
   constructor(private stripe: Stripe, private functions: FunctionsService) { }
+
+  private createPaymentIntent = this.functions.callable<any, PaymentIntent>('createPaymentIntent');
 
   public pay() {
 
-    console.log(this.stripe);
-
     this.progress = true;
+    this.error = '';
+
+    console.log("Creating payment intent for", this.amount, this.currency);
 
     this.createPaymentIntent({
+
       amount: this.amount * 100,
-      currency: this.currency,
-      email: this.email
-    })
+      currency: this.currency
 
-    // Simulates the async process...
-    setTimeout(() => {
+    }).then( intent => {
 
-      this.progress = false;
-
-      const clientSecret = '123_secret_456';
-    /**  
-     * Call on your server to create a payment intent getting back a clientSecret
-     * @see https://stripe.com/docs/payments/accept-a-payment
-     * 
-     *   stripe.paymentIntents.create({
-     *     amount: 1099, // * 100
-     *     currency: 'eur',
-     *     receipt_email: email
-     *   }).then( intent => intent.clientSecret );
-     * 
-     */ 
-
-    this.stripe.confirmCardPayment( clientSecret, {
-      payment_method: {
-        card: this.card,
-        billing_details: {
-          name: this.name,
-          //email
+      console.log("Confirming payment intent", intent.id);
+      
+      return this.stripe.confirmCardPayment( intent.client_secret, {
+      
+        payment_method: {
+          card: this.card,
+          billing_details: {
+            name: this.name,
+            email: this.email
+          }
         }
-      }
+      });
+
+    }).then( result => {
+
+      console.log("Transaction completed", result.paymentIntent?.status);
+
+      this.error = result.error?.message;
+      
+      this.progress = false; 
+
+      this.card.clear();
     });
-
-    }, 3000);
   }
-
 }

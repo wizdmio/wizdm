@@ -4,7 +4,6 @@ import { StripeElements } from './directives/elements.directive';
 import { StripeError } from './definitions/error';
 import { StripeConfig } from './stripe-factory';
 
-
 /** StripeElement types */
 export type StripeElementType = Exclude<ElementType, 'paymentRequestButton'>;
 
@@ -66,9 +65,9 @@ export abstract class StripeElement<T extends StripeElementType> implements OnIn
     this.element = this.elements.create(this.elementType, { ...this.config.elementOptions, ...this.options });
 
     // Hooks on the element's events
-    this.element.on('ready', (value) => { this.ready = true; this.readyChange.emit(value); });
-    this.element.on('focus', (value) => { this.focused = true; this.focusChange.emit(value); });
-    this.element.on('blur',  (value) => { this.focused = false; this.blurChange.emit(value); });
+    this.element.on('ready', () => { this.readyChange.emit(this.ready = true); });
+    this.element.on('focus', () => { this.focused = true; this.focusChange.emit(); });
+    this.element.on('blur',  () => { this.focused = false; this.blurChange.emit(); });
     this.element.on('change',(value: ChangeEventObject<T>) => this.valueChange.emit(this.value = value) );
     
     // Mounts the element on the DOM
@@ -85,7 +84,7 @@ export abstract class StripeElement<T extends StripeElementType> implements OnIn
     if(this.locale !== this.elements.locale) {
       // Disposed of the current element      
       this.ngOnDestroy();
-      // Creates a ne element
+      // Creates a new element
       this.ngOnInit();
       // Updates the locale
       this.locale = this.elements.locale;
@@ -94,7 +93,7 @@ export abstract class StripeElement<T extends StripeElementType> implements OnIn
 
   ngOnDestroy() { 
     // Resets the ready flag
-    this.ready = false;
+    this.readyChange.emit(this.ready = false); 
     // Disposes of the element    
     this.element && this.element.destroy(); 
   }
@@ -123,13 +122,13 @@ export abstract class StripeElement<T extends StripeElementType> implements OnIn
   public clear() { this.element && this.element.clear(); }
 
   /** Emits when fully loaded */
-  @Output('ready') readyChange = new EventEmitter();
+  @Output('ready') readyChange = new EventEmitter<boolean>(true);
   
   /** Emits when focused */
-  @Output('focus') focusChange = new EventEmitter();
+  @Output('focus') focusChange = new EventEmitter<void>();
   
   /** Emits when blurred */
-  @Output('blur') blurChange = new EventEmitter();
+  @Output('blur') blurChange = new EventEmitter<void>();
   
   /** Emits on status changes */
   @Output('change') valueChange = new EventEmitter<ChangeEventObject<T>>();

@@ -7,6 +7,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-mo
 import { MatIconRegistry } from '@angular/material/icon';
 import { DatabaseModule } from '@wizdm/connect/database';
 import { StorageModule } from '@wizdm/connect/storage';
+import { FunctionsModule } from '@wizdm/connect/functions';
 import { AuthModule } from '@wizdm/connect/auth';
 import { ConnectModule } from '@wizdm/connect';
 import { ContentModule } from '@wizdm/content';
@@ -37,7 +38,8 @@ const routes: Routes = [
     BrowserAnimationsModule,
     // Firebase integration
     ConnectModule.init(firebase, appname),
-    AuthModule, DatabaseModule, StorageModule,
+    AuthModule, DatabaseModule, 
+    StorageModule, FunctionsModule,
     // IP location info
     IpInfoModule.init(ipinfo),   
     // Dynamic content (i18n)

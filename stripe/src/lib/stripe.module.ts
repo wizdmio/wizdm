@@ -2,7 +2,7 @@ import { APP_INITIALIZER, PLATFORM_ID, NgModule, ModuleWithProviders, Inject, Op
 import { StripeConfig, StripeConfigToken, loadStripeJS, getStripeJS, stripeFactory  } from './stripe-factory';
 import { StripeControl, StripeConnect, StripeElements } from './directives';
 import { isPlatformBrowser } from '@angular/common';
-import { Stripe } from './definitions';
+import { Stripe } from './definitions/stripe';
 
 @NgModule({
   imports: [ ],

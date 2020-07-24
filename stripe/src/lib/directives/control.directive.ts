@@ -59,8 +59,14 @@ export class StripeControl implements ControlValueAccessor, Validator {
   /** Performs synchronous validation against the provided control. */
   validate(control: AbstractControl): ValidationErrors | null {
 
-    const errorType = this.element.error && this.element.error.type;
+    // Whenever the element is complete...
+    if(this.element.complete) {
+      // Checks for errors
+      const errorType = this.element.error && this.element.error.type;
+      // Translates the StripeError into a ValidationError passing along the message
+      return errorType ? { [errorType]: this.element.error.message } : null;
+    }
 
-    return errorType ? { [errorType]: true } : null;
+    return { required: true };
   }
 }

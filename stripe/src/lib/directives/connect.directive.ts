@@ -1,7 +1,7 @@
 import { Directive, OnInit, Input, Inject, forwardRef } from '@angular/core';
 import { StripeConfig, StripeConfigToken } from '../stripe-factory';
 import { Elements, ElementsOptions } from '../definitions/element';
-import { StripeJS, Stripe } from '../definitions';
+import { StripeJS, Stripe } from '../definitions/stripe';
 
 @Directive({
   selector: 'wm-stripe-connect, [StripeConnect]',
