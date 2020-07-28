@@ -24,6 +24,13 @@ export class ChatService extends DatabaseCollection<ConversationData> implements
 
     // Gets the requested recipient to chat to, if any
     const userName = route.queryParamMap.get('with');
+
+    // Prevents starting up a conversation on wrong conditions
+    if(!this.user.auth.authenticated || userName == this.user.data?.userName) { 
+      return false; 
+    }
+
+    // Initiate a conversation with the requested user
     if(userName) {
 
       // Skip unknown users. This may be a result of:

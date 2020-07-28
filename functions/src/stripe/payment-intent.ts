@@ -7,10 +7,18 @@ export const createPaymentIntent = https.onCall( async (data, context) => {
 	// Checking that the user is authenticated.
 	if (!context.auth) {
 		// Throwing an HttpsError so that the client gets the error details.
-		throw new https.HttpsError('failed-precondition', 'The function must be called  while authenticated.');
+		throw new https.HttpsError('unauthenticated', 'The function must be called  while authenticated.');
 	}
 	
-	if (!amount || !currency) { throw new https.HttpsError('failed-precondition', 'Missing amount or currency.'); }
+	// Ensure the critical parameters are present
+	if (!amount || !currency) { 
+		throw new https.HttpsError('failed-precondition', 'Missing amount or currency.'); 
+	}
+
+	// Checks for the amout being a positive number
+	if(amount <= 0) { 
+		throw new https.HttpsError('out-of-range', 'Amount must be a positive integer.'); 
+	}
 	
 	try {
 

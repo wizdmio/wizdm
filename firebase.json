@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/apps/wizdm",
+    "public": "dist/wizdm",
     "ignore": [
       "firebase.json",
       "**/.*",

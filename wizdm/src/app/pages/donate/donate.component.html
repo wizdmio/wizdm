@@ -2,7 +2,7 @@
 <!-- Localized content, config StripeElements locale, restore scroll position, report gtag -->
 <ng-container *wmContent="let msgs select 'donate';let lang = language" [StripeElements]="lang" scrollPositionRestoration="top" gtag="donate">
 
-  <h1>{{ msgs.title || 'Contribute to Wizdm' }}</h1>
+  <h1>{{ completed ? (msgs.thanks || 'Thank You 🙏🏻') : (msgs.title || 'Contribute to Wizdm') }}</h1>
 
   <p [wm-readme]="msgs.intro">
     Thanks to your generosity we are able to cover for the costs exceeding the free quotas of the various online services the project is based upon.
@@ -42,14 +42,14 @@
         <!-- Variable amount option -->
         <mat-button-toggle (mousedown)="false" value="">{{ msgs?.form?.amount?.custom || 'Other:' }}&nbsp;</mat-button-toggle>
 
-        <input matInput [(ngModel)]="amount" name="amount" required autocomplete="off"
+        <input matInput [(ngModel)]="amount" name="amount" required autocomplete="off" pattern="\d*"
                         [placeholder]="msgs.form?.amount?.placeholder || 'Enter the amount'" 
                         [disabled]="!ready || progress" #formAmount="ngModel" />
 
       </mat-button-toggle-group>
 
       <mat-hint>{{ msgs.form?.amout?.hint || 'Choose the amount' }}</mat-hint>
-      <mat-error *ngIf="!formAmount.valid">{{ msgs.form?.amount?.error || 'Please choose the amount' }}</mat-error>
+      <mat-error *ngIf="!formAmount.valid">{{ msgs.form?.amount?.error || 'Please choose a proper amount' }}</mat-error>
 
       <!-- Currency switch button -->
       <button mat-icon-button matSuffix matTooltip="Switch currency" (mousedown)="false" (click)="toggleCurrency()" [disabled]="formAmount.disabled" type="button">

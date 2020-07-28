@@ -20,6 +20,7 @@ export class DonateComponent {
   public error: string;
   public ready: boolean = false;
   public progress: boolean = false;
+  public completed: boolean = false;
   
   readonly defaultAmoutOptions = [
     { label: "5",   value: 5 },
@@ -40,6 +41,7 @@ export class DonateComponent {
   // Process the payment
   public pay() {
 
+    this.completed = false;
     this.progress = true;
     this.error = '';
 
@@ -71,10 +73,22 @@ export class DonateComponent {
     }).then( result => {
 
       console.log("Transaction completed", result.paymentIntent?.status);
-      // Traks the errors, if any
+      // Tracks the errors, if any
       this.error = result.error?.message;
       // Stops the progress
       this.progress = false; 
+      // Displays the completion 
+      this.completed = !this.error;
+      // Clears the card
+      this.card.clear();
+
+    }).catch( e => {
+      
+      console.log("Transaction terminated", e);
+      // Tracks the errors, if any
+      this.error = e.code;
+      // Stops the progress
+      this.completed = this.progress = false; 
       // Clears the card
       this.card.clear();
     });

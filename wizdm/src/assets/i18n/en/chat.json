@@ -1,4 +1,10 @@
 {
+  "welcome": {
+
+    "title": "Welcome to the chat",
+    "body": "To start a new conversation simply [explore for people](/explore/people), pick the person you wish talking to and send her a message."
+  },
+
   "thread": {
     
     "timeFormat": {
@@ -11,7 +17,6 @@
 
   "conversation": {
 
-    
     "info": { "label": "Contact info" },
     "delete": { "label": "Delete chat" },
     "new": { 
@@ -44,7 +49,6 @@
   },
 
   "composer": {
-
     "placeholder": "Type a message",
     "emoji": { "icon": "far:fa-grin-wink", "tooltip": "Insert an emoji" },
     "send": { "icon": "far:fa-paper-plane", "tooltip": "Send a message" }    

@@ -6,7 +6,8 @@
         "public": [
             { "label": "Wizdm" },
             { "label": "О нас" },
-            { "label": "Особенности" }
+            { "label": "Особенности" },
+            { "label": "Donate" }
         ],
         "private": [
             { "label": "Wizdm" },

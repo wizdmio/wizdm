@@ -34,7 +34,7 @@ export const emailVerified: AuthPipeFactory = (_, state) => map( user => {
   if(!!user && user.emailVerified) { return true; }
 
   // Redirects to login (default) or to send the email verification request
-  return redirectToLogin(state, !user.emailVerified ? 'sendEmailVerification' : undefined);
+  return redirectToLogin(state, (user && !user.emailVerified) ? 'sendEmailVerification' : undefined);
 });
 
 /** AuthPipe operator granting access based on roles */
