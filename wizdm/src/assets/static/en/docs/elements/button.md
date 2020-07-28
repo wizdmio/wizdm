@@ -51,8 +51,10 @@ export type ButtonType = basic | raised | stroked | flat | icon | fab | mini-fab
 | :------------- | :----------------------------------------------------------------------------- |
 | `@Input() type`  | Set attribute to trigger change dynamically on the current `mat-button ` attribute. Default to *basic* when not defined. |
 
----
 &nbsp;
+
+--- 
 ->
 [Continue Next](docs/toc?go=next) 
 ->
+ 

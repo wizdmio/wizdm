@@ -54,10 +54,10 @@ export class PeopleComponent extends DatabaseCollection<UserData> {
     const paged$ = this.pipe( 
       // Pages 20 items at a time
       orderBy('fullName'), page(more$), data(), 
-      // Buffers the results to avoid reloading after a search
-      shareReplay(1),
       // Hides the loading items when done
-      tap( () => this._loading$.next(0) )
+      tap( () => this._loading$.next(0) ),
+      // Buffers the results to avoid reloading after a search
+      shareReplay(1)
     );
 
     // Searching term observable

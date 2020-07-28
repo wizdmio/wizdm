@@ -11,6 +11,7 @@
       <!-- Top level link buttons -->
       <button mat-button [routerLink]="item.link" 
                          [queryParams]="item.params" 
+                         [queryParamsHandling]="item.handling"
                          [routerLinkActiveOptions]="{ exact: item.exact }"
                          routerLinkInkbar *ngIf="item.link">{{ item.label }}</button>
 
@@ -29,6 +30,7 @@
             <!-- Menu level link buttons -->
             <button mat-menu-item [routerLink]="top.link" 
                                   [queryParams]="top.params"
+                                  [queryParamsHandling]="top.handling"
                                   [routerLinkActive]="'link-active border-color-default ' + color"
                                   *ngIf="top.link">{{ top.label }}</button>
             <!-- Sub menus -->
@@ -46,6 +48,7 @@
                   <!-- Sub menu level link button -->
                   <button mat-menu-item [routerLink]="sub.link" 
                                         [queryParams]="sub.params"
+                                        [queryParamsHandling]="sub.handling"
                                         [routerLinkActive]="'link-active border-color-default ' + color"
                                         *ngIf="sub.link">{{ sub.label }}</button>
                 </ng-container>

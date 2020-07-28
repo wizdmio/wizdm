@@ -28,12 +28,14 @@ export class FooterComponent {
   }
 
   public languageLink(lang: string): any[] {
-    // Splits the current url
-    const cmds = this.router.url.split('/');
+    // Splits the current url removing query parameters, if any
+    // Parameters will be eventaully preserved by the routerLink directive
+    const cmds = this.router.url.replace(/\?.*$/, '').split('/');
     // Makes sure its absolute
     cmds[0] = '/';
     // Overwrites the language
     cmds[1] = lang;
+
     return cmds;
   }
 }

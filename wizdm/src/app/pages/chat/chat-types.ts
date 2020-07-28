@@ -3,23 +3,24 @@ import { Timestamp } from '@wizdm/connect/database';
 import { UserData } from 'app/utils/user-profile';
 
 export interface MessageData extends DocumentData {
-  
   body: string;
-  
   sender: string;
-  
-  timestamp?: string;
+  recipient: string;
 }
 
 export interface ConversationData extends DocumentData {
-  
   recipients: string[];
+  status?: ConversationStatus;
 };
 
 export interface ConversationStatus {
-
   [userId: string]: {
-    lastRead?: Timestamp,
+    lastRead?: Timestamp;
+    favorites?: ConversationFavorites;
     archived?: boolean;
   };
+}
+
+export interface ConversationFavorites {
+  [emoji: string]: number;
 }

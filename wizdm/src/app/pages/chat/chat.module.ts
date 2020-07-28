@@ -11,8 +11,10 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
 import { GtagModule } from '@wizdm/gtag';
 import { IconModule } from '@wizdm/elements/icon';
+import { ButtonChangerModule } from '@wizdm/elements/button';
 import { PipesModule } from '@wizdm/connect/database/pipes';
 import { ReadmeModule } from '@wizdm/readme';
+import { AvatarModule } from '@wizdm/elements/avatar';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { TeleportModule } from '@wizdm/teleport';
 import { ActionbarModule } from 'app/navigator/actionbar';
@@ -26,6 +28,7 @@ import { ValidProfile } from 'app/utils/user-profile';
 import { ConversationModule } from './conversation';
 import { MessageModule } from './message';
 import { ComposerModule } from './composer';
+import { ChatService } from './chat.service';
 import { ChatComponent } from './chat.component';
 
 const routes: RoutesWithContent = [
@@ -33,7 +36,7 @@ const routes: RoutesWithContent = [
     path: '',
     content: ['chat', 'emoji-keys'],
     component: ChatComponent,
-    canActivate: [ AuthGuard, ValidProfile ], data: { authGuardPipe: emailVerified },
+    canActivate: [ AuthGuard, ValidProfile, ChatService ], data: { authGuardPipe: emailVerified },
     canDeactivate: [ CanLeaveGuard ]
   }
 ];
@@ -53,7 +56,9 @@ const routes: RoutesWithContent = [
     PipesModule,
     GtagModule,
     IconModule, 
+    ButtonChangerModule,
     ReadmeModule,
+    //AvatarModule,
     DialogModule,
     TeleportModule,
     ActionbarModule,

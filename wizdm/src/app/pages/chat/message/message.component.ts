@@ -1,9 +1,10 @@
+import { Component, Input, Output, EventEmitter, ViewChild, HostListener } from '@angular/core';
 import { map, takeWhile, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { DatabaseService } from '@wizdm/connect/database';
 import { UserProfile } from 'app/utils/user-profile';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MessageData } from '../chat-types';
 import { Observable } from 'rxjs';
 
@@ -18,14 +19,17 @@ import { Observable } from 'rxjs';
     "[class.out]": "data?.sender === me"
   }
 })
-export class ChatMessage extends DatabaseDocument<MessageData> {
+export class Message extends DatabaseDocument<MessageData> {
 
   /** Deleted observable. Emits true (and completes) whenever the message gets deleted */
   public deleted$: Observable<boolean>;
   /** Message data/body from the query snapshot */
   public data: MessageData;
-  /** My user's id */
-  public get me(): string { return this.user.uid; }
+  
+  /** The conversation id */
+  get id(): string { return this.data.id; }
+  /** The current user's id */
+  get me(): string { return this.user.uid; }
 
   constructor(db: DatabaseService, private user: UserProfile) {
     super(db);
@@ -37,7 +41,7 @@ export class ChatMessage extends DatabaseDocument<MessageData> {
     // Unwraps the snapshot
     this.data = this.unwrap(message);
 
-    // Creates an observable to monitor this document deletion
+    // Creates an observable to monitor this document deletion across devices.
     this.deleted$ = this.asObservable().pipe( 
       // Monitors the exists flag      
       map( snap => !snap.exists ), startWith( !message.exists ),      
@@ -45,7 +49,17 @@ export class ChatMessage extends DatabaseDocument<MessageData> {
       takeWhile(deleted => !deleted, true),  distinctUntilChanged()
     );
 
+    // Emits the data payload
     this.dataChange.emit(this.data);
+  }
+
+  // Gets the menu trigger
+  @ViewChild(MatMenuTrigger) private menuTrigger: MatMenuTrigger;
+  @HostListener('contextmenu') onContextMenu() {
+    // Opens the menu on contextmenu event  
+    this.menuTrigger?.openMenu();
+    // Prevents default
+    return false;
   }
 
   /** Emits the unwrapped message data */

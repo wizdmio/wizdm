@@ -6,7 +6,7 @@
   <div *wmContent="let msgs select 'chat.conversation'" fxLayout="row" fxLayoutAlign="start center">
 
     <!-- Displays the avatar of the sender on the left -->
-    <div fxFlex="0 0 auto" [matBadge]="unread$ | async" [matBadgeHidden]="(unread$ | async) === '0'" matBadgeSize="small">
+    <div fxFlex="0 0 auto" [matBadge]="unreadCount(unread$ | async)" [matBadgeHidden]="(unread$ | async) <= 0" matBadgeSize="small">
 
       <wm-avatar [src]="(sender$ | async)?.photo" [class.skeleton-loading]="!(sender$ | async)" color="primary"></wm-avatar>
       
@@ -39,12 +39,17 @@
 
       </div>
 
+      <!-- Deletion progress bar -->
+      <ng-template #deletingProgress>
+        <mat-progress-bar class="mat-body" style="height: 1em" color="primary" mode="indeterminate"></mat-progress-bar>        
+      </ng-template>
+
       <!-- Second body line -->
-      <div fxLayout="row">
+      <div fxLayout="row" *ngIf="!deleting; else deletingProgress">
 
         <!-- Last message body -->
         <div fxFlex="1 1 auto" class="last mat-body text" 
-                               [class.unread]="data.unread > 0" 
+                               [class.unread]="(unread$ | async) > 0" 
                                [class.skeleton-loading]="!(sender$ | async)"
                                [wm-emoji-text]="(last$ | async)?.body"></div>
       

@@ -139,6 +139,4 @@ export class NavigatorComponent {
   public toggleSidenav() { 
     this.openSidenav( !this.isSidenavOpened ); 
   }
-
-  testClick(ev) { console.log("click", ev); }
 }

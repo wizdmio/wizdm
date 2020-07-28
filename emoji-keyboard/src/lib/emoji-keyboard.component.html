@@ -13,7 +13,7 @@
     <ng-template #keys>
 
       <!-- Renders a button for each key -->
-      <button mat-icon-button (mousedown)="press(key)" *ngFor="let key of row">
+      <button mat-icon-button [disabled]="disabled" (mousedown)="press(key)" *ngFor="let key of row">
         <!-- Renders the emoji -->
         <span class="key" [attr.mode]="mode" [attr.key]="key"></span>
     
@@ -34,6 +34,7 @@
   <!-- Starts with latest favorites, when present -->
   <button mat-button fxFlex="100" 
           [class.selected]="(currentId$ | async) === 'recently_used'" 
+          [disabled]="disabled"
           (click)="scrollTo('recently_used')" 
           *ngIf="favorites?.length > 0">
 
@@ -43,6 +44,7 @@
   <!-- Fills with group buttons -->
   <button mat-button fxFlex="100"  
           [class.selected]="(currentId$ | async) === group.id" 
+          [disabled]="disabled"
           (click)="scrollTo(group.id)"
           *ngFor="let group of emojis">
 

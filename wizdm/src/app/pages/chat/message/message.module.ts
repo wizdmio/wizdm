@@ -8,7 +8,7 @@ import { BalloonModule } from '@wizdm/elements/balloon';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { PipesModule } from '@wizdm/connect/database/pipes';
 import { ContentModule } from '@wizdm/content';
-import { ChatMessage } from './message.component';
+import { Message } from './message.component';
 
 @NgModule({
   imports: [
@@ -22,7 +22,7 @@ import { ChatMessage } from './message.component';
     PipesModule,
     ContentModule
   ],
-  declarations: [ ChatMessage ],
-  exports: [ ChatMessage ]
+  declarations: [ Message ],
+  exports: [ Message ]
 })
 export class MessageModule { }

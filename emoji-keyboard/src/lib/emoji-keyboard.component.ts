@@ -4,6 +4,7 @@ import { Observable, fromEvent, combineLatest, of, BehaviorSubject } from 'rxjs'
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { EMOJI_KEYS, EmojiGroup } from './emoji-keys';
 import { runInZone } from '@wizdm/rxjs';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'wm-emoji-keyboard',
@@ -39,6 +40,14 @@ export class EmojiKeyboardComponent {
 
   /** Optional alternative labels for the emoji groups */
   @Input() labels: { [key:string]: string };
+
+  /** Disables the keyboard */
+  @Input() set disabled(disabled: boolean) {
+    this._disabled = coerceBooleanProperty(disabled);
+  }
+
+  get disabled(): boolean { return this._disabled; }
+  private _disabled: boolean = false;
 
   /** Emits the selected emoji */
   @Output() keyPressed = new EventEmitter<string>();

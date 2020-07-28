@@ -1,7 +1,7 @@
-import { filter, sample, shareReplay } from 'rxjs/operators';
+import { filter, sample, delay, shareReplay, observeOn } from 'rxjs/operators';
 import { Injectable, NgZone } from '@angular/core';
 import { Router, Scroll } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, animationFrameScheduler } from 'rxjs';
 
 /** Replays the router scrolling event globally */
 @Injectable({ providedIn: 'root' })
@@ -13,6 +13,12 @@ export class RouterScroll extends Observable<Scroll> {
 
     super( subscriber => this.inner$.subscribe(subscriber) );
 
-    this.inner$ = router.events.pipe( filter( e => e instanceof Scroll ), sample<Scroll>( zone.onStable ), shareReplay(1) );
+    this.inner$ = router.events.pipe( 
+      filter( e => e instanceof Scroll ), 
+      sample<Scroll>( zone.onStable ), 
+      //delay(0),
+      //observeOn(animationFrameScheduler), 
+      shareReplay(1) 
+    );
   }
 }

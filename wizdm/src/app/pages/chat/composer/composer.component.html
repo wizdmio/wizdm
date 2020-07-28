@@ -41,7 +41,7 @@
   <!-- On Demand Emoji Keyboard -->
   <mat-expansion-panel class="padding-0 mat-elevation-z0" (afterExpand)="expanded.emit()" hideToggle>
   
-    <wm-emoji-keyboard [favorites]="keys" [mode]="mode" (keyPressed)="typein($event)"></wm-emoji-keyboard>
+    <wm-emoji-keyboard [favorites]="keys" [mode]="mode" (keyPressed)="!disabled && typein($event)"></wm-emoji-keyboard>
 
   </mat-expansion-panel>
 

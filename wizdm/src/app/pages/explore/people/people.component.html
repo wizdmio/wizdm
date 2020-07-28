@@ -3,7 +3,7 @@
 <ng-container *wmContent="let msgs select 'people'" gtag="people">
 
   <!-- User's search form -->
-  <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px" autocomplete="off">
+  <form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="16px" autocomplete="off" cdkTrapFocus cdkTrapFocusAutoCapture>
 
     <mat-form-field>
 
@@ -11,7 +11,7 @@
       
       <wm-icon matPrefix [icon]="msgs.search?.icon || 'search'"></wm-icon>
       
-      <input matInput name="name" [ngModel]="name" (ngModelChange)="search$.next(name = $event)" #formName="ngModel">
+      <input matInput name="name" [ngModel]="name" (ngModelChange)="search$.next(name = $event)" cdkFocusInitial #formName="ngModel">
 
       <mat-hint>{{ msgs.search?.hint || 'Type the name to search for' }}</mat-hint>
   

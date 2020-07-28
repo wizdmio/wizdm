@@ -1,5 +1,4 @@
 {
-
   "thread": {
     
     "timeFormat": {
@@ -12,18 +11,34 @@
 
   "conversation": {
 
+    
+    "info": { "label": "Contact info" },
+    "delete": { "label": "Delete chat" },
+    "new": { 
+      "label": "New chat", 
+      "icon": "far:fa-comments", 
+      "link": "/explore/people"
+    },
+
     "timeFormat": {
       "sameDay": "LT",
       "lastDay": "[Yesterday]",
       "lastWeek": "dddd",
       "sameElse": "L"
+    },
+
+    "confirmDelete": {
+      "title": "Deleting chat",
+      "message": "You're about to *delete* this entire conversation. Are you sure?",
+      "cancel": "Cancel",
+      "ok": "Proceed"
     }
   },
 
   "message": {
-    "delete": {
-      "icon": "fas:fa-ban",
+    "delete": {      
       "label": "Delete message",
+      "icon": "fas:fa-ban",
       "message": "This message has been deleted"
     }
   },
@@ -32,8 +47,7 @@
 
     "placeholder": "Type a message",
     "emoji": { "icon": "far:fa-grin-wink", "tooltip": "Insert an emoji" },
-    "send": { "icon": "far:fa-paper-plane", "tooltip": "Send a message" }
-    
+    "send": { "icon": "far:fa-paper-plane", "tooltip": "Send a message" }    
   },
 
   "canLeave": {

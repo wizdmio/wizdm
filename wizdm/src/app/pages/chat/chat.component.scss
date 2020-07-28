@@ -9,8 +9,6 @@
   flex-direction: column;
   box-sizing: border-box;
 
-  .mat-list-item { height: 72px; }
-
   // Customize the distance between messages
   .in + .in, .out + .out { margin-top: 2px; }
   .in + .out, .out + .in { margin-top: 12px; }

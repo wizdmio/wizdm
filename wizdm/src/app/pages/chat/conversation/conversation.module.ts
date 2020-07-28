@@ -6,6 +6,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { EmojiTextModule } from '@wizdm/emoji/text';
 import { ReadmeModule } from '@wizdm/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
@@ -24,6 +25,7 @@ import { Conversation } from './conversation.component';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
+    MatProgressBarModule,
     EmojiTextModule,
     ReadmeModule,
     AvatarModule,

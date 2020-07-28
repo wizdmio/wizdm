@@ -41,6 +41,7 @@
     { "label": "Avatar", "link": "docs/elements/avatar" },
     { "label": "Balloon", "link": "docs/elements/balloon" },
     { "label": "Button changer", "link": "docs/elements/button" },
+    { "label": "Declarative Dialog", "link": "docs/elements/dialog" },
     { "label": "Flip", "link": "docs/elements/flip" },
     { "label": "Icon", "link": "docs/elements/icon" },
     { "label": "Illustration", "link": "docs/elements/illustration" },
@@ -55,7 +56,6 @@
 
   { "label": "Extensions", "items": [
     { "label": "Animate On Scroll", "link": "docs/animate" },
-    { "label": "Declarative Dialog", "link": "docs/dialog" },
     { "label": "IP Geolocation", "link": "docs/ipinfo" },
     { "label": "Teleportation", "link": "docs/teleport" }
   ]},

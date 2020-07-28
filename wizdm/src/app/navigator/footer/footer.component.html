@@ -48,7 +48,7 @@
       <!-- Language menu -->
       <mat-menu #langMenu="matMenu">
         <button mat-menu-item *ngFor="let item of msgs.languages"
-               [routerLink]="languageLink(item.value)" 
+               [routerLink]="languageLink(item.value)" queryParamsHandling="preserve"
                [disabled]="item.value === lang" >{{ item.label }}</button>
       </mat-menu>
 

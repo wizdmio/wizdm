@@ -27,7 +27,13 @@ export class MessageComposer {
   @Input() keys: string[];
 
   /** Disables the composer */
-  @Input() set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
+  @Input() set disabled(value: boolean) { 
+    
+    if( this._disabled = coerceBooleanProperty(value) ) { 
+      // Force the panel closing when disabled
+      this.emojiKeysPanel?.close();
+    }
+  }
   get disabled(): boolean { return this._disabled; }
   private _disabled: boolean = false;
 

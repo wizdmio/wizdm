@@ -144,5 +144,5 @@ Closes the dialog passing along the output value.
 
 ---
 ->
-[Next Topic](docs/toc?go=next) 
+[Continue Next](docs/toc?go=next) 
 ->

@@ -1,5 +1,5 @@
 
-<section fxLayout="column" fxLayoutAlign="center center" *wmContent="let data select 'not-found'">
+<ng-container *wmContent="let data select 'not-found'">
   
   <h1>{{ data.title || 'The page does not exist' }}</h1>
   
@@ -9,4 +9,4 @@
 
   <h5>{{ data.e404 || 'Error 404' }}</h5>
 
-</section>
+</ng-container>
