@@ -30,8 +30,7 @@
     left: 0;
     
     // Makes sure all the children lays on the same z-index
-    z-index: 2;
-    & * { z-index: inherit; }
+    z-index: 2; & * { z-index: 2; }
 
     .mat-toolbar {
     
@@ -45,6 +44,9 @@
         height: 100%;
         left: 0;
         top: 0;
+
+        // Keeps the background on the background
+        z-index: 1;
         
         pointer-events: none;
 
@@ -69,12 +71,12 @@
     position: relative;
     width: 100%;
     min-height: 100%;
+    overflow: visible;
 
     // Makes sure to see trought the background from the body
     background-color: transparent;
 
     .mat-sidenav { 
-      //min-width: 240px; 
       overflow: visible;
       box-sizing: border-box;
 
@@ -106,7 +108,9 @@
     .mat-sidenav-content { 
     
       // Prevents the scrolling since the main scolling container remains the window
-      overflow: hidden; 
+      // NOTE: Making the overflow visible is crucial to ensure the sticky footer visibility
+      // on Safari browsers
+      overflow: visible; 
 
       .page { position: relative; }
 
@@ -119,10 +123,13 @@
   .sticky-footer {
 
     position: fixed;
+    height: auto;
     left: 0;
     right: 0;
     bottom: 0;
 
+    // Forces the GPU accelleration to avoid flickering while scrolling
+    transform: translate3d(0,0,0);
     // Applies the very same transition used by the mat-sidenav-content
     transition: { duration: 400ms; timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); property: margin; }
   }
@@ -139,6 +146,7 @@
     z-index: 2;
 
     pointer-events: none;
+    overflow: visible;
 
     .fab-container { 
 

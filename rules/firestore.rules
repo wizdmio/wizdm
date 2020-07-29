@@ -77,36 +77,36 @@ service cloud.firestore {
     // Conversations (group of users messaging).
     match /conversations/{convId} {
     
-    	// Allows only authenticated users among the recipients
-    	function inRecipients() {
-        return authenticated() && (request.auth.uid in resource.data.recipients);
-      }
-      
-      // Allows only authenticated users when the conversation is orphaned
-      function noRecipients() {
-      	return authenticated() && (resource.data.recipients.size() == 0);
-      }
-    
     	// Allow signed-in user to create and get new conversations
     	allow create, update, get: if authenticated();
             
-      // Allow recipients to list and update conversations
-      allow list: if inRecipients();
+      // Allow recipients to list conversations
+      allow list: if authenticated() && (request.auth.uid in resource.data.recipients);
       
       // Allow delete only when orphaned (no recipients)
-      allow delete: if noRecipients();
+      allow delete: if authenticated() && (resource.data.recipients.size() == 0);
       
       // Messages.
       match /messages/{messageId} {
       
+      	// Returns the parent's recipients list
+      	function recipients() {
+        	// Uses a variable to make sure the following 'in' clause will work 
+        	let conv = get(/databases/$(database)/documents/conversations/$(convId));  
+          return conv.data.recipients;
+        }
+      
 				// Allows authenticated users creating messages
-      	allow create, list: if authenticated();
+      	allow create: if authenticated();
+        
+        // Allows recipients
+        allow list: if authenticated() && (request.auth.uid in recipients());
         
         // Allows only the sender to update and delete a message 
         allow update, delete: if user(resource.data.sender);
                 
-        // Allows both sender and recipient to read messages
-        allow get: if user(resource.data.sender) || user(resource.data.recipient);
+        // Allows both sender and recipient to read messages (including the case the message has been deleted)
+        allow get: if resource == null || user(resource.data.sender) || user(resource.data.recipient);
       }
 		}
   }

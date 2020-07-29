@@ -9,13 +9,14 @@
   flex-direction: column;
   box-sizing: border-box;
 
-  // Customize the distance between messages
-  .in + .in, .out + .out { margin-top: 2px; }
-  .in + .out, .out + .in { margin-top: 12px; }
-
-  .group-label {
-    margin: 12px 0;
+  // Expands the bottom margin to rise the label till the top of the page
+  .group-label {    
+    margin: 12px 0 auto;
     padding: 6px 12px;
-    border-radius: 5px;
+    border-radius: 5px;    
   }
+
+  // Customize the distance between messages
+  .in, .out { margin-top: 12px; }
+  .in + .in, .out + .out { margin-top: 2px; }
 }

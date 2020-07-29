@@ -151,7 +151,7 @@
                          [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0">
 
       <!-- Page container to fit all the available space setting the animation viewport -->
-      <div class="page" fxFlex="1 1 auto" wmAnimateView [top]="navbar?.clientHeight || 0">
+      <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center stretch" class="page" wmAnimateView [top]="navbar?.clientHeight || 0">
 
         <!-- Pages will fit here -->
         <router-outlet></router-outlet>

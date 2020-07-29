@@ -61,7 +61,7 @@
         <ng-container *ngIf="i === 0 || (messages[i-1] | createdTime | moment:'D') !== (msg | createdTime | moment:'D')">
 
           <!-- Displays a badge with the date -->
-          <div style="margin-bottom: auto" fxFlexAlign="center" class="background-color group-label mat-elevation-z2">{{ 
+          <div fxFlexAlign="center" class="background-color group-label mat-elevation-z2">{{ 
               
             msg | createdTime | calendar:msgs.thread?.timeFormat || {
               sameDay: "[Today]",
