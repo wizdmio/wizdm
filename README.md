@@ -27,6 +27,7 @@ The app relies on several [firebase services][firebase]:
 * Firebase Auth for user authentication 
 * Cloud Firestore realtime database for user's profile and content
 * Cloud Storage for user's images and files
+* Cloud Functions to run key tasks server-side
 
 Take a look on [@wizdm/connect](libs/connect) library abstracting the communication layer with all the firebase services. 
 
