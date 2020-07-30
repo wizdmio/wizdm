@@ -21,7 +21,7 @@ The project revolves around a [web-app](apps/wizdm) running on [Angular][angular
 
 ## Firebase
 
-The app relies on several [firebase][firebase]:
+The app relies on several [firebase services][firebase]:
 
 * Firebase Hosting to host the production demo app at https://wizdm.io
 * Firebase Auth for user authentication 
