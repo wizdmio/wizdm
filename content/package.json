@@ -6,16 +6,16 @@
   "keywords": ["Angular", "Router", "i18n"],
   "homepage": "https://wizdm.io/docs/content",
   "peerDependencies": {
-    "@angular/core": "^10.0.2",
-    "@angular/common": "^10.0.2",
-    "@angular/router": "^10.0.2"
+    "@angular/core": "^10.0.0",
+    "@angular/common": "^10.0.0",
+    "@angular/router": "^10.0.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wizdmio/wizdm/tree/master/libs/content"
+    "url": "https://github.com/wizdmio/wizdm/tree/master/content"
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"

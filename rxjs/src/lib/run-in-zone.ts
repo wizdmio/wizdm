@@ -1,5 +1,5 @@
-import { NgZone } from '@angular/core';
 import { Observable, OperatorFunction } from 'rxjs';
+import type { NgZone } from '@angular/core';
 
 /** Returns an observable mirroring the source while running within the given zone */
 export function runInZone<T>(zone: NgZone): OperatorFunction<T, T> {

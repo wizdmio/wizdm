@@ -5,13 +5,14 @@ import { SidenavDirective } from 'app/navigator/sidenav';
 @Component({
   selector: 'wm-static',
   templateUrl: './static.component.html',
-  styleUrls: ['./static.component.scss'],
-  //host: { "style": "flex 1 1 auto" }
+  styleUrls: ['./static.component.scss']
 })
 export class StaticComponent {
 
   /** The sidenav panel */
   @ViewChild(SidenavDirective) sidenav: SidenavDirective;
+
+  public openTOC: boolean = true;
 
   constructor(private redirect: RedirectService) {}
 

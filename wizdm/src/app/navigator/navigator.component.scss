@@ -79,29 +79,6 @@
     .mat-sidenav { 
       overflow: visible;
       box-sizing: border-box;
-
-      .sidenav-toggler {
-        // Centers the toggler vertically
-        position: absolute;
-        right: -20px; 
-        bottom: 50%;
-        // Keeps the toggler visible even while the panel is hidden
-        visibility: visible;
-        // Right side only shadow
-        box-shadow: 6px 0 6px -6px rgba(black, 0.25);
-
-        // Animating the toggler during openng/closing isn't possible since the parent drawer is animating as well 
-        // and animateChild() do not work properly @see {https://github.com/angular/angular/issues/32133}
-        // So we are using a css transition instead.
-        .wm-icon {
-          // Translates the chevron to make it visible while closed
-          transform: translateX(8px);
-          // Animates the icon
-          transition: transform 450ms ease;
-          // Rotates and translates back the chevron while opened
-          &.opened { transform: rotateZ(180deg); }
-        }
-      }
     }
 
     // Page's content
@@ -134,8 +111,8 @@
     transition: { duration: 400ms; timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); property: margin; }
   }
 
-  // Page fab overlay
-  .fab-overlay {
+  // Places the fab portal on top of the viewport
+  .wm-fab-portal {
 
     position: fixed;
     left: 0;
@@ -144,22 +121,6 @@
     bottom: 0;
 
     z-index: 2;
-
-    pointer-events: none;
-    overflow: visible;
-
-    .fab-container { 
-
-      position: absolute;
-      pointer-events: all; 
-      margin: 16px; 
-
-      &[side="left"] { left: 0; }
-      &[side="right"] { right: 0; }
-
-      &[edge="top"] { top: 0; }
-      &[edge="bottom"] { bottom: 0; }
-    }
 
     // Applies the very same transition used by the mat-sidenav-content
     transition: { duration: 400ms; timing-function: cubic-bezier(0.25, 0.8, 0.25, 1); property: margin; }

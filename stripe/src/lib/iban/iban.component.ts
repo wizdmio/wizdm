@@ -1,9 +1,8 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { IbanElementOptions, IconStyle } from '../definitions/element';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
+import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
+import type { StripeIbanElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { StripeElement } from '../stripe-element';
-import { StripeElements } from '../directives';
+import { StripeElements } from '@wizdm/stripe';
 
 /** Stripe IBAN Element for Angular */
 @Component({
@@ -20,7 +19,7 @@ export class StripeIban extends StripeElement<'iban'> {
   }
 
   /** IBAN specific options */
-  protected get options(): IbanElementOptions {
+  protected get options(): StripeIbanElementOptions {
     return { 
      disabled: this.disabled,
      hideIcon: this.hideIcon,
@@ -29,16 +28,12 @@ export class StripeIban extends StripeElement<'iban'> {
     };
   }
   
-  /** Disables the Card control */
-  @Input('disabled') set disableSetter(value: boolean) { this.disabled = coerceBooleanProperty(value); }
-  public disabled = false;
-
   /** Hides the card icon */
   @Input('hideIcon') set hideIconSetter(value: boolean) { this.hideIcon = coerceBooleanProperty(value); }
   public hideIcon: boolean;
 
   /** Selects the icon style */
-  @Input() iconStyle: IconStyle;
+  @Input() iconStyle: StripeIbanElementOptions['iconStyle'];
 
   /** Supported countries */
   @Input() supportedCountries: string[]

@@ -1,5 +1,5 @@
-import { NgZone } from '@angular/core';
 import { MonoTypeOperatorFunction } from 'rxjs';
+import type { NgZone } from '@angular/core';
 import { tap, take } from 'rxjs/operators';
 
 /** Calls fn every emission right after the zone has become stable */

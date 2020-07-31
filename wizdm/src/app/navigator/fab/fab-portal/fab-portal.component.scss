@@ -1,0 +1,21 @@
+// Page fab overlay
+:host {
+
+  display: block;
+
+  pointer-events: none;
+  overflow: visible;
+
+  .fab-container { 
+
+    position: absolute;
+    pointer-events: all; 
+    margin: 16px; 
+
+    &[side="left"] { left: 0; }
+    &[side="right"] { right: 0; }
+
+    &[edge="top"] { top: 0; }
+    &[edge="bottom"] { bottom: 0; }
+  }
+}

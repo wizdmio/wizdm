@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FunctionsService } from '@wizdm/connect/functions';
-import { Stripe, CardElement, PaymentIntent } from '@wizdm/stripe';
+import { Stripe, StripeCardElement, PaymentIntent } from '@stripe/stripe-js';
+//import { Stripe, CardElement, PaymentIntent } from '@wizdm/stripe';
 import { $animations } from './donate.animations';
 
 @Component({
@@ -11,7 +12,7 @@ import { $animations } from './donate.animations';
 })
 export class DonateComponent {
 
-  public card: CardElement;
+  public card: StripeCardElement;
   public email: string = '';
   public name: string = '';
   public amount: number;
@@ -33,7 +34,7 @@ export class DonateComponent {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
-  constructor(private stripe: Stripe, private functions: FunctionsService) { }
+  constructor(@Inject('Stripe') private stripe: Stripe, private functions: FunctionsService) { }
 
   // createPaymentIntent runs server side on cloudFunctions
   private createPaymentIntent = this.functions.callable<any, PaymentIntent>('createPaymentIntent');

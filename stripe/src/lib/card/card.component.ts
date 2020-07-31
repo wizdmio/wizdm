@@ -1,9 +1,8 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { IconStyle, CardElementOptions } from '../definitions/element';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
+import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
+import type { StripeCardElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { StripeElement } from '../stripe-element';
-import { StripeElements } from '../directives';
+import { StripeElements } from '@wizdm/stripe';
 
 /** Stripe Card Element for Angular */
 @Component({
@@ -20,7 +19,7 @@ export class StripeCard extends StripeElement<'card'> {
   }
 
   /** Card specific options */
-  protected get options(): CardElementOptions {
+  protected get options(): StripeCardElementOptions {
     return { 
      disabled: this.disabled,
      hidePostalCode: this.hidePostalCode,
@@ -32,10 +31,6 @@ export class StripeCard extends StripeElement<'card'> {
   /** The brand of the Card */
   get brand(): string { return !!super.value && super.value.brand || ''; }
 
-  /** Disables the Card control */
-  @Input('disabled') set disableSetter(value: boolean) { this.disabled = coerceBooleanProperty(value); }
-  public disabled = false;
-
   /** Hides the card icon */
   @Input('hideIcon') set hideIconSetter(value: boolean) { this.hideIcon = coerceBooleanProperty(value); }
   public hideIcon: boolean;
@@ -45,5 +40,5 @@ export class StripeCard extends StripeElement<'card'> {
   public hidePostalCode: boolean;
 
   /** Selects the icon style */
-  @Input() iconStyle: IconStyle;
+  @Input() iconStyle: StripeCardElementOptions['iconStyle'];
 }

@@ -1,10 +1,10 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
-import { CardFieldElementOptions } from '../definitions/element';
+import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
+import type { StripeCardCvcElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { StripeElement } from '../stripe-element';
-import { StripeElements } from '../directives';
+import { StripeElements } from '@wizdm/stripe';
 
+/** Stripe Card CVC Element for Angular */
 @Component({
   selector: 'wm-stripe-card-cvc',
   template: '',
@@ -18,17 +18,13 @@ export class StripeCardCvc extends StripeElement<'cardCvc'> {
     super('cardCvc', elements, config, ref);
   }
 
-  protected get options(): CardFieldElementOptions {
+  protected get options(): StripeCardCvcElementOptions {
     return { 
      disabled: this.disabled,
      placeholder: this.placeholder
     };
   };
   
-  /** Disables the Card control */
-  @Input('disabled') set disableSetter(value: boolean) { this.disabled = coerceBooleanProperty(value); }
-  public disabled = false;
-
   /** A placeholder text */
   @Input() placeholder: string;
 }

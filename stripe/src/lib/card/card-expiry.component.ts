@@ -1,10 +1,10 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
-import { CardFieldElementOptions } from '../definitions/element';
+import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
+import type { StripeCardExpiryElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { StripeElements } from '../directives';
-import { StripeElement } from '../stripe-element';
+import { StripeElements } from '@wizdm/stripe';
 
+/** Stripe Card Exipation Date Element for Angular */
 @Component({
   selector: 'wm-stripe-card-expiry',
   template: '',
@@ -18,17 +18,13 @@ export class StripeCardExpiry extends StripeElement<'cardExpiry'> {
     super('cardExpiry', elements, config, ref);
   }
 
-  protected get options(): CardFieldElementOptions {
+  protected get options(): StripeCardExpiryElementOptions {
     return { 
      disabled: this.disabled,
      placeholder: this.placeholder
     };
   };
   
-  /** Disables the Card control */
-  @Input('disabled') set disableSetter(value: boolean) { this.disabled = coerceBooleanProperty(value); }
-  public disabled = false;
-
   /** A placeholder text */
   @Input() placeholder: string;
 }

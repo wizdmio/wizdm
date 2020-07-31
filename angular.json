@@ -49,7 +49,7 @@
               }
             ],
             "allowedCommonJsDependencies": [
-              "firebase/app", "@firebase/app", "@firebase/component", "@firebase/firestore", "@firebase/functions", "@firebase/util",
+              "firebase/app", "@firebase/app", "@firebase/component", "@firebase/auth", "@firebase/firestore", "@firebase/functions", "@firebase/util",
               "remark-align", "remark-parse", "unified"
             ]
           },
@@ -525,6 +525,18 @@
       "sourceRoot": "stripe/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "stripe/tsconfig.lib.json",
+            "project": "stripe/src/lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "stripe/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -622,7 +634,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "emoji/tsconfig.lib.json",
-            "project": "emoji/src/lib/package.json"
+            "project": "emoji/src/lib/ng-package.json"
           },
           "configurations": {
             "production": {

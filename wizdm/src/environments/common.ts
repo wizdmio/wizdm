@@ -1,4 +1,5 @@
 import { ExtraOptions } from '@angular/router';
+import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { ContentConfig } from '@wizdm/content';
 import { EmojiConfig } from '@wizdm/emoji/utils';
 import { IpInfoConfig, IP_LIST_CC } from '@wizdm/ipinfo';
@@ -29,4 +30,10 @@ export const scroll: ExtraOptions = {
   scrollPositionRestoration: 'disabled',
   anchorScrolling: 'disabled',
   scrollOffset: [0, 80]
+};
+
+export const tooltips: MatTooltipDefaultOptions = {
+  showDelay: 1000,
+  hideDelay: 0,
+  touchendHideDelay: 0
 };

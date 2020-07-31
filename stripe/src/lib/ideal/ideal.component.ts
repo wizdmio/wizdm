@@ -1,24 +1,23 @@
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
+import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
+import type { StripeIdealBankElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { IdealElementOptions } from '../definitions/element';
-import { StripeElement } from '../stripe-element';
-import { StripeElements } from '../directives';
+import { StripeElements } from '@wizdm/stripe';
 
 @Component({
-  selector: 'wm-stripe-ieal',
+  selector: 'wm-stripe-ideal-bank',
   template: '',
   providers: [
-    { provide: StripeElement, useExisting: forwardRef(() => StripeIdeal) }
+    { provide: StripeElement, useExisting: forwardRef(() => StripeIdealBank) }
   ]
 })
-export class StripeIdeal extends StripeElement<'ideal'> {
+export class StripeIdealBank extends StripeElement<'idealBank'> {
 
   constructor(elements: StripeElements, @Inject(StripeConfigToken) config: StripeConfig, ref: ElementRef<HTMLElement>) {
-    super('ideal', elements, config, ref);
+    super('idealBank', elements, config, ref);
   }
 
-  protected get options(): IdealElementOptions {
+  protected get options(): StripeIdealBankElementOptions {
     return { 
      disabled: this.disabled,
      hideIcon: this.hideIcon,
@@ -26,11 +25,7 @@ export class StripeIdeal extends StripeElement<'ideal'> {
     };
   }
   
-  /** Disables the Card control */
-  @Input('disabled') set disableSetter(value: boolean) { this.disabled = coerceBooleanProperty(value); }
-  public disabled = false;
-
-  /** Hides the card icon */
+  /** Hides the icon */
   @Input('hideIcon') set hideIconSetter(value: boolean) { this.hideIcon = coerceBooleanProperty(value); }
   public hideIcon: boolean;
 

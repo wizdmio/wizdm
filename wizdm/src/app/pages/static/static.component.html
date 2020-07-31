@@ -5,8 +5,34 @@
   <!-- Checks for an optional Table Of Contents -->
   <ng-container *ngIf="!!document.toc">
 
+    <!-- Gets the localized content -->
+    <ng-container *wmContent="let msgs select 'static'">
+
+      <!-- Displays the toc button as a fab button on large screens -->
+      <ng-template wmFab side="left" edge="top" let-mobile="isMobile">
+
+        <button mat-icon-button class="mat-elevation-z2 background-color" color="primary" 
+                [matTooltip]="msgs.toc?.tooltip || 'Table of contents'" 
+                (click)="openTOC = !openTOC" 
+                *ngIf="!mobile">
+          <wm-icon [icon]="msgs.toc?.icon || 'toc'"></wm-icon>
+        </button>
+
+      </ng-template>
+
+      <!-- Displays the toc button as an action button on small screens -->
+      <ng-template wmActionbar let-mobile="isMobile">
+
+        <button mat-icon-button color="primary" (click)="openTOC = !openTOC" *ngIf="mobile">
+          <wm-icon [icon]="msgs.toc?.icon || 'toc'"></wm-icon>
+        </button>
+
+      </ng-template>
+
+    </ng-container>
+ 
     <!-- Teleports the TOC into the side panel persisting the status across navigation -->
-    <ng-template wmSidenav opened persist let-mobile="isMobile">
+    <ng-template wmSidenav [(opened)]="openTOC" persist let-mobile="isMobile">
 
       <!-- Renders the Table Of Content using an ActionLink to navigate back/forward -->
       <div #toc
@@ -14,8 +40,7 @@
         [path]="document.path" 
         (navigate)="navigate($event, mobile)" 
         color="primary" 
-        wmActionLink="toc" 
-        (activate)="toc.go($event.go)">
+        wmActionLink="toc" (activate)="toc.go($event.go)">
       </div>
 
     </ng-template>

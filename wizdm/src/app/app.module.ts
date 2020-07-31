@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DatabaseModule } from '@wizdm/connect/database';
 import { StorageModule } from '@wizdm/connect/storage';
@@ -22,7 +23,7 @@ import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
 // Environment
-import { appname, content, emoji, scroll, ipinfo } from '../environments/common';
+import { appname, content, emoji, scroll, ipinfo, tooltips } from '../environments/common';
 import { firebase, stripe, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
@@ -67,7 +68,9 @@ const routes: Routes = [
     // Provides the MomentDateAdaper globally for @angular/material DatePicker
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
     // Configures Material Date Format accordingly
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    // Configures tooltips behavior globally
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips }
   ],
   bootstrap: [ AppComponent ]
 })

@@ -1,0 +1,41 @@
+
+
+<!-- Left top portal -->
+<div class="fab-container" side="left" edge="top" [fxLayout]="config[fabPos.leftTop]?.direction || 'row'" [fxHide]="!tmpl[fabPos.leftTop]">
+
+  <ng-template wmPortal="fab-left-top" [wmPortalContext]="{ isMobile: mobile }" 
+                                       (wmPortalActive)="tmpl[fabPos.leftTop] = $event"
+                                       (wmPortalData)="config[fabPos.leftTop] = $event">
+  </ng-template>
+
+</div>
+
+<!-- Right top portal -->
+<div class="fab-container" side="right" edge="top" [fxLayout]="config[fabPos.rightTop]?.direction || 'row'" [fxHide]="!tmpl[fabPos.rightTop]">
+
+  <ng-template wmPortal="fab-right-top" [wmPortalContext]="{ isMobile: mobile }" 
+                                        (wmPortalActive)="tmpl[fabPos.rightTop] = $event"
+                                        (wmPortalData)="config[fabPos.rightTop] = $event">
+  </ng-template>
+
+</div>
+
+<!-- Left bottom portal -->
+<div class="fab-container" side="left" edge="bottom" [fxLayout]="config[fabPos.leftBottom]?.direction || 'row'" [fxHide]="!tmpl[fabPos.leftBottom]">
+
+  <ng-template wmPortal="fab-left-bottom" [wmPortalContext]="{ isMobile: mobile }" 
+                                          (wmPortalActive)="tmpl[fabPos.leftBottom] = $event"
+                                          (wmPortalData)="config[fabPos.leftBottom] = $event">
+  </ng-template>
+
+</div>
+
+<!-- Right bottom portal -->
+<div class="fab-container" side="right" edge="bottom" [fxLayout]="config[fabPos.rightBottom]?.direction || 'row'" [fxHide]="!tmpl[fabPos.rightBottom]">
+
+  <ng-template wmPortal="fab-right-bottom" [wmPortalContext]="{ isMobile: mobile }" 
+                                           (wmPortalActive)="tmpl[fabPos.rightBottom] = $event"
+                                           (wmPortalData)="config[fabPos.rightBottom] = $event">
+  </ng-template>
+
+</div>  

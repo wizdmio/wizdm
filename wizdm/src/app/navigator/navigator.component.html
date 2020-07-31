@@ -126,7 +126,7 @@
                                           [style.width]="sideOptions?.width"
                                           [style.min-width]="sideOptions?.minWidth"
                                           [style.max-width]="sideOptions?.maxWidth"
-                                          [mode]="mobile ? 'over' : 'side'" 
+                                          [mode]="sideOptions?.mode || (mobile ? 'over' : 'side')" 
                                           [opened]="sideOpened$ | async" 
                                           (openedChange)="openSidenav($event)">
 
@@ -137,11 +137,6 @@
         <!-- Secondary child outlet do not work properly: https://github.com/angular/angular/issues/10726 -->
         <!--router-outlet name="side" (activate)="activateSidenav(true)" (deactivate)="activateSidenav(false)"></router-outlet-->
       </ng-template>
-
-      <!-- Side panel toggler to stay visible even when the panel is closed -->
-      <button mat-icon-button class="sidenav-toggler background-color" (click)="toggleSidenav()" *ngIf="sideActive$ | async" @sidenavOn>
-        <wm-icon [class.opened]="sideOpened$ | async" icon="fas:fa-chevron-right"></wm-icon>
-      </button>
         
     </mat-sidenav>
   
@@ -172,24 +167,11 @@
 
       </div>
 
-      <!-- Fab overlay. Activates when content is teleported to the 'fab' portal -->
-      <div class="fab-overlay" [fxHide]="!fabOverlay"
-                               [style.margin-left.px]="container?._contentMargins.left || 0"
-                               [style.margin-top.px]="navbar?.clientHeight || 0"
-                               [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0">
-
-        <!-- Fab container positioned to the requested corner -->
-        <div class="fab-container" [fxLayout]="fabOverlayConfig?.direction || 'row'" 
-                                   [attr.side]="fabOverlayConfig?.side || 'right'"
-                                   [attr.edge]="fabOverlayConfig?.edge || 'bottom'">
-
-          <!-- Fab teleported content goes here -->
-          <ng-template wmPortal="fab" [wmPortalContext]="{ isMobile: mobile }" 
-                                      (wmPortalActive)="fabOverlay = $event"
-                                      (wmPortalData)="fabOverlayConfig = $event">
-          </ng-template>
-        </div>
-      </div>
+      <!-- Fab portal. Activates when content is teleported to one of the 'fab-[side]-[edge]' portals -->
+      <wm-fab-portal [mobile]="mobile"
+                     [style.margin-left.px]="container?._contentMargins.left || 0"
+                     [style.margin-top.px]="navbar?.clientHeight || 0"
+                     [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0"></wm-fab-portal>
 
     </mat-sidenav-content>
 

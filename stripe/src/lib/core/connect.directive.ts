@@ -1,20 +1,19 @@
+import type { Stripe, StripeConstructor, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { Directive, OnInit, Input, Inject, forwardRef } from '@angular/core';
 import { StripeConfig, StripeConfigToken } from '../stripe-factory';
-import { Elements, ElementsOptions } from '../definitions/element';
-import { StripeJS, Stripe } from '../definitions/stripe';
 
 @Directive({
   selector: 'wm-stripe-connect, [StripeConnect]',
   exportAs: 'StripeConnect',
   providers: [ 
-    { provide: Stripe, useExisting: forwardRef(() => StripeConnect) }
+    { provide: 'Stripe', useExisting: forwardRef(() => StripeConnect) }
   ]
 })
 export class StripeConnect implements OnInit /*, Stripe*/ {
 
   public stripe: Stripe;
 
-  constructor(@Inject('StripeJS') private stripejs: StripeJS, @Inject(StripeConfigToken) private config: StripeConfig) { }
+  constructor(@Inject('StripeJS') private stripejs: StripeConstructor, @Inject(StripeConfigToken) private config: StripeConfig) { }
 
   ngOnInit() {
 
@@ -34,8 +33,8 @@ export class StripeConnect implements OnInit /*, Stripe*/ {
   /**
    * Implements Elements for children to use
    */
-  public elements(options?: ElementsOptions): Elements {
+  public elements(options?: StripeElementsOptions): StripeElements {
 
-    return this.stripe && this.stripe.elements(options);
+    return this.stripe?.elements(options);
   }
 }

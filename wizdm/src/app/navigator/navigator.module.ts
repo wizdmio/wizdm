@@ -21,6 +21,7 @@ import { ActionbarModule } from './actionbar/actionbar.module';
 import { MenuModule } from './menu/menu.module'; 
 import { FooterModule } from './footer/footer.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { FabPortalModule } from './fab/fab-portal/fab-portal.module';
 import { NavRoutingModule } from './navigator-routing.module';
 import { NavigatorComponent } from './navigator.component';
 
@@ -49,6 +50,7 @@ import { NavigatorComponent } from './navigator.component';
     ActionbarModule,
     MenuModule,
     FooterModule,
+    FabPortalModule,
     NavRoutingModule
   ]
 })

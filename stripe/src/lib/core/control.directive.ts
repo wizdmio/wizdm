@@ -1,6 +1,6 @@
-import { Directive, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
-import { StripeElement } from '../stripe-element';
+import { Directive, forwardRef } from '@angular/core';
+import { StripeElement } from './element.directive';
 
 /**
  * Bridges the StripeElement with the Angular's form API implementing both a ControlValueAccessor

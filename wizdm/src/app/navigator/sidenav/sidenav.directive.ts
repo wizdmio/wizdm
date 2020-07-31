@@ -7,9 +7,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 export interface SidenavConfig {
+  mode?    : 'over'|'side';
+  width?   : string;
   minWidth?: string;
   maxWidth?: string;
-  width?   : string;
 }
 
 /** Teleports the given content towards the 'sidenav' portal witihn the navigator */
@@ -21,6 +22,9 @@ export class SidenavDirective implements OnInit, OnDestroy {
 
   private sub: Subscription;
   private _opened: boolean;
+
+  /** Sidenav panel mode */
+  @Input() mode: 'over'|'side';
 
   /** Sidenav panel width */
   @Input() width: string;
@@ -97,10 +101,11 @@ export class SidenavDirective implements OnInit, OnDestroy {
         filter( value => this.persist && value !== undefined )
 
       // Applies the restored value
-    ).subscribe( data => this.opened = data );
+    ).subscribe( opened => this.openedChange.emit(this._opened = opened) );
 
     // Activates the content towards the 'sidenav' portal
     this.teleport.activate('sidenav', this.template, {
+      mode: this.mode,
       width: this.width,
       minWidth: this.minWidth,
       maxWidth: this.maxWidth
@@ -110,9 +115,10 @@ export class SidenavDirective implements OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
 
     // Asserts some width related inut changed...
-    if(changes.width || changes.minWidth || changes.maxWidth) {
+    if(changes.mode || changes.width || changes.minWidth || changes.maxWidth) {
       // ...applies the changes
       this.teleport.activate('sidenav', this.template, {
+        mode: this.mode,
         width: this.width,
         minWidth: this.minWidth,
         maxWidth: this.maxWidth

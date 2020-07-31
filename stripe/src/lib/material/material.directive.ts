@@ -1,7 +1,7 @@
-import { Directive, forwardRef } from '@angular/core';
 import { MatFormFieldControl } from '@angular/material/form-field';
+import { Directive, forwardRef } from '@angular/core';
+import { StripeElement } from '@wizdm/stripe';
 import { NgControl } from '@angular/forms';
-import { StripeElement } from '../stripe-element';
 import { Observable, merge } from 'rxjs';
 
 /**

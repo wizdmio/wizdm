@@ -84,7 +84,7 @@
   </div>
 
   <!-- Back to bottom button appearing when scrolled back enough -->
-  <ng-container *wmFab side="right" edge="bottom">
+  <ng-container *wmFab="right bottom">
 
     <button mat-mini-fab color="primary" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
       <mat-icon>expand_more</mat-icon>

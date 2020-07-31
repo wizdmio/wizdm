@@ -10,15 +10,15 @@
     "prismjs": "^1.17.1"
   },
   "peerDependencies": {
-    "@angular/common": "^10.0.2",
-    "@angular/core": "^10.0.2"
+    "@angular/common": "^10.0.0",
+    "@angular/core": "^10.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wizdmio/wizdm/tree/master/libs/prism"
+    "url": "https://github.com/wizdmio/wizdm/tree/master/prism"
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"

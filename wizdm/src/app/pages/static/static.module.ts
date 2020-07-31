@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { UrlSegment, UrlMatchResult } from '@angular/router';
 import { ContentRouterModule, RoutesWithContent, FileLoader } from '@wizdm/content';
 import { ActionLinkModule } from '@wizdm/actionlink';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
+import { IconModule } from '@wizdm/elements/icon';
+import { FabModule } from 'app/navigator/fab';
 import { SidenavModule } from 'app/navigator/sidenav';
+import { ActionbarModule } from 'app/navigator/actionbar';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { SizeLockModule } from 'app/utils/size-lock';
 import { StaticResolver } from './static-resolver.service';
@@ -36,8 +41,7 @@ export function matchFullPath(url: UrlSegment[]): UrlMatchResult {
 
 const routes: RoutesWithContent = [{
   path: '',
-  //matcher: matchFullPath,
-  //content: 'static',
+  content: 'static',
   component: StaticComponent,
   data: { source: 'assets/static' },
   resolve: { document: StaticResolver }
@@ -48,11 +52,16 @@ const routes: RoutesWithContent = [{
   imports: [
     CommonModule,
     MatDividerModule,
+    MatButtonModule,
+    MatTooltipModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
     ActionLinkModule,
     GtagModule,
     AnimateModule,
+    IconModule,
+    FabModule,
     SidenavModule,
+    ActionbarModule,
     ScrollingModule,
     SizeLockModule,
     TocModule,
