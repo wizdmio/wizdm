@@ -1,32 +1,32 @@
-import { StripeConfig, StripeConfigToken, loadStripeJS, getStripeJS, stripeFactory, stripeElementsFactory } from './stripe-factory';
-import { PLATFORM_ID, NgModule, ModuleWithProviders, Inject, Optional } from '@angular/core';
-import { StripeElements } from './core/elements.directive';
-import { StripeConnect } from './core/connect.directive';
-import { StripeControl } from './core/control.directive';
-import { isPlatformBrowser } from '@angular/common';
+import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS, loadStripeJS, getStripeJS, stripeFactory } from './stripe-factory';
+import { NgModule, ModuleWithProviders, Inject, Optional } from '@angular/core';
+import type { StripeConstructorOptions } from '@stripe/stripe-js';
+import { StripeConnect } from './connect/connect.directive';
 
 @NgModule({
   imports: [ ],
-  declarations: [ StripeControl, StripeConnect, StripeElements ],
-  exports: [ StripeControl, StripeConnect, StripeElements ]
+  declarations: [ StripeConnect ],
+  exports: [ StripeConnect ]
 })
 export class StripeModule {
 
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
-    if( !isPlatformBrowser(platformId) ) {
-      throw new Error('StripeModule package supports Browsers only');
-    }
-
+  constructor() {
+    // Triggers the stripe.js API loading asyncronously. Use this function as a resolver or guard
+    // to ensure the availability of the Stripe instance when needed. It can be used as an 
+    // APP_INITIALIZER too but likely impacting on the app starting up latency.
     loadStripeJS();
   }
 
-  static init(config: StripeConfig): ModuleWithProviders<StripeModule> {
+  static init(publicKey: string, options?: StripeConstructorOptions): ModuleWithProviders<StripeModule> {
     return {
       ngModule: StripeModule,
       providers: [
         
-        /** Provides the global StripeConfig object */
-        { provide: StripeConfigToken, useValue: config },
+        /** Provides the global Stripe public key */
+        { provide: STRIPE_PUBLIC_KEY, useValue: publicKey },
+
+        /** Provides the global stripe options */
+        { provide: STRIPE_OPTIONS, useValue: options },
 
         /** Provides StripeJS as an injectable */ 
         { provide: 'StripeJS', useFactory: getStripeJS },
@@ -34,13 +34,10 @@ export class StripeModule {
         /** Provides a Stripe instance as an injectable service */
         { provide: 'Stripe',
           useFactory: stripeFactory, 
-          deps: [ [ new Optional(), new Inject(StripeConfigToken) ] ] },
-
-        /** Provides a global StripeElements injectable reverting to Stripe.elements() in the eventuality
-         * the stripe components are used without or out of a <wm-stripe-elements> container. */
-        { provide: StripeElements,
-          useFactory: stripeElementsFactory,
-          deps: [ new Optional(), new Inject('Stripe'), [  new Optional(), new Inject(StripeConfigToken) ] ] }
+          deps: [ 
+            [ new Optional(), new Inject(STRIPE_PUBLIC_KEY) ], 
+            [ new Optional(), new Inject(STRIPE_OPTIONS) ] 
+          ]}
       ]
     };
   } 

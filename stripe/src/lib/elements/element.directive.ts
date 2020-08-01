@@ -1,9 +1,9 @@
 import type { StripeElement as Element, StripeElementOptions, StripeChangeEventObject, SupportedStripeElementType } from './generic-types';
 import { OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Input, Output, EventEmitter, Directive } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { StripeElementsConfig } from './elements-factory';
 import { StripeElements } from './elements.directive';
 import type { StripeError } from '@stripe/stripe-js';
-import { StripeConfig } from '../stripe-factory';
 
 /** 
  * Abstract generic class turning a StripeElement into an Angular component with basic features
@@ -13,7 +13,7 @@ import { StripeConfig } from '../stripe-factory';
 @Directive()
 export abstract class StripeElement<T extends SupportedStripeElementType> implements OnInit, OnChanges, OnDestroy {
 
-  constructor(readonly elementType: T, private elements: StripeElements, private config: StripeConfig, private ref: ElementRef<HTMLElement>) {}
+  constructor(readonly elementType: T, private elements: StripeElements, private config: StripeElementsConfig, private ref: ElementRef<HTMLElement>) {}
 
   /**
    * Implement this getter to provide component specific options during element creation and update

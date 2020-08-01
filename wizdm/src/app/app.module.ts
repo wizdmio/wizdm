@@ -19,12 +19,13 @@ import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
 import { StripeModule } from '@wizdm/stripe';
+import { StripeElementsModule } from '@wizdm/stripe/elements';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
 // Environment
-import { appname, content, emoji, scroll, ipinfo, tooltips } from '../environments/common';
-import { firebase, stripe, doorbell, gtag } from '../environments/secrets';
+import { appname, content, emoji, scroll, ipinfo, tooltips, stripeElements } from '../environments/common';
+import { firebase, stripePublicKey, doorbell, gtag } from '../environments/secrets';
 
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 
@@ -52,7 +53,9 @@ const routes: Routes = [
     // Universal Emoji support
     EmojiSupportModule.init(emoji),
     // Stripe payments w/ elements
-    StripeModule.init(stripe),
+    StripeModule.init(stripePublicKey),
+    // Styles StripeElements to fit wizdm styling
+    StripeElementsModule.init(stripeElements),
     // Angular's Router
     RouterModule.forRoot(routes),
     // Enables 'per page' scrolling behaviors overriding the router's configuration

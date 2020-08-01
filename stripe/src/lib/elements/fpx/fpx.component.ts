@@ -1,8 +1,6 @@
+import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
 import type { StripeFpxBankElementOptions } from '@stripe/stripe-js';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { StripeElements } from '@wizdm/stripe';
 
 /** Stripe fpxBank Element 
  * @see https://stripe.com/docs/payments/fpx
@@ -16,7 +14,7 @@ import { StripeElements } from '@wizdm/stripe';
 })
 export class StripeFpxBank extends StripeElement<'fpxBank'> {
 
-  constructor(elements: StripeElements, @Inject(StripeConfigToken) config: StripeConfig, ref: ElementRef<HTMLElement>) {
+  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('fpxBank', elements, config, ref);
   }
 

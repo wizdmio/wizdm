@@ -13,9 +13,10 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { ReadmeModule } from '@wizdm/readme';
 import { RedirectModule } from '@wizdm/redirect';
-import { StripeModule, loadStripeJS } from '@wizdm/stripe';
-import { StripeCardModule } from '@wizdm/stripe/card';
-import { StripeMaterialModule } from '@wizdm/stripe/material';
+import { loadStripeJS } from '@wizdm/stripe';
+import { StripeElementsModule } from '@wizdm/stripe/elements';
+import { StripeCardModule } from '@wizdm/stripe/elements/card';
+import { StripeMaterialModule } from '@wizdm/stripe/elements/material';
 import { DonateComponent } from './donate.component';
 
 const routes: RoutesWithContent = [
@@ -44,7 +45,7 @@ const routes: RoutesWithContent = [
     GtagModule,
     ReadmeModule,
     RedirectModule,
-    StripeModule,
+    StripeElementsModule,
     StripeCardModule,
     StripeMaterialModule,
     ContentRouterModule.forChild(routes)

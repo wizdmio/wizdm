@@ -1,8 +1,6 @@
+import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
 import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
-import { StripeElement, StripeConfig, StripeConfigToken } from '@wizdm/stripe';
 import type { StripeCardNumberElementOptions } from '@stripe/stripe-js';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { StripeElements } from '@wizdm/stripe';
 
 /** Stripe CardNumber Element for Angular */
 @Component({
@@ -14,7 +12,7 @@ import { StripeElements } from '@wizdm/stripe';
 })
 export class StripeCardNumber extends StripeElement<'cardNumber'> {
 
-  constructor(elements: StripeElements, @Inject(StripeConfigToken) config: StripeConfig, ref: ElementRef<HTMLElement>) {
+  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('cardNumber', elements, config, ref);
   }
 

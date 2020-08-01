@@ -27,7 +27,8 @@ import { StripeModule } from '@wizdm/stripe';
   ...
   imports: [
 
-    StripeModule.init({ publicKey: 'pk_test_xxxxxxxxxxxxxxxxxxxxx' }),
+    // Initialize the stripe.js module
+    StripeModule.init('pk_test_xxxxxxxxxxxxxxxxxxxxx'),
     ...
   ]
 })
@@ -36,7 +37,37 @@ export class AppModule();
 ```
 
 ## Styling Elements
-The `init()` function optionally accept a [style](https://stripe.com/docs/js/appendix/style) object and a [classes](https://stripe.com/docs/js/elements_object/create_element?type=card#elements_create-options-classes) object to be shared across all the StripeElements that will be created after the initialization.
+Import StripeElementsModule in the desiderd feature module to include the Angular's form API support. Optionally call its `init()` function providing a [style](https://stripe.com/docs/js/appendix/style) object and/or a [classes](https://stripe.com/docs/js/elements_object/create_element?type=card#elements_create-options-classes) object to be shared across all the StripeElements.
+
+``` typescript
+import { StripeElementsModule } from '@wizdm/stripe/elements';
+
+...
+
+@NgModule({
+  ...
+  imports: [
+
+    // Initialize the stripe.js module
+    StripeElementsModule.init({
+
+      elementsOptions: {
+        fonts: [
+          { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
+        ]
+      },
+      style: {
+        base: {
+          fontFamily: 'Ubuntu, sans-serif'
+        }
+      }
+    }),
+    ...
+  ]
+})
+export class MyModule();
+
+```
 
 ## Process payments
 Setup your form to collect all the payment information in your component template first:

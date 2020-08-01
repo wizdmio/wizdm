@@ -1,6 +1,6 @@
-import type { Stripe, StripeConstructor, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
-import { Directive, OnInit, Input, Inject, forwardRef } from '@angular/core';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
+import type { Stripe, StripeConstructor, StripeConstructorOptions, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
+import { Directive, OnInit, Input, Inject, Optional, forwardRef } from '@angular/core';
+import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS } from '../stripe-factory';
 
 @Directive({
   selector: 'wm-stripe-connect, [StripeConnect]',
@@ -13,16 +13,18 @@ export class StripeConnect implements OnInit /*, Stripe*/ {
 
   public stripe: Stripe;
 
-  constructor(@Inject('StripeJS') private stripejs: StripeConstructor, @Inject(StripeConfigToken) private config: StripeConfig) { }
+  constructor(@Inject('StripeJS') private stripejs: StripeConstructor, 
+              @Inject(STRIPE_PUBLIC_KEY) private publicKey: string, 
+              @Optional() @Inject(STRIPE_OPTIONS) private options: StripeConstructorOptions) { }
 
   ngOnInit() {
 
     console.log("Providing Stripe connected to:", this.account);
 
     // Gets a new stripe instance connected to the specified account
-    this.stripe = this.stripejs(this.config.publicKey, { 
+    this.stripe = this.stripejs(this.publicKey, { 
       // Merges the global configuration with the specified account
-      ...this.config.options, 
+      ...this.options, 
       // Stripe Account to connect to
       stripeAccount: this.account
     });

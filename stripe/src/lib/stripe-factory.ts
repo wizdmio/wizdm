@@ -1,16 +1,11 @@
-import type { Stripe, StripeConstructor, StripeConstructorOptions, StripeElementsOptions, StripeElementClasses, StripeElementStyle } from '@stripe/stripe-js';
+import type { Stripe, StripeConstructor, StripeConstructorOptions } from '@stripe/stripe-js';
 import { InjectionToken } from '@angular/core';
 
-export interface StripeConfig {
-  publicKey: string;
-  options? : StripeConstructorOptions;
-  elementsOptions?: StripeElementsOptions; 
-  classes?: StripeElementClasses;
-  style?: StripeElementStyle;
-}
+/** Stripe Public Key token */
+export const STRIPE_PUBLIC_KEY = new InjectionToken<string>('wizdm.stripe.public.key');
 
-/** StripeModule configuration token */
-export const StripeConfigToken = new InjectionToken<StripeConfig>('wizdm.stripe.config');
+/** Stripe Options token */
+export const STRIPE_OPTIONS = new InjectionToken<StripeConstructorOptions>('wizdm.stripe.options');
 
 /** Retrives the global StripeJS object  */
 export function getStripeJS(): StripeConstructor {
@@ -18,24 +13,18 @@ export function getStripeJS(): StripeConstructor {
 }
 
 /** Instantiates a Stripe istance accoding to the provided options */
-export function stripeFactory(config: StripeConfig): Stripe { 
+export function stripeFactory(publicKey: string, options?: StripeConstructorOptions): Stripe { 
 
   const StripeJS = getStripeJS();
   if(!StripeJS) {
     throw new Error('StripeJS loading failed');
   }
 
-  if(!config || typeof config.publicKey !== 'string') {
+  if(typeof publicKey !== 'string') {
     throw new Error('A valid publicKey must be provided');
   }
 
-  return StripeJS( config.publicKey, config.options );
-}
-
-/** Instantiates a StripeElements instance */
-export function stripeElementsFactory(stripe: Stripe, config: StripeConfig) {
-  
-  return stripe && stripe.elements(config.elementsOptions);
+  return StripeJS( publicKey, options );
 }
 
 /** Stripe.js v3 script loader. We do not use the official loader provided

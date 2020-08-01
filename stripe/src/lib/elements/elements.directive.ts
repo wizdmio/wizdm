@@ -1,7 +1,7 @@
 import type { StripeElement, StripeElementOptions, SupportedStripeElementType } from './generic-types';
 import type { Stripe, StripeElements as Elements, StripeElementsOptions } from '@stripe/stripe-js';
 import { Directive, OnInit, OnChanges, SimpleChanges, Input, Inject } from '@angular/core';
-import { StripeConfig, StripeConfigToken } from '../stripe-factory';
+import { StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from './elements-factory';
 
 /** Relays the Elements funcitons enabling dynamic locale */
 @Directive({
@@ -18,7 +18,7 @@ export class StripeElements implements OnInit, OnChanges {
     this.locale = locale;
   }
 
-  constructor(@Inject('Stripe') readonly stripe: Stripe, @Inject(StripeConfigToken) private config: StripeConfig) { }
+  constructor(@Inject('Stripe') readonly stripe: Stripe, @Inject(STRIPE_ELEMENTS_CONFIG) private config: StripeElementsConfig) { }
 
   // Implements StripeElements functions as generics
   public create<T extends SupportedStripeElementType>(elementType: T, options?: StripeElementOptions<T>): StripeElement<T> {

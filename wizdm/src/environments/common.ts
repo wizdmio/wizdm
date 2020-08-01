@@ -1,8 +1,9 @@
 import { ExtraOptions } from '@angular/router';
 import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import { StripeElementsConfig } from '@wizdm/stripe/elements';
+import { IpInfoConfig, IP_LIST_CC } from '@wizdm/ipinfo';
 import { ContentConfig } from '@wizdm/content';
 import { EmojiConfig } from '@wizdm/emoji/utils';
-import { IpInfoConfig, IP_LIST_CC } from '@wizdm/ipinfo';
 
 export const appname: string = 'wizdm';
 
@@ -36,4 +37,19 @@ export const tooltips: MatTooltipDefaultOptions = {
   showDelay: 1000,
   hideDelay: 0,
   touchendHideDelay: 0
+};
+
+// StripeElements styling to fit with the global theme
+export const stripeElements: StripeElementsConfig = {
+
+  elementsOptions: {
+    fonts: [
+      { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
+    ]
+  },
+  style: {
+    base: {
+      fontFamily: 'Ubuntu, sans-serif'
+    }
+  }
 };

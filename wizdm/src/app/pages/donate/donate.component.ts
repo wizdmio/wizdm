@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FunctionsService } from '@wizdm/connect/functions';
 import { Stripe, StripeCardElement, PaymentIntent } from '@stripe/stripe-js';
-//import { Stripe, CardElement, PaymentIntent } from '@wizdm/stripe';
 import { $animations } from './donate.animations';
 
 @Component({
