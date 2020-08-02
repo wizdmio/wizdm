@@ -18,7 +18,6 @@ export class StripeCardExpiry extends StripeElementDirective<'cardExpiry'> {
 
   protected get options(): StripeCardExpiryElementOptions {
     return { 
-     disabled: this.disabled,
      placeholder: this.placeholder
     };
   };

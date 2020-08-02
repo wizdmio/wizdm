@@ -16,7 +16,7 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
 
     if(!elements) {
       throw new Error(`
-        You're attempting to use a Stripe Element out of a propoer StripeElements container.
+        You're attempting to use a Stripe Element out of a proper StripeElements container.
         Make sure to wrap all the controls within a wm-stripe-elements directive.
       `);
     }
@@ -25,7 +25,60 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
   /**
    * Implement this getter to provide component specific options during element creation and update
    */
-  protected abstract get options(): StripeElementOptions<T>;
+  protected abstract get options(): Partial<StripeElementOptions<T>>;
+
+  /** Assembles the element's custom classes from the classesXXX input values */
+  protected get classes(): StripeElementOptions<T>['classes'] {
+    return {
+      base: this.classBase || this.config?.classes?.base,
+      complete: this.classComplete || this.config?.classes?.complete,
+      empty: this.classEmpty || this.config?.classes?.empty,
+      focus: this.classFocus || this.config?.classes?.focus,
+      invalid: this.classInvalid || this.config?.classes?.invalid
+    };
+  }
+
+  /** Assembles the element's custom style from the styleXXX input values */
+  protected get style(): StripeElementOptions<T>['style'] {
+
+    // Automatic style detection
+    if(this.styleBase === 'auto') {
+
+      // COmputes the style of this native element
+      const computed = window?.getComputedStyle(this.ref.nativeElement);
+      
+      // Applies the computed style to the styleBase input for the following update 
+      this.styleBase = {
+        color: computed.color,
+        fontFamily: computed.fontFamily,
+        fontSize: computed.fontSize,
+        fontStyle: computed.fontStyle,
+        fontVariant: computed.fontVariant,
+        fontWeight: computed.fontWeight,
+        letterSpacing: computed.letterSpacing,
+        textDecoration: computed.textDecoration,
+        textShadow: computed.textShadow,
+        textTransform: computed.textTransform
+      };
+    }
+
+    return {
+      base: this.styleBase || this.config?.style?.base,
+      complete: this.styleComplete || this.config?.style?.complete,
+      empty: this.styleEmpty || this.config?.style?.empty,
+      invalid: this.styleInvalid || this.config?.style?.invalid
+    };
+  }
+
+  /** Assembles all the element's relevan options for creation/update */
+  private get allOptions(): StripeElementOptions<T> {
+    return { 
+      disabled: this.disabled,
+      classes: this.classes, 
+      style: this.style, 
+      ...this.options 
+    } as any;
+  }
 
   /** The stripe element */
   public element: StripeElement<T>;
@@ -69,7 +122,7 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
     this.focused = this.value = undefined;
 
     // Creates the requested Stripe element
-    this.element = this.elements.create(this.elementType as any, { classes: this.config?.classes, style: this.config?.style, ...this.options }) as any;
+    this.element = this.elements.create(this.elementType as any, this.allOptions ) as any;
 
     // Hooks on the element's events
     this.element.on('ready',  () => { this.readyChange.emit(this.ready = true); });
@@ -84,7 +137,7 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
 
   ngOnChanges(changes: SimpleChanges) { 
     // Updates the element on input changes
-    this.update(this.options); 
+    this.update(this.allOptions); 
   }
 
   ngDoCheck() {
@@ -108,17 +161,9 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
   }
 
   /** Updates the element */
-  public update(options: Partial<StripeElementOptions<T>>) { 
-
-    if(!this.element) { return; }
-
-    // Ensures to correctly reflect the disabled status
-    if('disabled' in options) {
-      this.disabled = (options as any).disabled;
-    }
-    
+  public update(options: Partial<StripeElementOptions<T>>) {     
     // Updates the element
-    this.element.update(options as any); 
+    this.element?.update(options as any); 
   }
 
   /** Focus the element */
@@ -130,8 +175,42 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
   /** Clears the element */
   public clear() { this.element && this.element.clear(); }
 
+  /** Class applied to the StripeElement's container. Defaults to StripeElement */
+  @Input() classBase: StripeElementOptions<T>['classes']['base'];
+
+  /** The class name to apply when the Element is complete. Defaults to StripeElement--complete */
+  @Input() classComplete: StripeElementOptions<T>['classes']['complete'];
+
+  /** The class name to apply when the Element is empty. Defaults to StripeElement--empty */
+  @Input() classEmpty: StripeElementOptions<T>['classes']['empty'];
+
+  /** The class name to apply when the Element has focus. Defaults to StripeElement--focus */
+  @Input() classFocus: StripeElementOptions<T>['classes']['focus'];
+
+  /** The class name to apply when the Element is invalid. Defaults to StripeElement--invalid */
+  @Input() classInvalid: StripeElementOptions<T>['classes']['invalid'];
+  
+  /** Element's custom base style.
+   * @see https://stripe.com/docs/js/appendix/style
+   * Setting this input value to 'auto' enables the automatic detection of the element's style */
+  @Input() styleBase: StripeElementOptions<T>['style']['base'] | 'auto';
+  
+  /** Element's custom complete style.
+   * @see https://stripe.com/docs/js/appendix/style */
+  @Input() styleComplete: StripeElementOptions<T>['style']['complete'];
+  
+  /** Element's custom empty style.
+   * @see https://stripe.com/docs/js/appendix/style */
+  @Input() styleEmpty:    StripeElementOptions<T>['style']['empty'];
+  
+  /** Element's custom invalid style.
+   * @see https://stripe.com/docs/js/appendix/style */
+  @Input() styleInvalid:  StripeElementOptions<T>['style']['invalid'];
+
   /** Disables the control */
-  @Input('disabled') set disableSetter(value: boolean) { this.disabled = coerceBooleanProperty(value); }
+  @Input('disabled') set disableSetter(value: boolean) { 
+    this.disabled = coerceBooleanProperty(value); 
+  }
 
   /** Emits when fully loaded */
   @Output('ready') readyChange = new EventEmitter<boolean>(true);

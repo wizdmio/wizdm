@@ -20,7 +20,6 @@ export class StripeCard extends StripeElementDirective<'card'> {
   /** Card specific options */
   protected get options(): StripeCardElementOptions {
     return { 
-     disabled: this.disabled,
      hidePostalCode: this.hidePostalCode,
      hideIcon: this.hideIcon,
      iconStyle: this.iconStyle

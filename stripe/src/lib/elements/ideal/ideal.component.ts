@@ -18,7 +18,6 @@ export class StripeIdealBank extends StripeElementDirective<'idealBank'> {
 
   protected get options(): StripeIdealBankElementOptions {
     return { 
-     disabled: this.disabled,
      hideIcon: this.hideIcon,
      value: this.idealValue
     };

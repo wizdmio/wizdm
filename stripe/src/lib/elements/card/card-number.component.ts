@@ -19,7 +19,6 @@ export class StripeCardNumber extends StripeElementDirective<'cardNumber'> {
   /** CardNumber specific options */
   protected get options(): StripeCardNumberElementOptions {
     return { 
-     disabled: this.disabled,
      placeholder: this.placeholder
     };
   };

@@ -64,6 +64,7 @@
       <wm-stripe-card matStripe hidePostalCode  name="card" required 
                       [(ngModel)]="card" 
                       [disabled]="!ready || progress" 
+                      [styleBase]="'auto'"
                       (ready)="ready = $event" #formCard>
       </wm-stripe-card>
       <mat-error *ngIf="formCard.error">{{ formCard.error.message }}</mat-error>

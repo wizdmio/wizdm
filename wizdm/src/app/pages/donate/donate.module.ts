@@ -16,7 +16,7 @@ import { RedirectModule } from '@wizdm/redirect';
 import { loadStripeJS } from '@wizdm/stripe';
 import { StripeElementsModule } from '@wizdm/stripe/elements';
 import { StripeCardModule } from '@wizdm/stripe/elements/card';
-import { StripeMaterialModule } from '@wizdm/stripe/elements/material';
+import { StripeMaterialModule } from '@wizdm/stripe/material';
 import { DonateComponent } from './donate.component';
 
 const routes: RoutesWithContent = [

@@ -21,7 +21,6 @@ export class StripeFpxBank extends StripeElementDirective<'fpxBank'> {
   protected get options(): StripeFpxBankElementOptions {
     return { 
       accountHolderType: this.accountHolderType,
-      disabled: this.disabled,     
       value: this.fpxValue
     };
   }

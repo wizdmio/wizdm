@@ -18,7 +18,6 @@ export class StripeCardCvc extends StripeElementDirective<'cardCvc'> {
 
   protected get options(): StripeCardCvcElementOptions {
     return { 
-     disabled: this.disabled,
      placeholder: this.placeholder
     };
   };

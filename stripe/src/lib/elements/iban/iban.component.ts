@@ -20,7 +20,6 @@ export class StripeIban extends StripeElementDirective<'iban'> {
   /** IBAN specific options */
   protected get options(): StripeIbanElementOptions {
     return { 
-     disabled: this.disabled,
      hideIcon: this.hideIcon,
      iconStyle: this.iconStyle,
      supportedCountries: this.supportedCountries || ['SEPA']

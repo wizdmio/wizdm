@@ -46,10 +46,5 @@ export const stripeElements: StripeElementsConfig = {
     fonts: [
       { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
     ]
-  },
-  style: {
-    base: {
-      fontFamily: 'Ubuntu, sans-serif'
-    }
   }
 };
