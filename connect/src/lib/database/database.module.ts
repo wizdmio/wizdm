@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders, Optional, Inject } from '@angular/core';
 import { DatabaseService, PERSISTENCE_SETTINGS } from './database.service';
 import { PersistenceSettings } from './database-application';
-import { APP, FirebaseApp } from '../connect.module';
+import { APP, FirebaseApp } from '@wizdm/connect';
 import 'firebase/firestore';
 
 @NgModule({

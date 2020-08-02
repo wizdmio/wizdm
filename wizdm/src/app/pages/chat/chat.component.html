@@ -83,14 +83,15 @@
 
   </div>
 
-  <!-- Back to bottom button appearing when scrolled back enough -->
-  <ng-container *wmFab="right bottom">
+  <!-- FAB button for scrolling back -->
+  <ng-template wmFab="right bottom">
 
+    <!-- Back to bottom button appearing when scrolled back enough -->
     <button mat-mini-fab color="primary" (click)="scrollToBottom()" *ngIf="scrolled$ | async" @pop>
       <mat-icon>expand_more</mat-icon>
     </button>
 
-  </ng-container>
+  </ng-template>
 
   <!-- Message composer on the navigator's sticky footer -->
   <wm-composer *wmFooter [(value)]="text" 

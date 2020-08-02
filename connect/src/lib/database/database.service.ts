@@ -3,7 +3,7 @@ import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './colle
 import { Injectable, InjectionToken, Inject, Optional, NgZone } from '@angular/core';
 import { DatabaseApplication, PersistenceSettings } from './database-application';
 import { DistributedCounter, CounterShard } from './counter';
-import { APP, FirebaseApp } from '../connect.module';
+import { APP, FirebaseApp } from '@wizdm/connect';
 
 export const PERSISTENCE_SETTINGS = new InjectionToken<PersistenceSettings>('wizdm.connect.database.persistence');
 

@@ -1,6 +1,6 @@
 import { NgModule, Optional, Inject } from '@angular/core';
 import { FunctionsService } from './functions.service';
-import { APP, FirebaseApp } from '../connect.module';
+import { APP, FirebaseApp } from '@wizdm/connect';
 import 'firebase/functions';
 
 @NgModule({

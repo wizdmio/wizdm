@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/package.schema.json",
+  "name": "@wizdm/connect",
+  "description": "Firebase integration for Angular",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["Angular", "Firesbase", "Authentication", "Firestore", "Cloud Storage", "Cloud Functions"],
+  "homepage": "https://wizdm.io/docs/connect",
+  "dependencies": {
+    "tslib": "^2.0.0",
+    "firebase": "^7.15.5"
+  },
+  "peerDependencies": {
+    "@angular/core": "^10.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/connect"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
+  }
+}

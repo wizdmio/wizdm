@@ -1,9 +1,9 @@
 import { StorageApplication, StorageRef, UploadMetadata } from './storage-application';
 import { Injectable, Inject, NgZone } from '@angular/core';
-import { APP, FirebaseApp } from '../connect.module';
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
 import { StorageFile, StorageFolder } from './extras';
+import { APP, FirebaseApp } from '@wizdm/connect';
 
 /** Wraps the Firebase Storage as a service */
 @Injectable()

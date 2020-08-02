@@ -16,6 +16,7 @@ export class StripeCardCvc extends StripeElementDirective<'cardCvc'> {
     super('cardCvc', elements, config, ref);
   }
 
+  /** CardCvc specific options */
   protected get options(): StripeCardCvcElementOptions {
     return { 
      placeholder: this.placeholder

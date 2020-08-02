@@ -38,7 +38,7 @@
         "animate/src/index.ts"
       ],
       "@wizdm/connect": [
-        "connect/src/index.ts"
+        "connect/src/lib/index.ts"
       ],
       "@wizdm/connect/*": [
         "connect/src/lib/*"

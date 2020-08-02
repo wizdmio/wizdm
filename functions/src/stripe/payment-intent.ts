@@ -3,9 +3,11 @@ import Stripe from 'stripe';
 
 export const createPaymentIntent = https.onCall( async (data, context) => {
 	const { amount, currency } = data;
+
+	const stripeConfig = config().stripe;
 	
-	// Checking that the user is authenticated.
-	if (!context.auth) {
+	// Checking that the user is authenticated unless configured otherwise.
+	if (!stripeConfig.skipAuth && !context.auth) {
 		// Throwing an HttpsError so that the client gets the error details.
 		throw new https.HttpsError('unauthenticated', 'The function must be called  while authenticated.');
 	}
@@ -23,7 +25,7 @@ export const createPaymentIntent = https.onCall( async (data, context) => {
 	try {
 
 		// Use firebase functions:config:set stripe.key="sk_xxxxxxx" to set the variables
-    const stripe = new Stripe(config().stripe.key, null);		
+    const stripe = new Stripe(stripeConfig.key, null);		
 		
 		// Creates the payment intent
 		const paymentIntent = await stripe.paymentIntents.create({

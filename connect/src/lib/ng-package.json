@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../dist/connect",
+  "lib": {
+    "entryFile": "index.ts",
+    "umdModuleIds": {     
+      "firebase/app": "firebase/app"
+    }
+  },
+  "whitelistedNonPeerDependencies": [
+    "firebase"
+  ]
+}

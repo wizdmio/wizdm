@@ -63,20 +63,26 @@ const routes: Routes = [
   ],
   providers: [
 
-    //{ provide: APP_INITIALIZER, useValue: loadStripeJS, multi: true },
-
     // Provides the redirection service globally
     RedirectService,
+
     // Applies the  redirection service to ReadmeComponent from @wizdm/elements
     { provide: ReadmeNavigator, useExisting: RedirectService },
+
     // Provides the MatIconRegistry globally
     MatIconRegistry,
+
     // Provides the MomentDateAdaper globally for @angular/material DatePicker
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [ MAT_DATE_LOCALE ]},
+
     // Configures Material Date Format accordingly
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+
     // Configures tooltips behavior globally
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips }
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips },
+
+    // Uncomment this to wait for the Stripe SDK to load during app initialization.
+    //{ provide: APP_INITIALIZER, useValue: loadStripeJS, multi: true }
   ],
   bootstrap: [ AppComponent ]
 })

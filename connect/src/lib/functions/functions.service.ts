@@ -1,5 +1,5 @@
 import { Injectable, Optional, Inject, InjectionToken } from '@angular/core';
-import { APP, FirebaseApp } from '../connect.module';
+import { APP, FirebaseApp } from '@wizdm/connect';
 import { functions } from 'firebase/app';
 
 export type Functions = functions.Functions;

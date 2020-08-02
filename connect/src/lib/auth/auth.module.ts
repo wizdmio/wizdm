@@ -1,5 +1,5 @@
 import { NgModule, Optional, Inject } from '@angular/core';
-import { APP, FirebaseApp } from '../connect.module';
+import { APP, FirebaseApp } from '@wizdm/connect';
 import { AuthGuard } from './auth-guard.service';
 import { AuthService } from './auth.service';
 import 'firebase/auth';

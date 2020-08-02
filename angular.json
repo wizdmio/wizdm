@@ -248,7 +248,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "connect/tsconfig.lib.json",
-            "project": "connect/ng-package.json"
+            "project": "connect/src/lib/ng-package.json"
           },
           "configurations": {
             "production": {

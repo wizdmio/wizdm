@@ -1,4 +1,4 @@
-import { ConnectConfig } from '@wizdm/connect';
+import { ConnectConfig } from '@wizdm/connect/';
 import { DoorbellConfig } from '@wizdm/doorbell';
 import { GtagConfig } from '@wizdm/gtag';
 

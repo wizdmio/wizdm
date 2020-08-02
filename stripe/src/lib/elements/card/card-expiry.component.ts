@@ -16,6 +16,7 @@ export class StripeCardExpiry extends StripeElementDirective<'cardExpiry'> {
     super('cardExpiry', elements, config, ref);
   }
 
+  /** CardExpiry specific options */
   protected get options(): StripeCardExpiryElementOptions {
     return { 
      placeholder: this.placeholder
