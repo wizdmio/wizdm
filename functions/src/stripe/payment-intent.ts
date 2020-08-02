@@ -4,12 +4,13 @@ import Stripe from 'stripe';
 export const createPaymentIntent = https.onCall( async (data, context) => {
 	const { amount, currency } = data;
 
+	// Gets the global stripe configuration
 	const stripeConfig = config().stripe;
 	
 	// Checking that the user is authenticated unless configured otherwise.
-	if (!stripeConfig.skipAuth && !context.auth) {
+	if (stripeConfig.unauthenticated_payments !== "enable" && !context.auth) {
 		// Throwing an HttpsError so that the client gets the error details.
-		throw new https.HttpsError('unauthenticated', 'The function must be called  while authenticated.');
+		throw new https.HttpsError('unauthenticated', 'Authentication is required to process payments.');
 	}
 	
 	// Ensure the critical parameters are present
