@@ -1,5 +1,5 @@
-import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
-import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
+import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
 import type { StripeIdealBankElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
@@ -7,12 +7,12 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
   selector: 'wm-stripe-ideal-bank',
   template: '',
   providers: [
-    { provide: StripeElement, useExisting: forwardRef(() => StripeIdealBank) }
+    { provide: StripeElementDirective, useExisting: forwardRef(() => StripeIdealBank) }
   ]
 })
-export class StripeIdealBank extends StripeElement<'idealBank'> {
+export class StripeIdealBank extends StripeElementDirective<'idealBank'> {
 
-  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
+  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('idealBank', elements, config, ref);
   }
 

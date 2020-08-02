@@ -7,6 +7,12 @@ export const STRIPE_PUBLIC_KEY = new InjectionToken<string>('wizdm.stripe.public
 /** Stripe Options token */
 export const STRIPE_OPTIONS = new InjectionToken<StripeConstructorOptions>('wizdm.stripe.options');
 
+/** Stripe constructor token */
+export const STRIPEJS = new InjectionToken<StripeConstructor>('wizdm.stripe.constructor');
+
+/** Stripe instance token */
+export const STRIPE = new InjectionToken<Stripe>('wizdm.stripe.instance');
+
 /** Retrives the global StripeJS object  */
 export function getStripeJS(): StripeConstructor {
   return (!!window ? (window as any).Stripe : undefined);
@@ -17,7 +23,10 @@ export function stripeFactory(publicKey: string, options?: StripeConstructorOpti
 
   const StripeJS = getStripeJS();
   if(!StripeJS) {
-    throw new Error('StripeJS loading failed');
+    throw new Error(`
+      StripeJS loading failed. This may be the result of the asynchronous script loading still in progress.
+      Makes sure using loadStripeJS() as an APP_INITIALIZER, Router resolver or guard to ensure loading completion.
+    `);
   }
 
   if(typeof publicKey !== 'string') {
@@ -61,8 +70,8 @@ export function loadStripeJS(): Promise<StripeConstructor> {
       const script = findScript() || injectScript();
 
       // Listens for error or completion
-      script.addEventListener('error', () =>  reject( new Error("Unable to load StripeJS") ));
-      script.addEventListener('load', () =>  resolve( getStripeJS() ));
+      script.addEventListener('error', () => reject( new Error("Unable to load StripeJS") ));
+      script.addEventListener('load', () => resolve( getStripeJS() ));
     }
     catch(e) { reject(e); }
   });

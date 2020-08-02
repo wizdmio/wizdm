@@ -109,7 +109,7 @@ export class MyComponent {
   public name: string = '';
   public amount: number;
 
-  constructor(@Inject('Stripe') private stripe: Stripe) { }
+  constructor(@Inject(STRIPE) private stripe: Stripe) { }
 
   // Process the payment
   public pay() {

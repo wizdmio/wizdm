@@ -1,26 +1,27 @@
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
+import { StripeElementDirective } from './element.directive';
 import { Directive, forwardRef } from '@angular/core';
-import { StripeElement } from './element.directive';
 
 /**
  * Bridges the StripeElement with the Angular's form API implementing both a ControlValueAccessor
  * and a sync Validator enabling the use with FormControl
  */
 @Directive({
-  selector: 'wm-stripe-card[ngModel], wm-stripe-card[formControl], wm-stripe-card[formControlName]\
-             wm-stripe-card-number[ngModel], wm-stripe-card-number[formControl], wm-stripe-card-number[formControlName]\
-             wm-stripe-card-expiry[ngModel], wm-stripe-card-expiry[formControl], wm-stripe-card-expiry[formControlName]\
-             wm-stripe-card-cvc[ngModel], wm-stripe-card-cvc[formControl], wm-stripe-card-cvc[formControlName]\
-             wm-stripe-iban[ngModel], wm-stripe-iban[formControl], wm-stripe-iban[formControlName]\
-             wm-stripe-ideal[ngModel], wm-stripe-ideal[formControl], wm-stripe-ideal[formControlName]',
+  selector: `wm-stripe-card[ngModel], wm-stripe-card[formControl], wm-stripe-card[formControlName]
+             wm-stripe-card-number[ngModel], wm-stripe-card-number[formControl], wm-stripe-card-number[formControlName]
+             wm-stripe-card-expiry[ngModel], wm-stripe-card-expiry[formControl], wm-stripe-card-expiry[formControlName]
+             wm-stripe-card-cvc[ngModel], wm-stripe-card-cvc[formControl], wm-stripe-card-cvc[formControlName]
+             wm-stripe-iban[ngModel], wm-stripe-iban[formControl], wm-stripe-iban[formControlName]
+             wm-stripe-ideal-bank[ngModel], wm-stripe-ideal-bank[formControl], wm-stripe-ideal-bank[formControlName]
+             wm-stripe-fpx-bank[ngModel], wm-stripe-fpx-bank[formControl], wm-stripe-fpx-bank[formControlName]`,
   providers: [
-    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => StripeControl), multi: true },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeControl), multi: true  }
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => StripeControlDirective), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeControlDirective), multi: true  }
   ]
 })
-export class StripeControl implements ControlValueAccessor, Validator {
+export class StripeControlDirective implements ControlValueAccessor, Validator {
 
-  constructor(readonly element: StripeElement<any>) { }
+  constructor(readonly element: StripeElementDirective<any>) { }
 
   /** 
    * Called by the forms API to write to the view when programmatic changes from model to view are requested. 

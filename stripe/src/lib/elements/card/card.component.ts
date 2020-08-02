@@ -1,5 +1,5 @@
-import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
-import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
+import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
 import type { StripeCardElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
@@ -8,12 +8,12 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
   selector: 'wm-stripe-card',
   template: '',
   providers: [
-    { provide: StripeElement, useExisting: forwardRef(() => StripeCard) }
+    { provide: StripeElementDirective, useExisting: forwardRef(() => StripeCard) }
   ]
 })
-export class StripeCard extends StripeElement<'card'> {
+export class StripeCard extends StripeElementDirective<'card'> {
 
-  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
+  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('card', elements, config, ref);
   }
 

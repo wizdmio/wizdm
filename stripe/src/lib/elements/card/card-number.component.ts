@@ -1,5 +1,5 @@
-import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
-import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
+import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
 import type { StripeCardNumberElementOptions } from '@stripe/stripe-js';
 
 /** Stripe CardNumber Element for Angular */
@@ -7,12 +7,12 @@ import type { StripeCardNumberElementOptions } from '@stripe/stripe-js';
   selector: 'wm-stripe-card-number',
   template: '',
   providers: [
-    { provide: StripeElement, useExisting: forwardRef(() => StripeCardNumber) }
+    { provide: StripeElementDirective, useExisting: forwardRef(() => StripeCardNumber) }
   ]
 })
-export class StripeCardNumber extends StripeElement<'cardNumber'> {
+export class StripeCardNumber extends StripeElementDirective<'cardNumber'> {
 
-  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
+  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('cardNumber', elements, config, ref);
   }
 

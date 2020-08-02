@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { StripeMaterial } from './material.directive';
+import { StripeMaterialDirective } from './material.directive';
 
 @NgModule({
   imports: [ ],
-  declarations: [ StripeMaterial ],
-  exports: [ StripeMaterial ]
+  declarations: [ StripeMaterialDirective ],
+  exports: [ StripeMaterialDirective ]
 })
 export class StripeMaterialModule { }

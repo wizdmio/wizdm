@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
@@ -18,7 +18,7 @@ import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
-import { StripeModule } from '@wizdm/stripe';
+import { StripeModule, loadStripeJS } from '@wizdm/stripe';
 import { StripeElementsModule } from '@wizdm/stripe/elements';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
@@ -62,6 +62,9 @@ const routes: Routes = [
     ScrollingModule.init(scroll)
   ],
   providers: [
+
+    //{ provide: APP_INITIALIZER, useValue: loadStripeJS, multi: true },
+
     // Provides the redirection service globally
     RedirectService,
     // Applies the  redirection service to ReadmeComponent from @wizdm/elements

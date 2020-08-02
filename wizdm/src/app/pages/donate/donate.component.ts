@@ -1,7 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { FunctionsService } from '@wizdm/connect/functions';
 import { Stripe, StripeCardElement, PaymentIntent } from '@stripe/stripe-js';
+import { FunctionsService } from '@wizdm/connect/functions';
+import { Component, Inject } from '@angular/core';
 import { $animations } from './donate.animations';
+import { STRIPE } from '@wizdm/stripe';
 
 @Component({
   selector: 'wm-donate',
@@ -33,7 +34,7 @@ export class DonateComponent {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
-  constructor(@Inject('Stripe') private stripe: Stripe, private functions: FunctionsService) { }
+  constructor(@Inject(STRIPE) private stripe: Stripe, private functions: FunctionsService) { }
 
   // createPaymentIntent runs server side on cloudFunctions
   private createPaymentIntent = this.functions.callable<any, PaymentIntent>('createPaymentIntent');

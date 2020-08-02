@@ -1,19 +1,19 @@
 import type { Stripe, StripeConstructor, StripeConstructorOptions, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { Directive, OnInit, Input, Inject, Optional, forwardRef } from '@angular/core';
-import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS } from '../stripe-factory';
+import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS, STRIPEJS, STRIPE } from '../stripe-factory';
 
 @Directive({
   selector: 'wm-stripe-connect, [StripeConnect]',
   exportAs: 'StripeConnect',
   providers: [ 
-    { provide: 'Stripe', useExisting: forwardRef(() => StripeConnect) }
+    { provide: STRIPE, useExisting: forwardRef(() => StripeConnect) }
   ]
 })
 export class StripeConnect implements OnInit /*, Stripe*/ {
 
   public stripe: Stripe;
 
-  constructor(@Inject('StripeJS') private stripejs: StripeConstructor, 
+  constructor(@Inject(STRIPEJS) private stripejs: StripeConstructor, 
               @Inject(STRIPE_PUBLIC_KEY) private publicKey: string, 
               @Optional() @Inject(STRIPE_OPTIONS) private options: StripeConstructorOptions) { }
 

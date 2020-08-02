@@ -1,5 +1,5 @@
-import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
-import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
+import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
 import type { StripeFpxBankElementOptions } from '@stripe/stripe-js';
 
 /** Stripe fpxBank Element 
@@ -9,12 +9,12 @@ import type { StripeFpxBankElementOptions } from '@stripe/stripe-js';
   selector: 'wm-stripe-fpx-bank',
   template: '',
   providers: [
-    { provide: StripeElement, useExisting: forwardRef(() => StripeFpxBank) }
+    { provide: StripeElementDirective, useExisting: forwardRef(() => StripeFpxBank) }
   ]
 })
-export class StripeFpxBank extends StripeElement<'fpxBank'> {
+export class StripeFpxBank extends StripeElementDirective<'fpxBank'> {
 
-  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
+  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('fpxBank', elements, config, ref);
   }
 

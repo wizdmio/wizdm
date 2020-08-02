@@ -1,5 +1,5 @@
-import { StripeElements, StripeElement, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
-import { Component, Inject, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
+import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
 import type { StripeCardCvcElementOptions } from '@stripe/stripe-js';
 
 /** Stripe Card CVC Element for Angular */
@@ -7,12 +7,12 @@ import type { StripeCardCvcElementOptions } from '@stripe/stripe-js';
   selector: 'wm-stripe-card-cvc',
   template: '',
   providers: [
-    { provide: StripeElement, useExisting: forwardRef(() => StripeCardCvc) }
+    { provide: StripeElementDirective, useExisting: forwardRef(() => StripeCardCvc) }
   ]
 })
-export class StripeCardCvc extends StripeElement<'cardCvc'> {
+export class StripeCardCvc extends StripeElementDirective<'cardCvc'> {
 
-  constructor(elements: StripeElements, @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
+  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
     super('cardCvc', elements, config, ref);
   }
 

@@ -1,4 +1,4 @@
-import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS, loadStripeJS, getStripeJS, stripeFactory } from './stripe-factory';
+import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS, STRIPEJS, STRIPE, loadStripeJS, getStripeJS, stripeFactory } from './stripe-factory';
 import { NgModule, ModuleWithProviders, Inject, Optional } from '@angular/core';
 import type { StripeConstructorOptions } from '@stripe/stripe-js';
 import { StripeConnect } from './connect/connect.directive';
@@ -10,7 +10,15 @@ import { StripeConnect } from './connect/connect.directive';
 })
 export class StripeModule {
 
-  constructor() {
+  constructor(@Optional() @Inject(STRIPE_PUBLIC_KEY) publicKey) {
+
+    if(!publicKey) {
+      throw new Error(`
+        Stripe module has not been initialized.
+        Make sure to call StripeModule.init('pk_xxxxxxxxx') in your root module.
+      `);
+    }
+
     // Triggers the stripe.js API loading asyncronously. Use this function as a resolver or guard
     // to ensure the availability of the Stripe instance when needed. It can be used as an 
     // APP_INITIALIZER too but likely impacting on the app starting up latency.
@@ -29,10 +37,10 @@ export class StripeModule {
         { provide: STRIPE_OPTIONS, useValue: options },
 
         /** Provides StripeJS as an injectable */ 
-        { provide: 'StripeJS', useFactory: getStripeJS },
+        { provide: STRIPEJS, useFactory: getStripeJS },
 
         /** Provides a Stripe instance as an injectable service */
-        { provide: 'Stripe',
+        { provide: STRIPE,
           useFactory: stripeFactory, 
           deps: [ 
             [ new Optional(), new Inject(STRIPE_PUBLIC_KEY) ], 

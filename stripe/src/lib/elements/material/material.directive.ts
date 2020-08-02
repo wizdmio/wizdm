@@ -1,5 +1,5 @@
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { StripeElement } from '@wizdm/stripe/elements';
+import { StripeElementDirective } from '@wizdm/stripe/elements';
 import { Directive, forwardRef } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { Observable, merge } from 'rxjs';
@@ -11,12 +11,12 @@ import { Observable, merge } from 'rxjs';
   selector: '[matStripe]',
   host: { 'class': 'wm-stripe-material' },
   providers: [
-    { provide: MatFormFieldControl, useExisting: forwardRef(() => StripeMaterial) }
+    { provide: MatFormFieldControl, useExisting: forwardRef(() => StripeMaterialDirective) }
   ]
 })
-export class StripeMaterial implements MatFormFieldControl<any> {
+export class StripeMaterialDirective implements MatFormFieldControl<any> {
 
-  constructor(readonly element: StripeElement<any>) { 
+  constructor(readonly element: StripeElementDirective<any>) { 
 
     this.stateChanges = merge(
       element.readyChange,
