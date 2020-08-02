@@ -14,6 +14,7 @@ import { GtagModule } from '@wizdm/gtag';
 import { ReadmeModule } from '@wizdm/readme';
 import { RedirectModule } from '@wizdm/redirect';
 import { loadStripeJS } from '@wizdm/stripe';
+import { StripeModule } from '@wizdm/stripe';
 import { StripeElementsModule } from '@wizdm/stripe/elements';
 import { StripeCardModule } from '@wizdm/stripe/elements/card';
 import { StripeMaterialModule } from '@wizdm/stripe/material';
@@ -45,6 +46,7 @@ const routes: RoutesWithContent = [
     GtagModule,
     ReadmeModule,
     RedirectModule,
+    StripeModule,
     StripeElementsModule,
     StripeCardModule,
     StripeMaterialModule,

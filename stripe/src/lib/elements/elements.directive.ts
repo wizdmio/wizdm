@@ -1,16 +1,10 @@
-import { Directive, OnInit, OnChanges, SimpleChanges, Input, Inject, Optional, InjectionToken, inject, forwardRef } from '@angular/core';
-import type { Stripe, StripeElements, StripeElementsOptions, StripeElementClasses, StripeElementStyle } from '@stripe/stripe-js';
+import { Directive, OnInit, OnChanges, SimpleChanges, Input, Inject, Optional, InjectionToken } from '@angular/core';
 import type { StripeElement, StripeElementOptions, SupportedStripeElementType } from './generic-types';
+import type { Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { STRIPE } from '@wizdm/stripe';
 
-export interface StripeElementsConfig {
-  elementsOptions?: StripeElementsOptions; 
-  classes?: StripeElementClasses;
-  style?: StripeElementStyle;
-}
-
 /** StripeElementsModule configuration token */
-export const STRIPE_ELEMENTS_CONFIG = new InjectionToken<StripeElementsConfig>('wizdm.stripe.elements.config');
+export const STRIPE_ELEMENTS_OPTIONS = new InjectionToken<StripeElementsOptions>('wizdm.stripe.elements.options');
 
 /** Relays the Elements funcitons enabling dynamic locale */
 @Directive({
@@ -21,13 +15,7 @@ export class StripeElementsDirective implements OnInit, OnChanges {
 
   public elements: StripeElements;
 
-  @Input() locale: string;
-
-  @Input() set StripeElements(locale: string) {
-    this.locale = locale;
-  }
-
-  constructor(@Inject(STRIPE) readonly stripe: Stripe, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) private config: StripeElementsConfig) { }
+  constructor(@Inject(STRIPE) readonly stripe: Stripe, @Optional() @Inject(STRIPE_ELEMENTS_OPTIONS) private options: StripeElementsOptions) { }
 
   // Implements StripeElements functions as generics
   public create<T extends SupportedStripeElementType>(elementType: T, options?: StripeElementOptions<T>): StripeElement<T> {
@@ -41,9 +29,9 @@ export class StripeElementsDirective implements OnInit, OnChanges {
   ngOnInit() {
 
     // Computs the active locale falling back to the global configuratio, if any
-    const locale = this.locale || this.config?.elementsOptions?.locale;
+    const locale = this.locale || this.options?.locale;
     // Merges the global configurations with the new current locale
-    const options = { ...this.config?.elementsOptions, locale };
+    const options = { ...this.options, locale };
     // Initialize the StripeElements object
     this.elements = this.stripe.elements(options as StripeElementsOptions);
   }
@@ -51,5 +39,13 @@ export class StripeElementsDirective implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     // Switches to a different locale
     this.elements && this.ngOnInit();
+  }
+
+  /** The Elements locale to use. The locale is automatically detected when undefined */
+  @Input() locale: string;
+
+  /** Overrides the Elements locale */
+  @Input() set StripeElements(locale: string) {
+    this.locale = locale;
   }
 }

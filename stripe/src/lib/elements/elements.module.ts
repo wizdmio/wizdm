@@ -1,5 +1,6 @@
-import { StripeElementsDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from './elements.directive';
+import { StripeElementsDirective, STRIPE_ELEMENTS_OPTIONS } from './elements.directive';
 import { PLATFORM_ID, NgModule, ModuleWithProviders, Inject } from '@angular/core';
+import type { StripeElementsOptions } from '@stripe/stripe-js';
 import { StripeControlDirective } from './control.directive';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -16,11 +17,11 @@ export class StripeElementsModule {
     }
   }
 
-  static init(config: StripeElementsConfig): ModuleWithProviders<StripeElementsModule> {
+  static init(options: StripeElementsOptions): ModuleWithProviders<StripeElementsModule> {
     return {
       ngModule: StripeElementsModule,
-      /** Provides the global StripeElementsConfig object */
-      providers: [ { provide: STRIPE_ELEMENTS_CONFIG, useValue: config } ]
+      /** Provides the global StripeElementsOptions object */
+      providers: [ { provide: STRIPE_ELEMENTS_OPTIONS, useValue: options } ]
     };
   } 
 }

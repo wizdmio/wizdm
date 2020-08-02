@@ -1,9 +1,9 @@
 import { ExtraOptions } from '@angular/router';
 import { MatTooltipDefaultOptions } from '@angular/material/tooltip';
-import { StripeElementsConfig } from '@wizdm/stripe/elements';
 import { IpInfoConfig, IP_LIST_CC } from '@wizdm/ipinfo';
 import { ContentConfig } from '@wizdm/content';
 import { EmojiConfig } from '@wizdm/emoji/utils';
+import { StripeElementsOptions } from '@stripe/stripe-js'
 
 export const appname: string = 'wizdm';
 
@@ -40,11 +40,9 @@ export const tooltips: MatTooltipDefaultOptions = {
 };
 
 // StripeElements styling to fit with the global theme
-export const stripeElements: StripeElementsConfig = {
+export const stripeElements: StripeElementsOptions = {
 
-  elementsOptions: {
-    fonts: [
-      { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
-    ]
-  }
+  fonts: [
+    { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
+  ]
 };

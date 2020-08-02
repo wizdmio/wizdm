@@ -1,6 +1,6 @@
-import { StripeElementsDirective, StripeElementDirective, StripeElementsConfig, STRIPE_ELEMENTS_CONFIG } from '@wizdm/stripe/elements';
+import { StripeElementsDirective, StripeElementDirective, STRIPE_ELEMENTS_OPTIONS } from '@wizdm/stripe/elements';
 import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
-import type { StripeCardExpiryElementOptions } from '@stripe/stripe-js';
+import type { StripeElementsOptions, StripeCardExpiryElementOptions } from '@stripe/stripe-js';
 
 /** Stripe Card Exipation Date Element for Angular */
 @Component({
@@ -12,7 +12,7 @@ import type { StripeCardExpiryElementOptions } from '@stripe/stripe-js';
 })
 export class StripeCardExpiry extends StripeElementDirective<'cardExpiry'> {
 
-  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_CONFIG) config: StripeElementsConfig, ref: ElementRef<HTMLElement>) {
+  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_OPTIONS) config: StripeElementsOptions, ref: ElementRef<HTMLElement>) {
     super('cardExpiry', elements, config, ref);
   }
 

@@ -1,6 +1,7 @@
 
-<!-- Localized content, config StripeElements locale, restore scroll position, report gtag -->
-<ng-container *wmContent="let msgs select 'donate';let lang = language" [StripeElements]="lang" scrollPositionRestoration="top" gtag="donate">
+
+<!-- Localized content, restore scroll position, report gtag -->
+<ng-container *wmContent="let msgs select 'donate';let lang = language" scrollPositionRestoration="top" gtag="donate">
 
   <h1>{{ completed ? (msgs.thanks || 'Thank You 🙏🏻') : (msgs.title || 'Contribute to Wizdm') }}</h1>
 
@@ -8,7 +9,8 @@
     Thanks to your generosity we are able to cover for the costs exceeding the free quotas of the various online services the project is based upon.
   </p>
 
-  <form fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" (ngSubmit)="pay()" #form="ngForm">
+  <!-- Use the form as a StripeElements container using the current locale -->
+  <form [StripeElements]="lang" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" (ngSubmit)="pay(stripe)" #form="ngForm">
 
     <!-- Name -->
     <mat-form-field>

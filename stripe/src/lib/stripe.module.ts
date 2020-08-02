@@ -1,12 +1,11 @@
 import { STRIPE_PUBLIC_KEY, STRIPE_OPTIONS, STRIPEJS, STRIPE, loadStripeJS, getStripeJS, stripeFactory } from './stripe-factory';
 import { NgModule, ModuleWithProviders, Inject, Optional } from '@angular/core';
+import { StripeConnectDirective } from './connect/connect.directive';
 import type { StripeConstructorOptions } from '@stripe/stripe-js';
-import { StripeConnect } from './connect/connect.directive';
 
 @NgModule({
-  imports: [ ],
-  declarations: [ StripeConnect ],
-  exports: [ StripeConnect ]
+  declarations: [ StripeConnectDirective ],
+  exports: [ StripeConnectDirective ]
 })
 export class StripeModule {
 

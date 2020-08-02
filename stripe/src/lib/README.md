@@ -1,5 +1,4 @@
 # Stripe for Angular and Angular Material
-
 The @wizdm/stripe package brings all the functionalities of [Stripe Elements for the web](https://stripe.com/docs/stripe-js) into your Angular application. 
 
 Stripe Elements is a set of prebuilt UI components available as a feature of Stripe.js v3. This package, wraps the Stripe Elements into components complying with the [Angular forms API](https://angular.io/guide/forms-overview), so, to be used according to both template-driven form and reactive form patterns. 
@@ -7,7 +6,6 @@ Stripe Elements is a set of prebuilt UI components available as a feature of Str
 Additionally, the package supports [Angular Material Form Field](https://material.angular.io/components/form-field/overview), so, all the Stripe Elements can smootly blend in with all the other supported form field controls.
 
 # Installation
-
 Use `npm` to install the @wizdm/stripe module together with the official [@stripe/stripe-js](https://www.npmjs.com/package/@stripe/stripe-js) module which provides the typings:
 
 ```
@@ -37,7 +35,11 @@ export class AppModule();
 ```
 
 ## Styling Elements
-Import StripeElementsModule in the desiderd feature module to include the Angular's form API support. Optionally call its `init()` function providing a [style](https://stripe.com/docs/js/appendix/style) object and/or a [classes](https://stripe.com/docs/js/elements_object/create_element?type=card#elements_create-options-classes) object to be shared across all the StripeElements.
+Import StripeElementsModule in your feature module to include the Angular's form API support. The requested Stripe Elements will
+be provided within an `iframe` from the Stripe's servers for PCI compliance. This means none of the styling you may provide from
+your app's css will influence the appearance of the provided Elements. Use the module `init()` function to configure the 
+[elements options](https://stripe.com/docs/js/elements_object/create#stripe_elements-options) instructing Elemetns about the
+custom fonts to load within the iframe for the elements to fit your desired styling.
 
 ``` typescript
 import { StripeElementsModule } from '@wizdm/stripe/elements';
@@ -51,16 +53,9 @@ import { StripeElementsModule } from '@wizdm/stripe/elements';
     // Initialize the stripe.js module
     StripeElementsModule.init({
 
-      elementsOptions: {
-        fonts: [
-          { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
-        ]
-      },
-      style: {
-        base: {
-          fontFamily: 'Ubuntu, sans-serif'
-        }
-      }
+      fonts: [
+        { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
+      ]      
     }),
     ...
   ]
@@ -68,6 +63,9 @@ import { StripeElementsModule } from '@wizdm/stripe/elements';
 export class MyModule();
 
 ```
+
+Customize each element style using the `baseStyle` input. When settle to `auto` the styling values will be automatically 
+detected from the computed style of the wrapping element.
 
 ## Process payments
 Setup your form to collect all the payment information in your component template first:
@@ -86,7 +84,7 @@ Setup your form to collect all the payment information in your component templat
     <input [(ngModel)]="amount" required pattern="\d*"/>
 
     <!-- Credit Card Stripe Element -->
-    <wm-stripe-card [(ngModel)]="card" hidePostalCode name="card" required></wm-stripe-card>
+    <wm-stripe-card [(ngModel)]="card" baseStyle="auto" hidePostalCode name="card" required></wm-stripe-card>
 
     <!-- Submit button -->
     <button type="submit"[disabled]="!form.valid">Pay Now</button>

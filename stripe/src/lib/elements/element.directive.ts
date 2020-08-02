@@ -1,8 +1,9 @@
 import type { StripeElement, StripeElementOptions, StripeChangeEventObject, SupportedStripeElementType } from './generic-types';
 import { OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Input, Output, EventEmitter, Directive } from '@angular/core';
-import { StripeElementsDirective, StripeElementsConfig } from './elements.directive';
+import type { StripeElementsOptions, StripeError } from '@stripe/stripe-js';
+import { StripeElementsDirective } from './elements.directive';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import type { StripeError } from '@stripe/stripe-js';
+
 
 /** 
  * Abstract generic class turning a StripeElement into an Angular component with basic features
@@ -12,7 +13,7 @@ import type { StripeError } from '@stripe/stripe-js';
 @Directive()
 export abstract class StripeElementDirective<T extends SupportedStripeElementType> implements OnInit, OnChanges, OnDestroy {
 
-  constructor(readonly elementType: T, private elements: StripeElementsDirective, private config: StripeElementsConfig, private ref: ElementRef<HTMLElement>) {
+  constructor(readonly elementType: T, private elements: StripeElementsDirective, private config: StripeElementsOptions, private ref: ElementRef<HTMLElement>) {
 
     if(!elements) {
       throw new Error(`
@@ -30,11 +31,11 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
   /** Assembles the element's custom classes from the classesXXX input values */
   protected get classes(): StripeElementOptions<T>['classes'] {
     return {
-      base: this.classBase || this.config?.classes?.base,
-      complete: this.classComplete || this.config?.classes?.complete,
-      empty: this.classEmpty || this.config?.classes?.empty,
-      focus: this.classFocus || this.config?.classes?.focus,
-      invalid: this.classInvalid || this.config?.classes?.invalid
+      base: this.classBase,
+      complete: this.classComplete,
+      empty: this.classEmpty,
+      focus: this.classFocus,
+      invalid: this.classInvalid
     };
   }
 
@@ -63,20 +64,20 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
     }
 
     return {
-      base: this.styleBase || this.config?.style?.base,
-      complete: this.styleComplete || this.config?.style?.complete,
-      empty: this.styleEmpty || this.config?.style?.empty,
-      invalid: this.styleInvalid || this.config?.style?.invalid
+      base: this.styleBase,
+      complete: this.styleComplete,
+      empty: this.styleEmpty,
+      invalid: this.styleInvalid
     };
   }
 
   /** Assembles all the element's relevan options for creation/update */
   private get allOptions(): StripeElementOptions<T> {
     return { 
+      ...this.options,
       disabled: this.disabled,
       classes: this.classes, 
-      style: this.style, 
-      ...this.options 
+      style: this.style       
     } as any;
   }
 

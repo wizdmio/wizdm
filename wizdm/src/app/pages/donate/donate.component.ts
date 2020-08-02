@@ -1,4 +1,4 @@
-import { Stripe, StripeCardElement, PaymentIntent } from '@stripe/stripe-js';
+import { Stripe, StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
 import { FunctionsService } from '@wizdm/connect/functions';
 import { Component, Inject } from '@angular/core';
 import { $animations } from './donate.animations';
@@ -83,11 +83,11 @@ export class DonateComponent {
       // Clears the card
       this.card.clear();
 
-    }).catch( e => {
+    }).catch( (e: StripeError) => {
       
       console.log("Transaction terminated", e);
       // Tracks the errors, if any
-      this.error = e.code;
+      this.error = e.message || e.code;
       // Stops the progress
       this.completed = this.progress = false; 
       // Clears the card
