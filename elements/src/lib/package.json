@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/elements",
   "description": "Reusable elements with dynamic features",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "keywords": ["Angular", "Elements"],
   "homepage": "https://wizdm.io/docs/elements",
