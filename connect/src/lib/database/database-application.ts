@@ -19,18 +19,25 @@ export abstract class DatabaseApplication {
   private persisted: boolean = false;
 
   constructor(app: FirebaseApp, readonly zone: NgZone, persistance?: PersistenceSettings) { 
-    // Gets the Firestore instance 
-    this.firestore = app.firestore();
-    // Enables persistance on request
-    if(!!persistance) {
-      // Runs outside the angular zon to avoid triggerig change detection
-      zone.runOutsideAngular( () => {
-        // Tries to enable persistance
-        this.firestore.enablePersistence(persistance)
-          .then( () => this.persisted = true )
-          .catch( () => this.persisted = false);
-      });        
-    }
+
+    // Runs outside the angular zon to avoid triggerig unwanted change detections
+    this.firestore = zone.runOutsideAngular( () => {
+
+      // Gets the Firestore instance 
+      const firestore = app.firestore();
+
+      // Tries to enable persistance when requested
+      persistance && firestore.enablePersistence(persistance)
+        .then( () => this.persisted = true )
+        .catch( () => this.persisted = false);
+
+      return firestore;
+    });
+  }
+
+  /** True whenever persistance has been succesfully enabled */
+  public get isPersistanceEnabled() {
+    return this.persisted;
   }
 
   /** Returns a fieldpath from the provided field names. If more than one field name is provided, the path will point to a nested field 

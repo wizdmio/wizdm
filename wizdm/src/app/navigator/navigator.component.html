@@ -12,7 +12,7 @@
     <mat-toolbar (click)="openMenu(false)">
 
       <!-- Background w/ shadow to fade while blending in -->
-      <div class="background background-color" [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !(scrolled$ | async)"></div>
+      <div class="background background-color" [@backgndBlendin]="!(menuOpened$ | async) && !isMenuVisible && !(sideOpened$ | async) && !customToolbar && !(scrolled$ | async)"></div>
 
       <!-- Navigation bar (1st row) -->
       <mat-toolbar-row fxLayoutAlign="space-between center" #navbar>
@@ -24,10 +24,7 @@
           <wm-logo color="primary" routerLink="."></wm-logo>
       
           <!-- Desktop navigation links -->
-          <wm-navbar *ngIf="desktop && msgs.navbar as navbar" 
-                      [menuItems]="navbar[signedIn ? 'private' : 'public']" 
-                      color="primary">
-          </wm-navbar>
+          <wm-navbar *ngIf="desktop && msgs.navbar as navbar" [menuItems]="navbar[signedIn ? 'private' : 'public']" color="primary"></wm-navbar>
         
         </nav>
 
@@ -38,10 +35,7 @@
           <div [@actionActivate]="activateActions" fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="4px">
 
             <!-- De-sugared wmPortat directive: Actions will be teleported here -->
-            <ng-template wmPortal="actionbar" 
-                        [wmPortalContext]="{ isMobile: mobile }" 
-                        (wmPortalTemplate)="activateActions = $event">
-            </ng-template>
+            <ng-template wmPortal="actionbar" [wmPortalContext]="{ isMobile: mobile }" (wmPortalTemplate)="activateActions = $event"></ng-template>
 
           </div>
 
@@ -52,9 +46,7 @@
             <wm-flip [flipped]="signedIn" [style.top.px]="-2">
             
               <!-- Flip[front] - Shows a generic signIn icon when logged off -->
-              <wm-icon front [icon]="msgs.settings?.public?.icon || 'login'" 
-                             [routerLink]="msgs.settings?.public?.link || 'login'">
-              </wm-icon>
+              <wm-icon front [icon]="msgs.settings?.public?.icon || 'login'" [routerLink]="msgs.settings?.public?.link || 'login'"></wm-icon>
 
               <!-- Flip[back] - Shows the plain avatar on mobile -->
               <wm-avatar back color="primary" [src]="userImage" *ngIf="mobile; else settingsMenuTemplate"></wm-avatar>
@@ -100,7 +92,15 @@
         </div>
       </mat-toolbar-row>
 
-      <!-- Mobile menu (2nd row) -->
+      <!-- Custom toolbar (2nd row) -->
+      <mat-toolbar-row auto fxLayout="row" #toolbar>
+
+        <!-- De-sugared wmPortat directive: Toolbar content will be teleported here -->
+        <ng-template wmPortal="toolbar" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="customToolbar = $event"></ng-template>
+
+      </mat-toolbar-row>
+
+      <!-- Mobile menu (3rd row) -->
       <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
         
         <!-- Animated menu -->
@@ -122,7 +122,7 @@
 
     <!-- Side Navigation Panel (fixed) -->
     <mat-sidenav class="mat-elevation-z3" fixedInViewport 
-                                          [style.padding-top.px]="navbar?.clientHeight || 0" 
+                                          [style.padding-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)" 
                                           [style.width]="sideOptions?.width"
                                           [style.min-width]="sideOptions?.minWidth"
                                           [style.max-width]="sideOptions?.maxWidth"
@@ -142,11 +142,11 @@
   
     <!-- Main content wrapping page and footer -->
     <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" 
-                         [style.margin-top.px]="navbar?.clientHeight || 0" 
+                         [style.margin-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)"
                          [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0">
 
       <!-- Page container to fit all the available space setting the animation viewport -->
-      <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center stretch" class="page" wmAnimateView [top]="navbar?.clientHeight || 0">
+      <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center stretch" class="page" wmAnimateView [top]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)">
 
         <!-- Pages will fit here -->
         <router-outlet></router-outlet>
@@ -170,7 +170,7 @@
       <!-- Fab portal. Activates when content is teleported to one of the 'fab-[side]-[edge]' portals -->
       <wm-fab-portal [mobile]="mobile"
                      [style.margin-left.px]="container?._contentMargins.left || 0"
-                     [style.margin-top.px]="navbar?.clientHeight || 0"
+                     [style.margin-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)"
                      [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0"></wm-fab-portal>
 
     </mat-sidenav-content>

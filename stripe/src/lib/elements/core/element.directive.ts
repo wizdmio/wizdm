@@ -1,9 +1,8 @@
-import type { StripeElement, StripeElementOptions, StripeChangeEventObject, SupportedStripeElementType } from './generic-types';
+import type { StripeElement, StripeElementOptions, StripeChangeEventObject, SupportedStripeElementType } from '../generic-types';
 import { OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Input, Output, EventEmitter, Directive } from '@angular/core';
-import type { StripeElementsOptions, StripeError } from '@stripe/stripe-js';
-import { StripeElementsDirective } from './elements.directive';
+import { StripeElementsDirective } from '../elements.directive';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-
+import type { StripeError } from '@stripe/stripe-js';
 
 /** 
  * Abstract generic class turning a StripeElement into an Angular component with basic features
@@ -13,7 +12,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 @Directive()
 export abstract class StripeElementDirective<T extends SupportedStripeElementType> implements OnInit, OnChanges, OnDestroy {
 
-  constructor(readonly elementType: T, private elements: StripeElementsDirective, private config: StripeElementsOptions, private ref: ElementRef<HTMLElement>) {
+  constructor(readonly elementType: T, private elements: StripeElementsDirective, private ref: ElementRef<HTMLElement>) {
 
     if(!elements) {
       throw new Error(`
@@ -123,7 +122,7 @@ export abstract class StripeElementDirective<T extends SupportedStripeElementTyp
     this.focused = this.value = undefined;
 
     // Creates the requested Stripe element
-    this.element = this.elements.create(this.elementType as any, this.allOptions ) as any;
+    this.element = this.elements.create(this.elementType, this.allOptions);
 
     // Hooks on the element's events
     this.element.on('ready',  () => { this.readyChange.emit(this.ready = true); });

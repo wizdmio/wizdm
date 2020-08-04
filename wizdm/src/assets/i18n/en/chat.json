@@ -1,10 +1,4 @@
 {
-  "welcome": {
-
-    "title": "Welcome to the chat",
-    "body": "To start a new conversation simply [explore for people](/explore/people), pick the person you wish talking to and send her a message."
-  },
-
   "thread": {
     
     "timeFormat": {
@@ -19,9 +13,13 @@
 
     "info": { "label": "Contact info" },
     "delete": { "label": "Delete chat" },
+    "browse": { 
+      "label": "Browse chats", 
+      "icon": "fas:fa-comments"
+    },
     "new": { 
       "label": "New chat", 
-      "icon": "far:fa-comments", 
+      "icon": "fas:fa-comment-medical", 
       "link": "/explore/people"
     },
 

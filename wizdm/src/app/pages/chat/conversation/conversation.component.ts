@@ -1,5 +1,5 @@
-import { where, orderBy, startAfter, stream, limit } from '@wizdm/connect/database/collection/operators';
 import { Component, Input, Output, EventEmitter, ViewChild, HostListener } from '@angular/core';
+import { where, orderBy, startAfter, stream, limit } from '@wizdm/connect/database/collection/operators';
 import { map, startWith, switchMap, shareReplay, distinctUntilChanged } from 'rxjs/operators';
 import { QueryDocumentSnapshot, DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService, Timestamp } from '@wizdm/connect/database';
@@ -7,12 +7,17 @@ import { DatabaseDocument } from '@wizdm/connect/database/document';
 import { UserProfile, UserData } from 'app/utils/user-profile';
 import { ConversationData, MessageData } from '../chat-types';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { ThemePalette } from '@angular/material/core'
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-conversation',
   templateUrl: './conversation.component.html',
-  styleUrls: ['./conversation.component.scss']
+  styleUrls: ['./conversation.component.scss'],
+  host: {
+    '[attr.selected]' : 'highlight',
+    '[attr.color]' : 'color'
+  }
 })
 export class Conversation extends DatabaseDocument<ConversationData> {
 
@@ -48,6 +53,15 @@ export class Conversation extends DatabaseDocument<ConversationData> {
     super(db);
   }
 
+  /** Highlight the conversation */
+  @Input() highlight: boolean;
+
+  /** Highlighting color */
+  @Input() color: ThemePalette;
+
+  /** Shows the unread message counter */
+  @Input() showUnread: boolean;
+
   @Input() set content(conv: QueryDocumentSnapshot<ConversationData>) {
 
     // Skips useless changes
@@ -81,7 +95,7 @@ export class Conversation extends DatabaseDocument<ConversationData> {
       // Streams the conversation data getting the user's specific lastRead timestamp that will be used as a cursor
       map<ConversationData, Timestamp>( data => data?.status?.[this.me]?.lastRead ), 
       // Filters unchanged values
-      distinctUntilChanged( (x, y) => !!x && !!y && x.isEqual(y) ),
+      distinctUntilChanged( (x, y) => !!x && !!y && x.isEqual(y) ), 
       // Streams the messages...
       switchMap( lastRead => this.thread$.pipe( 
         // Selects sender messages after the lastRead timestamp up to 11 messages

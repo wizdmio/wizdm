@@ -23,10 +23,10 @@
       $palette: map-get($theme, #{$color});
 
       // Loops on each palette
-      &[color=#{$color}], &.#{$color}, .#{$color}, &.mat-#{$color}, .mat-#{$color} {
+      &[color=#{$color}], [color=#{$color}], &.#{$color}, .#{$color}, &.mat-#{$color}, .mat-#{$color} {
 
         // Styles a general selection 
-        &[selected=true], [selected=true], &.selected, .selected { 
+        &[selected=true], &.selected { 
           background-color: mat-color($palette, lighter, 0.5);
         }
 

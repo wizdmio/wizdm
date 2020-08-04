@@ -24,7 +24,7 @@ export abstract class StorageApplication {
 
   constructor(app: FirebaseApp, readonly zone: NgZone) {
     // Gets the Storage instance 
-    this.storage = app.storage();
+    this.storage = zone.runOutsideAngular( () => app.storage() );
   }
 
   /** Returns a firebase soage reference to the given path */

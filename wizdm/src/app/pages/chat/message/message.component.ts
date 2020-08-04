@@ -2,9 +2,9 @@ import { Component, Input, Output, EventEmitter, ViewChild, HostListener } from 
 import { map, takeWhile, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { UserProfile, UserData } from 'app/utils/user-profile';
 import { DatabaseService } from '@wizdm/connect/database';
-import { UserProfile } from 'app/utils/user-profile';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { MessageData } from '../chat-types';
 import { Observable } from 'rxjs';
 
@@ -21,6 +21,8 @@ import { Observable } from 'rxjs';
 })
 export class Message extends DatabaseDocument<MessageData> {
 
+  /** Sender observavble */
+  public sender$: Observable<UserData>; 
   /** Deleted observable. Emits true (and completes) whenever the message gets deleted */
   public deleted$: Observable<boolean>;
   /** Message data/body from the query snapshot */
@@ -35,11 +37,17 @@ export class Message extends DatabaseDocument<MessageData> {
     super(db);
   }
 
+  /** The previous message sender */
+  @Input() thread: string;
+
   /** Message snaphot */
   @Input() set message(message: QueryDocumentSnapshot<MessageData>) {
 
     // Unwraps the snapshot
     this.data = this.unwrap(message);
+
+    // Resolve the sender data
+    this.sender$ = this.user.fromUserId(this.data.sender);
 
     // Creates an observable to monitor this document deletion across devices.
     this.deleted$ = this.asObservable().pipe( 

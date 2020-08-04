@@ -85,7 +85,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
+          "options": {            
             "browserTarget": "wizdm:build",
             "ssl": true,
             "sslCert": "./ssl/server.crt",

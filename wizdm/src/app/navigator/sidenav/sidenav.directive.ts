@@ -49,7 +49,7 @@ export class SidenavDirective implements OnInit, OnDestroy {
   }
 
   /** Emits the open/close sidenav panel status */
-  @Output() openedChange = new EventEmitter<boolean>();
+  @Output() openedChange = new EventEmitter<boolean>(true);
 
   // The active route configuration data
   private get routeData(): any {

@@ -1,4 +1,4 @@
-import { Injectable, Optional, Inject, InjectionToken } from '@angular/core';
+import { Injectable, Optional, Inject, InjectionToken, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '@wizdm/connect';
 import { functions } from 'firebase/app';
 
@@ -17,15 +17,22 @@ export class FunctionsService {
   readonly functions: Functions;
   readonly url: string;
 
-  constructor(@Inject(APP) app: FirebaseApp, 
+  constructor(@Inject(APP) app: FirebaseApp, zone: NgZone,
               @Optional() @Inject(FUNCTIONS_REGION) region: string, 
               @Optional() @Inject(EMULATOR_ORIGIN) origin: string) {
 
-    // Gets the firebase Functions instance
-    this.functions = app.functions(region || undefined);
+    // Runs outside of Angular to avoid triggering unwated change detections
+    this.functions = zone.runOutsideAngular( () => {
 
-    // Enables the emulator on request 
-    if(origin) { this.functions.useFunctionsEmulator(origin); }
+      // Gets the firebase Functions instance
+      const functions = app.functions(region || undefined);
+
+      // Enables the emulator on request 
+      origin && functions.useFunctionsEmulator(origin);
+
+      // Returns the requested instance
+      return functions;
+    });
 
     // Gets the cloud function base url for further use with http api calls 
     this.url = (typeof (this.functions as any)._url === 'function') ? (this.functions as any)._url('') : 
@@ -33,6 +40,7 @@ export class FunctionsService {
       ( (origin ? (origin + '/') : `https://${region || 'us-central1'}-`) + `${(app.options as any).projectId}.cloudfunctions.net/` );
   }
 
+  /** Returns the requested callable cloud function */
   public callable<T=any, R=any>(name: string, options?: CallOptions): Callable<T, R> {
 
     const callable = this.functions.httpsCallable(name, options);

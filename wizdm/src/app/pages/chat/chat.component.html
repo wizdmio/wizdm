@@ -21,28 +21,34 @@
       <wm-icon icon="far:fa-bell" [matBadge]="unreadCount" matBadgeSize="small"></wm-icon>
     </button-->
 
-  </ng-template>
+    <!-- Teleports to the side panel. Forced open on large screens -->
+    <ng-template wmSidenav [opened]="((conversations$ | async)?.length > 0) && (browse || !mobile)" (openedChange)="browse = $event" persist minWidth="280px" maxWidth="350px">
 
-  <!-- Teleports to the side panel -->
-  <ng-template wmSidenav opened persist minWidth="280px" maxWidth="350px">
+      <!-- Resolves the active conversation -->
+      <ng-container *ngIf="activeConversation$ | async as activeConversation">
 
-    <!-- List of active conversations -->
-    <wm-conversation *ngFor="let conv of conversations$ | async; trackBy: trackById" 
-                      class="primary"
-                      [content]="conv" 
-                      [attr.selected]="conv.id === (conversationId$ | async)"
-                      (deleting)="onDeleting($event, conv.id)">
-    </wm-conversation>
+        <!-- Displays the active conversation on the toolbar on small screens -->
+        <ng-container *ngIf="mobile">
 
-    <!-- Welcome message to display when no conversations are there -->
-    <div style="padding: 8px 16px" *ngIf="(conversations$ | async)?.length <= 0">
-      <h3>{{ msgs.welcome?.title || 'Welcome to the chat' }}</h3>
-      <p style="text-align: justify;" [wm-readme]="msgs.welcome?.body">
-        To start a new conversation simply <a routerLink="/explore/people">explore for people</a>, pick the person you wish talking to and send her a message.
-      </p>
-    </div>
-      
-  </ng-template>
+          <wm-conversation *wmToolbar [content]="activeConversation" (deleting)="onDeleting($event, conv.id)" (click)="browse = !browse"></wm-conversation>
+
+        </ng-container>
+
+        <!-- List all the active conversations within the side panel -->
+        <wm-conversation *ngFor="let conv of conversations$ | async; trackBy: trackById"
+                         color="primary"
+                         [content]="conv" 
+                         [highlight]="conv.id === activeConversation.id"
+                         [showUnread]="conv.id !== activeConversation.id"
+                         (deleting)="onDeleting($event, conv.id)"
+                         (click)="mobile && (browse = !browse)">
+        </wm-conversation>
+
+      </ng-container>
+        
+    </ng-template><!-- Sidenav -->
+
+  </ng-template><!-- Actionbar -->
 
   <!-- Message thread -->
   <div fxFlex="100" fxLayout="column" fxLayoutAlign="end stretch"> 
@@ -60,8 +66,8 @@
         <!-- Group messages by date (different day) -->
         <ng-container *ngIf="i === 0 || (messages[i-1] | createdTime | moment:'D') !== (msg | createdTime | moment:'D')">
 
-          <!-- Displays a badge with the date -->
-          <div fxFlexAlign="center" class="background-color group-label mat-elevation-z2">{{ 
+          <!-- Displays a balloon with the date -->
+          <wm-balloon fxFlexAlign="center" class="group-label mat-elevation-z2">{{ 
               
             msg | createdTime | calendar:msgs.thread?.timeFormat || {
               sameDay: "[Today]",
@@ -70,12 +76,12 @@
               sameElse: "L"
             }
 
-          }}</div>
+          }}</wm-balloon>
 
         </ng-container>
 
-        <!-- Displays the next message reporting its lastRead time -->
-        <wm-message [message]="msg"></wm-message>
+        <!-- Displays the next message -->
+        <wm-message [thread]="(messages[i-1] | snapshotData)?.sender" [message]="msg"></wm-message>
 
       </ng-container>
 
@@ -95,10 +101,10 @@
 
   <!-- Message composer on the navigator's sticky footer -->
   <wm-composer *wmFooter [(value)]="text" 
-                          [keys]="keys" 
-                          [disabled]="!recipient || loading || deleting"
-                          (expanded)="onKeyboardExpand()" 
-                          (send)="send($event)">
+                         [keys]="keys" 
+                         [disabled]="!recipient || loading || deleting"
+                         (expanded)="onKeyboardExpand()" 
+                         (send)="send($event)">
   </wm-composer> 
 
   <!-- Can Leave dialog -->

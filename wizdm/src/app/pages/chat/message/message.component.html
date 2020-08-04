@@ -3,38 +3,52 @@
 <ng-container *wmContent="let msgs select 'chat.message'">
 
   <!-- Message balloon -->
-  <wm-balloon [color]="data?.sender === me ? 'accent' : 'primary'" [side]="data?.sender === me ? 'right' : 'left'" 
-    class="mat-elevation-z2" anchor="end">
+  <wm-balloon [color]="data?.sender === me ? 'accent' : 'primary'" 
+              [side]="data?.sender === me ? 'right' : 'left'" 
+              [anchor]="data?.sender !== thread ? 'start' : ''" 
+              class="mat-elevation-z2">
 
-    <!-- Deleted message -->
-    <span class="deleted" *ngIf="deleted$ | async; else messageBody">
-      <wm-icon [icon]="msgs.delete?.icon || 'error_outline'"></wm-icon>
-      <span>{{ msgs.delete?.message || 'This message has been deleted' }}</span>
-    </span>
+    <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="2px">
 
-    <!-- Message body template -->
-    <ng-template #messageBody><span [wm-emoji-text]="data?.body"></span></ng-template>
+      <!-- Sender full name -->
+      <div *ngIf="data?.sender !== thread"><b>{{ (sender$ | async)?.fullName }}</b></div>
 
-    <!-- Spaces the end of the text to clear the time -->
-    <span class="spacer"></span>
+      <!-- Message body -->
+      <div fxLayout="row">
 
-    <!-- Message time -->
-    <time class="time mat-small">{{ data?.created | timestamp | moment:msgs.timeFormat || 'LT' }}</time>
+        <!-- Deleted message -->
+        <span class="deleted" *ngIf="deleted$ | async; else messageBody">
+          <wm-icon [icon]="msgs.delete?.icon || 'error_outline'"></wm-icon>
+          <span>{{ msgs.delete?.message || 'This message has been deleted' }}</span>
+        </span>
 
-    <!-- Message action menu (visible to the sender only) -->
-    <ng-container *ngIf="data?.sender === me">
+        <!-- Message body template -->
+        <ng-template #messageBody><span [wm-emoji-text]="data?.body"></span></ng-template>
 
-      <!-- Menu button-->
-      <mat-icon class="menu" [matMenuTriggerFor]="menu">expand_more</mat-icon>
+        <!-- Spaces the end of the text to clear the time -->
+        <span class="spacer"></span>
 
-      <mat-menu #menu="matMenu">
+        <!-- Message time -->
+        <time class="time mat-small">{{ data?.created | timestamp | moment:msgs.timeFormat || 'LT' }}</time>
 
-        <!-- Delete message -->
-        <button mat-menu-item (click)="delete()">{{ msgs.delete?.label || 'Delete message' }}</button>
+        <!-- Message action menu (visible to the sender only) -->
+        <ng-container *ngIf="data?.sender === me">
 
-      </mat-menu>
-  
-    </ng-container>
+          <!-- Menu button-->
+          <mat-icon class="menu" [matMenuTriggerFor]="menu">expand_more</mat-icon>
+
+          <mat-menu #menu="matMenu">
+
+            <!-- Delete message -->
+            <button mat-menu-item (click)="delete()">{{ msgs.delete?.label || 'Delete message' }}</button>
+
+          </mat-menu>
+      
+        </ng-container>
+
+      </div><!-- Body -->
+    
+    </div>
 
   </wm-balloon>
 

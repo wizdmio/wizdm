@@ -1,5 +1,5 @@
+import type { Token, TokenStream, Grammar, Languages } from 'prismjs';
 import { Component, Input, Inject } from '@angular/core';
-import { Token, TokenStream, Grammar, Languages } from 'prismjs';
 
 @Component({ 
   selector: ':not(pre)[wm-prism]', 

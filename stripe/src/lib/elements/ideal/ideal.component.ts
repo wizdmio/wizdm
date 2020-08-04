@@ -1,6 +1,6 @@
-import { StripeElementsDirective, StripeElementDirective, STRIPE_ELEMENTS_OPTIONS } from '@wizdm/stripe/elements';
-import { Component, Inject, Optional, forwardRef, Input, ElementRef } from '@angular/core';
-import type { StripeElementsOptions, StripeIdealBankElementOptions } from '@stripe/stripe-js';
+import { StripeElementsDirective, StripeElementDirective } from '@wizdm/stripe/elements';
+import { Component, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import type { StripeIdealBankElementOptions } from '@stripe/stripe-js';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
@@ -12,8 +12,8 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 })
 export class StripeIdealBank extends StripeElementDirective<'idealBank'> {
 
-  constructor(@Optional() elements: StripeElementsDirective, @Optional() @Inject(STRIPE_ELEMENTS_OPTIONS) config: StripeElementsOptions, ref: ElementRef<HTMLElement>) {
-    super('idealBank', elements, config, ref);
+  constructor(@Optional() elements: StripeElementsDirective, ref: ElementRef<HTMLElement>) {
+    super('idealBank', elements, ref);
   }
 
   protected get options(): StripeIdealBankElementOptions {

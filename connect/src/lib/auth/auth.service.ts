@@ -26,7 +26,7 @@ export class AuthService {
   constructor(@Inject(APP) app: FirebaseApp, zone: NgZone) {
 
     // Gets the firebase Auth instance
-    this.auth = app.auth();
+    this.auth = zone.runOutsideAngular( () => app.auth() );
 
     // Builds the authentication state observable (sign-in/out)
     this.state$ = new Observable<User>(subscriber => this.auth.onAuthStateChanged(

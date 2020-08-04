@@ -42,10 +42,13 @@ export class NavigatorComponent {
   // Template variable to trigger the action animation
   public activateActions: any;
 
-  // Template variable to enable the sticky footer
+  // Template variable tracking the toolbar activation
+  public customToolbar: any;
+
+  // Template variable tracking the sticky footer activation
   public stickyFooter: any;
 
-  // Template variable to enable the fab overlay
+  // Template variable tracking the fab overlay activation
   public fabOverlay: any;
   public fabOverlayConfig: FabOptions;
 

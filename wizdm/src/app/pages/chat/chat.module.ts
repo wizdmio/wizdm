@@ -15,10 +15,12 @@ import { ButtonChangerModule } from '@wizdm/elements/button';
 import { PipesModule } from '@wizdm/connect/database/pipes';
 import { ReadmeModule } from '@wizdm/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
+import { BalloonModule } from '@wizdm/elements/balloon';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { TeleportModule } from '@wizdm/teleport';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { SidenavModule } from 'app/navigator/sidenav';
+import { ToolbarModule } from 'app/navigator/toolbar';
 import { StickyFooterModule } from 'app/navigator/footer';
 import { FabModule } from 'app/navigator/fab';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
@@ -58,11 +60,13 @@ const routes: RoutesWithContent = [
     IconModule, 
     ButtonChangerModule,
     ReadmeModule,
-    //AvatarModule,
+    AvatarModule,
+    BalloonModule,
     DialogModule,
     TeleportModule,
     ActionbarModule,
     SidenavModule,
+    ToolbarModule,
     StickyFooterModule,
     FabModule,
     MomentPipesModule,

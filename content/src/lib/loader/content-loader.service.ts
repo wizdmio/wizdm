@@ -49,6 +49,13 @@ export class FileLoader extends ContentLoader {
    */
   public loadFile(path: string, lang: string, name: string): Observable<any> {
 
+    if(!name) { 
+      throw new Error(`
+        Missing file name. 
+        Make sure every content statement is filled with the desired file name with an optional extension (txt or json).
+      `);
+    }
+
     // Flushes the cache when switching language
     if(lang !== this.language) { this.flush(lang); }
     

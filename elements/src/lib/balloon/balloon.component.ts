@@ -11,10 +11,10 @@ import { ThemePalette } from '@angular/material/core'
 export class BalloonComponent  {
 
   @HostBinding('attr.side')
-  @Input() side: 'left'|'top'|'right'|'bottom' = 'bottom';
+  @Input() side: 'left'|'top'|'right'|'bottom';
 
   @HostBinding('attr.anchor')
-  @Input() anchor: 'start'|'center'|'end' = 'start';
+  @Input() anchor: 'start'|'center'|'end';
 
   @HostBinding('attr.color')
   @Input() color: ThemePalette;

@@ -1,9 +1,9 @@
-import { take, skip, startWith, map, tap, filter, expand, pluck, switchMap, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs/operators';
+import { take, skip, startWith, map, tap, filter, expand, pluck, switchMap, distinctUntilChanged, shareReplay, takeUntil, delay } from 'rxjs/operators';
 import { where, orderBy, startAfter, endBefore, snap, pageReverse, onSnapshot, docs } from '@wizdm/connect/database/collection/operators';
 import { Component, AfterViewInit, OnDestroy, Inject, NgZone, ViewChildren, QueryList } from '@angular/core';
 import { DatabaseCollection, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { ConversationData, ConversationFavorites, MessageData } from './chat-types';
-import { Subscription, Observable, BehaviorSubject, of } from 'rxjs';
+import { Subscription, Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
 import { UserProfile, UserData } from 'app/utils/user-profile';
 import { DatabaseService } from '@wizdm/connect/database';
@@ -24,21 +24,27 @@ import { Message } from './message/message.component';
 export class ChatComponent extends DatabaseCollection<ConversationData> implements AfterViewInit, OnDestroy {
 
   // Conversation(s)
-  @ViewChildren(Conversation) conversations: QueryList<Conversation>;
-  readonly conversations$: Observable<QueryDocumentSnapshot<ConversationData>[]>;
-  readonly conversationId$: Observable<string>;  
+  @ViewChildren(Conversation) conversationsList: QueryList<Conversation>;
   private conversation: DatabaseDocument<ConversationData>;
-
+  /** Conversations observable (from DB) */
+  readonly conversations$: Observable<QueryDocumentSnapshot<ConversationData>[]>;
+  /** Active converastion Id  observable */  
+  readonly conversationId$: Observable<string>;
+  /** Active conversation observable */
+  readonly activeConversation$: Observable<QueryDocumentSnapshot<ConversationData>>;
+  
   // Messages thread
-  @ViewChildren(Message) messages: QueryList<Message>;
-  readonly messages$: Observable<QueryDocumentSnapshot<MessageData>[]>;  
+  @ViewChildren(Message) messagesList: QueryList<Message>;
   private  thread: DatabaseCollection<MessageData>;
-
+  /** Active conversation's messages (from DB) */
+  readonly messages$: Observable<QueryDocumentSnapshot<MessageData>[]>;  
+  
   private reload$ = new BehaviorSubject<void>(null);
-  private deletingCount: number = 0;
   public loading: boolean = true;
+  public browse: boolean = true;
 
   public get deleting(): boolean { return this.deletingCount > 0; }
+  private deletingCount: number = 0;
   
   // Scrolling
   readonly scrolled$: Observable<boolean>;
@@ -50,9 +56,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
   public  text = "";
 
   public get me(): string { return this.user.uid; }
-  private recipient: string;
-
-  private sub: Subscription;
+  private recipient: string = '';
   
   constructor(db: DatabaseService, private route: ActivatedRoute, private router: Router, private scroller: ScrollObservable, 
     private user: UserProfile<UserData>, @Inject(EmojiRegex) private regex: RegExp, private zone: NgZone) {
@@ -100,7 +104,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
     this.conversationId$ = route.queryParamMap.pipe(
 
       // Extracts the @username from the route
-      map( params => params.get('with') || '' ), distinctUntilChanged(),
+      map( params => params.get('with') || '' ), distinctUntilChanged(), delay(0),
 
       // Resolves the user, if any
       switchMap( userName => {
@@ -109,8 +113,12 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
         // 1. a deleted conversation (where the user has been removed from the recipients)
         // 2. a conversation with a user that no longer exists
         if(userName.startsWith('unknown-')) { 
-          // Returns the original conversation id resetting the recipient
-          return of(userName.replace(/^unknown-/, this.recipient = '')); 
+
+          // Resets the recipient
+          this.recipient = '';
+
+          // Returns the original conversation id
+          return of(userName.replace(/^unknown-/, '')); 
         }
 
         // Go on with a known user
@@ -119,7 +127,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
           // Skips unexisting users
           if(!user) { return this.recipient = ''; } 
 
-          // Tracks the new recipient
+          // Tracks the new recipient id
           this.recipient = user.id;
 
           // Computes the path for the requested conversation otherwise
@@ -128,6 +136,11 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
       }),
       // Filters unchanged values and replays to all subscribers
       shareReplay(1)
+    );
+
+    // Resolves the active conversation
+    this.activeConversation$ = combineLatest(this.conversations$, this.conversationId$).pipe( 
+      map( ([convs, id]) => convs?.find( conv => conv.id === id ) ) 
     );
 
     // Paging observalbe to load the previous messages while scrolling up
@@ -195,35 +208,6 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
       shareReplay(1)
     );
 
-    // Resolves the overall unread counter from the list of conversations
-    /*this.unreadCount$ = zone.onStable.pipe( take(1), switchMap( () => this.conversations.changes.pipe(
-
-      // Turns the list into an array
-      map(() => this.conversations.toArray() ),
-
-      // Ensures actual changes occurred among the conversations
-      distinctUntilChanged( (x, y) => x.length === y.length && x.every( (value, index) => value === y[index] )),
-
-      // Extracts the array of unread$ observables
-      map( list => ( list.length > 0 ? list.map( conv => conv.unread$ || of(0) ) : [of(0)] ) ),
-
-      // Resolves the single counters
-      switchMap( counters$ => combineLatest( counters$ ) ),
-
-      // Combines all the counters into a global one
-      map( counters => counters.reduce( ({ sum, more }, value) => {
-
-        return { sum: sum + value, more: more || value > 10 };
-
-      }, { sum: 0, more: false }) ),
-
-      // Turns the counter into a string
-      map( ({ sum, more }) => sum > 0 ? ( sum.toString() + (more ? '+' : '') ) : ''),
-
-      // Filters out and replay the last value
-      startWith(''), distinctUntilChanged(), shareReplay(1)
-    )));*/
-
     /** Builds an observable telling if the view has been scrolled */
     this.scrolled$ = this.conversationId$.pipe( switchMap( () => scroller.pipe( 
 
@@ -257,7 +241,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
       tap( status => {
 
         // Debug
-        //console.log('Loading', status);
+        console.log('Loading', status);
         // Gets the emoji usage stats from the conversation
         this.stats = status?.favorites || this.stats;
         // Updates the favorites emoji based on the new stat
@@ -281,7 +265,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
           // Prepares a new status object saving the lastRead timestamp and the conversation favorites
           const newStatus = { favorites: this.stats, lastRead };
           // Debug
-          //console.log('Saving data', newStatus);
+          console.log('Saving data', newStatus);
           // Saves the new data returning the new value for the next recursion
           return this.conversation.merge({ status: { [this.me]: newStatus }} )
             .then( () => newStatus );
@@ -296,6 +280,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
   // Disposes of the subscriptions
   ngOnDestroy() { this.sub.unsubscribe(); }
+  private sub: Subscription;
 
   /** Returns the requested conversation observable provided the id falls among the active ones */
   private fromId(id: string): Observable<ConversationData> {
@@ -303,9 +288,9 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
     // Waits until the view has been rendered
     return this.zone.onStable.pipe( take(1),
       // Catch the QueryList changes
-      switchMap( () => this.conversations.changes.pipe( startWith(null) ) ),
+      switchMap( () => this.conversationsList.changes.pipe( startWith(null) ) ),
       // Seeks for the requested conversation
-      map( () => this.conversations.find( conv => conv.id === id ) ), 
+      map( () => this.conversationsList.find( conv => conv.id === id ) ), 
       // Filters out unwanted emissions
       filter( conv => !!conv ), distinctUntilChanged( undefined, conv => conv.id ),
       // Returns the child conversation's data observable
@@ -319,9 +304,9 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
     // Waits until the view has been rendered
     return this.zone.onStable.pipe( take(1), 
       // Catch the QueryList changes
-      switchMap( () => this.messages.changes.pipe( startWith(null) ) ),
+      switchMap( () => this.messagesList.changes.pipe( startWith(null) ) ),
       // Seeks for the requested message data
-      map( () => this.messages.last?.data ), 
+      map( () => this.messagesList.last?.data ), 
       // Filters out duplicates
       distinctUntilChanged(),
     );

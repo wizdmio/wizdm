@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/connect",
   "description": "Firebase integration for Angular",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "keywords": ["Angular", "Firesbase", "Authentication", "Firestore", "Cloud Storage", "Cloud Functions"],
   "homepage": "https://wizdm.io/docs/connect",
