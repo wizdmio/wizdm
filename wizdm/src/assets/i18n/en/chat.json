@@ -19,7 +19,7 @@
     },
     "new": { 
       "label": "New chat", 
-      "icon": "fas:fa-comment-medical", 
+      "icon": "add_comment", 
       "link": "/explore/people"
     },
 

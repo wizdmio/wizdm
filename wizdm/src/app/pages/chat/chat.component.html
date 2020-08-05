@@ -9,7 +9,7 @@
     <button mat-stroked-button type.lt-sm="icon" color="primary" [routerLink]="msgs.conversation?.new?.link || '/explore/people'">
 
       <!-- Use an icon button on small screens -->
-      <wm-icon *ngIf="mobile; else newMessage" [icon]="msgs.conversation?.new?.icon || 'add'"></wm-icon>
+      <wm-icon *ngIf="mobile; else newMessage" [icon]="msgs.conversation?.new?.icon || 'add_comment'"></wm-icon>
 
       <!-- Use a stroked button on large screens -->
       <ng-template #newMessage>{{ msgs.conversation?.new?.caption || 'New chat' }}</ng-template>

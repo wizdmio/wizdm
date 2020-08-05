@@ -1,9 +1,8 @@
-
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT, ViewportScroller } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, tap, startWith, distinctUntilChanged, mergeMap } from 'rxjs/operators';
+import { Observable, interval, merge } from 'rxjs';
 
 export interface ScrollInfo {
   top: number;
@@ -17,10 +16,19 @@ export class ScrollObservable extends Observable<ScrollInfo> {
     return this.document.body.scrollHeight || 0; 
   }
 
-  constructor(private scroller: ViewportScroller, private ruler: ViewportRuler, @Inject(DOCUMENT) private document: Document, 
-    dispatcher: ScrollDispatcher) { 
+  constructor(private scroller: ViewportScroller, private ruler: ViewportRuler, @Inject(DOCUMENT) private document: Document, dispatcher: ScrollDispatcher) { 
 
-    super( subscriber => dispatcher.scrolled(0).pipe( map( () => this.scrollInfo() ) ).subscribe( subscriber ) );
+    super( subscriber => dispatcher.scrolled(0).pipe( 
+      // Always starts with a value
+      startWith(null), 
+      // Maps into the scroll info value
+      map( () => this.scrollInfo() ),
+      // Merges the scrolling emission with a 1s polling
+      source => merge(source, interval(1000).pipe( map(() => this.scrollInfo() ) ) ), 
+      // Filters out euqal values
+      distinctUntilChanged((x,y) => x.top === y.top && x.bottom === y.bottom)
+
+    ).subscribe( subscriber ) );
   }
 
   public scrollInfo(): ScrollInfo {
