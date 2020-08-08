@@ -196,11 +196,11 @@
     </ng-container>
   
     <!-- Renders the rows --> 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row class="background-color" *matHeaderRowDef="displayedColumns"></tr>
     <!-- Data row. Preview the row's record when clicked -->
-    <tr mat-row class="active" *matRowDef="let row; columns: displayedColumns" (click)="togglePreview(row)"></tr>
+    <tr mat-row class="background-color background-active" *matRowDef="let row; columns: displayedColumns" (click)="togglePreview(row)"></tr>
     <!-- Preview row -->
-    <tr mat-row *matRowDef="let row; columns: ['preview']"></tr>
+    <tr mat-row class="background-color" *matRowDef="let row; columns: ['preview']"></tr>
     <!-- No data row -->
     <!--tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">No data</td></tr-->
 

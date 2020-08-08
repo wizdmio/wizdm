@@ -3,7 +3,7 @@ import { DatabaseService } from '@wizdm/connect/database';
 import { DatabaseBatch } from '@wizdm/connect/database/document';
 import { StorageService, StorageRef } from '@wizdm/connect/storage';
 import { FunctionsClient } from '@wizdm/connect/functions/client';
-import { UserProfile, UserData } from 'app/utils/user-profile';
+import { UserProfile, UserData } from 'app/utils/user';
 import { map, scan, tap, switchMap } from 'rxjs/operators';
 import { animationFrameScheduler } from 'rxjs';
 import { UserRecord } from '../admin-types';

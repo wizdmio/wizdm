@@ -11,8 +11,9 @@ import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
-import { UserPhotoModule } from './user-photo/user-photo.module';
-import { UserFormModule } from './user-form/user-form.module';
+import { ProfilePhotoModule } from './profile-photo/profile-photo.module';
+import { ProfileFormModule } from './profile-form/profile-form.module';
+import { PreferencesFormModule } from './prefs-form/prefs-form.module';
 import { ProfileComponent } from './profile.component';
 
 const routes: RoutesWithContent = [
@@ -38,8 +39,9 @@ const routes: RoutesWithContent = [
     ButtonChangerModule,
     CanLeaveModule,
     ActionbarModule,
-    UserFormModule,
-    UserPhotoModule,
+    ProfileFormModule,
+    ProfilePhotoModule,
+    PreferencesFormModule,
     ContentRouterModule.forChild(routes)
   ]
 })

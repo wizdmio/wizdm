@@ -1,8 +1,14 @@
 {
-  "title": "Public Profile",
+  "title": "Public profile",
 
   "actions": {
     "save": { "caption": "Update Profile", "icon": "fas:fa-save" }
+  },
+
+  "photo": {
+    "label": "Profile picture", 
+    "delete": { "icon": "fas:fa-trash-alt" },
+    "upload": { "icon": "fas:fa-cloud-upload-alt" }
   },
 
   "form": {
@@ -81,14 +87,34 @@
         { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
         { "label": "Русский","image": "assets/img/ru.svg", "value": "ru" }
       ]
-    },
-    "submit": { "label": "Update profile" }
+    }
   },
 
-  "photo": {
-    "label": "Profile picture", 
-    "delete": { "icon": "fas:fa-trash-alt" },
-    "upload": { "icon": "fas:fa-cloud-upload-alt" }
+  "preferences": {
+
+    "title": "User's preferences",
+
+    "theme": {
+      "label": "Theming",
+      "icon": "fas:fa-brush",
+      "hint": "Choose the theme you prefer",
+      "options": [
+        { "label": "Detect from the OS", "value": "auto" },
+        { "label": "Light theme", "value": "light", "icon": "fas:fa-sun" },
+        { "label": "Dark theme", "value": "dark", "icon": "fas:fa-moon" }
+      ]
+    },
+
+    "language": {
+      "label": "Language",
+      "icon": "fas:fa-language",
+      "hint": "We'll try to adapt the content accordingly",
+      "options": [
+        { "label": "English", "image": "assets/img/gb.svg", "value": "en" },
+        { "label": "Italiano", "image": "assets/img/it.svg", "value": "it" },
+        { "label": "Русский","image": "assets/img/ru.svg", "value": "ru" }
+      ]
+    }
   },
 
   "canLeave": {

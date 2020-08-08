@@ -1,8 +1,11 @@
 import { Stripe, StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
 import { FunctionsService } from '@wizdm/connect/functions';
+import { DarkModeObserver } from 'app/utils/platform';
 import { Component, Inject } from '@angular/core';
 import { $animations } from './donate.animations';
 import { STRIPE } from '@wizdm/stripe';
+import { tap, map, delay, startWith, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'wm-donate',
@@ -11,6 +14,8 @@ import { STRIPE } from '@wizdm/stripe';
   animations: $animations
 })
 export class DonateComponent {
+
+  readonly autoMode$: Observable<any>;
 
   public card: StripeCardElement;
   public email: string = '';
@@ -34,7 +39,11 @@ export class DonateComponent {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
-  constructor(@Inject(STRIPE) private stripe: Stripe, private functions: FunctionsService) { }
+  constructor(@Inject(STRIPE) private stripe: Stripe, private functions: FunctionsService, dark: DarkModeObserver) { 
+
+    // Uses an observable to refresh the Card Element automatic style detection on theme changes
+    this.autoMode$ = dark.pipe( switchMap( () => of('auto').pipe( delay(0), startWith({}) )));
+  }
 
   // createPaymentIntent runs server side on cloudFunctions
   private createPaymentIntent = this.functions.callable<any, PaymentIntent>('createPaymentIntent');

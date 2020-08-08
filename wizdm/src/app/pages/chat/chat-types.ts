@@ -1,6 +1,6 @@
 import { DocumentData } from '@wizdm/connect/database/document';
 import { Timestamp } from '@wizdm/connect/database';
-import { UserData } from 'app/utils/user-profile';
+import { UserData } from 'app/utils/user';
 
 export interface MessageData extends DocumentData {
   body: string;

@@ -1,6 +1,5 @@
-import { UserProfile, UserData } from 'app/utils/user-profile';
-import { UserFormComponent } from './user-form/user-form.component';
-import { Component, ViewChild } from '@angular/core';
+import { UserProfile, UserData } from 'app/utils/user';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'wm-profile',
@@ -9,18 +8,22 @@ import { Component, ViewChild } from '@angular/core';
 })
 export class ProfileComponent {
 
-  @ViewChild(UserFormComponent) form: UserFormComponent;
-
   constructor(private user: UserProfile) {} 
+
+  /** The new user data */
+  private data: UserData = {};
 
   /* The current user profile data */
   get profile(): UserData { return this.user.data; }
+  set profile(data: Partial<UserData>) {
+
+    // Combines the profile and preferences change into a new profile data object
+    this.data = { ...this.data, ...data };
+  }
 
   /** Updates the profile data */
-  public updateProfile(data: UserData) {
-
-    return this.user.update(data)
-      .then( () => this.form.markAsPristine() );
+  public updateProfile() {
+    return this.user.update(this.data);
   }
 
   /** Updates the profile photo */

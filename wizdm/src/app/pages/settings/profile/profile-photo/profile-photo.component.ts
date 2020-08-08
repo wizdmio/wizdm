@@ -4,11 +4,11 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'wm-user-photo',
-  templateUrl: './user-photo.component.html',
-  styleUrls: ['./user-photo.component.scss']
+  selector: 'wm-profile-photo',
+  templateUrl: './profile-photo.component.html',
+  styleUrls: ['./profile-photo.component.scss']
 })
-export class UserPhotoComponent {
+export class ProfilePhotoComponent {
 
   public progress$: Observable<number>;
 

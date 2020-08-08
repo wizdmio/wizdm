@@ -21,7 +21,97 @@ $sheetFile: "/assets/emoji/sheets/32.png";
   @include tweak-material-typo-margins();
 
   // Tweaks material compoment styles for improved flexibility
-  @include tweak-material-components($theme);
+  @include tweak-material-components();
+
+  // Styles the elements according to the theme
+  @include wm-elements-theme($theme);
+
+  // Styles the emoji-keyboard component
+  @include wm-emoji-keyboard($theme);
+
+  // Styles the theme colors globally
+  @include wm-theme-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
+
+  // Styles the skeleton loading animation class
+  @include skeleton-loading(map-get($foreground, 'divider')) {
+    
+    // Patches the avatar element color
+    &.wm-avatar { fill: opacify(map-get($foreground, 'divider'), 0.25); }
+  }
+
+  // Styles links
+  a { 
+    cursor: pointer;    
+    text-decoration: none;
+
+    // Styles according the theme palette colors
+    color: mat-color($primary); 
+    @each $color in ('accent', 'warn') { &[color=#{$color}] { color: mat-color( map-get($theme, #{$color}) ); }}
+
+    // Styles the disabled link
+    &[disabled=true] {
+
+      text-decoration: dotted underline;
+      color: map-get( map-get($theme, 'foreground'), 'disabled');
+    }    
+  }
+
+  // Smoothen the text color on content
+  p, li, td { 
+    line-height: 1.5;
+    color: rgba( map-get(map-get($theme, 'foreground'), 'text'), 0.8); 
+  }
+
+  // Defines a global style for blockquotes
+  blockquote {
+    padding: 0 1em;
+    color: rgba(black, 0.4);
+    border-left: 0.25em solid rgba(black, 0.11);
+    p, li, td { color: inherit; }
+  }
+
+  // Ensures the inline-code breaks, eventually
+  code { 
+    overflow-wrap: break-word; 
+    font-family: 'Ubuntu Mono', monospace;
+  }
+
+  // Defines a global style for tables
+  table { border-collapse: collapse; }
+
+  td { 
+      
+    padding: 8px;
+    
+    &:first-of-type { padding-left: 24px; }
+    &:last-of-type { padding-right: 24px; }
+
+    border-bottom: 1px solid map-get( map-get($theme, 'foreground'), 'divider'); 
+  }
+
+  // Defines a global style for dividers
+  hr { 
+
+    height: 4px;
+    line-height: 24px;
+    margin: 24px 0;
+    border-style: none;
+
+    background-color: map-get( map-get($theme, 'foreground'), 'divider'); 
+  }
+}
+
+// Initialize the application theme colors only (to be used for multiple themes)
+@mixin wm-init-application-colors($theme) {
+
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  
+  // Includes a material component specifics colors only
+  @include angular-material-color($theme);
 
   // Styles the elements according to the theme
   @include wm-elements-theme($theme);
@@ -39,92 +129,21 @@ $sheetFile: "/assets/emoji/sheets/32.png";
     &.wm-avatar { fill: opacify(map-get($foreground, divider), 0.25); }
   }
 
-  // Applies a smooth scroll behaviour whenever supported
-  html { scroll-behavior: smooth; }
+  // Styles links
+  a { 
+    // Styles according the theme palette colors
+    color: mat-color($primary); 
+    @each $color in ('accent', 'warn') { &[color=#{$color}] { color: mat-color( map-get($theme, #{$color}) ); }}
 
-  // Styles the body
-  body {
-    // Applies material typography rules globally
-    @extend .mat-typography;
-    // Applies material theme general colors
-    @extend .mat-app-background;
-    
-    // Disables outline on all elements
-    * { outline: none; }
-
-    // Styles links
-    a { 
-
-      cursor: pointer;
-      color: mat-color($primary); 
-      text-decoration: none;
-
-      //&:hover { text-decoration: underline; }
-
-      // Styles according the theme palette colors
-      @each $color in ('accent', 'warn') {
-
-        &[color=#{$color}] { 
-          color: mat-color( map-get($theme, #{$color}) ); 
-        }
-      }
-
-      // Styles the disabled link
-      &[disabled=true] {
-
-        color: map-get( map-get($theme, foreground) , 'disabled');
-        text-decoration: dotted underline;
-      }    
-    }
-
-    // Smoothen the text color on content
-    p, li, td { 
-      line-height: 1.5;
-      color: rgba(map-get($foreground, text), 0.8); 
-    }
-
-    // Defines a global style for blockquotes
-    blockquote {
-      padding: 0 1em;
-      color: rgba(black, 0.4);
-      border-left: 0.25em solid rgba(black, 0.11);
-      p, li, td { color: inherit; }
-    }
-
-    // Code blocks
-    pre { 
-      // Overrides the PrismJS highlighting default theme color
-      background-color: transparent !important; 
-    }
-
-    // Ensures the inline-code breaks, eventually
-    code { overflow-wrap: break-word; }
-
-    // Defines a global style for tables
-    table {
-
-      border-collapse: collapse;
-
-      td { 
-        
-        padding: 8px;
-        
-        &:first-of-type { padding-left: 24px; }
-        &:last-of-type { padding-right: 24px; }
-
-        border-bottom: 1px solid map-get($foreground, divider); 
-      }
-    }
-
-    // Defines a global style for dividers
-    hr { 
-
-      height: 4px;
-      line-height: 24px;
-      margin: 24px 0;
-      border-style: none;
-
-      background-color: map-get($foreground, divider); 
-    }
+    // Styles the disabled link
+    &[disabled=true] { color: map-get( map-get($theme, 'foreground'), 'disabled'); }    
   }
+
+  // Smoothen the text color on content
+  p, li, td { color: rgba( map-get(map-get($theme, 'foreground'), 'text'), 0.8); }
+
+  td { border-bottom: 1px solid map-get( map-get($theme, 'foreground'), 'divider'); }
+
+  // Defines a global style for dividers
+  hr { background-color: map-get( map-get($theme, 'foreground'), 'divider'); }
 }

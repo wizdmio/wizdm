@@ -1,8 +1,8 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { BackLinkObserver, CloseLinkObserver } from 'app/utils/action-links';
-import { LanguageSelector, WelcomeBack } from 'app/utils/lang-selector';
 import { matchUserNameOnly } from 'app/pages/profile/profile.module';
 import { matchFullPath } from 'app/pages/static/static.module';
+import { UserPreferences, WelcomeBack } from 'app/utils/user';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from '@wizdm/actionlink';
@@ -26,7 +26,7 @@ const routes: RoutesWithContent = [
     
     component: NavigatorComponent,
     
-    canActivate: [ WelcomeBack, LanguageSelector ],
+    canActivate: [ WelcomeBack, UserPreferences ],
     
     content: ['navigator', 'navigator/login', 'navigator/feedback'],
     
@@ -81,6 +81,6 @@ const routes: RoutesWithContent = [
 @NgModule({
   imports: [ ContentRouterModule.forChild(routes) ],
   exports: [ ContentRouterModule ],
-  providers: [ WelcomeBack, LanguageSelector ]
+  providers: [ WelcomeBack, UserPreferences ]
 })
 export class NavRoutingModule {}

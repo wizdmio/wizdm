@@ -4,7 +4,7 @@ import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
 import { ScrollObservable } from 'app/utils/scrolling';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { UserData } from 'app/utils/user-profile';
+import { UserData } from 'app/utils/user';
 import { autocomplete } from '@wizdm/rxjs';
 import { Component } from '@angular/core';
 

@@ -1,7 +1,7 @@
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
+import { map, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { DOCUMENT, ViewportScroller } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
-import { map, tap, startWith, distinctUntilChanged, mergeMap } from 'rxjs/operators';
 import { Observable, interval, merge } from 'rxjs';
 
 export interface ScrollInfo {

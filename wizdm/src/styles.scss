@@ -1,11 +1,11 @@
 // Resets styles with Normalize.css for browser behaviour consistency
 @import '~normalize.css/normalize.css';
 
-// Import prism code highlighting theme
-@import '~prismjs/themes/prism.css';
-
 // Import Angular Material theming 
 @import '~@angular/material/theming';
+
+// Load the main Ubuntu google font from the web
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:wght@400;700');
 
 // Load material icons from the web both regular and extended version
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Extended');
@@ -13,14 +13,12 @@
 // Load fontawsome icons from the web
 @import url('https://use.fontawesome.com/releases/v5.14.0/css/all.css');
 
-// Load the main Ubuntu google font from the web
-@import url('https://fonts.googleapis.com/css?family=Ubuntu:400,700');
-
 // Import local partials
 @import './styles/preloader';
 @import './styles/skeleton';
 @import './styles/material';
 @import './styles/colors';
+@import './styles/prism';
 @import './styles/theming';
 
 // Define the main font family 
@@ -48,9 +46,9 @@ $wm-accent:  mat-palette($mat-amber);//, 400, 600, 800);
 $wm-warn:    mat-palette($mat-red);
 
 // Creates a standard material light theme first...
-$wm-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
+$wm-light-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
 //... than overrides with customized fore/background values
-$wm-theme: tweak-material-theme($wm-theme, 
+$wm-light-theme: tweak-material-theme($wm-light-theme, 
 
   $foreground: ( // Overrides Material foreground colors
 
@@ -61,18 +59,41 @@ $wm-theme: tweak-material-theme($wm-theme,
     text:              mat-color($wm-primary, 900),
     //light-text:       mat-color($primary, 50),
     dark-text:         mat-color($wm-primary, 900)
-  ), 
-
-  $background: ( // Overrides Material background colors
-
-    app-bar:          white,
-    status-bar:       white, 
-    background:       white,
   )
 );
 
 // Creates the .preloader spinner class applying the theme color
-@include preloader(150px, 3px, mat-color($wm-primary), transparent);
+@include preloader(150px, 3px, mat-color($wm-primary)) {
+
+  // Includes a background option adapting to the OS color scheme. This will apply the proper background color
+  // until the app loads and the .darl-mode class gets applied according to the user preferences
+  &.background {
+
+    @media(prefers-color-scheme: light) { background: map-get($mat-light-theme-background, 'background'); }
+    @media(prefers-color-scheme: dark)  { background: map-get($mat-dark-theme-background,  'background'); }
+  }
+};
 
 // Initialze the global application theme, make sure to call this only once
-@include wm-init-application-theme($wm-theme, $wm-typography);
+@include wm-init-application-theme($wm-light-theme, $wm-typography);
+
+.dark-mode {
+
+  //@import '~prismjs/themes/prism-tomorrow.css';
+
+  // Define the main theme colors palettes.
+  $wm-dark-primary: mat-palette($mat-blue, 700, 300, 900, 700);
+  $wm-dark-accent:  mat-palette($mat-amber, 700, 300, 900, 700);
+  $wm-dark-warn:    mat-palette($mat-red, 700, 300, 900, 700);
+
+  $wm-dark-theme: mat-dark-theme($wm-dark-primary, $wm-dark-accent, $wm-dark-warn);
+
+  // Initialze the global application theme, make sure to call this only once
+  @include wm-init-application-colors($wm-dark-theme);
+}
+
+// Disables outline on all elements
+* { outline: none; }
+
+// Applies a smooth scroll behaviour whenever supported
+html { scroll-behavior: smooth; }

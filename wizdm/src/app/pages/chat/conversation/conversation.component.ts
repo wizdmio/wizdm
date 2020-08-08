@@ -4,7 +4,7 @@ import { map, startWith, switchMap, shareReplay, distinctUntilChanged } from 'rx
 import { QueryDocumentSnapshot, DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService, Timestamp } from '@wizdm/connect/database';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
-import { UserProfile, UserData } from 'app/utils/user-profile';
+import { UserProfile, UserData } from 'app/utils/user';
 import { ConversationData, MessageData } from '../chat-types';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ThemePalette } from '@angular/material/core'

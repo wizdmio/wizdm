@@ -3,19 +3,19 @@
  
   .wm-balloon { 
 
-    $fore: map-get($theme, foreground);
-    $back: map-get($theme, background);
-    $dark: map-get($theme, isDark);
-    
-    border: 1px solid map-get($fore, divider);
-    background-color: map-get($back, background);
+    $fore: map-get($theme, 'foreground');
+    $back: map-get($theme, 'background');
+    $dark: map-get($theme, 'is-dark');
+
+    border: 1px solid map-get($fore, 'divider');
+    background-color: map-get($back, 'background');
 
     @each $color in ('primary', 'accent', 'warn') {
 
       $palette: map-get($theme, #{$color});
 
       &[color=#{$color}] {
-        background-color: mat-color($palette, if($dark, darker, lighter)); 
+        background-color: mat-color($palette, if($dark, 'darker', 'lighter')); 
       }
     }
   }

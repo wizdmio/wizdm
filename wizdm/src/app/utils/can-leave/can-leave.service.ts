@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate } from '@angular/router';
+import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { flatMap, take } from 'rxjs/operators';
 
@@ -16,7 +16,12 @@ export class CanLeaveGuard implements CanDeactivate<any> {
   }
 
   // Implements the CanDeactivate interface to conditionally prevent leaving the page
-  canDeactivate(/*component, route, state, next*/): CanLeaveType {
+  canDeactivate(component, route, state: RouterStateSnapshot, next: RouterStateSnapshot): CanLeaveType {
+
+    // Always allow deactivation whenever the current and next url(s) matches excepts for the language segment at the root
+    if(next && state.url.replace(/^\/[^/]+/, '') === next.url.replace(/^\/[^/]+/, '')) {
+      return true;
+    }
 
     // Returns an observable resolving into a suitable guarding value
     return this.observer$.pipe( 

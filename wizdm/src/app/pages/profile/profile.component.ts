@@ -1,4 +1,4 @@
-import { UserData, UserProfile } from 'app/utils/user-profile';
+import { UserData, UserProfile } from 'app/utils/user';
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
 import { switchMap } from 'rxjs/operators';

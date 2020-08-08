@@ -1,0 +1,25 @@
+
+<!-- Profile form w/ localized content -->
+<form [formGroup]="this" fxLayout="column" fxLayoutGap="32px" *wmContent="let msgs select 'profile.preferences'">
+
+  <!-- Theming -->
+  <mat-form-field>  
+    <mat-label>{{ msgs.theme?.label || 'Theme' }}</mat-label>
+    <wm-icon matPrefix [icon]="themeIcon(msgs.theme?.options) || msgs.theme?.icon"></wm-icon>
+    <mat-select formControlName="theme" (selectionChange)="changeTheme($event.value)">
+      <mat-option *ngFor="let option of msgs.theme?.options" [value]="option.value">{{ option.label }}</mat-option>
+    </mat-select>
+    <mat-hint>{{ msgs.theme?.hint }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Language -->
+  <mat-form-field>  
+    <mat-label>{{ msgs.language?.label || 'Language' }}</mat-label>
+    <wm-icon matPrefix [icon]="msgs.language?.icon"></wm-icon>
+    <mat-select formControlName="lang" (selectionChange)="changeLanguage($event.value)">
+      <mat-option *ngFor="let option of msgs.language?.options" [value]="option.value">{{ option.label }}</mat-option>
+    </mat-select>
+    <mat-hint>{{ msgs.language?.hint }}</mat-hint>
+  </mat-form-field>
+
+</form>

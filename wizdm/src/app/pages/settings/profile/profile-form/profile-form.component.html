@@ -7,7 +7,7 @@
     <mat-label>{{ msgs.userName?.label || 'Username' }}</mat-label>
     <input matInput formControlName="userName">
     <wm-icon matPrefix [icon]="msgs.userName?.icon"></wm-icon>
-    <mat-hint>{{'https://wizdm.io/@' + value.userName | lowercase }}</mat-hint>
+    <mat-hint>{{ hostname + '/@' + value.userName | lowercase }}</mat-hint>
     <mat-error *ngIf="controls.userName.errors?.required">{{ msgs.userName?.errors?.required }}</mat-error>
     <mat-error *ngIf="controls.userName.errors?.pattern">{{ msgs.userName?.errors?.format }}</mat-error>
     <mat-error *ngIf="controls.userName.errors?.exists">{{ msgs.userName?.errors?.exists }}</mat-error>
@@ -91,13 +91,13 @@
   </mat-form-field>
 
   <!-- Language -->
-  <mat-form-field>  
-    <mat-label>{{ msgs.language?.label }}</mat-label>
+  <!--mat-form-field>  
+    <mat-label>{{ msgs.language?.label || 'Language' }}</mat-label>
     <wm-icon matPrefix [icon]="msgs.language?.icon"></wm-icon>
     <mat-select formControlName="lang">
       <mat-option *ngFor="let option of msgs.language?.options" [value]="option.value">{{ option.label }}</mat-option>
     </mat-select>
     <mat-hint>{{ msgs.language?.hint }}</mat-hint>
-  </mat-form-field>
+  </mat-form-field-->
 
 </form>

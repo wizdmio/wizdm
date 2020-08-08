@@ -36,7 +36,11 @@ export class IpInfo<T> extends Observable<T> {
       // Debug
       tap( ep => console.log("Requesting ip info from:", ep) ),
       // Queries the ipinfo.io API with the given ip preventing errors from completing the inner observable
-      switchMap( url => http.get<T>(url).pipe( catchError( e => of({} as T) ) ) ),
+      switchMap( url => http.get<T>(url).pipe( catchError( e => {
+        // Reports a warning
+        console.warn(`Something went wrong while attemtping to retrive ip geolocation info from ${config?.provider}`, e);        
+        return of({} as T); 
+      }))),
       // Replays the last value to all the subscribers
       shareReplay(1)
     );

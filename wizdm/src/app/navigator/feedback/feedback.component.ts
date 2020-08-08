@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { UserProfile } from 'app/utils/user-profile';
+import { UserProfile } from 'app/utils/user';
 import { MatDialog } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
 import { DialogComponent } from '@wizdm/elements/dialog';

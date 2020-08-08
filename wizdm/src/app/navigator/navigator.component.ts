@@ -2,7 +2,7 @@ import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } f
 import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { DarkModeObserver } from 'app/utils/platform';
-import { UserProfile } from 'app/utils/user-profile';
+import { UserProfile } from 'app/utils/user';
 import { MediaObserver } from '@angular/flex-layout';
 import { $animations } from './navigator.animations';
 import { Component, NgZone } from '@angular/core';

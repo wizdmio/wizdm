@@ -63,10 +63,10 @@
     <!-- Credit card info -->
     <mat-form-field>
       <mat-label>{{ msgs.form?.card.label || 'Credit card' }}</mat-label>
-      <wm-stripe-card matStripe hidePostalCode  name="card" required 
+      <wm-stripe-card matStripe hidePostalCode name="card" required 
                       [(ngModel)]="card" 
                       [disabled]="!ready || progress" 
-                      [styleBase]="'auto'"
+                      [styleBase]="(autoMode$ | async) || 'auto'"
                       (ready)="ready = $event" #formCard>
       </wm-stripe-card>
       <mat-error *ngIf="formCard.error">{{ formCard.error.message }}</mat-error>

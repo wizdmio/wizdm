@@ -82,7 +82,7 @@ $wm-theme: extend-material-theme($wm-theme,
 */
 
 // Overrides standard theme foreground and background values with customized ones
-@function tweak-material-theme($theme, $foreground, $background) {
+@function tweak-material-theme($theme, $foreground: (), $background: ()) {
   
   // Gets the standard material maps of fore/background
   $fore: map-get($theme, foreground);
@@ -171,11 +171,7 @@ $wm-theme: extend-material-theme($wm-theme,
   }
 }
 
-@mixin tweak-material-components($theme) {
-
-  // Picks the foreground/background maps from the global theme 
-  $fore: map-get($theme, foreground);
-  $back: map-get($theme, background);
+@mixin tweak-material-components() {
 
   // Minifies the menu on request
   .mat-menu-panel.mini { min-width: unset !important; min-height: unset !important; }  
@@ -188,12 +184,6 @@ $wm-theme: extend-material-theme($wm-theme,
   .mat-dialog.padding-0 .mat-dialog-container,
   .mat-expansion-panel.padding-0 .mat-expansion-panel-body { 
     padding: 0;
-  }
-
-  // Turns a material table row into an active item
-  .mat-row.active {
-    cursor: pointer;
-    &:hover { background: mat-color($back, 'hover'); }
   }
 
   // Adds center alignement for material table

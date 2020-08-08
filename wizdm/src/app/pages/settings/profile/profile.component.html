@@ -5,11 +5,7 @@
   <ng-template wmActionbar let-mobile="isMobile">
   
     <!-- Update profile button -->
-    <button mat-stroked-button
-            type.lt-sm="icon"
-            color="primary" 
-            [disabled]="form.invalid || form.pristine"
-            (click)="updateProfile(form.userData)">
+    <button mat-stroked-button type.lt-sm="icon" color="primary" [disabled]="!(form.dirty || prefs.dirty) || form.invalid || prefs.invalid" (click)="updateProfile()">
 
       <wm-icon *ngIf="mobile; else saveProfile" [icon]="msgs.actions?.save?.icon || 'save'"></wm-icon>
       
@@ -20,26 +16,30 @@
   </ng-template>
 
   <!-- Public profile -->
-  <h2>{{ msgs.title || 'Public Profile' }}</h2>
+  <h2>{{ msgs.title || 'Public profile' }}</h2>
 
   <mat-divider></mat-divider>
 
   <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start center" fxLayoutGap="32px">
 
     <!-- Profile form -->
-    <wm-user-form fxFlexOrder.lt-sm="2" [value]="profile" #form></wm-user-form>
+    <wm-profile-form fxFlexOrder.lt-sm="2" [(value)]="profile" #form></wm-profile-form>
 
     <!-- Profile photo w/ loader -->
-    <wm-user-photo fxFlexOrder.lt-sm="1"
-      [url]="profile?.photo" 
-      [folder]="profile?.id" 
-      (update)="updatePhoto($event)">
-    </wm-user-photo>
+    <wm-profile-photo fxFlexOrder.lt-sm="1" [url]="profile?.photo" [folder]="profile?.id" (update)="updatePhoto($event)"></wm-profile-photo>
   
   </div>
+
+  <!-- User preferences -->
+  <h3>{{ msgs.preferences?.title || 'User\'s preferences' }}</h3>
+
+  <mat-divider></mat-divider>
+
+  <!-- Preferences form -->
+  <wm-preferences-form [(value)]="profile" #prefs></wm-preferences-form>
   
   <!-- CanLeave Popup Dialog (based on MatDialog) -->
-  <wm-dialog [dontLeave]="form.dirty || form.error" (beforeClosed)="$event === 'save' && updateProfile(form.userData)">
+  <wm-dialog [dontLeave]="form.dirty || prefs.dirty" (beforeClosed)="$event === 'save' && updateProfile(form.userData)">
 
     <h2 mat-dialog-title><b>{{ msgs.canLeave?.title || 'Unsaved changes' }}</b></h2>
   

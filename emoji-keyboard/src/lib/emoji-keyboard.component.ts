@@ -2,9 +2,9 @@ import { Component, Input, Output, EventEmitter, Inject, ViewEncapsulation, Elem
 import { sample, map, take, tap, startWith, switchMap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
 import { Observable, fromEvent, combineLatest, of, BehaviorSubject } from 'rxjs';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMOJI_KEYS, EmojiGroup } from './emoji-keys';
 import { runInZone } from '@wizdm/rxjs';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
   selector: 'wm-emoji-keyboard',

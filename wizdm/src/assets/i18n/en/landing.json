@@ -146,8 +146,7 @@
       "icon": "fab:fa-stripe-s",
       "title": "Payments",
       "description": "Payment processing powered by [Stripe](https://stripe.com).",
-      "reference": "docs/stripe",
-      "experimental": "Experimental"
+      "reference": "docs/stripe"
     },
     { 
       "icon": "fab:fa-angular",

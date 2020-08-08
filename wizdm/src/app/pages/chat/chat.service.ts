@@ -3,7 +3,7 @@ import { query, get } from '@wizdm/connect/database/collection/operators';
 import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseService } from '@wizdm/connect/database';
 import { map, take, switchMap } from 'rxjs/operators';
-import { UserProfile } from 'app/utils/user-profile';
+import { UserProfile } from 'app/utils/user';
 import { ConversationData } from './chat-types';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';

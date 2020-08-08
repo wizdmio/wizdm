@@ -26,7 +26,7 @@ import { FabModule } from 'app/navigator/fab';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { CanLeaveModule, CanLeaveGuard } from 'app/utils/can-leave';
 import { AuthGuard, emailVerified } from 'app/utils/auth-guard';
-import { ValidProfile } from 'app/utils/user-profile';
+import { ValidProfile } from 'app/utils/user';
 import { ConversationModule } from './conversation';
 import { MessageModule } from './message';
 import { ComposerModule } from './composer';

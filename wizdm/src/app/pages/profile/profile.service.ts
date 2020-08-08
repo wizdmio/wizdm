@@ -1,5 +1,5 @@
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { UserProfile } from 'app/utils/user-profile';
+import { UserProfile } from 'app/utils/user';
 import { take, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 

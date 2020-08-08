@@ -12,7 +12,7 @@ import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { AuthGuardModule } from 'app/utils/auth-guard';
-import { ValidProfile } from 'app/utils/user-profile';
+import { ValidProfile } from 'app/utils/user';
 import { SidenavModule } from 'app/navigator/sidenav';
 import { ExploreComponent } from './explore.component';
 

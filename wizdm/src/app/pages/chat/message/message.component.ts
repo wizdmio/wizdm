@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, ViewChild, HostListener } from 
 import { map, takeWhile, startWith, distinctUntilChanged } from 'rxjs/operators';
 import { QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
-import { UserProfile, UserData } from 'app/utils/user-profile';
+import { UserProfile, UserData } from 'app/utils/user';
 import { DatabaseService } from '@wizdm/connect/database';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MessageData } from '../chat-types';

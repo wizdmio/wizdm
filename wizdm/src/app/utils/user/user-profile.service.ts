@@ -17,8 +17,10 @@ export interface UserData extends DocumentData {
   birth?    : string;
   gender?   : string;
   bio?      : string;
-  lang?     : string;
   location? : string;
+
+  lang?     : string;
+  theme?    : 'auto'|'light'|'dark';
 
   userName? : string;
   fullName? : string;

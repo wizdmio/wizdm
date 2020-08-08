@@ -1,8 +1,9 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
-import { switchMap, map, take, distinctUntilChanged } from 'rxjs/operators';
-import { UserProfile } from 'app/utils/user-profile';
+import { DarkModeObserver } from 'app/utils/platform';
+import { switchMap, map, take } from 'rxjs/operators';
 import { DateAdapter } from '@angular/material/core';
+import { UserProfile } from './user-profile.service';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Injectable } from '@angular/core';
 import { $languageMap } from './lang-map';
@@ -10,36 +11,39 @@ import { Observable, of } from 'rxjs';
 import moment from 'moment';
 
 /**
- * Seletcs the language
+ * Applies the User's preferences
  */
 @Injectable()
-export class LanguageSelector extends ContentSelector {
+export class UserPreferences extends ContentSelector {
 
   private get auth() { return this.user.auth; }
 
-  private userLang: Observable<string>;
-
-  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, router: Router, config: ContentConfigurator) { 
+  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, private theme: DarkModeObserver, router: Router, config: ContentConfigurator) { 
     super(router, config); 
 
     // Gets the user's preferred language filtering for real changes only
-    this.userLang = this.user.data$.pipe( map( profile => profile && profile.lang ), distinctUntilChanged() );
+    //this.userLang = this.user.data$.pipe( map( profile => profile && profile.lang ), distinctUntilChanged() );
   }
 
   // Implements CanActivate guarding to detect the most appropriate language to apply
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     // Resolves user profile data, when authenticated. This also prevents page flickering by delaying routing until authentication is completed
-    return this.userLang.pipe( 
+    return this.user.data$.pipe( 
+      
+      // Resolves the user's profile data when authenticated
+      switchMap( data => {
 
-      // Detects the language from the user profile
-      switchMap( lang => {
+        // Applies the user's theme preference when specified
+        if(data?.theme !== 'auto') { 
+          this.theme.darkMode( data.theme === 'dark'); 
+        }
 
         // Whenever authenticated, returns the user preferred language
-        if(lang) { return of(lang) }; 
+        if(data?.lang) { return of(data.lang); }
         
-        // Detects the location from the IP and returns the coresponding language falling back to the browser language
-        // Note; IpInfo service caches the last value to avoid multiple API calls unless requested.
+        // Detects the location from the IP and returns the corresponding language falling back to the browser language
+        // Note: IpInfo service caches the last value to avoid multiple API calls unless requested.
         return this.iplist.pipe( map( list => $languageMap[list.countrycode]?.[0] || this.browserLanguage ));
       }), 
 

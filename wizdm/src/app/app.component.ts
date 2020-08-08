@@ -3,6 +3,7 @@ import { filter, map, startWith, distinctUntilChanged, takeWhile } from 'rxjs/op
 import { trigger, animate, style, transition } from '@angular/animations';
 import { Router, ResolveStart, NavigationEnd } from '@angular/router';
 import { BackgroundObservable } from 'app/utils/background';
+import { DarkModeObserver } from 'app/utils/platform';
 import { Observable, Subscription } from 'rxjs';
 import { NgStyle } from '@angular/common';
 
@@ -19,14 +20,20 @@ import { NgStyle } from '@angular/common';
         )] 
       )
     ])
-  ]
+  ],
+  host: {
+    'class': 'mat-typography mat-app-background', 
+    '[class.dark-mode]': 'darkMode'
+  }
 })
 export class AppComponent extends NgStyle implements OnDestroy { 
   
   readonly loading$: Observable<boolean>;
   private sub: Subscription;
+  
+  public darkMode: boolean;
 
-  constructor(background$: BackgroundObservable, el: ElementRef, diffs: KeyValueDiffers, renderer: Renderer2, router: Router) {
+  constructor(background$: BackgroundObservable, private darkMode$: DarkModeObserver, el: ElementRef, diffs: KeyValueDiffers, renderer: Renderer2, router: Router) {
 
     // Builds the NgStyle directive
     super(el, diffs, renderer);
@@ -35,6 +42,9 @@ export class AppComponent extends NgStyle implements OnDestroy {
     this.sub = background$.subscribe( styles => {
       this.ngStyle = styles;
     });
+
+    // Detects the dark mode, when enabled
+    this.sub.add( darkMode$.subscribe( dark => this.darkMode = dark ) );
 
     // Uses router events to display the loading spinner
     this.loading$ = router.events.pipe( 

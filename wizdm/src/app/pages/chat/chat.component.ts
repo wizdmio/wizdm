@@ -5,7 +5,7 @@ import { DatabaseCollection, QueryDocumentSnapshot } from '@wizdm/connect/databa
 import { ConversationData, ConversationFavorites, MessageData } from './chat-types';
 import { Subscription, Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
-import { UserProfile, UserData } from 'app/utils/user-profile';
+import { UserProfile, UserData } from 'app/utils/user';
 import { DatabaseService } from '@wizdm/connect/database';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ScrollObservable } from 'app/utils/scrolling';
