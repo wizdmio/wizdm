@@ -89,20 +89,23 @@ export class FileLoader extends ContentLoader {
         this.http.request('GET', `${path}/${this.language}/${fileName}.${fileExt}`, { observe: 'body', responseType }).pipe(
         // Reverts to the default language in case of errors (basically it pass an empty object 
         // since default content will be merged in the next map() )
-          catchError( () => of({}) )
+          catchError( () => of(responseType === 'json' ? {} : '') )
           // Skips unnecessary loading
-        ) : of({})
+        ) : of(responseType === 'json' ? {} : '')
 
     ).pipe( 
       // Packs the result by merging the modules whenever necessary
-      zip( data => this.language === this.config.defaultValue ? data[0] : this.merge(data[1], data[0]) ),
+      zip( data => this.language === this.config.defaultValue ? data[0] : this.merge(data[1], data[0], responseType) ),
       // Caches the content for further requests
       tap( data => this.cache[fileName] = data )
     );
   }
 
   /** Deep merges the localModule with the defaultModule */
-  private merge(localModule: any, defaultModule?: any): any {
+  private merge(localModule: any, defaultModule: any, type: 'text'|'json' = 'json'): any {
+
+    // Simply returns the not empty content when 'text' type
+    if(type === 'text') { return localModule || defaultModule; }
 
     // Done recurring when default module is no longer available
     if(!!defaultModule) {

@@ -34,17 +34,14 @@
 
       <!-- Fixed amount options -->
       <mat-button-toggle-group [(ngModel)]="amount" name="amount">
-        <mat-button-toggle 
-          *ngFor="let option of msgs.form?.amount?.options || defaultAmoutOptions" 
-          (mousedown)="false" 
-          [value]="option.value"
-          >{{ option.label }}
-        </mat-button-toggle>
+
+        <!-- Pre-defined options -->
+        <mat-button-toggle *ngFor="let option of msgs.form?.amount?.options || defaultAmoutOptions" (mousedown)="false" [value]="option.value">{{ option.label }}</mat-button-toggle>
         
         <!-- Variable amount option -->
         <mat-button-toggle (mousedown)="false" value="">{{ msgs?.form?.amount?.custom || 'Other:' }}&nbsp;</mat-button-toggle>
 
-        <input matInput [(ngModel)]="amount" name="amount" required autocomplete="off" pattern="\d*"
+        <input matInput [(ngModel)]="amount" name="amount" required autocomplete="off" pattern="\d*" style="text-align: center;"
                         [placeholder]="msgs.form?.amount?.placeholder || 'Enter the amount'" 
                         [disabled]="!ready || progress" #formAmount="ngModel" />
 

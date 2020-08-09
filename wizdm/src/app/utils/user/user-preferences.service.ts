@@ -1,13 +1,13 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
+import { switchMap, map, take, filter } from 'rxjs/operators';
+import { Injectable, OnDestroy } from '@angular/core';
 import { DarkModeObserver } from 'app/utils/platform';
-import { switchMap, map, take } from 'rxjs/operators';
 import { DateAdapter } from '@angular/material/core';
 import { UserProfile } from './user-profile.service';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
-import { Injectable } from '@angular/core';
 import { $languageMap } from './lang-map';
-import { Observable, of } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import moment from 'moment';
 
 /**
@@ -17,13 +17,30 @@ import moment from 'moment';
 export class UserPreferences extends ContentSelector {
 
   private get auth() { return this.user.auth; }
+  private sub: Subscription;
 
-  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, private theme: DarkModeObserver, router: Router, config: ContentConfigurator) { 
+  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, theme: DarkModeObserver, router: Router, config: ContentConfigurator) { 
     super(router, config); 
 
-    // Gets the user's preferred language filtering for real changes only
-    //this.userLang = this.user.data$.pipe( map( profile => profile && profile.lang ), distinctUntilChanged() );
+    // Monitors logging-in to apply user's preferences
+    this.sub = this.auth.state$.pipe( filter( user => !!user ), switchMap( () => this.user.data$.pipe( take(1) ) ) ).subscribe( data => {
+
+      // Applies the user's theme preference when specified
+      theme.darkMode(data.theme && data.theme !== 'auto' ? data.theme === 'dark' : undefined);
+
+      // Applies user's language preference when specified
+      if(data.lang) {
+        
+        // Evaluates the current url against the one with the desired language.
+        // Note that this reg-ex does not match '/' skipping to apply any early stage changes addressed by canActivate()
+        const target = router.url.replace(/^\/[^\/]+(\/|$)/, '/' + data.lang + '$1');
+        if(target !== router.url) { router.navigateByUrl(target); }
+      }
+    });
   }
+
+  // Disposes of the subscriptions
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
   // Implements CanActivate guarding to detect the most appropriate language to apply
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -33,9 +50,6 @@ export class UserPreferences extends ContentSelector {
       
       // Resolves the user's profile data when authenticated
       switchMap( data => {
-
-        // Applies the user's theme preference when specified
-        if(data && data.theme !== 'auto') { this.theme.darkMode(data.theme === 'dark'); }
 
         // Whenever authenticated, returns the user preferred language
         if(data?.lang) { return of(data.lang); }

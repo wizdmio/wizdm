@@ -103,10 +103,20 @@ $sheetFile: "/assets/emoji/sheets/32.png";
   // Ovverrides the autofill styles to blend in with the theme
   input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     &, &:hover, &:focus, &:active {
-      // Use an inset box-shadow to overlap the autofill background color
-      box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
       // Use the custom text-fill-color to override the color property
       -webkit-text-fill-color: map-get( map-get($theme, 'foreground'), 'text') !important;
+      // Use an inset box-shadow to overlap the autofill background color
+      box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
+    }
+  }
+
+  .mat-dialog-container {
+    // Ovverrides the autofill styles to blend in with the theme
+    input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+      &, &:hover, &:focus, &:active {
+        // Use an inset box-shadow to overlap the autofill background color
+        box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'dialog') inset !important;
+      }
     }
   }
 }
@@ -164,6 +174,16 @@ $sheetFile: "/assets/emoji/sheets/32.png";
       box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
       // Use the custom text-fill-color to override the color property
       -webkit-text-fill-color: map-get( map-get($theme, 'foreground'), 'text') !important;
+    }
+  }
+
+  .mat-dialog-container {
+    // Ovverrides the autofill styles to blend in with the theme
+    input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+      &, &:hover, &:focus, &:active {
+        // Use an inset box-shadow to overlap the autofill background color
+        box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'dialog') inset !important;
+      }
     }
   }
 }
