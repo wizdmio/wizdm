@@ -25,7 +25,8 @@ import { AppComponent } from './app.component';
 
 // Environment
 import { appname, content, emoji, scroll, ipinfo, tooltips, stripeElements } from '../environments/common';
-import { firebase, stripePublicKey, doorbell, gtag } from '../environments/secrets';
+import { firebase, stripeTestKey, stripeLiveKey, doorbell, gtag } from '../environments/secrets';
+import { environment } from '../environments/environment';
 
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 
@@ -53,7 +54,7 @@ const routes: Routes = [
     // Universal Emoji support
     EmojiSupportModule.init(emoji),
     // Stripe payments w/ elements
-    StripeModule.init(stripePublicKey),
+    StripeModule.init(environment.production ? stripeLiveKey : stripeTestKey),
     // Styles StripeElements to fit wizdm styling
     StripeElementsModule.init(stripeElements),
     // Angular's Router

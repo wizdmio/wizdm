@@ -64,7 +64,7 @@
               "fileReplacements": [
                 {
                   "replace": "wizdm/src/environments/secrets.ts",
-                  "with": "wizdm/src/environments/secrets.prod.private.ts"
+                  "with": "wizdm/src/environments/secrets.private.ts"
                 },
                 {
                   "replace": "wizdm/src/environments/environment.ts",

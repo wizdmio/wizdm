@@ -2,9 +2,11 @@ import { ConnectConfig } from '@wizdm/connect';
 import { DoorbellConfig } from '@wizdm/doorbell';
 import { GtagConfig } from '@wizdm/gtag';
 
-export const rootEmail = 'rootEmail@your-domain.io';
+export const rootEmail = '<< your root access email goes here >>';
 
-export const stripePublicKey = 'pk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+// We use the test key while in development, live key for production
+export const stripeTestKey = '<< your pk_test_... key goes here >>';
+export const stripeLiveKey = '<< your pk_live_... key goes here >>';
 
 export const firebase: ConnectConfig = {
   apiKey: "<< YOUR FIREBASE API KEY HERE >>",

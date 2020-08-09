@@ -1,11 +1,12 @@
 import { Stripe, StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
+import { delay, startWith, switchMap } from 'rxjs/operators';
 import { FunctionsService } from '@wizdm/connect/functions';
 import { DarkModeObserver } from 'app/utils/platform';
 import { Component, Inject } from '@angular/core';
 import { $animations } from './donate.animations';
 import { STRIPE } from '@wizdm/stripe';
-import { tap, map, delay, startWith, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { environment } from 'env/environment';
 
 @Component({
   selector: 'wm-donate',
@@ -61,7 +62,9 @@ export class DonateComponent {
     this.createPaymentIntent({
       // Amount goes in cents
       amount: this.amount * 100,
-      currency: this.currency
+      currency: this.currency,
+      // Enables testMode when in developent so the private test key will be used instead of the live one.
+      testMode: !environment.production
 
     }).then( intent => {
 

@@ -35,9 +35,7 @@ export class UserPreferences extends ContentSelector {
       switchMap( data => {
 
         // Applies the user's theme preference when specified
-        if(data?.theme !== 'auto') { 
-          this.theme.darkMode( data.theme === 'dark'); 
-        }
+        if(data && data.theme !== 'auto') { this.theme.darkMode(data.theme === 'dark'); }
 
         // Whenever authenticated, returns the user preferred language
         if(data?.lang) { return of(data.lang); }

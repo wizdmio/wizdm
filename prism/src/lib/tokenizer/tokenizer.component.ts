@@ -1,4 +1,4 @@
-import type { Token, TokenStream, Grammar, Languages } from 'prismjs';
+import { Token, TokenStream, Grammar, Languages } from 'prismjs';
 import { Component, Input, Inject } from '@angular/core';
 
 @Component({ 

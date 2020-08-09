@@ -99,6 +99,16 @@ $sheetFile: "/assets/emoji/sheets/32.png";
 
     background-color: map-get( map-get($theme, 'foreground'), 'divider'); 
   }
+
+  // Ovverrides the autofill styles to blend in with the theme
+  input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    &, &:hover, &:focus, &:active {
+      // Use an inset box-shadow to overlap the autofill background color
+      box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
+      // Use the custom text-fill-color to override the color property
+      -webkit-text-fill-color: map-get( map-get($theme, 'foreground'), 'text') !important;
+    }
+  }
 }
 
 // Initialize the application theme colors only (to be used for multiple themes)
@@ -146,4 +156,14 @@ $sheetFile: "/assets/emoji/sheets/32.png";
 
   // Defines a global style for dividers
   hr { background-color: map-get( map-get($theme, 'foreground'), 'divider'); }
+
+  // Ovverrides the autofill styles to blend in with the theme
+  input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    &, &:hover, &:focus, &:active {
+      // Use an inset box-shadow to overlap the autofill background color
+      box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
+      // Use the custom text-fill-color to override the color property
+      -webkit-text-fill-color: map-get( map-get($theme, 'foreground'), 'text') !important;
+    }
+  }
 }
