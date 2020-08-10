@@ -41,7 +41,7 @@ export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnCh
       // Wait the next round to avid expressionChangedAfterItHasBeenChecked() exception
       delay(0)
  
-    ).subscribe( template => this.changeTemplate(template || { template: null }) );
+    ).subscribe( payload => this.changeTemplate(payload || {} as TeleportPayload) );
   }
 
   private changeTemplate({ template, data }: TeleportPayload) {

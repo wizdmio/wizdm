@@ -130,6 +130,6 @@ export class SidenavDirective implements OnInit, OnDestroy {
     // Unsubscribes from the observable
     this.sub.unsubscribe();
     // Clears the content
-    this.teleport.clear('sidenav');
+    this.teleport.clear('sidenav', this.template);
   }
 }

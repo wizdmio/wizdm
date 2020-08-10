@@ -32,5 +32,5 @@ export class ToolbarDirective implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges) { this.ngOnInit(); }
 
   // Releases the portal when done
-  ngOnDestroy() { this.teleport.clear('toolbar'); }
+  ngOnDestroy() { this.teleport.clear('toolbar', this.template); }
 }

@@ -12,5 +12,5 @@ export class StickyFooterDirective implements OnInit, OnDestroy {
   ngOnInit() { this.teleport.activate('footer', this.template); }
 
   // Clears the 'footer' portal
-  ngOnDestroy() { this.teleport.clear('footer'); }
+  ngOnDestroy() { this.teleport.clear('footer', this.template); }
 }

@@ -29,5 +29,5 @@ export class ActionbarDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   // Clears the portal content when disposing 
-  ngOnDestroy() { this.teleport.clear('actionbar'); }
+  ngOnDestroy() { this.teleport.clear('actionbar', this.template); }
 }

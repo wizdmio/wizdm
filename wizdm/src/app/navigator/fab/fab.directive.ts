@@ -63,7 +63,7 @@ export class FabDirective implements OnInit, OnChanges, OnDestroy {
     const newEdge = this.edge || 'bottom';
 
     // Deactivates the previous portal, if any
-    if(prevSide && prevEdge) { this.teleport.clear(`fab-${prevSide}-${prevEdge}`); }
+    if(prevSide && prevEdge) { this.teleport.clear(`fab-${prevSide}-${prevEdge}`, this.template); }
 
     // Activates/updates the requested portal
     this.teleport.activate(`fab-${newSide}-${newEdge}`, this.template, {
@@ -74,5 +74,5 @@ export class FabDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   // Releases the portal when done
-  ngOnDestroy() { this.teleport.clear(`fab-${this.side}-${this.edge}`); }
+  ngOnDestroy() { this.teleport.clear(`fab-${this.side}-${this.edge}`, this.template); }
 }

@@ -18,7 +18,7 @@ export class TeleportDirective implements OnChanges, OnDestroy {
     if(!target) { return; }
 
     // Clears the previous target, if any
-    target.previousValue && this.teleport.clear(target.previousValue);
+    target.previousValue && this.teleport.clear(target.previousValue, this.template);
 
     // Teleports the template to the new target portal
     target.currentValue && this.teleport.activate(target.currentValue, this.template, this.data);
@@ -26,6 +26,6 @@ export class TeleportDirective implements OnChanges, OnDestroy {
 
   ngOnDestroy() {
     // Clears the portal on destroy
-    this.target && this.teleport.clear(this.target);
+    this.target && this.teleport.clear(this.target, this.template);
   }
 }
