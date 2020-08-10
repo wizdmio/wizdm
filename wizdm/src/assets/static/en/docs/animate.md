@@ -122,7 +122,7 @@ Static module initialization function to customize the module behavior. It retur
 * `config: AnimateConfig` - the configuration object.
 ```typescript
 interface AnimateConfig {
-  triggerMode?: 'scrolling'|intersectionObserver'|'auto';
+  triggerMode?: 'scrolling'|'intersectionObserver'|'auto';
   offsetTop?: number;
   offsetLeft?: number;
   offsetRight?: number;

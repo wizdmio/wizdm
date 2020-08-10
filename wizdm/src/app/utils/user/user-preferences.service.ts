@@ -23,7 +23,15 @@ export class UserPreferences extends ContentSelector {
     super(router, config); 
 
     // Monitors logging-in to apply user's preferences
-    this.sub = this.auth.state$.pipe( filter( user => !!user ), switchMap( () => this.user.data$.pipe( take(1) ) ) ).subscribe( data => {
+    this.sub = this.auth.state$.pipe( 
+      
+      // Filters for sign-in 
+      filter( user => !!user ), 
+      
+      // Switches to the user data waiting for the data to actually exists, this may take some time during new user registration
+      switchMap( () => this.user.data$.pipe( filter( data => !!data ), take(1) ) ) 
+      
+    ).subscribe( data => {
 
       // Applies the user's theme preference when specified
       theme.darkMode(data.theme && data.theme !== 'auto' ? data.theme === 'dark' : undefined);

@@ -178,9 +178,9 @@
   </mat-sidenav-container>
 
   <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
-  <wm-login-dlg maxWidth="95vw" wmActionLink="login" (activate)="$event.return(login.open($event)?.afterClosed())" #login></wm-login-dlg>
+  <wm-login-dlg maxWidth="95vw"></wm-login-dlg>
 
   <!-- Feedback form activated on 'contact' action link  @see navigator-router-module -->
-  <wm-feedback-dlg maxWidth="95vw" disableClose="true" wmActionLink="contact" (activate)="feedback.open($event)" #feedback></wm-feedback-dlg>
+  <wm-feedback-dlg maxWidth="95vw" disableClose="true"></wm-feedback-dlg>
   
 </ng-container>

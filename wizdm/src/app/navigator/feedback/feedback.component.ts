@@ -1,8 +1,10 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
 import { UserProfile } from 'app/utils/user';
 import { MatDialog } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
 import { DialogComponent } from '@wizdm/elements/dialog';
+import { ActionLinkObserver } from '@wizdm/actionlink';
+import { Subscription } from 'rxjs';
 
 export interface DorbellSubmit {
   email        : string,
@@ -23,7 +25,9 @@ export interface DorbellSubmit {
   styleUrls: ['./feedback.component.scss'],
   host: { 'class': 'wm-feedback' }
 })
-export class FeedbackComponent extends DialogComponent {
+export class FeedbackComponent extends DialogComponent implements AfterViewInit, OnDestroy {
+
+  private sub: Subscription;
 
   public name: string;
   public email: string;
@@ -33,10 +37,10 @@ export class FeedbackComponent extends DialogComponent {
   public sending = false;
   public sent = false;
 
-  constructor(dialog: MatDialog, private user: UserProfile, private doorbell: DoorbellService) { 
+  constructor(dialog: MatDialog, private user: UserProfile, private doorbell: DoorbellService, private actionLink: ActionLinkObserver) { 
     super(dialog);
 
-    this.panelClass = ['wm-feedback', 'wm-theme-colors'];    
+    this.panelClass = ['wm-feedback'];
   }
 
   get me() { return this.user.data || {}; }
@@ -56,6 +60,16 @@ export class FeedbackComponent extends DialogComponent {
 
     return false;
   }
+
+  ngAfterViewInit() {
+
+    // Registers the dialog to react on 'contact' actionLink. The registration takes place in AfterViewInit making sure
+    // to intercept requests even when coming as an external redirection causing the app to load from scratch.
+    this.sub = this.actionLink.register('contact').subscribe( () => this.open() );
+  }
+
+  // Disposes of the subscritpion
+  ngOnDestroy() { this.sub.unsubscribe(); }
   
   public open() {
 

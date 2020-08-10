@@ -1,15 +1,17 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserProfile } from 'app/utils/user';
 import { MatDialog } from '@angular/material/dialog';
 import { RedirectService } from '@wizdm/redirect';
 import { DialogComponent } from '@wizdm/elements/dialog';
+import { ActionLinkObserver, ActionData } from '@wizdm/actionlink';
 import { $animations } from './login-animations';
 import { GtagService } from '@wizdm/gtag';
+import { Subscription } from 'rxjs';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
 
-export interface LoginData { 
+export interface LoginData extends ActionData { 
   mode?: loginAction;
   code?: string;
   url?: string;
@@ -23,8 +25,9 @@ export interface LoginData {
   encapsulation: ViewEncapsulation.None,
   animations: $animations
 })
-export class LoginComponent extends DialogComponent<LoginData> {
+export class LoginComponent extends DialogComponent<LoginData> implements AfterViewInit, OnDestroy {
   
+  private sub: Subscription;
   readonly form: FormGroup;
 
   private name: FormControl;
@@ -40,7 +43,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
   get auth() { return this.user.auth; }
   
-  constructor(dialog: MatDialog, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService) {
+  constructor(dialog: MatDialog, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService, private actionLink: ActionLinkObserver) {
 
     super(dialog);
 
@@ -56,6 +59,22 @@ export class LoginComponent extends DialogComponent<LoginData> {
     // Empty form group
     this.form = new FormGroup({});
   }
+
+  ngAfterViewInit() {
+
+    // Registers the dialog to react on 'login' actionLink. The registration takes place in AfterViewInit making sure
+    // to intercept login requests even when coming as an external redirection such as in oauth2 requests.
+    this.sub = this.actionLink.register('login').subscribe( data => {
+      
+      // Returns the afterClosed() observable carrying the user information when logged-in
+      // It can be used to detect when a guarding redirection resulted in a successful sign-in
+      // or registration action
+      data.return( this.open(data)?.afterClosed() );
+    });
+  }
+
+  // Disposes of the subscritpion
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
   /** Opens the Login dialog */
   public open(data?: LoginData) {
@@ -273,13 +292,16 @@ export class LoginComponent extends DialogComponent<LoginData> {
   }
 
   private sendEmailVerification() {
-    // Grabs the url value passed along with the dialog data
+    
+    // Grabs the url value passed along with the dialog data. Please note this is a relative url
     const url = this.data && this.data.url || ''; 
+    
     // Removes the url from data preventing the redirection while closing the dialog
     if('url' in this.data) { delete this.data.url; } 
-    // Sends the email verification request passing along the destination url for the user
+
+    // Sends the email verification request passing along the destination deep url for the user
     // to be redirected towards the desiderd destination once the verification will be completed
-    return this.auth.user.sendEmailVerification({ url })
+    return this.auth.user.sendEmailVerification({ url: window.location.origin + url })
       // Closes the dialog returning null
       .then( () => this.close(null) )
       // Dispays the error code, eventually
@@ -309,9 +331,15 @@ export class LoginComponent extends DialogComponent<LoginData> {
   
   private updateEmail(password: string, newEmail: string) {
     // Refreshes the authentication
-    this.auth.reauthenticate(password)
+    this.auth.reauthenticate(password).then( user => {
+        
       // Updates the email returning the new user object
-      .then( user => user.updateEmail(newEmail).then( () => this.close(user) ) )
+      user.updateEmail(newEmail)
+
+        .then( () => user.sendEmailVerification() )
+      
+        .then( () => this.close(user) )
+      })
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }

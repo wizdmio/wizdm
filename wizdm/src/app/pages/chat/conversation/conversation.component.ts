@@ -80,7 +80,7 @@ export class Conversation extends DatabaseDocument<ConversationData> {
     const senderId = this.data.recipients.find(id => id !== this.me) || 'unknown';
 
     // Resolves the sender user profile falling back to an unknown userName including the conversation id
-    this.sender$ = this.user.fromUserId( senderId, { userName: this.unknownUser } );
+    this.sender$ = this.user.fromUserId( senderId ).pipe( map( data => data || { userName: this.unknownUser } ) );
 
     // Resolves the last message in the thread
     this.last$ = this.thread$.stream( qf => qf.orderBy('created').limitToLast(1) ).pipe( 

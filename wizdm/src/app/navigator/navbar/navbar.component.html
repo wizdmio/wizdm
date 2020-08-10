@@ -22,7 +22,7 @@
         <button mat-button class="menu-trigger" [matMenuTriggerFor]="topMenu" [wmInkbarIf]="menuLinks.isActive">{{ item.label }}</button>
 
         <!-- Top menu. Using routerLinkActive to detect whenever e child link is active -->
-        <mat-menu class="wm-navbar wm-theme-colors" #topMenu="matMenu" routerLinkActive #menuLinks="routerLinkActive">
+        <mat-menu class="wm-navbar" #topMenu="matMenu" routerLinkActive #menuLinks="routerLinkActive">
             
           <!-- Top menu level links -->
           <ng-container *ngFor="let top of item.menu">
@@ -40,7 +40,7 @@
               <button mat-menu-item [matMenuTriggerFor]="subMenu" >{{ top.label }}</button>
 
               <!-- Sub menu -->
-              <mat-menu class="wm-navbar wm-theme-colors" #subMenu="matMenu">
+              <mat-menu class="wm-navbar" #subMenu="matMenu">
 
                 <!-- Sub menu level links -->
                 <ng-container *ngFor="let sub of top.menu">

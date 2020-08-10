@@ -15,7 +15,6 @@ import { FabOptions } from './fab';
   selector: 'wm-navigator',
   templateUrl: './navigator.component.html',
   styleUrls: ['./navigator.component.scss'],
-  host: { 'class': 'wm-theme-colors' },
   animations: $animations
 })
 export class NavigatorComponent {

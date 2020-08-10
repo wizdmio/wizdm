@@ -7,7 +7,7 @@
     <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 
     <!-- ERROR MESSAGE -->
-    <p class="mat-error" *ngIf="errorCode" @morph>{{ (errorCode | camelize) | pluck: msgs.errors: errorCode }}</p>
+    <p class="mat-error" *ngIf="errorCode" @morph>{{ (errorCode | camelize) | pluck:msgs.errors:errorCode }}</p>
 
     <!-- MESSAGE -->
     <p class="mat-small" [wm-readme]="msgs.pages[page]?.message" [@vanish]="page"></p>

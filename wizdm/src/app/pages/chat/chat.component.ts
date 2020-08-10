@@ -131,7 +131,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
           this.recipient = user.id;
 
           // Computes the path for the requested conversation otherwise
-          return (this.me < user.id ? this.me.concat(user.id) : user.id.concat(this.me) );
+          return (this.me < user.id ? this.me.concat(user.id) : this.recipient.concat(this.me) );
         }));
       }),
       // Filters unchanged values and replays to all subscribers
@@ -140,7 +140,7 @@ export class ChatComponent extends DatabaseCollection<ConversationData> implemen
 
     // Resolves the active conversation
     this.activeConversation$ = combineLatest(this.conversations$, this.conversationId$).pipe( 
-      map( ([convs, id]) => convs?.find( conv => conv.id === id ) ) 
+      map( ([convs, id]) => convs?.find( conv => conv.id === id ) || {} as any) 
     );
 
     // Paging observalbe to load the previous messages while scrolling up

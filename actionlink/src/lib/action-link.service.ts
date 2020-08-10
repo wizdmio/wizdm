@@ -1,6 +1,6 @@
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable, Subject, ReplaySubject, isObservable, from, of } from 'rxjs';
-import { filter, tap, take, pluck, switchMap, takeUntil } from 'rxjs/operators';
+import { tap, filter, take, pluck, switchMap, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 /** ActionLink optional data */
@@ -21,19 +21,18 @@ export type ActionResult<T = any> = void|T|Promise<T>|Observable<T>;
 @Injectable({ providedIn: 'root' })
 export class ActionLinkObserver implements CanActivate {
 
-  private observers$ = new Subject<{ action: string, data?: ActionDataWithReturn }>();
+  private observers$ = new ReplaySubject<{ action: string, data?: ActionDataWithReturn }>(1);
+
+  constructor(private router: Router) {}
 
   /** Register the observer returning the observable emitting on the specified action(s) */
   public register(action: string): Observable<ActionDataWithReturn> {
     // Filters the request based on the action code
-    return this.observers$.pipe(       
-      filter( data => data.action === action ),
-      pluck('data')
-    );
+    return this.observers$.pipe( filter( data => data.action === action ), pluck('data') );
   }
  
   // Implements single route user authentication guarding
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): false {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): UrlTree {
 
     // Computes the action code from the route data
     const action = route.data.actionMatch || route.routeConfig.path;
@@ -50,8 +49,10 @@ export class ActionLinkObserver implements CanActivate {
     // Pushes the request using data coming from the route
     this.observers$.next( { action, data } );
 
-    // Always prevents the real routing
-    return false;
+    // Always prevents the real routing by redirecting to the current url instead of returning false.
+    // This way the router will always end up loading a page even when the requested action link comes
+    // from an extrnal redirection causing the app to load from scratch.
+    return this.router.parseUrl(this.router.url);
   }
 
   /** Activate a link programmatically */

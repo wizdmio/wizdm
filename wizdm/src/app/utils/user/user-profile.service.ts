@@ -1,6 +1,6 @@
 import { Observable, Subscription, of, from, defer, empty } from 'rxjs';
 import { DatabaseCollection } from '@wizdm/connect/database/collection';
-import { map, shareReplay, expand, switchMap } from 'rxjs/operators';
+import { tap, map, shareReplay, expand, switchMap } from 'rxjs/operators';
 import { DocumentData } from '@wizdm/connect/database/document';
 import { DatabaseService } from '@wizdm/connect/database';
 import { AuthService, User } from '@wizdm/connect/auth';
@@ -188,10 +188,10 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
   }
 
   /**  Observes a user from the id */
-  public fromUserId(userId: string, defaultValue?: any): Observable<T> {
+  public fromUserId(userId: string): Observable<T> {
 
     // Skips invalid id
-    if(!userId) { return of(defaultValue); }
+    if(!userId) { return of(undefined).pipe( shareReplay({ bufferSize: 1, refCount: false }) ); }
 
     // Returns the cached observable, if any
     const cached = this.cache[userId];
@@ -203,7 +203,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
       // Caches the same observable under its @username whenever possible
       tapOnce( data => { data && (this.cache[data.userName || userId] = this.cache[data.userName || userId] || streamed); }),
 
-      map( data => data || defaultValue ),
+      map( data => data ),
 
       // Replays the emission to avoid streaming multiple copies from the database when not needed
       shareReplay({ bufferSize: 1, refCount: false })
@@ -216,7 +216,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
   public fromUserName(userName: string): Observable<T> {
 
     // Skips invalid user names
-    if(!userName) { return of(null); }
+    if(!userName) { return of(undefined).pipe( shareReplay({ bufferSize: 1, refCount: false }) ); }
 
     // Returns the cached observable, if any
     const cached = this.cache[userName];
@@ -225,11 +225,11 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
     // Streams a new observable from the user's collection acching a copy for further uses
     const streamed = this.cache[userName] = this.stream( qf => qf.where('userName', '==', userName) ).pipe( 
 
+      // Caches the same observable under its uid whenever possible
+      tapOnce( users => { users[0] && (this.cache[users[0].id] = this.cache[users[0].id] || streamed); } ),
+
       // Gets the user's data
       map( users => users[0] ), 
-      
-      // Caches the same observable under its uid whenever possible
-      tapOnce( data => { data && (this.cache[data.id] = this.cache[data.id] || streamed); } ),
 
       // Replays the emission to avoid streaming multiple copies from the database when not needed
       shareReplay({ bufferSize: 1, refCount: false })

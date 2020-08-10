@@ -1,12 +1,16 @@
 import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Injectable, Inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Oauth2Handler implements CanActivate {
 
-  constructor(private router: Router) {}
+  constructor(@Inject(DOCUMENT) private document: Document, private router: Router) {}
+
+  // Returns the window object
+  get window(): Window { return this.document.defaultView || window; }
 
   canActivate(route: ActivatedRouteSnapshot) {
 
@@ -15,7 +19,10 @@ export class Oauth2Handler implements CanActivate {
     const code = route.queryParamMap.get('oobCode');
     const api  = route.queryParamMap.get('apiKey');
     const lang = route.queryParamMap.get('lang') || 'en';
-    const url  = route.queryParamMap.get('continueUrl') || 'home';
+    const uri  = route.queryParamMap.get('continueUrl');
+
+    // extracts the relative url from the uri
+    const url = uri && uri.replace(new RegExp(`^${this.window.location.origin}`), '');
 
     //...and translates into the proper request for the login module
     return this.router.createUrlTree([lang, 'login'], { 
