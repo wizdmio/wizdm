@@ -5,6 +5,9 @@ import { Funding } from './common';
 
 // @see { https://github.com/krakenjs/zoid/blob/master/docs/api.md }
 export interface Buttons {
+  
+  isEligible : () => boolean;
+
   state: any;
   show: () => Promise<void>;
   hide: () => Promise<void>;
@@ -14,6 +17,8 @@ export interface Buttons {
 }
 
 export interface ButtonsConfig {
+
+  fundingSource?: Funding;
 
   style?: ButtonsStyle;
 

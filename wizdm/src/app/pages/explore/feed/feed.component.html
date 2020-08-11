@@ -17,5 +17,7 @@
 
 <!--/ng-container-->
 
+<wm-addpost></wm-addpost>
+
 <!-- List all posts in descending order -->
 <wm-post class="mat-elevation-z3" *ngFor="let post of feed$ | async" [post]="post"></wm-post>

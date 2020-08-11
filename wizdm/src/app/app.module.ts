@@ -1,4 +1,4 @@
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
@@ -17,14 +17,13 @@ import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
-import { StripeModule, loadStripeJS } from '@wizdm/stripe';
-import { StripeElementsModule } from '@wizdm/stripe/elements';
+import { StripeModule } from '@wizdm/stripe';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
 // Environment
 import { environment } from '../environments/environment';
-const  { appname, content, emoji, scroll, ipinfo, tooltips, stripeElements, firebase, stripeTestKey, stripeLiveKey, gtag } = environment;
+const  { appname, content, emoji, scroll, ipinfo, tooltips, firebase, stripeTestKey, stripeLiveKey, gtag } = environment;
 
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 
@@ -50,8 +49,6 @@ const routes: Routes = [
     EmojiSupportModule.init(emoji),
     // Stripe payments w/ elements
     StripeModule.init(environment.production ? stripeLiveKey : stripeTestKey),
-    // Styles StripeElements to fit wizdm styling
-    StripeElementsModule.init(stripeElements),
     // Angular's Router
     RouterModule.forRoot(routes),
     // Enables 'per page' scrolling behaviors overriding the router's configuration
@@ -75,10 +72,7 @@ const routes: Routes = [
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
 
     // Configures tooltips behavior globally
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips },
-
-    // Uncomment this to wait for the Stripe SDK to load during app initialization.
-    //{ provide: APP_INITIALIZER, useValue: loadStripeJS, multi: true }
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips }
   ],
   bootstrap: [ AppComponent ]
 })

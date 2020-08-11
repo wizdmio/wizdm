@@ -8,7 +8,7 @@
         "private": [
             { "label": "My profile", "icon": "", "link": "@me" },
             { "label": "Settings", "icon": "", "link": "settings" },
-            { "label": "Sign Out", "icon": "", "link": "login", "params": { "mode": "signOut" }, "divider": true }
+            { "label": "Sign Out", "icon": "", "link": "logout", "divider": true }
         ]
     },
 
@@ -44,7 +44,7 @@
             { "label": "Reference", "link": "docs" },
             { "label": "Settings", "link": "settings" },
             { "label": "Donate", "link": "donate" },
-            { "label": "Sign-out", "link": "login", "params": { "mode": "signOut" } }
+            { "label": "Sign-out", "link": "logout" }
         ]
     },
 

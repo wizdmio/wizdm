@@ -1,10 +1,10 @@
-import { Stripe, StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
+import type { StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
 import { delay, startWith, switchMap } from 'rxjs/operators';
 import { FunctionsService } from '@wizdm/connect/functions';
 import { DarkModeObserver } from 'app/utils/platform';
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { $animations } from './donate.animations';
-import { STRIPE } from '@wizdm/stripe';
+import { StripeService } from '@wizdm/stripe';
 import { Observable, of } from 'rxjs';
 import { environment } from 'env/environment';
 
@@ -40,7 +40,7 @@ export class DonateComponent {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
-  constructor(@Inject(STRIPE) private stripe: Stripe, private functions: FunctionsService, dark: DarkModeObserver) { 
+  constructor(private stripe: StripeService, private functions: FunctionsService, dark: DarkModeObserver) { 
 
     // Uses an observable to refresh the Card Element automatic style detection on theme changes
     this.autoMode$ = dark.pipe( switchMap( () => of('auto').pipe( delay(0), startWith({}) )));

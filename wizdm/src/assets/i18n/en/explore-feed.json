@@ -1,3 +1,26 @@
 {
-  
+  "button" : { 
+    "comment": {
+      "label": "Comment",
+      "icon": "far:fa-comments",
+      "hint": "Write comment"
+    },
+    "like": {
+      "label": "Like",
+      "icon": "fas:fa-thumbs-up",
+      "hint": "Express how you feel"
+    }, 
+    "share": {
+      "label": "Share",
+      "icon": "fas:fa-external-link-alt",
+      "hint": "Share with loved ones & friends"
+    }
+  },
+  "addpost": {
+    "textarea": {
+      "placeholder": "Type a message",
+      "emoji": { "icon": "far:fa-grin-wink", "tooltip": "Insert an emoji" }
+    }
+  }
+
 }

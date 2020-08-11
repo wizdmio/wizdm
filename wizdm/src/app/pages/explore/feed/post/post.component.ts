@@ -45,8 +45,11 @@ export class PostComponent extends DatabaseDocument<PostData> {
 
   @Input() set post(snapshot: QueryDocumentSnapshot<PostData>) { 
 
-    // Unwraps the document data and reference
-    this.data = this.unwrap(snapshot);
+    // Assosiates the document DB reference with this DatabaseDocument instance 
+    this.ref = snapshot.ref;
+
+    // Gets the data
+    this.data = snapshot.data();
     
     // Gets the likes distributed counter
     this.likes = this.counter('likes');

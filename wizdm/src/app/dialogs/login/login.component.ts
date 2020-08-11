@@ -1,15 +1,14 @@
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 import { RedirectService } from '@wizdm/redirect';
-import { DialogComponent } from '@wizdm/elements/dialog';
 import { GtagService } from '@wizdm/gtag';
+import { User } from '@wizdm/connect/auth';
 import { UserProfile } from 'app/utils/user';
 import { $animations } from './login-animations';
-
 import type { ActionData } from '@wizdm/actionlink';
 
-export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
+export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete';
 
 export interface LoginData extends ActionData { 
   mode?: loginAction;
@@ -21,11 +20,9 @@ export interface LoginData extends ActionData {
   selector : 'wm-login-dlg',
   templateUrl : './login.component.html',
   styleUrls : ['./login.component.scss'],
-  host: { 'class': 'wm-login' },
-  encapsulation: ViewEncapsulation.None,
   animations: $animations
 })
-export class LoginComponent extends DialogComponent<LoginData> {
+export class LoginComponent {
   
   readonly form: FormGroup;
 
@@ -42,13 +39,9 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
   get auth() { return this.user.auth; }
   
-  constructor(dialog: MatDialog, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService/*, private actionLink: ActionLinkObserver*/) {
+  constructor(@Inject(MAT_DIALOG_DATA) private data: LoginData, private ref: MatDialogRef<LoginData, User>, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService/*, private actionLink: ActionLinkObserver*/) {
 
-    super(dialog);
-
-    this.panelClass = 'wm-login';
-
-    // Form controls
+    // Individual form controls
     this.name = new FormControl(null, Validators.required);
     this.email = new FormControl(null, [Validators.required, Validators.email]);
     this.password = new FormControl(null, Validators.required);
@@ -57,25 +50,15 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
     // Empty form group
     this.form = new FormGroup({});
-  }
 
-  /** Opens the Login dialog */
-  public open(data?: LoginData) {
-    
     // Gets the requested loginAction, if any
     const mode = data && data.mode;
-
-    // Shortcuts for signing-out
-    if(mode === 'signOut') { return this.signOut(), null; }
 
     // Populates the form according to the requested action
     this.switchPage(mode || 'social');
     
-    // Opens the login dialog
-    const ref = super.open(data);
-
     // Applies the one time code confirmation (if any) on opening 
-    ref.afterOpened().subscribe(() => {
+    this.ref.afterOpened().subscribe(() => {
       // Allows verifyEmail and recoverEmail only
       if(mode === 'verifyEmail' || mode === 'recoverEmail') {
         // Applies the one-time code confirmation
@@ -88,10 +71,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
     });
     
     // Navigates towards the data url on closing
-    ref.beforeClosed().subscribe( () => this.navigate(data.url) );
-   
-    // Returns the dialog ref for further use
-    return ref;
+    this.ref.beforeClosed().subscribe( () => this.navigate(data.url) );
   }
 
   private switchPage(page: loginAction) {
@@ -214,7 +194,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
       case 'verifyEmail': 
       case 'recoverEmail':
-      this.close(this.auth.user);
+      this.ref.close(this.auth.user);
       break;
     }
   }
@@ -225,12 +205,6 @@ export class LoginComponent extends DialogComponent<LoginData> {
     if(!to) { return Promise.resolve(true); }
     // Navigates as requested
     return this.redirect.navigate(to);
-  }
-
-  private signOut() {
-    // Navigates home prior to sign-out 
-    return this.navigate('/')
-      .then( () => this.auth.signOut() );
   }
 
   private registerNew(email: string, password: string, name: string) {
@@ -244,7 +218,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
           // Sends the email verification
           .then( () => user.sendEmailVerification() )
           // Closes the dialog returning the user
-          .then( () => this.close(user) );
+          .then( () => this.ref.close(user) );
       })
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
@@ -258,7 +232,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
         // Tracks the activity with analytics
         this.gtag.login(user?.providerId);
         // Closes the dialog 
-        this.close(user);        
+        this.ref.close(user);        
       })
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
@@ -273,7 +247,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
         // Creates the new user user if needed, keeps the existing one otherwise 
         this.user.register(user)
           // Closes the dialog returning the user
-          .then( () => this.close(user) );
+          .then( () => this.ref.close(user) );
       })
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
@@ -291,7 +265,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
     // to be redirected towards the desiderd destination once the verification will be completed
     return this.auth.user.sendEmailVerification({ url: window.location.origin + url })
       // Closes the dialog returning null
-      .then( () => this.close(null) )
+      .then( () => this.ref.close(null) )
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }
@@ -300,7 +274,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
     this.auth.sendPasswordResetEmail(email)
       // Closes the dialog returning null
-      .then( () => this.close(null) )
+      .then( () => this.ref.close(null) )
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }
@@ -312,7 +286,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
     
     this.auth.confirmPasswordReset(code, newPassword)
       // Closes the dialog returning null
-      .then( () => this.close(null) )
+      .then( () => this.ref.close(null) )
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }
@@ -326,7 +300,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
 
         .then( () => user.sendEmailVerification() )
       
-        .then( () => this.close(user) )
+        .then( () => this.ref.close(user) )
       })
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
@@ -336,7 +310,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
     // Refreshes the authentication
     this.auth.reauthenticate(password)
       // Updates the password returning the new user object
-      .then( user => user.updatePassword(newPassword).then( () => this.close(user) ) )
+      .then( user => user.updatePassword(newPassword).then( () => this.ref.close(user) ) )
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }
@@ -356,7 +330,7 @@ export class LoginComponent extends DialogComponent<LoginData> {
           .catch( error => this.showError(error.code) );
       })
       // Closes the dialog returning null
-      .then( () => this.close(null) )
+      .then( () => this.ref.close(null) )
       // Dispays the error code, eventually
       .catch( error => this.showError(error.code) );
   }

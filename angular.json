@@ -501,6 +501,18 @@
       "sourceRoot": "paypal/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "paypal/tsconfig.lib.json",
+            "project": "paypal/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "paypal/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

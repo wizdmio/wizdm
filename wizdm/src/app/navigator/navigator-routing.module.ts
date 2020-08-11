@@ -1,5 +1,5 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { BackLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
+import { BackLinkObserver, LogoutLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
 import { matchUserNameOnly } from 'app/pages/profile/matcher';
 import { matchFullPath } from 'app/pages/static/static-matcher';
 import { NavigatorComponent } from './navigator.component';
@@ -25,7 +25,7 @@ const routes: RoutesWithContent = [
     path: ':lang',    
     component: NavigatorComponent,    
     canActivate: [ WelcomeBack, UserPreferences ],    
-    content: 'navigator',
+    content: ['navigator', 'login', 'feedback'],
     
     children: [
 
@@ -67,6 +67,9 @@ const routes: RoutesWithContent = [
 
       // Admin tools
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
+      
+       // Login dialog
+      { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ DialogLoader ] },
 
       // Custom action links
       { path: 'back', canActivate: [ BackLinkObserver ] },
@@ -87,6 +90,6 @@ const routes: RoutesWithContent = [
 @NgModule({
   imports: [ ContentRouterModule.forChild(routes) ],
   exports: [ ContentRouterModule ],
-  providers: [ WelcomeBack, UserPreferences ]
+  providers: [ WelcomeBack, UserPreferences, DialogLoader ]
 })
 export class NavRoutingModule {}

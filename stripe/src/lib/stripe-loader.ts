@@ -1,39 +1,8 @@
-import type { Stripe, StripeConstructor, StripeConstructorOptions } from '@stripe/stripe-js';
-import { InjectionToken } from '@angular/core';
-
-/** Stripe Public Key token */
-export const STRIPE_PUBLIC_KEY = new InjectionToken<string>('wizdm.stripe.public.key');
-
-/** Stripe Options token */
-export const STRIPE_OPTIONS = new InjectionToken<StripeConstructorOptions>('wizdm.stripe.options');
-
-/** Stripe constructor token */
-export const STRIPEJS = new InjectionToken<StripeConstructor>('wizdm.stripe.constructor');
-
-/** Stripe instance token */
-export const STRIPE = new InjectionToken<Stripe>('wizdm.stripe.instance');
+import type { StripeConstructor } from '@stripe/stripe-js';
 
 /** Retrives the global StripeJS object  */
 export function getStripeJS(): StripeConstructor {
   return (!!window ? (window as any).Stripe : undefined);
-}
-
-/** Instantiates a Stripe istance accoding to the provided options */
-export function stripeFactory(publicKey: string, options?: StripeConstructorOptions): Stripe { 
-
-  const StripeJS = getStripeJS();
-  if(!StripeJS) {
-    throw new Error(`
-      StripeJS loading failed. This may be the result of the asynchronous script loading still in progress.
-      Makes sure using loadStripeJS() as an APP_INITIALIZER, Router resolver or guard to ensure loading completion.
-    `);
-  }
-
-  if(typeof publicKey !== 'string') {
-    throw new Error('A valid publicKey must be provided');
-  }
-
-  return StripeJS( publicKey, options );
 }
 
 /** Stripe.js v3 script loader. We do not use the official loader provided

@@ -21,8 +21,7 @@ export class SettingsComponent {
     {
       icon: "exit_to_app",
       label: "Sign Out",
-      link: "../login",
-      params: { mode: "signOut" }
+      link: "../logout"
     }
   ];
 }

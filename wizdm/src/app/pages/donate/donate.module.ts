@@ -13,20 +13,20 @@ import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { ReadmeModule } from '@wizdm/readme';
 import { RedirectModule } from '@wizdm/redirect';
-import { loadStripeJS } from '@wizdm/stripe';
-import { StripeModule } from '@wizdm/stripe';
 import { StripeElementsModule } from '@wizdm/stripe/elements';
 import { StripeCardModule } from '@wizdm/stripe/elements/card';
 import { StripeMaterialModule } from '@wizdm/stripe/material';
 import { DonateComponent } from './donate.component';
 
+// Environment
+import { environment } from 'env/environment';
+const  { stripeElements } = environment;
+
 const routes: RoutesWithContent = [
   {
     path: '',
     content: 'donate',
-    component: DonateComponent,
-    // Resolves stripeJS making sure the script has been loaded by the time the page renders the StripeElements
-    resolve: { stripe: 'loadStripeJS' }
+    component: DonateComponent
   }
 ];
 
@@ -46,13 +46,11 @@ const routes: RoutesWithContent = [
     GtagModule,
     ReadmeModule,
     RedirectModule,
-    StripeModule,
     StripeElementsModule,
     StripeCardModule,
     StripeMaterialModule,
+    StripeElementsModule.init(stripeElements),
     ContentRouterModule.forChild(routes)
-  ],
-  // Provides stripe loading function as a simple resolver
-  providers: [{ provide: 'loadStripeJS', useValue: () => loadStripeJS() }]
+  ]
 })
 export class DonateModule { }

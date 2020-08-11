@@ -10,6 +10,7 @@ import { RedirectModule } from '@wizdm/redirect';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { PostModule } from './post/post.module';
 import { FeedComponent } from './feed.component';
+import { AddPostModule } from './add-post/add-post.module'
 
 const routes: RoutesWithContent = [
   {
@@ -29,6 +30,7 @@ const routes: RoutesWithContent = [
     ButtonChangerModule,
     GtagModule,
     ActionbarModule,
+    AddPostModule,
     PostModule,
     ContentRouterModule.forChild(routes)
   ]
