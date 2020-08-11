@@ -13,12 +13,30 @@ export const bounceIn = [
       animate('{{timing}} {{delay}} cubic-bezier(0.215, 0.61, 0.355, 1)', 
 
         keyframes([
-          style({ opacity: 0, transform: 'scale(0.3)', offset: 0 }),
-          style({ transform: 'scale(1.1)', offset: 0.2 }),
-          style({ transform: 'scale(0.9)', offset: 0.4 }),
-          style({ opacity: 1, transform: 'scale(1.03)', offset: 0.6 }),
-          style({ transform: 'scale(0.97)', offset: 0.8 }),
-          style({ opacity: 1, transform: 'scale(1)', offset: 1 })
+          style({ 
+            transform: 'scale(0.3)', 
+            opacity: 0, 
+            offset: 0 
+          }),
+          style({ 
+            transform: 'scale(1.1)', 
+            offset: 0.2 
+          }),
+          style({ 
+            transform: 'scale(0.9)', 
+            offset: 0.4 
+          }),
+          style({ 
+            transform: 'scale(1.03)', 
+            opacity: 1, 
+            offset: 0.6 }),
+          style({ 
+            transform: 'scale(0.97)', 
+            offset: 0.8 }),
+          style({ 
+            transform: 'scale(1)', 
+            opacity: 1, 
+            offset: 1 })
         ])
         
       ), { params: { timing: '750ms', delay: '' }}

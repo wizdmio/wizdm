@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, Renderer2 } from '@angular/core';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { startWith, filter, takeWhile, delay } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
@@ -43,7 +43,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
   public animating = false;
   public animated = false;
 
-  constructor(private elm: ElementRef, private scroll: AnimateService) {}
+  constructor(private elm: ElementRef, private scroll: AnimateService, private renderer: Renderer2) {}
 
   @HostBinding('@animate') 
   public trigger;
@@ -101,7 +101,18 @@ export class AnimateComponent implements OnInit, OnDestroy {
   /** Emits at the end of the animation */
   @Output() done = new EventEmitter<void>();  
   @HostListener('@animate.done') 
-  public animationDone() { this.animating = false; this.animated = true; this.done.emit(); }
+  public animationDone() { 
+    
+    this.animating = false; this.animated = true; this.done.emit(); 
+
+    /** 
+     * Removes spurious 'animation' style from the element once done with the animation. 
+     * This behaviour has been observed when running on iOS devices where for some reason 
+     * the animation engine do not properly clean-up the animation style using cubic-bezier()
+     * as its timing function. The issue do not appear with ease-in/out and others.
+     * */
+    this.renderer.removeStyle(this.elm.nativeElement, 'animation');
+  }
 
   /** When true, keeps the animation idle until the next replay triggers */
   @Input('paused') set pauseAnimation(value: boolean) { this.paused = coerceBooleanProperty(value); }
@@ -138,7 +149,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
       // Builds the AOS observable from the common service
       this.scroll.trigger(this.elm, this.threshold),
       // Prevents false visibility blinks due to the animation transformations
-      filter( trigger => !this.animating ),
+      filter(trigger => !this.animating && !this.disabled),
       // Stop taking the first on trigger when aosOnce is set
       takeWhile(trigger => !trigger || !this.once, true),
 

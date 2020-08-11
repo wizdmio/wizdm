@@ -36,7 +36,7 @@ export const zoomIn = [
         style({ 
           opacity: 1, 
           transform: 'scale(0.475) translateY(60px)', 
-          animationTimingFunction:'ubic-bezier(0.175, 0.885, 0.32, 1)', 
+          animationTimingFunction:'cubic-bezier(0.175, 0.885, 0.32, 1)', 
           offset: 0.6
         }),
         style({ opacity: 1, transform: 'scale(1) translateY(0)', offset: 1 })
@@ -59,7 +59,7 @@ export const zoomIn = [
         style({ 
           opacity: 1, 
           transform: 'scale(0.475) translateX(60px)', 
-          animationTimingFunction:'ubic-bezier(0.175, 0.885, 0.32, 1)', 
+          animationTimingFunction:'cubic-bezier(0.175, 0.885, 0.32, 1)', 
           offset: 0.6
         }),
         style({ opacity: 1, transform: 'scale(1) translateX(0)', offset: 1 })
@@ -82,7 +82,7 @@ export const zoomIn = [
         style({ 
           opacity: 1, 
           transform: 'scale(0.475) translateY(-60px)', 
-          animationTimingFunction:'ubic-bezier(0.175, 0.885, 0.32, 1)', 
+          animationTimingFunction:'cubic-bezier(0.175, 0.885, 0.32, 1)', 
           offset: 0.6
         }),
         style({ opacity: 1, transform: 'scale(1) translateY(0)', offset: 1 })
@@ -105,7 +105,7 @@ export const zoomIn = [
         style({ 
           opacity: 1, 
           transform: 'scale(0.475) translateX(-60px)', 
-          animationTimingFunction:'ubic-bezier(0.175, 0.885, 0.32, 1)', 
+          animationTimingFunction:'cubic-bezier(0.175, 0.885, 0.32, 1)', 
           offset: 0.6
         }),
         style({ opacity: 1, transform: 'scale(1) translateX(0)', offset: 1 })
