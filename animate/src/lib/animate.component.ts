@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, Renderer2 } from '@angular/core';
+import { startWith, filter, takeWhile, delay, distinctUntilChanged } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { startWith, filter, takeWhile, delay } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { trigger } from '@angular/animations';
 import { AnimateService } from './animate.service';
@@ -148,8 +148,8 @@ export class AnimateComponent implements OnInit, OnDestroy {
       startWith(!this.paused),
       // Builds the AOS observable from the common service
       this.scroll.trigger(this.elm, this.threshold),
-      // Prevents false visibility blinks due to the animation transformations
-      filter(trigger => !this.animating && !this.disabled),
+      // Eliminates multiple triggers
+      distinctUntilChanged(),
       // Stop taking the first on trigger when aosOnce is set
       takeWhile(trigger => !trigger || !this.once, true),
 

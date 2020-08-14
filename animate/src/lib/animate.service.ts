@@ -89,7 +89,7 @@ export class AnimateService {
           // Triggers upon cdk/scrolling
           this.scrolling(elm ,threshold)
         )
-      ) 
+      )
     );
   }
 
