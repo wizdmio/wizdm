@@ -35,7 +35,7 @@ export class PreferencesFormComponent extends FormGroup implements OnDestroy {
 
   /** Applies the requested theme */
   public changeTheme(theme: string) {
-
+    
     this.theme.darkMode( theme === 'auto' ? undefined : (theme === 'dark') );
   }
 

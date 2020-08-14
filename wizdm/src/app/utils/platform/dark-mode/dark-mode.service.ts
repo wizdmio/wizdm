@@ -1,4 +1,4 @@
-import { Observable, BehaviorSubject, fromEvent, combineLatest } from 'rxjs';
+import { Observable, BehaviorSubject, fromEvent, fromEventPattern, combineLatest } from 'rxjs';
 import { map, tap, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -13,12 +13,10 @@ export class DarkModeObserver extends Observable<boolean> {
   private get window(): Window { return this.document.defaultView || window; }
 
   // The prefers-color-scheme media query
-  private get matchMedia(): MediaQueryList {
-    return this.window.matchMedia('(prefers-color-scheme: dark)');
-  }
+  readonly mq = this.window.matchMedia('(prefers-color-scheme: dark)');
 
   private isDarkMode(force?: boolean): boolean {
-    return typeof force === 'boolean' ? force : this.matchMedia.matches;
+    return typeof force === 'boolean' ? force : this.mq.matches;
   }
 
   /** True whenever the dark mode is detected or requested */
@@ -31,16 +29,23 @@ export class DarkModeObserver extends Observable<boolean> {
     this.force$.next(dark);
   }
 
+  /** Builds the media observer for the dark theme */
+  private darkObserver(): Observable<Event> {
+
+    // On modern browsers MediaQuelyList inherit from EventTarget...
+    return (this.mq as any instanceof EventTarget) ? fromEvent(this.mq, 'change') : 
+      //... while older browsers may still rely on deprecated addListener/RemoveListener functions
+      fromEventPattern<MediaQueryListEvent>(this.mq.addListener.bind(this.mq), this.mq.removeListener.bind(this.mq));
+  }
+
   constructor(@Inject(DOCUMENT) private document: Document) { 
     
-    // Creates an observble from the change event
-    super( subscriber => combineLatest( this.force$, fromEvent(this.matchMedia, 'change').pipe(startWith(null)) ).pipe( 
-
+    // Creates an observble combining the forcing flag with the media query
+    super( subscriber => combineLatest( this.force$, this.darkObserver().pipe(startWith(null)) ).pipe( 
+        // Checks for the media match
         map(([force]) => this.isDarkMode(force) ),
-
         // Filters for value changes only
         distinctUntilChanged(),
-
         // Subscribes to the inner observable
       ).subscribe( subscriber )
     )
