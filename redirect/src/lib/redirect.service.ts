@@ -40,7 +40,7 @@ export class RedirectService implements CanActivate {
   /** Parses the given url for internal routing */
   private internalUrl(url: string): string {
     // Handles '#' anchors and '.' relative urls by prepending the current url from the router
-    return url && url.startsWith('#') ? (this.router.url + url) : (url && url.replace(/^\./, this.router.url));
+    return url && url.startsWith('#') ? (this.router.url.replace(/#.*$/, '') + url) : (url && url.replace(/^\./, this.router.url));
   }
 
   /** Navigates to the given url, redirecting when necessary 
