@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, Renderer2 } from '@angular/core';
-import { startWith, filter, takeWhile, delay, distinctUntilChanged } from 'rxjs/operators';
+import { startWith, map, takeWhile, delay, distinctUntilChanged } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription } from 'rxjs';
 import { trigger } from '@angular/animations';
@@ -138,25 +138,33 @@ export class AnimateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Sets the idle state for the given animation
-    this.trigger = this.idle;
+
     // Triggers the animation based on the input flags
     this.sub = this.replay$.pipe( 
+      
       // Waits the next round to re-trigger
       delay(0), 
+      
       // Triggers immediately when not paused
       startWith(!this.paused),
+      
       // Builds the AOS observable from the common service
-      this.scroll.trigger(this.elm, this.threshold),
-      // Eliminates multiple triggers
-      distinctUntilChanged(),
+      this.scroll.trigger(this.elm, this.threshold),      
+      
       // Stop taking the first on trigger when aosOnce is set
       takeWhile(trigger => !trigger || !this.once, true),
 
-    ).subscribe( trigger => {
+      // Maps the trigger into animation states
+      map( trigger => trigger ? this.play : this.idle ),
+
+      // Always start with idle
+      startWith(this.idle),
+
+      // Eliminates multiple triggers
+      distinctUntilChanged(),
+
       // Triggers the animation to play or to idle
-      this.trigger = trigger ? this.play : this.idle;
-    });
+    ).subscribe( trigger => this.trigger = trigger );
   }
 
   // Disposes of the observable
