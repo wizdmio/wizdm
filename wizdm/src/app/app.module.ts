@@ -24,9 +24,8 @@ import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
 // Environment
-import { appname, content, emoji, scroll, ipinfo, tooltips, stripeElements } from '../environments/common';
-import { firebase, stripeTestKey, stripeLiveKey, doorbell, gtag } from '../environments/secrets';
 import { environment } from '../environments/environment';
+const  { appname, content, emoji, scroll, ipinfo, tooltips, stripeElements, firebase, stripeTestKey, stripeLiveKey, doorbell, gtag } = environment;
 
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 

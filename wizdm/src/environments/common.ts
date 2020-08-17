@@ -5,44 +5,49 @@ import { ContentConfig } from '@wizdm/content';
 import { EmojiConfig } from '@wizdm/emoji/utils';
 import { StripeElementsOptions } from '@stripe/stripe-js'
 
-export const appname: string = 'wizdm';
+// Defines global common environment variables
+export const common = {
+  
+  // Add configuration specifics
+  production: false,
 
-export const content: ContentConfig = {
-  selector: 'lang', 
-  source: 'assets/i18n',
-  supportedValues: ['en', 'it', 'ru'],
-  defaultValue: 'en'
-};
+  appname: 'wizdm',
 
-export const emoji: EmojiConfig = {
-  emojiPath: 'assets/emoji',
-  emojiExt: '.png',
-  emojiMode: 'auto'
-};
+  content: <ContentConfig>{
+    selector: 'lang', 
+    source: 'assets/i18n',
+    supportedValues: ['en', 'it', 'ru'],
+    defaultValue: 'en'
+  },
 
-export const ipinfo: IpInfoConfig = {
-  // Use iplist.cc as the provider
-  provider: IP_LIST_CC
-}
+  emoji: <EmojiConfig>{
+    emojiPath: 'assets/emoji',
+    emojiExt: '.png',
+    emojiMode: 'auto'
+  },
 
-export const scroll: ExtraOptions = { 
-  // Anchor scrolling and scroll position restoration are implemented 'per page'
-  // making sure the rendering is completed prior to perform the scrolling attempt
-  scrollPositionRestoration: 'disabled',
-  anchorScrolling: 'disabled',
-  scrollOffset: [0, 80]
-};
+  ipinfo: <IpInfoConfig>{
+    // Use iplist.cc as the provider
+    provider: IP_LIST_CC
+  },
 
-export const tooltips: MatTooltipDefaultOptions = {
-  showDelay: 1000,
-  hideDelay: 0,
-  touchendHideDelay: 0
-};
+  scroll: <ExtraOptions>{ 
+    // Anchor scrolling and scroll position restoration are implemented 'per page'
+    // making sure the rendering is completed prior to perform the scrolling attempt
+    scrollOffset: [0, 80]
+  },
 
-// StripeElements styling to fit with the global theme
-export const stripeElements: StripeElementsOptions = {
+  tooltips: <MatTooltipDefaultOptions>{
+    showDelay: 1000,
+    hideDelay: 0,
+    touchendHideDelay: 0
+  },
 
-  fonts: [
-    { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
-  ]
+  // StripeElements styling to fit with the global theme
+  stripeElements: <StripeElementsOptions>{
+
+    fonts: [
+      { cssSrc: 'https://fonts.googleapis.com/css?family=Ubuntu:400,700' }
+    ]
+  }
 };
