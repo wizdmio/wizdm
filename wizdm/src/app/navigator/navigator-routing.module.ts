@@ -1,12 +1,12 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { BackLinkObserver, CloseLinkObserver } from 'app/utils/action-links';
+import { BackLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
 import { matchUserNameOnly } from 'app/pages/profile/profile.module';
 import { matchFullPath } from 'app/pages/static/static.module';
-import { UserPreferences, WelcomeBack } from 'app/utils/user';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from '@wizdm/actionlink';
 import { RedirectService } from '@wizdm/redirect';
+import { UserPreferences } from 'app/utils/user';
 import { NgModule } from '@angular/core';
 
 const routes: RoutesWithContent = [
