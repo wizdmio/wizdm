@@ -67,8 +67,7 @@ const routes: RoutesWithContent = [
       
       // Docs (using static docs subfolder)
       { path: 'docs', redirectTo: 'docs/start', pathMatch: 'full' },
-      { path: 'docs/toc', canActivate: [ ActionLinkObserver ], data: { actionMatch: 'toc' } },
-
+      
       // Static content pages (about, terms, docs/...), redirecting to NotFound when no content is available
       { matcher: matchFullPath, loadChildren: () => import('../pages/static/static.module').then(m => m.StaticModule) },
 

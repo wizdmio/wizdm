@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UrlSegment, UrlMatchResult } from '@angular/router';
 import { ContentRouterModule, RoutesWithContent, FileLoader } from '@wizdm/content';
-import { ActionLinkModule } from '@wizdm/actionlink';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
@@ -55,7 +54,6 @@ const routes: RoutesWithContent = [{
     MatButtonModule,
     MatTooltipModule,
     MarkdownModule.init({ commonmark: true, footnotes: true }),
-    ActionLinkModule,
     GtagModule,
     AnimateModule,
     IconModule,
