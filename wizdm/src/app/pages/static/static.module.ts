@@ -42,7 +42,7 @@ const routes: RoutesWithContent = [{
   path: '',
   content: 'static',
   component: StaticComponent,
-  data: { source: 'assets/static' },
+  data: { source: 'assets/doc' },
   resolve: { document: StaticResolver }
 }];
 
