@@ -6,19 +6,6 @@ import { DialogComponent } from '@wizdm/elements/dialog';
 import { ActionLinkObserver } from '@wizdm/actionlink';
 import { Subscription } from 'rxjs';
 
-export interface DorbellSubmit {
-  email        : string,
-  message      : string,
-  name?        : string
-  ip?          : string,
-  sentiment?   : 'positive'|'neutral'|'negative',
-  tags?        : string|string[],
-  properties?  : { [key: string]: string },
-  attachments? : number[],
-  nps?         : number,
-  language?    : string
-};
-
 @Component({
   selector: 'wm-feedback-dlg',
   templateUrl: './feedback.component.html',

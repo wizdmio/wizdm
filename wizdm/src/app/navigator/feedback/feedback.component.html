@@ -64,7 +64,10 @@
 
           <input style="display:none" type="file" multiple (change)="files = $event.target.files" #openfile />
           
-          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" (click)="openfile.value=''; openfile.click()" [attr.disabled]="sending">
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" 
+            [style.pointer-events]="sending ? 'none' : undefined"
+            [class.color-disabled]="sending"
+            (click)="openfile.value=''; openfile.click()">
 
             <wm-icon [icon]="msgs.attachments.icon || 'attach_file'"></wm-icon>
 

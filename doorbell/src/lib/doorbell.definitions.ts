@@ -6,7 +6,7 @@ export interface DoorbellConfig {
   appKey : string,//'your key here'
 };
 
-export interface DorbellSubmit {
+export interface DoorbellSubmit {
   email        : string,
   message      : string,
   name?        : string

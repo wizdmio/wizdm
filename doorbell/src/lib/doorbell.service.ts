@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
-import { DoorbellConfig, DorbellSubmit, DoorbellConfigToken } from './doorbell.definitions';
+import { DoorbellConfig, DoorbellSubmit, DoorbellConfigToken } from './doorbell.definitions';
 
 @Injectable()
 export class DoorbellService {
@@ -32,7 +32,7 @@ export class DoorbellService {
    * @param body is the form data content
    * @param files is the optional list of files to attach
    */
-  public submit(body: DorbellSubmit, files?: FileList): Promise<boolean> {
+  public submit(body: DoorbellSubmit, files?: FileList): Promise<boolean> {
 
     // Uploads the attachement first
     return this.uploader(files).pipe( switchMap( attachments => {
