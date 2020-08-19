@@ -1,12 +1,12 @@
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ContentSelector, ContentConfigurator, AllowedContent } from '@wizdm/content';
 import { switchMap, map, take, filter } from 'rxjs/operators';
-import { Injectable, OnDestroy } from '@angular/core';
+import { LANGUAGE_MAP, LanguageMap } from '@wizdm/geo';
 import { DarkModeObserver } from 'app/utils/platform';
 import { DateAdapter } from '@angular/material/core';
 import { UserProfile } from './user-profile.service';
+import { Injectable, Inject } from '@angular/core';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
-import { $languageMap } from './lang-map';
 import { Subscription, of } from 'rxjs';
 import moment from 'moment';
 
@@ -19,7 +19,7 @@ export class UserPreferences extends ContentSelector {
   private get auth() { return this.user.auth; }
   private sub: Subscription;
 
-  constructor(private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, theme: DarkModeObserver, router: Router, config: ContentConfigurator) { 
+  constructor(@Inject(LANGUAGE_MAP) private languageMap: LanguageMap, private iplist: IpInfo<IpListCC>, private adapter: DateAdapter<any>, private user: UserProfile, theme: DarkModeObserver, router: Router, config: ContentConfigurator) { 
     super(router, config); 
 
     // Monitors logging-in to apply user's preferences
@@ -64,7 +64,7 @@ export class UserPreferences extends ContentSelector {
         
         // Detects the location from the IP and returns the corresponding language falling back to the browser language
         // Note: IpInfo service caches the last value to avoid multiple API calls unless requested.
-        return this.iplist.pipe( map( list => $languageMap[list.countrycode]?.[0] || this.browserLanguage ));
+        return this.iplist.pipe( map( list => this.languageMap[list.countrycode]?.[0] || this.browserLanguage ));
       }), 
 
       map( detected => {
