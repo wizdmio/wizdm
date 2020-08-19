@@ -38,6 +38,9 @@
       "path": "./emoji/tsconfig.lib.json"
     },
     {
+      "path": "./emoji-keyboard/tsconfig.lib.json"
+    },
+    {
       "path": "./gtag/tsconfig.lib.json"
     },
     {
@@ -71,13 +74,10 @@
       "path": "./play-sound/tsconfig.lib.json"
     },
     {
-      "path": "./play-sound/tsconfig.spec.json"
-    },
-    {
       "path": "./rxjs/tsconfig.lib.json"
     },
     {
-      "path": "./emoji-keyboard/tsconfig.lib.json"
+      "path": "./geo/tsconfig.lib.json"
     }
   ]
 }

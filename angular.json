@@ -1039,6 +1039,46 @@
           }
         }
       }
+    },
+    "geo": {
+      "projectType": "library",
+      "root": "geo",
+      "sourceRoot": "geo/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "geo/tsconfig.lib.json",
+            "project": "geo/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "geo/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "geo/src/test.ts",
+            "tsConfig": "geo/tsconfig.spec.json",
+            "karmaConfig": "geo/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "geo/tsconfig.lib.json",
+              "geo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

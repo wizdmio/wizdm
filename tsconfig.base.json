@@ -120,6 +120,9 @@
       ],
       "@wizdm/rxjs": [
         "rxjs/src/index.ts"
+      ],
+      "@wizdm/geo": [
+        "geo/src/index.ts"
       ]
     }
   },
