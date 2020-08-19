@@ -1,7 +1,7 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { BackLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
-import { matchUserNameOnly } from 'app/pages/profile/profile.module';
-import { matchFullPath } from 'app/pages/static/static.module';
+import { matchUserNameOnly } from 'app/pages/profile/matcher';
+import { matchFullPath } from 'app/pages/static/matcher';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { ActionLinkObserver } from '@wizdm/actionlink';

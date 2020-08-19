@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UrlSegment, UrlMatchResult } from '@angular/router';
 import { ContentRouterModule, RoutesWithContent, FileLoader } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
@@ -23,20 +22,7 @@ import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-markdown';
 
-/** Static content route matcher */
-export function matchFullPath(url: UrlSegment[]): UrlMatchResult {
 
-  // Builds the posParams from the url sub segments
-  const posParams = url.reduce( (params, url, index) => {
-
-    params[`path${index}`] = url;
-    return params;
-
-  }, {});
-
-  // Matches all the routes passing along the sub segments as pos parameters
-  return { consumed: url, posParams };
-}
 
 const routes: RoutesWithContent = [{
   path: '',
