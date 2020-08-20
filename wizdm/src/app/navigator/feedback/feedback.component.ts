@@ -1,10 +1,8 @@
-import { Component, Output, EventEmitter, AfterViewInit, OnDestroy } from '@angular/core';
-import { UserProfile } from 'app/utils/user';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { DialogComponent } from '@wizdm/elements/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { DoorbellService } from '@wizdm/doorbell';
-import { DialogComponent } from '@wizdm/elements/dialog';
-import { ActionLinkObserver } from '@wizdm/actionlink';
-import { Subscription } from 'rxjs';
+import { UserProfile } from 'app/utils/user';
 
 @Component({
   selector: 'wm-feedback-dlg',
@@ -12,9 +10,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./feedback.component.scss'],
   host: { 'class': 'wm-feedback' }
 })
-export class FeedbackComponent extends DialogComponent implements AfterViewInit, OnDestroy {
-
-  private sub: Subscription;
+export class FeedbackComponent extends DialogComponent {
 
   public name: string;
   public email: string;
@@ -24,7 +20,7 @@ export class FeedbackComponent extends DialogComponent implements AfterViewInit,
   public sending = false;
   public sent = false;
 
-  constructor(dialog: MatDialog, private user: UserProfile, private doorbell: DoorbellService, private actionLink: ActionLinkObserver) { 
+  constructor(dialog: MatDialog, private user: UserProfile, private doorbell: DoorbellService) { 
     super(dialog);
 
     this.panelClass = ['wm-feedback'];
@@ -47,18 +43,8 @@ export class FeedbackComponent extends DialogComponent implements AfterViewInit,
 
     return false;
   }
-
-  ngAfterViewInit() {
-
-    // Registers the dialog to react on 'contact' actionLink. The registration takes place in AfterViewInit making sure
-    // to intercept requests even when coming as an external redirection causing the app to load from scratch.
-    this.sub = this.actionLink.register('contact').subscribe( () => this.open() );
-  }
-
-  // Disposes of the subscritpion
-  ngOnDestroy() { this.sub.unsubscribe(); }
   
-  public open() {
+  public open(data?: any) {
 
     this.sending = this.sent = false;
 
@@ -69,7 +55,7 @@ export class FeedbackComponent extends DialogComponent implements AfterViewInit,
     this.files = null;
 
     // Opens the form dialog
-    const ref = super.open();
+    const ref = super.open(data);
 
     // Rings the doorbell when opening the feedback form
     ref.afterOpened().subscribe( () => 

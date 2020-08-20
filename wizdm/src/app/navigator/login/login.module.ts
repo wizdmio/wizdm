@@ -29,6 +29,7 @@ import { LoginComponent } from './login.component';
     IconModule
   ],
   declarations: [ LoginComponent ],
-  exports: [ LoginComponent ]
+  exports: [ LoginComponent ],
+  providers: [ { provide: 'default', useValue: LoginComponent }]
 })
 export class LoginModule { }

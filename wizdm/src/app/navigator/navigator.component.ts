@@ -1,12 +1,12 @@
+import { filter, map, tap, take, scan, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, of, scheduled, animationFrameScheduler } from 'rxjs';
-import { filter, map, distinctUntilChanged, startWith, switchMap } from 'rxjs/operators';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { DarkModeObserver } from 'app/utils/platform';
-import { UserProfile } from 'app/utils/user';
 import { MediaObserver } from '@angular/flex-layout';
 import { $animations } from './navigator.animations';
-import { Component, NgZone } from '@angular/core';
 import { AdminObservable } from 'app/utils/admin';
+import { Component, NgZone } from '@angular/core';
+import { UserProfile } from 'app/utils/user';
 import { runInZone } from '@wizdm/rxjs';
 import { SidenavConfig } from './sidenav';
 import { FabOptions } from './fab';

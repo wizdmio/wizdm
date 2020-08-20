@@ -1,7 +1,7 @@
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable, Subject, ReplaySubject, isObservable, from, of } from 'rxjs';
 import { tap, filter, take, pluck, switchMap, takeUntil } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, NgModuleRef } from '@angular/core';
 
 /** ActionLink optional data */
 export interface ActionData<T = any> { 
@@ -10,6 +10,8 @@ export interface ActionData<T = any> {
 };
 
 export interface ActionDataWithReturn<T = any> extends ActionData<T> {
+  // Optional module ref when lazily loaded by loadChildren
+  module?: NgModuleRef<any>,
   // Return handler
   return: (value: ActionResult<T>) => void;
 }
@@ -37,6 +39,9 @@ export class ActionLinkObserver implements CanActivate {
     // Computes the action code from the route data
     const action = route.data.actionMatch || route.routeConfig.path;
 
+    // Extracts the internal NgModule ref eventually loaded while routing according to loadChildren
+    const module: NgModuleRef<any> = (route.routeConfig as any)._loadedConfig?.module;
+
     // Computes the data object from the route's query parameters
     const data = route.queryParamMap.keys.reduce( (data, key) => {
       // Adds the single key, value pair
@@ -44,7 +49,7 @@ export class ActionLinkObserver implements CanActivate {
       // Returns the object
       return data;
     // Adds a dummy return handler
-    }, { return: () => {} } );
+    }, { module, return: () => {} } );
   
     // Pushes the request using data coming from the route
     this.observers$.next( { action, data } );

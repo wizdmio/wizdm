@@ -1,13 +1,13 @@
-import { Component, AfterViewInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserProfile } from 'app/utils/user';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RedirectService } from '@wizdm/redirect';
 import { DialogComponent } from '@wizdm/elements/dialog';
-import { ActionLinkObserver, ActionData } from '@wizdm/actionlink';
-import { $animations } from './login-animations';
 import { GtagService } from '@wizdm/gtag';
-import { Subscription } from 'rxjs';
+import { UserProfile } from 'app/utils/user';
+import { $animations } from './login-animations';
+
+import type { ActionData } from '@wizdm/actionlink';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete'|'signOut';
 
@@ -25,9 +25,8 @@ export interface LoginData extends ActionData {
   encapsulation: ViewEncapsulation.None,
   animations: $animations
 })
-export class LoginComponent extends DialogComponent<LoginData> implements AfterViewInit, OnDestroy {
+export class LoginComponent extends DialogComponent<LoginData> {
   
-  private sub: Subscription;
   readonly form: FormGroup;
 
   private name: FormControl;
@@ -43,7 +42,7 @@ export class LoginComponent extends DialogComponent<LoginData> implements AfterV
 
   get auth() { return this.user.auth; }
   
-  constructor(dialog: MatDialog, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService, private actionLink: ActionLinkObserver) {
+  constructor(dialog: MatDialog, private user: UserProfile, private gtag: GtagService, private redirect: RedirectService/*, private actionLink: ActionLinkObserver*/) {
 
     super(dialog);
 
@@ -59,22 +58,6 @@ export class LoginComponent extends DialogComponent<LoginData> implements AfterV
     // Empty form group
     this.form = new FormGroup({});
   }
-
-  ngAfterViewInit() {
-
-    // Registers the dialog to react on 'login' actionLink. The registration takes place in AfterViewInit making sure
-    // to intercept login requests even when coming as an external redirection such as in oauth2 requests.
-    this.sub = this.actionLink.register('login').subscribe( data => {
-      
-      // Returns the afterClosed() observable carrying the user information when logged-in
-      // It can be used to detect when a guarding redirection resulted in a successful sign-in
-      // or registration action
-      data.return( this.open(data)?.afterClosed() );
-    });
-  }
-
-  // Disposes of the subscritpion
-  ngOnDestroy() { this.sub.unsubscribe(); }
 
   /** Opens the Login dialog */
   public open(data?: LoginData) {
@@ -187,8 +170,8 @@ export class LoginComponent extends DialogComponent<LoginData> implements AfterV
     this.progress = false;
     // Sets the error code to be displayed
     this.errorCode = error;
-    // Makes sure to turn off the error message after 3s
-    setTimeout(() => this.errorCode = null, 3000);
+    // Makes sure to turn off the error message after 10s
+    setTimeout(() => this.errorCode = null, 10000);
   }
 
   public activate(action: loginAction) {
@@ -227,6 +210,11 @@ export class LoginComponent extends DialogComponent<LoginData> implements AfterV
 
       case 'delete':
       this.deleteAccount( this.password.value );
+      break;
+
+      case 'verifyEmail': 
+      case 'recoverEmail':
+      this.close(this.auth.user);
       break;
     }
   }

@@ -8,10 +8,6 @@ export class PluckPipe implements PipeTransform {
 
   transform(key: string, value?: any, defaultValue?: any): any {
 
-    if(!(this instanceof InterpolatePipe)) {
-      console.log(key, defaultValue);
-    }
-
     if(!(value instanceof Object) || !key) { return value; }
 
     return key.split(/[.\/]/).reduce( (value, key) => { 

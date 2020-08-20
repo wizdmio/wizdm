@@ -177,10 +177,10 @@
 
   </mat-sidenav-container>
 
-  <!-- Login popup dialog activated on 'login' action link @see navigator-router-module -->
-  <wm-login-dlg maxWidth="95vw"></wm-login-dlg>
-
-  <!-- Feedback form activated on 'contact' action link  @see navigator-router-module -->
-  <wm-feedback-dlg maxWidth="95vw" disableClose="true"></wm-feedback-dlg>
+  <!-- Login popup dialog lazily loaded on 'login' action link @see navigator-router-module -->
+  <ng-container wm-lazy-dialog="login"></ng-container>
+  
+  <!-- Feedback form lazily loaded on 'contact' action link  @see navigator-router-module -->
+  <ng-container wm-lazy-dialog="contact"></ng-container>
   
 </ng-container>

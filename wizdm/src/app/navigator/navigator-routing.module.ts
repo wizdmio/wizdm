@@ -60,8 +60,8 @@ const routes: RoutesWithContent = [
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
 
       // Action links
-      { path: 'login',   canActivate: [ ActionLinkObserver ] },
-      { path: 'contact', canActivate: [ ActionLinkObserver ] },
+      { path: 'login',   canActivate: [ ActionLinkObserver ], loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
+      { path: 'contact', canActivate: [ ActionLinkObserver ], loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackModule) },
       { path: 'back',    canActivate: [ BackLinkObserver ] },
       { path: 'close',   canActivate: [ CloseLinkObserver ] },
       

@@ -11,7 +11,12 @@ import { ContentModule } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { IconModule } from '@wizdm/elements/icon';
+import { DoorbellModule } from '@wizdm/doorbell';
 import { FeedbackComponent } from './feedback.component';
+
+// Environment
+import { environment } from 'env/environment';
+const  { doorbell } = environment;
 
 @NgModule({
   imports: [
@@ -26,9 +31,12 @@ import { FeedbackComponent } from './feedback.component';
     ContentModule,
     RedirectModule,
     DialogModule,
-    IconModule
+    IconModule,
+    // Initialize the doorbell service
+    DoorbellModule.init(doorbell)
   ],
   declarations: [ FeedbackComponent ],
-  exports: [ FeedbackComponent ]
+  exports: [ FeedbackComponent ],
+  providers: [ { provide: 'default', useValue: FeedbackComponent }]
 })
 export class FeedbackModule { }

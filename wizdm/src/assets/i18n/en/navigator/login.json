@@ -50,11 +50,13 @@
     },
     "verifyEmail": {
       "title": "Email verification",
-      "message": "Thank you for verifying your email.\nEnjoy"
+      "message": "Thank you for verifying your email.\nEnjoy",
+      "caption": "Close"
     },
     "recoverEmail": {
       "title": "Email recovery",
-      "message": "Your previous email has been restored.\nWe recommend changing your password the soonest"
+      "message": "Your previous email has been restored.\nWe recommend changing your password the soonest",
+      "caption": "Close"
     },
     "changeEmail": {
       "title": "Change email",
