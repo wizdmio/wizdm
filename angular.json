@@ -27,6 +27,11 @@
               "wizdm/src/favicon.ico",
               "wizdm/src/assets",
               {
+                "glob": "*",
+                "input": "./node_modules/@fortawesome/fontawesome-free/webfonts/",
+                "output": "/assets/font/"
+              },
+              {
                 "glob": "*.png",
                 "input": "./node_modules/emoji-datasource-google/img/google/64/",
                 "output": "/assets/emoji/"

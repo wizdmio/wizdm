@@ -4,16 +4,17 @@
 // Import Angular Material theming 
 @import '~@angular/material/theming';
 
-// Load the main Ubuntu google font from the web
+// Load text and icon fonts from the relevant CDN
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:wght@400;700');
-
-// Load material icons from the web both regular and extended version
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Extended');
-
-// Load fontawsome icons from the web
 @import url('https://use.fontawesome.com/releases/v5.14.0/css/all.css');
 
-// Import local partials
+/** Uncomment this to self-host the fonts instead */
+$font-path: "/assets/font";
+//@import './styles/fonts';
+//@import './styles/icons';
+
+/* Load all the other partials */
 @import './styles/preloader';
 @import './styles/skeleton';
 @import './styles/material';
@@ -21,12 +22,9 @@
 @import './styles/prism';
 @import './styles/theming';
 
-// Define the main font family 
-$wm-font-family: 'Ubuntu, sans-serif';
-
 // Creates a customized material typography first...
 $wm-typography: mat-typography-config(
-  $font-family:   $wm-font-family,
+  $font-family:   'Ubuntu, sans-serif',
   $display-4:     mat-typography-level(112px, 112px, 300),
   $display-3:     mat-typography-level(72px, 72px, 400),
   $display-2:     mat-typography-level(56px, 56px, 400),
@@ -78,8 +76,6 @@ $wm-light-theme: tweak-material-theme($wm-light-theme,
 @include wm-init-application-theme($wm-light-theme, $wm-typography);
 
 .dark-mode {
-
-  //@import '~prismjs/themes/prism-tomorrow.css';
 
   // Define the main theme colors palettes.
   $wm-dark-primary: mat-palette($mat-blue, 700, 300, 900, 700);
