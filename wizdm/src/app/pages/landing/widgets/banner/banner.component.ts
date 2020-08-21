@@ -15,7 +15,8 @@ import { BannerConfig } from './banner.config';
 @Component({
   selector: 'wm-banner',
   templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.scss']
+  styleUrls: ['./banner.component.scss'],
+  host: { '[style.min-height.px]': "config.minHeight || undefined" }
 })
 export class BannerComponent extends WidgetDirective<BannerConfig> {}
 
