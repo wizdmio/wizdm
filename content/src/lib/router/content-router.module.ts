@@ -74,10 +74,10 @@ export class ContentRouterModule {
   }
 
   /** Initializes child routes with content */
-static forChild(routes: RoutesWithContent): ModuleWithProviders<ContentRouterModule> {
+  static forChild(routes: RoutesWithContent): ModuleWithProviders<ContentRouterModule> {
     return {
-        ngModule: ContentRouterModule,
-        providers: [ provideRoutes(routes) ]
-    };
-}
+      ngModule: ContentRouterModule,
+      providers: [ provideRoutes(routes) ]
+    };  
+  }
 }

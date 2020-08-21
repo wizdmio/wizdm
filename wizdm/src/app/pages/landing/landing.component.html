@@ -1,68 +1,21 @@
 
 <!-- Localized content, restore scroll position, report gtag -->
-<ng-container *wmContent="let msgs select 'landing';let lang = language" scrollPositionRestoration="top" gtag="landing">
+<ng-container *wmContent="let msgs select 'landing'" scrollPositionRestoration="top" gtag="landing">
   
-  <!-- Applies a scrolling background image to the navigator -->
-  <wm-background [url]="msgs.banner" attachment="local" repeat="no-repeat" size="cover"></wm-background>
+  <!-- Applies a background as per the configuration -->
+  <wm-background *ngIf="msgs.background as background" 
+    [url]="background.url" 
+    [attachment]="background.attachment || 'local'" 
+    [repeat]="background.repeat || 'no-repeat'" 
+    [size]="background.size || 'cover'">
+  </wm-background>
 
-  <!-- Top banner -->
-  <section fxLayout="row" fxLayoutAlign="center center" class="banner">
+  <!-- Dynamically loads the requested widgets -->
+  <ng-container *ngFor="let widget of msgs.widgets">
 
-    <!-- Animated Info panel on the left -->
-    <div fxFlex.gt-sm="50" fxLayout="column" fxLayoutAlign="center center" class="textbox" wmAnimate="landing" aos>
+    <!-- For a list of widgets check the landing.module -->
+    <ng-container [wm-load-widget]="widget"></ng-container>
 
-      <h1 class="mat-display-1"><b>{{ msgs.title || 'Get your app done right' }}</b></h1>
-      
-      <p [wm-readme]="msgs.pitch">
-        Wizdm provides all the key features of a modern single page application ready to use.
-      </p>
-      
-      <button mat-raised-button color="accent" [routerLink]="msgs.action?.link">{{ msgs.action?.caption || 'Get started' }}</button>
-      
-      <p [wm-readme]="msgs.join" class="mat-small">
-        Join us and become part of the revolution of <a wmRedirect="about">Wizdm</a>
-      </p>
-  
-    </div>
-
-    <!-- Displays the resting Buddha on the right on big screens -->
-    <wm-illustration fxHide.lt-sm fxFlex="50" [src]="msgs.illustration" color="primary"></wm-illustration>
-
-  </section>
-
-  <!-- Features Matrix -->
-  <section fxLayout="column" fxLayoutAlign="center center" class="features">
-
-    <div class="row" fxLayout="row wrap" fxLayout.lt-sm="column">
-  
-      <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%" *ngFor="let feat of msgs.features">
-
-        <!-- Feature Card -->
-        <div class="content mat-elevation-z2" wmAnimate="bounceIn" aos>
-      
-          <div class="goto" [wmRedirect]="feat.reference">
-
-            <!-- Icon -->
-            <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
-            
-            <!-- Title -->
-            <h2><b>{{ feat.title }}</b></h2>
-
-          </div> 
-
-          <!-- Feature description -->
-          <p [wm-readme]="feat.description"></p>          
-
-          <div *ngIf="feat.comingSoon" class="tag accent background-color-default contrast-default mat-small">{{ feat.comingSoon }}</div>
-
-          <div *ngIf="feat.experimental" class="tag warn background-color-default contrast-default mat-small">{{ feat.experimental }}</div>
-
-        </div>
-
-      </div>
-      
-    </div>
-  
-  </section>
+  </ng-container>
 
 </ng-container>

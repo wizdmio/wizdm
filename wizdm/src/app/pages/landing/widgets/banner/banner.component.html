@@ -1,0 +1,36 @@
+
+<!-- Animated Info panel on one side -->
+<div *ngIf="config.textbox as textbox" 
+  fxFlex.gt-sm="50" fxLayout="column" fxLayoutAlign="center center" 
+  [fxFlexOrder]="textbox.order || 1" 
+  [wmAnimate]="textbox.animation?.name || 'none'" 
+  [aos]="textbox.animation?.aos || 0.5"
+  [once]="textbox.animation?.once || false">
+
+  <h1 class="mat-display-1"><b>{{ textbox.title || 'Title goes here' }}</b></h1>
+  
+  <p [wm-readme]="textbox.pitch">
+    The elevator pitch goes here. If you're reading this something went wrong while loading the widget.
+  </p>
+
+  <ng-container *ngIf="textbox.action as action">
+  
+    <button mat-button [type]="action.type || 'raised'" 
+                       [color]="action.color || 'accent'" 
+                       [routerLink]="action.link">{{ action.caption || 'Get started' }}
+    </button>
+    
+    <p [wm-readme]="action.hint" class="mat-small"></p>
+
+</ng-container>
+
+</div>
+
+<!-- Displays the resting Buddha on the right on big screens -->
+<wm-illustration *ngIf="config.illustration as illustration"
+  fxHide.lt-sm fxFlex="50" 
+  [fxFlexOrder]="illustration.order || 2"
+  [src]="illustration.source" 
+  [color]="illustration.color || 'primary'">
+</wm-illustration>
+

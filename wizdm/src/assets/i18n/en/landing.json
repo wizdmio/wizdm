@@ -1,167 +1,197 @@
 {
-  "title": "Get your app done right",
-  "pitch": "Wizdm provides all the key features of a modern single page application ready to use, so, for you to focus on launching your idea the quickest!",
-  "action": { "caption": "Explore", "link": "explore" },
-  "join": "Join us 🙏🏻 and become part of the revolution of [Wizdm](about)",
-  "illustration": "assets/img/blue-buddha.svg",
-  "banner": "assets/img/blue-gradient.svg",
-  "features": [
-    { 
-      "icon": "fas:fa-mobile-alt",
-      "title": "Responsive navigation",
-      "description": "Navigation smoothly adapts to the device the application renders to.",
-      "reference": "docs/navigator"
+
+  "background": { "url": "assets/img/blue-gradient.svg" },
+
+  "widgets": [
+    {
+      "type": "doesnt-exists",
+      "comment": "This is placed here for testing purposes only"
     },
-    { 
-      "icon": "far:fa-clone",
-      "title": "Modular design",
-      "description": "Desiged with full modularity to enable collaboration while minimizing the final bundle size and loading time."
+    {
+      "type": "banner",
+
+      "textbox": {
+
+        "order": 1,
+        "title": "Get your app done right",
+        "pitch": "Wizdm provides all the key features of a modern single page application ready to use, so, for you to focus on launching your idea the quickest!",
+
+        "action": { "caption": "Explore", "link": "explore", "hint": "Join us 🙏🏻 and become part of the revolution of [Wizdm](about)" },
+
+        "animation": { "name": "landing" }
+      },
+
+      "illustration": {
+        "order": 2,
+        "source": "assets/img/blue-buddha.svg",
+        "color": "primary"
+      }
     },
-    { 
-      "icon": "fas:fa-code",
-      "title": "UI elements",
-      "description": "Rich collections of advanced UI elements ready to use for you to avoid re-inventing the wheel.",
-      "reference": "docs/elements"
-    },
-    { 
-      "icon": "fas:fa-icons",
-      "title": "Icon sets",
-      "description": "Both [Material](https://material.io/icons) icons font and [FontAwesome](https://fontawesome.com) icon set are natively supported to enrich you user interface.",
-      "reference": "docs/elements/icon"
-    },
-    { 
-      "icon": "far:fa-kiss-beam",
-      "title": "Emoji Support",
-      "description": "Universal emoji rendering capabilities to always offer the best user experience no matter the platform.",
-      "reference": "docs/emoji"
-    },
-    { 
-      "icon": "fas:fa-box-open",
-      "title": "Animate On Scroll",
-      "description": "Ready to use animation set with built-in \"Animate on Scroll\" trigger to enrich your contents with catching-eye motion",
-      "reference": "docs/animate"
-    },
-    { 
-      "icon": "fas:fa-swatchbook",
-      "title": "Theming",
-      "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)",
-      "reference": "docs/styling"
-    },
-    { 
-      "icon": "fas:fa-language",
-      "title": "Internationalization",
-      "description": "Thanks to a flexible content manager at its core, wizdm handles as many lanuages as you need at once.",
-      "reference": "docs/content"
-    },
-    { 
-      "icon": "fas:fa-globe-europe",
-      "title": "IP geolocation",
-      "description": "Country level and City level IP info localization supported by [IpList](https://iplist.cc/) and [IpInfo](https://ipinfo.io/) *API*s.",
-      "reference": "docs/ipinfo"
-    },
-    { 
-      "icon": "fas:fa-user-circle",
-      "title": "Account management",
-      "description": "User authetication, email verification and recovery, rich user profile data and account cancellation.",
-      "reference": "docs/auth"
-    },
-    { 
-      "icon": "fas:fa-sync-alt",
-      "title": "Data synchronization",
-      "description": "Real-time online and offline data sync based on severless *NoSQL* database ready for global level scale.",
-      "reference": "docs/connect"
-    },
-    { 
-      "icon": "fas:fa-folder-open",
-      "title": "File storage",
-      "description": "File uploading capabilities for user profile image and more."
-    },
-    { 
-      "icon": "fab:fa-markdown",
-      "title": "Static content",
-      "description": "*Markdown* rendering to quickly set up static contents such as terms of service and privacy without extra coding.",
-      "reference": "docs/markdown"
-    },
-    { 
-      "icon": "fas:fa-highlighter",
-      "title": "Syntax Highlighting",
-      "description": "Code syntax highlighting powered by [PrismJS](https://prismjs.com/)",
-      "reference": "docs/prism"
-    },
-    { 
-      "icon": "far:fa-edit",
-      "title": "Content editing",
-      "description": "Powerfull built-in *WYSIWYG* content editing capabilities to serve your needs.",
-      "experimental": "Experimental"
-    },
-    { 
-      "icon": "far:fa-comment",
-      "title": "Feedback form",
-      "description": "Direct feedback support powered by [Doorbell.io](https://doorbell.io) to immediately collect user's suggestions.",
-      "reference": "docs/doorbell"
-    },
-    { 
-      "icon": "fas:fa-directions",
-      "title": "Smart redirection",
-      "description": "Prevents unwanted external redirections to keep the user engaged."
-    },
-    { 
-      "icon": "fas:fa-search",
-      "title": "Simple search",
-      "description": "Simple data search performed server side with no need of expensive third party serivces.",
-      "reference": "docs/redirect"
-    },
-    { 
-      "icon": "fab:fa-algolia",
-      "title": "Full text search",
-      "description": "Full text search powered by [Algolia](https://www.algolia.com) for the time your app get traction.",
-      "comingSoon": "Coming soon"  
-    },
-    { 
-      "icon": "fas:fa-cookie-bite",
-      "title": "Cookie Consent",
-      "description": "Inform your user about the use your app is doing of cookies so to comform with regulations.",
-      "comingSoon": "Coming soon"  
-    },
-    { 
-      "icon": "fas:fa-chart-bar",
-      "title": "Google Analytics",
-      "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience.",
-      "reference": "docs/gtag"
-    },
-    { 
-      "icon": "fas:fa-camera",
-      "title": "Unsplash",
-      "description": "Beautifull royaltiy free images from [Unsplash](https://unsplash.com/).",
-      "comingSoon": "Coming soon"  
-    },
-    { 
-      "icon": "fab:fa-paypal",
-      "title": "Paypal",
-      "description": "Payment processing powered by [Paypal](https://www.paypal.com).",
-      "reference": "docs/paypal",
-      "experimental": "Experimental"
-    },
-    { 
-      "icon": "fab:fa-stripe-s",
-      "title": "Payments",
-      "description": "Payment processing powered by [Stripe](https://stripe.com).",
-      "reference": "docs/stripe"
-    },
-    { 
-      "icon": "fab:fa-angular",
-      "title": "Angular powered",
-      "description": "Designed using the latest edge technologies for maximum performances and compatibility."
-    },
-    { 
-      "icon": "fab:fa-github",
-      "title": "Open source",
-      "description": "Wizdm is *100%* open source and supported by a growing community."
-    },
-    { 
-      "icon": "fas:fa-rocket",
-      "title": "For bootstrappers",
-      "description": "Designed and mantained by the very same bootstrappers actively using it to fuel their initiatives."
+
+    {
+      "type": "feature-matrix",
+
+      "defaultAnimation": "bounceIn",
+
+      "features": [
+        { 
+          "icon": "fas:fa-mobile-alt",
+          "title": "Responsive navigation",
+          "description": "Navigation smoothly adapts to the device the application renders to.",
+          "url": "docs/navigator"
+        },
+        { 
+          "icon": "far:fa-clone",
+          "title": "Modular design",
+          "description": "Desiged with full modularity to enable collaboration while minimizing the final bundle size and loading time."
+        },
+        { 
+          "icon": "fas:fa-code",
+          "title": "UI elements",
+          "description": "Rich collections of advanced UI elements ready to use for you to avoid re-inventing the wheel.",
+          "url": "docs/elements"
+        },
+        { 
+          "icon": "fas:fa-icons",
+          "title": "Icon sets",
+          "description": "Both [Material](https://material.io/icons) icons font and [FontAwesome](https://fontawesome.com) icon set are natively supported to enrich you user interface.",
+          "url": "docs/elements/icon"
+        },
+        { 
+          "icon": "far:fa-kiss-beam",
+          "title": "Emoji Support",
+          "description": "Universal emoji rendering capabilities to always offer the best user experience no matter the platform.",
+          "url": "docs/emoji"
+        },
+        { 
+          "icon": "fas:fa-box-open",
+          "title": "Animate On Scroll",
+          "description": "Ready to use animation set with built-in \"Animate on Scroll\" trigger to enrich your contents with catching-eye motion",
+          "url": "docs/animate"
+        },
+        { 
+          "icon": "fas:fa-swatchbook",
+          "title": "Theming",
+          "description": "Easily define the application theme thanks to the theming capabilities based on the guidance from [Material Design](https://material.io/archive/guidelines/style/color.html#color-color-palette)",
+          "url": "docs/styling"
+        },
+        { 
+          "icon": "fas:fa-language",
+          "title": "Internationalization",
+          "description": "Thanks to a flexible content manager at its core, wizdm handles as many lanuages as you need at once.",
+          "url": "docs/content"
+        },
+        { 
+          "icon": "fas:fa-globe-europe",
+          "title": "IP geolocation",
+          "description": "Country level and City level IP info localization supported by [IpList](https://iplist.cc/) and [IpInfo](https://ipinfo.io/) *API*s.",
+          "url": "docs/ipinfo"
+        },
+        { 
+          "icon": "fas:fa-user-circle",
+          "title": "Account management",
+          "description": "User authetication, email verification and recovery, rich user profile data and account cancellation.",
+          "url": "docs/auth"
+        },
+        { 
+          "icon": "fas:fa-sync-alt",
+          "title": "Data synchronization",
+          "description": "Real-time online and offline data sync based on severless *NoSQL* database ready for global level scale.",
+          "url": "docs/connect"
+        },
+        { 
+          "icon": "fas:fa-folder-open",
+          "title": "File storage",
+          "description": "File uploading capabilities for user profile image and more."
+        },
+        { 
+          "icon": "fab:fa-markdown",
+          "title": "Static content",
+          "description": "*Markdown* rendering to quickly set up static contents such as terms of service and privacy without extra coding.",
+          "url": "docs/markdown"
+        },
+        { 
+          "icon": "fas:fa-highlighter",
+          "title": "Syntax Highlighting",
+          "description": "Code syntax highlighting powered by [PrismJS](https://prismjs.com/)",
+          "url": "docs/prism"
+        },
+        { 
+          "icon": "far:fa-edit",
+          "title": "Content editing",
+          "description": "Powerfull built-in *WYSIWYG* content editing capabilities to serve your needs.",
+          "experimental": "Experimental"
+        },
+        { 
+          "icon": "far:fa-comment",
+          "title": "Feedback form",
+          "description": "Direct feedback support powered by [Doorbell.io](https://doorbell.io) to immediately collect user's suggestions.",
+          "url": "docs/doorbell"
+        },
+        { 
+          "icon": "fas:fa-directions",
+          "title": "Smart redirection",
+          "description": "Prevents unwanted external redirections to keep the user engaged."
+        },
+        { 
+          "icon": "fas:fa-search",
+          "title": "Simple search",
+          "description": "Simple data search performed server side with no need of expensive third party serivces.",
+          "url": "docs/redirect"
+        },
+        { 
+          "icon": "fab:fa-algolia",
+          "title": "Full text search",
+          "description": "Full text search powered by [Algolia](https://www.algolia.com) for the time your app get traction.",
+          "comingSoon": "Coming soon"  
+        },
+        { 
+          "icon": "fas:fa-cookie-bite",
+          "title": "Cookie Consent",
+          "description": "Inform your user about the use your app is doing of cookies so to comform with regulations.",
+          "comingSoon": "Coming soon"  
+        },
+        { 
+          "icon": "fas:fa-chart-bar",
+          "title": "Google Analytics",
+          "description": "Measure how user interacts with your app even before they are ready to give you a feedback abour their experience.",
+          "url": "docs/gtag"
+        },
+        { 
+          "icon": "fas:fa-camera",
+          "title": "Unsplash",
+          "description": "Beautifull royaltiy free images from [Unsplash](https://unsplash.com/).",
+          "comingSoon": "Coming soon"  
+        },
+        { 
+          "icon": "fab:fa-paypal",
+          "title": "Paypal",
+          "description": "Payment processing powered by [Paypal](https://www.paypal.com).",
+          "url": "docs/paypal",
+          "experimental": "Experimental"
+        },
+        { 
+          "icon": "fab:fa-stripe-s",
+          "title": "Payments",
+          "description": "Payment processing powered by [Stripe](https://stripe.com).",
+          "url": "docs/stripe"
+        },
+        { 
+          "icon": "fab:fa-angular",
+          "title": "Angular powered",
+          "description": "Designed using the latest edge technologies for maximum performances and compatibility."
+        },
+        { 
+          "icon": "fab:fa-github",
+          "title": "Open source",
+          "description": "Wizdm is *100%* open source and supported by a growing community."
+        },
+        { 
+          "icon": "fas:fa-rocket",
+          "title": "For bootstrappers",
+          "description": "Designed and mantained by the very same bootstrappers actively using it to fuel their initiatives."
+        }
+      ]
     }
   ]
 }

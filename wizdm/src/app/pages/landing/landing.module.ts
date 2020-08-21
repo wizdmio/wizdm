@@ -1,38 +1,42 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material/button';
 import { GtagModule } from '@wizdm/gtag';
-import { RedirectModule } from '@wizdm/redirect';
-import { AnimateModule } from '@wizdm/animate';
-import { IconModule } from '@wizdm/elements/icon';
-import { ReadmeModule } from '@wizdm/readme';
-import { IllustrationModule } from '@wizdm/elements/illustration';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { BackgroundModule } from 'app/utils/background';
 import { LandingComponent } from './landing.component';
+import { LoadWidgetDirective, Widgets } from './widgets/load-widget.directive';
+import { LandingResolver } from './landing.service';
 
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'landing',
+    //content: 'landing',
+    resolve: { landing: LandingResolver },
     component: LandingComponent
   }
 ];
 
+/** List of widgets */
+const widgets: Widgets = [
+
+  // Banner Widget
+  { type: 'banner', loadComponent: () => import('./widgets/banner/banner.component').then( ({ BannerComponent }) => BannerComponent ) },
+
+  // Feature matrix widget
+  { type: 'feature-matrix', loadComponent: () => import('./widgets/features/features.component').then( ({ FeaturesComponent }) => FeaturesComponent ) }
+
+];
+
 @NgModule({
-  declarations: [ LandingComponent ],
+  // Provides the widgets registry for the loader to load from
+  providers: [ { provide: 'widgets', useValue: widgets }, LandingResolver ],
+  declarations: [ LandingComponent, LoadWidgetDirective ],
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MatButtonModule,
     GtagModule,
-    RedirectModule,
-    AnimateModule,
-    IconModule, 
-    ReadmeModule,
-    IllustrationModule,
     ScrollingModule,
     BackgroundModule,
     ContentRouterModule.forChild(routes)

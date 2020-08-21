@@ -8,6 +8,7 @@ import { AnimateService } from './animate.service';
 import { beat, bounce, headShake, heartBeat, pulse, rubberBand, shake, swing, wobble, jello, tada, flip } from './attention-seekers';
 import { bumpIn, bounceIn, fadeIn, flipIn, jackInTheBox, landing, rollIn, zoomIn } from './entrances';
 import { bounceOut, fadeOut, hinge, rollOut, zoomOut } from './exits';
+import { state, style } from '@angular/animations';
 
 export type wmAnimateSpeed = 'slower'|'slow'|'normal'|'fast'|'faster';
 export type wmAnimations = 
@@ -16,18 +17,22 @@ export type wmAnimations =
   // Entrances
   'bumpIn'|'bounceIn'|'bounceInDown'|'bounceInLeft'|'bounceInUp'|'bounceInRight'|'fadeIn'|'fadeInRight'|'fadeInLeft'|'fadeInUp'|'fadeInDown'|'flipInX'|'flipInY'|'jackInTheBox'|'landing'|'rollIn'|'zoomIn'|'zoomInDown'|'zoomInLeft'|'zoomInUp'|'zoomInRight'|
   // Exits
-  'bounceOut'|'bounceOutDown'|'bounceOutUp'|'bounceOutRight'|'bounceOutLeft'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'hinge'|'rollOut'|'zoomOut'|'zoomOutDown'|'zoomOutRight'|'zoomOutUp'|'zoomOutLeft';
+  'bounceOut'|'bounceOutDown'|'bounceOutUp'|'bounceOutRight'|'bounceOutLeft'|'fadeOut'|'fadeOutRight'|'fadeOutLeft'|'fadeOutDown'|'fadeOutUp'|'hinge'|'rollOut'|'zoomOut'|'zoomOutDown'|'zoomOutRight'|'zoomOutUp'|'zoomOutLeft'|
+  // None
+  'none';
 
 @Component({
- selector: '[wmAnimate]',
- template: '<ng-content></ng-content>',
- animations: [ trigger('animate', [
-  // Attention seekers
-  ...beat,...bounce,...flip,...headShake,...heartBeat,...jello,...pulse,...rubberBand,...shake,...swing,...tada,...wobble,
-  // Entrances
- ...bumpIn,...bounceIn,...fadeIn,...flipIn,...jackInTheBox,...landing,...rollIn,...zoomIn,
-  // Exits
- ...bounceOut,...fadeOut,...hinge,...rollOut,...zoomOut
+  selector: '[wmAnimate]',
+  template: '<ng-content></ng-content>',
+  animations: [ trigger('animate', [
+    // Attention seekers
+    ...beat,...bounce,...flip,...headShake,...heartBeat,...jello,...pulse,...rubberBand,...shake,...swing,...tada,...wobble,
+    // Entrances
+    ...bumpIn,...bounceIn,...fadeIn,...flipIn,...jackInTheBox,...landing,...rollIn,...zoomIn,
+    // Exits
+    ...bounceOut,...fadeOut,...hinge,...rollOut,...zoomOut,
+    // None
+    state('none', style('*')), state('idle-none', style('*'))
   ])]
 })
 export class AnimateComponent implements OnInit, OnDestroy {

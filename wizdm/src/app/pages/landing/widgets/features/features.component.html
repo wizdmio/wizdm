@@ -1,0 +1,30 @@
+
+<div class="row" fxLayout="row wrap" fxLayout.lt-sm="column">
+  
+  <div class="cell" fxFlex="33.3%" fxFlex.lt-md="50%" fxFlex.lt-sm="100%" *ngFor="let feat of config.features">
+
+    <!-- Feature Card -->
+    <div class="content mat-elevation-z2" [wmAnimate]="feat.animation || config.defaultAnimation || 'none'" aos>
+  
+      <div class="goto" [wmRedirect]="feat.url">
+
+        <!-- Icon -->
+        <wm-icon class="icon" [icon]="feat.icon"></wm-icon>
+        
+        <!-- Title -->
+        <h2><b>{{ feat.title }}</b></h2>
+
+      </div> 
+
+      <!-- Feature description -->
+      <p [wm-readme]="feat.description"></p>          
+
+      <div *ngIf="feat.comingSoon" class="tag accent background-color-default contrast-default mat-small">{{ feat.comingSoon }}</div>
+
+      <div *ngIf="feat.experimental" class="tag warn background-color-default contrast-default mat-small">{{ feat.experimental }}</div>
+
+    </div>
+
+  </div>
+  
+</div>
