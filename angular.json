@@ -42,7 +42,9 @@
                 "output": "/assets/emoji/sheets/"
               }
             ],
-            "styles": ["wizdm/src/styles.scss"],
+            "styles": [
+              "wizdm/src/styles.scss"              
+            ],
             "stylePreprocessorOptions": {
               "includePaths": ["wizdm/src/styles", "elements/src/lib", "emoji-keyboard/src/lib"]
             },

@@ -1,5 +1,3 @@
-@import './emoji-sheet-map';
-@import './emoji-keys';
 
 @mixin wm-emoji-keyboard($theme) {
 
@@ -12,7 +10,5 @@
     .selected {
       color: mat-color( map-get($theme, primary) );
     }
-
-    @include defineKeys("key");
   }
 }

@@ -60,6 +60,10 @@ $wm-light-theme: tweak-material-theme($wm-light-theme,
   )
 );
 
+// Include the keys definition for the emoji-keyboard once
+@import 'emoji-keyboard-keys';
+@include wm-emoji-keyboard-keys("/assets/emoji/sheets/32.png");
+
 // Creates the .preloader spinner class applying the theme color
 @include preloader(150px, 3px, mat-color($wm-primary)) {
 

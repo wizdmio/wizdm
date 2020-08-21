@@ -1,0 +1,20 @@
+/** This is an experimental file atempting to split the dark-theme style in a separate bundle
+ * @see { https://angular.io/guide/workspace-config#styles-and-scripts-configuration }
+ * Add { "input": "wizdm/src/dark-theme.scss", "inject": false, "bundleName": "dark-theme" } under styles in your angular.json
+ * to get the bundle compiled ready to be dynamically loaded.
+ */
+
+@import '~@angular/material/theming';
+@import './styles/skeleton';
+@import './styles/colors';
+@import './styles/theming';
+
+// Define the main theme colors palettes.
+$wm-dark-primary: mat-palette($mat-blue, 700, 300, 900, 700);
+$wm-dark-accent:  mat-palette($mat-amber, 700, 300, 900, 700);
+$wm-dark-warn:    mat-palette($mat-red, 700, 300, 900, 700);
+
+$wm-dark-theme: mat-dark-theme($wm-dark-primary, $wm-dark-accent, $wm-dark-warn);
+
+// Initialze the global application theme, make sure to call this only once
+@include wm-init-application-colors($wm-dark-theme);
