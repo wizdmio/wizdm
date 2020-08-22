@@ -21,13 +21,6 @@ export class BackgroundDirective implements OnChanges, OnDestroy {
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-color} */
   @Input() color: string;
 
-  /** Sets one or more background images. 
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-image} */
-  @Input() image: string;
-
-  /** Sets the backgrpund image from an url. */
-  @Input() url: string;
-
   /** Sets the background's origin: from the border start, inside the border, or inside the padding.
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-origin} */
   @Input() origin: string;
@@ -44,6 +37,13 @@ export class BackgroundDirective implements OnChanges, OnDestroy {
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-size} */
   @Input() size: string;
 
+  /** Sets one or more background images. 
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/CSS/background-image} */
+  @Input() image: string;
+
+  /** Sets the backgrpund image from an url. */
+  @Input() url: string;
+
   // Applies back the collected properties to the Navigator's background via the service.
   ngOnChanges() {
 
@@ -51,7 +51,7 @@ export class BackgroundDirective implements OnChanges, OnDestroy {
       "background-attachment": this.attachment,
       "backgroung-clip": this.clip,
       "background-color": this.color,
-      "background-image": this.image || (this.url && 'url(' + this.url + ')'),
+      "background-image": this.image || this.url && 'url(' + this.url + ')',
       "background-origin": this.origin,
       "background-position": this.position,
       "background-repeat": this.repeat,
