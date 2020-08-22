@@ -3,11 +3,16 @@
 <ng-container *wmContent="let msgs select 'landing'" scrollPositionRestoration="top" gtag="landing">
   
   <!-- Applies a background as per the configuration -->
-  <wm-background *ngIf="msgs.background as background" 
-    [url]="background.url" 
-    [attachment]="background.attachment || 'local'" 
-    [repeat]="background.repeat || 'no-repeat'" 
-    [size]="background.size || 'cover'">
+  <wm-background *ngIf="msgs.background as background"
+    [linearGradients]="background.linearGradients || undefined"
+    [attachment]="background.attachment || 'local'"
+    [position]="background.position || undefined" 
+    [repeat]="background.repeat || 'no-repeat'"    
+    [color]="background.color || undefined"
+    [image]="background.image || undefined"
+    [clip]="background.clip || undefined" 
+    [size]="background.size || 'cover'"
+    [url]="background.url">
   </wm-background>
 
   <!-- Dynamically loads the requested widgets -->
