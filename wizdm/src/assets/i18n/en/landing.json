@@ -1,10 +1,6 @@
 {
-  "background": { 
-    
-    "image-disabled": "url(assets/img/world-map.png), linear-gradient(#e66465, #9198e5)",
-    "url": "assets/img/world-map.png", 
-    "position": "center" 
-  },
+
+  "background": { "url": "assets/img/blue-gradient.svg" },
 
   "widgets": [
     {
