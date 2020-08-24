@@ -37,7 +37,7 @@ const routes: RoutesWithContent = [
       { path: '404', redirectTo: 'not-found', pathMatch: 'full' },
 
       // Landing page
-      { path: '', loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule) },
+      { path: '', pathMatch: 'full', loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule) },
       { path: 'home', redirectTo: '', pathMatch: 'full' },
       
       // Content browsing
