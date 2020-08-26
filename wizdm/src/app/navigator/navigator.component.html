@@ -21,7 +21,7 @@
         <nav fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 
           <!-- Wizdm logo routing to home -->
-          <wm-logo [color]="msgs.color || 'primary'" routerLink="."></wm-logo>
+          <wm-logo [color]="msgs.logo?.color || msgs.color || 'primary'" [size]="msgs.logo?.size || 56" [src]="msgs.logo?.url" routerLink="."></wm-logo>
       
           <!-- Desktop navigation links -->
           <wm-navbar *ngIf="desktop && msgs.navbar as navbar" [menuItems]="navbar[signedIn ? 'private' : 'public']" [color]="msgs.color || 'primary'">
