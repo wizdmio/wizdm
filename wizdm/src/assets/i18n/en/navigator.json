@@ -49,13 +49,11 @@
     },
 
     "footer": {
-        "copyright": "Shared with wisdom from planet Earth ©{{ year }}",
+        "copyright": "Powered by :wizdm: Wizdm - ©{{ year }}",
       
         "socials": [
             { "label": "Facebook", "icon": "fab:fa-facebook", "link": "https://facebook.com" },
-            { "label": "Twitter", "icon": "fab:fa-twitter", "link": "https://twitter.com" },
-            { "label": "LinkedIn", "icon": "fab:fa-linkedin", "link": "https://linkedin.com" },
-            { "label": "Github", "icon": "fab:fa-github", "link": "https://github.com/wizdmio/wizdm" } 
+            { "label": "Twitter", "icon": "fab:fa-twitter", "link": "https://twitter.com" }
         ],
       
         "links": [

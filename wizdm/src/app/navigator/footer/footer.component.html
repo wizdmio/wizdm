@@ -2,15 +2,13 @@
 <ng-container *wmContent="let msgs select 'navigator.footer';let lang = language">
 
   <!-- Top section with links -->
-  <!--section class="content" fxLayout="row" fxLayoutAlign="space-between" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center"-->
   <section class="content" fxLayout="row" [fxLayoutAlign]="(xsmall$ | async) ? 'center' : 'space-between'">
 
     <!-- Left/Top pane: Links to About, terms, privacy... -->
-    <!--div fxLayout="row" fxHide.lt-sm fxLayoutAlign="center center"-->
     <div fxLayout="row" *ngIf="!(xsmall$ | async)">
 
       <!-- Regular links on desktop -->
-      <a mat-button *ngFor="let item of msgs.links" [routerLink]="item.link"> 
+      <a mat-button *ngFor="let item of msgs.links || []" [routerLink]="item.link" [queryParams]="item.params"> 
         {{ item.label }}
       </a>
       
@@ -20,8 +18,7 @@
     <div fxLayout="row" fxLayoutAlign="center center">
 
       <!-- Links menu on mobile -->
-      <!--a mat-icon-button fxHide fxShow.lt-sm [matMenuTriggerFor]="linksMenu"-->
-      <ng-container *ngIf="xsmall$ | async">
+      <ng-container *ngIf="(xsmall$ | async) && msgs.links?.length > 0">
 
         <a mat-icon-button [matMenuTriggerFor]="linksMenu">
           <wm-icon icon="fas:fa-info-circle"></wm-icon>
@@ -29,36 +26,59 @@
 
         <!-- Links menu on mobile -->
         <mat-menu #linksMenu="matMenu">
-          <button mat-menu-item *ngFor="let item of msgs.links" [routerLink]="item.link">{{ item.label }}</button>
+          <button mat-menu-item *ngFor="let item of msgs.links" 
+            [routerLink]="item.link" 
+            [queryParams]="item.params"
+          >{{ item.label }}</button>
         </mat-menu>
 
       </ng-container>
 
       <!-- Social media links -->
-      <a mat-icon-button routerLink="/redirect" [queryParams]="{ url: item.link }" *ngFor="let item of msgs.socials">
+      <a mat-icon-button routerLink="/redirect" [queryParams]="{ url: item.link }" *ngFor="let item of msgs.socials || []">
         <wm-icon [icon]="item.icon"></wm-icon>
       </a>
 
-      <!-- Language selection -->
-      <a mat-icon-button [matMenuTriggerFor]="langMenu">
-        <wm-icon icon="fas:fa-globe-europe"></wm-icon>
-        <span class="mat-small" style="text-transform: uppercase;">{{ lang }} </span>
-      </a>
+      <!-- Language list -->
+      <ng-container *ngIf="msgs.languages?.length > 0">
 
-      <!-- Language menu -->
-      <mat-menu #langMenu="matMenu">
-        <button mat-menu-item *ngFor="let item of msgs.languages"
-               [routerLink]="languageLink(item.value)" queryParamsHandling="preserve"
-               [disabled]="item.value === lang" >{{ item.label }}</button>
-      </mat-menu>
+        <!-- Language selection -->
+        <a mat-icon-button [matMenuTriggerFor]="langMenu">
+          <wm-icon icon="fas:fa-globe-europe"></wm-icon>
+          <span class="mat-small" style="text-transform: uppercase;">{{ lang }} </span>
+        </a>
+
+        <!-- Language menu -->
+        <mat-menu #langMenu="matMenu">
+
+          <button mat-menu-item *ngFor="let item of msgs.languages"
+            [routerLink]="languageLink(item.value)" queryParamsHandling="preserve"
+            [disabled]="item.value === lang"
+          >{{ item.label }}</button>
+
+        </mat-menu>
+
+      </ng-container>
 
     </div>
 
   </section>
 
   <!-- Copyright banner -->
-  <section fxLayout="row" fxLayoutAlign="center center" class="copyright background-color-darker color-100 primary">
-    <span class="mat-small">{{ ( msgs.copyright || 'Copyright \{\{ year \}\}' ) | interpolate: { year: '' | moment:'YYYY' } }}</span>
+  <section *ngIf="msgs.copyright as copyright" class="copyright"    
+    fxLayout="row" fxLayoutAlign="center center"  
+    [attr.color]="copyright.color || 'primary'"
+    [ngClass]="{ 
+      'background-color-darker color-100': !copyright.background || copyright.background === 'dark',
+      'background-color': copyright.background === 'light'  
+    }">
+
+    <!-- Use inlined logo to display the copyright message -->
+    <wm-logo class="mat-small" inline 
+      [caption]="(copyright.text || copyright) | interpolate: { year: '' | moment:'YYYY' }"
+      [color]="copyright.color || 'primary'">      
+    </wm-logo>
+
   </section>
 
 </ng-container> 
