@@ -105,7 +105,7 @@
       <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
         
         <!-- Animated menu -->
-        <wm-menu color="primary" 
+        <wm-menu [color]="msgs.color || 'primary'"
                  [items]="menus[signedIn ? 'private' : 'public']" 
                  [toggler]="menuOpened$ | async" 
                  (togglerChange)="openMenu($event)"
