@@ -21,10 +21,11 @@
         <nav fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 
           <!-- Wizdm logo routing to home -->
-          <wm-logo color="primary" routerLink="."></wm-logo>
+          <wm-logo [color]="msgs.color || 'primary'" routerLink="."></wm-logo>
       
           <!-- Desktop navigation links -->
-          <wm-navbar *ngIf="desktop && msgs.navbar as navbar" [menuItems]="navbar[signedIn ? 'private' : 'public']" color="primary"></wm-navbar>
+          <wm-navbar *ngIf="desktop && msgs.navbar as navbar" [menuItems]="navbar[signedIn ? 'private' : 'public']" [color]="msgs.color || 'primary'">
+          </wm-navbar>
         
         </nav>
 
@@ -49,11 +50,11 @@
               <wm-icon front [icon]="msgs.settings?.public?.icon || 'login'" [routerLink]="msgs.settings?.public?.link || 'login'"></wm-icon>
 
               <!-- Flip[back] - Shows the plain avatar on mobile -->
-              <wm-avatar back color="primary" [src]="userImage" *ngIf="mobile; else settingsMenuTemplate"></wm-avatar>
+              <wm-avatar back [color]="msgs.color || 'primary'" [src]="userImage" *ngIf="mobile; else settingsMenuTemplate"></wm-avatar>
               <ng-template #settingsMenuTemplate>
 
                 <!-- Shows the avatar as the setting menu trigger on big screens -->
-                <wm-avatar back color="primary" [src]="userImage" [matMenuTriggerFor]="menuSettings"></wm-avatar>
+                <wm-avatar back [color]="msgs.color || 'primary'" [src]="userImage" [matMenuTriggerFor]="menuSettings"></wm-avatar>
 
                 <!-- Builds the settings menu -->
                 <mat-menu #menuSettings="matMenu">
@@ -104,7 +105,7 @@
       <mat-toolbar-row auto *ngIf="mobile && msgs.menu as menus">
         
         <!-- Animated menu -->
-        <wm-menu color="primary" 
+        <wm-menu [color]="msgs.color || 'primary'"
                  [items]="menus[signedIn ? 'private' : 'public']" 
                  [toggler]="menuOpened$ | async" 
                  (togglerChange)="openMenu($event)"

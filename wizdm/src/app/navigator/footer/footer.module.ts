@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { ContentModule } from '@wizdm/content';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { IconModule } from '@wizdm/elements/icon';
+import { LogoModule } from '@wizdm/elements/logo';
 import { FooterComponent } from './footer.component';
 
 @NgModule({
@@ -20,7 +21,8 @@ import { FooterComponent } from './footer.component';
     MatMenuModule,
     ContentModule,
     MomentPipesModule,
-    IconModule
+    IconModule,
+    LogoModule
   ],
   declarations: [
     FooterComponent
