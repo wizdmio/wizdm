@@ -3,7 +3,7 @@
 {{ prefix }}
 
 <!-- Custom logo -->
-<img *ngIf="src; else wizdmLogo" [src]="src" [style.width.px]="size || 48" (error)="src = null" />
+<img *ngIf="src; else wizdmLogo" [src]="src" [style.width.px]="size || 48" [style.height.px]="size || 48" (error)="src = null" />
 
 <!-- Wizdm Logo -->
 <ng-template #wizdmLogo>
