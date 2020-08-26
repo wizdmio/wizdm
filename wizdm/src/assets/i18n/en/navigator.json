@@ -49,7 +49,7 @@
     },
 
     "footer": {
-        "copyright": "Shared with wisdom from planet Earth ©{{ year }}",
+        "copyright": "Shared with :wizdm: wisdom from planet Earth ©{{ year }}",
       
         "socials": [
             { "label": "Facebook", "icon": "fab:fa-facebook", "link": "https://facebook.com" },
