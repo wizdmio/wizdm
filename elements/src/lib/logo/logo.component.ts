@@ -24,14 +24,23 @@ export class LogoComponent {
   /** Theme color */ 
   @Input() color: ThemePalette = 'primary';
 
+  /** Logo size in pixels */
+  @Input() size: number;
+
+  /** Caption. It wraps around the logo. Use :wizdm: to place the logo within the text */
   @Input() set caption(text: string) {
     
+    // Splits the text in prefix/suffix
     const [prefix, suffix] = (text || '').split(':wizdm:');
 
+    // Prefix works only when there's a suffix.
     this.prefix = suffix ? prefix : suffix;
+    // Single text defaults to become suffix only
     this.suffix = suffix || prefix;
-
   }
+
+  /** Logo image to be used as alternative to the default Wizdm logo */
+  @Input() src: string;
 
   /** Automatically adjust the size to the font height */
   @Input('inline') set inlining(inline: boolean) {
