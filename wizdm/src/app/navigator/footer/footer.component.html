@@ -75,8 +75,9 @@
 
     <!-- Use inlined logo to display the copyright message -->
     <wm-logo class="mat-small" inline 
+      routerLink="/redirect" [queryParams]="{ url: copyright.url || 'https://wizdm.io' }"
       [caption]="(copyright.text || copyright) | interpolate: { year: '' | moment:'YYYY' }"
-      [color]="copyright.color || 'primary'">      
+      [color]="copyright.color || 'primary'">
     </wm-logo>
 
   </section>
