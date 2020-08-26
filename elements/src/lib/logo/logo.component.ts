@@ -18,9 +18,20 @@ export class LogoComponent {
 
   public animate: boolean
   public inline: boolean;
+  public prefix: string;
+  public suffix: string;
 
   /** Theme color */ 
   @Input() color: ThemePalette = 'primary';
+
+  @Input() set caption(text: string) {
+    
+    const [prefix, suffix] = (text || '').split(':wizdm:');
+
+    this.prefix = suffix ? prefix : suffix;
+    this.suffix = suffix || prefix;
+
+  }
 
   /** Automatically adjust the size to the font height */
   @Input('inline') set inlining(inline: boolean) {

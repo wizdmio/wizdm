@@ -3,13 +3,11 @@
   
   display: inline-flex;
   vertical-align: text-bottom;
-  cursor: pointer;
   outline: none;
-  
-  &[inline="true"] {
 
-    svg { width: 1.5em; height: 1.5em; }
-  }
+  svg { cursor: pointer; }
+  
+  &[inline="true"] svg { width: 1.5em; height: 1.5em; }
 
   &.animate {
 
