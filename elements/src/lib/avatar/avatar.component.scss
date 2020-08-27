@@ -19,6 +19,9 @@
     left: 0;
   }
 
+  // Fits the image within the object
+  img { object-fit: cover; object-position: center; }
+
   // Sets opacity of both background and foreground, so, the latter will results being the sum of both
   svg { #background, #foreground { opacity: 0.25; } }
 }
