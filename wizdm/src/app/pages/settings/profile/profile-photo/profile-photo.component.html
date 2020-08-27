@@ -16,7 +16,7 @@
     </mat-progress-bar>
     
     <!-- Upload/Delete button -->
-    <button mat-icon-button class="buttons" (click)="deleteFile()" *ngIf="!!url; else uploadBtn">
+    <button mat-icon-button class="buttons" (click)="deleteFile()" *ngIf="validUrl; else uploadBtn">
       <wm-icon [icon]="msgs.delete?.icon || 'delete'"></wm-icon>
     </button>
 
