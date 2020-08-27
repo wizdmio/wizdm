@@ -27,7 +27,7 @@ export abstract class StorageApplication {
     this.storage = zone.runOutsideAngular( () => app.storage() );
   }
 
-  /** Returns a firebase soage reference to the given path */
+  /** Returns a firebase storage reference to the given path */
   public ref(path: string|StorageRef): StorageRef {
     return typeof path === 'string' ? this.storage.ref(path) : path;
   }
@@ -37,6 +37,9 @@ export abstract class StorageApplication {
 
   /** Returns a reference to the storage object identified by its download URL */
   public abstract fromURL(url: string): StorageReference;
+
+  /** Verifies the validity of a given storage url */
+  public abstract testURL(url: string): boolean;
 
   /** Shortcut to start an upload task of binary data */
   public abstract upload(path: string, data: Blob|Uint8Array|ArrayBuffer, metadata?: UploadMetadata): UploadObservable;
