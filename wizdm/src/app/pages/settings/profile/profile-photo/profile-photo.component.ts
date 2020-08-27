@@ -12,14 +12,30 @@ export class ProfilePhotoComponent {
 
   public progress$: Observable<number>;
 
+  /** True whenever the current URL refers to a valid storage file */
+  public validUrl: boolean;
+
   constructor(private storage: StorageService) {}
 
+  /** Sets the image folder */
   @Input() folder: string;
 
-  @Input() url: string;
+  /** Sets the image url */
+  @Input() set url(url: string) {
 
+    // Vefifies the validity of the url enabling the deletion.
+    this.validUrl = this.storage.testURL(this._url = url);
+  }
+
+  /** Returns the current url  */
+  get url(): string { return this._url; }
+  private _url: string;
+
+
+  /** Emits image updates */
   @Output() update = new EventEmitter<string>();
 
+  /** Uploads a new image */
   public uploadFile(files: FileList) {
 
     if(files.length <= 0) { return; }
@@ -40,9 +56,11 @@ export class ProfilePhotoComponent {
       .then( () => delete this.progress$ )
   }
 
+  /** Deletes the current image */
   public deleteFile() {
 
     if(!this.url) { return; }
+
     // Gets the torage ref from the URL
     const ref = this.storage.fromURL(this.url);
     
