@@ -23,6 +23,19 @@ export class StorageService extends StorageApplication {
     return new StorageReference(this, this.storage.refFromURL(url));
   }
 
+  /** Verifies the validity of a given storage url */
+  public testURL(url: string): boolean {
+
+    // Short circuits empty and non string arguments
+    if(!url || typeof url !== 'string') { return false; }
+
+    // Tests the url
+    try { this.storage.refFromURL(url); }
+    catch(e) { return false; }
+
+    return true;
+  }
+
   /** Shortcut to start an upload task of binary data */
   public upload(path: string, data: Blob|Uint8Array|ArrayBuffer, metadata?: UploadMetadata): UploadObservable { 
     return this.reference(path).put(data, metadata);
