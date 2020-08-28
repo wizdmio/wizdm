@@ -24,9 +24,9 @@ const routes: RoutesWithContent = [
     canActivate: [ ValidProfile ],
     children: [
       { path: '',       redirectTo: 'people', pathMatch: 'full' },
-      //{ path: 'feed',   loadChildren: () => import('./feed/feed.module').then(m => m.FeedModule) },
+      { path: 'feed',   loadChildren: () => import('./feed/feed.module').then(m => m.FeedModule) },
       { path: 'people', loadChildren: () => import('./people/people.module').then(m => m.PeopleModule) },
-      //{ path: 'groups', loadChildren: () => import('./groups/groups.module').then(m => m.GroupsModule) }
+      { path: 'groups', loadChildren: () => import('./groups/groups.module').then(m => m.GroupsModule) }
     ]
   }
 ];
