@@ -14,6 +14,11 @@ import { IconModule } from '@wizdm/elements/icon';
 import { LoginComponent } from './login.component';
 
 @NgModule({
+
+  providers: [ { provide: 'dialog', useValue: LoginComponent }],
+
+  declarations: [ LoginComponent ],  
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,9 +32,6 @@ import { LoginComponent } from './login.component';
     DialogModule,
     ReadmeModule,
     IconModule
-  ],
-  declarations: [ LoginComponent ],
-  exports: [ LoginComponent ],
-  providers: [ { provide: 'default', useValue: LoginComponent }]
+  ]
 })
 export class LoginModule { }
