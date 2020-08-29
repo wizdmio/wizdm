@@ -19,6 +19,11 @@ import { environment } from 'env/environment';
 const  { doorbell } = environment;
 
 @NgModule({
+
+  providers: [ { provide: 'dialog', useValue: FeedbackComponent }],
+
+  declarations: [ FeedbackComponent ],
+
   imports: [
     CommonModule,
     RouterModule,
@@ -34,9 +39,6 @@ const  { doorbell } = environment;
     IconModule,
     // Initialize the doorbell service
     DoorbellModule.init(doorbell)
-  ],
-  declarations: [ FeedbackComponent ],
-  exports: [ FeedbackComponent ],
-  providers: [ { provide: 'default', useValue: FeedbackComponent }]
+  ]
 })
 export class FeedbackModule { }

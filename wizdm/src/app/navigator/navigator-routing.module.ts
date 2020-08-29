@@ -4,9 +4,9 @@ import { matchUserNameOnly } from 'app/pages/profile/matcher';
 import { matchFullPath } from 'app/pages/static/matcher';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
-import { ActionLinkObserver } from '@wizdm/actionlink';
 import { RedirectService } from '@wizdm/redirect';
 import { UserPreferences } from 'app/utils/user';
+import { DialogLoader } from 'app/dialogs';
 import { NgModule } from '@angular/core';
 
 const routes: RoutesWithContent = [
@@ -22,15 +22,24 @@ const routes: RoutesWithContent = [
   
   // Loads te main window (navigator) together with the localized content 
   {
-    path: ':lang',
-    
-    component: NavigatorComponent,
-    
-    canActivate: [ WelcomeBack, UserPreferences ],
-    
-    content: ['navigator', 'navigator/login', 'navigator/feedback'],
+    path: ':lang',    
+    component: NavigatorComponent,    
+    canActivate: [ WelcomeBack, UserPreferences ],    
+    content: ['navigator', 'login', 'feedback'],
     
     children: [
+
+      { // Login dialog
+        path: 'login', 
+        loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), 
+        canActivate: [ DialogLoader ]
+      },
+
+      { // Feedback dialog
+        path: 'contact', 
+        loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), 
+        canActivate: [ DialogLoader ]
+      },
 
       // Not found page
       { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
@@ -59,11 +68,9 @@ const routes: RoutesWithContent = [
       // Admin tools
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
 
-      // Action links
-      { path: 'login',   canActivate: [ ActionLinkObserver ], loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
-      { path: 'contact', canActivate: [ ActionLinkObserver ], loadChildren: () => import('./feedback/feedback.module').then(m => m.FeedbackModule) },
-      { path: 'back',    canActivate: [ BackLinkObserver ] },
-      { path: 'close',   canActivate: [ CloseLinkObserver ] },
+      // Custom action links
+      { path: 'back', canActivate: [ BackLinkObserver ] },
+      { path: 'close', canActivate: [ CloseLinkObserver ] },
       
       // Docs (using static docs subfolder)
       { path: 'docs', redirectTo: 'docs/start', pathMatch: 'full' },
