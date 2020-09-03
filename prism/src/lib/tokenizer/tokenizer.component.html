@@ -6,7 +6,7 @@
 
   <!-- Spans the token recurring down the tree with the proper styling otherwise -->
   <ng-template #spanToken>
-    <span [class]="tokenClass(token)" [wm-prism]="token.content"></span>
+    <span [class]="tokenClass(token)" [tokenize]="token.content"></span>
   </ng-template>
 
 </ng-container>
