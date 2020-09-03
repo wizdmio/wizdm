@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ContentRouterModule, RoutesWithContent, FileLoader } from '@wizdm/content';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { GtagModule } from '@wizdm/gtag';
 import { AnimateModule } from '@wizdm/animate';
 import { MarkdownModule } from '@wizdm/markdown';
@@ -22,8 +23,6 @@ import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-markdown';
 
-
-
 const routes: RoutesWithContent = [{
   path: '',
   content: 'static',
@@ -34,8 +33,10 @@ const routes: RoutesWithContent = [{
 
 @NgModule({
   declarations: [ StaticComponent ],
+  providers: [ StaticResolver ],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatDividerModule,
     MatButtonModule,
     MatTooltipModule,
@@ -50,8 +51,6 @@ const routes: RoutesWithContent = [{
     SizeLockModule,
     TocModule,
     ContentRouterModule.forChild(routes)
-  ],
-  // Provides the @content/FileLoder locally to avoid mixing up Dynamic content and Static content within the same cache
-  providers: [ FileLoader, StaticResolver ]
+  ]
 })
 export class StaticModule { }

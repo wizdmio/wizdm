@@ -22,7 +22,7 @@ import { PeopleComponent } from './people.component';
 const routes: RoutesWithContent = [{
 
   path: '',
-  content: 'explore/people',
+  content: 'explore-people',
   component: PeopleComponent
 
 }];

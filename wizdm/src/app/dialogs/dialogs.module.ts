@@ -4,6 +4,7 @@ import { DialogOutletDirective } from './dialog-outlet.directive';
 
 @NgModule({
   declarations: [ DialogOutletDirective ],
+  providers: [ DialogLoader ],
   exports: [ DialogOutletDirective ]
 })
 export class DialogsModule { }

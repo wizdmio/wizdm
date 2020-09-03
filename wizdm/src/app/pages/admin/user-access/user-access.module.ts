@@ -13,7 +13,7 @@ import { UserAccessComponent } from './user-access.component';
 const routes: RoutesWithContent = [{
 
   path: '',
-  content: 'admin/access',
+  content: 'admin-access',
   component: UserAccessComponent
 }];
 

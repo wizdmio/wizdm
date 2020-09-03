@@ -1,59 +1,77 @@
 import { Router, Resolve, ActivatedRouteSnapshot, ParamMap } from '@angular/router';
-import { SelectorResolver, FileLoader } from '@wizdm/content';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { SelectorResolver } from '@wizdm/content';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export interface StaticContent {
+  path: string;
   body: string;
-  toc?: any;
-  ref?: string;
 }
 
+/** Resolves the static document content */
 @Injectable()
 export class StaticResolver implements Resolve<StaticContent> {
+
+  private cache = new Map<string, StaticContent>();
+
+  // Returns the default language of the content manager
+  private get defaultLang() { return this.selector.config.defaultValue || 'en'; }
+  private currentLang: string;
   
-  constructor(private router: Router, private selector: SelectorResolver, private loader: FileLoader) { }
+  constructor(private router: Router, private selector: SelectorResolver, private http: HttpClient) { }
 
   /** Resolves the content loading the requested source file */
   public resolve(route: ActivatedRouteSnapshot): Observable<StaticContent> {
 
     // Gets the root path from the route data
-    const root = route.data.source || 'assets/docs';
+    const source = route.data.source || 'assets/doc';
     
     // Resolves the language code from the route using the content selector resolver
     const lang = this.selector.resolve(route);
 
+    // Clears the cache switching language
+    if(lang !== this.currentLang) { this.cache.clear(); }
+
+    // Keeps track of the current language
+    this.currentLang = lang;
+
     // Resolves the source file path from the route
     const path = this.resolvePath(route.paramMap);
 
-    // Loads the main .md file
-    return this.loader.loadFile(root, lang, path + '.md').pipe(
-      // Gets the body contents...
-      switchMap( body => {
+    // Resolves the request from the cache whenever possible
+    if(this.cache.has(path)) { return of(this.cache.get(path)); }
 
-        // Parses the comments looking for options
-        const options = this.parseComments(body);
+    console.log('Loading document:', path + '.md');
 
-        // Returns the body plus the options when no toc is found
-        if(!options.toc) { return of({ body, path, ...options }); }
-        
-        // Loads the toc file if any
-        return this.loader.loadFile(root, lang, options.toc).pipe( 
-          // And returns the body, the toc and the options
-          map( toc => ({ body, path, ...options, toc }) 
-        ));
-      }),
-      
-      // Redirects to NotFound when no content is found
-      catchError( e => {
-  
-        console.error('Unable to load, edirecting to not-found', e);
+    // Loads the document .md file in the requested language folder first
+    return this.http.get(`${source}/${lang}/${path}.md`, { responseType: 'text' }).pipe(
+
+       // Catches the possible error
+       catchError( (e: HttpErrorResponse) => {
+
+        // On file not found (404)...
+        if(lang !== this.defaultLang && e.status === 404) {                 
+          
+          console.log('404 File not found, reverting to default language:', this.defaultLang);
+          
+          // Loads the same document in the default language instead
+          return this.http.get(`${source}/${this.defaultLang}/${path}.md`, { responseType: 'text' });
+        }
+
+        console.error('Unable to load, redirecting to not-found', e);
 
         this.router.navigate(['/not-found']); 
-        
-        return of({ body: '' });
-      })
+
+        return of('');
+      }),
+
+      // Composes the static content
+      map( body => ({ body, path })),
+
+      // Caches the content to avoid reloads
+      tap( content => this.cache.set(path, content) )
     );
   }
 

@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ContentModule } from '@wizdm/content';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { IconModule } from '@wizdm/elements/icon';
@@ -18,9 +18,14 @@ import { FeedbackComponent } from './feedback.component';
 import { environment } from 'env/environment';
 const  { doorbell } = environment;
 
-@NgModule({
+/** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
+const routes: RoutesWithContent = [{
+  path: '',
+  content: 'feedback',
+  component: FeedbackComponent
+}];
 
-  providers: [ { provide: 'dialog', useValue: FeedbackComponent }],
+@NgModule({
 
   declarations: [ FeedbackComponent ],
 
@@ -33,12 +38,12 @@ const  { doorbell } = environment;
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
-    ContentModule,
     RedirectModule,
     DialogModule,
     IconModule,
     // Initialize the doorbell service
-    DoorbellModule.init(doorbell)
+    DoorbellModule.init(doorbell),
+    ContentRouterModule.forChild(routes)
   ]
 })
 export class FeedbackModule { }
