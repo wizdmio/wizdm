@@ -31,19 +31,6 @@ export const common = {
     emojiMode: 'auto'
   },
 
-  // Markdown rendering configuration
-  markdown: <MarkdownConfig> { 
-    commonmark: true, 
-    footnotes: true 
-  },
-
-  // Prism syntax-highlighting extra languages
-  prism: <PrismLanguages> [
-    { name: 'scss', load: () => import('prismjs/components/prism-scss') },
-    { name: 'typescript', load: () => import('prismjs/components/prism-typescript') },
-    { name: 'markdown', load: () => import('prismjs/components/prism-markdown') }
-  ],
-
   // IpInfo geo location service configuration
   ipinfo: <IpInfoConfig>{
     // Use iplist.cc as the provider
@@ -63,6 +50,19 @@ export const common = {
     hideDelay: 0,
     touchendHideDelay: 0
   },
+
+  // Markdown rendering configuration
+  markdown: <MarkdownConfig> { 
+    commonmark: true, 
+    footnotes: true 
+  },
+
+  // Prism syntax-highlighting extra languages
+  prism: <PrismLanguages> [
+    { name: 'scss', load: () => import('prismjs/components/prism-scss') },
+    { name: 'typescript', load: () => import('prismjs/components/prism-typescript') },
+    { name: 'markdown', load: () => import('prismjs/components/prism-markdown') }
+  ],
 
   // StripeElements styling to fit with the global theme
   stripeElements: <StripeElementsOptions>{
