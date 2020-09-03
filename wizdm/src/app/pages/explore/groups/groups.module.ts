@@ -6,7 +6,7 @@ import { GroupsComponent } from './groups.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'explore/groups',
+    content: 'explore-groups',
     component: GroupsComponent
   }
 ];

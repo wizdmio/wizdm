@@ -15,7 +15,7 @@ import { ProfileFixerComponent } from './profile-fixer.component';
 const routes: RoutesWithContent = [{
 
   path: '',
-  content: 'admin/fixer',
+  content: 'admin-fixer',
   component: ProfileFixerComponent,
   canDeactivate: [ CanLeaveGuard ]
 

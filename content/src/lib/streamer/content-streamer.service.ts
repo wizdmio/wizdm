@@ -1,21 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ContentConfigurator } from '../loader/content-configurator.service';
+import { ContentLoader } from '../loader/content-loader.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+/** Streams the data content from the local ContentLoader cache */
 @Injectable()
-/** Data streamer helper. To be provided within the target component or directive decorator 
- * for the correct ActivatedRoute to be injected. */
 export class ContentStreamer {
 
-  constructor(readonly route: ActivatedRoute, readonly config: ContentConfigurator) {}
-  
+  constructor(readonly loader: ContentLoader, readonly config: ContentConfigurator) {}
+    
   /** The content data snapshot */
-  get data(): any { return this.route.snapshot.data; }
+  get data(): any { return this.loader.cache; }
 
   /** The content data observable */
-  get data$(): Observable<any> { return this.route.data; }
+  get data$(): Observable<any> { return this.loader.data$; }
 
   /** The current resolved language code */
   get language(): string { return this.data[this.config.selector]; }

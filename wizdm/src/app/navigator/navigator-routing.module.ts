@@ -1,7 +1,7 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { BackLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
 import { matchUserNameOnly } from 'app/pages/profile/matcher';
-import { matchFullPath } from 'app/pages/static/matcher';
+import { matchFullPath } from 'app/pages/static/static-matcher';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { RedirectService } from '@wizdm/redirect';
@@ -25,7 +25,7 @@ const routes: RoutesWithContent = [
     path: ':lang',    
     component: NavigatorComponent,    
     canActivate: [ WelcomeBack, UserPreferences ],    
-    content: ['navigator', 'login', 'feedback'],
+    content: 'navigator',
     
     children: [
 

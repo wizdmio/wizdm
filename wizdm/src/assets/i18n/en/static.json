@@ -1,6 +1,80 @@
 {
   "toc": {
     "icon": "fas:fa-list",
-    "tooltip": "Table of Contents"
+    "tooltip": "Table of Contents",
+    "items": [
+
+      { "label": "Getting Started", "link": "docs/start" },
+    
+      { "label": "Basics", "items": [
+    
+        { "label": "Environment", "link": "docs/environment" },
+        { "label": "Styling", "link": "docs/styling" },
+        { "label": "Background", "link": "docs/background" },
+        { "label": "Scrolling", "link": "docs/scrolling" }
+      ]},
+    
+      { "label": "Content Management", "items": [
+        { "label": "Overview", "link": "docs/content/overview" },
+        { "label": "Dynamic content", "link": "docs/content/content" },
+        { "label": "Markdown rendering", "link": "docs/content/markdown" },
+        { "label": "Syntax highlighting", "link": "docs/content/prism" },
+        { "label": "Text rendering", "link": "docs/content/readme" },
+        { "label": "Emoji support", "link": "docs/content/emoji" },
+        { "label": "Multiple languages", "link": "docs/content/language" }
+      ]},
+    
+      { "label": "Navigation", "items": [
+    
+        { "label": "Overview", "link": "docs/navigation/overview" },
+        { "label": "Action Bar", "link": "docs/navigation/actionbar" },
+        { "label": "Action Links", "link": "docs/navigation/actionlink" },
+        { "label": "Redirection", "link": "docs/navigation/redirect" },
+        { "label": "Side Panel", "link": "docs/navigation/sidenav" }
+      ]},
+      
+      { "label": "User Management", "items": [
+        { "label": "Authentication", "link": "docs/user/auth" },
+        { "label": "User profile", "link": "docs/user/profile" }
+      ]},
+      
+      { "label": "Guarding", "link": "docs/guards" },
+    
+      { "label": "Elements", "items": [ 
+          
+        { "label": "Introduction", "link": "docs/elements" },
+        { "label": "Avatar", "link": "docs/elements/avatar" },
+        { "label": "Balloon", "link": "docs/elements/balloon" },
+        { "label": "Button changer", "link": "docs/elements/button" },
+        { "label": "Declarative Dialog", "link": "docs/elements/dialog" },
+        { "label": "Flip", "link": "docs/elements/flip" },
+        { "label": "Icon", "link": "docs/elements/icon" },
+        { "label": "Illustration", "link": "docs/elements/illustration" },
+        { "label": "Inkbar", "link": "docs/elements/inkbar" },
+        { "label": "Logo", "link": "docs/elements/logo" },
+        { "label": "Spinner", "link": "docs/elements/spinner" },
+        { "label": "Thumbnail", "link": "docs/elements/thumbnail" },
+        { "label": "Toggler", "link": "docs/elements/toggler" },
+        { "label": "Highlight", "link": "docs/elements/highlight" }
+    
+      ]},
+    
+      { "label": "Extensions", "items": [
+        { "label": "Animate On Scroll", "link": "docs/animate" },
+        { "label": "IP Geolocation", "link": "docs/ipinfo" },
+        { "label": "Teleportation", "link": "docs/teleport" }
+      ]},
+    
+      { "label": "Integrations", "items": [
+    
+        { "label": "Doorbell", "link": "docs/doorbell" },
+        { "label": "Firebase", "link": "docs/connect" },
+        { "label": "Google Analytics", "link": "docs/gtag" },
+        { "label": "Paypal", "link": "docs/paypal" },
+        { "label": "Stripe", "link": "docs/stripe" }
+      ]},
+    
+      { "label": "Utilities", "link": "docs/utils" }
+    ]
   }
 }

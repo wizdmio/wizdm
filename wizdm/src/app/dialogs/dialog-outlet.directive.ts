@@ -18,7 +18,7 @@ export class DialogOutletDirective implements OnDestroy {
     this.sub = loader.dialogs$.pipe(
 
       // Extract the lazily loaded module, if anyn
-      switchMap( ({ action, module, data }) => {
+      switchMap( ({ action, module, component, data }) => {
 
         // Already loaded, so, just skips
         if(this.dlgs[action]) { return of({ dlg: this.dlgs[action], data }); }
@@ -30,17 +30,16 @@ export class DialogOutletDirective implements OnDestroy {
         );}
 
         // Asks for the dialog Component type
-        const component = module.injector.get('dialog');
         if(!component) { throw new Error(
-          `The requested module has no default component defined.
-            Make sure to provide the dialog component type with a 'default' token.`
+          `The requested module has no root component defined.
+            Make sure to provide the dialog component withing the primary child route.`
         );}
 
         // Grab the component factory from the module
         const factory = module.componentFactoryResolver.resolveComponentFactory(component);
 
         // Creates the dialog component within the view container
-        const dlg = view.createComponent(factory).instance as any;
+        const dlg = view.createComponent(factory, undefined, module.injector, undefined, module).instance as any;
         if(typeof dlg.open !== 'function') { throw new Error(
           `The default component doesn't appear to be a DialogComponent.
            Make sure to provide a DialogComponent as the default compoent.`

@@ -4,8 +4,7 @@ import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 @Directive({
-  selector: 'ng-template[wmContent]',
-  providers: [ ContentStreamer ]
+  selector: 'ng-template[wmContent]'
 })
 /** Provides the selected content to be consumed by the template */
 export class ContentDirective implements OnInit, OnDestroy {

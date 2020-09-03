@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders, Inject } from '@angular/core';
 import { RouterModule, Route, Routes, ROUTES, provideRoutes } from '@angular/router';
 import { ContentConfigurator } from '../loader/content-configurator.service';
-import { SelectorResolver } from './selector-resolver.service';
 import { ContentResolver } from './content-resolver';
 import { ContentModule } from '../content.module';
 
@@ -31,14 +30,10 @@ export function resolveRoutesWithContent(routes: RoutesWithContent, source: stri
       const content: string[] = typeof(route.content) === 'string' ? [route.content] : route.content;
       // Gets the resolve data map
       const resolve = route.resolve || {};
-      // Applies the selector resolver first (aka language code)
-      resolve[selector] = SelectorResolver;
       // Builds the content resolvers map
       route.resolve = content.reduce( (resolve, file) => {
-        // Gets the file name without folder(s) and extension, if any
-        const name = file.replace(/^\w+\/|\.\w+$/g, '');
          // Adds a resolver for the given name 
-        if(name) { resolve[ name ] = ContentResolver.create(path, file, ContentRouterModule); }
+        resolve[ file ] = ContentResolver.create(path, file, ContentRouterModule);
         // Next
         return resolve; 
 
@@ -50,7 +45,7 @@ export function resolveRoutesWithContent(routes: RoutesWithContent, source: stri
       delete route.content;
     }
     // Walk down to children
-    if(!!route.children) { route.children = resolveRoutesWithContent(route.children, selector); }
+    if(!!route.children) { route.children = resolveRoutesWithContent(route.children, source, selector); }
     // Done
     return route;
   });

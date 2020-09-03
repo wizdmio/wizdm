@@ -3,14 +3,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { InterpolationPipesModule } from '@wizdm/pipes/interpolation';
 import { ContentConfig, ContentConfigToken } from './loader/content-configurator.service';
 import { ContentConfigurator } from './loader/content-configurator.service';
-import { ContentLoader, FileLoader } from './loader/content-loader.service';
+import { ContentLoader } from './loader/content-loader.service';
 import { SelectorResolver } from './router/selector-resolver.service';
+import { ContentStreamer } from './streamer/content-streamer.service';
 import { ContentDirective } from './streamer/content.directive';
 
 @NgModule({
   declarations: [ ContentDirective ],
   imports: [ HttpClientModule, InterpolationPipesModule ],
-  exports: [ ContentDirective, InterpolationPipesModule ]
+  exports: [ ContentDirective, InterpolationPipesModule ],
+  providers: [ ContentLoader, ContentStreamer ]
 })
 export class ContentModule { 
   /** Initializes the content module with loaders. Call this once in the app root module */
@@ -22,10 +24,6 @@ export class ContentModule {
         { provide: ContentConfigToken, useValue: config }, 
         // Content configurator providing default values when missing 
         ContentConfigurator,
-        // Standard content loader provided only at root level
-        { provide: ContentLoader, useExisting: FileLoader }, 
-        // Default content loader provided as the standard when not overriden
-        FileLoader,
         // Standard selector resolver provided only at root level
         SelectorResolver
       ]

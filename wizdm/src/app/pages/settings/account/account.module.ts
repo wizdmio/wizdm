@@ -14,7 +14,7 @@ import { AccountComponent } from './account.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'settings/account',
+    content: 'settings-account',
     component: AccountComponent,
     //canDeactivate: [ CanLeaveGuard ]
   }

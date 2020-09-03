@@ -27,7 +27,7 @@ import { UploadsComponent } from './uploads.component';
 const routes: RoutesWithContent = [
   {
     path: '',
-    content: 'settings/uploads',
+    content: 'settings-uploads',
     component: UploadsComponent,
     //canDeactivate: [ CanLeaveGuard ]
   }
