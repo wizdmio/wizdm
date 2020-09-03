@@ -1,22 +1,27 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import './prism-manual-mode';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { PrismService, PrismLanguages, LANGUAGE_MODULES } from './prism.service';
 import { PrismHighlighter } from './highlighter/highlighter.component';
 import { PrismTokenizer } from './tokenizer/tokenizer.component';
-import './prism-manual-mode';
-import * as ManualModePrism from 'prismjs';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  declarations: [
+   declarations: [
     PrismHighlighter,
     PrismTokenizer
   ],
-  exports: [
-    PrismHighlighter,
-    PrismTokenizer
-  ],
-  providers: [{ provide: 'prism', useValue: ManualModePrism }]
+  imports: [ CommonModule ],
+  exports: [ PrismHighlighter ],
+  providers: [ PrismService ]
 })
-export class PrismModule { }
+export class PrismModule { 
+
+  /** Initializes the PrismModule with extra language loaders */
+  static init(languages: PrismLanguages): ModuleWithProviders<PrismModule> {
+
+    return {
+      ngModule: PrismModule,
+      providers: [ { provide: LANGUAGE_MODULES, useValue: languages }]
+    }
+  }
+}

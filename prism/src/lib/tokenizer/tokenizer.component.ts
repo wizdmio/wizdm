@@ -1,25 +1,17 @@
-import { Token, TokenStream, Grammar, Languages } from 'prismjs';
-import { Component, Input, Inject } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Token } from 'prismjs';
 
 @Component({ 
-  selector: ':not(pre)[wm-prism]', 
+  selector: '[tokenize]', 
   templateUrl: './tokenizer.component.html'
 }) 
 export class PrismTokenizer { 
 
-  public tokens: TokenStream;
-  private grammar: Grammar;
-
-  constructor(@Inject('prism') private prism) {}
-
-  /** Selects the most appropriate grammar according to the language */
-  @Input() set language(language: string) {
-    this.grammar = !!language ? this.prism.languages[language] : undefined;
-  }
+  public tokens: (string|Token)[];
 
   /** Tokenizes the input string or pass along the already tokenized array */
-  @Input('wm-prism') set source(source: TokenStream) {
-    this.tokens = typeof(source) === 'string' ? this.tokenize(source) : source;
+  @Input() set tokenize(source: (string|Token)[]) {
+    this.tokens = typeof(source) === 'string' ? [source] : source;
   }
 
   /** Helper for rendering strings */
@@ -40,14 +32,5 @@ export class PrismTokenizer {
     }
     // Appends the single alias
     return ' ' + token.alias;
-  }
-
-  private tokenize(source: string): (string|Token)[] {
-    // Skips invalid source
-    if(!source) { return ['']; }
-    // Returns the full text as a single token when no grammar is defined
-    if(!this.grammar) { return [source]; }
-    // Tokenize the source code according to the selected grammar
-    return this.prism.tokenize(source, this.grammar);
   }
 }
