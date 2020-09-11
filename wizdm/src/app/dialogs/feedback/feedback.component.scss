@@ -1,22 +1,24 @@
 
+:host {
 
-// Dialog
-.mat-dialog-content { 
-  max-width: 100%;
-  width: 350px;
-  margin: 0;
-  padding: 0;    
-}
+  // Dialog
+  .mat-dialog-content { 
+    max-width: 100%;
+    width: 350px;
+    margin: 0;
+    padding: 0;    
+  }
 
-.message { 
-  text-align: center; 
-  white-space: pre-wrap;
-  margin-bottom: 20px;
-  padding: 5px;
-}
+  .message { 
+    text-align: center; 
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+    padding: 5px;
+  }
 
-.upload {
-  cursor: pointer;
-  span { opacity: 0.5; }
-  &:hover { span { opacity: inherit; } }
+  .upload {
+    cursor: pointer;
+    span { opacity: 0.5; }
+    &:hover { span { opacity: inherit; } }
+  }
 }

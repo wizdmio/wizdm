@@ -17,7 +17,6 @@
   {
     "icon": "fas:fa-sign-out-alt",
     "label": "SignOut",
-    "link": "../login",
-    "params": { "mode": "signOut" }
+    "link": "../logout"
   }
 ]

@@ -1,16 +1,14 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { DialogComponent } from '@wizdm/elements/dialog';
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 import { DoorbellService } from '@wizdm/doorbell';
 import { UserProfile } from 'app/utils/user';
 
 @Component({
   selector: 'wm-feedback-dlg',
   templateUrl: './feedback.component.html',
-  styleUrls: ['./feedback.component.scss'],
-  host: { 'class': 'wm-feedback' }
+  styleUrls: ['./feedback.component.scss']
 })
-export class FeedbackComponent extends DialogComponent {
+export class FeedbackComponent {
 
   public name: string;
   public email: string;
@@ -20,15 +18,24 @@ export class FeedbackComponent extends DialogComponent {
   public sending = false;
   public sent = false;
 
-  constructor(dialog: MatDialog, private user: UserProfile, private doorbell: DoorbellService) { 
-    super(dialog);
-
-    this.panelClass = ['wm-feedback'];
-  }
-
   get me() { return this.user.data || {}; }
   
   get authenticated() { return this.user.auth.authenticated; }
+
+  constructor(@Inject(MAT_DIALOG_DATA) data: any, private ref: MatDialogRef<any>, private user: UserProfile, private doorbell: DoorbellService) { 
+
+    // Initializes the form with the authenticated user name/email when available
+    this.name = this.me.fullName || this.me.name || '';
+    this.email = this.me.email || '';
+    this.message = '';
+    this.files = null;
+
+    // Prevents user to close the dialog
+    //this.ref.disableClose = true;
+
+    // Rings the doorbell when opening the feedback form
+    this.ref.afterOpened().subscribe( () => this.doorbell.ring() );
+  }
 
   get fileSizeExceeded(): boolean {
 
@@ -43,30 +50,6 @@ export class FeedbackComponent extends DialogComponent {
 
     return false;
   }
-  
-  public open(data?: any) {
-
-    this.sending = this.sent = false;
-
-    // Initializes the form with the authenticated user name/email when available
-    this.name = this.me.fullName || this.me.name || '';
-    this.email = this.me.email || '';
-    this.message = '';
-    this.files = null;
-
-    // Opens the form dialog
-    const ref = super.open(data);
-
-    // Rings the doorbell when opening the feedback form
-    ref.afterOpened().subscribe( () => 
-      // Call the Doorbell restful api and emit the result
-      this.doorbell.ring().then( success => this.feedbackOpen.emit(success) ) 
-    );
-
-    return ref;
-  }
-
-  @Output('rang') feedbackOpen = new EventEmitter<boolean>();
 
   public send(language?: string) {
 
@@ -89,16 +72,14 @@ export class FeedbackComponent extends DialogComponent {
     
     }, this.files).then( success => {
 
+      // Tracks the result
+      this.success = success;
+
       // Turns the sending flag off
       this.sending = false;
 
       // Flags as sent showing the resulting message
       this.sent = true;
-
-      // Emits the result of submission while keeping track of it locally
-      this.feedbackSent.emit(this.success = success);
     }); 
   }
-
-  @Output('sent') feedbackSent = new EventEmitter<boolean>();
 }

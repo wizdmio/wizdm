@@ -18,24 +18,23 @@ import { StripeModule } from '@wizdm/stripe';
 import { StripeElementsModule } from '@wizdm/stripe/elements';
 import { StripeCardModule } from '@wizdm/stripe/elements/card';
 import { StripeMaterialModule } from '@wizdm/stripe/material';
-import { DonateComponent } from './donate.component';
+import { PayComponent } from './pay.component';
 
 // Environment
 import { environment } from 'env/environment';
 const  { stripeElements } = environment;
 
-const routes: RoutesWithContent = [
-  {
-    path: '',
-    content: 'donate',
-    component: DonateComponent,
-    // Resolves stripeJS making sure the script has been loaded by the time the page renders the StripeElements
-    resolve: { stripe: 'loadStripeJS' }
-  }
-];
+/** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
+const routes: RoutesWithContent = [{
+  path: '',
+  content: 'pay',
+  component: PayComponent,
+  // Resolves stripeJS making sure the script has been loaded by the time the dialog renders the StripeElements
+  resolve: { stripe: 'loadStripeJS' }
+}];
 
 @NgModule({
-  declarations: [ DonateComponent ],
+  declarations: [PayComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -50,8 +49,7 @@ const routes: RoutesWithContent = [
     GtagModule,
     ReadmeModule,
     RedirectModule,
-    StripeModule,
-    StripeElementsModule,
+    StripeModule,    
     StripeCardModule,
     StripeMaterialModule,
     StripeElementsModule.init(stripeElements),
@@ -60,4 +58,4 @@ const routes: RoutesWithContent = [
   // Provides stripe loading function as a simple resolver
   providers: [{ provide: 'loadStripeJS', useValue: () => loadStripeJS() }]
 })
-export class DonateModule { }
+export class PayModule { }

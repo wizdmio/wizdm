@@ -1,131 +1,128 @@
 
-<ng-template>
+<!-- Gets the localized content -->
+<ng-container *wmContent="let msgs select 'login'">
 
-  <ng-container *wmContent="let msgs select 'login'">
+  <!-- TITLE -->
+  <h1 mat-dialog-title class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
 
-    <!-- TITLE -->
-    <h1 class="mat-title" [@vanish]="page">{{ msgs.pages[page]?.title }}</h1>
+  <!-- ERROR MESSAGE -->
+  <p class="mat-error" *ngIf="errorCode" @morph>{{ (errorCode | camelize) | pluck:msgs.errors:errorCode }}</p>
 
-    <!-- ERROR MESSAGE -->
-    <p class="mat-error" *ngIf="errorCode" @morph>{{ (errorCode | camelize) | pluck:msgs.errors:errorCode }}</p>
+  <!-- MESSAGE -->
+  <p class="mat-small" [wm-readme]="msgs.pages[page]?.message" [@vanish]="page"></p>
 
-    <!-- MESSAGE -->
-    <p class="mat-small" [wm-readme]="msgs.pages[page]?.message" [@vanish]="page"></p>
+  <!-- SOCIAL SIGN-IN LINKS -->
+  <div class="providers" fxLayout="row" fxLayoutAlign="space-around" *ngIf="page === 'social'" @morph>
 
-    <!-- SOCIAL SIGN-IN LINKS -->
-    <div class="providers" fxLayout="row" fxLayoutAlign="space-around" *ngIf="page === 'social'" @morph>
+    <a *ngFor="let provider of ['google', 'facebook', 'twitter']" (click)="signInWith(provider)">
+      <svg><use attr.xlink:href="#{{provider}}" /></svg>
+    </a>
 
-      <a *ngFor="let provider of ['google', 'facebook', 'twitter']" (click)="signInWith(provider)">
-        <svg><use attr.xlink:href="#{{provider}}" /></svg>
-      </a>
+  </div>
 
-    </div>
+  <!-- EMAIL SIGN-IN FORM -->
+  <form [formGroup]="form" fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px" (ngSubmit)="activate(page)" *ngIf="page !== 'social'" @morph>
 
-    <!-- EMAIL SIGN-IN FORM -->
-    <form [formGroup]="form" fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px" (ngSubmit)="activate(page)" *ngIf="page !== 'social'" @morph>
+    <!-- NAME -->
+    <mat-form-field appearance="legacy" *ngIf="form.contains('name')" @morph>
+      <mat-label>{{ msgs.labels?.fullname }}</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="form.controls['name'].errors?.required">
+        {{ msgs.errors?.nameRequired }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- NAME -->
-      <mat-form-field appearance="legacy" *ngIf="form.contains('name')" @morph>
-        <mat-label>{{ msgs.labels?.fullname }}</mat-label>
-        <input matInput formControlName="name">
-        <mat-error *ngIf="form.controls['name'].errors?.required">
-          {{ msgs.errors?.nameRequired }}
-        </mat-error>
-      </mat-form-field>
+    <!-- EMAIL -->
+    <mat-form-field appearance="legacy" *ngIf="form.contains('email')" @morph>
+      <mat-label>{{ msgs.labels?.email }}</mat-label>
+      <input matInput formControlName="email">
+      <mat-error *ngIf="form.controls['email'].errors?.required">
+        {{ msgs.errors?.emailRequired }}
+      </mat-error>
+      <mat-error *ngIf="form.controls['email'].errors?.email">
+        {{ msgs.errors?.emailInvalid }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- EMAIL -->
-      <mat-form-field appearance="legacy" *ngIf="form.contains('email')" @morph>
-        <mat-label>{{ msgs.labels?.email }}</mat-label>
-        <input matInput formControlName="email">
-        <mat-error *ngIf="form.controls['email'].errors?.required">
-          {{ msgs.errors?.emailRequired }}
-        </mat-error>
-        <mat-error *ngIf="form.controls['email'].errors?.email">
-          {{ msgs.errors?.emailInvalid }}
-        </mat-error>
-      </mat-form-field>
+    <!-- PASSWORD -->
+    <mat-form-field appearance="legacy" *ngIf="form.contains('password')" @morph>
+      <mat-label>{{ msgs.labels?.password }}</mat-label>
+      <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password">
+      <wm-icon matSuffix class="pwd" [icon]="showPassword ? 'visibility' : 'visibility_off'" (click)="showPassword = !showPassword"></wm-icon>
+      <mat-error *ngIf="form.controls['password'].errors?.required">
+        {{ msgs.errors?.passwordRequired }}
+      </mat-error>
 
-      <!-- PASSWORD -->
-      <mat-form-field appearance="legacy" *ngIf="form.contains('password')" @morph>
-        <mat-label>{{ msgs.labels?.password }}</mat-label>
-        <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password">
-        <wm-icon matSuffix class="pwd" [icon]="showPassword ? 'visibility' : 'visibility_off'" (click)="showPassword = !showPassword"></wm-icon>
-        <mat-error *ngIf="form.controls['password'].errors?.required">
-          {{ msgs.errors?.passwordRequired }}
-        </mat-error>
+      <mat-hint class="mat-small" align="end" *ngIf="page === 'signIn'" [wm-readme]="msgs.forgot" (navigate)="switchPage($event)" @morph>
+        <a (click)="switchPage('forgotPassword')">Forgot password?</a>
+      </mat-hint>
+    </mat-form-field>
 
-        <mat-hint class="mat-small" align="end" *ngIf="page === 'signIn'" [wm-readme]="msgs.forgot" (navigate)="switchPage($event)" @morph>
-          <a (click)="switchPage('forgotPassword')">Forgot password?</a>
-        </mat-hint>
-      </mat-form-field>
+    <!-- NEW EMAIL -->
+    <mat-form-field appearance="legacy" *ngIf="form.contains('newEmail')" @morph>
+      <mat-label>{{ msgs.labels?.newEmail }}</mat-label>
+      <input matInput formControlName="newEmail">
+      <mat-error *ngIf="form.controls['newEmail'].errors?.required">
+        {{ msgs.errors?.emailRequired }}
+      </mat-error>
+      <mat-error *ngIf="form.controls['newEmail'].errors?.email">
+        {{ msgs.errors?.emailInvalid }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- NEW EMAIL -->
-      <mat-form-field appearance="legacy" *ngIf="form.contains('newEmail')" @morph>
-        <mat-label>{{ msgs.labels?.newEmail }}</mat-label>
-        <input matInput formControlName="newEmail">
-        <mat-error *ngIf="form.controls['newEmail'].errors?.required">
-          {{ msgs.errors?.emailRequired }}
-        </mat-error>
-        <mat-error *ngIf="form.controls['newEmail'].errors?.email">
-          {{ msgs.errors?.emailInvalid }}
-        </mat-error>
-      </mat-form-field>
+    <!-- NEW PASSWORD -->
+    <mat-form-field appearance="legacy" *ngIf="form.contains('newPassword')" @morph>
+      <mat-label>{{ msgs.labels?.newPassword }}</mat-label>
+      <input matInput formControlName="newPassword">
+      <mat-error *ngIf="form.controls['newPassword'].errors?.required">
+        {{ msgs.errors?.passwordRequired }}
+      </mat-error>
+    </mat-form-field>
 
-      <!-- NEW PASSWORD -->
-      <mat-form-field appearance="legacy" *ngIf="form.contains('newPassword')" @morph>
-        <mat-label>{{ msgs.labels?.newPassword }}</mat-label>
-        <input matInput formControlName="newPassword">
-        <mat-error *ngIf="form.controls['newPassword'].errors?.required">
-          {{ msgs.errors?.passwordRequired }}
-        </mat-error>
-      </mat-form-field>
+    <!-- ACTION BUTTON -->
+    <button *ngIf="msgs.pages[page]?.caption as caption" 
+              mat-stroked-button type="submit" class="btn"
+              [color]="msgs.pages[page]?.color || 'primary'" 
+              [disabled]="!!errorCode || !form.valid" 
+              @morph>{{ caption }}</button>
 
-      <!-- ACTION BUTTON -->
-      <button *ngIf="msgs.pages[page]?.caption as caption" 
-               mat-stroked-button type="submit" class="btn"
-               [color]="msgs.pages[page]?.color || 'primary'" 
-               [disabled]="!!errorCode || !form.valid" 
-               @morph>{{ caption }}</button>
+    <!-- PROGRESS -->
+    <mat-progress-bar *ngIf="progress" mode="indeterminate" color="accent" @morph></mat-progress-bar>
 
-      <!-- PROGRESS -->
-      <mat-progress-bar *ngIf="progress" mode="indeterminate" color="accent" @morph></mat-progress-bar>
+  </form>
 
-    </form>
+  <!-- INSTRUCTIONS -->
+  <p *ngIf="msgs.pages[page]?.instructions as instructions" 
+      class="mat-small bit-of-space" 
+      [wm-readme]="instructions" 
+      (navigate)="switchPage($event)"
+      [@vanish]="page"></p>
 
-    <!-- INSTRUCTIONS -->
-    <p *ngIf="msgs.pages[page]?.instructions as instructions" 
-        class="mat-small bit-of-space" 
-        [wm-readme]="instructions" 
-        (navigate)="switchPage($event)"
-        [@vanish]="page"></p>
+  <!-- SOCIAL PROVIDERS --> 
+  <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" visibility="hidden">
 
-    <!-- SOCIAL PROVIDERS --> 
-    <svg xmlns="http://www.w3.org/2000/svg" height="0" width="0" visibility="hidden">
+    <!-- GOOGLE LOGO -->
+    <symbol id="google" viewBox="0 0 533.5 544.3">
+      <path fill="#4285F4" d="M533.5 278.4c0-18.5-1.5-37.1-4.7-55.3H272.1v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z"/><path fill="#34A853" d="M272.1 544.3c73.4 0 135.3-24.1 180.4-65.7l-87.7-68c-24.4 16.6-55.9 26-92.6 26-71 0-131.2-47.9-152.8-112.3H28.9v70.1c46.2 91.9 140.3 149.9 243.2 149.9z"/><path fill="#FBBC04" d="M119.3 324.3c-11.4-33.8-11.4-70.4 0-104.2V150H28.9c-38.6 76.9-38.6 167.5 0 244.4l90.4-70.1z"/><path fill="#EA4335" d="M272.1 107.7c38.8-.6 76.3 14 104.4 40.8l77.7-77.7C405 24.6 339.7-.8 272.1 0 169.2 0 75.1 58 28.9 150l90.4 70.1c21.5-64.5 81.8-112.4 152.8-112.4z"/>
+    </symbol>
 
-      <!-- GOOGLE LOGO -->
-      <symbol id="google" viewBox="0 0 533.5 544.3">
-        <path fill="#4285F4" d="M533.5 278.4c0-18.5-1.5-37.1-4.7-55.3H272.1v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z"/><path fill="#34A853" d="M272.1 544.3c73.4 0 135.3-24.1 180.4-65.7l-87.7-68c-24.4 16.6-55.9 26-92.6 26-71 0-131.2-47.9-152.8-112.3H28.9v70.1c46.2 91.9 140.3 149.9 243.2 149.9z"/><path fill="#FBBC04" d="M119.3 324.3c-11.4-33.8-11.4-70.4 0-104.2V150H28.9c-38.6 76.9-38.6 167.5 0 244.4l90.4-70.1z"/><path fill="#EA4335" d="M272.1 107.7c38.8-.6 76.3 14 104.4 40.8l77.7-77.7C405 24.6 339.7-.8 272.1 0 169.2 0 75.1 58 28.9 150l90.4 70.1c21.5-64.5 81.8-112.4 152.8-112.4z"/>
-      </symbol>
+    <!-- FACECBOOK LOGO -->
+    <symbol id="facebook" viewBox="0 0 400 400">
+      <path fill="#1977F3" d="M400 201C400 90.551 310.449 1 200 1S0 90.551 0 201c0 99.817 73.126 182.562 168.753 197.581V258.826h-50.795V201h50.795v-44.073c0-50.119 29.869-77.823 75.545-77.823 21.881 0 44.775 3.91 44.775 3.91v49.219h-25.228c-24.835 0-32.598 15.413-32.598 31.248V201h55.464l-8.86 57.826h-46.604v139.755C326.874 383.59 400 300.845 400 201z"/><path fill="#FEFEFE" d="M277.851 257.826l8.86-57.826h-55.464v-37.519c0-15.807 7.735-31.248 32.598-31.248h25.228V82.014s-22.894-3.91-44.775-3.91c-45.676 0-75.545 27.676-75.545 77.823V200h-50.795v57.826h50.795v139.755A200.795 200.795 0 00200 400c10.631 0 21.066-.844 31.247-2.419V257.826h46.604z"/>
+    </symbol>
 
-      <!-- FACECBOOK LOGO -->
-      <symbol id="facebook" viewBox="0 0 400 400">
-        <path fill="#1977F3" d="M400 201C400 90.551 310.449 1 200 1S0 90.551 0 201c0 99.817 73.126 182.562 168.753 197.581V258.826h-50.795V201h50.795v-44.073c0-50.119 29.869-77.823 75.545-77.823 21.881 0 44.775 3.91 44.775 3.91v49.219h-25.228c-24.835 0-32.598 15.413-32.598 31.248V201h55.464l-8.86 57.826h-46.604v139.755C326.874 383.59 400 300.845 400 201z"/><path fill="#FEFEFE" d="M277.851 257.826l8.86-57.826h-55.464v-37.519c0-15.807 7.735-31.248 32.598-31.248h25.228V82.014s-22.894-3.91-44.775-3.91c-45.676 0-75.545 27.676-75.545 77.823V200h-50.795v57.826h50.795v139.755A200.795 200.795 0 00200 400c10.631 0 21.066-.844 31.247-2.419V257.826h46.604z"/>
-      </symbol>
+    <!-- TWITTER LOGO -->
+    <symbol id="twitter" viewBox="0 0 400 400">
+      <path fill="#1DA1F2" d="M125.792 362.474c150.944 0 233.504-125.056 233.504-233.504 0-3.552 0-7.088-.24-10.608A166.986 166.986 0 00400 75.882a163.814 163.814 0 01-47.136 12.912 82.352 82.352 0 0036.08-45.392 164.474 164.474 0 01-52.112 19.92c-25.439-27.05-65.861-33.67-98.599-16.149-32.739 17.521-49.653 54.826-41.257 90.997A232.993 232.993 0 0127.84 52.426c-21.782 37.498-10.656 85.47 25.408 109.552A81.452 81.452 0 0116 151.706v1.04c.011 39.065 27.548 72.712 65.84 80.448a81.933 81.933 0 01-37.056 1.408c10.751 33.431 41.561 56.332 76.672 56.992a164.672 164.672 0 01-101.92 35.2A167.174 167.174 0 010 325.61a232.344 232.344 0 00125.792 36.8"/>
+    </symbol>
+    
+    <!-- INSTAGRAM LOGO -->
+    <!--symbol id="instagram" viewBox="0 0 400 400">
+      <path fill="url(#a)" d="M200.065 0C116.567 0 92.147.086 87.4.48c-17.135 1.425-27.798 4.123-39.414 9.909-8.952 4.446-16.012 9.6-22.98 16.826C12.316 40.391 4.625 56.602 1.841 75.871.487 85.226.094 87.134.014 134.916c-.031 15.928 0 36.889 0 65.006 0 83.453.092 107.855.492 112.594 1.384 16.678 3.999 27.171 9.537 38.649 10.582 21.971 30.794 38.465 54.605 44.619 8.244 2.124 17.35 3.293 29.04 3.847 4.953.215 55.436.369 105.95.369 50.513 0 101.027-.062 105.857-.308 13.536-.637 21.396-1.692 30.086-3.939 23.965-6.185 43.807-22.432 54.605-44.711 5.43-11.201 8.184-22.094 9.429-37.902.271-3.446.385-58.395.385-113.271 0-54.884-.123-109.732-.394-113.179-1.261-16.062-4.014-26.863-9.62-38.28-4.599-9.345-9.705-16.324-17.119-23.46-13.232-12.641-29.413-20.334-48.696-23.116C314.828.483 312.967.083 265.161 0h-65.096z"/><path fill="url(#b)" d="M200.065 0C116.567 0 92.147.086 87.4.48c-17.135 1.425-27.798 4.123-39.414 9.909-8.952 4.446-16.012 9.6-22.98 16.826C12.316 40.391 4.625 56.602 1.841 75.871.487 85.226.094 87.134.014 134.916c-.031 15.928 0 36.889 0 65.006 0 83.453.092 107.855.492 112.594 1.384 16.678 3.999 27.171 9.537 38.649 10.582 21.971 30.794 38.465 54.605 44.619 8.244 2.124 17.35 3.293 29.04 3.847 4.953.215 55.436.369 105.95.369 50.513 0 101.027-.062 105.857-.308 13.536-.637 21.396-1.692 30.086-3.939 23.965-6.185 43.807-22.432 54.605-44.711 5.43-11.201 8.184-22.094 9.429-37.902.271-3.446.385-58.395.385-113.271 0-54.884-.123-109.732-.394-113.179-1.261-16.062-4.014-26.863-9.62-38.28-4.599-9.345-9.705-16.324-17.119-23.46-13.232-12.641-29.413-20.334-48.696-23.116C314.828.483 312.967.083 265.161 0h-65.096z"/><path fill="#FFF" d="M199.973 52.312c-40.103 0-45.136.176-60.887.892-15.72.721-26.45 3.21-35.839 6.863-9.712 3.772-17.951 8.819-26.159 17.032-8.213 8.21-13.259 16.45-17.043 26.162-3.66 9.395-6.152 20.131-6.86 35.849-.704 15.755-.889 20.793-.889 60.907s.179 45.133.892 60.888c.723 15.725 3.212 26.458 6.861 35.849 3.774 9.715 8.819 17.956 17.03 26.166 8.205 8.216 16.443 13.275 26.149 17.047 9.395 3.653 20.129 6.142 35.846 6.862 15.751.717 20.78.893 60.881.893 40.106 0 45.123-.176 60.874-.893 15.72-.72 26.463-3.209 35.858-6.862 9.709-3.772 17.935-8.831 26.14-17.047 8.214-8.21 13.259-16.451 17.043-26.163 3.63-9.394 6.122-20.131 6.86-35.849.708-15.755.892-20.777.892-60.891s-.184-45.149-.892-60.904c-.738-15.724-3.23-26.457-6.86-35.849-3.784-9.715-8.829-17.955-17.043-26.165-8.214-8.216-16.428-13.263-26.149-17.032-9.414-3.653-20.15-6.142-35.87-6.863-15.751-.716-20.766-.892-60.881-.892zM186.726 78.93c3.932-.006 8.319 0 13.247 0 39.426 0 44.099.141 59.669.849 14.397.659 22.211 3.065 27.416 5.087 6.891 2.677 11.804 5.877 16.969 11.047 5.169 5.169 8.368 10.093 11.051 16.986 2.021 5.2 4.429 13.016 5.085 27.417.707 15.571.861 20.248.861 59.667s-.154 44.096-.861 59.667c-.659 14.401-3.064 22.217-5.085 27.417-2.677 6.893-5.882 11.801-11.051 16.968-5.168 5.17-10.075 8.37-16.969 11.047-5.199 2.031-13.019 4.431-27.416 5.09-15.567.707-20.243.861-59.669.861-39.429 0-44.102-.154-59.669-.861-14.397-.665-22.211-3.071-27.419-5.093-6.891-2.677-11.813-5.877-16.982-11.047-5.168-5.17-8.367-10.081-11.05-16.977-2.021-5.2-4.43-13.016-5.085-27.418-.708-15.57-.849-20.248-.849-59.691s.141-44.096.849-59.666c.658-14.402 3.064-22.218 5.085-27.424 2.677-6.893 5.882-11.817 11.05-16.986 5.169-5.17 10.091-8.37 16.982-11.054 5.205-2.031 13.022-4.431 27.419-5.092 13.622-.616 18.901-.8 46.422-.831zm92.069 24.525c-9.783 0-17.72 7.93-17.72 17.718 0 9.786 7.937 17.725 17.72 17.725 9.783 0 17.72-7.939 17.72-17.725 0-9.785-7.937-17.724-17.72-17.724zm-78.822 20.709c-41.878 0-75.832 33.963-75.832 75.853 0 41.89 33.954 75.837 75.832 75.837 41.878 0 75.82-33.947 75.82-75.837s-33.945-75.853-75.823-75.853zm0 26.618c27.183 0 49.222 22.042 49.222 49.235 0 27.19-22.039 49.235-49.222 49.235-27.186 0-49.222-22.045-49.222-49.235 0-27.193 22.036-49.235 49.222-49.235z"/>
+    </symbol-->
 
-      <!-- TWITTER LOGO -->
-      <symbol id="twitter" viewBox="0 0 400 400">
-        <path fill="#1DA1F2" d="M125.792 362.474c150.944 0 233.504-125.056 233.504-233.504 0-3.552 0-7.088-.24-10.608A166.986 166.986 0 00400 75.882a163.814 163.814 0 01-47.136 12.912 82.352 82.352 0 0036.08-45.392 164.474 164.474 0 01-52.112 19.92c-25.439-27.05-65.861-33.67-98.599-16.149-32.739 17.521-49.653 54.826-41.257 90.997A232.993 232.993 0 0127.84 52.426c-21.782 37.498-10.656 85.47 25.408 109.552A81.452 81.452 0 0116 151.706v1.04c.011 39.065 27.548 72.712 65.84 80.448a81.933 81.933 0 01-37.056 1.408c10.751 33.431 41.561 56.332 76.672 56.992a164.672 164.672 0 01-101.92 35.2A167.174 167.174 0 010 325.61a232.344 232.344 0 00125.792 36.8"/>
-      </symbol>
-      
-      <!-- INSTAGRAM LOGO -->
-      <!--symbol id="instagram" viewBox="0 0 400 400">
-        <path fill="url(#a)" d="M200.065 0C116.567 0 92.147.086 87.4.48c-17.135 1.425-27.798 4.123-39.414 9.909-8.952 4.446-16.012 9.6-22.98 16.826C12.316 40.391 4.625 56.602 1.841 75.871.487 85.226.094 87.134.014 134.916c-.031 15.928 0 36.889 0 65.006 0 83.453.092 107.855.492 112.594 1.384 16.678 3.999 27.171 9.537 38.649 10.582 21.971 30.794 38.465 54.605 44.619 8.244 2.124 17.35 3.293 29.04 3.847 4.953.215 55.436.369 105.95.369 50.513 0 101.027-.062 105.857-.308 13.536-.637 21.396-1.692 30.086-3.939 23.965-6.185 43.807-22.432 54.605-44.711 5.43-11.201 8.184-22.094 9.429-37.902.271-3.446.385-58.395.385-113.271 0-54.884-.123-109.732-.394-113.179-1.261-16.062-4.014-26.863-9.62-38.28-4.599-9.345-9.705-16.324-17.119-23.46-13.232-12.641-29.413-20.334-48.696-23.116C314.828.483 312.967.083 265.161 0h-65.096z"/><path fill="url(#b)" d="M200.065 0C116.567 0 92.147.086 87.4.48c-17.135 1.425-27.798 4.123-39.414 9.909-8.952 4.446-16.012 9.6-22.98 16.826C12.316 40.391 4.625 56.602 1.841 75.871.487 85.226.094 87.134.014 134.916c-.031 15.928 0 36.889 0 65.006 0 83.453.092 107.855.492 112.594 1.384 16.678 3.999 27.171 9.537 38.649 10.582 21.971 30.794 38.465 54.605 44.619 8.244 2.124 17.35 3.293 29.04 3.847 4.953.215 55.436.369 105.95.369 50.513 0 101.027-.062 105.857-.308 13.536-.637 21.396-1.692 30.086-3.939 23.965-6.185 43.807-22.432 54.605-44.711 5.43-11.201 8.184-22.094 9.429-37.902.271-3.446.385-58.395.385-113.271 0-54.884-.123-109.732-.394-113.179-1.261-16.062-4.014-26.863-9.62-38.28-4.599-9.345-9.705-16.324-17.119-23.46-13.232-12.641-29.413-20.334-48.696-23.116C314.828.483 312.967.083 265.161 0h-65.096z"/><path fill="#FFF" d="M199.973 52.312c-40.103 0-45.136.176-60.887.892-15.72.721-26.45 3.21-35.839 6.863-9.712 3.772-17.951 8.819-26.159 17.032-8.213 8.21-13.259 16.45-17.043 26.162-3.66 9.395-6.152 20.131-6.86 35.849-.704 15.755-.889 20.793-.889 60.907s.179 45.133.892 60.888c.723 15.725 3.212 26.458 6.861 35.849 3.774 9.715 8.819 17.956 17.03 26.166 8.205 8.216 16.443 13.275 26.149 17.047 9.395 3.653 20.129 6.142 35.846 6.862 15.751.717 20.78.893 60.881.893 40.106 0 45.123-.176 60.874-.893 15.72-.72 26.463-3.209 35.858-6.862 9.709-3.772 17.935-8.831 26.14-17.047 8.214-8.21 13.259-16.451 17.043-26.163 3.63-9.394 6.122-20.131 6.86-35.849.708-15.755.892-20.777.892-60.891s-.184-45.149-.892-60.904c-.738-15.724-3.23-26.457-6.86-35.849-3.784-9.715-8.829-17.955-17.043-26.165-8.214-8.216-16.428-13.263-26.149-17.032-9.414-3.653-20.15-6.142-35.87-6.863-15.751-.716-20.766-.892-60.881-.892zM186.726 78.93c3.932-.006 8.319 0 13.247 0 39.426 0 44.099.141 59.669.849 14.397.659 22.211 3.065 27.416 5.087 6.891 2.677 11.804 5.877 16.969 11.047 5.169 5.169 8.368 10.093 11.051 16.986 2.021 5.2 4.429 13.016 5.085 27.417.707 15.571.861 20.248.861 59.667s-.154 44.096-.861 59.667c-.659 14.401-3.064 22.217-5.085 27.417-2.677 6.893-5.882 11.801-11.051 16.968-5.168 5.17-10.075 8.37-16.969 11.047-5.199 2.031-13.019 4.431-27.416 5.09-15.567.707-20.243.861-59.669.861-39.429 0-44.102-.154-59.669-.861-14.397-.665-22.211-3.071-27.419-5.093-6.891-2.677-11.813-5.877-16.982-11.047-5.168-5.17-8.367-10.081-11.05-16.977-2.021-5.2-4.43-13.016-5.085-27.418-.708-15.57-.849-20.248-.849-59.691s.141-44.096.849-59.666c.658-14.402 3.064-22.218 5.085-27.424 2.677-6.893 5.882-11.817 11.05-16.986 5.169-5.17 10.091-8.37 16.982-11.054 5.205-2.031 13.022-4.431 27.419-5.092 13.622-.616 18.901-.8 46.422-.831zm92.069 24.525c-9.783 0-17.72 7.93-17.72 17.718 0 9.786 7.937 17.725 17.72 17.725 9.783 0 17.72-7.939 17.72-17.725 0-9.785-7.937-17.724-17.72-17.724zm-78.822 20.709c-41.878 0-75.832 33.963-75.832 75.853 0 41.89 33.954 75.837 75.832 75.837 41.878 0 75.82-33.947 75.82-75.837s-33.945-75.853-75.823-75.853zm0 26.618c27.183 0 49.222 22.042 49.222 49.235 0 27.19-22.039 49.235-49.222 49.235-27.186 0-49.222-22.045-49.222-49.235 0-27.193 22.036-49.235 49.222-49.235z"/>
-      </symbol-->
+    <!-- INSTAGRAM LOGO GRADIENTS -->
+    <!--defs><radialGradient id="a" gradientUnits="userSpaceOnUse" cx="12.208" cy="616.437" r="199.962" gradientTransform="matrix(0 -1.982 1.844 0 -1030.398 455.004)"><stop offset="0" stop-color="#FD5"/><stop offset=".1" stop-color="#FD5"/><stop offset=".5" stop-color="#FF543E"/><stop offset="1" stop-color="#C837AB"/></radialGradient><radialGradient id="b" gradientUnits="userSpaceOnUse" cx="157.863" cy="486.859" r="199.969" gradientTransform="matrix(.174 .869 -3.582 .717 1649.352 -457.493)"><stop offset="0" stop-color="#3771C8"/><stop offset=".128" stop-color="#3771C8"/><stop offset="1" stop-color="#60F" stop-opacity="0"/></radialGradient></defs-->
+  </svg>
 
-      <!-- INSTAGRAM LOGO GRADIENTS -->
-      <!--defs><radialGradient id="a" gradientUnits="userSpaceOnUse" cx="12.208" cy="616.437" r="199.962" gradientTransform="matrix(0 -1.982 1.844 0 -1030.398 455.004)"><stop offset="0" stop-color="#FD5"/><stop offset=".1" stop-color="#FD5"/><stop offset=".5" stop-color="#FF543E"/><stop offset="1" stop-color="#C837AB"/></radialGradient><radialGradient id="b" gradientUnits="userSpaceOnUse" cx="157.863" cy="486.859" r="199.969" gradientTransform="matrix(.174 .869 -3.582 .717 1649.352 -457.493)"><stop offset="0" stop-color="#3771C8"/><stop offset=".128" stop-color="#3771C8"/><stop offset="1" stop-color="#60F" stop-opacity="0"/></radialGradient></defs-->
-    </svg>
-
-  </ng-container>
-
-</ng-template>
+</ng-container>

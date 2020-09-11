@@ -13,7 +13,6 @@ import { TogglerModule } from '@wizdm/elements/toggler';
 import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { FlipModule } from '@wizdm/elements/flip';
-import { DialogsModule } from 'app/dialogs';
 import { TitleModule } from './title/title.module';
 import { NavbarModule } from './navbar/navbar.module'; 
 import { ActionbarModule } from './actionbar/actionbar.module'; 
@@ -41,7 +40,6 @@ import { NavigatorComponent } from './navigator.component';
     IconModule, 
     AvatarModule,
     FlipModule,
-    DialogsModule,
     TitleModule,
     NavbarModule,
     ActionbarModule,

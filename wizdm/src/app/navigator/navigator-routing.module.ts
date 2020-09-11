@@ -1,5 +1,5 @@
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { BackLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
+import { BackLinkObserver, LogoutLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
 import { matchUserNameOnly } from 'app/pages/profile/matcher';
 import { matchFullPath } from 'app/pages/static/static-matcher';
 import { NavigatorComponent } from './navigator.component';
@@ -29,18 +29,6 @@ const routes: RoutesWithContent = [
     
     children: [
 
-      { // Login dialog
-        path: 'login', 
-        loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), 
-        canActivate: [ DialogLoader ]
-      },
-
-      { // Feedback dialog
-        path: 'contact', 
-        loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), 
-        canActivate: [ DialogLoader ]
-      },
-
       // Not found page
       { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
       { path: '404', redirectTo: 'not-found', pathMatch: 'full' },
@@ -67,9 +55,19 @@ const routes: RoutesWithContent = [
 
       // Admin tools
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
+      
+       // Login dialog
+      { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ DialogLoader ] },
+
+      // Feedback dialog
+      { path: 'contact', loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), canActivate: [ DialogLoader ] },
+
+      // Payments dialog
+      //{ path: 'pay', loadChildren: () => import('../dialogs/pay/pay.module').then(m => m.PayModule), canActivate: [ DialogLoader ] },
 
       // Custom action links
       { path: 'back', canActivate: [ BackLinkObserver ] },
+      { path: 'logout', canActivate: [ LogoutLinkObserver ] },
       { path: 'close', canActivate: [ CloseLinkObserver ] },
       
       // Docs (using static docs subfolder)
@@ -87,6 +85,6 @@ const routes: RoutesWithContent = [
 @NgModule({
   imports: [ ContentRouterModule.forChild(routes) ],
   exports: [ ContentRouterModule ],
-  providers: [ WelcomeBack, UserPreferences ]
+  providers: [ WelcomeBack, UserPreferences, DialogLoader ]
 })
 export class NavRoutingModule {}

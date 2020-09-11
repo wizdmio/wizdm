@@ -1,0 +1,20 @@
+{
+  "title": "Contribute to Wizdm",
+  "intro": "Thanks to your generosity we are able to cover for the costs exceeding the free quotas of the [various online services](about) the project is based upon.",
+  "form": {
+    "name": { "label": "Name", "hint": "How do we call you", "error": "Please provide your name for billing purposes" },
+    "email": { "label": "Email", "hint": "We'll send you the rececipt here", "error": "Please provide a valid email" },
+    "amount": { "label": "Amount", "hint": "Choose the amount to donate", "error": "Please choose a proper amount", 
+      "options": [ 
+        { "label": "5", "value": 5 },
+        { "label": "25", "value": 25 },
+        { "label": "100", "value": 100 }
+      ], 
+      "custom": "Other:",
+      "placeholder": "Enter the amount"
+    },
+    "card": { "label": "Credit card", "hint": "Powered by Stripe" },
+    "action": "Donate Now"
+  },
+  "thanks": "Thank You 🙏🏻"
+}

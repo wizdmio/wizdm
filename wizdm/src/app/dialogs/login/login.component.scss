@@ -1,15 +1,15 @@
 
-.wm-login {
+:host {
 
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   justify-content: space-around;
   align-items: stretch;
+  text-align: center;
 
   width: 350px;
   max-width: 100%;
-  text-align: center;
 
   .providers {
     height: 48px;
