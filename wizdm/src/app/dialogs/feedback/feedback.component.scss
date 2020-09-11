@@ -1,10 +1,13 @@
 
-// Dialog
-.mat-dialog-content { 
-  max-width: 100%;
-  width: 350px;
-  margin: 0;
-  padding: 0;
+:host {
+
+  // Dialog
+  .mat-dialog-content { 
+    max-width: 100%;
+    width: 350px;
+    margin: 0;
+    padding: 0;    
+  }
 
   .message { 
     text-align: center; 
@@ -12,17 +15,10 @@
     margin-bottom: 20px;
     padding: 5px;
   }
-}
 
-.upload {
-  cursor: pointer;
-  span { opacity: 0.5; }
-  &:hover {
-    span { opacity: inherit; }
-  }
-
-  &[disabled=true] {
-    pointer-events: none;
-    color: gray;
+  .upload {
+    cursor: pointer;
+    span { opacity: 0.5; }
+    &:hover { span { opacity: inherit; } }
   }
 }

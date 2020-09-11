@@ -1,0 +1,77 @@
+  
+<!-- Use the form as a StripeElements container using the current locale -->
+<form *wmContent="let msgs select 'pay';let lang = language" 
+      [StripeElements]="lang" 
+      fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="16px" 
+      (ngSubmit)="pay(stripe)" 
+      gtag="pay" 
+      #form="ngForm">
+
+  <!-- Name -->
+  <mat-form-field>
+    <mat-label>{{ msgs.form?.name?.label || 'Name' }}</mat-label>
+    <input matInput [(ngModel)]="name" name="name" required [disabled]="!ready || progress" #formName="ngModel">
+    <mat-error *ngIf="!formName.valid">{{ msgs.form?.name?.error || 'Please provide your name' }}</mat-error>
+    <mat-hint>{{ msgs.form?.name?.hint || 'Your name here' }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Email -->
+  <mat-form-field>
+    <mat-label>{{ msgs.form?.email?.label || 'Email' }}</mat-label>
+    <input matInput [(ngModel)]="email" name="email" email required [disabled]="!ready || progress" #formEmail="ngModel">
+    <mat-error *ngIf="!formEmail.valid">{{ msgs.form?.email?.error || 'Please provide a valid email' }}</mat-error>
+    <mat-hint>{{ msgs.form?.email?.hint || 'We\'ll send you the rececipt here' }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Amount -->
+  <mat-form-field floatLabel='always'>
+    <mat-label>{{ msgs.form?.amount?.label || 'Amount' }}</mat-label>
+
+    <!-- Fixed amount options -->
+    <mat-button-toggle-group [(ngModel)]="amount" name="amount">
+
+      <!-- Pre-defined options -->
+      <mat-button-toggle *ngFor="let option of msgs.form?.amount?.options || defaultAmoutOptions" (mousedown)="false" [value]="option.value">{{ option.label }}</mat-button-toggle>
+      
+      <!-- Variable amount option -->
+      <mat-button-toggle (mousedown)="false" value="">{{ msgs?.form?.amount?.custom || 'Other:' }}&nbsp;</mat-button-toggle>
+
+      <input matInput [(ngModel)]="amount" name="amount" required autocomplete="off" pattern="\d*" style="text-align: center;"
+                      [placeholder]="msgs.form?.amount?.placeholder || 'Enter the amount'" 
+                      [disabled]="!ready || progress" #formAmount="ngModel" />
+
+    </mat-button-toggle-group>
+
+    <mat-hint>{{ msgs.form?.amout?.hint || 'Choose the amount' }}</mat-hint>
+    <mat-error *ngIf="!formAmount.valid">{{ msgs.form?.amount?.error || 'Please choose a proper amount' }}</mat-error>
+
+    <!-- Currency switch button -->
+    <button mat-icon-button matSuffix matTooltip="Switch currency" (mousedown)="false" (click)="toggleCurrency()" [disabled]="formAmount.disabled" type="button">
+      <mat-icon inline fontSet="fas" [fontIcon]="currency === 'eur' ? 'fa-euro-sign' : 'fa-dollar-sign'"></mat-icon>
+    </button> 
+    
+  </mat-form-field>
+
+  <!-- Credit card info -->
+  <mat-form-field>
+    <mat-label>{{ msgs.form?.card.label || 'Credit card' }}</mat-label>
+    <wm-stripe-card matStripe hidePostalCode name="card" required 
+                    [(ngModel)]="card" 
+                    [disabled]="!ready || progress" 
+                    [styleBase]="(autoMode$ | async) || 'auto'"
+                    (ready)="ready = $event" #formCard>
+    </wm-stripe-card>
+    <mat-error *ngIf="formCard.error">{{ formCard.error.message }}</mat-error>
+    <mat-hint>{{ msgs.form?.card?.hint || 'Powered by Stripe' }}</mat-hint>
+  </mat-form-field>
+
+  <!-- Payment error message -->
+  <p class="mat-error" *ngIf="error" @error>{{ error }}</p>
+
+  <!-- Submit button -->
+  <button mat-flat-button type="submit" color="primary" [disabled]="!form.valid || !ready || progress">
+    <mat-progress-spinner mode="indeterminate" diameter="30" *ngIf="progress"></mat-progress-spinner>
+    <span>{{ msgs.form?.action || 'Donate Now' }}</span>
+  </button>
+
+</form>

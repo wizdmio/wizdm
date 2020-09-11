@@ -1,73 +1,185 @@
-import { Injectable, NgModuleRef } from '@angular/core';
+import { Router, Route, Routes, ROUTES, ActivatedRouteSnapshot, RouterStateSnapshot, Resolve, ResolveData } from '@angular/router';
+import { Observable, Subscription, isObservable, from, of, forkJoin, throwError } from 'rxjs';
+import { Injectable, NgModuleRef, Type, Compiler, Injector, OnDestroy } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActionLinkObserver, ActionData } from '@wizdm/actionlink';
-import { Router } from '@angular/router';
-import { Observable, ReplaySubject, isObservable, from, of } from 'rxjs';
-import { filter, take, skip, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
-export type DialogResult<T = any> = void|T|Promise<T>|Observable<T>;
-
+/** Lazy Dialog Module Loader. Use this class as a canActivate guard within a regular lazy loading route. */
 @Injectable({
   providedIn: 'root'
 })
-export class DialogLoader extends ActionLinkObserver {
+export class DialogLoader extends ActionLinkObserver implements OnDestroy {
 
-  readonly dialogs$: Observable<{ action: string, module: NgModuleRef<any>, data?: ActionData }>;
+  private sub: Subscription;
 
-  // Builds a ReplaySubject to be used for returning values asynchronously
-  private return$ = new ReplaySubject<DialogResult>(1);
-
-  constructor(router: Router) { 
+  constructor(router: Router, private injector: Injector) { 
     
-    super(router); 
+    super(router);
 
     /** Builds the dialogs stream */
-    this.dialogs$ = this.observers$.pipe( 
-      
-      // Filters for routes containing the DialogLoader only
-      filter( ({ route }) => !!route?.routeConfig?.canActivate?.find( item => item === DialogLoader )),
+    this.sub = this.observers$.pipe( 
 
-      map( ({ action, route }) => {
+      switchMap( ({ route, state }) => {
 
-        // Extracts the internal NgModule ref eventually loaded while routing according to loadChildren
-        const module: NgModuleRef<any> = (route?.routeConfig as any)?._loadedConfig?.module;
+        // Extracts the dialog input data from the query parameters
+        const data = this.actionData(route);
 
-        return { action, module, data: this.actionData(route) };
-      })
+        // Loads the dialog
+        return this.loadDialog<ActionData, any>( route.routeConfig, data, route, state );
+      }),
+
+    ).subscribe( value => console.log("Dialog closed returning", value) );
+  }
+
+  ngOnDestroy() { this.sub.unsubscribe(); }
+
+  /** Activate a dialog programmatically */
+  public open<T, R>(dialog: string, data?: T): Promise<R> {
+
+    // Seeks for the requested dialog within the local Routes
+    const routeConfig = this.flatten( this.routes() ).find( ({ path }) => path === dialog );
+    if(!routeConfig) { return Promise.reject( new Error(`
+      Unable to find the requested dialog "${dialog}".
+      Make sure the corresponding Route exists within the same module this DialogLoader instance is provided.
+    `));}
+
+    return this.loadDialog<T,R>(routeConfig, data).toPromise();
+  }
+
+  /** Lazily loads the dialog mimicking the Router from the given routeConfig */
+  private loadDialog<T, R>(routeConfig: Route, data?: T, route?: ActivatedRouteSnapshot, state?: RouterStateSnapshot): Observable<R> {
+
+    // Loads the route configuration first
+    return this.loadRouteConfig(routeConfig).pipe( switchMap(({ module, routes }) => {
+
+      // Gets the module's MatDialog instance. This is crucial to make the lazily loaded dialog to work enabling 
+      // MatDialog.open() to create the component within its own module having the local injector able to provide
+      // additional local directives and services.
+      const dialog = module.injector.get(MatDialog);
+      if(!dialog) { return throwError( new Error(`
+        Unable to inject the MatDialog service from the given module "${ module.constructor }".
+        Make sure your dialog module correctly imports the MatDialogModule.
+      `));}
+
+      // Seeks for the primary child route where to find the dialog component
+      const root = routes.find( ({ path }) => path === '' );
+
+      // Gets the dialog component
+      const component = root?.component; 
+      if(!component) { return throwError( new Error(`
+        Unable to find the dialog component within the module's routes.
+        Make sure your dialog module exports a root Route with an empty path as if it were a regular lazely loaded routing module.
+      `));}
+
+      // Runs the Route resolvers
+      return this.runResolvers(root?.resolve, module, data, route, state).pipe(
+
+        // Opens the dialog
+        switchMap( data => {
+
+          // Extracts the dialog configuration from the route, if any
+          const config: MatDialogConfig = root.data?.dialogConfig;
+          
+          // Opens the dialog according to the given parameters
+          return dialog.open<unknown, T, R>(component, { ...config, data }).afterClosed();
+        })
+      );
+    }));
+  }
+
+  /** Loads the Route config */
+  private loadRouteConfig(routeConfig: Route): Observable<{ module: NgModuleRef<any>, routes: Routes }> {
+
+    // Extracts the internal NgModule ref eventually already lazily loaded by the Router
+    const module: NgModuleRef<any> = (routeConfig as any)?._loadedConfig?.module;
+    if(module) { 
+
+      // Extracts the internal routes too
+      const routes: Routes = (routeConfig as any)?._loadedConfig?.routes || [];
+
+      // Returns the config data already loaded by the Router
+      return of({ module, routes });
+    }
+
+    // Gets the loader function otherwise
+    const loader = routeConfig.loadChildren;
+    if(!loader || typeof loader !== 'function') { return throwError( new Error(`
+      The matching Route "${routeConfig.path}" misses the proper loadChildren function.
+    `)); 
+    }
+
+    // Loads the module file
+    return from( (loader as () => Promise<Type<any>>)() ).pipe(
+
+      // Compiles the module
+      switchMap( moduleType => {
+
+        // Gets the compiler
+        const compiler = this.injector.get(Compiler);
+        
+        // Compiles the module asyncronously
+        return compiler.compileModuleAsync(moduleType);      
+      }),
+
+      map( moduleFactory => {
+
+        // Creates the module from the module factory
+        const module = moduleFactory.create(this.injector);
+
+        // Returns the module ref with the associated flatten routes array
+        return { module, routes: this.routes(module) };
+      }),
+
+      // Saves the loaded config within the route mimicking the Router
+      tap( config => (routeConfig as any)._loadedConfig = config )
     );
   }
 
-  /** Activate a dialog programmatically */
-  public open<T>(dialog: string, data?: ActionData): Observable<T> {
+  /** Runs the given resolvers */
+  private runResolvers(resolve: ResolveData, module: NgModuleRef<any>, data?: any, route?: ActivatedRouteSnapshot, state?: RouterStateSnapshot): Observable<any> {
 
-    // Triggers the dialog opened by navigation lazily loading the moduel whenever necessary
-    this.router.navigate(['/' + dialog], { skipLocationChange: true, queryParams: data });
+    // Short circuits empty ResolveData objects
+    if(!resolve || Object.keys(resolve).length <= 0) {
+      return of(data || {});
+    }
 
-    // Returns an Observavble resolving into the returned value
-    return this.return$.pipe( 
+    // Ensures a valid route/state pair to be used by resolvers
+    state = state || this.router.routerState.snapshot;
+    route = route || state.root.firstChild;
 
-        // Completes the observable with the next dialog activation (worst case)
-        takeUntil(this.dialogs$.pipe(skip(1))),
-        
-        // Transforms the given result
-        switchMap( result => {
+    // Runs all the resolvers in parallel
+    return forkJoin( Object.keys(resolve).map( key => {
 
-          // Returns thee given observable
-          if(isObservable(result)) { return result as Observable<T>; }
+      // Gets the resolver instance from the module injector
+      const resolver: Resolve<any> = module.injector.get(resolve[key]);
+      if(typeof resolver.resolve !== 'function') { return of(null); }
 
-          // Converts the Promise into observable
-          if(Promise.resolve(result) == result) { return from(result as Promise<T>); }
+      // Runs the resolver turning the results into an observable
+      return this.toObservable(resolver.resolve(route, state))
+        .pipe( map( data => ({ key, data }) ));
 
-          // Converts the value into observable
-          return of(result as T);
-        }),
-        
-        // Takes a single emission at max
-        take(1)
-    );  
+    // Composes the dialog data merging both the original query parameters from the activeLink and the resolved content
+    })).pipe( map( resolvedArray => resolvedArray.reduce( (data, item) => (data[item.key] = item.data, data), data || {} ) ));
   }
 
-  /** Pushes the next returned value */
-  public return<T>(value: DialogResult<T>) { 
-    value && this.return$.next(value); 
+  /** Flattens the give Routes recurring down the children */
+  private flatten(routes: Routes): Routes {
+
+    return routes.reduce( (flat, toFlatten) => {
+      
+      return flat.concat( toFlatten.children ? this.flatten(toFlatten.children) : toFlatten );
+
+    }, [] );
+  };
+
+  /** Retrives the Routes array for the given Module defaulting to the current Module when not specified */
+  private routes(module?: NgModuleRef<any>): Routes {
+
+    // Injects the Routes (note multi is set to true)
+    const routes = (module?.injector || this.injector).get(ROUTES, []);
+    
+    // Flattens the routes array
+    return Array.prototype.concat.apply([], routes);
   }
 }

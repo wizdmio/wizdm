@@ -29,18 +29,6 @@ const routes: RoutesWithContent = [
     
     children: [
 
-      { // Login dialog
-        path: 'login', 
-        loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), 
-        canActivate: [ DialogLoader ]
-      },
-
-      { // Feedback dialog
-        path: 'contact', 
-        loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), 
-        canActivate: [ DialogLoader ]
-      },
-
       // Not found page
       { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
       { path: '404', redirectTo: 'not-found', pathMatch: 'full' },
@@ -71,8 +59,15 @@ const routes: RoutesWithContent = [
        // Login dialog
       { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ DialogLoader ] },
 
+      // Feedback dialog
+      { path: 'contact', loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), canActivate: [ DialogLoader ] },
+
+      // Payments dialog
+      //{ path: 'pay', loadChildren: () => import('../dialogs/pay/pay.module').then(m => m.PayModule), canActivate: [ DialogLoader ] },
+
       // Custom action links
       { path: 'back', canActivate: [ BackLinkObserver ] },
+      { path: 'logout', canActivate: [ LogoutLinkObserver ] },
       { path: 'close', canActivate: [ CloseLinkObserver ] },
       
       // Docs (using static docs subfolder)

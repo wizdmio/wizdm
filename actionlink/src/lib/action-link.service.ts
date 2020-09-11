@@ -1,6 +1,6 @@
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, ActivatedRoute } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable, ReplaySubject } from 'rxjs';
-import { tap, filter, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 /** ActionLink optional data */
@@ -9,18 +9,15 @@ export interface ActionData {
   [key: string]: any;
 };
 
-export interface ActionStream {
-
-  action : string;
-  route  : ActivatedRouteSnapshot;
-  state  : RouterStateSnapshot;
-};
-
 /** Actinng as a CanActivate guard to intercept routing actions */
 @Injectable({ providedIn: 'root' })
 export class ActionLinkObserver implements CanActivate {
 
-  readonly observers$ = new ReplaySubject<ActionStream>(1);
+  /** Streams the canActivate requests */
+  readonly observers$ = new ReplaySubject<{
+    route : ActivatedRouteSnapshot;
+    state : RouterStateSnapshot;
+  }>(1);
 
   constructor(protected router: Router) {}
 
@@ -31,13 +28,20 @@ export class ActionLinkObserver implements CanActivate {
     return this.observers$.pipe( 
     
       // Filters the request based on the action code
-      filter( data => data.action === action ), 
+      filter( ({ route }) => action === this.actionCode(route) ), 
       
       // Extract the data from the route
       map( ({ route }) => this.actionData(route) ) 
     );
   }
 
+  /** Computes the action code from teh route */
+  protected actionCode(route: ActivatedRouteSnapshot): string {
+    
+    return route?.data.actionMatch || route?.routeConfig.path || '';
+  }
+
+  /** Computes the axtion data from the route queryParams */
   protected actionData(route: ActivatedRouteSnapshot): ActionData {
 
     // Computes the data object from the route's query parameters
@@ -51,12 +55,9 @@ export class ActionLinkObserver implements CanActivate {
  
   // Implements single route user authentication guarding
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): UrlTree {
-
-    // Computes the action code from the route data
-    const action = route.data.actionMatch || route.routeConfig.path;
   
     // Pushes the request using data coming from the route
-    this.observers$.next( { action, route, state } );
+    this.observers$.next( { route, state } );
 
     // Always prevents the real routing by redirecting to the current url instead of returning false.
     // This way the router will always end up loading a page even when the requested action link comes

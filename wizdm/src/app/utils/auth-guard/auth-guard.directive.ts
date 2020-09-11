@@ -1,17 +1,17 @@
-import { Directive, HostListener, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { AuthService, User } from '@wizdm/connect/auth';
+import type { LoginData } from 'app/dialogs/login';
 import { DialogLoader } from 'app/dialogs';
-import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 /** AuthGuard on click */
 @Directive({
   selector: '[authClick]'
 })
-export class AuthGuardDirective implements OnDestroy {
+export class AuthGuardDirective {
 
   private skipEmail: boolean = true;
-  private sub: Subscription;
 
   constructor(private auth: AuthService, private dialogs: DialogLoader) { }
 
@@ -41,16 +41,11 @@ export class AuthGuardDirective implements OnDestroy {
       const mode = this.auth.authenticated ? 'sendEmailVerification' : undefined;
 
       // Activates the 'login' actionlink programatically intercepting the returned value
-      this.sub = this.dialogs.open<User>('login', { mode } ).subscribe( user => {
+      this.dialogs.open<LoginData, User>('login', { mode } ).then( user => {
 
         // Whenever the user is now authorized, emits the guarded click event
         if( this.isClickAuthorized(user) ) { this.authClick.emit(ev); }
       });
     }   
-  }
-
-  ngOnDestroy() {
-    // Disposes of the subscription
-    this.sub && this.sub.unsubscribe();
   }
 }

@@ -1,103 +1,101 @@
 
-<ng-content></ng-content>
+<!-- Gets the localized content -->
+<ng-container *wmContent="let msgs select 'feedback'; let lang = language">
 
-<!-- Feedback Popup Dialog -->
-<ng-template>
-
-  <ng-container *wmContent="let msgs select 'feedback'; let lang = language">
-
-    <!-- Common header with close button -->
-    <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
-      
-      <span>{{ msgs.title || 'Feedback'}}</span>
-      
-      <button mat-icon-button mat-dialog-close>
-        <wm-icon inline="true" icon="close"></wm-icon>
-      </button>
-
-    </header>
-
-    <!-- Thank you message on feedback sent -->
-    <ng-template #thankYou>
-
-      <mat-dialog-content [ngSwitch]="success">
-
-        <p class="message color-default primary" *ngSwitchCase="true">{{ msgs.notifications?.success || 'Succeeded' }}</p>
-
-        <p class="message color-default warn" *ngSwitchCase="false">{{ msgs.notifications?.error || 'Error' }}</p>
-      
-      </mat-dialog-content>
-
-    </ng-template>
-
-    <!-- Feedback form to fill-in -->
-    <form (ngSubmit)="send(lang)" *ngIf="!sent; else thankYou" [disabled]="sending" #form="ngForm">
-
-      <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
-
-        <!-- Name -->
-        <mat-form-field appearance="outline">
-          <mat-label>{{ msgs.name?.label || 'Name' }}</mat-label>
-          <input matInput [(ngModel)]="name" name="name" [disabled]="authenticated">
-          <mat-hint>{{ msgs.name?.hint }}</mat-hint>
-        </mat-form-field>
+  <!-- Common header with close button -->
+  <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
     
-        <!-- Email -->
-        <mat-form-field appearance="outline">
-          <mat-label>{{ msgs.email?.label || 'Email' }}</mat-label>
-          <input matInput [(ngModel)]="email" name="email" [disabled]="authenticated && !!me.email" required email #emailInput="ngModel">
-          <mat-hint>{{ msgs.email?.hint }}</mat-hint>
-          <mat-error *ngIf="emailInput.errors?.required">{{ msgs.email?.errors?.required || 'Email required' }}</mat-error>
-          <mat-error *ngIf="emailInput.errors?.email">{{ msgs.email?.errors?.invalid || 'Invalid email' }}</mat-error>
-        </mat-form-field>
+    <span>{{ msgs.title || 'Feedback'}}</span>
+    
+    <!-- Closes the dialog returning the feedback sending result -->
+    <button mat-icon-button [mat-dialog-close]="success">
+      <wm-icon inline="true" icon="close"></wm-icon>
+    </button>
 
-        <!-- Message -->
-        <mat-form-field appearance="outline">
-          <mat-label>{{ msgs.message?.label || 'Message' }}</mat-label>
-          <textarea matInput [(ngModel)]="message" name="message" rows="5" required cdkFocusInitial #messageInput="ngModel"></textarea>
-          <mat-hint>{{ msgs.message?.hint }}</mat-hint>
-          <mat-error *ngIf="messageInput.errors?.required">{{ msgs.message?.errors?.required || 'Message required' }}</mat-error>
-        </mat-form-field>
+  </header>
 
-        <!-- Attachments -->
-        <ng-container *ngIf="msgs.attachments && msgs.attachments.enable">
+  <!-- Thank you message on feedback sent -->
+  <ng-template #thankYou>
 
-          <input style="display:none" type="file" multiple (change)="files = $event.target.files" #openfile />
-          
-          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" (click)="openfile.value=''; openfile.click()" [attr.disabled]="sending">
+    <mat-dialog-content [ngSwitch]="success">
 
-            <wm-icon [icon]="msgs.attachments.icon || 'attach_file'"></wm-icon>
+      <p class="message color-default primary" *ngSwitchCase="true">{{ msgs.notifications?.success || 'Succeeded' }}</p>
 
-            <span class="mat-error" *ngIf="fileSizeExceeded; else filesOk">
-              {{ msgs.attachments.errors?.sizeExceeded || 'File size exeeded' }}
-            </span>
-            <ng-template #filesOk>
+      <p class="message color-default warn" *ngSwitchCase="false">{{ msgs.notifications?.error || 'Error' }}</p>
+    
+    </mat-dialog-content>
 
-              <span>{{ msgs.attachments.label || 'Attachments' }}</span>
-              
-              <span *ngIf="files?.length > 0">&nbsp;({{ files.length }})</span>
+  </ng-template>
 
-            </ng-template>
-          
-          </div>
-        </ng-container>
+  <!-- Feedback form to fill-in -->
+  <form (ngSubmit)="send(lang)" *ngIf="!sent; else thankYou" [disabled]="sending" #form="ngForm">
 
-      </mat-dialog-content>
+    <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
 
-      <!-- Submit button -->
-      <mat-dialog-actions align="end">
-
-        <mat-progress-bar *ngIf="sending" mode="indeterminate" color="primary"></mat-progress-bar>
-
-        <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid || sending">{{ msgs.send || 'Send' }}</button>
-
-      </mat-dialog-actions>
-
-    </form>
-
-    <!-- Credits -->
-    <a *ngIf="msgs.credits as credits" class="mat-small" [wmRedirect]="credits.url">{{ credits.caption }}</a>
+      <!-- Name -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ msgs.name?.label || 'Name' }}</mat-label>
+        <input matInput [(ngModel)]="name" name="name" [disabled]="authenticated">
+        <mat-hint>{{ msgs.name?.hint }}</mat-hint>
+      </mat-form-field>
   
-  </ng-container>
+      <!-- Email -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ msgs.email?.label || 'Email' }}</mat-label>
+        <input matInput [(ngModel)]="email" name="email" [disabled]="authenticated && !!me.email" required email #emailInput="ngModel">
+        <mat-hint>{{ msgs.email?.hint }}</mat-hint>
+        <mat-error *ngIf="emailInput.errors?.required">{{ msgs.email?.errors?.required || 'Email required' }}</mat-error>
+        <mat-error *ngIf="emailInput.errors?.email">{{ msgs.email?.errors?.invalid || 'Invalid email' }}</mat-error>
+      </mat-form-field>
 
-</ng-template>
+      <!-- Message -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ msgs.message?.label || 'Message' }}</mat-label>
+        <textarea matInput [(ngModel)]="message" name="message" rows="5" required cdkFocusInitial #messageInput="ngModel"></textarea>
+        <mat-hint>{{ msgs.message?.hint }}</mat-hint>
+        <mat-error *ngIf="messageInput.errors?.required">{{ msgs.message?.errors?.required || 'Message required' }}</mat-error>
+      </mat-form-field>
+
+      <!-- Attachments -->
+      <ng-container *ngIf="msgs.attachments && msgs.attachments.enable">
+
+        <input style="display:none" type="file" multiple (change)="files = $event.target.files" #openfile />
+        
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="upload" 
+          [style.pointer-events]="sending ? 'none' : undefined"
+          [class.color-disabled]="sending"
+          (click)="openfile.value=''; openfile.click()">
+
+          <wm-icon [icon]="msgs.attachments.icon || 'attach_file'"></wm-icon>
+
+          <span class="mat-error" *ngIf="fileSizeExceeded; else filesOk">
+            {{ msgs.attachments.errors?.sizeExceeded || 'File size exeeded' }}
+          </span>
+          <ng-template #filesOk>
+
+            <span>{{ msgs.attachments.label || 'Attachments' }}</span>
+            
+            <span *ngIf="files?.length > 0">&nbsp;({{ files.length }})</span>
+
+          </ng-template>
+        
+        </div>
+      </ng-container>
+
+    </mat-dialog-content>
+
+    <!-- Submit button -->
+    <mat-dialog-actions align="end">
+
+      <mat-progress-bar *ngIf="sending" mode="indeterminate" color="primary"></mat-progress-bar>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid || sending">{{ msgs.send || 'Send' }}</button>
+
+    </mat-dialog-actions>
+
+  </form>
+
+  <!-- Credits -->
+  <a *ngIf="msgs.credits as credits" class="mat-small" [wmRedirect]="credits.url">{{ credits.caption }}</a>
+
+</ng-container>
