@@ -6,15 +6,7 @@ import { map, take, switchMap, shareReplay } from 'rxjs/operators';
 export class StripeCaller {
 
   /** The optional stripe account to connect to @see [Connect](https://stripe.com/docs/connect) */
-  private account$ = new BehaviorSubject<string>(undefined);
-
-  /**
-   * For usage with [Connect](https://stripe.com/docs/connect) only.
-   * Specifying a connected account ID (e.g., `acct_24BFMpJ1svR5A89k`) allows you to perform actions on behalf of that account.
-   */
-  public connect(stripeAccount: string) {
-    this.account$.next(stripeAccount);
-  }
+  protected account$ = new BehaviorSubject<string>(undefined);
 
   /** The active Stripe instance observable */
   readonly stripe$: Observable<Stripe>;

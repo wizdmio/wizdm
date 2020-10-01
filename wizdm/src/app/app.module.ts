@@ -17,7 +17,7 @@ import { RedirectService } from '@wizdm/redirect';
 import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
-import { StripeModule, loadStripeJS } from '@wizdm/stripe';
+import { StripeModule } from '@wizdm/stripe';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 

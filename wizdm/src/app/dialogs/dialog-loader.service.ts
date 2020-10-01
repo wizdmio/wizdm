@@ -11,11 +11,15 @@ import { map, switchMap, tap } from 'rxjs/operators';
 })
 export class DialogLoader extends ActionLinkObserver implements OnDestroy {
 
-  private sub: Subscription;
-
+  private readonly sub: Subscription;
+  private readonly dialogs: Routes;
+  
   constructor(router: Router, private injector: Injector) { 
     
     super(router);
+
+    /** Flattens the local routes recurring down the children and filters for the ones using the DialogLoader */
+    this.dialogs = this.flatten( this.routes() ).filter( ({ canActivate }) => canActivate?.indexOf( DialogLoader ) >= 0);
 
     /** Builds the dialogs stream */
     this.sub = this.observers$.pipe( 
@@ -38,7 +42,7 @@ export class DialogLoader extends ActionLinkObserver implements OnDestroy {
   public open<T, R>(dialog: string, data?: T): Promise<R> {
 
     // Seeks for the requested dialog within the local Routes
-    const routeConfig = this.flatten( this.routes() ).find( ({ path }) => path === dialog );
+    const routeConfig = this.dialogs.find( ({ path }) => path === dialog );
     if(!routeConfig) { return Promise.reject( new Error(`
       Unable to find the requested dialog "${dialog}".
       Make sure the corresponding Route exists within the same module this DialogLoader instance is provided.
