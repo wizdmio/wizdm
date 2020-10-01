@@ -1,6 +1,6 @@
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { StripeElementDirective } from '@wizdm/stripe/elements';
-import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { Directive, forwardRef } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { Observable, merge } from 'rxjs';
 

@@ -1,22 +1,21 @@
-import { Stripe, StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
+import type { StripeCardElement, PaymentIntent, StripeError } from '@stripe/stripe-js';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { delay, startWith, switchMap } from 'rxjs/operators';
 import { FunctionsService } from '@wizdm/connect/functions';
-import { DialogComponent } from '@wizdm/elements/dialog';
 import { DarkModeObserver } from 'app/utils/platform';
-import { MatDialog } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { environment } from 'env/environment';
-import { $animations } from './pay.animations';
-import { STRIPE } from '@wizdm/stripe';
+import { $animations } from './checkout.animations';
+import { StripeService } from '@wizdm/stripe';
 import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'wm-pay',
-  templateUrl: './pay.component.html',
-  styleUrls: ['./pay.component.css'],
+  templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.css'],
   animations: $animations
 })
-export class PayComponent extends DialogComponent {
+export class CheckoutComponent {
 
   public card: StripeCardElement;
   public email: string = '';
@@ -42,10 +41,8 @@ export class PayComponent extends DialogComponent {
     this.currency = this.currency === 'eur' ? 'usd' : 'eur';
   }
 
-  constructor(@Inject(STRIPE) private stripe: Stripe, private functions: FunctionsService, dialog: MatDialog, dark: DarkModeObserver) { 
+  constructor(@Inject(MAT_DIALOG_DATA) data: any, private ref: MatDialogRef<any>, private stripe: StripeService, private functions: FunctionsService, dark: DarkModeObserver) { 
 
-    super(dialog);
-  
     // Uses an observable to refresh the Card Element automatic style detection on theme changes
     this.autoMode$ = dark.pipe( switchMap( () => of('auto').pipe( delay(0), startWith({}) )));
   }

@@ -1,6 +1,9 @@
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, AbstractControl, ControlValueAccessor, Validator, ValidationErrors } from '@angular/forms';
+import { Directive, OnDestroy, forwardRef } from '@angular/core';
 import { StripeElementDirective } from './element.directive';
-import { Directive, forwardRef } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+import type { StripeElementType } from '@stripe/stripe-js';
 
 /**
  * Bridges the StripeElement with the Angular's form API implementing both a ControlValueAccessor
@@ -19,9 +22,14 @@ import { Directive, forwardRef } from '@angular/core';
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeControlDirective), multi: true  }
   ]
 })
-export class StripeControlDirective implements ControlValueAccessor, Validator {
+export class StripeControlDirective<T extends Exclude<StripeElementType, 'paymentRequestButton'>> 
+  implements ControlValueAccessor, Validator, OnDestroy {
 
-  constructor(readonly element: StripeElementDirective<any>) { }
+  private sub = new Subscription(); 
+
+  constructor(readonly element: StripeElementDirective<T>) {}
+
+  ngOnDestroy() { this.sub.unsubscribe(); }
 
   /** 
    * Called by the forms API to write to the view when programmatic changes from model to view are requested. 
@@ -29,8 +37,17 @@ export class StripeControlDirective implements ControlValueAccessor, Validator {
    */
   writeValue(value: any): void {
 
-    !value && this.element.clear();
+    if(!value) { this.element.clear(); }
   }  
+
+  /** 
+   * Function that is called by the forms API when the control status changes to or from 'DISABLED'. 
+   * Depending on the status, it enables or disables the appropriate DOM element. 
+   */
+  setDisabledState(disabled: boolean): void {
+
+    this.element.disable(disabled);
+  }
 
   /** 
    * Registers a callback function that is called when the control's value changes in the UI. 
@@ -39,22 +56,13 @@ export class StripeControlDirective implements ControlValueAccessor, Validator {
    */
   registerOnChange(fn: (_:any) => void): void {
 
-    this.element.valueChange.subscribe( value => fn(value.complete ? this.element.element : null) );
+    this.sub.add( this.element.valueChange.subscribe( value => fn(value.complete ? this.element.instance : null) ) );
   }
 
   /** Registers a callback function is called by the forms API on initialization to update the form model on blur. */
   registerOnTouched(fn: () => void): void {
 
-    this.element.blurChange.subscribe( () => fn() );
-  }
-
-  /** 
-   * Function that is called by the forms API when the control status changes to or from 'DISABLED'. 
-   * Depending on the status, it enables or disables the appropriate DOM element. 
-   */
-  setDisabledState(disabled: boolean): void {
-
-    this.element.update({ disabled });
+    this.sub.add( this.element.blurChange.subscribe( () => fn() ) );
   }
 
   /** Performs synchronous validation against the provided control. */

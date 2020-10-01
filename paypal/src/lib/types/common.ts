@@ -1,5 +1,5 @@
+export type Funding = 'paypal'|'venmo'|'itau'|'credit'|'paylater'|'card'|'ideal'|'sepa'|'bancontact'|'giropay'|'sofort'|'eps'|'mybank'|'p24'|'vekkopankki'|'payu'|'blik'|'trustly'|'zimpler'|'maxima'|'oxxo'|'boleto'|'wechatpay'|'mercadopago';
 export type Currency = |'AUD'|'BRL'|'CAD'|'CZK'|'DKK'|'EUR'|'HKD'|'HUF'|'INR'|'ILS'|'JPY'|'MYR'|'MXN'|'TWD'|'NZD'|'NOK'|'PHP'|'PLN'|'GBP'|'RUB'|'SGD'|'SEK'|'CHF'|'THB'|'USD';
-export type Funding = 'paypal'|'card'|'credit'|'venmo'|'sepa'|'bancontact'|'eps'|'giropay'|'ideal'|'mybank'|'p24'|'sofort';
 export type Card = 'visa'|'mastercard'|'amex'|'discover'|'jcb'|'elo'|'hiper';
 
 export interface LocaleType {

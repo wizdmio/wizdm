@@ -1,51 +1,49 @@
-import { Directive, OnInit, OnChanges, SimpleChanges, Input, Inject, Optional, InjectionToken } from '@angular/core';
-import type { StripeElement, StripeElementOptions, SupportedStripeElementType } from './generic-types';
-import type { Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
-import { STRIPE } from '@wizdm/stripe';
+import { Directive, Input, Inject, Optional, InjectionToken } from '@angular/core';
+import { map, switchMap, shareReplay } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { StripeService } from '@wizdm/stripe';
+
+import type { StripeElements, StripeElementsOptions, StripeElementLocale, StripeElementType } from '@stripe/stripe-js';
+import type { StripeElement, StripeElementOptions } from './generic-types';
 
 /** StripeElementsModule configuration token */
 export const STRIPE_ELEMENTS_OPTIONS = new InjectionToken<StripeElementsOptions>('wizdm.stripe.elements.options');
 
 /** Relays the Elements funcitons enabling dynamic locale */
 @Directive({
-  selector: 'wm-stripe-elements, [StripeElements]',
+  selector: '[StripeElements]',
   exportAs: 'StripeElements'
 })
-export class StripeElementsDirective implements OnInit, OnChanges {
+export class StripeElementsDirective {
 
-  public elements: StripeElements;
+  private locale$ = new BehaviorSubject<StripeElementLocale>(undefined);
+  private elements$: Observable<StripeElements>;
 
-  constructor(@Inject(STRIPE) readonly stripe: Stripe, @Optional() @Inject(STRIPE_ELEMENTS_OPTIONS) private options: StripeElementsOptions) { }
+  constructor(stripe: StripeService, @Optional() @Inject(STRIPE_ELEMENTS_OPTIONS) options: StripeElementsOptions) { 
 
-  // Implements StripeElements functions as generics
-  public create<T extends SupportedStripeElementType>(elementType: T, options?: StripeElementOptions<T>): StripeElement<T> {
-    return this.elements?.create(elementType as any, options as any) as unknown as StripeElement<T>;
-  }
+    this.elements$ = stripe.stripe$.pipe( 
 
-  public getElement<T extends SupportedStripeElementType>(type: T): StripeElement<T> {
-    return this.elements?.getElement(type as any) as unknown as StripeElement<T> || null;
-  }
+      switchMap( stripe => this.locale$.pipe( 
+        
+        map( locale => stripe.elements({ 
+        
+          ...options, 
+          
+          locale          
+        }))
+      )),
 
-  ngOnInit() {
-
-    // Computs the active locale falling back to the global configuratio, if any
-    const locale = this.locale || this.options?.locale;
-    // Merges the global configurations with the new current locale
-    const options = { ...this.options, locale };
-    // Initialize the StripeElements object
-    this.elements = this.stripe.elements(options as StripeElementsOptions);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // Switches to a different locale
-    this.elements && this.ngOnInit();
+      shareReplay(1)
+    )
   }
 
   /** The Elements locale to use. The locale is automatically detected when undefined */
-  @Input() locale: string;
+  @Input() set StripeElements(locale: StripeElementLocale) {
+    this.locale$.next(locale);
+  }
 
-  /** Overrides the Elements locale */
-  @Input() set StripeElements(locale: string) {
-    this.locale = locale;
+  /** Creates a Stripe Element of the given type using the given locale and options */
+  public create<T extends StripeElementType>(elementType: T, options?: StripeElementOptions<T>): Observable<StripeElement<T>> {    
+    return this.elements$.pipe( map( elements => elements.create(elementType as any, options as any) )) as any;
   }
 }

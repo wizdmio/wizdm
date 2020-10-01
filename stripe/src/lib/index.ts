@@ -1,3 +1,2 @@
-export * from './connect/connect.directive';
-export * from './stripe-factory';
+export * from './stripe.service';
 export * from './stripe.module';
