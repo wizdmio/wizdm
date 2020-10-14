@@ -12,6 +12,9 @@ Use `npm` to install the @wizdm/stripe module together with the official [@strip
 npm install @stripe/stripe-js @wizdm/stripe
 ```
 
+## Notes
+Since *@stripe/stripe-js* package is used for typings only, you can also npm install it as a **development** dependency (using the --save-dev option)
+
 # Usage
 Import the `StripeModule` in the root NgModule of your Angular project. Call the static `init()` function to configure the `StripeModule`
 with your own Stripe public key along with any additional options.
@@ -72,7 +75,7 @@ Setup your form to collect all the payment information in your component templat
 
 ``` html
 
-  <form (ngSubmit)="pay()" #form="ngForm">
+  <form (ngSubmit)="pay()" #form="ngForm" StripeElements>
 
     <!-- Name -->
     <input [(ngModel)]="name" name="name" required>
@@ -107,7 +110,7 @@ export class MyComponent {
   public name: string = '';
   public amount: number;
 
-  constructor(@Inject(STRIPE) private stripe: Stripe) { }
+  constructor(private stripe: StripeService) { }
 
   // Process the payment
   public pay() {
