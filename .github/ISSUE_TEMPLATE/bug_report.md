@@ -17,7 +17,9 @@ A clear and concise description of what the bug is.
 Yes, the previous version in which this bug was not present was: ....
 
 **Minimal reproduction**
-There's a demo on https://stackblitz.com/...
+There's a demo on https://stackblitz.com/... 
+ 
+
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
