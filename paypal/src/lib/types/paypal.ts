@@ -35,7 +35,7 @@ export interface PayPalConfig {
   /** Funding sources to disallow from showing in the Smart Payment Buttons. */
   disableFunding?: Funding;
 
-  /** Cards to disable from showing in the Smart Payment Buttons. */
+  /** @deprecated Cards to disable from showing in the Smart Payment Buttons. */
   disableCard?: Card;
 
   /** The date of integration. Used to ensure backwards compatibility. */
