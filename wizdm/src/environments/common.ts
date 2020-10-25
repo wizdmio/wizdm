@@ -58,10 +58,15 @@ export const common = {
   },
 
   // Prism syntax-highlighting extra languages
-  prism: <PrismLanguages> [
+  prism: <PrismLanguages> [ 
+    
+    // Uncomment the following line to enable the universal prism-language loader
+    //{ name: '*', load: (language) => import(`prismjs/components/prism-${language}`) },
+    
+    // Enable loading only few extra languages instead
     { name: 'scss', load: () => import('prismjs/components/prism-scss') },
-    { name: 'typescript', load: () => import('prismjs/components/prism-typescript') },
-    { name: 'markdown', load: () => import('prismjs/components/prism-markdown') }
+    { name: ['typescript', 'ts'], load: () => import('prismjs/components/prism-typescript') },
+    { name: ['markdown', 'md'], load: () => import('prismjs/components/prism-markdown') }
   ],
 
   // StripeElements styling to fit with the global theme
