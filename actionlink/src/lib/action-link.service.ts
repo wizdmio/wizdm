@@ -58,7 +58,9 @@ export class ActionLinkObserver implements CanActivate {
     // Pushes the request using data coming from the route
     this.observers$.next( { action, route, state } );
 
-    // Always prevents the real routing
-    return false;
+    // Always prevents the real routing by redirecting to the current url instead of returning false.
+    // This way the router will always end up loading a page even when the requested action link comes
+    // from an extrnal redirection causing the app to load from scratch.
+    return this.router.parseUrl(this.router.url);
   }
 }

@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, HostListener, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { AuthService, User } from '@wizdm/connect/auth';
 import { DialogLoader } from 'app/dialogs';
@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 @Directive({
   selector: '[authClick]'
 })
-export class AuthGuardDirective {
+export class AuthGuardDirective implements OnDestroy {
 
   private skipEmail: boolean = true;
+  private sub: Subscription;
 
   constructor(private auth: AuthService, private dialogs: DialogLoader) { }
 
