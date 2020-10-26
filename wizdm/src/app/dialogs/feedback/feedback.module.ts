@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ContentModule, RoutesWithContent } from '@wizdm/content';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { RedirectModule } from '@wizdm/redirect';
 import { IconModule } from '@wizdm/elements/icon';
 import { DoorbellModule } from '@wizdm/doorbell';
@@ -28,8 +28,6 @@ const routes: RoutesWithContent = [{
 
 @NgModule({
 
-  providers: [ { provide: 'dialog', useValue: FeedbackComponent }],
-
   declarations: [ FeedbackComponent ],
 
   imports: [
@@ -42,11 +40,11 @@ const routes: RoutesWithContent = [{
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
-    ContentModule,
     RedirectModule,
     IconModule,
     // Initialize the doorbell service
-    DoorbellModule.init(doorbell)
+    DoorbellModule.init(doorbell),
+    ContentRouterModule.forChild(routes)
   ]
 })
 export class FeedbackModule { }

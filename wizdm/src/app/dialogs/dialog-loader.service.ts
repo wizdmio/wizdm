@@ -186,4 +186,17 @@ export class DialogLoader extends ActionLinkObserver implements OnDestroy {
     // Flattens the routes array
     return Array.prototype.concat.apply([], routes);
   }
+
+  /** Asses the given value and return an Observable of it */
+  private toObservable<T>(value: T|Promise<T>|Observable<T>): Observable<T> {
+
+    // Returns the given observable
+    if(isObservable(value)) { return value as Observable<T>; }
+
+    // Converts the Promise into observable
+    if(Promise.resolve(value) == value) { return from(value as Promise<T>); }
+
+    // Converts the value into observable
+    return of(value as T);
+  }
 }

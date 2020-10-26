@@ -10,6 +10,7 @@ import { IconModule } from '@wizdm/elements/icon';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
+import { AuthGuardModule } from 'app/utils/auth-guard';
 import { PostComponent } from './post.component';
 
 @NgModule({
@@ -23,7 +24,8 @@ import { PostComponent } from './post.component';
     IconModule,
     AvatarModule,
     ButtonChangerModule,
-    MomentPipesModule
+    MomentPipesModule,
+    AuthGuardModule
   ],
   declarations: [ PostComponent ],
   exports: [ PostComponent ]
