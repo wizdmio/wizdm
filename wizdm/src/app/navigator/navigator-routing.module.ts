@@ -25,6 +25,11 @@ const routes: RoutesWithContent = [
     path: ':lang',    
     component: NavigatorComponent,    
     canActivate: [ WelcomeBack, UserPreferences ],    
+    content: 'navigator',
+    
+    children: [
+
+      // Not found page
       { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
       { path: '404', redirectTo: 'not-found', pathMatch: 'full' },
 
