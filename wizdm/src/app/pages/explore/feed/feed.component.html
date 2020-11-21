@@ -51,7 +51,7 @@
             <div fxLayout="row" fxLayoutAlign="center end">
                 
                 <mat-form-field fxFlex="1 1 auto" appearance="legacy"  *ngIf="mode === 'native'; else webMode">
-                    <textarea matInput typein formControlName="text" [disabled]="disabled" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+                    <textarea matInput typein formControlName="text"  cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
                     <wm-icon [icon]="msgs.composer.emoji?.icon" (mousedown)="!disabled && toggleEmojiKeys()" 
                              class="tools"
                              inline
@@ -61,7 +61,7 @@
 
                 <ng-template #webMode>
                     <mat-form-field appearance="legacy"  fxFlex="1 1 auto">
-                        <wm-emoji-input typein formControlName="text" matEmoji [disabled]="disabled"></wm-emoji-input>
+                        <wm-emoji-input typein formControlName="text" matEmoji ></wm-emoji-input>
                         <wm-icon [icon]="msgs.composer.emoji?.icon" (mousedown)="!disabled && toggleEmojiKeys()" 
                                  class="tools"
                                  inline
@@ -72,7 +72,7 @@
             </div>
 
             <mat-expansion-panel class="mat-elevation-z0"  hideToggle>
-                <wm-emoji-keyboard [favorites]="keys" [mode]="mode" (keyPressed)="!disabled && typein($event)">
+                <wm-emoji-keyboard [favorites]="keys" [mode]="mode" (keyPressed)="typein($event)">
                 </wm-emoji-keyboard>
 
             </mat-expansion-panel>
@@ -80,7 +80,7 @@
             <mat-dialog-actions align="center">
                 <button class="post__btn" [mat-dialog-close]="true" cdkFocusInitial
                         [color]="'primary'"
-                        [disabled]="disabled"
+                        (click)="closeModal()"
                         mat-button>{{msgs.addpost?.createpost  || "Post"}}
                 </button>
 
@@ -92,7 +92,7 @@
 
   <ng-template wmFab="right bottom" [direction]="'column'">
 
-    <button mat-mini-fab color="primary" class="mat-elevation-z11 post__entry" (click)="postdialog.open()">
+    <button mat-mini-fab color="primary" class="mat-elevation-z11 post__entry" (click)="postdialog.open() && openModal($event)">
       <mat-icon color="secondary">plus</mat-icon>
     </button>
 

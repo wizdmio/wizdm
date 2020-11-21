@@ -24,6 +24,7 @@ import { TextareaModule } from 'app/utils/textarea';
 import {MatListModule} from '@angular/material/list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { FabModule } from 'app/navigator/fab/fab.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 const routes: RoutesWithContent = [
@@ -35,7 +36,7 @@ const routes: RoutesWithContent = [
 ];
 
 @NgModule({
-  declarations: [ FeedComponent ],
+  declarations: [ FeedComponent],
   imports: [
     CommonModule,
     // ContentModule,
@@ -58,9 +59,11 @@ const routes: RoutesWithContent = [
     ActionbarModule,
     PostModule,
     MatListModule,
+    MatDialogModule,
     MatExpansionModule,
     FabModule,
     ContentRouterModule.forChild(routes)
-  ]
+  ],
+  providers: []
 })
 export class FeedModule { }

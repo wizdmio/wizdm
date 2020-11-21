@@ -14,6 +14,7 @@ import { EmojiUtils } from '@wizdm/emoji/utils';
 import { MediaObserver } from '@angular/flex-layout';
 import { UserProfile, UserData } from 'app/utils/user';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DialogComponent } from '@wizdm/elements/dialog';
 
 @Component({
   selector: 'wm-feed',
@@ -27,6 +28,7 @@ export class FeedComponent extends DatabaseGroup<PostData> implements OnInit {
   @ViewChild(CdkVirtualScrollViewport) scroller: CdkVirtualScrollViewport;
   @ViewChild(MatExpansionPanel) private emojiKeysPanel: MatExpansionPanel;
   @ViewChild(TypeinAdapter) private typeinAdapter: TypeinAdapter;
+  @ViewChild(DialogComponent) private postmodal: DialogComponent;
 
   readonly feed$: Observable<QueryDocumentSnapshot<PostData>[]>;
 
@@ -35,7 +37,7 @@ export class FeedComponent extends DatabaseGroup<PostData> implements OnInit {
 
   /** Disables the composer */
   set disabled(value: boolean) {
-
+    
     if (this._disabled = coerceBooleanProperty(value)) {
       // Force the panel closing when disabled
       this.emojiKeysPanel?.close();
@@ -49,9 +51,8 @@ export class FeedComponent extends DatabaseGroup<PostData> implements OnInit {
   public get mobile(): boolean { return this.media.isActive('xs'); }
   public get desktop(): boolean { return !this.mobile; }
 
-  
 
-  constructor (db: DatabaseService, @Inject(MAT_DIALOG_DATA) matDialogData: any, private matDialogRef: MatDialogRef<any>, private utils: EmojiUtils,
+  constructor (db: DatabaseService, private utils: EmojiUtils,
     private media: MediaObserver, private user: UserProfile<UserData>,) {
 
     super(db, 'feed');
@@ -88,6 +89,33 @@ export class FeedComponent extends DatabaseGroup<PostData> implements OnInit {
     );
   }
 
+  public openModal(postModal): PostData {
+    console.log("Log Dialog Ref", this.postmodal.ref);
+    console.log("Log Dialog Data", this.postmodal.data);
+    console.log("Log Dialog Width", this.postmodal.width);
+
+    console.log("Log Dialog Properties", this.postmodal.ref);
+
+    return postModal;
+  }
+
+  public closeModal(): PostData {
+    let postModal = this.postmodal.data = this.postForm.value;
+
+    console.log("Log Post Modal", postModal)
+    this.savePost(postModal);
+
+    return postModal;
+  }
+  public savePost(data: PostData) {
+
+    const userCol = this.db.collection('users')
+    const userColId = userCol.document(this.user.uid);
+    const feedEndpoint = userColId.collection('feed');
+
+    feedEndpoint.add({...data}).then(value => console.log(value.get()))
+}
+
   /** Returns the globally used emoji mode */
   public get mode(): 'native' | 'web' {
     // Use the very same emoji mode from EmojiSupportModule
@@ -113,7 +141,9 @@ export class FeedComponent extends DatabaseGroup<PostData> implements OnInit {
   }
 
   ngOnInit() {
-
+    /**TODO: Add image upload, add post permission using the angular 
+     * material chip component, 
+     */
     this.postForm = new FormGroup({
       text: new FormControl('')
     })
