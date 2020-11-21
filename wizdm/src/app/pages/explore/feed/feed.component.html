@@ -17,7 +17,83 @@
 
 <!--/ng-container-->
 
-<wm-addpost></wm-addpost>
+<!-- <wm-addpost></wm-addpost> -->
 
 <!-- List all posts in descending order -->
 <wm-post class="mat-elevation-z3" *ngFor="let post of feed$ | async" [post]="post"></wm-post>
+
+
+<!-- Modal dialog to add-post -->
+<wm-dialog #postdialog
+           [panelClass]="'wm-dlg-addpost'">
+    <ng-container *wmContent="let msgs select 'explore-feed'">
+        
+        <div class="dlg-header" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="dlg-header__title">
+                <h4 mat-dialog-title>{{msgs.addpost.header?.title || "Create Post"}}</h4>
+            </div>
+            <div class="dlg-header__close" fxLayout="row" fxLayoutAlign="end start">
+                <wm-icon (click)="postdialog.close($event)" [icon]="msgs.addpost.header?.icon"></wm-icon>
+            </div>
+        </div>
+        <mat-divider>
+        </mat-divider>
+        <div class="dlg-subheader" fxLayout="row" fxLayoutGap="10px">
+            <div class="dlg-avatar">
+                <wm-avatar [src]="userImage"></wm-avatar>
+            </div>
+            <div fxLayout="column">
+                <a class="mat-small" [routerLink]="">{{userFirstName}} </a>
+                <a class="mat-small" [routerLink]="">Public</a>
+            </div>
+        </div>
+        <form [formGroup]="postForm" fxLayout="column">
+            <div fxLayout="row" fxLayoutAlign="center end">
+                
+                <mat-form-field fxFlex="1 1 auto" appearance="legacy"  *ngIf="mode === 'native'; else webMode">
+                    <textarea matInput typein formControlName="text" [disabled]="disabled" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+                    <wm-icon [icon]="msgs.composer.emoji?.icon" (mousedown)="!disabled && toggleEmojiKeys()" 
+                             class="tools"
+                             inline
+                             matSuffix>
+                    </wm-icon>
+                </mat-form-field>
+
+                <ng-template #webMode>
+                    <mat-form-field appearance="legacy"  fxFlex="1 1 auto">
+                        <wm-emoji-input typein formControlName="text" matEmoji [disabled]="disabled"></wm-emoji-input>
+                        <wm-icon [icon]="msgs.composer.emoji?.icon" (mousedown)="!disabled && toggleEmojiKeys()" 
+                                 class="tools"
+                                 inline
+                                 matSuffix>
+                        </wm-icon>
+                    </mat-form-field>
+                </ng-template>
+            </div>
+
+            <mat-expansion-panel class="mat-elevation-z0"  hideToggle>
+                <wm-emoji-keyboard [favorites]="keys" [mode]="mode" (keyPressed)="!disabled && typein($event)">
+                </wm-emoji-keyboard>
+
+            </mat-expansion-panel>
+
+            <mat-dialog-actions align="center">
+                <button class="post__btn" [mat-dialog-close]="true" cdkFocusInitial
+                        [color]="'primary'"
+                        [disabled]="disabled"
+                        mat-button>{{msgs.addpost?.createpost  || "Post"}}
+                </button>
+
+            </mat-dialog-actions>
+        </form>
+
+    </ng-container>
+</wm-dialog>
+
+  <ng-template wmFab="right bottom" [direction]="'column'">
+
+    <button mat-mini-fab color="primary" class="mat-elevation-z11 post__entry" (click)="postdialog.open()">
+      <mat-icon color="secondary">plus</mat-icon>
+    </button>
+
+  </ng-template>
