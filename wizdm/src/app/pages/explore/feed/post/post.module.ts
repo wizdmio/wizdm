@@ -24,10 +24,11 @@ import { PostCardModule } from '../post-card/post-card.module';
     // ReadmeModule,
     // IconModule,
     // AvatarModule,
-    PostCardModule,
+  
     // ButtonChangerModule,
     // MomentPipesModule,
     // AuthGuardModule
+    PostCardModule
   ],
   declarations: [ PostComponent ],
   exports: [ PostComponent ]

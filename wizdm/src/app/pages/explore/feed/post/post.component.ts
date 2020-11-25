@@ -7,6 +7,7 @@ import { Observable, BehaviorSubject, merge } from 'rxjs';
 import { DatabaseService } from '@wizdm/connect/database';
 import { AuthService } from '@wizdm/connect/auth';
 import { $animations } from './post.animations';
+import { UserProfile, UserData } from 'app/utils/user';
 
 export interface PostData extends DocumentData {
   channel?: string;
@@ -39,7 +40,7 @@ export class PostComponent extends DatabaseDocument<PostData> {
   /** Returns true whenever the current user is authenticated */
   get authenticated(): boolean { return this.authenticated; }
 
-  constructor(db: DatabaseService, private auth: AuthService) { 
+  constructor(db: DatabaseService, private auth: AuthService, private user: UserProfile<UserData>) { 
     super(db)
   }
 
@@ -104,5 +105,14 @@ export class PostComponent extends DatabaseDocument<PostData> {
 
     // Updates the likes counter accordingly
     this.likes.update( favorite ? 1 : -1 );
+  }
+
+  public get userImage(): string {
+    return this.user.data.photo || '';
+  }
+
+  public get userFirstName(): string {
+    let displayName = this.user?.data?.userName?.split('-').slice().pop();
+    return displayName || '';
   }
 }

@@ -2,9 +2,9 @@
 
 
 <!-- Cover -->
-<div class="cover" fxFlex="0 0 auto" fxLayoutGap="5px">
+<div class="cover" fxFlex="0 0 auto">
  
-  <img [src]="data?.photo" style="object-fit: cover;"/>
+  <img [src]="postData?.photo" style="object-fit: cover;"/>
 
 </div>
 
@@ -22,28 +22,28 @@
     </button>
 
     <!-- Likes -->
-    <button mat-icon-button color="primary" class="mat-elevation-z4" (authClick)="toggleFavorite()"
+    <!-- <button mat-icon-button color="primary" class="mat-elevation-z4" (authClick)="toggleFavorite()"
             [matBadge]="likes.counter$ | async" [matBadgeHidden]="(likes.counter$ | async) === 0">
 
       <wm-icon [icon]="(favorite$ | async) ? 'fas:fa-thumbs-up' : 'far:fa-thumbs-up'" [@beat]="likes.counter$ | async"></wm-icon>
-    </button>
+    </button> -->
   </div>
 
   <!-- Meta -->
   <div class="meta" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 
-    <a mat-button color="primary">{{ data?.channel || 'Wizdm' }}</a>
+    <a mat-button color="primary">{{ postData?.channel || 'Wizdm' }}</a>
 
-    <time class="time">{{ data?.updated | moment:'ll' }}</time>
+    <time class="time">{{ postData?.updated | moment:'ll' }}</time>
 
   </div>
 
   <!-- Content -->
   <article fxFlex="1 1 auto" fxLayout="column">
 
-    <h2>{{ data?.title }}</h2>
+    <h2>{{ postData?.title }}</h2>
 
-    <p>{{ data?.text }}</p>
+    <p>{{ postData?.text }}</p>
 
   </article>
 
@@ -52,8 +52,8 @@
 <!-- Author -->
 <div class="footer" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px">
 
-  <wm-avatar></wm-avatar>
+  <wm-avatar [src]="userImage"></wm-avatar>
 
-  <span>Wizdm</span>
+  <span> <a class="mat-small" >{{userFirstName}} </a></span>
 
 </div>

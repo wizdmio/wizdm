@@ -25,7 +25,7 @@ import { PostCardComponent } from './post-card.component';
     ButtonChangerModule,
     MomentPipesModule,
     AuthGuardModule],
-  exports: [],
+  exports: [PostCardComponent],
   providers: [],
 })
 export class PostCardModule { }
