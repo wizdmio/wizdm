@@ -96,7 +96,7 @@ export class DialogLoader extends ActionLinkObserver implements OnDestroy {
   private loadRouteConfig(routeConfig: Route): Observable<{ module: NgModuleRef<any>, routes: Routes }> {
 
     // Extracts the internal NgModule ref eventually already lazily loaded by the Router
-    const module: NgModuleRef<any> = (routeConfig as any)?._loadedConfig?.module;
+    const module: NgModuleRef<any> = (routeConfig as any)._loadedConfig?.module;
     if(module) { 
 
       // Extracts the internal routes too
@@ -156,7 +156,7 @@ export class DialogLoader extends ActionLinkObserver implements OnDestroy {
     return forkJoin( Object.keys(resolve).map( key => {
 
       // Gets the resolver instance from the module injector
-      const resolver: Resolve<any> = module.injector.get(resolve[key]);
+      const resolver: Resolve<any> = module.injector.get(resolve[key] as Type<any>);
       if(typeof resolver.resolve !== 'function') { return of(null); }
 
       // Runs the resolver turning the results into an observable
