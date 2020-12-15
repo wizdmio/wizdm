@@ -20,7 +20,7 @@ export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnCh
   /** The portal context */
   @Input('wmPortalContext') ngTemplateOutletContext: Object|null;
 
-  /** The actual template in use. NOTE for this event to bind correclty yhe directive must be used in its de-sugared form */
+  /** The actual template in use. NOTE for this event to bind correclty the directive must be used in its de-sugared form */
   @Output('wmPortalTemplate') template = new EventEmitter<TemplateRef<Object|null>>();
 
   /** True then the portal is active  */
@@ -38,7 +38,7 @@ export class PortalDirective extends NgTemplateOutlet implements OnDestroy, OnCh
       // Beams the content with the given name
       switchMap( name => this.teleport.beam(name) ),
 
-      // Wait the next round to avid expressionChangedAfterItHasBeenChecked() exception
+      // Wait the next round to avoid expressionChangedAfterItHasBeenChecked() exception
       delay(0)
  
     ).subscribe( payload => this.changeTemplate(payload || {} as TeleportPayload) );
