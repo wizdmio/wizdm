@@ -29,7 +29,7 @@ The app relies on several [firebase services][firebase]:
 * Cloud Storage for user's images and files
 * Cloud Functions to run key tasks server-side
 
-Take a look on [@wizdm/connect](libs/connect) library abstracting the communication layer with all the firebase services. 
+Take a look on [@wizdm/connect](https://github.com/wizdmio/wizdm/tree/master/connect/src/lib) library abstracting the communication layer with all the firebase services. 
 
 ## Internationalization
 
