@@ -1,7 +1,7 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "window.zoomLevel": -1,
-    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.colorTheme": "Black",
     "editor.tabSize": 2,
     "deno.enable": false
 }
