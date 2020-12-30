@@ -1,36 +1,29 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DatabaseService } from '@wizdm/connect/database';
-import { QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
-import { DatabaseDocument } from '@wizdm/connect/database/document';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 import { PostData } from '../post/post.component';
+import { $animations } from './post-card.animation';
 
 @Component({
   selector: 'wm-post-card',
   templateUrl: './post-card.component.html',
-  styleUrls: ['./post-card.component.scss']
+  styleUrls: ['./post-card.component.scss'],
+  animations: $animations
 })
-export class PostCardComponent extends DatabaseDocument<PostData> {
+export class PostCardComponent implements OnInit {
 
-  @Input() toggleFavorites;
-  @Input() likers;
-  postData: PostData;
+  @Output() toggleLikes = new EventEmitter<boolean>(false);
+  @Input() likes: Observable<number>;
+  @Input() favorite: Observable<boolean>;
 
-  @Input() set data(postSnapShot: QueryDocumentSnapshot<PostData>){
-    this.postData = this.unwrap(postSnapShot);
-  };
+  @Input() data: PostData = {};
 
   @Input() userFirstName: string;
   @Input() userImage: string;
-  @Output() likes = new EventEmitter<string>();
+
+  constructor() { }
 
 
-  constructor(db: DatabaseService) {
-    super(db);
+  ngOnInit(): void {
   }
-
-public toggleLikes(value) {
-    this.likes.emit(value)
-  }
-
 
 }

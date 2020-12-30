@@ -1,70 +1,8 @@
-$wm-pcard-width: 600px !default;
-$wm-pcard-height: 50%;
-$wm-avatar-size: 48px !default;
-
 
 :host {
   display: flex;
   flex-direction: column;
-
 }
-  
-.wm-dlg-addpost {
-  position: relative;
-  display: block;
-  width: 450px;
-  left: 100px;
-  top: -40px;
-
-}
-
-  .dlg-subheader {
-    margin-top: $wm-avatar-size/4;
-    margin-bottom: 10px;
-  }
-
-  .dlg-header__close {
-    wm-icon {
-      cursor: pointer;
-    }
-   
-  }
-
-  .tools {
-    cursor: pointer;
-    vertical-align: middle;
-  }
-
- .dlg-avatar {
-  position: relative;
-  height: $wm-avatar-size;
-}
-
-.wm-emoji-keyboard {
-  flex-direction: column !important;
-
-  .mat-button {
-    min-width: 40px;
-  }
-}
-
-wm-avatar {
-  width: $wm-avatar-size;
-  height: $wm-avatar-size;
-  line-height: $wm-avatar-size;
-  cursor: pointer;
-}
-
-
-.post__btn.mat-button {
-  width: 100% !important;
-}
-
-
-textarea {
-  line-height: 1.5em;
-}
-
 wm-post { 
   margin-bottom: 20px;
 }

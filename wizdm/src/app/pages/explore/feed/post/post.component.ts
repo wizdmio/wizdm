@@ -6,7 +6,6 @@ import { Component, Input, HostBinding } from '@angular/core';
 import { Observable, BehaviorSubject, merge } from 'rxjs';
 import { DatabaseService } from '@wizdm/connect/database';
 import { AuthService } from '@wizdm/connect/auth';
-import { $animations } from './post.animations';
 import { UserProfile, UserData } from 'app/utils/user';
 
 export interface PostData extends DocumentData {
@@ -22,7 +21,6 @@ export interface PostData extends DocumentData {
   selector: 'wm-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
-  animations: $animations 
 })
 export class PostComponent extends DatabaseDocument<PostData> {
 
@@ -36,7 +34,9 @@ export class PostComponent extends DatabaseDocument<PostData> {
   /** Returns the current authenticated userId or 'unknown' */
   get me(): string { return this.auth.userId || 'unknown'; }
   /** Returns true thenever the place is favorite */
-  get favorite(): boolean { return this._favorite$.value; }
+  get favorite(): boolean {  return this._favorite$.value; }
+
+
   /** Returns true whenever the current user is authenticated */
   get authenticated(): boolean { return this.authenticated; }
 
@@ -72,7 +72,7 @@ export class PostComponent extends DatabaseDocument<PostData> {
         // Seeks for the user id within the collection of likers
         switchMap( me => this.isLikedBy(me) ),
         // Syncs the local copy
-        tap( favorite => this._favorite$.next(favorite) ) 
+        tap( favorite => this._favorite$.next(favorite) ),
       )
       // Distinct changes to avoid unwanted flickering
     ).pipe( distinctUntilChanged() );
@@ -81,16 +81,17 @@ export class PostComponent extends DatabaseDocument<PostData> {
   /** Checks if the specified userId is among the likers */
   private isLikedBy(userId: string): Observable<boolean> {
 
-    // Searches among the collection of likers 
+    // Searches among the collection of likers
     return this.likers
       // Matches for the document named upon the userId
       .stream( ref => ref.where(this.db.sentinelId, "==", userId ) )
       // Returns true if such document exists
-      .pipe( map( docs => docs.length > 0 ) );
+      .pipe( map( docs => docs.length > 0 ),
+       );
   }
   
   /** Toggles the favorite status */
-  public toggleFavorite() {
+  public toggleFavorite(event) {
 
     // Negates the curret favorite value
     const favorite = !this.favorite;

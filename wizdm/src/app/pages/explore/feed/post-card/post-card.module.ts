@@ -24,7 +24,8 @@ import { PostCardComponent } from './post-card.component';
     AvatarModule,
     ButtonChangerModule,
     MomentPipesModule,
-    AuthGuardModule],
+    AuthGuardModule
+  ],
   exports: [PostCardComponent],
   providers: [],
 })
