@@ -692,6 +692,18 @@
       "sourceRoot": "teleport/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "teleport/tsconfig.lib.json",
+            "project": "teleport/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "teleport/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

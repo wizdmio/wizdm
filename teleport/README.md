@@ -1,7 +1,9 @@
-# teleport
+# Template Teleportation Package For Angular
+Content teleportation enables template injectection elsewhere.
 
-This library was generated with [Nx](https://nx.dev).
+# Installation
+Use `npm` to install the @wizdm/teleport module:
 
-## Running unit tests
-
-Run `nx test teleport` to execute the unit tests.
+```
+npm install @wizdm/teleport
+```
