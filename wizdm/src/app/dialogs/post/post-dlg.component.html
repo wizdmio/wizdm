@@ -1,0 +1,67 @@
+
+<ng-container *wmContent="let msgs select 'explorer-feed-post'">
+        
+  <div class="dlg-header" fxLayout="row" fxLayoutAlign="space-between center">
+      <div class="dlg-header__title">
+          <h4 mat-dialog-title>{{msgs.addpost.header?.title || "Create Post"}}</h4>
+      </div>
+      <div class="dlg-header__close" fxLayout="row" fxLayoutAlign="end start">
+          <wm-icon [icon]="msgs.addpost.header?.icon" (click)="closePostDialog()"></wm-icon>
+      </div>
+  </div>
+  <mat-divider>
+  </mat-divider>
+
+  <div class="dlg-subheader" fxLayout="row" fxLayoutGap="10px">
+      <div class="dlg-avatar">
+          <wm-avatar [src]="userImage"></wm-avatar>
+      </div>
+      <div fxLayout="column">
+          <a class="mat-small" [routerLink]="">{{userFirstName}} </a>
+          <a class="mat-small" [routerLink]="">Public</a>
+      </div>
+  </div>
+  
+  <form [formGroup]="postForm" fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="center end">
+          
+          <mat-form-field fxFlex="1 1 auto" appearance="legacy"  *ngIf="mode === 'native'; else webMode">
+              <textarea matInput typein formControlName="text"  cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+              <wm-icon [icon]="msgs.composer.emoji?.icon" (mousedown)="!disabled && toggleEmojiKeys()" 
+                       class="tools"
+                       inline
+                       matSuffix>
+              </wm-icon>
+          </mat-form-field>
+
+          <ng-template #webMode>
+              <mat-form-field appearance="legacy"  fxFlex="1 1 auto">
+                  <wm-emoji-input typein formControlName="text" matEmoji ></wm-emoji-input>
+                  <wm-icon [icon]="msgs.composer.emoji?.icon" 
+                  (mousedown)="!disabled && toggleEmojiKeys()" 
+                           class="tools"
+                           inline
+                           matSuffix>
+                  </wm-icon>
+              </mat-form-field>
+          </ng-template>
+      </div>
+
+      <mat-expansion-panel class="mat-elevation-z0"  hideToggle>
+          <wm-emoji-keyboard [favorites]="keys" [mode]="mode" 
+          (keyPressed)="typein($event)">
+          </wm-emoji-keyboard>
+
+      </mat-expansion-panel>
+
+      <mat-dialog-actions align="center">
+          <button class="post__btn" [mat-dialog-close]="true" cdkFocusInitial
+                  [color]="'primary'"
+                  (click)="savePost()"
+                  mat-button>{{msgs.addpost?.createpost  || "Post"}}
+          </button>
+ 
+      </mat-dialog-actions>
+  </form>
+
+</ng-container>

@@ -1,0 +1,58 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 5px;
+  overflow: hidden;
+
+  .cover {
+
+    background-color: lightgrey;
+
+    height: 100px;
+  
+    img {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+    }
+  }
+
+  .body {
+
+    padding: 0 20px;
+
+    background-color: white;
+
+    .tools {
+      margin-top: -22px;
+      background-color: transparent;
+
+      .mat-icon-button { background-color: white; }
+    }
+
+    .meta {
+      margin-left: -16px; 
+
+      .time {
+        opacity: 0.35;
+      }
+    }
+  }
+
+  .footer {
+
+    background-color: white;
+
+    padding: 8px;
+
+    .wm-avatar { 
+      width: 40px;
+      height: 40px; 
+
+      border: 2px solid white;
+
+      box-sizing: border-box;
+    }
+  }
+}

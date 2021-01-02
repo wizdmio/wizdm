@@ -1,23 +1,14 @@
 
-<!-- Localized content -->
-<!--ng-container *wmContent="let msgs select 'feed'"-->
-
-  <!-- Action Bar (projected in the top toolbar) -->
-  <!--ng-template wmActionbar let-mobile="isMobile">
-    
-    <button mat-button [type]="mobile ? 'icon' : 'basic'" color="primary">
-      
-      <span *ngIf="!mobile">{{ msgs.filter? || 'Sign-out' }}</ng-template>
-
-      <wm-icon [icon]="msgs.filter?.icon || 'filter_list'"></wm-icon>
-      
-    </button>
-
-  </ng-template-->
-
-<!--/ng-container-->
-
-<wm-addpost></wm-addpost>
 
 <!-- List all posts in descending order -->
-<wm-post class="mat-elevation-z3" *ngFor="let post of feed$ | async" [post]="post"></wm-post>
+<wm-post class="mat-elevation-z3" fxLayout="column" *ngFor="let post of feed$ | async" [post]="post"></wm-post>
+
+<!-- Add Post  -->
+  <ng-template wmFab="right bottom" [direction]="'column'">
+
+    <button mat-mini-fab color="primary"  class="mat-elevation-z11 post__entry" [routerLink]="'postdlg'">
+      <wm-icon   icon="fas:fa-plus" ></wm-icon>
+
+    </button>
+
+  </ng-template>
