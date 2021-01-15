@@ -1,13 +1,12 @@
 import { StripeElementsDirective, STRIPE_ELEMENTS_OPTIONS } from './elements.directive';
 import { PLATFORM_ID, NgModule, ModuleWithProviders, Inject } from '@angular/core';
-import { StripeControlDirective } from './control.directive';
 import { isPlatformBrowser } from '@angular/common';
 
 import type { StripeElementsOptions } from '@stripe/stripe-js';
 
 @NgModule({
-  declarations: [ StripeControlDirective, StripeElementsDirective ],
-  exports: [ StripeControlDirective, StripeElementsDirective ]
+  declarations: [ StripeElementsDirective ],
+  exports: [ StripeElementsDirective ]
 })
 export class StripeElementsModule {
 

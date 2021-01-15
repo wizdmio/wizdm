@@ -1,8 +1,19 @@
-import { StripeElementsDirective, StripeElementDirective, computeBaseStyle } from '@wizdm/stripe/elements';
-import { Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeControlDirective, computeBaseStyle } from '@wizdm/stripe/elements';
+import { Directive, Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import type { StripeFpxBankElementOptions, StripeElementStyleVariant } from '@stripe/stripe-js';
+
+/** Bridge with the Angular's form API */
+@Directive({
+  selector: 'wm-stripe-fpx-bank[ngModel], wm-stripe-fpx-bank[formControl], wm-stripe-fpx-bank[formControlName]',
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => StripeFpxBankControl), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeFpxBankControl), multi: true  }
+  ]
+})
+export class StripeFpxBankControl extends StripeControlDirective<'fpxBank'> {}
 
 /** Stripe fpxBank Element 
  * @see https://stripe.com/docs/payments/fpx

@@ -1,8 +1,19 @@
-import { StripeElementsDirective, StripeElementDirective, computeBaseStyle } from '@wizdm/stripe/elements';
-import { Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeControlDirective, computeBaseStyle } from '@wizdm/stripe/elements';
+import { Directive, Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import type { StripeElementStyleVariant } from '@stripe/stripe-js';
+
+/** Bridge with the Angular's form API */
+@Directive({
+  selector: 'wm-stripe-card-expiry[ngModel], wm-stripe-card-expiry[formControl], wm-stripe-card-expiry[formControlName]',
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => StripeCardExpiryControl), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeCardExpiryControl), multi: true  }
+  ]
+})
+export class StripeCardExpiryControl extends StripeControlDirective<'cardExpiry'> {}
 
 /** Stripe Card Exipation Date Element for Angular */
 @Component({

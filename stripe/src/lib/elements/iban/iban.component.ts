@@ -1,8 +1,19 @@
-import { StripeElementsDirective, StripeElementDirective, computeBaseStyle } from '@wizdm/stripe/elements';
-import { Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeControlDirective, computeBaseStyle } from '@wizdm/stripe/elements';
+import { Directive, Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import type { StripeIbanElementOptions, StripeElementStyleVariant } from '@stripe/stripe-js';
+
+/** Bridge with the Angular's form API */
+@Directive({
+  selector: 'wm-stripe-iban[ngModel], wm-stripe-iban[formControl], wm-stripe-iban[formControlName]',
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => StripeIbanControl), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeIbanControl), multi: true  }
+  ]
+})
+export class StripeIbanControl extends StripeControlDirective<'iban'> {}
 
 /** Stripe IBAN Element for Angular */
 @Component({

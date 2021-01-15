@@ -1,8 +1,19 @@
-import { StripeElementsDirective, StripeElementDirective, computeBaseStyle } from '@wizdm/stripe/elements';
-import { Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { StripeElementsDirective, StripeElementDirective, StripeControlDirective, computeBaseStyle } from '@wizdm/stripe/elements';
+import { Directive, Component, OnInit, OnChanges, Optional, forwardRef, Input, ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 import type { StripeElementStyleVariant } from '@stripe/stripe-js';
+
+/** Bridge with the Angular's form API */
+@Directive({
+  selector: 'wm-stripe-card-cvc[ngModel], wm-stripe-card-cvc[formControl], wm-stripe-card-cvc[formControlName]',
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => StripeCardCvcControl), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => StripeCardCvcControl), multi: true  }
+  ]
+})
+export class StripeCardCvcControl extends StripeControlDirective<'cardCvc'> {}
 
 /** Stripe Card CVC Element for Angular */
 @Component({

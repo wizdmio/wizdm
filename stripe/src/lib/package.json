@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/stripe",
   "description": "Stripe Elements for Angular Material",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
   "keywords": ["Angular", "Material", "Stripe"],
   "homepage": "https://wizdm.io/docs/stripe",

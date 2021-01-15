@@ -1,9 +1,9 @@
+import { StripeFpxBank, StripeFpxBankControl } from './fpx.component';
 import { NgModule } from '@angular/core';
-import { StripeFpxBank } from './fpx.component';
 
 @NgModule({
   imports: [ ],
-  declarations: [ StripeFpxBank ],
-  exports: [ StripeFpxBank ]
+  declarations: [ StripeFpxBank, StripeFpxBankControl ],
+  exports: [ StripeFpxBank, StripeFpxBankControl ]
 })
 export class StripeFpxBankModule { }

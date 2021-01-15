@@ -1,9 +1,9 @@
+import { StripeIban, StripeIbanControl } from './iban.component';
 import { NgModule } from '@angular/core';
-import { StripeIban } from './iban.component';
 
 @NgModule({
   imports: [ ],
-  declarations: [ StripeIban ],
-  exports: [ StripeIban ]
+  declarations: [ StripeIban, StripeIbanControl ],
+  exports: [ StripeIban, StripeIbanControl ]
 })
 export class StripeIbanModule { }

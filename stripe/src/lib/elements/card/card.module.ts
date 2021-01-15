@@ -1,12 +1,22 @@
-import { StripeCardNumber } from './card-number.component';
-import { StripeCardExpiry } from './card-expiry.component';
-import { StripeCardCvc } from './card-cvc.component';
-import { StripeCard } from './card.component';
+import { StripeCardNumber, StripeCardNumberControl } from './card-number.component';
+import { StripeCardExpiry, StripeCardExpiryControl } from './card-expiry.component';
+import { StripeCardCvc, StripeCardCvcControl } from './card-cvc.component';
+import { StripeCard, StripeCardControl } from './card.component';
 import { NgModule } from '@angular/core';
 
 @NgModule({
   imports: [ ],
-  declarations: [ StripeCard, StripeCardNumber, StripeCardExpiry, StripeCardCvc ],
-  exports: [ StripeCard, StripeCardNumber, StripeCardExpiry, StripeCardCvc ]
+  declarations: [ 
+    StripeCard, StripeCardControl, 
+    StripeCardNumber, StripeCardNumberControl, 
+    StripeCardExpiry, StripeCardExpiryControl, 
+    StripeCardCvc, StripeCardCvcControl
+  ],
+  exports: [ 
+    StripeCard, StripeCardControl, 
+    StripeCardNumber, StripeCardNumberControl, 
+    StripeCardExpiry, StripeCardExpiryControl,
+    StripeCardCvc, StripeCardCvcControl 
+  ]
 })
 export class StripeCardModule { }

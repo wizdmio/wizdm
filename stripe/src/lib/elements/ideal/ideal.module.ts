@@ -1,9 +1,9 @@
+import { StripeIdealBank, StripeIdealBankControl } from './ideal.component';
 import { NgModule } from '@angular/core';
-import { StripeIdealBank } from './ideal.component';
 
 @NgModule({
   imports: [ ],
-  declarations: [ StripeIdealBank ],
-  exports: [ StripeIdealBank ]
+  declarations: [ StripeIdealBank, StripeIdealBankControl ],
+  exports: [ StripeIdealBank, StripeIdealBankControl ]
 })
 export class StripeIdealBankModule { }
