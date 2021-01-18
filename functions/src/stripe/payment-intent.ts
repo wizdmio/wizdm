@@ -40,5 +40,5 @@ export const createPaymentIntent = https.onCall( async (data, context) => {
 		// Returns the payment intent to the client to proceed with confirming it based upon the client_secret.
 		return paymentIntent;
 		
-	} catch(err) { throw new https.HttpsError(err.code, err.message); }
+	} catch(err) { throw new https.HttpsError('unknown', err.message); }
 });
