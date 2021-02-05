@@ -1,4 +1,3 @@
-
 <!-- Resolve the localized content -->
 <ng-container *wmContent="let msgs select 'navigator'">
 
@@ -96,7 +95,7 @@
       <!-- Custom toolbar (2nd row) -->
       <mat-toolbar-row auto fxLayout="row" #toolbar>
 
-        <!-- De-sugared wmPortat directive: Toolbar content will be teleported here -->
+        <!-- De-sugared wmPortal directive: Toolbar content will be teleported here -->
         <ng-template wmPortal="toolbar" [wmPortalContext]="{ isMobile: mobile }" (wmPortalActive)="customToolbar = $event"></ng-template>
 
       </mat-toolbar-row>

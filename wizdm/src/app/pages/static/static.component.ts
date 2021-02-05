@@ -36,7 +36,7 @@ export class StaticComponent {
   // Tracks the toc changes
   public tocChanged(item: TocItem, mobile?: boolean) {
 
-    // Force closing the toc panel while navigating on small screens or no iem is null (aka the current document isn't referred within the toc)
+    // Force closing the toc panel while navigating on small screens or the item is null (aka the current document isn't referred within the toc)
     if(mobile || !item) { this.openTOC = false; }
 
     // Force opening the toc panel whenever display a document referred within the toc for the first time
