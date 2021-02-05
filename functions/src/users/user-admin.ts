@@ -114,7 +114,7 @@ export async function listUsers(req: Request, res: Response) {
 
    console.log('Listing users', req.body);
 
-   // Checks the  bidy is a non-empty array of identifiers
+   // Checks the body is a non-empty array of identifiers
    if(!Array.isArray(req.body) || req.body.length <= 0) { return res.status(400).send({ message: 'Missing fields' }); }
    
    try {
