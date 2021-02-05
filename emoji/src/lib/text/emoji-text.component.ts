@@ -16,6 +16,9 @@ export interface emSegment {
 })
 export class EmojiText implements OnChanges {
 
+  // Internal value
+  protected _value: string;
+
   readonly segments: emSegment[] = [];
   
   constructor(readonly utils: EmojiUtils) { 
@@ -24,7 +27,8 @@ export class EmojiText implements OnChanges {
   }
 
   /** Plain text source input */
-  @Input('wm-emoji-text') value: string;
+  @Input('wm-emoji-text') set value(value: string) { this._value = value; }
+  get value(): string { return this._value || ''; }
     
   /** Mode flag:
    * 'web' renders emoji as images

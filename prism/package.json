@@ -1,17 +1,17 @@
 {
   "name": "@wizdm/prism",
   "description": "Syntax Highlighting in Angular",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Prism", "Syntax highlighting"],
   "homepage": "https://wizdm.io/docs/content/prism",
   "dependencies": {
     "tslib": "^2.0.0",
-    "prismjs": "^1.17.1"
+    "prismjs": "^1.23.0"
   },
   "peerDependencies": {
-    "@angular/common": "^10.0.0",
-    "@angular/core": "^10.0.0"
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0"
   },
   "publishConfig": {
     "access": "public"

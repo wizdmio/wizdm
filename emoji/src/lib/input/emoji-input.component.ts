@@ -19,8 +19,6 @@ import { OnDestroy } from '@angular/core';
 })
 export class EmojiInput extends EmojiText implements OnDestroy {
 
-  // Internal value
-  private _value: string;
   // Current selection
   private start: number;
   private end: number;
@@ -68,7 +66,6 @@ export class EmojiInput extends EmojiText implements OnDestroy {
   @Input() placeholder: string;
 
   /** The input value */
-  get value(): string { return this._value || ''; }
   @Input() set value(value: string) {
     // Avoids unecessary changes
     if(value === this.value) { return; }

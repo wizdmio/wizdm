@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/stripe",
   "description": "Stripe Elements for Angular Material",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Material", "Stripe"],
   "homepage": "https://wizdm.io/docs/stripe",
@@ -10,11 +10,13 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@stripe/stripe-js": "^1.9.0",
-    "@angular/core": "^10.0.0",
-    "@angular/forms": "^10.0.0",
-    "@angular/cdk": "^10.0.0",
-    "@angular/material": "^10.0.0"
+    "@angular/core": "^11.0.0",
+    "@angular/forms": "^11.0.0",
+    "@angular/cdk": "^11.0.0",
+    "@angular/material": "^11.0.0"
+  },
+  "devDependencies": {
+    "@stripe/stripe-js": "^1.12.0"
   },
   "publishConfig": {
     "access": "public"

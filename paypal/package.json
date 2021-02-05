@@ -2,7 +2,7 @@
   "$schema": "../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/paypal",
   "description": "Paypal Smart Buttons for Angular",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Paypal"],
   "homepage": "https://wizdm.io/docs/paypal",
@@ -10,7 +10,7 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/core": "^10.0.0"
+    "@angular/core": "^11.0.0"
   },
   "publishConfig": {
     "access": "public"

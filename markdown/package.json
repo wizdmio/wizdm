@@ -2,7 +2,7 @@
   "$schema": "../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/markdown",
   "description": "Markdown renderer for Angular",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Markdown"],
   "homepage": "https://wizdm.io/docs/content/markdown",
@@ -10,15 +10,15 @@
     "tslib": "^2.0.0",
     "path": "^0.12.7",
     "remark-align": "^1.2.13",
-    "remark-parse": "^8.0.2",
+    "remark-parse": "^9.0.0",
     "remark-sub-super": "^1.0.19",
     "unified": "^9.0.0"
   },
   "peerDependencies": {
-    "@angular/common": "^10.0.0",
-    "@angular/core": "^10.0.0",
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0",
     "@wizdm/emoji": "^2.0.0",
-    "@wizdm/prism": "^2.0.0"
+    "@wizdm/prism": "^3.0.0"
   },
   "publishConfig": {
     "access": "public"

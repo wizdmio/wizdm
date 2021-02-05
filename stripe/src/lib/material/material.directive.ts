@@ -18,7 +18,7 @@ export class StripeMaterialDirective implements MatFormFieldControl<any> {
 
   constructor(readonly element: StripeElementDirective<any>) { 
 
-    this.stateChanges = merge(
+    this.stateChanges = merge<void>(
       element.readyChange,
       element.focusChange,
       element.blurChange,

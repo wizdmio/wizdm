@@ -27,11 +27,6 @@
               "wizdm/src/favicon.ico",
               "wizdm/src/assets",
               {
-                "glob": "*",
-                "input": "./node_modules/@fortawesome/fontawesome-free/webfonts/",
-                "output": "/assets/font/"
-              },
-              {
                 "glob": "*.png",
                 "input": "./node_modules/emoji-datasource-google/img/google/64/",
                 "output": "/assets/emoji/"
@@ -166,7 +161,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "animate/tsconfig.lib.json",
             "project": "animate/ng-package.json"
@@ -209,7 +204,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "content/tsconfig.lib.json",
             "project": "content/ng-package.json"
@@ -252,7 +247,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "connect/tsconfig.lib.json",
             "project": "connect/src/lib/ng-package.json"
@@ -321,7 +316,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
               "tsConfig": "elements/tsconfig.lib.json",
               "project": "elements/src/lib/ng-package.json"
@@ -364,7 +359,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "markdown/tsconfig.lib.json",
             "project": "markdown/ng-package.json"
@@ -402,7 +397,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "prism/tsconfig.lib.json",
             "project": "prism/ng-package.json"
@@ -502,7 +497,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "paypal/tsconfig.lib.json",
             "project": "paypal/ng-package.json"
@@ -545,7 +540,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "stripe/tsconfig.lib.json",
             "project": "stripe/src/lib/ng-package.json"
@@ -650,7 +645,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "emoji/tsconfig.lib.json",
             "project": "emoji/src/lib/ng-package.json"
@@ -693,7 +688,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "teleport/tsconfig.lib.json",
             "project": "teleport/ng-package.json"
@@ -760,49 +755,6 @@
         }
       }
     },
-    "dialog": {
-      "projectType": "library",
-      "root": "dialog",
-      "sourceRoot": "dialog/src",
-      "prefix": "wm",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "dialog/tsconfig.lib.json",
-            "project": "dialog/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "dialog/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "dialog/tsconfig.lib.json",
-              "dialog/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!dialog/**"]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "dialog/src/test.ts",
-            "tsConfig": "dialog/tsconfig.spec.json",
-            "karmaConfig": "dialog/karma.conf.js"
-          }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
-      }
-    },
     "readme": {
       "projectType": "library",
       "root": "readme",
@@ -810,7 +762,7 @@
       "prefix": "wm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "readme/tsconfig.lib.json",
             "project": "readme/ng-package.json"
@@ -884,7 +836,7 @@
       "prefix": "wizdm",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "download/tsconfig.lib.json",
             "project": "download/ng-package.json"
@@ -958,7 +910,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "play-sound/tsconfig.lib.json",
             "project": "play-sound/ng-package.json"
@@ -998,7 +950,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "rxjs/tsconfig.lib.json",
             "project": "rxjs/ng-package.json"
@@ -1038,7 +990,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "emoji-keyboard/tsconfig.lib.json",
             "project": "emoji-keyboard/ng-package.json"
@@ -1078,7 +1030,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "geo/tsconfig.lib.json",
             "project": "geo/ng-package.json"

@@ -1,7 +1,7 @@
 {
   "name": "@wizdm/teleport",
   "description": "Template teleporting",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Template", "Teleport"],
   "homepage": "https://wizdm.io/docs/content/teleport",
@@ -9,8 +9,8 @@
     "tslib": "^2.0.0"
   },
   "peerDependencies": {
-    "@angular/common": "10.0.0",
-    "@angular/core": "^10.0.0"
+    "@angular/common": "11.0.0",
+    "@angular/core": "^11.0.0"
   },
   "repository": {
     "type": "git",

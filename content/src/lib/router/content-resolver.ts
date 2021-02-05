@@ -13,7 +13,7 @@ export class ContentResolver implements Resolve<any> {
 
     return new InjectionToken(`wizdm.content.${file}`, {
       providedIn,
-      factory: () => new ContentResolver(inject(ContentLoader as any), inject(SelectorResolver), source,file)
+      factory: () => new ContentResolver(inject(ContentLoader as any), inject(SelectorResolver), source, file)
     });
   }
 

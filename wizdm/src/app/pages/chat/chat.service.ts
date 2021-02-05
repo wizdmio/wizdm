@@ -98,7 +98,6 @@ export class ChatService extends DatabaseCollection<ConversationData> implements
                     
           // Redirects to the very same route including the user name this time
           return this.router.createUrlTree(state.url.split('/'), {
-            replaceUrl: true,
             queryParams: {
               with: userName
             }

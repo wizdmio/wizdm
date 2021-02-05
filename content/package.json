@@ -1,14 +1,14 @@
 {
   "name": "@wizdm/content",
   "description": "Dynamic content by the Angular Router",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Router", "i18n"],
   "homepage": "https://wizdm.io/docs/content",
   "peerDependencies": {
-    "@angular/core": "^10.0.0",
-    "@angular/common": "^10.0.0",
-    "@angular/router": "^10.0.0"
+    "@angular/core": "^11.0.0",
+    "@angular/common": "^11.0.0",
+    "@angular/router": "^11.0.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

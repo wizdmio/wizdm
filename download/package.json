@@ -1,13 +1,13 @@
 {
   "name": "@wizdm/download",
   "description": "Cross origin downloader helper",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Download", "cors"],
   "homepage": "https://wizdm.io/docs/download",
   "peerDependencies": {
-    "@angular/common": "^10.0.0",
-    "@angular/core": "^10.0.0"
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
