@@ -2,13 +2,13 @@
   "$schema": "../../../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/connect",
   "description": "Firebase integration for Angular",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
   "keywords": ["Angular", "Firesbase", "Authentication", "Firestore", "Cloud Storage", "Cloud Functions"],
   "homepage": "https://wizdm.io/docs/connect",
   "dependencies": {
     "tslib": "^2.0.0",
-    "firebase": "^7.24.0"
+    "firebase": "^8.3.2"
   },
   "peerDependencies": {
     "@angular/core": "^11.0.0"
