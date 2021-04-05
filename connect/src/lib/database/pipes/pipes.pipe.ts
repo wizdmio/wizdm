@@ -2,7 +2,7 @@ import { DocumentSnapshot, DocumentData } from '../document/types';
 import { Pipe, PipeTransform } from '@angular/core';
 import { Timestamp } from '../database-application';
 import { mapSnaphotData } from '../document/utils';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 
 @Pipe({ name: 'snapshotData' })
 export class SnapshotDataPipe implements PipeTransform {

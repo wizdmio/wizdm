@@ -1,7 +1,7 @@
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
 import { StorageFile, StorageFolder } from './extras';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 import { FirebaseApp } from '@wizdm/connect';
 import { NgZone } from '@angular/core';
 

@@ -1,7 +1,7 @@
 import { DatabaseDocument, DatabaseTransaction, DatabaseBatch, DocumentRef } from './document'
 import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './collection';
 import { DistributedCounter, CounterShard } from './counter';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 import { FirebaseApp } from '@wizdm/connect';
 import { NgZone } from '@angular/core';
 

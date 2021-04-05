@@ -1,5 +1,5 @@
 import { UploadTask, UploadTaskSnapshot, StorageRef } from './storage-application';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 import { shareReplay } from 'rxjs/operators';
 import { NgZone } from '@angular/core';
 import { Observable, of } from 'rxjs';

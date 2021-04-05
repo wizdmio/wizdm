@@ -3,7 +3,7 @@
   "lib": {
     "entryFile": "index.ts",
     "umdModuleIds": {     
-      "firebase": "firebase"
+      "firebase/app": "firebase/app"
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, Optional, Inject, InjectionToken, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '@wizdm/connect';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 
 export type Functions = firebase.functions.Functions;
 export type Callable<T, R> = (data?:  T) => Promise<R>;

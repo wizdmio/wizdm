@@ -1,6 +1,6 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '@wizdm/connect';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 import { shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 

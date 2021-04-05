@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders, InjectionToken, Inject, Optional } from '@angular/core';
-import { default as firebase } from 'firebase'; 
+import { default as firebase } from 'firebase/app'; 
 
 /** FirebaseApp type */
 export type FirebaseApp = firebase.app.App;

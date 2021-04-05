@@ -1,5 +1,5 @@
 import { Timestamp } from '../database-application';
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 
 export type DocumentSnapshot<T> = firebase.firestore.DocumentSnapshot<T>
 export type DocumentRef<T> = firebase.firestore.DocumentReference<T>;

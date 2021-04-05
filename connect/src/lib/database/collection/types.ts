@@ -1,4 +1,4 @@
-import { default as firebase } from 'firebase';
+import { default as firebase } from 'firebase/app';
 
 /** Collectio Reference */
 export type CollectionRef<T> = firebase.firestore.CollectionReference<T>;
