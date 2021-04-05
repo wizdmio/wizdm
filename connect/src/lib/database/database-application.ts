@@ -1,17 +1,17 @@
 import { DatabaseDocument, DatabaseTransaction, DatabaseBatch, DocumentRef } from './document'
 import { DatabaseCollection, DatabaseGroup, CollectionRef, Query } from './collection';
 import { DistributedCounter, CounterShard } from './counter';
+import { default as firebase } from 'firebase';
 import { FirebaseApp } from '@wizdm/connect';
-import { firestore } from 'firebase/app';
 import { NgZone } from '@angular/core';
 
-export type PersistenceSettings = firestore.PersistenceSettings;
-export type FirebaseFirestore = firestore.Firestore;
+export type PersistenceSettings = firebase.firestore.PersistenceSettings;
+export type FirebaseFirestore = firebase.firestore.Firestore;
 
-export type Timestamp = firestore.Timestamp;
-export type FieldPath = firestore.FieldPath;
-export type FieldValue = firestore.FieldValue;
-export type GeoPoint = firestore.GeoPoint;
+export type Timestamp = firebase.firestore.Timestamp;
+export type FieldPath = firebase.firestore.FieldPath;
+export type FieldValue = firebase.firestore.FieldValue;
+export type GeoPoint = firebase.firestore.GeoPoint;
 
 export abstract class DatabaseApplication {
 
@@ -43,42 +43,42 @@ export abstract class DatabaseApplication {
   /** Returns a fieldpath from the provided field names. If more than one field name is provided, the path will point to a nested field 
    * in a document */
   public fieldPath(...fieldNames: string[]) {
-    return new firestore.FieldPath(...fieldNames);
+    return new firebase.firestore.FieldPath(...fieldNames);
   }
 
   /** Returns an ID sentinel to be used in queries */
   public get sentinelId(): FieldPath {
-    return firestore.FieldPath.documentId();
+    return firebase.firestore.FieldPath.documentId();
   }
 
   /** Returns a server timestamp palceholder (it'll turn into a timestamp serverside) */
   public get timestamp(): FieldValue {
-    return firestore.FieldValue.serverTimestamp();
+    return firebase.firestore.FieldValue.serverTimestamp();
   }
 
   /** Returns a sentinel for use with update to mark the field for deletion */
   public get delete(): FieldValue {
-    return firestore.FieldValue.delete();
+    return firebase.firestore.FieldValue.delete();
   }
 
   /** Returns a special value that can be used with set() or update() telling the server to increment the field's current value */
   public increment(n: number): FieldValue {
-    return firestore.FieldValue.increment(n);
+    return firebase.firestore.FieldValue.increment(n);
   }
 
   /** Returns a special value that can be used with set() or update() telling the server to add the given elements to an array */
   public arrayUnion<T>(...elements: T[]): FieldValue {
-    return firestore.FieldValue.arrayUnion(...elements);
+    return firebase.firestore.FieldValue.arrayUnion(...elements);
   }
 
   /** Returns a special value that can be used with set() or update() telling the server to remove the given elements from an array */
   public arrayRemove<T>(...elements: T[]): FieldValue {
-    return firestore.FieldValue.arrayRemove(...elements);
+    return firebase.firestore.FieldValue.arrayRemove(...elements);
   }
 
   /** Creates a geopoint at the given lat and lng */
   public geopoint(lat: number, lng: number): GeoPoint {
-    return new firestore.GeoPoint(lat, lng);
+    return new firebase.firestore.GeoPoint(lat, lng);
   }
 
   public doc<T>(ref: string|DocumentRef<T>): DocumentRef<T> {

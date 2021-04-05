@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Inkbar
 [Go to the API Reference](#api-reference)

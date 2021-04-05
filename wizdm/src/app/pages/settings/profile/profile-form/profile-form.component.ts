@@ -87,7 +87,7 @@ export class ProfileFormComponent extends FormGroup implements OnDestroy {
     const birth = value.birth ? moment(value.birth, defaultFormat) : null;
 
     // Replaces the old 'motto' with the new 'bio' field
-    if(value.motto && !value.bio) { value.bio = value.motto; }
+    if((value as any).motto && !value.bio) { value.bio = (value as any).motto; }
 
     // Keeps track of the original input data
     this.data = value;

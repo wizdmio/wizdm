@@ -1,5 +1,3 @@
-<!-- toc: docs/reference.json -->
-
 # Elements 
 <!-- THe NPM package link goes here once published -->
 [@wizdm/elements](https://github.com/wizdmio/wizdm/tree/master/libs/elements/src/lib) 

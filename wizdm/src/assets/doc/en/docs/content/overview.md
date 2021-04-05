@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Content Management
  Content data in Wizdm is divided in *Static* content and *Dynamic* content. 

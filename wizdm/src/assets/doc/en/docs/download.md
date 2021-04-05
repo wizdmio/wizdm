@@ -1,5 +1,3 @@
-<!-- toc: docs/reference.json -->
-
 # We Are Sorry
 
 [Start](docs) - [Back](back) - [Home](home)

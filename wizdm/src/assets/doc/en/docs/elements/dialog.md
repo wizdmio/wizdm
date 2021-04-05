@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Dialog 
 [Go to the API Reference](#api-reference)

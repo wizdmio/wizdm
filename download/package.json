@@ -1,7 +1,7 @@
 {
-  "name": "@wizdm/download",
+  "name": "@wizdm/downloader",
   "description": "Cross origin downloader helper",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "keywords": ["Angular", "Download", "cors"],
   "homepage": "https://wizdm.io/docs/download",

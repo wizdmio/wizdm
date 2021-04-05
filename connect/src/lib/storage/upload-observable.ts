@@ -1,10 +1,10 @@
 import { UploadTask, UploadTaskSnapshot, StorageRef } from './storage-application';
+import { default as firebase } from 'firebase';
 import { shareReplay } from 'rxjs/operators';
 import { NgZone } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { storage } from 'firebase/app';
 
-export type TaskState = storage.TaskState;
+export type TaskState = firebase.storage.TaskState;
 
 /** UploadeObservable streaming UploadTaskSnapshots */
 export class UploadObservable extends Observable<UploadTaskSnapshot> {
@@ -37,7 +37,7 @@ export class UploadObservable extends Observable<UploadTaskSnapshot> {
     // Builds the inner observable hooking on the 'state_changed' observer. 
     // Since task creation is delegated to the factory function this result being 
     // a cold observable (upload starts upon subscription)
-    this._inner$ = new Observable<UploadTaskSnapshot>(subscriber => this.task.on(storage.TaskEvent.STATE_CHANGED,
+    this._inner$ = new Observable<UploadTaskSnapshot>(subscriber => this.task.on(firebase.storage.TaskEvent.STATE_CHANGED,
       // Runs the observable within the Angular's zone
       snap => zone.run( () => subscriber.next(snap) ),
       // Runs the observable within the Angular's zone

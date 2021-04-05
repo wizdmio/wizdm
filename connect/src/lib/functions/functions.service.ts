@@ -1,11 +1,11 @@
 import { Injectable, Optional, Inject, InjectionToken, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '@wizdm/connect';
-import { functions } from 'firebase/app';
+import { default as firebase } from 'firebase';
 
-export type Functions = functions.Functions;
+export type Functions = firebase.functions.Functions;
 export type Callable<T, R> = (data?:  T) => Promise<R>;
-export type CallOptions = functions.HttpsCallableOptions;
-export type CallResult = functions.HttpsCallableResult;
+export type CallOptions = firebase.functions.HttpsCallableOptions;
+export type CallResult = firebase.functions.HttpsCallableResult;
 
 export const FUNCTIONS_REGION = new InjectionToken<string>('wizdm.connectc.functions.region');
 export const EMULATOR_ORIGIN = new InjectionToken<string>('wizdm.connect.functions.emulator.origin');

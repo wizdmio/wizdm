@@ -51,7 +51,7 @@
               }
             ],
             "allowedCommonJsDependencies": [
-              "firebase/app", "@firebase/app", "@firebase/component", "@firebase/auth", "@firebase/firestore", "@firebase/functions", "@firebase/util",
+              "firebase", "@firebase/app", "@firebase/component", "@firebase/auth", "@firebase/firestore", "@firebase/functions", "@firebase/util",
               "remark-align", "remark-parse", "unified"
             ]
           },
@@ -188,49 +188,6 @@
             "main": "animate/src/test.ts",
             "tsConfig": "animate/tsconfig.spec.json",
             "karmaConfig": "animate/karma.conf.js"
-          }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
-      }
-    },
-    "content": {
-      "projectType": "library",
-      "root": "content",
-      "sourceRoot": "content/src",
-      "prefix": "wm",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "content/tsconfig.lib.json",
-            "project": "content/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "content/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "content/tsconfig.lib.json",
-              "content/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "content/src/test.ts",
-            "tsConfig": "content/tsconfig.spec.json",
-            "karmaConfig": "content/karma.conf.js"
           }
         }
       },

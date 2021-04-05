@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Toggler
 [Go to the API Reference](#api-reference)

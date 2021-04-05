@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Emoji Support
 

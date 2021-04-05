@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Openfile
 [Go to the API Reference](#api-reference)

@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Highlight
 [Go to the API Reference](#api-reference)

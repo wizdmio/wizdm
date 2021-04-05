@@ -1,14 +1,14 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { APP, FirebaseApp } from '@wizdm/connect';
-import { auth, User } from 'firebase/app';
+import { default as firebase } from 'firebase';
 import { shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 //--
-export type FirebaseAuth = auth.Auth;
-export type AuthProvider = auth.AuthProvider;
-export type IdTokenResult = auth.IdTokenResult;
-export { User } from 'firebase/app';
+export type FirebaseAuth = firebase.auth.Auth;
+export type AuthProvider = firebase.auth.AuthProvider;
+export type IdTokenResult = firebase.auth.IdTokenResult;
+export type User = firebase.User;
 
 /** Wraps the Firebase Auth as a service */
 @Injectable()
@@ -117,16 +117,16 @@ export class AuthService {
     switch(providerId) {
 
       case 'google': case 'google.com':
-      return new auth.GoogleAuthProvider();
+      return new firebase.auth.GoogleAuthProvider();
 
       case 'facebook': case 'facebook.com':
-      return new auth.FacebookAuthProvider();
+      return new firebase.auth.FacebookAuthProvider();
  
       case 'twitter': case 'twitter.com':
-      return new auth.TwitterAuthProvider();
+      return new firebase.auth.TwitterAuthProvider();
       
       case 'github': case 'github.com':
-      return new auth.GithubAuthProvider();
+      return new firebase.auth.GithubAuthProvider();
     }
 
     return null;
@@ -191,7 +191,7 @@ export class AuthService {
 
       console.log("Refreshing authentication: ", this.user.email);
       // Gets fresh credentials for the current user
-      const credential = auth.EmailAuthProvider.credential(this.user.email, password);
+      const credential = firebase.auth.EmailAuthProvider.credential(this.user.email, password);
       // Re-authenticate the user with the fresh credentials
       return this.user.reauthenticateWithCredential(credential)
         .then( credential => credential.user ); 

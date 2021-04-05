@@ -1,8 +1,8 @@
 import { NgModule, ModuleWithProviders, InjectionToken, Inject, Optional } from '@angular/core';
-import { default as firebase, app } from 'firebase/app'; 
+import { default as firebase } from 'firebase'; 
 
 /** FirebaseApp type */
-export type FirebaseApp = app.App;
+export type FirebaseApp = firebase.app.App;
 
 /** Firebase APP token */
 export const APP = new InjectionToken<FirebaseApp>('wizdm.connect.app');

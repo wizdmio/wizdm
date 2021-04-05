@@ -1,4 +1,4 @@
-<!-- toc: docs/reference.json -->
+
 
 # Markdown rendering
 [Go to the API Reference](#api-reference)

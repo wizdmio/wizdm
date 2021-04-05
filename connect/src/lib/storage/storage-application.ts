@@ -1,21 +1,21 @@
 import { StorageReference } from './storage-reference';
 import { UploadObservable } from './upload-observable';
 import { StorageFile, StorageFolder } from './extras';
+import { default as firebase } from 'firebase';
 import { FirebaseApp } from '@wizdm/connect';
 import { NgZone } from '@angular/core';
-import { storage } from 'firebase/app';
 
 //--
-export type FirebaseStorage    = storage.Storage;
-export type StorageRef         = storage.Reference;
-export type ListOptions        = storage.ListOptions;
-export type ListResult         = storage.ListResult;
-export type UploadMetadata     = storage.UploadMetadata;
-export type SettableMetadata   = storage.SettableMetadata;
-export type FullMetadata       = storage.FullMetadata;
-export type StringFormat       = storage.StringFormat;
-export type UploadTask         = storage.UploadTask;
-export type UploadTaskSnapshot = storage.UploadTaskSnapshot;
+export type FirebaseStorage    = firebase.storage.Storage;
+export type StorageRef         = firebase.storage.Reference;
+export type ListOptions        = firebase.storage.ListOptions;
+export type ListResult         = firebase.storage.ListResult;
+export type UploadMetadata     = firebase.storage.UploadMetadata;
+export type SettableMetadata   = firebase.storage.SettableMetadata;
+export type FullMetadata       = firebase.storage.FullMetadata;
+export type StringFormat       = firebase.storage.StringFormat;
+export type UploadTask         = firebase.storage.UploadTask;
+export type UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 
 /** Wraps the Firebase Storage  */
 export abstract class StorageApplication {
