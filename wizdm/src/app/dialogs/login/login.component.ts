@@ -70,8 +70,8 @@ export class LoginComponent {
       }
     });
     
-    // Navigates towards the data url on closing
-    this.ref.beforeClosed().subscribe( () => this.navigate(data.url) );
+    // Navigates towards the data url on closing provided the user is loggerd in
+    this.ref.beforeClosed().subscribe( user => (user && this.navigate(data.url)) );
   }
 
   private switchPage(page: loginAction) {
