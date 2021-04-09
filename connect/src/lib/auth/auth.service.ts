@@ -1,4 +1,4 @@
-import { Injectable, Inject, NgZone } from '@angular/core';
+import { Injectable, Inject, Optional, NgZone, InjectionToken } from '@angular/core';
 import { APP, FirebaseApp } from '@wizdm/connect';
 import { default as firebase } from 'firebase/app';
 import { shareReplay } from 'rxjs/operators';
@@ -9,6 +9,9 @@ export type FirebaseAuth = firebase.auth.Auth;
 export type AuthProvider = firebase.auth.AuthProvider;
 export type IdTokenResult = firebase.auth.IdTokenResult;
 export type User = firebase.User;
+
+/** Emulator Host Configuration for Firebase Auth */
+export const FIREBASE_AUTH_EMULATOR_HOST = new InjectionToken<string>('wizdm.connect.auth.emulator.host');
 
 /** Wraps the Firebase Auth as a service */
 @Injectable()
@@ -23,10 +26,23 @@ export class AuthService {
   /** inner Firebase Auth instance */
   readonly auth: FirebaseAuth;
 
-  constructor(@Inject(APP) app: FirebaseApp, zone: NgZone) {
+  constructor(@Inject(APP) app: FirebaseApp, zone: NgZone, @Optional() @Inject(FIREBASE_AUTH_EMULATOR_HOST) emulator: string) {
 
     // Gets the firebase Auth instance
-    this.auth = zone.runOutsideAngular( () => app.auth() );
+    this.auth = zone.runOutsideAngular( () => {
+
+      // Gets the firebase auth instance
+      const auth = app.auth();
+
+      // Enables the emualtor on request
+      if(emulator) {
+        // Connects to the emulator
+        auth.useEmulator(`http://${emulator}`);        
+      }
+
+      // Returns the instance
+      return auth;
+    });
 
     // Builds the authentication state observable (sign-in/out)
     this.state$ = new Observable<User>(subscriber => this.auth.onAuthStateChanged(

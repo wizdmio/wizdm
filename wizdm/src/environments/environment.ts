@@ -9,6 +9,15 @@ export const environment = {
 
   // Shares the same configurations...
   ...common, ...secrets,
+
+  // Enables emulators on request
+  emulators: {
+
+    // Uncomment to enable the relevant emulator
+    //auth:      'localhost:9099',
+    //firestore: 'localhost:8080',
+    //functions: 'localhost:5001'
+  },
   
   // Disables production mode (aka debug mode)
   production: false

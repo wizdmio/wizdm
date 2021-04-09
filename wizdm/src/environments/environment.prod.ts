@@ -10,6 +10,9 @@ export const environment = {
   // Shares the same configurations from debug mode...
   ...common, ...secrets,
 
+  // Disables emulators
+  emulators: { },
+
   // Enables production mode
   production: true 
 };

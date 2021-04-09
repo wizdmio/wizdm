@@ -7,10 +7,13 @@ export type Callable<T, R> = (data?:  T) => Promise<R>;
 export type CallOptions = firebase.functions.HttpsCallableOptions;
 export type CallResult = firebase.functions.HttpsCallableResult;
 
-export const FUNCTIONS_REGION = new InjectionToken<string>('wizdm.connectc.functions.region');
-export const EMULATOR_ORIGIN = new InjectionToken<string>('wizdm.connect.functions.emulator.origin');
+/** Custom Region Configuration for Cloud Functions */
+export const FUNCTIONS_REGION = new InjectionToken<string>('wizdm.connect.functions.region');
 
+/** Emulator Host Configuration for Cloud Functions */
+export const FUNCTIONS_EMULATOR_HOST = new InjectionToken<string>('wizdm.connect.functions.emulator.host');
 
+/** Cloud Functions Connect Service */
 @Injectable()
 export class FunctionsService {
 
@@ -19,7 +22,7 @@ export class FunctionsService {
 
   constructor(@Inject(APP) app: FirebaseApp, zone: NgZone,
               @Optional() @Inject(FUNCTIONS_REGION) region: string, 
-              @Optional() @Inject(EMULATOR_ORIGIN) origin: string) {
+              @Optional() @Inject(FUNCTIONS_EMULATOR_HOST) emulator: string) {
 
     // Runs outside of Angular to avoid triggering unwated change detections
     this.functions = zone.runOutsideAngular( () => {
@@ -28,7 +31,14 @@ export class FunctionsService {
       const functions = app.functions(region || undefined);
 
       // Enables the emulator on request 
-      origin && functions.useFunctionsEmulator(origin);
+      if(emulator) {
+
+        // Gets the emulator host/port from the config string
+        const [host, port] = emulator.split(':');
+
+        // Connects to the emulator
+        functions.useEmulator(host || 'localhost',+port || 9099);
+      } 
 
       // Returns the requested instance
       return functions;

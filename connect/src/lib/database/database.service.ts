@@ -5,13 +5,20 @@ import { DatabaseApplication, PersistenceSettings } from './database-application
 import { DistributedCounter, CounterShard } from './counter';
 import { APP, FirebaseApp } from '@wizdm/connect';
 
+/** Persistence Settings for Cloud Firestore */
 export const PERSISTENCE_SETTINGS = new InjectionToken<PersistenceSettings>('wizdm.connect.database.persistence');
+
+/** Emulator Host Configuration for Cloud Firestore */
+export const FIRESTORE_EMULATOR_HOST = new InjectionToken<string>('wizdm.connect.firestore.emulator.host');
 
 @Injectable()
 export class DatabaseService extends DatabaseApplication {
 
-  constructor(@Inject(APP) app: FirebaseApp, zone: NgZone, @Optional() @Inject(PERSISTENCE_SETTINGS) persistence: PersistenceSettings) { 
-    super(app, zone, persistence); 
+  constructor(@Inject(APP) app: FirebaseApp, zone: NgZone, 
+              @Optional() @Inject(PERSISTENCE_SETTINGS) persistence: PersistenceSettings,
+              @Optional() @Inject(FIRESTORE_EMULATOR_HOST) emulator: string) { 
+
+    super(app, zone, persistence, emulator); 
   }
 
   /**

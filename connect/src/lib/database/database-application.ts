@@ -18,13 +18,23 @@ export abstract class DatabaseApplication {
   readonly firestore: FirebaseFirestore;
   private persisted: boolean = false;
 
-  constructor(app: FirebaseApp, readonly zone: NgZone, persistance?: PersistenceSettings) { 
+  constructor(app: FirebaseApp, readonly zone: NgZone, persistance?: PersistenceSettings, emulator?: string) { 
 
     // Runs outside the angular zon to avoid triggerig unwanted change detections
     this.firestore = zone.runOutsideAngular( () => {
 
       // Gets the Firestore instance 
       const firestore = app.firestore();
+
+      // Enables the emulator on request 
+      if(emulator) {
+
+        // Gets the emulator host/port from the config string
+        const [host, port] = emulator.split(':');
+
+        // Connects to the emulator
+        firestore.useEmulator(host || 'localhost',+port || 8080);
+      } 
 
       // Tries to enable persistance when requested
       persistance && firestore.enablePersistence(persistance)

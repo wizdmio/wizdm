@@ -25,6 +25,12 @@ import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 const  { appname, content, emoji, scroll, ipinfo, tooltips, firebase, stripeTestKey, stripeLiveKey, gtag } = environment;
 
+// Emulators
+import { FIREBASE_AUTH_EMULATOR_HOST } from '@wizdm/connect/auth';
+import { FIRESTORE_EMULATOR_HOST } from '@wizdm/connect/database';
+import { FUNCTIONS_EMULATOR_HOST } from '@wizdm/connect/functions';
+const  { emulators } = environment;
+
 // Define the singe lazy loading navigation routes
 const routes: Routes = [ 
   { path: '', loadChildren: () => import('./navigator/navigator.module').then(m => m.NavigatorModule) }
@@ -72,7 +78,12 @@ const routes: Routes = [
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
 
     // Configures tooltips behavior globally
-    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips }
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: tooltips },
+
+    // Emulators 
+    { provide: FIREBASE_AUTH_EMULATOR_HOST, useValue:  emulators['auth'] },
+    { provide: FIRESTORE_EMULATOR_HOST, useValue: emulators['firestore'] },
+    { provide: FUNCTIONS_EMULATOR_HOST, useValue: emulators['functions'] },
   ],
   bootstrap: [ AppComponent ]
 })
