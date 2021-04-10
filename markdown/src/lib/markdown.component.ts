@@ -38,7 +38,6 @@ export class MarkdownRoot extends MarkdownBlock {
     this.tree.emojiMode = mode;
   }
 
-
   /** Navigation event emitted when a link is clicked on */
   @Output('navigate') navigate = new EventEmitter<string>();
 }

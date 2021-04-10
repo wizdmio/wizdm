@@ -3,6 +3,21 @@ import { MarkdownTree } from '../tree/tree.service';
 import { mdPhrasingContent } from '../tree/tree-types';
 import { MarkdownRoot } from '../markdown.component';
 
+/** Inline Elements' custom classes */
+export interface MarkdownInlineCustomClasses {
+
+  em?    : string;
+  strong?: string;
+  del?   : string;
+  code?  : string;
+  sub?   : string;
+  sup?   : string;
+  span?  : string;
+  br?    : string;
+  a?     : string;
+  img?   : string;
+}
+
 @Component({
   selector: '[wm-inline]',
   templateUrl: './inline.component.html',
@@ -14,6 +29,9 @@ export class MarkdownInline {
   constructor(readonly tree: MarkdownTree, private root: MarkdownRoot) {}
 
   @Input('wm-inline') node: mdPhrasingContent;
+
+  /** Rendered elements' custom classes */
+  @Input() customClasses: MarkdownInlineCustomClasses;
 
   // AOT safe children from the node
   get children() { return ("children" in this.node) ? this.node.children : [] }

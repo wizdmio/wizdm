@@ -1,6 +1,35 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { MarkdownInlineCustomClasses } from '../inline/inline.component';
 import { mdContent, mdHeading } from '../tree/tree-types';
 import { MarkdownTree } from '../tree/tree.service';
+
+export interface MarkdownCustomClasses extends MarkdownInlineCustomClasses {
+
+  h1?: string;
+  h2?: string;
+  h3?: string;
+  h4?: string;
+  h5?: string;
+  h6?: string;
+
+  p?: string;
+
+  ol?: string;
+  ul?: string;
+  li?: string;
+
+  hr?: string;
+
+  blockquote?: string;
+
+  pre?: string;
+
+  table?: string;
+  tbody?: string;
+  tr?: string;
+  td?: string;
+}
+
 
 @Component({
   selector: '[wm-block]',
@@ -14,6 +43,9 @@ export class MarkdownBlock {
   constructor(readonly tree: MarkdownTree) {}
 
   @Input('wm-block') node: mdContent;
+
+  /** Rendered elements' custom classes */
+  @Input() customClasses: MarkdownCustomClasses;
 
   // AOT safe children from the node
   get children() { return ("children" in this.node) ? this.node.children : [] }

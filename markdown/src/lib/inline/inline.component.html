@@ -3,22 +3,22 @@
   <ng-container [ngSwitch]="child.type">
     
     <!-- Emphasis -->
-    <em *ngSwitchCase="'emphasis'" [wm-inline]="child"></em>
+    <em *ngSwitchCase="'emphasis'" [class]="customClasses?.em" [wm-inline]="child" [customClasses]="customClasses"></em>
     
     <!-- Strong -->
-    <strong *ngSwitchCase="'strong'" [wm-inline]="child"></strong>
+    <strong *ngSwitchCase="'strong'" [class]="customClasses?.strong" [wm-inline]="child" [customClasses]="customClasses"></strong>
     
     <!-- Delete -->
-    <del *ngSwitchCase="'delete'"[wm-inline]="child"></del> 
+    <del *ngSwitchCase="'delete'" [class]="customClasses?.del" [wm-inline]="child" [customClasses]="customClasses"></del> 
 
     <!-- Inlide Code -->
-    <code *ngSwitchCase="'inlineCode'">{{ _T(child.value) }}</code>
+    <code *ngSwitchCase="'inlineCode'" [class]="customClasses?.code">{{ _T(child.value) }}</code>
     
     <!-- Sub-script Super-script plugin -->
-    <sub *ngSwitchCase="'sub'" [wm-inline]="child"></sub>
+    <sub *ngSwitchCase="'sub'" [class]="customClasses?.sub" [wm-inline]="child" [customClasses]="customClasses"></sub>
     
     <!-- Super-script Super-script plugin -->
-    <sup *ngSwitchCase="'sup'" [wm-inline]="child"></sup>
+    <sup *ngSwitchCase="'sup'" [class]="customClasses?.sup" [wm-inline]="child" [customClasses]="customClasses"></sup>
     
     <!-- Footnote Reference -->
     <sup *ngSwitchCase="'footnoteReference'">[{{ tree.footnoteIndex(child) }}]</sup>
@@ -27,22 +27,22 @@
     <span *ngSwitchCase="'text'" [wm-emoji-text]="_T(child.value) | emojiNames" [mode]="tree.emojiMode"></span>
 
     <!-- Line Break -->
-    <br *ngSwitchCase="'break'" />
+    <br *ngSwitchCase="'break'" [class]="customClasses?.br" />
 
     <!-- Link -->
-    <a *ngSwitchCase="'link'" [href]="child.url" (click)="navigate(child.url)" [wm-inline]="child"></a>
+    <a *ngSwitchCase="'link'" [href]="child.url" [class]="customClasses?.a" (click)="navigate(child.url)" [wm-inline]="child" [customClasses]="customClasses"></a>
     
     <!-- Link Reference --> 
     <ng-container *ngSwitchCase="'linkReference'">
-      <a *ngIf="tree.definition(child) as def" [href]="def.url" (click)="navigate(def.url)" [wm-inline]="child"></a>
+      <a *ngIf="tree.definition(child) as def" [href]="def.url" [class]="customClasses?.a" (click)="navigate(def.url)" [wm-inline]="child" [customClasses]="customClasses"></a>
     </ng-container>
 
     <!-- Image -->
-    <img *ngSwitchCase="'image'" [src]="child.url" [title]="_T(child.title)" [alt]="_T(child.alt)" />
+    <img *ngSwitchCase="'image'" [class]="customClasses?.img" [src]="child.url" [title]="_T(child.title)" [alt]="_T(child.alt)" />
 
     <!-- Image Reference -->
     <ng-container *ngSwitchCase="'imageReference'">
-      <img *ngIf="tree.definition(child) as def" [src]="def.url" [title]="_T(def.title)" [alt]="_T(def.alt)" />
+      <img *ngIf="tree.definition(child) as def" [class]="customClasses?.img" [src]="def.url" [title]="_T(def.title)" [alt]="_T(def.alt)" />
     </ng-container>
 
   </ng-container>
