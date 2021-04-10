@@ -17,7 +17,7 @@
       </div> 
 
       <!-- Feature description -->
-      <p [wm-readme]="feat.description"></p>          
+      <p [wm-readme]="feat.description" [linkClass]="config.linkColor || 'primary'"></p>          
 
       <div *ngIf="feat.comingSoon" class="tag accent background-color-default contrast-default mat-small">{{ feat.comingSoon }}</div>
 

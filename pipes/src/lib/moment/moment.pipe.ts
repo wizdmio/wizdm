@@ -43,6 +43,6 @@ export class OlderThanPipe implements PipeTransform {
 
   transform(value: MomentInput, duration: string = 'PT5M'): boolean {
 
-    return moment().diff( moment(value || undefined).add( moment.duration(duration) ) ) < 0;
+    return moment().diff( moment(value || undefined).add( moment.duration(duration) ) ) > 0;
   }
 }

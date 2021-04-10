@@ -43,7 +43,7 @@
 
     <h2 mat-dialog-title><b>{{ msgs.canLeave?.title || 'Unsaved changes' }}</b></h2>
   
-    <mat-dialog-content [wm-readme]="msgs.canLeave?.message">
+    <mat-dialog-content [wm-readme]="msgs.canLeave?.message" linkClass="primary">
       <span>You're about to leave the page without saving the latest changes.<br>Please confirm.</span>
     </mat-dialog-content>
   

@@ -9,9 +9,9 @@ import { AuthService } from '@wizdm/connect/auth';
 import { UserProfile, UserData } from 'app/utils/user';
 
 export interface PostData extends DocumentData {
-  channel?: string;
   title?  : string;
   text?   : string; 
+  group?  : string;
   photo?  : string;
   author? : string; 
   tags?   : string[]; 
@@ -30,12 +30,14 @@ export class PostComponent extends DatabaseDocument<PostData> {
   public favorite$: Observable<boolean>;
   public likes: DistributedCounter;
   public data: PostData;
+
+  /** The post's author */
+  public author$: Observable<UserData>;
   
   /** Returns the current authenticated userId or 'unknown' */
   get me(): string { return this.auth.userId || 'unknown'; }
   /** Returns true thenever the place is favorite */
   get favorite(): boolean {  return this._favorite$.value; }
-
 
   /** Returns true whenever the current user is authenticated */
   get authenticated(): boolean { return this.authenticated; }
@@ -48,6 +50,9 @@ export class PostComponent extends DatabaseDocument<PostData> {
 
     // Unwraps the document data and reference
     this.data = this.unwrap(snapshot);
+
+    // Resolves the post's author
+    this.author$ = this.user.fromUserId(this.data.author);
     
     // Gets the likes distributed counter
     this.likes = this.counter('likes');
@@ -106,14 +111,5 @@ export class PostComponent extends DatabaseDocument<PostData> {
 
     // Updates the likes counter accordingly
     this.likes.update( favorite ? 1 : -1 );
-  }
-
-  public get userImage(): string {
-    return this.user.data.photo || '';
-  }
-
-  public get userFirstName(): string {
-    let displayName = this.user?.data?.userName?.split('-').slice().pop();
-    return displayName || '';
   }
 }

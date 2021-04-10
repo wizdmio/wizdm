@@ -15,7 +15,7 @@
 
       <h2 mat-dialog-title><b>{{ msgs.confirmDelete?.title || 'Deleting file(s)' }}</b></h2>
     
-      <mat-dialog-content [wm-readme]="msgs.confirmDelete?.message">
+      <mat-dialog-content [wm-readme]="msgs.confirmDelete?.message" linkClass="primary">
         You're about to <b>delete</b> the selected files.<br>Are you sure?
       </mat-dialog-content>
     
@@ -46,7 +46,7 @@
 
       <h2 mat-dialog-title><b>{{ msgs.confirmOverwrite?.title || 'Existing file(s)' }}</b></h2>
     
-      <mat-dialog-content [wm-readme]="msgs.confirmOverwrite?.message">
+      <mat-dialog-content [wm-readme]="msgs.confirmOverwrite?.message" linkClass="primary">
         Some of the files <i>already exist</i> and will be overridden.
       </mat-dialog-content>
     
@@ -113,7 +113,7 @@
 
         <!-- File name with 'new' badge whenever the file has less than 3 minutes -->
         <span [matBadge]="msgs.newBadge || 'new'"
-              [matBadgeHidden]="!(record.data.updated | olderThan: 'PT3M')"
+              [matBadgeHidden]="record.data.updated | olderThan: 'PT3M'"
                matBadgeSize="small"
                matBadgeOverlap="false" 
                matBadgeColor="warn">{{ record.data.name }}</span>

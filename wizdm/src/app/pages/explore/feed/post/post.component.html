@@ -1,2 +1,37 @@
-<wm-post-card [userFirstName]="userFirstName" [userImage]="userImage" [data]="data"
-  (toggleLikes)="toggleFavorite($event)" [favorite]="favorite$" [likes]="likes.counter$"></wm-post-card>
+<!--wm-post-card [userFirstName]="userFirstName" [userImage]="userImage" [data]="data"
+  (toggleLikes)="toggleFavorite($event)" [favorite]="favorite$" [likes]="likes.counter$"></wm-post-card-->
+
+
+  <!-- Loads the localized content -->
+<ng-container *wmContent="let msgs select 'explore-feed.post'">
+
+  <div class="header" fxLayout="row" fxLayoutAlign="center center" *ngIf="author$ | async as author">
+  
+    <!-- Author's picture -->
+    <wm-avatar class="avatar link" [src]="author.photo" [routerLink]="['/', '@' + author.userName]"></wm-avatar>
+
+    <div fxLayout="column">
+  
+      <!-- Author's name -->
+      <div class="link" [routerLink]="['/', '@' + author.userName]"><b>{{ author.fullName }}</b></div>
+      
+      <!-- Post creation time long version (when older than 12 hours) -->
+      <time class="time mat-small" *ngIf="data | createdTime | olderThan:'PT12H'; else shortTime" >{{ 
+        
+        data | createdTime | calendar:msgs.timeFormat || {
+          sameDay : '[Today at] LT',          
+          lastDay : '[Yesterday at] LT',
+          lastWeek : '[Last] dddd [at] LT',
+          sameElse : 'LL'
+        }  
+      
+      }}</time>
+
+      <!-- Post creation time short version (whithin 12 hours) -->
+      <ng-template #shortTime><time class="time mat-small">{{ data | createdTime | fromNow }}</time></ng-template>
+
+    </div>
+  </div>
+
+</ng-container>
+

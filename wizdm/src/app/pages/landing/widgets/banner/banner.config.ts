@@ -23,6 +23,8 @@ export interface BannerConfig extends WidgetConfig {
       hint?: string;
     },
 
+    linkColor?: ThemePalette;
+
     animation?: WidgetAnimationConfig;
   },
 

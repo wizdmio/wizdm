@@ -7,7 +7,7 @@
   <mat-divider fxFill></mat-divider>
   
   <!-- account creation -->
-  <p [wm-readme]="msgs.description | interpolate: { 'created': user.metadata?.creationTime | moment:'ll' }">
+  <p [wm-readme]="msgs.description | interpolate: { 'created': user.metadata?.creationTime | moment:'ll' }" linkClass="primary">
     <span>Your account has been created on <b>{{ user.metadata?.creationTime | moment: 'll' }}</b>.</span>
   </p>
 
@@ -25,7 +25,7 @@
     
     <mat-divider fxFill></mat-divider>
     
-    <p [wm-readme]="user.emailVerified ? msgs.verify?.verified : msgs.verify?.unverified">
+    <p [wm-readme]="user.emailVerified ? msgs.verify?.verified : msgs.verify?.unverified" linkClass="primary">
       <span>Your email {{ user.emailVerified ? 'has been verified already' : 'has not been verified yet '}}.</span>
     </p>
     
@@ -38,7 +38,7 @@
     
     <mat-divider fxFill></mat-divider>
     
-    <p [wm-readme]="msgs.credentials?.description">
+    <p [wm-readme]="msgs.credentials?.description" linkClass="primary">
       <span>Here you can change the credentials used for signin-in.</span>
     </p>
     
@@ -61,7 +61,7 @@
   
   <mat-divider fxFill></mat-divider>
   
-  <p [wm-readme]="msgs.delete?.description">
+  <p [wm-readme]="msgs.delete?.description" linkClass="primary">
     <span>By proceeding you'll <b>permanently</b> delete all your data!</span>
   </p>
 

@@ -16,10 +16,12 @@
         "order": 1,
         "title": "Get your app done right",
         "pitch": "Wizdm provides all the key features of a modern single page application ready to use, so, for you to focus on launching your idea the quickest!",
-
+        
         "action": { "caption": "Explore", "link": "explore", "hint": "Join us 🙏🏻 and become part of the revolution of [Wizdm](about)" },
 
-        "animation": { "name": "landing" }
+        "animation": { "name": "landing" },
+
+        "linkColor": "primary"
       },
 
       "illustration": {
@@ -33,6 +35,8 @@
       "type": "feature-matrix",
 
       "defaultAnimation": "bounceIn",
+
+      "linkColor": "primary",
 
       "features": [
         { 

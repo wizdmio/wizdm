@@ -1,11 +1,13 @@
-import { Directive, Input } from '@angular/core';
 import type { wmAnimations, wmAnimateSpeed } from '@wizdm/animate';
+import { Directive, Input } from '@angular/core';
 
+/** General widget configuration */
 export interface WidgetConfig {
 
   type: string;
 };
 
+/** General widget animation configuration */
 export interface WidgetAnimationConfig {
   
   name: wmAnimations;
@@ -14,6 +16,7 @@ export interface WidgetAnimationConfig {
   once?: boolean;
 }
 
+/** Base widget directive */
 @Directive({ selector: 'wm-widget' })
 export abstract class WidgetDirective<T extends WidgetConfig> {
 

@@ -47,7 +47,7 @@
 <article class="foreground" wmAnimate="fadeIn" speed="faster" [replay]="body$ | async" lockMaxWidth>
 
   <!-- Renders the markdown document body -->
-  <section [wm-markdown]="body$ | async" (navigate)="navigate($event)" #body></section>
+  <section [wm-markdown]="body$ | async" [customClasses]="{ a: 'primary' }" (navigate)="navigate($event)" #body></section>
 
   <!-- Renders the footnotes, if any -->
   <section *ngIf="body.notes.length > 0">
@@ -55,7 +55,7 @@
     <mat-divider></mat-divider>
     
     <div *ngFor="let note of body.notes; index as i">
-      {{ i + 1 }} - <span [wm-markdown]="note" inline></span>
+      {{ i + 1 }} - <span [wm-markdown]="note" [customClasses]="{ a: 'primary' }" inline></span>
     </div>
   
   </section>

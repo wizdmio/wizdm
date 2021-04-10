@@ -3,7 +3,7 @@
   
   <h1>{{ data.title || 'The page does not exist' }}</h1>
   
-  <p [wm-readme]="data.body | interpolate: this">
+  <p [wm-readme]="data.body | interpolate: this" linkClass="primary">
     You'll be redirected back in <b>{{ countdown }}</b>s...
   </p>  
 

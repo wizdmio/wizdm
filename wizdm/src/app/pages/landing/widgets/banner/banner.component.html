@@ -10,7 +10,7 @@
 
   <h1 class="mat-display-1"><b>{{ textbox.title || 'Title goes here' }}</b></h1>
   
-  <p [wm-readme]="textbox.pitch">
+  <p [wm-readme]="textbox.pitch" [linkClass]="textbox.linkColor || 'primary'">
     The elevator pitch goes here. If you're reading this something went wrong while loading the widget.
   </p>
 
@@ -21,7 +21,7 @@
                        [routerLink]="action.link">{{ action.caption || 'Get started' }}
     </button>
     
-    <p [wm-readme]="action.hint" class="mat-small"></p>
+    <p [wm-readme]="action.hint" [linkClass]="textbox.linkColor || 'primary'" class="mat-small"></p>
 
 </ng-container>
 

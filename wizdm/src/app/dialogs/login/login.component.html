@@ -9,7 +9,7 @@
   <p class="mat-error" *ngIf="errorCode" @morph>{{ (errorCode | camelize) | pluck:msgs.errors:errorCode }}</p>
 
   <!-- MESSAGE -->
-  <p class="mat-small" [wm-readme]="msgs.pages[page]?.message" [@vanish]="page"></p>
+  <p class="mat-small" [wm-readme]="msgs.pages[page]?.message" linkClass="primary" [@vanish]="page"></p>
 
   <!-- SOCIAL SIGN-IN LINKS -->
   <div class="providers" fxLayout="row" fxLayoutAlign="space-around" *ngIf="page === 'social'" @morph>

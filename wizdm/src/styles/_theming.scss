@@ -40,15 +40,21 @@
 
   // Styles links
   a { 
-    cursor: pointer;    
+    color: inherit;
+    cursor: pointer;
     text-decoration: none;
 
     // Styles according the theme palette colors
-    color: mat-color($primary); 
-    @each $color in ('accent', 'warn') { &[color=#{$color}] { color: mat-color( map-get($theme, #{$color}) ); }}
+    @each $color in ('primary', 'accent', 'warn') { 
+      
+      &[color=#{$color}], &.#{$color} {
+
+        color: mat-color( map-get($theme, #{$color}) ); 
+      }
+    }
 
     // Styles the disabled link
-    &[disabled=true] {
+    &[disabled=true], &.disabled {
 
       text-decoration: dotted underline;
       color: map-get( map-get($theme, 'foreground'), 'disabled');
@@ -151,11 +157,19 @@
   // Styles links
   a { 
     // Styles according the theme palette colors
-    color: mat-color($primary); 
-    @each $color in ('accent', 'warn') { &[color=#{$color}] { color: mat-color( map-get($theme, #{$color}) ); }}
+    @each $color in ('primary', 'accent', 'warn') { 
+      
+      &[color=#{$color}], &.#{$color} { 
+        
+        color: mat-color( map-get($theme, #{$color}) ); 
+      }
+    }
 
     // Styles the disabled link
-    &[disabled=true] { color: map-get( map-get($theme, 'foreground'), 'disabled'); }    
+    &[disabled=true], &.disabled { 
+
+      color: map-get( map-get($theme, 'foreground'), 'disabled'); 
+    }    
   }
 
   // Smoothen the text color on content

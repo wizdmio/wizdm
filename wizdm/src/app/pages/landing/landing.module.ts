@@ -18,14 +18,20 @@ const routes: RoutesWithContent = [
   }
 ];
 
-/** List of widgets */
+/** List of available widgets */
 const widgets: Widgets = [
 
   // Banner Widget
-  { type: 'banner', loadComponent: () => import('./widgets/banner/banner.component').then( ({ BannerComponent }) => BannerComponent ) },
+  { 
+    type: 'banner', 
+    loadComponent: () => import('./widgets/banner/banner.component').then( ({ BannerComponent }) => BannerComponent ) 
+  },
 
   // Feature matrix widget
-  { type: 'feature-matrix', loadComponent: () => import('./widgets/features/features.component').then( ({ FeaturesComponent }) => FeaturesComponent ) }
+  { 
+    type: 'feature-matrix', 
+    loadComponent: () => import('./widgets/features/features.component').then( ({ FeaturesComponent }) => FeaturesComponent ) 
+  }
 
 ];
 
