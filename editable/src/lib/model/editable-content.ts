@@ -1,9 +1,9 @@
-import { wmEditable, wmParent, wmNodeType, wmIndentType, wmSizeLevel, wmAlignType, wmTextStyle } from './editable-types';
+import { EditableData, EditableParentNode, EditableNodeType, EditableIndentType, EditableSizeLevel, EditableAlignType, EditableTextStyle } from './editable-types';
 import { EditableFactory, EditableTypes } from './editable-factory';
 
 export type EditablePosition = number[];
 
-export abstract class EditableContent<T extends wmEditable = wmEditable> {
+export abstract class EditableContent<T extends EditableData = EditableData> {
 
   protected node: T;
   protected parent: EditableContent;
@@ -18,13 +18,13 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns the node private data */
   get data(): T { return this.node; }
   /** Returns the node type */
-  get type(): wmNodeType { return this.node.type; }
+  get type(): EditableNodeType { return this.node.type; }
   /** Sets/gets the node alignement */
-  set align(align: wmAlignType) { }
-  get align(): wmAlignType { return null; }
+  set align(align: EditableAlignType) { }
+  get align(): EditableAlignType { return null; }
   /** Sets/gets the node level */
-  get level(): wmSizeLevel { return 0; }
-  set level(level: wmSizeLevel) { }
+  get level(): EditableSizeLevel { return 0; }
+  set level(level: EditableSizeLevel) { }
   /** Returns the array of children */
   get content(): EditableContent[] { return this.children || (this.children = []); }
   /** Returns the number of child nodes */
@@ -51,8 +51,8 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   /** Returns the value's length */
   get length(): number { return this.value.length; }
   /** Sets/Fets the style array for the content */
-  set style(style: wmTextStyle[]) { this.content.forEach( node => node.style = style ); }
-  get style(): wmTextStyle[] { return this.count > 0 ? this.firstChild().style : []; } 
+  set style(style: EditableTextStyle[]) { this.content.forEach( node => node.style = style ); }
+  get style(): EditableTextStyle[] { return this.count > 0 ? this.firstChild().style : []; } 
   /** Return the associated irl, if any */
   get url(): string { return ''; }
   /** Initializes the node data */
@@ -72,8 +72,8 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
   public link(url: string): this { return this; }
   public break(): this { return this; }
   // Recursively apply or unapply text formatting to the content 
-  public format(style: wmTextStyle[]): this { return this.content.forEach( node => node.format(style) ), this;}
-  public unformat(style: wmTextStyle[]): this { return this.content.forEach( node => node.unformat(style) ), this;}
+  public format(style: EditableTextStyle[]): this { return this.content.forEach( node => node.format(style) ), this;}
+  public unformat(style: EditableTextStyle[]): this { return this.content.forEach( node => node.unformat(style) ), this;}
   // Disable joining and defragment on structural nodes
   public join(node: EditableContent): this { return this; }
   public same(node: EditableContent): boolean { return false; }
@@ -103,7 +103,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Assigns the source to the node data
     if(!!this.init(source).node && "content" in this.data) {
       // Recurs on children
-      this.children = (this.node as wmParent).content.map( (node, i) => {
+      this.children = (this.node as EditableParentNode).content.map( (node, i) => {
         // Creates the children nodes of the requested type
         return this.create.node(node as any)
           // Links it to the parent
@@ -174,7 +174,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
    * @param depth the node level to drive the search up to. Specifying 'inline'
    * drives the search up to the level containing inline text nodes only
   */
-  public ancestors(depth: number = 0): wmNodeType[] {
+  public ancestors(depth: number = 0): EditableNodeType[] {
     // Stops when done
     if(!this.parent || this.depth <= depth) return [];
     // Walks up toward the root
@@ -193,7 +193,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     return !!this.parent ? this.parent.ancestor(depth) : null;
   }
 
-  public climb(...types: wmNodeType[]): EditableContent {
+  public climb(...types: EditableNodeType[]): EditableContent {
     if(!types || !this.parent) { return null; }
     return types.some( type => type === this.type ) ? this : this.parent.climb(...types);
   }
@@ -255,14 +255,14 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     // Insert/remove children nodes as requested
     const nodes = this.content.splice(index, count, ...items);
     // Syncs the data children accordingly
-    if(this.count) { (this.data as wmParent).content = this.content.map( node => node.data ); }
+    if(this.count) { (this.data as EditableParentNode).content = this.content.map( node => node.data ); }
     // Refreshes the added and shifted children inheritance
     this.refresh(index);
     // Return the removed nodes
     return nodes;
   }
   /** Wraps the node with the specified container updating the hierarchy, if any*/
-  public wrap(type: wmNodeType): EditableContent {
+  public wrap(type: EditableNodeType): EditableContent {
     // Creates a new node to wrap this node with
     const wrap = this.create.node({ type } as any);
     // Replaces the current node with the new wrapper within the parent content 
@@ -598,7 +598,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     return this;
   }
 
-  public indent(type: wmIndentType): EditableContent {
+  public indent(type: EditableIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
     // Checks on the preceding sibling
@@ -616,7 +616,7 @@ export abstract class EditableContent<T extends wmEditable = wmEditable> {
     return block;
   }
 
-  public outdent(type: wmIndentType): EditableContent {
+  public outdent(type: EditableIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
     // Performs unindentation when the parent node match the requested type

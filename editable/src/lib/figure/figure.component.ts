@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { DocumentComponent } from '../editable-document.component';
 import { EditableFigure, EditableImage } from '../model/editable-figure';
+import { DocumentViewer } from '../editable-viewer.component';
 
 @Component({
   selector: 'figure[wm-figure]',
@@ -12,7 +12,7 @@ import { EditableFigure, EditableImage } from '../model/editable-figure';
 })
 export class FigureComponent {
 
-  constructor(readonly document: DocumentComponent) {}
+  constructor(readonly document: DocumentViewer) {}
   
   @Input('wm-figure') figure: EditableFigure;
   // Makes sure excluding the figure container from the editability
@@ -23,7 +23,7 @@ export class FigureComponent {
   @HostBinding('style.text-align') get align() { return this.figure.align || 'left'; }
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
-    return this.document.selection.includes(this.figure) ? '' : undefined; 
+    return this.document.isSelected(this.figure) ? '' : undefined; 
   }
 
   // Helper function computing the max-size style for images

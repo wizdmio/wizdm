@@ -1,5 +1,5 @@
 import { EditableContent } from './editable-content';
-import { wmBlock } from './editable-types';
+import { EditableBlockData } from './editable-types';
 
 /** Implements block nodes */
-export class EditableBlock extends EditableContent<wmBlock> {}
+export class EditableBlock extends EditableContent<EditableBlockData> {}

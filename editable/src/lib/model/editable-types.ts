@@ -1,107 +1,107 @@
-export type wmEditable = wmDocument|wmRootContent|wmListContent|wmFigureContent|wmRow|wmCell|wmInline;
-export type wmRootContent = wmBlock|wmBlockContent|wmFigure;
-export type wmBlockContent =  wmHeading|wmParagraph|wmList;
-export type wmList = wmBulleted|wmNumbered;
-export type wmListContent  = wmParagraph|wmList;
-export type wmIndentable = wmBlock|wmList;
-export type wmContainer = wmItem|wmCell|wmCaption;
-export type wmItem = wmHeading|wmParagraph;
-export type wmInline = wmText|wmLink;
-export type wmFigureContent = wmImage|wmTable|wmCaption;
-export type wmSizeLevel = 0|1|2|3|4|5|6;
-export type wmAlignType = 'left'|'center'|'right'|'justify';
-export type wmVertAlignType = 'top'|'middle'|'bottom';
-export type wmTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
-export type wmImageSize = '25'|'33'|'50'|'66'|'75'|'icon'|'thumb'|'small'|'regular';
-export type wmNodeType = wmEditable['type'];
-export type wmIndentType = wmIndentable['type'];
+export type EditableData = EditableDocumentData|EditableRootContentData|EditableListContentData|EditableFigureContentData|EditableRowData|EditableCellData|EditableInlineData;
+export type EditableRootContentData = EditableBlockData|EditableBlockContentData|EditableFigureData;
+export type EditableBlockContentData = EditableHeadingData|EditableParagraphData|EditableListData;
+export type EditableListData = EditableBulletedData|EditableNumberedData;
+export type EditableListContentData = EditableParagraphData|EditableListData;
+export type EditableIndentableData = EditableBlockData|EditableListData;
+export type EditableContainerData = EditableItemData|EditableCellData|EditableCaptionData;
+export type EditableItemData = EditableHeadingData|EditableParagraphData;
+export type EditableInlineData = EditableTextData|EditableLinkData;
+export type EditableFigureContentData = EditableImageData|EditableTableData|EditableCaptionData;
+export type EditableSizeLevel = 0|1|2|3|4|5|6;
+export type EditableAlignType = 'left'|'center'|'right'|'justify';
+export type EditableVertAlignType = 'top'|'middle'|'bottom';
+export type EditableTextStyle = 'bold'|'italic'|'underline'|'overline'|'strikethrough'|'super'|'sub';
+export type EditableImageSize = '25'|'33'|'50'|'66'|'75'|'icon'|'thumb'|'small'|'regular';
+export type EditableNodeType = EditableData['type'];
+export type EditableIndentType = EditableIndentableData['type'];
 
-export interface wmNode {
+export interface EditableNode {
   type: string;
 }
 
-export interface wmParent<T=wmEditable> extends wmNode {
+export interface EditableParentNode<T=EditableData> extends EditableNode {
   content?: T[];
 } 
 
-export interface wmLiteral extends wmNode {
+export interface EditableLiteralNode extends EditableNode {
   value?: string;
 }
 
-export interface wmAlignable {
-  align?: wmAlignType;
+export interface EditableAlignableData {
+  align?: EditableAlignType;
 }
 
-export interface wmResource {
+export interface EditableResourceData {
   url?: string;
 }
 
-export interface wmDocument extends wmParent<wmRootContent> {
+export interface EditableDocumentData extends EditableParentNode<EditableRootContentData> {
   type: 'document';
-  name?: string;
+  title?: string;
   author?: string;
   version?: string;
   range?: [ number, number ];
 }
 
-export interface wmBlock extends wmParent<wmBlockContent> {
+export interface EditableBlockData extends EditableParentNode<EditableBlockContentData> {
   type: 'blockquote';
 }
 
-export interface wmBulleted extends wmParent<wmListContent> {
+export interface EditableBulletedData extends EditableParentNode<EditableListContentData> {
   type: 'bulleted';
 }
 
-export interface wmNumbered extends wmParent<wmListContent> {
+export interface EditableNumberedData extends EditableParentNode<EditableListContentData> {
   type: 'numbered';
   start?: number;
 }
 
-export interface wmHeading extends wmParent<wmInline>, wmAlignable {
+export interface EditableHeadingData extends EditableParentNode<EditableInlineData>, EditableAlignableData {
   type: 'heading';
-  level?: wmSizeLevel;
+  level?: EditableSizeLevel;
 }
 
-export interface wmParagraph extends wmParent<wmInline>, wmAlignable {
+export interface EditableParagraphData extends EditableParentNode<EditableInlineData>, EditableAlignableData {
   type: 'paragraph';
 }
 
-export interface wmText extends wmLiteral {
+export interface EditableTextData extends EditableLiteralNode {
   type: 'text';
-  style?: wmTextStyle[];
+  style?: EditableTextStyle[];
 }
 
-export interface wmLink extends wmLiteral, wmResource {
+export interface EditableLinkData extends EditableLiteralNode, EditableResourceData {
   type: 'link';
 }
 
-export interface wmFigure extends wmParent<wmFigureContent>, wmAlignable {
+export interface EditableFigureData extends EditableParentNode<EditableFigureContentData>, EditableAlignableData {
   type: 'figure';
-  content: [wmImage|wmTable, wmCaption?]
+  content: [EditableImageData|EditableTableData, EditableCaptionData?]
 }
 
-export interface wmImage extends wmNode, wmResource {
+export interface EditableImageData extends EditableNode, EditableResourceData {
   type: 'image';
-  size?: wmImageSize;
+  size?: EditableImageSize;
   alt?: string;
   title?: string;
 }
 
-export interface wmTable extends wmParent<wmRow> {
+export interface EditableTableData extends EditableParentNode<EditableRowData> {
   type: 'table';
 }
 
-export interface wmRow extends wmParent<wmCell> {
+export interface EditableRowData extends EditableParentNode<EditableCellData> {
   type: 'row';
 }
 
-export interface wmCell extends wmParent<wmInline>, wmAlignable {
+export interface EditableCellData extends EditableParentNode<EditableInlineData>, EditableAlignableData {
   type: 'cell';
-  valign?: wmVertAlignType;
+  valign?: EditableVertAlignType;
   rowspan?: number;
   colspan?: number;
 }
 
-export interface wmCaption extends wmParent<wmInline>, wmAlignable {
+export interface EditableCaptionData extends EditableParentNode<EditableInlineData>, EditableAlignableData {
   type: 'caption';
 }

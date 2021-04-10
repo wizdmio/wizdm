@@ -9,6 +9,8 @@ The `EditableDocument` component renders the data tree content into its view. On
 
 Document selection (aka caret) is queried prior to every change to the data tree and applied back after every rendering, so, to restore it. This way the browser selection is kept in sync with the data tree selection used internally to modify the data tree. 
 
+When the document needs to be viewed without editing it, use the lighter weight component `EditableViewer` instead.
+
 ## Designed for cloud
 
 This library is designed to smoothly blend with [@wizdm/connect](../connect) enabling editing of documents stored in cloud firestore.

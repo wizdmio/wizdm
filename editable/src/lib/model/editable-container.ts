@@ -1,11 +1,11 @@
-import { wmContainer, wmAlignable, wmAlignType } from './editable-types';
+import { EditableContainerData, EditableAlignableData, EditableAlignType } from './editable-types';
 import { EditableContent } from './editable-content';
 
-export class EditableContainer<T extends wmContainer = wmContainer> extends EditableContent<T> {
+export class EditableContainer<T extends EditableContainerData = EditableContainerData> extends EditableContent<T> {
 
   /** Sets/gets the container alignement */
-  get align(): wmAlignType { return (this.node as wmAlignable).align || 'left'; }
-  set align(align: wmAlignType) { (this.node as wmAlignable).align = align; }
+  get align(): EditableAlignType { return (this.node as EditableAlignableData).align || 'left'; }
+  set align(align: EditableAlignType) { (this.node as EditableAlignableData).align = align; }
  
   // Overrides the default setter forcing a single node value 
   public set(text: string): this {

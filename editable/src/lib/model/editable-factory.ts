@@ -1,3 +1,4 @@
+import { EditableDocumentData, EditableBlockData, EditableListData, EditableItemData, EditableInlineData, EditableTableData, EditableRowData, EditableCellData, EditableFigureData, EditableImageData, EditableCaptionData, EditableData } from './editable-types';
 import { EditableDocument } from './editable-document';
 import { EditableBlock } from './editable-block';
 import { EditableList } from './editable-list';
@@ -5,25 +6,24 @@ import { EditableItem } from './editable-item';
 import { EditableInline } from './editable-inline';
 import { EditableTable, EditableRow, EditableCell } from './editable-table';
 import { EditableFigure, EditableImage, EditableCaption } from './editable-figure';
-import { wmDocument, wmBlock, wmList, wmItem, wmInline, wmTable, wmRow, wmCell, wmFigure, wmImage, wmCaption, wmEditable } from './editable-types';
 
 export type EditableTypes = EditableDocument|EditableBlock|EditableList|EditableItem|EditableTable|EditableRow|EditableCell|EditableInline|EditableFigure|EditableImage|EditableCaption;
 
 export abstract class EditableFactory {
 
   /** Creates a new empty node of the specified type */
-  public abstract node(data: wmDocument): EditableDocument;
-  public abstract node(data: wmBlock): EditableBlock;
-  public abstract node(data: wmList): EditableList;
-  public abstract node(data: wmItem): EditableItem;
-  public abstract node(data: wmTable): EditableTable;
-  public abstract node(data: wmRow): EditableRow;
-  public abstract node(data: wmCell): EditableCell;
-  public abstract node(data: wmInline): EditableInline;
-  public abstract node(data: wmFigure): EditableFigure;
-  public abstract node(data: wmImage): EditableImage;
-  public abstract node(data: wmCaption): EditableCaption;
-  public abstract node(data: wmEditable): EditableTypes;
+  public abstract node(data: EditableDocumentData): EditableDocument;
+  public abstract node(data: EditableBlockData): EditableBlock;
+  public abstract node(data: EditableListData): EditableList;
+  public abstract node(data: EditableItemData): EditableItem;
+  public abstract node(data: EditableTableData): EditableTable;
+  public abstract node(data: EditableRowData): EditableRow;
+  public abstract node(data: EditableCellData): EditableCell;
+  public abstract node(data: EditableInlineData): EditableInline;
+  public abstract node(data: EditableFigureData): EditableFigure;
+  public abstract node(data: EditableImageData): EditableImage;
+  public abstract node(data: EditableCaptionData): EditableCaption;
+  public abstract node(data: EditableData): EditableTypes;
 
   /** Creates a new empty document node */
   abstract get document(): EditableDocument;

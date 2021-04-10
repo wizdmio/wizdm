@@ -7,13 +7,13 @@
     <span *ngSwitchCase="'text'" 
           [id]="child.id" 
           [ngStyle]="style(child)"
-          [attr.selected]="document.selection.includes(child) ? '' : undefined">{{ child.value || '\n' }}</span>
+          [attr.selected]="document.isSelected(child) ? '' : undefined">{{ child.value || '\n' }}</span>
 
     <!-- Renders a link node -->
     <a *ngSwitchCase="'link'" 
        [id]="child.id" 
        [href]="child.url"
-       [attr.selected]="document.selection.includes(child) ? '' : undefined"
+       [attr.selected]="document.isSelected(child) ? '' : undefined"
        (click)="navigate(child.url)">{{ child.value }}</a>
 
     <!-- Renders an image node -->
@@ -23,7 +23,7 @@
          [alt]="child.alt" 
          [title]="child.title" 
          [style.max-width]="size(child)" 
-         [attr.selected]="document.selection.includes(child) ? '' : undefined"/-->
+         [attr.selected]="document.isSelected(child) ? '' : undefined"/-->
 
   </ng-container>
 

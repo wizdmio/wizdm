@@ -1,8 +1,5 @@
-import { wmDocument, wmNodeType, wmIndentType, wmTextStyle, wmAlignType, wmSizeLevel } from './editable-types';
-import { EditableTable, EditableRow, EditableCell } from './editable-table';
-import { EditableInline } from './editable-inline';
-import { EditableDocument } from './editable-document';
-import { EditableContent } from './editable-content';
+import { EditableDocumentData, EditableNodeType, EditableIndentType, EditableTextStyle, EditableAlignType, EditableSizeLevel } from '@wizdm/editable';
+import { EditableInline, EditableDocument, EditableContent } from '@wizdm/editable';
 import { timeInterval, map, filter } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 
@@ -353,32 +350,32 @@ export class EditableSelection {
     return this;
   }
   /** Returns the current selection alignement (corresponding to the start node container's) */
-  public get align(): wmAlignType {
+  public get align(): EditableAlignType {
     return this.valid ? this.start.align : 'left';
   }
   /** Applies the given alignemnt to the selection */
-  public set align(align: wmAlignType) {
+  public set align(align: EditableAlignType) {
 
     this.store().containers( container => container.align = align ).mark();
 
   }
   /** Returns the current selection level (corresponding to the start node container's) */
-  public get level(): wmSizeLevel { 
+  public get level(): EditableSizeLevel { 
     return this.valid ? this.start.level : 0;
   }
   /** Applies a new level to the selection */
-  public set level(level: wmSizeLevel) {
+  public set level(level: EditableSizeLevel) {
     // Skips on invalid selection
     if(!this.valid) { return; }
     // Applies the level on the containers within the selection
     this.store().containers( container => container.level = level ).mark();
   }
   /** Returns the style of the selection always corresponding to the style of the start node */
-  public get style(): wmTextStyle[] {
+  public get style(): EditableTextStyle[] {
     return this.valid ? this.start.style : [];
   }
   /** Applies the given style to the selection */
-  public set style(style: wmTextStyle[]) {
+  public set style(style: EditableTextStyle[]) {
     // Skips on invalid selection
     if(this.valid) {
       // Store a snapshot for undo history
@@ -398,7 +395,7 @@ export class EditableSelection {
    * @param style style array to be applied.
    * @param remove when true, the requested style will be removed instead.
    */
-  public format(style: wmTextStyle[], remove: boolean = false): EditableSelection {
+  public format(style: EditableTextStyle[], remove: boolean = false): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Store a snapshot for undo history
@@ -416,7 +413,7 @@ export class EditableSelection {
     return this.defrag();
   }
   /** Toggles a single format style on/off */
-  public toggleFormat(style: wmTextStyle): EditableSelection {
+  public toggleFormat(style: EditableTextStyle): EditableSelection {
     const remove = this.style.some( s => s === style );
     return this.format([style], remove);
   }
@@ -457,7 +454,7 @@ export class EditableSelection {
   }
 
   /** Picks the first selection's parent matching the specified types  */
-  public pick(...types: wmNodeType[]): EditableContent {
+  public pick(...types: EditableNodeType[]): EditableContent {
     return this.valid ? this.start.climb(...types) : null;
   }
 
@@ -467,7 +464,7 @@ export class EditableSelection {
     const indent = this.pick('blockquote', 'bulleted', 'numbered'); 
     if(!indent) { return this; }
     // outdent all the containers within the selection
-    this.store().containers( container => container.outdent(indent.type as wmIndentType) );
+    this.store().containers( container => container.outdent(indent.type as EditableIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
@@ -479,7 +476,7 @@ export class EditableSelection {
     // At this point, skips indentation when type is not specified
     if(!list) { return this; }
     // Indent all the containers within the selection
-    this.store().containers( item => item.indent(list.type as wmIndentType) );
+    this.store().containers( item => item.indent(list.type as EditableIndentType) );
     // Mark the selection to update on the next rendering round
     return this.mark();
   }
@@ -494,7 +491,7 @@ export class EditableSelection {
     const list = this.start.climb('bulleted', 'numbered'); 
     if(!!list) {
       // If so, outdent the list it belongs to
-      this.containers( item => item.outdent(list.type as wmIndentType) );
+      this.containers( item => item.outdent(list.type as EditableIndentType) );
       // Stop on toggle off
       if(list.type === type) { return this.mark(); }
     }
@@ -525,7 +522,7 @@ export class EditableSelection {
   }
 
   /** Returns true if the current selection fully belongs to a single specified node or branch */
-  public belongsTo(type: wmNodeType): boolean {
+  public belongsTo(type: EditableNodeType): boolean {
     // Skips on invalid selection
     if(!this.valid) { return false; }
     // Perform the check
@@ -553,7 +550,7 @@ export class EditableSelection {
     return false;
   }
 
-  public matchOne(...types: wmNodeType[]): boolean {
+  public matchOne(...types: EditableNodeType[]): boolean {
     return !!types && types.some( type => this.belongsTo(type) );
   }
 
@@ -597,7 +594,7 @@ export class EditableSelection {
   }
 
    /** Pastes a data fragment to the current selection */
-  public paste(source: wmDocument): EditableSelection {
+  public paste(source: EditableDocumentData): EditableSelection {
     // Skips on invalid selection
     if(!this.valid) { return this; }
     // Builds the fragment to paste from
@@ -695,7 +692,7 @@ export class EditableSelection {
   /***** HISTORY UNDO/REDO *****/
 
   private store$ = new Subject<EditableDocument>();
-  private history: wmDocument[];
+  private history: EditableDocumentData[];
   private timeIndex: number;
   private sub$: Subscription;
 

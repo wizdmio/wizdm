@@ -1,0 +1,7 @@
+{
+  "$schema": "../../../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../../../dist/editable/document",
+  "lib": {
+    "entryFile": "index.ts"
+  }
+}

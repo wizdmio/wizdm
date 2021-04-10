@@ -59,7 +59,7 @@
         "download/src/index.ts"
       ],
       "@wizdm/editable": [
-        "editable/src/index.ts"
+        "editable/src/lib/index.ts"
       ],
       "@wizdm/editable/*": [
         "editable/src/lib/*"

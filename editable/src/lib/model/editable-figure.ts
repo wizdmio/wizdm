@@ -1,12 +1,13 @@
-import { EditableContent } from './editable-content';
+import { EditableFigureData, EditableImageData, EditableCaptionData, EditableAlignType, EditableAlignableData } from './editable-types';
 import { EditableContainer } from './editable-container';
-import { wmFigure, wmImage, wmCaption, wmAlignType, wmAlignable } from './editable-types';
+import { EditableContent } from './editable-content';
 
-export class EditableFigure extends EditableContent<wmFigure> {
+
+export class EditableFigure extends EditableContent<EditableFigureData> {
 
   /** Sets/gets the container alignement */
-  get align(): wmAlignType { return (this.node as wmAlignable).align || 'left'; }
-  set align(align: wmAlignType) { (this.node as wmAlignable).align = align; }
+  get align(): EditableAlignType { return (this.node as EditableAlignableData).align || 'left'; }
+  set align(align: EditableAlignType) { (this.node as EditableAlignableData).align = align; }
 
   // Overrides the default setter redirecting to the child caption node 
   public set(text: string): this {
@@ -25,7 +26,7 @@ export class EditableFigure extends EditableContent<wmFigure> {
   }
 }
 
-export class EditableImage extends EditableContent<wmImage> {
+export class EditableImage extends EditableContent<EditableImageData> {
 
   // Overridnes the default value
   get pad(): string { return ''; }
@@ -40,4 +41,4 @@ export class EditableImage extends EditableContent<wmImage> {
   public link(url: string): this { return this.data.url = url, this ;}
 }
 
-export class EditableCaption extends EditableContainer<wmCaption> { }
+export class EditableCaption extends EditableContainer<EditableCaptionData> { }

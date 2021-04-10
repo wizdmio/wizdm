@@ -1,8 +1,8 @@
 import { EditableContent } from './editable-content';
 import { EditableContainer } from './editable-container';
-import { wmTable, wmRow, wmCell } from './editable-types';
+import { EditableTableData, EditableRowData, EditableCellData } from './editable-types';
 
-export class EditableTable extends EditableContent<wmTable> {
+export class EditableTable extends EditableContent<EditableTableData> {
 
   get rows(): number { return this.count; }
   get cols(): number { return !!this.rows && this.row(0).cols || 0; }
@@ -67,7 +67,7 @@ export class EditableTable extends EditableContent<wmTable> {
   }
 }
 
-export class EditableRow extends EditableContent<wmRow> {
+export class EditableRow extends EditableContent<EditableRowData> {
   get cols(): number { return this.count; }
 
   public col(index: number): EditableCell {
@@ -102,7 +102,7 @@ export class EditableRow extends EditableContent<wmRow> {
   }
 }
 
-export class EditableCell extends EditableContainer<wmCell> {
+export class EditableCell extends EditableContainer<EditableCellData> {
   // Overrides with cell specific pad value
   get pad(): string { return this.last ? '' : '\t';}
 

@@ -1,11 +1,11 @@
 import { EditableContainer } from './editable-container';
-import { wmItem, wmHeading, wmParagraph, wmSizeLevel } from './editable-types';
+import { EditableItemData, EditableHeadingData, EditableParagraphData, EditableSizeLevel } from './editable-types';
 
-export class EditableItem extends EditableContainer<wmItem> {
+export class EditableItem extends EditableContainer<EditableItemData> {
 
    /** Sets/gets the container level */
-  get level(): wmSizeLevel { return (this.data as wmHeading).level || 0; }
-  set level(level: wmSizeLevel) {
+  get level(): EditableSizeLevel { return (this.data as EditableHeadingData).level || 0; }
+  set level(level: EditableSizeLevel) {
     // Whenever the level is within heading values...
     if(level >= 1 && level <= 6) {
       // Turn paragraphs into headings when needed
@@ -16,7 +16,7 @@ export class EditableItem extends EditableContainer<wmItem> {
     // Turns headings to paragraphs otherwise
     else if(level === 0 && this.type === 'heading') {
       this.data.type = 'paragraph';
-      delete (this.data as wmHeading).level;
+      delete (this.data as EditableHeadingData).level;
     }
   }
 }

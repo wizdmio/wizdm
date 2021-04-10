@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { DocumentComponent } from '../editable-document.component';
 import { EditableTable } from '../model/editable-table';
+import { DocumentViewer } from '../editable-viewer.component';
 
 @Component({
   selector: 'table[wm-table]',
@@ -8,7 +8,7 @@ import { EditableTable } from '../model/editable-table';
 })
 export class TableComponent {
 
-  constructor(readonly document: DocumentComponent) {}
+  constructor(readonly document: DocumentViewer) {}
 
   @Input('wm-table') table: EditableTable;
 
@@ -24,6 +24,6 @@ export class TableComponent {
   }
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
-    return this.document.selection.includes(this.table) ? '' : undefined; 
+    return this.document.isSelected(this.table) ? '' : undefined; 
   } 
 }

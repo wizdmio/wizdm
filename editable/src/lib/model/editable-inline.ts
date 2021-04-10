@@ -1,23 +1,23 @@
-import { wmAlignType, wmText, wmTextStyle, wmLink,  wmInline, wmSizeLevel } from './editable-types';
+import { EditableAlignType, EditableTextData, EditableTextStyle, EditableLinkData,  EditableInlineData, EditableSizeLevel } from './editable-types';
 import { EditableContent } from './editable-content';
 
 /** Implements text nodes */
-export class EditableInline extends EditableContent<wmInline> {
+export class EditableInline extends EditableContent<EditableInlineData> {
   // Overrides with inline specifics
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
   get pad(): string { return ''; }
   get empty(): boolean { return this.length <= 0;}
   // text specifics
-  set style(style: wmTextStyle[]) { if(this.type === 'text') { (this.data as wmText).style = [...style]; }}
-  get style(): wmTextStyle[] { return (this.type === 'text') ? (this.data as wmText).style || ((this.data as wmText).style = []) : []; } 
+  set style(style: EditableTextStyle[]) { if(this.type === 'text') { (this.data as EditableTextData).style = [...style]; }}
+  get style(): EditableTextStyle[] { return (this.type === 'text') ? (this.data as EditableTextData).style || ((this.data as EditableTextData).style = []) : []; } 
   // link specifics
-  get url(): string { return (this.data as wmLink).url || ''; }
+  get url(): string { return (this.data as EditableLinkData).url || ''; }
   // Redirects to the parent container
-  set align(align: wmAlignType) { if(!!this.parent) { this.parent.align = align; } }
-  get align(): wmAlignType { return !!this.parent ? this.parent.align : 'left'; }
-  set level(level: wmSizeLevel) { if(!!this.parent) { this.parent.level = level;} }
-  get level(): wmSizeLevel { return !!this.parent ? this.parent.level : 0; }
+  set align(align: EditableAlignType) { if(!!this.parent) { this.parent.align = align; } }
+  get align(): EditableAlignType { return !!this.parent ? this.parent.align : 'left'; }
+  set level(level: EditableSizeLevel) { if(!!this.parent) { this.parent.level = level;} }
+  get level(): EditableSizeLevel { return !!this.parent ? this.parent.level : 0; }
   
   // Overrides the parent classes with text node specifics
   public set(text: string): this { return (this.value = text), this; }
@@ -67,7 +67,7 @@ export class EditableInline extends EditableContent<wmInline> {
     return [before, after];
   }
 
-  public format(style: wmTextStyle[]): this {
+  public format(style: EditableTextStyle[]): this {
     // Only text nodes can be formatted
     if(this.type !== 'text') { return this; }
 
@@ -81,7 +81,7 @@ export class EditableInline extends EditableContent<wmInline> {
     return this;
   }
 
-  public unformat(style: wmTextStyle[]): this {
+  public unformat(style: EditableTextStyle[]): this {
     // Only text nodes can be formatted
     if(this.type !== 'text') { return this; }
 
@@ -102,14 +102,14 @@ export class EditableInline extends EditableContent<wmInline> {
     if(!!url) {
 
       this.data.type = 'link';
-      (this.data as wmLink).url = url;
-      delete (this.data as wmText).style;
+      (this.data as EditableLinkData).url = url;
+      delete (this.data as EditableTextData).style;
     }
     else {
 
       this.data.type = 'text';
-      (this.data as wmText).style = [];
-      delete (this.data as wmLink).url;
+      (this.data as EditableTextData).style = [];
+      delete (this.data as EditableLinkData).url;
     }
     
     return this;

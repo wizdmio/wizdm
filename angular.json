@@ -396,6 +396,18 @@
       "projectType": "library",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "editable/tsconfig.lib.json",
+            "project": "editable/src/lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "editable/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {

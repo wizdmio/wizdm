@@ -1,6 +1,6 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { DocumentComponent } from '../editable-document.component';
 import { EditableList } from '../model/editable-list';
+import { DocumentViewer } from '../editable-viewer.component';
 
 @Component({
   selector: '[wm-list]',
@@ -8,7 +8,7 @@ import { EditableList } from '../model/editable-list';
 })
 export class ListComponent {
 
-  constructor(readonly document: DocumentComponent) {}
+  constructor(readonly document: DocumentViewer) {}
   
   @Input('wm-list') list: EditableList;
    // Applies the node id to the element
@@ -17,6 +17,6 @@ export class ListComponent {
   @HostBinding('attr.start') get start() { return !!this.list && this.list.start; }
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
-    return this.document.selection.includes(this.list) ? '' : undefined; 
+    return this.document.isSelected(this.list) ? '' : undefined; 
   }
 }

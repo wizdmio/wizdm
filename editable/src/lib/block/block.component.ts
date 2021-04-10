@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding } from '@angular/core';
-import { DocumentComponent } from '../editable-document.component';
+import { DocumentViewer } from '../editable-viewer.component';
 import { EditableBlock } from '../model/editable-block';
 
 @Component({
@@ -8,13 +8,13 @@ import { EditableBlock } from '../model/editable-block';
 })
 export class BlockComponent {
 
-  constructor(private document: DocumentComponent) {}
+  constructor(private document: DocumentViewer) {}
 
   @Input('wm-block') block: EditableBlock;
   // Applies the node id to the element
   @HostBinding('id') get id() { return !!this.block && this.block.id;}
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 
-    return this.document.selection.includes(this.block) ? '' : undefined; 
+    return this.document.isSelected(this.block) ? '' : undefined; 
   }
 }
