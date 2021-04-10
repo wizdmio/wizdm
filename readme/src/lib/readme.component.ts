@@ -28,6 +28,9 @@ export class ReadmeComponent {
     this.compile(source); 
   }
 
+  /** Class(es) for the embedded links */
+  @Input() linkClass: string;
+
   /** Emoji Rendering Mode */
   @Input() emojiMode: EmojiMode;
 
