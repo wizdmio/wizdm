@@ -1,36 +1,85 @@
-<!--wm-post-card [userFirstName]="userFirstName" [userImage]="userImage" [data]="data"
-  (toggleLikes)="toggleFavorite($event)" [favorite]="favorite$" [likes]="likes.counter$"></wm-post-card-->
 
-
-  <!-- Loads the localized content -->
+<!-- Loads the localized content -->
 <ng-container *wmContent="let msgs select 'explore-feed.post'">
 
-  <div class="header" fxLayout="row" fxLayoutAlign="center center" *ngIf="author$ | async as author">
-  
-    <!-- Author's picture -->
-    <wm-avatar class="avatar link" [src]="author.photo" [routerLink]="['/', '@' + author.userName]"></wm-avatar>
+  <div class="header" fxLayout="row" fxLayoutAlign="start center">
 
-    <div fxLayout="column">
+    <!-- Author's info -->
+    <div fxLayout="row" *ngIf="author$ | async as author">
   
-      <!-- Author's name -->
-      <div class="link" [routerLink]="['/', '@' + author.userName]"><b>{{ author.fullName }}</b></div>
-      
-      <!-- Post creation time long version (when older than 12 hours) -->
-      <time class="time mat-small" *ngIf="data | createdTime | olderThan:'PT12H'; else shortTime" >{{ 
+      <!-- Author's picture -->
+      <a [routerLink]="['/', '@' + author.userName]"><wm-avatar class="avatar" [src]="author.photo"></wm-avatar></a>
+
+      <div fxLayout="column">
+    
+        <!-- Author's name -->
+        <a [routerLink]="['/', '@' + author.userName]"><b>{{ author.fullName }}</b></a>
         
-        data | createdTime | calendar:msgs.timeFormat || {
-          sameDay : '[Today at] LT',          
-          lastDay : '[Yesterday at] LT',
-          lastWeek : '[Last] dddd [at] LT',
-          sameElse : 'LL'
-        }  
-      
-      }}</time>
+        <!-- Post creation time long version (when older than 12 hours) -->
+        <time class="time mat-small" *ngIf="data | createdTime | olderThan:'PT12H'; else shortTime" >{{ 
+          
+          data | createdTime | calendar:msgs.timeFormat || {
+            sameDay : '[Today at] LT',          
+            lastDay : '[Yesterday at] LT',
+            lastWeek : '[Last] dddd [at] LT',
+            sameElse : 'LL'
+          }  
+        
+        }}</time>
 
-      <!-- Post creation time short version (whithin 12 hours) -->
-      <ng-template #shortTime><time class="time mat-small">{{ data | createdTime | fromNow }}</time></ng-template>
+        <!-- Post creation time short version (whithin 12 hours) -->
+        <ng-template #shortTime><time class="time mat-small">{{ data | createdTime | fromNow }}</time></ng-template>
 
+      </div>
     </div>
+
+    <button mat-icon-button class="menu">
+      <wm-icon icon="far:fa-bookmark"></wm-icon>
+    </button>
+  </div>
+  
+  <mat-divider></mat-divider>
+
+  <!-- Renders the post body -->
+  <section [wm-editable-viewer]="data" 
+           [customClasses]="{ a: 'primary', caption: 'mat-small' }" 
+           (navigate)="navigate.emit($event)" 
+           class="body"
+  ></section>
+
+  <!-- Tag list -->
+  <mat-chip-list aria-label="Tags" [selectable]="false">
+    
+    <mat-chip *ngFor="let tag of data.tags">
+      <span class="mat-small">{{ tag }}</span> 
+    </mat-chip>
+    
+  </mat-chip-list>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row">
+
+    <!-- Likes -->
+    <button mat-button fxFlex="50" color="primary" (click)="toggleFavorite()">
+
+      <wm-icon [icon]="(favorite$ | async)  ? 'fas:fa-heart' : 'far:fa-heart'" [@beat]="likes.counter$ | async"></wm-icon>
+
+      <span>Like</span>
+
+      <span *ngIf="(likes.counter$ | async) > 0">&nbsp;{{ likes.counter$ | async }}</span>
+
+    </button>
+
+    <!-- Comments -->
+    <button mat-button fxFlex="50" color="primary">
+
+      <wm-icon icon="far:fa-comment"></wm-icon>
+
+      <span>Comment</span>
+
+    </button>
+
   </div>
 
 </ng-container>

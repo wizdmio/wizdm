@@ -3,6 +3,7 @@ import { MarkdownInlineCustomClasses } from '../inline/inline.component';
 import { mdContent, mdHeading } from '../tree/tree-types';
 import { MarkdownTree } from '../tree/tree.service';
 
+/** Block Elements' custom classes */
 export interface MarkdownCustomClasses extends MarkdownInlineCustomClasses {
 
   h1?: string;
@@ -30,14 +31,13 @@ export interface MarkdownCustomClasses extends MarkdownInlineCustomClasses {
   td?: string;
 }
 
-
+/** Renders a markdown text into an angular view */
 @Component({
   selector: '[wm-block]',
   templateUrl: './block.component.html',
   styleUrls: ['./block.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-/** Renders a markdown text into an angular view */
 export class MarkdownBlock {
   
   constructor(readonly tree: MarkdownTree) {}

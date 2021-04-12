@@ -9,14 +9,15 @@
            [id]="child.id" 
            [src]="child.url" 
            [alt]="child.alt" 
-           [title]="child.title" 
+           [title]="child.title"
+           [class]="customClasses?.img" 
            [style.max-width]="size(child)" style="user-select: auto;"/>
 
       <!-- Renders a table -->
-      <table *ngSwitchCase="'table'" [wm-table]="child"></table>
+      <table *ngSwitchCase="'table'" [class]="customClasses?.table" [wm-table]="child" [customClasses]="customClasses"></table>
   
       <!-- Renders the caption (actually the editable part) -->
-      <figcaption *ngSwitchCase="'caption'" [wm-editable]="child"></figcaption>
+      <figcaption *ngSwitchCase="'caption'" [class]="customClasses?.caption" [wm-editable]="child"></figcaption>
   
     </ng-container>
   

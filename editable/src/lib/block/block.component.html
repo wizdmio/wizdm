@@ -4,22 +4,22 @@
 
     <!-- Headings -->
     <ng-container *ngSwitchCase="'heading'">
-      <h1 *ngIf="node.level === 1" [wm-editable]="node"></h1>
-      <h2 *ngIf="node.level === 2" [wm-editable]="node"></h2>
-      <h3 *ngIf="node.level === 3" [wm-editable]="node"></h3>
-      <h4 *ngIf="node.level === 4" [wm-editable]="node"></h4>
-      <h5 *ngIf="node.level === 5" [wm-editable]="node"></h5>
-      <h6 *ngIf="node.level === 6" [wm-editable]="node"></h6>
+      <h1 *ngIf="node.level === 1" [class]="customClasses?.h1" [wm-editable]="node" [customClasses]="customClasses"></h1>
+      <h2 *ngIf="node.level === 2" [class]="customClasses?.h2" [wm-editable]="node" [customClasses]="customClasses"></h2>
+      <h3 *ngIf="node.level === 3" [class]="customClasses?.h3" [wm-editable]="node" [customClasses]="customClasses"></h3>
+      <h4 *ngIf="node.level === 4" [class]="customClasses?.h4" [wm-editable]="node" [customClasses]="customClasses"></h4>
+      <h5 *ngIf="node.level === 5" [class]="customClasses?.h5" [wm-editable]="node" [customClasses]="customClasses"></h5>
+      <h6 *ngIf="node.level === 6" [class]="customClasses?.h6" [wm-editable]="node" [customClasses]="customClasses"></h6>
     </ng-container>
 
     <!-- Paragraphs -->
-    <p *ngSwitchCase="'paragraph'" [wm-editable]="node"></p>
+    <p *ngSwitchCase="'paragraph'" [class]="customClasses?.p" [wm-editable]="node" [customClasses]="customClasses"></p>
     
     <!-- Numbered lists with nesting -->
-    <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
+    <ol *ngSwitchCase="'numbered'" [class]="customClasses?.ol" [wm-list]="node" [customClasses]="customClasses"></ol>
 
     <!-- Bulleted lists with nesting -->
-    <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
+    <ul *ngSwitchCase="'bulleted'" [class]="customClasses?.ul" [wm-list]="node" [customClasses]="customClasses"></ul>
 
     <!-- Blockquotes nesting disabled -->
     <!--blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote-->

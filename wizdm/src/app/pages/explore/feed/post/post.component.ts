@@ -1,19 +1,17 @@
 import { DatabaseCollection, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
 import { DatabaseDocument, DocumentData } from '@wizdm/connect/database/document';
 import { map, tap, switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DistributedCounter } from '@wizdm/connect/database/counter';
-import { Component, Input, HostBinding } from '@angular/core';
 import { Observable, BehaviorSubject, merge } from 'rxjs';
 import { DatabaseService } from '@wizdm/connect/database';
 import { AuthService } from '@wizdm/connect/auth';
+import { EditableDocumentData } from '@wizdm/editable';
 import { UserProfile, UserData } from 'app/utils/user';
+import { $animations } from './post.animation';
 
-export interface PostData extends DocumentData {
-  title?  : string;
-  text?   : string; 
-  group?  : string;
-  photo?  : string;
-  author? : string; 
+export interface PostData extends DocumentData, EditableDocumentData {
+  //channel?  : string;
   tags?   : string[]; 
 };
 
@@ -21,6 +19,7 @@ export interface PostData extends DocumentData {
   selector: 'wm-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
+  animations: $animations
 })
 export class PostComponent extends DatabaseDocument<PostData> {
 
@@ -62,7 +61,10 @@ export class PostComponent extends DatabaseDocument<PostData> {
     
     // Builds the favorite flag
     this.favorite$ = this.initFavorite();   
- }
+  }
+
+  /** Emits on navigation */
+  @Output() navigate = new EventEmitter<string>();
 
   /** Builds the favorite flag Observable */
   private initFavorite(): Observable<boolean> {

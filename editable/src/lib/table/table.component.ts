@@ -2,6 +2,13 @@ import { Component, Input, HostBinding } from '@angular/core';
 import { EditableTable } from '../model/editable-table';
 import { DocumentViewer } from '../editable-viewer.component';
 
+/** Inline Elements' custom classes */
+export interface EditableTableCustomClasses {  
+  tr?: string;
+  td?: string; 
+}
+
+/** Table Node Renderer */
 @Component({
   selector: 'table[wm-table]',
   templateUrl: './table.component.html'
@@ -10,10 +17,16 @@ export class TableComponent {
 
   constructor(readonly document: DocumentViewer) {}
 
+  /** Input Node */
   @Input('wm-table') table: EditableTable;
 
+  /** Rendered elements' custom classes */
+  @Input() customClasses: EditableTableCustomClasses;
+
   // Applies the node id to the element
-  @HostBinding('id') get id() { return !!this.table && this.table.id; }
+  @HostBinding('id') get id() { 
+    return !!this.table && this.table.id; 
+  }
 
   // Applies table margins according to node alignement
   @HostBinding('style.margin-left') get mleft() { 

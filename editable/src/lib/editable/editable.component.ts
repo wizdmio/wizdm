@@ -5,6 +5,11 @@ import { EditableCell } from '../model/editable-table';
 import { EditableCaption } from '../model/editable-figure';
 import { EditableInline } from '../model/editable-inline';
 
+/** Inline Elements' custom classes */
+export interface EditableInlineCustomClasses {
+  a? : string;
+}
+
 @Component({
   selector: '[wm-editable]',
   templateUrl: './editable.component.html',
@@ -14,17 +19,26 @@ export class EditableComponent {
 
   constructor(readonly document: DocumentViewer) {}
 
+  /** Input Node */
   @Input('wm-editable') node: EditableItem|EditableCell|EditableCaption;
 
-   @HostBinding('attr.contenteditable') get editable() { 
+  /** Rendered elements' custom classes */
+  @Input() customClasses: EditableInlineCustomClasses;
+
+  // Applies the conteneditable attribute while in editMode
+  @HostBinding('attr.contenteditable') get editable() { 
     return this.document.edit ? 'true' : 'false';
   }
 
   // Applies the node id to the element
-  @HostBinding('id') get id() { return !!this.node && this.node.id; }
+  @HostBinding('id') get id() { 
+    return !!this.node && this.node.id; 
+  }
   
   // Applies text align style according to node alignement
-  @HostBinding('style.text-align') get align() { return !!this.node && this.node.align; }
+  @HostBinding('style.text-align') get align() { 
+    return !!this.node && this.node.align; 
+  }
   
   // Applies the 'selected' attribute for selection styling
   @HostBinding('attr.selected') get selected() { 

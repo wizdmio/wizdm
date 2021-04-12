@@ -1,12 +1,14 @@
 
 <!-- Loops on rows -->
-<tr *ngFor="let row of table?.content; index as r; first as top" [id]="row.id">
+<tr *ngFor="let row of table?.content; index as r; first as top" [id]="row.id" [class]="customClasses?.tr">
   <!-- Cell content -->
   <td *ngFor="let cell of row.content; index as c"
       [style.vertical-align]="cell.data.valign"
       [attr.rowspan]="cell.data.rowspan"
-      [attr.colspan]="cell.data.colspan" 
-      [wm-editable]="cell">
+      [attr.colspan]="cell.data.colspan"
+      [class]="customClasses?.td"
+      [wm-editable]="cell" 
+      [customClasses]="customClasses">
   </td>
 </tr>
   

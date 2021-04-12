@@ -3,13 +3,13 @@
   <ng-container [ngSwitch]="node.type">
 
     <!-- List items -->
-    <li *ngSwitchCase="'paragraph'" [wm-editable]="node"></li>
+    <li *ngSwitchCase="'paragraph'" [class]="customClasses?.li" [wm-editable]="node" [customClasses]="customClasses"></li>
 
     <!-- Next level indentation ordered list -->
-    <ol *ngSwitchCase="'numbered'" [wm-list]="node"></ol>
+    <ol *ngSwitchCase="'numbered'" [class]="customClasses?.ol" [wm-list]="node" [customClasses]="customClasses"></ol>
 
     <!-- Next level indentation unordered list -->
-    <ul *ngSwitchCase="'bulleted'" [wm-list]="node"></ul>
+    <ul *ngSwitchCase="'bulleted'" [class]="customClasses?.ul" [wm-list]="node" [customClasses]="customClasses"></ul>
 
     <!-- Blockquotes nesting disabled -->
     <!--blockquote *ngSwitchCase="'blockquote'" [wm-block]="node"></blockquote-->

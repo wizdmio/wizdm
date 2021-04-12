@@ -10,7 +10,18 @@
     height: 40px;
   }
 
-  .link { cursor: pointer; }
+  .menu {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
 
+  .mat-divider {
+    margin: 6px 0 6px 0;
+  }
+
+  .photo {
+    margin-bottom: 6px;
+  }
 
 }
