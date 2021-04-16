@@ -1,14 +1,13 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { query, stream, onSnapshot, where, orderBy, limit, endBefore, docs, snap } from '@wizdm/connect/database/collection/operators';
+import { onSnapshot, where, orderBy, limit, endBefore, docs, snap } from '@wizdm/connect/database/collection/operators';
 import { DatabaseGroup, QueryDocumentSnapshot } from '@wizdm/connect/database/collection';
+import { filter, take, map, expand } from 'rxjs/operators';
 import { DatabaseService } from '@wizdm/connect/database';
-import { PostData } from './post/post.component';
-import { filter, take, map, expand, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-
-import { EmojiUtils } from '@wizdm/emoji/utils';
-import { MediaObserver } from '@angular/flex-layout';
 import { UserProfile, UserData } from 'app/utils/user';
+import { MediaObserver } from '@angular/flex-layout';
+import { EmojiUtils } from '@wizdm/emoji/utils';
+import { PostData } from './post/post.component';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'wm-feed',
@@ -22,7 +21,6 @@ export class FeedComponent extends DatabaseGroup<PostData> {
   // Media queries to switch between desktop/mobile views
   public get mobile(): boolean { return this.media.isActive('xs'); }
   public get desktop(): boolean { return !this.mobile; }
-
 
   constructor (db: DatabaseService, private utils: EmojiUtils,
     private media: MediaObserver, private user: UserProfile<UserData>,) {
@@ -60,15 +58,4 @@ export class FeedComponent extends DatabaseGroup<PostData> {
       )
     );
   }
-
-  public get userImage(): string {
-    return this.user.data.photo || '';
-  }
-
-  public get userFirstName(): string {
-    let displayName = this.user?.data?.userName?.split('-').slice().pop();
-    return displayName || '';
-  }
-
-
 }

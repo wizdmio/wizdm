@@ -1,5 +1,5 @@
 import { DatabaseCollection, CollectionRef } from '../collection';
-import { map, tap, distinctUntilChanged } from 'rxjs/operators';
+import { map, tap, distinctUntilChanged, shareReplay } from 'rxjs/operators';
 import { DatabaseApplication, FieldValue } from '../database-application';
 import { Observable, BehaviorSubject, merge } from 'rxjs';
 import { DocumentData } from '../document';
@@ -31,7 +31,7 @@ export class DistributedCounter extends DatabaseCollection<CounterShard> {
       // With the distributed counter value, keeping the local copy up to do date 
       this.accumulate().pipe( tap( counter => this._counter$.next(counter) ) )
       // Distinca only effective counter changes
-    ).pipe( distinctUntilChanged() );
+    ).pipe( distinctUntilChanged(), shareReplay(1) );
   }
 
   // Streams the current counter value accumulating the shards

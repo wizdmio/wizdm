@@ -1,21 +1,31 @@
 
+<!-- Loads the localized content -->
+<ng-container *wmContent="let msgs select 'explore-feed'">
 
-<!-- List all posts in descending order -->
-<ul class="feed-list">
+  <!-- Actionbar -->
+  <ng-template wmActionbar let-mobile="isMobile">
 
-  <li *ngFor="let post of feed$ | async" class="feed-item mat-elevation-z3">
+    <!-- New post button -->
+    <button mat-stroked-button type.lt-sm="icon" color="primary" routerLink="edit">
 
-    <wm-post [post]="post" (navigate)="navigate($event)"></wm-post>
+      <!-- Use an icon button on small screens -->
+      <wm-icon *ngIf="mobile; else newMessage" [icon]="msgs.post?.new?.icon || 'add'"></wm-icon>
 
-  </li>
-</ul>
+      <!-- Use a stroked button on large screens -->
+      <ng-template #newMessage>{{ msgs.post?.new?.caption || 'New' }}</ng-template>
 
-<!-- Add Post  -->
-<!--ng-template wmFab="right bottom" [direction]="'column'">
+    </button>
 
-  <button mat-mini-fab color="primary" class="mat-elevation-z11 post__entry" [routerLink]="'postdlg'">
-    <wm-icon icon="fas:fa-plus" ></wm-icon>
+  </ng-template>
 
-  </button>
+  <!-- List all posts in descending order -->
+  <ul class="feed-list">
 
-</ng-template-->
+    <li *ngFor="let post of feed$ | async" class="feed-item mat-elevation-z3">
+
+      <wm-post [post]="post" (navigate)="navigate($event)"></wm-post>
+
+    </li>
+  </ul>
+
+</ng-container>

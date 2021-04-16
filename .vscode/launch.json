@@ -7,7 +7,7 @@
 			"type": "chrome",
 			"request": "launch",
 			"url": "https://localhost:4200",
-			"webRoot": "${workspaceRoot}/wizdm",
+			"webRoot": "${workspaceRoot}",
 			"userDataDir": "${workspaceRoot}/.vscode/chrome",
 			"sourceMaps": true,
 			"timeout": 30000,
@@ -21,7 +21,7 @@
 			"request": "attach",
 			"port": 9222,
 			"urlFilter": "https://localhost:4200/*",
-			"webRoot": "${workspaceRoot}/wizdm",
+			"webRoot": "${workspaceRoot}",
 			"sourceMaps": true,
 			"timeout": 30000
 		}

@@ -1,6 +1,7 @@
 import { Component, Inject, AfterViewChecked, Input, HostBinding, HostListener, Output, EventEmitter, forwardRef } from '@angular/core';
 import { EditableInline, EditableContent, EditableFactoryService, DocumentViewer } from '@wizdm/editable';
 import { EditableDocumentData, EditableSizeLevel } from '@wizdm/editable';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EditableSelection } from './editable-selection';
 import { DOCUMENT } from '@angular/common';
 
@@ -35,21 +36,6 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
     return this.edit && this.selection.includes(node);
   }
 
-  /** When true switches to edit mode */
-  get edit(): boolean { return this.editMode; }
-  @Input() set edit(mode: boolean) { 
-    // Entering edit mode queries for the current selection and initiaizes the history buffer
-    if(this.editMode = mode) { this.query().enableHistory(); }
-    else { 
-      // Resets the seelction and clears the history buffer while exiting edit mode...
-      this.selection.reset().clearHistory(); 
-      // ...and reloads the document whenever changed
-      if(this.node !== this.source) { 
-        this.load(this.source).defrag(); 
-      }
-    }
-  }
-
   /** Loads the document */
   @Input('wm-editable-document') set _source(source: EditableDocumentData) {
     // Keeps track of the source
@@ -58,6 +44,21 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
     if(this.edit) { return; }
     // Loads the source data building the tree otherwise
     this.load(source).defrag();
+  }
+
+  /** When true switches to edit mode */
+  get edit(): boolean { return this.editMode; }
+  @Input() set edit(mode: boolean) { 
+    // Entering edit mode queries for the current selection and initiaizes the history buffer
+    if(this.editMode = coerceBooleanProperty(mode)) { this.query().enableHistory(); }
+    else { 
+      // Resets the seelction and clears the history buffer while exiting edit mode...
+      this.selection.reset().clearHistory(); 
+      // ...and reloads the document whenever changed
+      if(this.node !== this.source) { 
+        this.load(this.source).defrag(); 
+      }
+    }
   }
 
   /** change event notifying for document changes */

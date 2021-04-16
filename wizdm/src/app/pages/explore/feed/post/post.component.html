@@ -63,11 +63,11 @@
     <!-- Likes -->
     <button mat-button fxFlex="50" color="primary" (click)="toggleFavorite()">
 
-      <wm-icon [icon]="(favorite$ | async)  ? 'fas:fa-heart' : 'far:fa-heart'" [@beat]="likes.counter$ | async"></wm-icon>
+      <wm-icon [icon]="(favorite$ | async)  ? 'fas:fa-heart' : 'far:fa-heart'" [@beat]="likes$ | async"></wm-icon>
 
       <span>Like</span>
 
-      <span *ngIf="(likes.counter$ | async) > 0">&nbsp;{{ likes.counter$ | async }}</span>
+      <span *ngIf="(likes$ | async) > 0">&nbsp;{{ likes$ | async }}</span>
 
     </button>
 

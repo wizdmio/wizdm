@@ -1,6 +1,6 @@
+import { switchMap, expand, scan, map, shareReplay } from 'rxjs/operators';
 import { DatabaseApplication } from '../database-application';
 import { DatabaseDocument, DocumentData } from '../document';
-import { switchMap, expand, scan } from 'rxjs/operators';
 import { CollectionRef, QueryFn } from './types';
 import { Observable, of, EMPTY } from 'rxjs';
 import { query, get } from './operators';
@@ -9,6 +9,7 @@ import { DatabaseQuery } from './query';
 /** Collection object in the database, created by the DatabaseService */
 export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T> {
 
+  /** The collection reference within the database */
   public get ref(): CollectionRef<T>{ return this._ref as CollectionRef<T>; }
 
   constructor(db: DatabaseApplication, pathOrRef?: string|CollectionRef<T>) {
@@ -28,7 +29,7 @@ export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T>
   /**
    * Returns the requested child document
    * @param path the document path within the collection. If no path is specified, 
-   * an automatically-generated unique ID will be used for the refurned DatabaseDocument
+   * an automatically-generated unique ID will be used for the returned DatabaseDocument
    */
   public document(path?: string): DatabaseDocument<T> {
    return this.db.document<T>( this.ref.doc(path) );
@@ -77,5 +78,19 @@ export class DatabaseCollection<T extends DocumentData> extends DatabaseQuery<T>
       // Commits the batch write and returns the snapshot size
       return batch.commit().then( () => snap.size ) ;
     }));
+  }
+
+  /** 
+   * Checks if the requested document exists in the collection 
+   * @param path the document path within the collection.
+   * @returns an observable monitoring the existance of the specified document.
+   */
+  public hasDocument(path: string): Observable<boolean> {
+    // Streams
+    return this
+      // Matches for the document named upon the id
+      .stream( ref => ref.where(this.db.sentinelId, "==", path ) )
+      // Returns true if such document exists
+      .pipe( map( docs => docs.length > 0 ), shareReplay(1) );
   }
 }

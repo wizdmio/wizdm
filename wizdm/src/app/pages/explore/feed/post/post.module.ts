@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 //import { MatBadgeModule } from '@angular/material/badge';
 //import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { PipesModule } from '@wizdm/connect/database/pipes';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
@@ -25,6 +26,7 @@ import { PostComponent } from './post.component';
     //MatBadgeModule,
     //MatMenuModule,
     MatChipsModule,
+    //MatTooltipModule,
     MatDividerModule,
     //AuthGuardModule,
     EditableViewerModule,

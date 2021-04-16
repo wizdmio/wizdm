@@ -25,7 +25,6 @@ export class PostDialogComponent extends DatabaseGroup<PostData> implements OnIn
   public get mobile(): boolean { return this.media.isActive('xs'); }
   public get desktop(): boolean { return !this.mobile; }
 
-
   get disabled(): boolean { return this._disabled; }
   private _disabled: boolean = false;
 
