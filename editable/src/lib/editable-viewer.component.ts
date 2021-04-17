@@ -27,9 +27,6 @@ export interface EditableDocumentCustomClasses
 })
 export class DocumentViewer extends EditableDocument {
 
-  /** Document source */
-  protected source: EditableDocumentData;
-
   /** Edit mode setter/getter dummies */
   set edit(mode: boolean) { console.warn('DocumentBody edit setter must be overridden', mode); };
   get edit(): boolean { return false; }
@@ -43,7 +40,7 @@ export class DocumentViewer extends EditableDocument {
   
   /** Loads the document */
   @Input('wm-editable-viewer') set _source(source: EditableDocumentData) {
-    this.load(this.source = source);
+    source && this.load(source);
   }
 
   /** Rendered elements' custom classes */

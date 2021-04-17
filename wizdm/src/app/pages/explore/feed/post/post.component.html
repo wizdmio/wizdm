@@ -8,7 +8,9 @@
     <div fxLayout="row" *ngIf="author$ | async as author">
   
       <!-- Author's picture -->
-      <a [routerLink]="['/', '@' + author.userName]"><wm-avatar class="avatar" [src]="author.photo"></wm-avatar></a>
+      <a [routerLink]="['/', '@' + author.userName]">
+        <wm-avatar class="avatar" [src]="author.photo"></wm-avatar>
+      </a>
 
       <div fxLayout="column">
     
@@ -33,9 +35,25 @@
       </div>
     </div>
 
-    <button mat-icon-button class="menu">
-      <wm-icon icon="far:fa-bookmark"></wm-icon>
+    <!-- Actions menu -->
+    <button mat-icon-button class="menu" [matMenuTriggerFor]="menuActions">
+      <wm-icon icon="fas:fa-ellipsis-v"></wm-icon>
     </button>
+
+    <mat-menu #menuActions="matMenu">
+
+      <button mat-menu-item>
+        <wm-icon icon="far:fa-bookmark"></wm-icon>
+        {{ msgs.actions?. save || 'Save' }}
+      </button>
+
+      <!-- Enables editing -->
+      <button mat-menu-item routerLink="edit" [queryParams]="{ id: data.id }" *ngIf="(author$ | async).id === me">
+        <wm-icon icon="far:fa-edit"></wm-icon>
+        {{ msgs.actions?. save || 'Edit' }}
+      </button>
+
+    </mat-menu>
   </div>
   
   <mat-divider></mat-divider>

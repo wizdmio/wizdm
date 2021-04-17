@@ -6,19 +6,21 @@ import { MatButtonModule } from '@angular/material/button';
 //import { MatBadgeModule } from '@angular/material/badge';
 //import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from '@angular/material/divider';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableDocumentModule } from '@wizdm/editable/document';
-//import { ContentModule } from '@wizdm/content';
+import { AvatarModule } from '@wizdm/elements/avatar';
+import { IconModule } from '@wizdm/elements/icon';
+import { ToolbarModule } from './toolbar/toolbar.module';
 import { EditComponent } from './edit.component';
-
 
 /** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
 const routes: RoutesWithContent = [{
   path: '',
   content: 'explorer-feed-edit',
   component: EditComponent,
-  data: { dialogConfig: {  maxWidth: '100%' }}
+  data: { dialogConfig: {  width: '500px', maxWidth: '100%' }}
 }];
 
 @NgModule({
@@ -30,8 +32,12 @@ const routes: RoutesWithContent = [{
     MatButtonModule,
     MatChipsModule,
     MatDividerModule,
-    ContentRouterModule.forChild(routes),
-    EditableDocumentModule
+    MatFormFieldModule,
+    EditableDocumentModule,
+    AvatarModule,
+    IconModule,
+    ToolbarModule,
+    ContentRouterModule.forChild(routes)
   ],
   declarations: [ EditComponent ]
 })

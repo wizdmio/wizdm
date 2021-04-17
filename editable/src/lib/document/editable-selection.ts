@@ -16,20 +16,28 @@ export class EditableSelection {
 
   /** Returns true on valid selection */
   get valid(): boolean { return !!this.start && !!this.end; }
+
   /** Returns true when the selection belongs within a single node */
   get single(): boolean { return this.valid && (this.start === this.end); }
+  
   /** Returns true when the selection spread across moltiple nodes */
   get multi(): boolean { return !this.single; }
+  
   /** Returns true when the selection includes the whole nodes */
   get whole(): boolean { return this.valid && (this.startOfs === 0) && (this.endOfs === this.end.length); }
+  
   /** Returns true when the selection falls in the middle of node(s) */
   get partial(): boolean { return !this.whole; }
+  
   /** Returns true when the selection is collpased in a cursor */
   get collapsed(): boolean { return this.single && (this.startOfs === this.endOfs);}
+  
   /** Returns true when the selection fully belongs to a single container  */
   get contained(): boolean { return this.single || this.valid && this.start.container === this.end.container; }
+  
   /** Returns true whenever the selection has been modified */
   get marked(): boolean { return this.valid && this.modified; }
+  
   /** Marks a seleciotn as modified */
   public mark(modified = true): EditableSelection {
     this.modified = this.valid && modified;
@@ -692,8 +700,8 @@ export class EditableSelection {
   /***** HISTORY UNDO/REDO *****/
 
   private store$ = new Subject<EditableDocument>();
-  private history: EditableDocumentData[];
-  private timeIndex: number;
+  private history: EditableDocumentData[] = [];
+  private timeIndex: number = 0;
   private sub$: Subscription;
 
   /** Clears the history buffer */

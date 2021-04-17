@@ -1,0 +1,167 @@
+<!-- Main tools -->
+<div fxLayout="row" fxLayoutGap="4px">
+
+  <!-- Undo -->
+  <button mat-icon-button 
+    [disabled]="!sel.undoable" 
+    (click)="sel.undo()">
+    <mat-icon>undo</mat-icon>
+  </button>
+
+  <!-- Redo -->
+  <button mat-icon-button 
+    [disabled]="!sel.redoable" 
+    (click)="sel.redo()">
+    <mat-icon>redo</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Size (level) menu -->
+  <button mat-icon-button [matMenuTriggerFor]="sizeMenu">
+    <mat-icon>format_size</mat-icon>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <!-- Size menu -->
+  <mat-menu [class]="'mini '+color" #sizeMenu="matMenu">
+    <!-- Heading / paragraph -->
+    <button mat-menu-item *ngFor="let level of [1, 2, 3, 0]" style="display: block; border-width:0; border-radius: 0;" 
+            [class]="color" [attr.selected]="sel.level === level"
+            (click)="sel.level = level">
+            <span [ngClass]="'mat-h' + level">T</span>
+    </button>
+  </mat-menu>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Formatting -->
+  <button mat-icon-button *ngFor="let item of ['bold', 'italic']" 
+          style="border-width:0;"
+          [class]="color" [attr.selected]="hasStyle(item)"            
+          (click)="sel.toggleFormat(item)">
+    <mat-icon>{{'format_' + item }}</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Bulleted list -->
+  <button mat-icon-button style="border-width:0;"
+          [class]="color" [attr.selected]="sel.belongsTo('bulleted')"
+          (click)="sel.toggleList('bulleted')">
+    <mat-icon>format_list_bulleted</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Link -->
+  <button mat-icon-button *ngIf="!sel.belongsTo('link'); else unlink" style="border-width:0;" (click)="sel.link('./')">
+    <mat-icon>link</mat-icon>
+  </button>
+
+  <!-- Unlink -->
+  <ng-template #unlink>
+    <button mat-icon-button style="border-width:0;" (click)="sel.unlink()">
+      <mat-icon>link_off</mat-icon>
+    </button>
+  </ng-template>
+
+  <!-- Insert image -->
+  <button mat-icon-button style="border-width:0;" 
+          [disabled]="true"          
+          (click)="doNothing()">
+    <mat-icon>insert_photo</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- More menu -->
+  <button mat-icon-button [class]="color" [attr.selected]="more" (click)="more = !more">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+</div>
+
+<!-- Extra tools -->
+<div fxLayout="row" fxLayoutGap="4px" *ngIf="more" @slide>
+
+  <!-- Indent less -->
+  <button mat-icon-button style="border-width:0;"
+        [disabled]="!sel.belongsTo('numbered') && !sel.belongsTo('bulleted') && !sel.belongsTo('blockquote')"    
+        (click)="sel.outdent()">
+    <mat-icon>format_indent_decrease</mat-icon>
+  </button>
+
+  <!-- Indent more -->
+  <button mat-icon-button style="border-width:0;"
+          [disabled]="!sel.belongsTo('numbered') && !sel.belongsTo('bulleted')"    
+          (click)="sel.indent()">
+    <mat-icon>format_indent_increase</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Alignement menu -->
+  <button mat-icon-button style="border-width:0;" [matMenuTriggerFor]="alignMenu">
+    <mat-icon>{{'format_align_' + sel.align }}</mat-icon>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <!-- Alignement menu -->
+  <mat-menu [class]="'mini '+color" #alignMenu="matMenu">
+    <!-- Alignaments -->
+    <button mat-icon-button *ngFor="let item of ['left', 'center', 'right', 'justify']" 
+            style="display: block; border-width:0; border-radius: 0;"
+            [class]="color" [attr.selected]="item === sel.align"
+            (click)="sel.align = item">
+      <mat-icon>{{'format_align_' + item }}</mat-icon>
+    </button>
+
+  </mat-menu>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Formatting -->
+  <button mat-icon-button *ngFor="let item of ['underline', 'strikethrough']" 
+          style="border-width:0;"
+          [class]="color" [attr.selected]="hasStyle(item)"            
+          (click)="sel.toggleFormat(item)">
+    <mat-icon>{{'format_' + item }}</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Numbered list -->
+  <button mat-icon-button style="border-width:0;"
+          [class]="color" [attr.selected]="sel.belongsTo('numbered')"
+          (click)="sel.toggleList('numbered')">
+    <mat-icon>format_list_numbered</mat-icon>
+  </button>
+
+  <mat-divider vertical></mat-divider>
+
+  <!-- Quote -->
+  <button mat-icon-button style="border-width:0;"
+          [class]="color" [attr.selected]="sel.belongsTo('blockquote')"    
+          (click)="sel.toggleQuote()">
+    <mat-icon>format_quote</mat-icon>
+  </button>
+
+  <!-- Clear formatting -->
+  <button mat-icon-button style="border-width:0;"
+          [disabled]="sel.belongsTo('link')"          
+          (click)="sel.clear()">
+    <mat-icon>format_clear</mat-icon>
+  </button>
+
+</div>
+
+<!-- Insert table -->
+<!--button mat-icon-button 
+  [matTooltip]="msgs?.insert?.table"
+  [matTooltipShowDelay]="tooltipDelay"
+  [disabled]="sel.belongsTo('table')" 
+  style="display: block; border-radius: 0" 
+  (click)="sel.tableNew(1, 3)">
+  <mat-icon>table_chart</mat-icon>
+</button-->

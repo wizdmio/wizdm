@@ -1,10 +1,10 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DatabaseCollection } from '@wizdm/connect/database/collection';
 import { DatabaseDocument } from '@wizdm/connect/database/document';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { DatabaseService } from '@wizdm/connect/database';
+import { UserProfile, UserData } from 'app/utils/user';
 import { Component, Inject } from '@angular/core';
 import { PostData } from '../post/post.component'
-import { UserProfile } from 'app/utils/user';
 
 export interface PostEditData {
   id?: string;
@@ -15,41 +15,67 @@ export interface PostEditData {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })
-export class EditComponent extends DatabaseCollection<PostData> {
+export class EditComponent extends DatabaseDocument<PostData> {
 
-  private post: DatabaseDocument<PostData>;
   public data: PostData;
 
-  constructor(user: UserProfile, db: DatabaseService, private dlg: MatDialogRef<PostData>, @Inject(MAT_DIALOG_DATA) post: PostEditData) { 
+  get author(): UserData { return this.user.data || {}; }
 
-    super(db, `users/${user.id}/feed`);
+  constructor(db: DatabaseService, private user: UserProfile, private dlg: MatDialogRef<PostData>, @Inject(MAT_DIALOG_DATA) post: PostEditData) { 
+    
+    // Computes the doc path either if existing or new
+    super(db, `users/${user.uid}/feed/${post?.id || db.col(`users/${user.uid}/feed`).doc().id }`);
 
-    this.post = this.load(post?.id);
+    console.log(`${ post?.id ? 'Opening' : 'New' } document`, this.ref.id);
+
+    // Opens the existing document...
+    if(post?.id) { this.get().then( data => this.data = data ); }
+    
+    //... or draft a new empty one
+    else {
+      this.data = { 
+        id: this.ref.id,
+        tags: ['public'],
+        author: this.user.uid,
+        type: 'document', content: [{ 
+          type: 'paragraph', content: [{ 
+            type: 'text', value: '' 
+      }]}]};
+    }
   }
 
-  private load(id?: string): DatabaseDocument<PostData>|null {
+  public addTag({ input, value }: MatChipInputEvent): void {
 
-    if(!id) { return null; }
+    
+    
+    // Add our fruit
+    if ((value || '').trim()) {
+      //this.fruits.push({name: value.trim()});
+    }
 
-    const doc = this.document(id);
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
 
-    doc.get().then( data => this.data = data );
+  public removeTag(tag: string): void {
 
-    return doc;
+    console.log(tag);
+
+    //const index = this.fruits.indexOf(fruit);
+
+    /*if (index >= 0) {
+      this.fruits.splice(index, 1);
+    }*/
   }
 
   saveAndClose() {
 
-    if(this.post) {
-
-      this.post.update(this.data)
-        .then( () => this.dlg.close() );
-    }
-    else {
-
-      this.add(this.data)
-        .then( () => this.dlg.close() );
-
-    }  
+    console.log('Saving', this.data);
+/*
+    this.upsert(this.data)
+      .then( () => this.dlg.close() );
+*/
   }
 }

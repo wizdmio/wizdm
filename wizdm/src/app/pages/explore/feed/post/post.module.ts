@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { MatButtonModule } from '@angular/material/button';
 //import { MatBadgeModule } from '@angular/material/badge';
-//import { MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
@@ -24,7 +24,7 @@ import { PostComponent } from './post.component';
     FlexLayoutModule,
     MatButtonModule,
     //MatBadgeModule,
-    //MatMenuModule,
+    MatMenuModule,
     MatChipsModule,
     //MatTooltipModule,
     MatDividerModule,

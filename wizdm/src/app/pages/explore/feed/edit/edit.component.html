@@ -1,23 +1,65 @@
 
+<!-- Gets the localized content -->
 <ng-container *wmContent="let msgs select 'explorer-feed-edit'">
         
-  <h4 mat-dialog-title>{{ msgs.title || "New Post" }}</h4>
+  <!-- Common header with close button -->
+  <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
     
-  <!--mat-divider></mat-divider-->
+    <span>{{ msgs.title || "New Post" }}</span>
+    
+    <!-- Closes the dialog returning null -->
+    <button mat-icon-button [mat-dialog-close]="null">
+      <wm-icon inline="true" icon="close"></wm-icon>
+    </button>
 
+  </header>
+    
+  <mat-divider></mat-divider>
+
+  <!-- Author's info -->
+  <div fxLayout="row" fxLayoutAlign="start center" class="author">
+  
+    <!-- Author's picture -->
+    <wm-avatar class="avatar" [src]="author.photo"></wm-avatar>
+    
+    <!-- Author's name -->
+    <b>{{ author.fullName }}</b>
+            
+  </div>
+
+  <!-- Tag list editor -->
+  <!--mat-form-field style="width: 100%;">
+    <mat-label>Tags</mat-label>
+    <mat-chip-list #tagList aria-label="Tags">
+      <mat-chip *ngFor="let tag of data.tags" removable (removed)="removeTag(tag)">
+        <span class="mat-small">{{ tag }}</span>
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="New tag..." [matChipInputFor]="tagList" (matChipInputTokenEnd)="addTag($event)" />
+    </mat-chip-list>
+  </mat-form-field-->
+
+  <!-- Body editor -->
   <mat-dialog-content>
 
-    <section [wm-editable-document]="data" 
+    <section [wm-editable-document]="data" (change)="data = $event"
              [customClasses]="{ a: 'primary', caption: 'mat-small' }"
-             class="body"
-             edit>
-    </section>
+             class="body" edit cdkFocusInitial #body="Editable">
+    </section>    
 
   </mat-dialog-content>
 
-  <mat-dialog-actions align="end">
+  <mat-dialog-actions align="start">
 
-    <button mat-button color="primary" (click)="saveAndClose()" cdkFocusInitial>{{ msgs.save || "Post" }}</button>
+    <div fxFlex="100%" fxLayout="column" fxLayoutGap="8px">
+
+      <!--mat-divider></mat-divider-->
+
+      <wm-post-toolbar [sel]="body.selection" color="primary"></wm-post-toolbar>
+
+      <button mat-flat-button fxFlex="100%" color="primary" (click)="saveAndClose()">{{ msgs.save || "Post" }}</button>
+
+    </div>
  
   </mat-dialog-actions>
   
