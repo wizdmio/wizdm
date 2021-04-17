@@ -48,9 +48,10 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public set(data: Partial<T>): Promise<void> {
 
+    const { id, updated, ...sanitized } = data;
     const created = this.db.timestamp;
     return this.ref ? this.ref.set({
-      ...data,
+      ...sanitized,
       created
     } as T) : refReject();
   }
@@ -61,18 +62,20 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public merge(data: Partial<T>): Promise<void> {
     
+    const { id, created, ...sanitized } = data;
     const updated = this.db.timestamp;
     return this.ref ? this.ref.set({
-      ...data,
+      ...sanitized,
       updated
     } as T, { merge: true } ) : refReject();
   }
 
   public mergeFields(data: Partial<T>, ...fields: (string|FieldPath)[]): Promise<void> {
     
+    const { id, created, ...sanitized } = data;
     const updated = this.db.timestamp;
     return this.ref ? this.ref.set({
-      ...data,
+      ...sanitized,
       updated
     } as T, { mergeFields: [...fields, 'updated'] } ) : refReject();
   }
@@ -83,9 +86,10 @@ export class DatabaseDocument<T extends DocumentData> {
    */
   public update(data: Partial<T>): Promise<void> {
 
+    const { id, created, ...sanitized } = data;
     const updated = this.db.timestamp;
     return this.ref ? this.ref.update({
-      ...data,
+      ...sanitized,
       updated
     } as T) : refReject();
   }

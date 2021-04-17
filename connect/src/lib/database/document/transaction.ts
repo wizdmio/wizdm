@@ -12,9 +12,10 @@ export class DatabaseTransaction {
    */
   public set<T extends DocumentData>(ref: DocumentRef<T>, data: T): this {
 
+    const { id, updated, ...sanitized } = data;
     const created = this.db.timestamp;
     return this.trx.set(ref, {
-      ...data as any,
+      ...sanitized as any,
       created
     }), this;
   }
@@ -25,9 +26,10 @@ export class DatabaseTransaction {
    */
   public merge<T extends DocumentData>(ref: DocumentRef<T>, data: T): this {
     
+    const { id, created, ...sanitized } = data;
     const updated = this.db.timestamp;
     return this.trx.set(ref, {
-      ...data as any,
+      ...sanitized as any,
       updated
     }, { merge: true } ), this;
   }
@@ -38,9 +40,10 @@ export class DatabaseTransaction {
    */
   public update<T extends DocumentData>(ref: DocumentRef<T>, data: T): this {
 
+    const { id, created, ...sanitized } = data;
     const updated = this.db.timestamp;
     return this.trx.update(ref, {
-      ...data as any,
+      ...sanitized as any,
       updated
     }), this;
   }
