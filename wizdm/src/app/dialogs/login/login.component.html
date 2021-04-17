@@ -53,7 +53,7 @@
         {{ msgs.errors?.passwordRequired }}
       </mat-error>
 
-      <mat-hint class="mat-small" align="end" *ngIf="page === 'signIn'" [wm-readme]="msgs.forgot" (navigate)="switchPage($event)" @morph>
+      <mat-hint class="mat-small" align="end" *ngIf="page === 'signIn'" [wm-readme]="msgs.forgot" linkClass="primary" (navigate)="switchPage($event)" @morph>
         <a (click)="switchPage('forgotPassword')">Forgot password?</a>
       </mat-hint>
     </mat-form-field>
@@ -93,8 +93,8 @@
 
   <!-- INSTRUCTIONS -->
   <p *ngIf="msgs.pages[page]?.instructions as instructions" 
-      class="mat-small bit-of-space" 
-      [wm-readme]="instructions" 
+      class="mat-small bit-of-space"
+      [wm-readme]="instructions" linkClass="primary"
       (navigate)="switchPage($event)"
       [@vanish]="page"></p>
 
