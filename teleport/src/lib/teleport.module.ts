@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { PortalDirective } from './portal.directive';
 import { TeleportDirective } from './teleport.directive';
 import { TeleportConfigToken, TeleportConfig } from './teleport.service';
-import { OnNextAnimationFramePipe } from './pipes';
 
 @NgModule({
   imports: [ CommonModule ],
-  declarations: [ PortalDirective, TeleportDirective, OnNextAnimationFramePipe ],
-  exports: [ PortalDirective, TeleportDirective, OnNextAnimationFramePipe ]
+  declarations: [ PortalDirective, TeleportDirective ],
+  exports: [ PortalDirective, TeleportDirective ]
   
 })
 export class TeleportModule { 

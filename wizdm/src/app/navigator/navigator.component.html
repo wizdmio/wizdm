@@ -122,7 +122,7 @@
 
     <!-- Side Navigation Panel (fixed) -->
     <mat-sidenav class="mat-elevation-z3" fixedInViewport 
-                                          [style.padding-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)" 
+                                          [style.padding-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | schedule:'asap')" 
                                           [style.width]="sideOptions?.width"
                                           [style.min-width]="sideOptions?.minWidth"
                                           [style.max-width]="sideOptions?.maxWidth"
@@ -142,11 +142,11 @@
   
     <!-- Main content wrapping page and footer -->
     <mat-sidenav-content fxFlex="1 1 auto" fxLayout="column" 
-                         [style.margin-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)"
-                         [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0">
+                         [style.margin-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | schedule:'asap')"
+                         [style.margin-bottom.px]="(footer?.clientHeight | schedule:'asap') || 0">
 
       <!-- Page container to fit all the available space setting the animation viewport -->
-      <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center stretch" class="page" wmAnimateView [top]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)">
+      <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="center stretch" class="page" wmAnimateView [top]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | schedule:'asap')">
 
         <!-- Pages will fit here -->
         <router-outlet></router-outlet>
@@ -170,8 +170,8 @@
       <!-- Fab portal. Activates when content is teleported to one of the 'fab-[side]-[edge]' portals -->
       <wm-fab-portal [mobile]="mobile"
                      [style.margin-left.px]="container?._contentMargins.left || 0"
-                     [style.margin-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | onNextAnimationFrame)"
-                     [style.margin-bottom.px]="(footer?.clientHeight | onNextAnimationFrame) || 0"></wm-fab-portal>
+                     [style.margin-top.px]="(navbar?.clientHeight || 0) + ((toolbar?.clientHeight || 0) | schedule:'asap')"
+                     [style.margin-bottom.px]="(footer?.clientHeight | schedule:'asap') || 0"></wm-fab-portal>
 
     </mat-sidenav-content>
 
