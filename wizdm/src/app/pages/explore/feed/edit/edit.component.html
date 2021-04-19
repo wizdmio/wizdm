@@ -42,10 +42,20 @@
   <!-- Body editor -->
   <mat-dialog-content>
 
-    <section [wm-editable-document]="data" (change)="data = $event"
+    <section [wm-editable-document]="data"
+             [attr.placeholder]="msgs.placeholder || 'What\'s uuuuuuup!'"
              [customClasses]="{ a: 'primary', caption: 'mat-small' }"
-             class="body" edit cdkFocusInitial #body="Editable">
-    </section>    
+             [class.empty]="body.empty | schedule:'asap'"
+             (longpress)="longpress.lookup($event)"
+             (change)="data = $event"
+             class="body" 
+             edit 
+             cdkFocusInitial 
+             #body="Editable">
+    </section>
+
+    <!-- Longpress key char alternatives -->
+    <wm-longpress color="primary" [sel]="body.selection" [caret]="body.caret" #longpress></wm-longpress> 
 
   </mat-dialog-content>
 

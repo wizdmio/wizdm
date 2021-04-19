@@ -43,32 +43,38 @@ export class EditableSelection {
     this.modified = this.valid && modified;
     return this;
   }
+  
   /** Sets the selection's start node */
   public setStart(node: EditableContent, ofs: number) {
     this.start = node;
     this.startOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
+  
   /** Sets the selection's end node */
   public setEnd(node: EditableContent, ofs: number) {
     this.end = node;
     this.endOfs = (!!node && ofs < 0) ? node.length : ofs;
     this.modified = true;
   }
+  
   /** Sets the selection range */
   public set(start: EditableContent, startOfs: number, end: EditableContent, endOfs: number): EditableSelection {
     this.setStart(start, startOfs);
     this.setEnd(end, endOfs);
     return this;
   }
+  
   /** Collapses the selection to a cursor at the specified position */
   public setCursor(node: EditableContent, ofs: number): EditableSelection {
     return this.set(node, ofs, node, ofs);
   }
+  
   /** Resets the selection as a cursor position at the very beginning of the document tree */
   public reset(): EditableSelection {
     return this.setCursor(this.root.firstDescendant() as any, 0);
   }
+  
   /** 
    * Collapses the curernt selection to a cursor
    * @param end (optional) when true, collapses the cursor to the end edge of the selection.
@@ -77,6 +83,7 @@ export class EditableSelection {
   public collapse(end?: boolean): EditableSelection {
     return !!end ? this.setCursor(this.end, this.endOfs) : this.setCursor(this.start, this.startOfs);
   }
+
   /** Moves the selection start and end points by the specified offsets */
   public move(deltaStart: number, deltaEnd?: number): EditableSelection {
     // Skips on invalid selection
@@ -87,6 +94,7 @@ export class EditableSelection {
     // Update the selection
     return this.set(start[0], start[1], end[0], end[1]);
   }
+
   /** Jumps to the previous text node skipping non text ones*/
   private previous(node: EditableContent, traverse: boolean = false): EditableContent {
 
@@ -94,6 +102,7 @@ export class EditableSelection {
     while(!!prev && !(prev instanceof EditableInline)) { prev = prev.previous(traverse); }
     return prev;
   }
+
   /** Jumps to the next text node skipping non text ones*/
   private next(node: EditableContent, traverse: boolean = false): EditableContent {
 
@@ -101,6 +110,7 @@ export class EditableSelection {
     while(!!next && !(next instanceof EditableInline)) { next = next.next(traverse); }
     return next;
   }
+
   /** Saves the current selection into the document data to be eventually restored by calling @see restore() */
   public save(document: EditableDocument): EditableDocument {
     // Skips on invalid selection
@@ -111,6 +121,7 @@ export class EditableSelection {
     document.setRange(start + this.startOfs, (this.single ? start : this.end.offset) + this.endOfs );
     return document;
   }
+
   /** Restores the selection range from the documenta data. @see save() */
   public restore(document: EditableDocument): EditableSelection {
     // Gets the range from the root data
@@ -118,11 +129,13 @@ export class EditableSelection {
     // Updates the selection to reflect the absolute range
     return !!range ? this.reset().move(range[0], range[0] !== range[1] ? range[1] : undefined) : this;
   }
+  
   /** Returns true whenever the start node/offset comes after the end ones */
   public get reversed(): boolean {
     if(!this.valid) { return false; }
     return this.start === this.end && this.startOfs > this.endOfs || this.start.compare(this.end) > 0;
   }
+  
   /** Sort the start/end selection nodes, so, to make sure start comes always first */
   public sort(): EditableSelection {
     // Compares the points' position
@@ -138,6 +151,7 @@ export class EditableSelection {
     }    
     return this;
   }
+  
   /** Helper function to loop on all the text nodes within the selection */
   private nodes(callbackfn: (node: EditableContent) => void): EditableSelection {
     // Skips on invalid selection
@@ -152,6 +166,7 @@ export class EditableSelection {
     }
     return this;
   }
+  
   /** Helper function to loop on all the containers within the selection */
   private containers(callbackfn: (container: EditableContent) => void): EditableSelection {
     // Skips on invalid selection
@@ -168,6 +183,7 @@ export class EditableSelection {
     }
     return this;
   }
+  
   /** Makes sure the selection falls within the inner nodes when on the edges.  */ 
   public trim(): EditableSelection {
     // Skips on invalid selection
@@ -187,6 +203,7 @@ export class EditableSelection {
 
     return this;
   }
+  
   /** Forces the selection to wrap around the closes text word boundaries */
   public wordWrap(): EditableSelection {
     // Skips on invalid selection
@@ -220,6 +237,7 @@ export class EditableSelection {
     this.start.insert(char, this.startOfs);
     return this.move(char.length);
   }
+  
   /** Deletes the selection from the document tree */
   public delete(): EditableSelection {
     // Skips on invalid selection
@@ -249,6 +267,7 @@ export class EditableSelection {
     // Updates the cursor position
     return this.setCursor(this.start, ofs);
   }
+  
   /** Deletes the selection, if any, or the following char when collapsed */
   public del(): EditableSelection {
     // Skips on invalid selection
@@ -293,6 +312,7 @@ export class EditableSelection {
     // Deletes the selection
     return this.delete();
   }
+  
   /**
    * Breaks the selection by inserting a new line char or an entire new editable block
    * @param newline when true, a new line charachter wil be used to break the selection,
@@ -324,6 +344,7 @@ export class EditableSelection {
     // Updates the cursor position
     return this.setCursor(node, 0);
   }
+  
   /** Splits the seleciton at the edges, so, the resulting selection will be including full nodes only */
   public split(): EditableSelection {
     // Skips on invalid selection
@@ -341,6 +362,7 @@ export class EditableSelection {
     }
     return this;
   }
+  
   /** 
    * Defragments the selections, so, minimizing the number of text nodes comprised in it
    * by joining siblings sharing the same attributes.
@@ -357,20 +379,24 @@ export class EditableSelection {
     // Returns the selection supporting chaining
     return this;
   }
+  
   /** Returns the current selection alignement (corresponding to the start node container's) */
   public get align(): EditableAlignType {
     return this.valid ? this.start.align : 'left';
   }
+  
   /** Applies the given alignemnt to the selection */
   public set align(align: EditableAlignType) {
 
     this.store().containers( container => container.align = align ).mark();
 
   }
+
   /** Returns the current selection level (corresponding to the start node container's) */
   public get level(): EditableSizeLevel { 
     return this.valid ? this.start.level : 0;
   }
+  
   /** Applies a new level to the selection */
   public set level(level: EditableSizeLevel) {
     // Skips on invalid selection
@@ -378,10 +404,12 @@ export class EditableSelection {
     // Applies the level on the containers within the selection
     this.store().containers( container => container.level = level ).mark();
   }
+  
   /** Returns the style of the selection always corresponding to the style of the start node */
   public get style(): EditableTextStyle[] {
     return this.valid ? this.start.style : [];
   }
+  
   /** Applies the given style to the selection */
   public set style(style: EditableTextStyle[]) {
     // Skips on invalid selection
@@ -394,10 +422,12 @@ export class EditableSelection {
       this.trim().split().nodes( node => node.style = style ).defrag();
     }
   }
+  
   /** Resets the selection style removing all formatting */
   public clear(): EditableSelection {
     return this.style = [], this;
   }
+  
   /** 
    * Applies (or removes) a given style set to the selection.
    * @param style style array to be applied.
@@ -420,6 +450,7 @@ export class EditableSelection {
     // Defragments the text nodes when done
     return this.defrag();
   }
+  
   /** Toggles a single format style on/off */
   public toggleFormat(style: EditableTextStyle): EditableSelection {
     const remove = this.style.some( s => s === style );
@@ -574,6 +605,7 @@ export class EditableSelection {
       this.start.compare(node) <= 0 && this.end.compare(node) >= 0
     );
   }
+  
   /** Returns a tree fragment containing a copy of the selection  */
   public copy(): EditableContent {
     // Skips on invalid selection

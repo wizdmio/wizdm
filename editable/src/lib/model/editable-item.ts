@@ -1,5 +1,5 @@
 import { EditableContainer } from './editable-container';
-import { EditableItemData, EditableHeadingData, EditableParagraphData, EditableSizeLevel } from './editable-types';
+import { EditableItemData, EditableHeadingData, EditableSizeLevel } from './editable-types';
 
 export class EditableItem extends EditableContainer<EditableItemData> {
 

@@ -15,48 +15,68 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
 
   /** Returns the parent container */
   get container(): EditableContent { return this.parent; }
+  
   /** Returns the node private data */
   get data(): T { return this.node; }
+  
   /** Returns the node type */
   get type(): EditableNodeType { return this.node.type; }
+  
   /** Sets/gets the node alignement */
   set align(align: EditableAlignType) { }
   get align(): EditableAlignType { return null; }
+  
   /** Sets/gets the node level */
   get level(): EditableSizeLevel { return 0; }
   set level(level: EditableSizeLevel) { }
+  
   /** Returns the array of children */
   get content(): EditableContent[] { return this.children || (this.children = []); }
+  
   /** Returns the number of child nodes */
   get count(): number { return this.content.length; }
+  
   /** Return the node depth within the tree */
   get depth(): number { return (this.position || []).length; }
+  
   /** Returns the node unique ID based on node absolute position in the tree */
   get id(): string { return 'N'+(this.position || []).join('.'); }
-  /** Returns true wheneer this node has no content */
+  
+  /** Returns true whenever this node has no content */
   get empty(): boolean { return this.content.every( child => child.empty ); }
+  
   /** Returns true whenever this node has been removed from the tree */
   get removed(): boolean { return !this.parent || !this.parent.childOfMine(this);}
+  
   /** Returns true wheneve this node is the only child within its parent */
   get alone(): boolean { return this.removed || this.parent.count <= 1; }
+  
   /** Returns true whenever the node is the first child within its parent */
   get first(): boolean { return !this.removed && this.index === 0; }
+  
   /** Returns true whenever the node is the last child within its parent */
   get last(): boolean { return !this.removed && this.index === this.parent.count - 1; }  
+  
   /** Sets/Gets the text value of all the content nodes */
   set value(text: string) { this.set(text); }
   get value(): string { return this.content.reduce( (txt, node) => txt + node.value + node.pad, '');}
+  
   /** Returns the appropriate pad character to terminate the node value */
   get pad(): string { return this.last ? '' : '\n'; }
+  
   /** Returns the value's length */
   get length(): number { return this.value.length; }
+  
   /** Sets/Fets the style array for the content */
   set style(style: EditableTextStyle[]) { this.content.forEach( node => node.style = style ); }
   get style(): EditableTextStyle[] { return this.count > 0 ? this.firstChild().style : []; } 
-  /** Return the associated irl, if any */
+  
+  /** Return the associated url, if any */
   get url(): string { return ''; }
+  
   /** Initializes the node data */
   public init(data: T): this { return (this.node = data), this; }
+  
   /** Sets the text value of the contained nodes returning this for chaining */
   public set(text: string): this { return this.content.forEach( node => node.value = text ), this; }
 
@@ -71,12 +91,15 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public split(from: number, to?: number): this { return this; }
   public link(url: string): this { return this; }
   public break(): this { return this; }
+  
   // Recursively apply or unapply text formatting to the content 
   public format(style: EditableTextStyle[]): this { return this.content.forEach( node => node.format(style) ), this;}
   public unformat(style: EditableTextStyle[]): this { return this.content.forEach( node => node.unformat(style) ), this;}
+  
   // Disable joining and defragment on structural nodes
   public join(node: EditableContent): this { return this; }
   public same(node: EditableContent): boolean { return false; }
+  
   /** 
    * Merges the two nodes. Merging nodes implies that the target node content
    * is appended to the source while all the tree nodes in between are removed 
@@ -98,6 +121,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Return this for chaining
     return this;
   }
+
   /** Loads the source document building the data tree */
   public load(source: T): this {
     // Assigns the source to the node data
@@ -115,6 +139,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
 
     return this;
   }
+
   /**
    * Inherits the node coordinates from the specified parent
    * @param parent the parent node to inherit from
@@ -132,6 +157,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Return this to support chaining
     return this;
   }
+
   /** Refreshes children inheritance recurring along descendants 
    * @param from (optional) optionally start from a non-zero index 
    */
@@ -143,10 +169,12 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     }
     return this;
   }
+
   /** Clones a node with or whithout its children */
   public clone(withChildren: boolean = true): this { 
     return this.create.clone(this as EditableTypes, withChildren) as this; 
   }
+
   /**
    * Compares two nodes position
    * @param node the node to be compared with
@@ -169,10 +197,11 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // We should never come down here unless two different nodes have the same position
     return 0;
   }
+
   /** 
    * Returns an array of all the ancestors' types up to the specified depth 
-   * @param depth the node level to drive the search up to. Specifying 'inline'
-   * drives the search up to the level containing inline text nodes only
+   * @param depth the node level to drive the search up to.
+   * @returns an array with all the ancestors
   */
   public ancestors(depth: number = 0): EditableNodeType[] {
     // Stops when done
@@ -184,6 +213,11 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     return ancestors;
   }
 
+  /** 
+   * Returns the ancestor node for the given depth 
+   * @param depth the node level to drive the search up to.
+   * @returns the requested ancestor node or null
+  */
   public ancestor(depth: number): EditableContent {
     // Skips wrong levels
     if(this.depth < depth) { return null; }
@@ -193,10 +227,16 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     return !!this.parent ? this.parent.ancestor(depth) : null;
   }
 
+  /**
+   * Clims up the tree until the ancestor matches one of the given types
+   * @param types a list of types to climb up to
+   * @returns the first node matching on of the given types
+   */
   public climb(...types: EditableNodeType[]): EditableContent {
     if(!types || !this.parent) { return null; }
     return types.some( type => type === this.type ) ? this : this.parent.climb(...types);
   }
+
   /** 
    * Seeks for a common ancestor between this and the requested node 
    * @param node the node to be compared with
@@ -221,6 +261,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Found!
     return this.parent;
   }
+
   /** Returns true whenever the tow nodes belongs to the same cocntainer */
   public siblings(node: EditableContent): boolean {
     
@@ -236,9 +277,11 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     return !!node && (this.childOfMine(node) || this.content.some( child => child.descendantOfMine(node) ));
   }
 
+  /** Returns the relative index of the given node provided is a child. Returns -1 otherwise */
   public findIndex(child: EditableContent): number {
     return this.childOfMine(child) ? child.index : -1;
   }
+
   /**
    * Splices the node content (children array) refreshing the siblings
    * @param start child or index of which starting to change the array
@@ -261,6 +304,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Return the removed nodes
     return nodes;
   }
+
   /** Wraps the node with the specified container updating the hierarchy, if any*/
   public wrap(type: EditableNodeType): EditableContent {
     // Creates a new node to wrap this node with
@@ -273,6 +317,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     return wrap;
   }
 
+  /** Unwraps the node content into the parent's */
   public unwrap(): EditableContent {
     // Skips unwrapping removed nodes
     if(this.removed) { return this; }
@@ -281,6 +326,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Return the container node the unwrapped content now belongs to
     return this;
   }
+
   /** 
    * Removes this node from the tree recurring up along the tree
    * to remove empty ancestors if any.
@@ -295,6 +341,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Returns the removed node
     return node;
   }
+
   /** 
    * Append a child node updating the tree
    * @param node the new child
@@ -304,6 +351,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Pushes the node into the content array
     return this.splice(this.count, 0, node), node;
   }
+
   /**
    * Inserts a node before the specified one
    * @param before the child node to shift
@@ -313,6 +361,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public insertBefore(before: EditableContent, node: EditableContent): EditableContent {    
     return this.childOfMine(before) ? (this.splice(before.index, 0, node), node) : null;
   }
+
   /**
    * Inserts a node after the specified one
    * @param after the child node after wich to insert the new child
@@ -322,6 +371,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public insertAfter(after: EditableContent, node: EditableContent): EditableContent {  
     return this.childOfMine(after) ? (this.splice(after.index + 1, 0, node), node) : null;
   }
+
   /** 
    * Insert a sibling node before this one 
    * @param node the node to be inserted
@@ -330,6 +380,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public insertPrevious(node: EditableContent): EditableContent {
     return !!this.parent ? this.parent.insertBefore(this, node) : null;
   }
+
   /** 
    * Insert a sibling node after this one 
    * @param node the node to be inserted
@@ -338,28 +389,34 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public insertNext(node: EditableContent): EditableContent {
     return !!this.parent ? this.parent.insertAfter(this, node) : null;
   }
+
   /** Returns the child node at the specified position or null */
   public childAt(index: number): EditableContent {
     return index >= 0 && index < this.count ? this.content[index] : null;
   }
+
   /** Returns the last child node in this parent list */
   public lastChild(): EditableContent {
     return this.childAt(this.count-1);
   }
-   /** Returns the first child node in this parent list */
+
+  /** Returns the first child node in this parent list */
   public firstChild(): EditableContent{
     return this.childAt(0);
   }
+
   /** Returns the deepest descendant of the last child */
   public lastDescendant(): EditableContent {
     const last = this.lastChild();
     return !!last ? last.lastDescendant() : this;
   }
+
   /** Returns the deepest descendant of the first child */
   public firstDescendant(): EditableContent{
     const first = this.firstChild();
     return !!first ? first.firstDescendant() : this;
   }
+
   /** 
    * Jumps to the previous sibling node.
    * @return the node immediately preceding this in its parent's list, 
@@ -368,6 +425,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public previousSibling(): EditableContent {
     return (!!this.parent) ? this.parent.childAt(this.index-1) : null;
   }
+
   /** 
    * Jumps to the next sibling node.
    * @return the node immediately following this in its parent's list, 
@@ -376,6 +434,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   public nextSibling(): EditableContent {
     return (!!this.parent) ? this.parent.childAt(this.index+1) : null;
   }
+
   /**
    * Jumps to the previous node traversing the tree when necessary.
    * @param traverse (default = true) when false, behaves like previousSibling()
@@ -389,6 +448,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     if(!traverse) { return sibling; }
     return !!sibling ? sibling.lastDescendant() : this.parent.previous();
   }
+
   /**
    * Jumps to the next node traversing the tree when necessary.
    * @param traverse (default = true) when false, behaves like nextSibling()
@@ -416,6 +476,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Returns the offset recurring up the tree
     return offset + this.parent.offset;
   }
+
   /** Moves from the current node towards the sibling leafs based on the absolut value position */
   public move(offset: number): [EditableContent, number] {
     // Gets a reference to this nodes
@@ -449,7 +510,12 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Return the new node/offset pair
     return [node, offset]; 
   }
-  /** Traverse the tree till the node requested by id */
+
+  /** 
+   * Traverse the tree till the node requested by id 
+   * @param id the dom node id in the form N0.1.3...
+   * @returns the node
+   */
   public walkTree(id: string): EditableContent {
     // Turns the element id into the node absolute position
     const pos = !!id ? id.replace(/[^0-9\.]+/g, '').split('.').map( n => +n ) : [];
@@ -461,7 +527,8 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Found it!
     return node;
   }
-  /** Helper function to perform depth-first lke tree traversal minimizing the number of traversed node */
+
+  /** Helper function to perform depth-first like tree traversal minimizing the number of traversed node */
   private traverse(node: EditableContent, callbackfn: (left: EditablePosition, right: EditablePosition) => EditableContent): EditableContent {
     // Skips on null or invalid parameters
     if(!node || typeof callbackfn !== 'function') { return null; }
@@ -480,6 +547,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     }
     return null;
   }
+
   /** 
    * Remove branches between the two nodes
    * @param node the node to remove branches up to.
@@ -508,8 +576,9 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Done recurring
     return this;
   }
+
   /** 
-   * Return a copy of the tree between the two nodes (includes) as a document fragment 
+   * Return a copy of the tree between the two nodes (included) as a document fragment 
    * so always reflecting a document(/block)/item/text hierarchy
    */
   public fragment(node: EditableContent): EditableContent {
@@ -563,6 +632,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Done recurring
     return node;
   }
+
   /** Cleaves the tree between this node and the next sibling climbing up till the root node*/
   public cleave(): EditableContent {
     // Done when removed or we reached the top 
@@ -575,8 +645,9 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
         .splice(0, 0, ...this.parent.splice(next, -1));
     }
     // Climbs up the tree
-    return this.parent.cleave();
+    return this.parent.cleave();    
   } 
+
   /**
    * Defragments the tree content, so, text nodes are minimized
    * by joining siblings when sharing the same attributes
@@ -598,6 +669,11 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     return this;
   }
 
+  /** 
+   * Indent the node into a block/list merging with preceeding or following blocks/lists when matching 
+   * @param type the type of the parent node
+   * @returns the parent block/list node 
+   */
   public indent(type: EditableIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }
@@ -608,7 +684,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     const block = (!!prev && prev.type === type) ? (prev.appendChild( this.remove() ), prev) : this.wrap(type);
     // Checks on the following sibling
     const next = block.nextSibling();
-    // Merges the next sibling bloxk when matching the same type
+    // Merges the next sibling block when matching the same type
     if(!!next && next.type === type) { 
       block.appendChild( next.remove() ).unwrap(); 
     }
@@ -616,6 +692,11 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     return block;
   }
 
+  /** 
+   * Outdent a node from the parent block/list splitting the parent whenever necessary 
+   * @param type the type of the parent node
+   * @returns the parent node 
+   */
   public outdent(type: EditableIndentType): EditableContent {
     // Skips on invalid nodes
     if(this.removed) { return this; }

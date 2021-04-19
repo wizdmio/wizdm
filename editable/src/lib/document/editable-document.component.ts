@@ -18,6 +18,7 @@ import { take } from 'rxjs/operators';
 export class DocumentComponent extends DocumentViewer implements AfterViewChecked {
 
   private selection = new EditableSelection(this);
+  private longpressed: boolean = false;
   private editMode = false;
   public caret: ClientRect;
 
@@ -96,8 +97,13 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
   @HostListener('keyup', ['$event']) KeyUp(ev: KeyboardEvent) {
     // Query the selection, so, it's always up to date
     if(this.editMode) { this.query(); }
-    // Abort longpress on keyUp
-    this.longpressClear();
+    // Resets longpress on keyUp
+    this.longpressed = false;
+  }
+
+  @HostListener('blur') blur() {
+    // Resets longpress on blur
+    this.longpressed = false;
   }
 
   @HostListener('keydown', ['$event']) keyDown(ev: KeyboardEvent) {
@@ -125,10 +131,19 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
       return sel.break(ev.shiftKey), false;
       // Editing
       default: if(ev.key.length === 1) {
-        // Prevents repeating chars whenever LongPress is enabled
-        if(ev.repeat && this.longpressEnabled) { return this.longpressDefer(ev, 0), false; }
+
         // Inserts new content
-        return sel.insert(ev.key), false;
+        if(!ev.repeat) { sel.insert(ev.key); }
+        else if(!this.longpressed) {
+
+          // Disables further emissions untile reset
+          this.longpressed = true;
+
+          // Emits the longpress event
+          this.longpress.emit(ev);          
+        }
+        // Prevents default
+        return false; 
       }
     }
     // Fallback to default
@@ -260,6 +275,8 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
     // Resets the values in case the range is undefined or null
     else { this.selection.setCursor(undefined, 0); }
 
+    //console.log("query", this.selection.start.id, this.selection.startOfs, this.selection.end.id, this.selection.endOfs);
+
     // Resets the modified flag
     return this.selection.mark(false);
   }
@@ -316,6 +333,8 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
       range.setStart(...start);
       range.setEnd(...end);
       sel.addRange(range);
+
+      //console.log("apply", start[0], start[1], end[0], end[1]);
     }
     catch(e) { console.error(e); }
 
@@ -332,6 +351,7 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
   }
 
   private dom(node: EditableContent, offset: number): [Node, number] {
+
     // Seeks for the dom element matching the internal node id
     const el = !!node ? this.queryElement(node.id) : null;
     if(!el) { return null; }// No element found
@@ -354,30 +374,23 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
     return [el.parentNode, count + offset];
   }
 
-  private longpressTimer: number;
-
-  // Returns true whenever the LongPress event is subscribed by an observer
-  get longpressEnabled(): boolean { return this.longpress.observers.length > 0; }
-
-  private longpressDefer(ev: KeyboardEvent, delay: number) {
-    if(!this.longpressTimer) { 
-      setTimeout( ev => this.longpressTimer = (this.longpress.emit(ev), undefined), delay, ev); 
-    }
-  }
-
-  private longpressClear() {
-    if(this.longpressTimer) { 
-      this.longpressTimer = ( clearTimeout(this.longpressTimer), undefined ); 
-    }
-  }
-
+  // Defers the execution of fn() right after the zone stabilized, so, when the latest rendering round has completed.
   private defer(fn: () => void) {
 
-    this.zone.runOutsideAngular(() => {
-
-      if(this.zone.isStable) { fn(); }
+    // Runs fn() straight away whenver the zone is stable
+    if(this.zone.isStable) { fn(); }
+    else { 
       
-      else { this.zone.onStable.pipe(take(1)).subscribe( fn ); }
-    });
+      // Runs outside the angular'z zone preventing undesired change-detections to occur
+      this.zone.runOutsideAngular(() => {
+
+        // Waits until the zone stabilizes
+        this.zone.onStable.pipe(take(1)).subscribe( () => {
+          
+          // Runs fn() back into angular's zone
+          this.zone.run(fn);
+         }); 
+      });
+    }
   }
 }

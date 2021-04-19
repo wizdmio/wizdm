@@ -44,13 +44,13 @@
 
       <button mat-menu-item>
         <wm-icon icon="far:fa-bookmark"></wm-icon>
-        {{ msgs.actions?. save || 'Save' }}
+        <span>{{ msgs.actions?.save || 'Save post' }}</span>      
       </button>
 
       <!-- Enables editing -->
       <button mat-menu-item routerLink="edit" [queryParams]="{ id: data.id }" *ngIf="(author$ | async).id === me">
         <wm-icon icon="far:fa-edit"></wm-icon>
-        {{ msgs.actions?. save || 'Edit' }}
+        <span>{{ msgs.actions?.edit || 'Edit post' }}</span>        
       </button>
 
     </mat-menu>
@@ -69,7 +69,7 @@
   <mat-chip-list aria-label="Tags" [selectable]="false">
     
     <mat-chip *ngFor="let tag of data.tags">
-      <span class="mat-small">{{ tag }}</span> 
+      <span class="mat-small">{{ tag | titlecase }}</span> 
     </mat-chip>
     
   </mat-chip-list>

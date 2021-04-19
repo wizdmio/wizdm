@@ -17,7 +17,12 @@
       <table *ngSwitchCase="'table'" [class]="customClasses?.table" [wm-table]="child" [customClasses]="customClasses"></table>
   
       <!-- Renders the caption (actually the editable part) -->
-      <figcaption *ngSwitchCase="'caption'" [class]="customClasses?.caption" [wm-editable]="child"></figcaption>
+      <ng-container *ngSwitchCase="'caption'">
+        
+        <!-- Hides empty caption whenin view mode -->
+        <figcaption *ngIf="document.edit || !child.empty" [class]="customClasses?.caption" [wm-editable]="child"></figcaption>
+
+      </ng-container>
   
     </ng-container>
   

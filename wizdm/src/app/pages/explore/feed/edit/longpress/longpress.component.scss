@@ -1,0 +1,41 @@
+
+:host {
+  position: fixed;
+  display: inline-block;
+  box-sizing: border-box;
+
+  ul {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 2px;
+    margin: 0px;
+    font-size: 12pt;
+    border-width: 1px;
+    border-style: solid;
+    list-style-type: none;
+    line-height: 21px;
+    border-radius: 5px;
+
+    li {
+      position: relative;
+      display: inline-block;
+      box-sizing: border-box;
+      line-height: 21px;
+      border-radius: 4px;
+      text-align: center;
+      min-width: 24px;
+      
+      cursor: pointer;
+    }
+
+    .number {
+      display: block;
+      font-weight: lighter;
+      text-align: center;
+      font-size: 9pt;
+      padding: 0px;
+      margin: 0px;
+    }
+  }
+}

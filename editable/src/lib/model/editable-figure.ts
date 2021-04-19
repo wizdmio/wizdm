@@ -2,7 +2,6 @@ import { EditableFigureData, EditableImageData, EditableCaptionData, EditableAli
 import { EditableContainer } from './editable-container';
 import { EditableContent } from './editable-content';
 
-
 export class EditableFigure extends EditableContent<EditableFigureData> {
 
   /** Sets/gets the container alignement */
@@ -28,8 +27,7 @@ export class EditableFigure extends EditableContent<EditableFigureData> {
 
 export class EditableImage extends EditableContent<EditableImageData> {
 
-  // Overridnes the default value
-  get pad(): string { return ''; }
+  get empty(): boolean { return this.url.length <= 0; }
 
   // Implements image specifics
   get url(): string { return this.data.url || ''; }

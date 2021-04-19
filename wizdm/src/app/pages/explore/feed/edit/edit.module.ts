@@ -10,9 +10,11 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from '@angular/material/divider';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableDocumentModule } from '@wizdm/editable/document';
+import { SchedulePipesModule } from '@wizdm/pipes/schedule';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
 import { ToolbarModule } from './toolbar/toolbar.module';
+import { LongPressModule } from './longpress/longpress.module';
 import { EditComponent } from './edit.component';
 
 /** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
@@ -34,9 +36,11 @@ const routes: RoutesWithContent = [{
     MatDividerModule,
     MatFormFieldModule,
     EditableDocumentModule,
+    SchedulePipesModule,
     AvatarModule,
     IconModule,
     ToolbarModule,
+    LongPressModule,
     ContentRouterModule.forChild(routes)
   ],
   declarations: [ EditComponent ]

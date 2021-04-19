@@ -18,7 +18,24 @@
   }
 
   .body {
+    
     min-height: 200px;
+
+    // Uses ::before meta-element to simulate the placehoder
+    &::before {
+      // Contents comes from the placehoder attribute
+      content: attr(placeholder); 
+      position: absolute;
+      opacity: 0.5;
+
+      // The placeholder is normally hidden
+      visibility: hidden;
+    }
+
+    // Displays the placeholder when empty
+    &.empty::before {
+      visibility: visible;
+    }
   }
 
   .mat-dialog-actions {

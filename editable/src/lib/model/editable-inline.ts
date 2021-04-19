@@ -1,21 +1,26 @@
 import { EditableAlignType, EditableTextData, EditableTextStyle, EditableLinkData,  EditableInlineData, EditableSizeLevel } from './editable-types';
 import { EditableContent } from './editable-content';
 
-/** Implements text nodes */
+/** Implements text/link nodes */
 export class EditableInline extends EditableContent<EditableInlineData> {
+  
   // Overrides with inline specifics
   get value(): string { return this.node.value || ''; }
   set value(text: string) { this.node.value = text; }
   get pad(): string { return ''; }
   get empty(): boolean { return this.length <= 0;}
+  
   // text specifics
   set style(style: EditableTextStyle[]) { if(this.type === 'text') { (this.data as EditableTextData).style = [...style]; }}
   get style(): EditableTextStyle[] { return (this.type === 'text') ? (this.data as EditableTextData).style || ((this.data as EditableTextData).style = []) : []; } 
+  
   // link specifics
   get url(): string { return (this.data as EditableLinkData).url || ''; }
+  
   // Redirects to the parent container
   set align(align: EditableAlignType) { if(!!this.parent) { this.parent.align = align; } }
   get align(): EditableAlignType { return !!this.parent ? this.parent.align : 'left'; }
+  
   set level(level: EditableSizeLevel) { if(!!this.parent) { this.parent.level = level;} }
   get level(): EditableSizeLevel { return !!this.parent ? this.parent.level : 0; }
   
@@ -95,6 +100,7 @@ export class EditableInline extends EditableContent<EditableInlineData> {
 
     return this;
   }
+
   /** Turns the text node into a link or back*/
   public link(url: string): this {
 
@@ -114,6 +120,7 @@ export class EditableInline extends EditableContent<EditableInlineData> {
     
     return this;
   }
+
   /** 
    * Joins the text values of node into this removing the former from the tree.
    * @return this node supoprting chaining.
