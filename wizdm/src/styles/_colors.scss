@@ -9,6 +9,9 @@
     // Styles the text color
     .text-color { color: map-get($foreground, text); }
 
+    // Styles the text color
+    .hint-color { color: map-get($foreground, hint-text); }
+
     // Styles the background color
     .background-color { background-color: map-get($background, 'background'); }
 
