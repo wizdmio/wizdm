@@ -86,6 +86,28 @@ export abstract class DatabaseApplication {
     return firebase.firestore.FieldValue.arrayRemove(...elements);
   }
 
+  /** Turns a string into a index for simple single field search */
+  public searchableIndex(value: string): string[] {
+
+    // Skips empty values and splits by spaces
+    return value && value.split(/\s/).reduce( (out, token) => {
+
+      // Splits the token in UTF-16 compatible substrings.
+      let sub = "";        
+      for(let ch of token) {
+
+        sub += ch;
+        // Adds the subscring provided is unique
+        if(out.findIndex( index => index === sub ) < 0) {
+          out.push(sub);
+        }
+      }
+
+      return out;
+      
+    }, []) || [""];
+  }
+
   /** Creates a geopoint at the given lat and lng */
   public geopoint(lat: number, lng: number): GeoPoint {
     return new firebase.firestore.GeoPoint(lat, lng);

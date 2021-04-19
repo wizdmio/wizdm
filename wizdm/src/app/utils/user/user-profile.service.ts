@@ -135,7 +135,7 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
       data.fullName = `${data.name} ${data.lastName}`.replace(/^\s*|\s*$|(\s)\s+/g, '$1');
 
       // Computes the search index based on a lowered case full name
-      data.searchIndex = this.searchIndex(data.fullName.toLowerCase()); 
+      data.searchIndex = this.db.searchableIndex(data.fullName.toLowerCase()); 
     }
 
     return data;
@@ -165,26 +165,6 @@ export class UserProfile<T extends UserData = UserData> extends DatabaseCollecti
 
     // Tests the name for existance and recurs until an original name is found
     return test( guessName ).pipe( expand( (name, index) => name ? empty(): test( guessName + index.toString() ) ) ).toPromise();
-  }
-
-  /** Build a simple search index based on the user name */
-  private searchIndex(value: string): string[] {
-
-    return value && value.split(/\s/).reduce( (out, token) => {
-      // Splits the token in UTF-16 compatible substrings.
-      let sub = "";        
-      for(let ch of token) {
-
-        sub += ch;
-        // Adds the subscring provided is unique
-        if(out.findIndex( index => index === sub ) < 0) {
-          out.push(sub);
-        }
-      }
-
-      return out;
-      
-    }, []) || [""];
   }
 
   /**  Observes a user from the id */
