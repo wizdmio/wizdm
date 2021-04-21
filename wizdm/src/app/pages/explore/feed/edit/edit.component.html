@@ -45,7 +45,6 @@
     <section [wm-editable-document]="data"
              [attr.placeholder]="msgs.placeholder || 'What\'s uuuuuuup!'"
              [customClasses]="{ a: 'primary', caption: 'mat-small' }"
-             [class.empty]="body.empty | schedule:'asap'"
              (longpress)="longpress.lookup($event)"
              (change)="data = $event"
              class="body" 

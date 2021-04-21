@@ -23,7 +23,7 @@ export interface EditableDocumentCustomClasses
 @Component({
   selector: '[wm-editable-viewer]',
   templateUrl: './editable-viewer.component.html',
-  host: { 'class': 'wm-editable-viewer' }
+  host: { 'class': 'wm-editable-viewer', '[class.empty]': 'empty' }
 })
 export class DocumentViewer extends EditableDocument {
 

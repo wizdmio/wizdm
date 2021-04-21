@@ -13,14 +13,9 @@
       <h6 *ngIf="node.level === 6" [class]="customClasses?.h6" [wm-editable]="node" [customClasses]="customClasses"></h6>
     </ng-container>
 
-    <!-- Paragraphs -->
-    <ng-container *ngSwitchCase="'paragraph'">
-
-      <!-- Hides empty paragraphs at the end of the document when in view mode -->
-      <p *ngIf="edit || !(node.last && node.empty)" [class]="customClasses?.p" [wm-editable]="node" [customClasses]="customClasses"></p>
+    <!-- Paragraphs -->    
+    <p *ngSwitchCase="'paragraph'" [class]="customClasses?.p" [wm-editable]="node" [customClasses]="customClasses"></p>    
     
-    </ng-container>
-
     <!-- Blockquotes supporting paragraph and list indentation -->
     <blockquote *ngSwitchCase="'blockquote'" [class]="customClasses?.blockquote" [wm-block]="node" [customClasses]="customClasses"></blockquote>
 

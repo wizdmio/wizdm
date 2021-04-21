@@ -48,7 +48,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
   /** Returns true whenever this node has been removed from the tree */
   get removed(): boolean { return !this.parent || !this.parent.childOfMine(this);}
   
-  /** Returns true wheneve this node is the only child within its parent */
+  /** Returns true whenever this node is the only child within its parent */
   get alone(): boolean { return this.removed || this.parent.count <= 1; }
   
   /** Returns true whenever the node is the first child within its parent */
@@ -337,7 +337,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
     // Removes the node by index
     const node = this.parent.splice(this, 1)[0];
     // Recurs removing the parent when empty
-    if(this.parent.empty) { this.parent.remove(); }
+    if(this.parent.count <= 0) { this.parent.remove(); }
     // Returns the removed node
     return node;
   }

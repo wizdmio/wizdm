@@ -10,7 +10,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDividerModule } from '@angular/material/divider';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { EditableDocumentModule } from '@wizdm/editable/document';
-import { SchedulePipesModule } from '@wizdm/pipes/schedule';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
 import { ToolbarModule } from './toolbar/toolbar.module';
@@ -36,7 +35,6 @@ const routes: RoutesWithContent = [{
     MatDividerModule,
     MatFormFieldModule,
     EditableDocumentModule,
-    SchedulePipesModule,
     AvatarModule,
     IconModule,
     ToolbarModule,

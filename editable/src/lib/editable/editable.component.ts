@@ -27,7 +27,12 @@ export class EditableComponent {
 
   // Applies the conteneditable attribute while in editMode
   @HostBinding('attr.contenteditable') get editable() { 
-    return this.document.edit ? 'true' : 'false';
+    return this.document.edit ? 'true' : undefined;
+  }
+
+  // Applies the empty class
+  @HostBinding('class.empty') get empty() { 
+    return !!this.node && this.node.empty; 
   }
 
   // Applies the node id to the element

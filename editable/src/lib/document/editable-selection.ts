@@ -329,14 +329,15 @@ export class EditableSelection {
       this.start.insert('\n', this.startOfs);
       return this.move(1);
     }
-    // Inserts an extra empty text on the start edge preserving the same style
-    if(this.start.first && this.startOfs === 0) { 
-      this.start.insertPrevious(this.start.clone().set('')); 
-    }
-    // Inserts an extra empty text node on the end edge preserving the same style
+    
+    // Inserts an extra empty text node on the end edge preserving the same style    
     if(this.start.last && this.startOfs === this.start.length) { 
       this.start.insertNext(this.start.clone().set('')); 
     }
+    // Inserts an extra empty text on the start edge preserving the same style
+    else if(this.start.first && this.startOfs === 0) { 
+      this.start.insertPrevious(this.start.clone().set('')); 
+    }        
     // Makes sure the cursor is on the right side of node's edges 
     if(this.startOfs === this.start.length) { this.setCursor(this.next(this.start), 0);}
     // Breaks the content from this node foreward in a new editable container

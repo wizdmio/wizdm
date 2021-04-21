@@ -13,10 +13,7 @@ export interface EditableFigureCustomClasses {
 @Component({
   selector: 'figure[wm-figure]',
   templateUrl: './figure.component.html',
-  host: { 
-    'contenteditable': 'false',
-    'style': 'user-select: none' 
-  }
+  host: { 'style': 'user-select: none' }
 })
 export class FigureComponent {
 
@@ -27,6 +24,11 @@ export class FigureComponent {
 
   /** Rendered elements' custom classes */
   @Input() customClasses: EditableFigureCustomClasses;
+
+  // Makes sure the figure isn't editable while in edit mode
+  @HostBinding('attr.contenteditable') get editable() { 
+    return this.document.edit ? 'false' : undefined;
+  }
 
   // Applies the node id to the element
   @HostBinding('id') get id() { 

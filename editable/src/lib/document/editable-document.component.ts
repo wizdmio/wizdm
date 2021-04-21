@@ -11,8 +11,8 @@ import { take } from 'rxjs/operators';
 @Component({
   selector: '[wm-editable-document]',
   templateUrl: '../editable-viewer.component.html',
-  host: { 'class': 'wm-editable-document' },
   providers: [ { provide: DocumentViewer, useExisting: forwardRef(() => DocumentComponent) } ],
+  host: { 'class': 'wm-editable-document', '[class.edit]': 'edit', '[class.empty]': 'empty' },
   exportAs: 'Editable'
 })
 export class DocumentComponent extends DocumentViewer implements AfterViewChecked {
@@ -23,7 +23,7 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
   public caret: ClientRect;
 
   @HostBinding('attr.contenteditable') get editable() { 
-    return this.edit ? 'true' : 'false';
+    return this.edit ? 'true' : undefined;
   }
 
   private get window(): Window { return this.document.defaultView; }
