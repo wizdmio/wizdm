@@ -8,7 +8,7 @@
     <span fxLayout="row" fxLayoutAlign="space-between center">
 
       <!-- Renders the label with the proper indentation level -->
-      <span [style.padding-left.px]="indent" fxFlex="1 1 auto">{{ item.label }}</span>
+      <span fxFlex="1 1 auto">{{ item.label }}</span>
 
       <!-- Renders the chrevron in case the item has children -->
       <mat-icon [class.opened]="isOpened(item)" fxFlex="0 0 auto" *ngIf="hasItems(item)">chevron_right</mat-icon>
@@ -18,13 +18,6 @@
   </button>
 
   <!-- Renders the sub items, if any -->
-  <div *ngIf="isOpened(item)"
-       class="w100" 
-       [wm-toc]="item.items" 
-       [color]="color" 
-       [(selected)]="selected" 
-       (navigate)="navigate.emit($event)" 
-       @topic>
-  </div>
+  <div [wm-toc]="item.items" class="w100" [color]="color" [(selected)]="selected" (navigate)="navigate.emit($event)" [@topic]="isOpened(item)"></div>
 
 </ng-container>

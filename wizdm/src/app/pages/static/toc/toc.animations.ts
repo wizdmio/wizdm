@@ -1,15 +1,18 @@
-import { trigger, animate, style, transition, group, query, stagger } from '@angular/animations';
+import { state, trigger, animate, style, transition, group, query, stagger } from '@angular/animations';
 const $timing = '500ms cubic-bezier(0.2, 1, 0.2, 1)';
 
 export const $animations = [
 
   trigger('topic', [
+
+    state('false', style({ visibility: 'hidden', height: 0 })),
     
-    transition(':enter', [
+    transition('false => true', [
       style({ height: 0, overflow: 'hidden' }),
       query('button',
         style({ 
           opacity: '0', 
+          visibility: '*',
           transform: 'translateX(-150px)'
         }), { optional: true }
       ),
@@ -19,14 +22,16 @@ export const $animations = [
       ]),
     ]),
 
-    transition(':leave', [
+    transition('true => false', [
       style({ overflow: 'hidden' }),
       group([ 
         animate($timing, style({ height: 0 })),
-        query('button', animate($timing, style({ 
-          opacity: '0', 
-          transform: 'translateY(-150px)'
-        })), { optional: true })
+        query('button', animate($timing, 
+          style({ 
+            opacity: '0', 
+            transform: 'translateY(-150px)'
+          })
+        ), { optional: true })
       ])
     ])
   ])

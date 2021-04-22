@@ -13,7 +13,8 @@ export interface TocItem {
   selector: '[wm-toc]',
   templateUrl: './toc.component.html',
   styleUrls: ['./toc.component.scss'],
-  animations: $animations 
+  animations: $animations,
+  host: { '[class.nested]' : '!!parent' }
 })
 export class TocComponent {
 
@@ -22,10 +23,7 @@ export class TocComponent {
   private _index: TocItem[];
 
   // Injects the parent TocComponent, if any, to compute the indentation level accordingly
-  constructor(@Optional() @SkipSelf() private parent: TocComponent) {}
-
-  /** Returns the indentation level in pixels */
-  get indent(): number { return !!this.parent ? this.parent.indent + 24 : 0; }
+  constructor(@Optional() @SkipSelf() readonly parent: TocComponent) {}
 
   /** The currently selected item */
   get selected(): TocItem { return this._selected; }

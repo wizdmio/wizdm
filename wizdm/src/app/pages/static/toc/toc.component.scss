@@ -7,6 +7,8 @@
 
   .w100 { width: 100%; }
 
+  &.nested { padding-left: 24px; }
+
   // Overrides the general selection theme to remove the border
   .selected { border: none; }
 
