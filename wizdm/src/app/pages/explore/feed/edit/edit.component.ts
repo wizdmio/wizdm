@@ -17,16 +17,20 @@ export interface PostEditData {
 })
 export class EditComponent extends DatabaseDocument<PostData> {
 
+  public modified: boolean = false;
+  readonly new: boolean = true;
   public data: PostData;
-
+  
   get author(): UserData { return this.user.data || {}; }
 
   constructor(db: DatabaseService, private user: UserProfile, private dlg: MatDialogRef<PostData>, @Inject(MAT_DIALOG_DATA) post: PostEditData) { 
     
     // Computes the doc path either if existing or new
-    super(db, `users/${user.uid}/feed/${post?.id || db.col(`users/${user.uid}/feed`).doc().id }`);
+    super(db, !!post?.id ? `users/${user.uid}/feed/${post?.id}` : db.col<PostData>(`users/${user.uid}/feed`).doc() );
 
-    console.log(`${ post?.id ? 'Opening' : 'New' } document`, this.ref.id);
+    this.new = !post?.id;
+
+    console.log(`${ this.new ? 'New' : 'Opening' } document`, this.ref.id);
 
     // Opens the existing document...
     if(post?.id) { this.get().then( data => this.data = data ); }
@@ -46,8 +50,6 @@ export class EditComponent extends DatabaseDocument<PostData> {
 
   public addTag({ input, value }: MatChipInputEvent): void {
 
-    
-    
     // Add our fruit
     if ((value || '').trim()) {
       //this.fruits.push({name: value.trim()});
@@ -72,10 +74,8 @@ export class EditComponent extends DatabaseDocument<PostData> {
 
   saveAndClose() {
 
-    console.log('Saving', this.data);
-/*
+    // Create/Update the document and close the dialog
     this.upsert(this.data)
-      .then( () => this.dlg.close() );
-*/
+      .then( () => this.dlg.close(this.data) );
   }
 }

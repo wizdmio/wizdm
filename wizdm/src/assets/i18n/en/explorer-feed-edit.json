@@ -1,0 +1,13 @@
+{
+  "title": {
+    "new": "New post",
+    "edit": "Edit post"
+  },
+
+  "placeholder": "Share what's on your mind...",
+  
+  "action": {
+    "post": "Post",
+    "update": "Update post"
+  }
+}

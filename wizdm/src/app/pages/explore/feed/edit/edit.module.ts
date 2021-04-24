@@ -23,7 +23,7 @@ const routes: RoutesWithContent = [{
   component: EditComponent,
   data: { dialogConfig: {  width: '500px', maxWidth: '100%' }}
 }];
-
+        
 @NgModule({
   
   imports: [

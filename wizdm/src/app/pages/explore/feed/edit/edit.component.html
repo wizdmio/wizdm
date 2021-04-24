@@ -5,10 +5,10 @@
   <!-- Common header with close button -->
   <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
     
-    <span>{{ msgs.title || "New Post" }}</span>
+    <span>{{ new ? (msgs.title?.new || "New post") : (msgs.title?.edit || 'Edit post') }}</span>
     
     <!-- Closes the dialog returning null -->
-    <button mat-icon-button [mat-dialog-close]="null">
+    <button mat-icon-button mat-dialog-close>
       <wm-icon inline="true" icon="close"></wm-icon>
     </button>
 
@@ -46,7 +46,7 @@
              [attr.placeholder]="msgs.placeholder || 'What\'s uuuuuuup!'"
              [customClasses]="{ a: 'primary', caption: 'mat-small' }"
              (longpress)="longpress.lookup($event)"
-             (change)="data = $event"
+             (change)="data = $event; modified = !body.empty"
              class="body" 
              edit 
              cdkFocusInitial 
@@ -66,7 +66,9 @@
 
       <wm-post-toolbar [sel]="body.selection" color="primary"></wm-post-toolbar>
 
-      <button mat-flat-button fxFlex="100%" color="primary" (click)="saveAndClose()">{{ msgs.save || "Post" }}</button>
+      <button mat-flat-button fxFlex="100%" color="primary" (click)="saveAndClose()" [disabled]="!modified">{{ 
+        new ? (msgs.action?.post || "Post") : (msgs.action?.update || 'Update post') 
+      }}</button>
 
     </div>
  

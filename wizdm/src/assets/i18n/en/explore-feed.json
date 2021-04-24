@@ -1,11 +1,3 @@
 {
-  "post": {
-    
-    "timeFormat": {
-      "sameDay" : "[Today at] LT",          
-      "lastDay" : "[Yesterday at] LT",
-      "lastWeek" : "[Last] dddd [at] LT",
-      "sameElse" : "LL"
-    }
-  }
+  
 }

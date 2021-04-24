@@ -19,8 +19,11 @@
       <!-- Renders the caption (actually the editable part) -->
       <ng-container *ngSwitchCase="'caption'">
         
-        <!-- Hides empty caption whenin view mode -->
+        <!-- Hides empty caption when in view mode -->
         <figcaption *ngIf="document.edit || !child.empty" [class]="customClasses?.caption" [wm-editable]="child"></figcaption>
+
+        <!-- Styles a '...' placeholder for empty caption -->
+        <style>figcaption.empty:before { content: "..."; opacity: 0.5; position: absolute; }</style>
 
       </ng-container>
   

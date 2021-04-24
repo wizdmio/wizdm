@@ -17,9 +17,12 @@ export interface PostData extends DocumentData, EditableDocumentData {
   selector: 'wm-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
+  host: { '[style.display]' : "deleted ? 'none' : undefined"},
   animations: $animations
 })
 export class PostComponent extends LikableDocument<PostData> {
+
+  public deleted: boolean = false;
 
   /** Data payload */
   public data: PostData;

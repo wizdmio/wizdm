@@ -72,6 +72,7 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
 
   /** change event notifying for document changes */
   @Output() change = new EventEmitter<EditableDocumentData>();
+
   /** Longpress event */
   @Output() longpress = new EventEmitter<KeyboardEvent>();
 
@@ -79,13 +80,19 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
     // Applies the current selection to the document when needed. This is essential even when the selection
     // isn't modified since view changes (aka rendering) affects the selection that requires to be restored
     if(this.editMode && this.selection.marked) {
-     
-      // Notifies listeners for document change saving the current selection
-      this.change.emit( this.selection.save(this).data );
 
-      // Makes sure to restore the selection after the view has been rendered but anyhow well before
-      // the next change will be applied to the data tree (such as while typing) 
-      this.defer(() => this.apply());
+      // Defers the execution after the zone has been stabilized (aka rendering completed)
+      this.defer(() => {
+
+        // Notifies listeners for document change saving the current selection
+        this.change.emit( this.selection.save(this).data );
+
+        // Makes sure to restore the selection after the view has been rendered but anyhow well before
+        // the next change will be applied to the data tree (such as while typing) 
+        this.apply()
+      });
+     
+      //this.defer(() => this.apply());
     }
   }
 

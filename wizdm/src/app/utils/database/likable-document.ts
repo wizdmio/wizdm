@@ -65,4 +65,17 @@ export class LikableDocument<T extends DocumentData> extends DatabaseDocument<T>
       this.likes.update( favorite ? -1 : 1 );      
     });
   }
+
+  /** Deletes the likable document wiping the likes/likers collections too */
+  public delete() {
+
+    return Promise.all([
+      // Wipes the likes counter
+      this.likes.wipe(),       
+      // Wipes the likers collection 
+      this.likers.wipe(),
+      // Deletes the post
+      super.delete()
+    ]) as unknown as Promise<void>;
+  }
 }

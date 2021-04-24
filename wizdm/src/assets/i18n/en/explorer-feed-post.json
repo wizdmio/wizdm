@@ -1,4 +1,28 @@
 {
+
+  "timeFormat": {
+    "sameDay" : "[Today at] LT",          
+    "lastDay" : "[Yesterday at] LT",
+    "lastWeek" : "[Last] dddd [at] LT",
+    "sameElse" : "LL"
+  },
+
+  "actions": {
+
+    "save": "Save post",
+    "edit": "Edit post",
+    "delete": "Delete post"
+  },
+
+  "canDelete": {
+
+    "title": "Delete post",
+    "message": "Are you sure you want to delete this post?",
+    "cancel": "Cancel",
+    "ok": "Yes, delete"
+
+  },
+
   "addpost": {
     "header": {
       "title": "Create Post",
