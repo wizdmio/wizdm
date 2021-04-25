@@ -22,7 +22,7 @@
     </ng-container>
 
     <!-- New post button, refreshed the list when posting a new one -->
-    <button mat-stroked-button type.lt-sm="icon" color="primary" openDialog="edit" (dialogClosed)="$event && refresh()">
+    <button mat-stroked-button type.lt-sm="icon" color="primary" openDialog="edit"><!--(dialogClosed)="$event && refresh()"-->
 
       <!-- Use an icon button on small screens -->
       <wm-icon *ngIf="mobile; else newMessage" [icon]="msgs.new?.icon || 'add'"></wm-icon>
@@ -38,15 +38,12 @@
   <ul class="feed-list">
 
     <li *ngFor="let post of feed$ | async" class="feed-item mat-elevation-z3">
-
       <wm-post [post]="post" (navigate)="navigate($event)"></wm-post>
-
     </li>
 
+    <!-- Dummy empty posts while loading -->
     <li *ngFor="let dummy of loading$ | async" class="feed-item mat-elevation-z3">
-
       <wm-post [post]="null"></wm-post>
-
     </li>
   </ul>
 

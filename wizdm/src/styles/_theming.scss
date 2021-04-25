@@ -138,6 +138,9 @@
   // Includes a material component specifics colors only
   @include angular-material-color($theme);
 
+  // Tweaks material compoment styles for improved flexibility
+  @include tweak-material-components();
+
   // Styles the elements according to the theme
   @include wm-elements-theme($theme);
 
