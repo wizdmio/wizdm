@@ -14,8 +14,10 @@ import { EditableViewerModule } from '@wizdm/editable';
 import { ContentModule } from '@wizdm/content';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
+import { LazyDialogModule } from '@wizdm/lazy-dialog';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { ReadmeModule } from '@wizdm/readme';
+
 //import { AuthGuardModule } from 'app/utils/auth-guard';
 import { PostComponent } from './post.component';
 
@@ -38,7 +40,8 @@ import { PostComponent } from './post.component';
     AvatarModule,
     IconModule,
     DialogModule,
-    ReadmeModule
+    ReadmeModule,
+    LazyDialogModule
   ],
   declarations: [ PostComponent ],
   exports: [ PostComponent ]

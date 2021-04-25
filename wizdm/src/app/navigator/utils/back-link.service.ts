@@ -2,7 +2,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActionLinkObserver } from '@wizdm/actionlink';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { filter, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 @Injectable({

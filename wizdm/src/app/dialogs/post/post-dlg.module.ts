@@ -22,7 +22,7 @@ import { TextareaModule } from 'app/utils/textarea';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 
-/** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
+/** Dialog route. This route will be used by the LazyDialogLoader, emulating the router, to lazily load the dialog */
 const routes: RoutesWithContent = [{
   path: '',
   content: 'explorer-feed-post',

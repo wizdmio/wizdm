@@ -23,7 +23,7 @@ import { CheckoutComponent } from './checkout.component';
 import { environment } from 'env/environment';
 const  { stripeElements } = environment;
 
-/** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
+/** Dialog route. This route will be used by the LazyDialogLoader, emulating the router, to lazily load the dialog */
 const routes: RoutesWithContent = [{
   path: '',
   content: 'checkout',

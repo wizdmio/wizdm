@@ -1,13 +1,13 @@
 
 <!-- Gets the localized content -->
-<ng-container *wmContent="let msgs select 'explorer-feed-edit'">
+<ng-container *wmContent="let msgs select 'explore-feed-edit'">
         
   <!-- Common header with close button -->
   <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between end">
     
     <span>{{ new ? (msgs.title?.new || "New post") : (msgs.title?.edit || 'Edit post') }}</span>
     
-    <!-- Closes the dialog returning null -->
+    <!-- Closes the dialog returning undefined -->
     <button mat-icon-button mat-dialog-close>
       <wm-icon inline="true" icon="close"></wm-icon>
     </button>

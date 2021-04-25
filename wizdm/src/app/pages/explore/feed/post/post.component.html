@@ -51,8 +51,8 @@
       <!-- Enables editing -->
       <ng-container *ngIf="(author$ | async).id === me">
       
-        <!-- Edit post -->
-        <button mat-menu-item routerLink="edit" [queryParams]="{ id: data.id }" >
+        <!-- Edit post and updates its data when done -->
+        <button mat-menu-item openDialog="edit" [dialogData]="{ id: data.id }" (dialogClosed)="data = $event || data">
           <wm-icon icon="far:fa-edit"></wm-icon>
           <span>{{ msgs.actions?.edit || 'Edit post' }}</span>
         </button>
@@ -63,8 +63,8 @@
           <span>{{ msgs.actions?.delete || 'Delete post' }}</span>
         </button>
 
-        <!-- CanDelete dialog -->
-        <wm-dialog (closedChange)=" (deleted = $event) && delete()" #dlgDelete>
+        <!-- CanDelete dialog, hides the post when deleted -->
+        <wm-dialog (closedChange)="(deleted = $event) && delete()" #dlgDelete>
           <h2 mat-dialog-title><b>{{ msgs.canDelete?.title || 'Confirm deletion' }}</b></h2>
   
           <mat-dialog-content [wm-readme]="msgs.canDelete?.message" linkClass="primary">

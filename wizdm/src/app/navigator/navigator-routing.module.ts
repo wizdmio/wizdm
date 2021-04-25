@@ -4,9 +4,10 @@ import { matchUserNameOnly } from 'app/pages/profile/matcher';
 import { matchFullPath } from 'app/pages/static/static-matcher';
 import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
+import { LazyDialogLoader } from '@wizdm/lazy-dialog';
 import { RedirectService } from '@wizdm/redirect';
 import { UserPreferences } from 'app/utils/user';
-import { DialogLoader } from 'app/dialogs';
+
 import { NgModule } from '@angular/core';
 
 const routes: RoutesWithContent = [
@@ -57,13 +58,13 @@ const routes: RoutesWithContent = [
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
       
        // Login dialog
-      { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ DialogLoader ] },
+      { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ LazyDialogLoader ] },
 
       // Feedback dialog
-      { path: 'contact', loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), canActivate: [ DialogLoader ] },
+      { path: 'contact', loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), canActivate: [ LazyDialogLoader ] },
 
       // Payments dialog
-      //{ path: 'pay', loadChildren: () => import('../dialogs/pay/pay.module').then(m => m.PayModule), canActivate: [ DialogLoader ] },
+      //{ path: 'pay', loadChildren: () => import('../dialogs/pay/pay.module').then(m => m.PayModule), canActivate: [ LazyDialogLoader ] },
 
       // Custom action links
       { path: 'back', canActivate: [ BackLinkObserver ] },
@@ -85,6 +86,6 @@ const routes: RoutesWithContent = [
 @NgModule({
   imports: [ ContentRouterModule.forChild(routes) ],
   exports: [ ContentRouterModule ],
-  providers: [ WelcomeBack, UserPreferences, DialogLoader ]
+  providers: [ WelcomeBack, UserPreferences, LazyDialogLoader ]
 })
 export class NavRoutingModule {}

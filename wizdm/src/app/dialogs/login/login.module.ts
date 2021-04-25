@@ -12,7 +12,7 @@ import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { LoginComponent } from './login.component';
 
-/** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
+/** Dialog route. This route will be used by the LazyDialogLoader, emulating the router, to lazily load the dialog */
 const routes: RoutesWithContent = [{
   path: '',
   content: 'login',

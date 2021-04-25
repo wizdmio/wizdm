@@ -16,7 +16,7 @@ import { ToolbarModule } from './toolbar/toolbar.module';
 import { LongPressModule } from './longpress/longpress.module';
 import { EditComponent } from './edit.component';
 
-/** Dialog route. This route will be used by the DialogLoader, emulating the router, to lazily load the dialog */
+/** Dialog route. This route will be used by the LazyDialogLoader, emulating the router, to lazily load the dialog */
 const routes: RoutesWithContent = [{
   path: '',
   content: 'explorer-feed-edit',

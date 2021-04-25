@@ -1,9 +1,8 @@
 import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { AuthService, User } from '@wizdm/connect/auth';
+import { LazyDialogLoader } from '@wizdm/lazy-dialog';
 import type { LoginData } from 'app/dialogs/login';
-import { DialogLoader } from 'app/dialogs';
-import { finalize } from 'rxjs/operators';
 
 /** AuthGuard on click */
 @Directive({
@@ -13,7 +12,7 @@ export class AuthGuardDirective {
 
   private skipEmail: boolean = true;
 
-  constructor(private auth: AuthService, private dialogs: DialogLoader) { }
+  constructor(private auth: AuthService, private dialogs: LazyDialogLoader) { }
 
   /** Returns true when authorization has been granted */
   private isClickAuthorized(user: User = this.auth.user): boolean {

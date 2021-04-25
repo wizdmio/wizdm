@@ -7,9 +7,9 @@ import { ButtonChangerModule } from '@wizdm/elements/button';
 import { GtagModule } from '@wizdm/gtag';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
+import { LazyDialogLoader } from '@wizdm/lazy-dialog';
 import { PostModule } from './post/post.module';
 import { FeedComponent } from './feed.component';
-import { DialogLoader } from 'app/dialogs';
 
 
 const routes: RoutesWithContent = [{
@@ -17,7 +17,7 @@ const routes: RoutesWithContent = [{
   component: FeedComponent,
   content: 'explore-feed',
   children: [
-    { path: 'edit', loadChildren: () => import('./edit/edit.module').then(m => m.EditModule), canActivate: [ DialogLoader ] }
+    { path: 'edit', loadChildren: () => import('./edit/edit.module').then(m => m.EditModule), canActivate: [ LazyDialogLoader ] }
   ]
 }];
 
@@ -34,6 +34,6 @@ const routes: RoutesWithContent = [{
     PostModule,
     ContentRouterModule.forChild(routes)
   ],
-  providers: [ DialogLoader ]
+  providers: [ LazyDialogLoader ]
 })
 export class FeedModule { }
