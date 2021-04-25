@@ -1,11 +1,11 @@
 {
-  "$schema": "../../../node_modules/ng-packagr/package.schema.json",
-  "name": "@wizdm/elements",
-  "description": "Reusable elements with dynamic features",
-  "version": "2.0.0",
+  "$schema": "../node_modules/ng-packagr/package.schema.json",
+  "name": "@wizdm/actionlink",
+  "description": "Custom actions for Angular Router",
+  "version": "1.0.0",  
   "license": "MIT",
-  "keywords": ["Angular", "Elements"],
-  "homepage": "https://wizdm.io/docs/elements",  
+  "keywords": ["Angular", "Router"],
+  "homepage": "https://wizdm.io/docs/actionlink",  
   "peerDependencies": {
     "@angular/core": "^11.0.0",
     "@angular/cdk": "^11.0.0",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wizdmio/wizdm/tree/master/elements"
+    "url": "https://github.com/wizdmio/wizdm/tree/master/actionlink"
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"

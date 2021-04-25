@@ -699,6 +699,18 @@
       "sourceRoot": "actionlink/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "actionlink/tsconfig.lib.json",
+            "project": "actionlink/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "actionlink/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -1024,6 +1036,46 @@
             "tsConfig": [
               "geo/tsconfig.lib.json",
               "geo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "lazy-dialog": {
+      "projectType": "library",
+      "root": "lazy-dialog",
+      "sourceRoot": "lazy-dialog/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "lazy-dialog/tsconfig.lib.json",
+            "project": "lazy-dialog/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "lazy-dialog/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "lazy-dialog/src/test.ts",
+            "tsConfig": "lazy-dialog/tsconfig.spec.json",
+            "karmaConfig": "lazy-dialog/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "lazy-dialog/tsconfig.lib.json",
+              "lazy-dialog/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

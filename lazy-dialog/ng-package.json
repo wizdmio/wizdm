@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../dist/lazy-dialog",
+  "lib": {
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "@wizdm/actionlink": "actionlink"
+    }
+  }
+}

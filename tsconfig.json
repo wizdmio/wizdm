@@ -123,6 +123,9 @@
       ],
       "@wizdm/geo": [
         "geo/src/index.ts"
+      ],
+      "@wizdm/lazy-dialog": [
+        "lazy-dialog/src/index.ts"
       ]
     }
   },

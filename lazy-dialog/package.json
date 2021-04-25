@@ -1,0 +1,28 @@
+{
+  "$schema": "../node_modules/ng-packagr/package.schema.json",
+  "name": "@wizdm/lazy-dialog",
+  "description": "Lazy loading for Angular Material dialogs",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["Angular", "Dialog", "Lazy loading"],
+  "homepage": "https://wizdm.io/docs/lazy-dialog",  
+  "peerDependencies": {
+    "@angular/core": "^11.0.0",
+    "@angular/cdk": "^11.0.0",
+    "@angular/material": "^11.0.0",
+    "@wizdm/actionlink": "^1.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/lazy-dialog"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
+  }
+}
