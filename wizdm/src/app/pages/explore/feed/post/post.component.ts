@@ -40,7 +40,7 @@ export class PostComponent extends LikableDocument<PostData> {
     this.data = this.unwrap(snapshot);
 
     // Resolves the post's author
-    this.author$ = this.user.fromUserId(this.data.author);
+    this.author$ = this.user.fromUserId(this.data?.author);
   }
 
   /** Emits on navigation */

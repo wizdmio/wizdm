@@ -1,3 +1,41 @@
 {
+
+  "new": {
+
+    "caption": "New post",
+    "icon": "far:fa-sticky-note"
+  },
+
+  "refresh": {
+
+    "caption": "Refresh",
+    "icon": "fas:fa-sync-alt"
+  },
+
+  "post": {
   
+    "timeFormat": {
+      "sameDay" : "[Today at] LT",          
+      "lastDay" : "[Yesterday at] LT",
+      "lastWeek" : "[Last] dddd [at] LT",
+      "sameElse" : "LL"
+    },
+  
+    "actions": {
+  
+      "save": "Save post",
+      "edit": "Edit post",
+      "delete": "Delete post",
+      "like": "Like",
+      "comment": "Comment"
+    },
+  
+    "canDelete": {
+  
+      "title": "Delete post",
+      "message": "Are you sure you want to delete this post?",
+      "cancel": "Cancel",
+      "ok": "Yes, delete"
+    } 
+  }
 }

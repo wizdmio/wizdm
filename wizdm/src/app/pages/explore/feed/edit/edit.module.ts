@@ -19,7 +19,7 @@ import { EditComponent } from './edit.component';
 /** Dialog route. This route will be used by the LazyDialogLoader, emulating the router, to lazily load the dialog */
 const routes: RoutesWithContent = [{
   path: '',
-  content: 'explorer-feed-edit',
+  content: 'explore-feed-edit',
   component: EditComponent,
   data: { dialogConfig: {  width: '500px', maxWidth: '100%' }}
 }];

@@ -1,130 +1,205 @@
-
 <!-- Loads the localized content -->
-<ng-container *wmContent="let msgs select 'explore-feed-post'">
+<ng-container *wmContent="let msgs select 'explore-feed.post'">
 
-  <div class="header" fxLayout="row" fxLayoutAlign="start center">
+  <!-- Displays the real post or a skeleton one -->
+  <ng-container *ngIf="data; else: skeletonPost">
 
-    <!-- Author's info -->
-    <div fxLayout="row" *ngIf="author$ | async as author">
-  
-      <!-- Author's picture -->
-      <a [routerLink]="['/', '@' + author.userName]">
-        <wm-avatar class="avatar" [src]="author.photo"></wm-avatar>
-      </a>
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
 
-      <div fxLayout="column">
+      <!-- Author's info -->
+      <div fxLayout="row" *ngIf="author$ | async as author">
     
-        <!-- Author's name -->
-        <a [routerLink]="['/', '@' + author.userName]"><b>{{ author.fullName }}</b></a>
-        
-        <!-- Post creation time long version (when older than 12 hours) -->
-        <time class="time mat-small" *ngIf="data | createdTime | olderThan:'PT12H'; else shortTime" >{{ 
+        <!-- Author's picture -->
+        <a [routerLink]="['/', '@' + author.userName]">
+          <wm-avatar class="avatar" [src]="author.photo"></wm-avatar>
+        </a>
+
+        <div fxLayout="column">
+      
+          <!-- Author's name -->
+          <a [routerLink]="['/', '@' + author.userName]"><b>{{ author.fullName }}</b></a>
           
-          data | createdTime | calendar:msgs.timeFormat || {
-            sameDay : '[Today at] LT',          
-            lastDay : '[Yesterday at] LT',
-            lastWeek : '[Last] dddd [at] LT',
-            sameElse : 'LL'
-          }  
-        
-        }}</time>
+          <!-- Post creation time long version (when older than 12 hours) -->
+          <time class="time mat-small" *ngIf="data | createdTime | olderThan:'PT12H'; else shortTime" >{{ 
+            
+            data | createdTime | calendar:msgs.timeFormat || {
+              sameDay : '[Today at] LT',          
+              lastDay : '[Yesterday at] LT',
+              lastWeek : '[Last] dddd [at] LT',
+              sameElse : 'LL'
+            }  
+          
+          }}</time>
 
-        <!-- Post creation time short version (whithin 12 hours) -->
-        <ng-template #shortTime><time class="time mat-small">{{ data | createdTime | fromNow }}</time></ng-template>
+          <!-- Post creation time short version (whithin 12 hours) -->
+          <ng-template #shortTime><time class="time mat-small">{{ data | createdTime | fromNow }}</time></ng-template>
 
+        </div>
       </div>
-    </div>
 
-    <!-- Actions menu -->
-    <button mat-icon-button class="menu" [matMenuTriggerFor]="menuActions">
-      <wm-icon icon="fas:fa-ellipsis-v"></wm-icon>
-    </button>
-
-    <mat-menu #menuActions="matMenu">
-
-      <!-- Save post -->
-      <button mat-menu-item>
-        <wm-icon icon="far:fa-bookmark"></wm-icon>
-        <span>{{ msgs.actions?.save || 'Save post' }}</span>      
+      <!-- Actions menu -->
+      <button mat-icon-button class="menu" [matMenuTriggerFor]="menuActions">
+        <wm-icon icon="fas:fa-ellipsis-v"></wm-icon>
       </button>
 
-      <!-- Enables editing -->
-      <ng-container *ngIf="(author$ | async).id === me">
+      <mat-menu #menuActions="matMenu">
+
+        <!-- Save post -->
+        <button mat-menu-item>
+          <wm-icon icon="far:fa-bookmark"></wm-icon>
+          <span>{{ msgs.actions?.save || 'Save post' }}</span>      
+        </button>
+
+        <!-- Enables editing -->
+        <ng-container *ngIf="(author$ | async)?.id === me">
+        
+          <!-- Edit post and updates its data when done -->
+          <button mat-menu-item openDialog="edit" [dialogData]="{ id: data.id }" (dialogClosed)="data = $event || data">
+            <wm-icon icon="far:fa-edit"></wm-icon>
+            <span>{{ msgs.actions?.edit || 'Edit post' }}</span>
+          </button>
+
+          <!-- Delete post -->
+          <button mat-menu-item (click)="dlgDelete.open()">
+            <wm-icon icon="far:fa-trash-alt"></wm-icon>
+            <span>{{ msgs.actions?.delete || 'Delete post' }}</span>
+          </button>
+
+          <!-- CanDelete dialog, hides the post when deleted -->
+          <wm-dialog (closedChange)="(deleted = $event) && delete()" #dlgDelete>
+            <h2 mat-dialog-title><b>{{ msgs.canDelete?.title || 'Confirm deletion' }}</b></h2>
+    
+            <mat-dialog-content [wm-readme]="msgs.canDelete?.message" linkClass="primary">
+              <span>You're about to delete the post.<br>Please confirm.</span>
+            </mat-dialog-content>
+    
+            <mat-dialog-actions align="end">
+              <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.canDelete?.cancel || 'Cancel' }}</button>
+              <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.canDelete?.ok || 'Delete' }}</button>
+            </mat-dialog-actions>
+          </wm-dialog>
+
+        </ng-container>
+
+      </mat-menu>
+    </div>
+    
+    <mat-divider></mat-divider>
+
+    <!-- Renders the post body -->
+    <section [wm-editable-viewer]="data" 
+            [customClasses]="{ a: 'primary', caption: 'mat-small' }" 
+            (navigate)="navigate.emit($event)" 
+            class="body"
+    ></section>
+
+    <!-- Tag list -->
+    <mat-chip-list aria-label="Tags" [selectable]="false">
       
-        <!-- Edit post and updates its data when done -->
-        <button mat-menu-item openDialog="edit" [dialogData]="{ id: data.id }" (dialogClosed)="data = $event || data">
-          <wm-icon icon="far:fa-edit"></wm-icon>
-          <span>{{ msgs.actions?.edit || 'Edit post' }}</span>
-        </button>
+      <mat-chip *ngFor="let tag of data?.tags">
+        <span class="mat-small">{{ tag | titlecase }}</span> 
+      </mat-chip>
+      
+    </mat-chip-list>
 
-        <!-- Delete post -->
-        <button mat-menu-item (click)="dlgDelete.open()">
-          <wm-icon icon="far:fa-trash-alt"></wm-icon>
-          <span>{{ msgs.actions?.delete || 'Delete post' }}</span>
-        </button>
+    <mat-divider></mat-divider>
 
-        <!-- CanDelete dialog, hides the post when deleted -->
-        <wm-dialog (closedChange)="(deleted = $event) && delete()" #dlgDelete>
-          <h2 mat-dialog-title><b>{{ msgs.canDelete?.title || 'Confirm deletion' }}</b></h2>
+    <div fxLayout="row">
+
+      <!-- Likes -->
+      <button mat-button fxFlex="50" color="primary" (click)="toggleFavorite()">
+
+        <wm-icon [icon]="(favorite$ | async)  ? 'fas:fa-heart' : 'far:fa-heart'" [@beat]="likes$ | async"></wm-icon>
+
+        <span>{{ msgs.actions?.like || 'Like' }}</span>
+
+        <span *ngIf="(likes$ | async) > 0">&nbsp;{{ likes$ | async }}</span>
+
+      </button>
+
+      <!-- Comments -->
+      <button mat-button fxFlex="50" color="primary">
+
+        <wm-icon icon="far:fa-comment"></wm-icon>
+
+        <span>{{ msgs.actions?.comment || 'Comment' }}</span>
+
+      </button>
+
+    </div>
   
-          <mat-dialog-content [wm-readme]="msgs.canDelete?.message" linkClass="primary">
-            <span>You're about to delete the post.<br>Please confirm.</span>
-          </mat-dialog-content>
-  
-          <mat-dialog-actions align="end">
-            <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.canDelete?.cancel || 'Cancel' }}</button>
-            <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.canDelete?.ok || 'Delete' }}</button>
-          </mat-dialog-actions>
-        </wm-dialog>
+  </ng-container>
 
-      </ng-container>
+  <!-- Skeleton Post -->
+  <ng-template #skeletonPost>
 
-    </mat-menu>
-  </div>
-  
-  <mat-divider></mat-divider>
+    <!-- Header -->
+    <div class="header" fxLayout="row" fxLayoutAlign="start center">
 
-  <!-- Renders the post body -->
-  <section [wm-editable-viewer]="data" 
-           [customClasses]="{ a: 'primary', caption: 'mat-small' }" 
-           (navigate)="navigate.emit($event)" 
-           class="body"
-  ></section>
+      <div fxLayout="row">
 
-  <!-- Tag list -->
-  <mat-chip-list aria-label="Tags" [selectable]="false">
-    
-    <mat-chip *ngFor="let tag of data.tags">
-      <span class="mat-small">{{ tag | titlecase }}</span> 
-    </mat-chip>
-    
-  </mat-chip-list>
+        <!-- Author's avatar -->
+        <wm-avatar class="avatar skeleton-loading"></wm-avatar>
 
-  <mat-divider></mat-divider>
+        <div fxLayout="column">
 
-  <div fxLayout="row">
+          <!-- Author's name -->
+          <a class="skeleton-loading text" style="width: 150px;"></a>
+      
+          <!-- Post time -->
+          <time class="time mat-small skeleton-loading text" style="width: 100px;"></time>
 
-    <!-- Likes -->
-    <button mat-button fxFlex="50" color="primary" (click)="toggleFavorite()">
+        </div>
 
-      <wm-icon [icon]="(favorite$ | async)  ? 'fas:fa-heart' : 'far:fa-heart'" [@beat]="likes$ | async"></wm-icon>
+      </div>
 
-      <span>Like</span>
+      <!-- Menu button -->
+      <button mat-icon-button class="menu" disabled>
+        <wm-icon icon="fas:fa-ellipsis-v"></wm-icon>
+      </button>
 
-      <span *ngIf="(likes$ | async) > 0">&nbsp;{{ likes$ | async }}</span>
+    </div>  
 
-    </button>
+    <mat-divider></mat-divider>
 
-    <!-- Comments -->
-    <button mat-button fxFlex="50" color="primary">
+    <!-- Body section -->
+    <section>
 
-      <wm-icon icon="far:fa-comment"></wm-icon>
+      <h3 class="skeleton-loading text" style="width: 200px;"></h3>
 
-      <span>Comment</span>
+      <p *ngFor="let len of [320, 250, 200]" [style.width.px]="len" class="skeleton-loading text"></p>
 
-    </button>
+    </section>
 
-  </div>
+    <!-- Tag list -->
+    <mat-chip-list aria-label="Tags" [selectable]="false">
+      
+      <mat-chip *ngFor="let tag of [1, 2, 3]" class="skeleton-loading" disabled>
+        <span class="mat-small" style="width: 28px;"></span> 
+      </mat-chip>
+      
+    </mat-chip-list>
+
+    <mat-divider></mat-divider>
+
+    <!-- Action bar -->
+    <div fxLayout="row">
+
+      <!-- Likes -->
+      <button mat-button fxFlex="50" disabled>
+        <wm-icon icon="far:fa-heart"></wm-icon>        
+        <span>{{ msgs.actions?.like || 'Like' }}</span>
+      </button>
+
+      <!-- Comments -->
+      <button mat-button fxFlex="50" disabled>
+        <wm-icon icon="far:fa-comment"></wm-icon>
+        <span>{{ msgs.actions?.comment || 'Comment' }}</span>
+      </button>
+
+    </div>
+
+  </ng-template>
 
 </ng-container>
 

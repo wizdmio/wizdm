@@ -5,14 +5,30 @@
   <!-- Actionbar -->
   <ng-template wmActionbar let-mobile="isMobile">
 
-    <!-- New post button -->
-    <button mat-stroked-button type.lt-sm="icon" color="primary" routerLink="edit">
+    <!-- Refresh posts -->
+    <ng-container *ngIf="(unread$ | async) as unread">
+
+      <button mat-stroked-button type.lt-sm="icon" color="accent" (click)="refresh()" 
+              [matBadge]="unread" matBadgeColor="accent" matBadgePosition="before">
+        
+        <!-- Always display an icon -->
+        <wm-icon [icon]="msgs.refresh?.icon || 'refresh'"></wm-icon>
+        
+        <!-- Use a stroked button on large screens -->
+        <span *ngIf="!mobile">{{ msgs.refresh?.caption || 'Refresh' }}</span>
+      
+      </button>
+      
+    </ng-container>
+
+    <!-- New post button, refreshed the list when posting a new one -->
+    <button mat-stroked-button type.lt-sm="icon" color="primary" openDialog="edit" (dialogClosed)="$event && refresh()">
 
       <!-- Use an icon button on small screens -->
-      <wm-icon *ngIf="mobile; else newMessage" [icon]="msgs.post?.new?.icon || 'add'"></wm-icon>
+      <wm-icon *ngIf="mobile; else newMessage" [icon]="msgs.new?.icon || 'add'"></wm-icon>
 
       <!-- Use a stroked button on large screens -->
-      <ng-template #newMessage>{{ msgs.post?.new?.caption || 'New' }}</ng-template>
+      <ng-template #newMessage>{{ msgs.new?.caption || 'New' }}</ng-template>
 
     </button>
 
@@ -24,6 +40,12 @@
     <li *ngFor="let post of feed$ | async" class="feed-item mat-elevation-z3">
 
       <wm-post [post]="post" (navigate)="navigate($event)"></wm-post>
+
+    </li>
+
+    <li *ngFor="let dummy of loading$ | async" class="feed-item mat-elevation-z3">
+
+      <wm-post [post]="null"></wm-post>
 
     </li>
   </ul>

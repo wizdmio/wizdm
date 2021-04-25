@@ -19,7 +19,7 @@ export class LikableDocument<T extends DocumentData> extends DatabaseDocument<T>
   public favorite$: Observable<boolean>;
 
   /** Likes counter */
-  public get likes$(): Observable<number> { return this.likes.counter$; }
+  public get likes$(): Observable<number> { return this.likes?.counter$; }
 
   /** The currently authenticated userId or 'unknown' */
   public get me(): string { return this.auth.userId || 'unknown'; }
@@ -33,6 +33,7 @@ export class LikableDocument<T extends DocumentData> extends DatabaseDocument<T>
 
     // Unwraps the base document
     const data = super.unwrap(snapshot);
+    if(!snapshot) { return data; }
 
     // Builds the favorite flag
     this.favorite$ = this.auth.user$.pipe( switchMap( user => user ? this.likers.hasDocument(user.uid) : of(undefined) ) );

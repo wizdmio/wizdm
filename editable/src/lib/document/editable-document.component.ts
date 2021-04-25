@@ -47,26 +47,28 @@ export class DocumentComponent extends DocumentViewer implements AfterViewChecke
 
     // Loads the source data building the tree 
     source ? this.load(source).defrag() : this.new();
+
+    // Moves the cursor at the end when in edit mode 
+    this.edit && this.selection.endset();
   }
 
   /** When true switches to edit mode */
   get edit(): boolean { return this.editMode; }
   
   @Input() set edit(mode: boolean) { 
+
+    // Skips when unchanged
+    if(mode === this.edit) { return; }
     
-    // Entering edit mode queries for the current selection and initiaizes the history buffer
+    // Entering edit mode
     if(this.editMode = coerceBooleanProperty(mode)) { 
 
       // Defers the edit mode waiting for the view to be fully rendered
-      this.defer(() => this.query().enableHistory());
+      this.defer(() => this.selection.endset().enableHistory());
     }
     else { 
-      // Resets the seelction and clears the history buffer while exiting edit mode...
-      this.selection.reset().clearHistory(); 
-      // ...and reloads the document whenever changed
-      /*if(this.node !== this.source) { 
-        this.load(this.source).defrag(); 
-      }*/
+      // Resets the selection and clears the history buffer while exiting edit mode...
+      this.selection.reset().clearHistory();
     }
   }
 

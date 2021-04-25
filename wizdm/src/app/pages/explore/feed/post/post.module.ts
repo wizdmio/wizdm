@@ -17,7 +17,6 @@ import { IconModule } from '@wizdm/elements/icon';
 import { LazyDialogModule } from '@wizdm/lazy-dialog';
 import { DialogModule } from '@wizdm/elements/dialog';
 import { ReadmeModule } from '@wizdm/readme';
-
 //import { AuthGuardModule } from 'app/utils/auth-guard';
 import { PostComponent } from './post.component';
 

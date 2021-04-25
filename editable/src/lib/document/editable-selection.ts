@@ -74,6 +74,12 @@ export class EditableSelection {
   public reset(): EditableSelection {
     return this.setCursor(this.root.firstDescendant() as any, 0);
   }
+
+  /** Resets the selection as a cursor position at the very end of the document tree */
+  public endset(): EditableSelection {
+    const node = this.root.lastDescendant();
+    return this.setCursor(node, node.length);
+  }
   
   /** 
    * Collapses the curernt selection to a cursor

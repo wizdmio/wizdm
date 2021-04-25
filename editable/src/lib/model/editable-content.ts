@@ -494,7 +494,7 @@ export abstract class EditableContent<T extends EditableData = EditableData> {
       // Loop on the next node
       node = prev;
     }
-    // Jumps on next nodes whenever the new offset cossed the  node length
+    // Jumps on next nodes whenever the new offset crossed the  node length
     while(offset > node.length) {
       // Jumps on the next node traversing the full tree
       const next = node.next(true);
