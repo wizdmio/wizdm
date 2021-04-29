@@ -19,7 +19,6 @@
             { "label": "Donazioni" }
         ],
         "private": [
-            { "label": "Wizdm" },
             { "label": "Esplora" },
             { "label": "Chat" },
             { "label": "Documentazione" },
@@ -36,7 +35,6 @@
             { "label": "Entra/Registrati" }
         ],
         "private": [
-            { "label": "Wizdm" },
             { "label": "Profilo" },
             { "label": "Esplora" },
             { "label": "Chat" },

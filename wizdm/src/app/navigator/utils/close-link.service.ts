@@ -1,23 +1,20 @@
-import { Injectable, OnDestroy, Inject } from '@angular/core';
-import { ActionLinkObserver } from '@wizdm/actionlink';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
+import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CloseLinkObserver extends ActionLinkObserver implements OnDestroy {
+export class CloseLinkObserver implements CanActivate {
 
-  private sub: Subscription;
+  // Returns the window object
+  private get window(): Window { return this.document.defaultView || window; }
+  
+  constructor(@Inject(DOCUMENT) private document: Document) { }
 
-  constructor(@Inject(DOCUMENT) document: Document, router: Router) { 
-    
-    super(router); 
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) { 
 
-    // Registers to the 'close' actionlink to close the window
-    this.sub = this.register('close').subscribe( () => (document.defaultView || window).close() );
+    // Closes the window and prevents further navigations
+    return this.window.close(), false;
   }
-
-  ngOnDestroy() { this.sub.unsubscribe(); }
 }

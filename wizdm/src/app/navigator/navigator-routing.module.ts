@@ -17,6 +17,11 @@ const routes: RoutesWithContent = [
 
   // External links redirection helper
   { path: 'redirect', canActivate: [ RedirectService ] },
+
+  // Custom action links at root level
+  { path: 'back', canActivate: [ BackLinkObserver ] },
+  { path: 'logout', canActivate: [ LogoutLinkObserver ] },
+  { path: 'close', canActivate: [ CloseLinkObserver ] },
   
   // Enables language autodetection on empty routes
   { path: '', redirectTo: 'auto', pathMatch: 'full' },
@@ -25,17 +30,22 @@ const routes: RoutesWithContent = [
   {
     path: ':lang',    
     component: NavigatorComponent,    
-    canActivate: [ WelcomeBack, UserPreferences ],    
+    canActivate: [ UserPreferences ],
     content: 'navigator',
     
     children: [
+
+      // Children action links redirecting to their root's counterparts
+      { path: 'back', redirectTo: '/back' },
+      { path: 'logout', redirectTo: '/logout' },
+      { path: 'close', redirectTo: '/close' },
 
       // Not found page
       { path: 'not-found', loadChildren: () => import('../pages/not-found/not-found.module').then(m => m.NotFoundModule) },
       { path: '404', redirectTo: 'not-found', pathMatch: 'full' },
 
-      // Landing page
-      { path: '', pathMatch: 'full', loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule) },
+      // Home -> Landing page or Welcome Back
+      { path: '', pathMatch: 'full', loadChildren: () => import('../pages/landing/landing.module').then(m => m.LandingModule), canActivate: [ WelcomeBack ] },
       { path: 'home', redirectTo: '', pathMatch: 'full' },
       
       // Content browsing
@@ -65,11 +75,6 @@ const routes: RoutesWithContent = [
 
       // Payments dialog
       //{ path: 'pay', loadChildren: () => import('../dialogs/pay/pay.module').then(m => m.PayModule), canActivate: [ LazyDialogLoader ] },
-
-      // Custom action links
-      { path: 'back', canActivate: [ BackLinkObserver ] },
-      { path: 'logout', canActivate: [ LogoutLinkObserver ] },
-      { path: 'close', canActivate: [ CloseLinkObserver ] },
       
       // Docs (using static docs subfolder)
       { path: 'docs', redirectTo: 'docs/start', pathMatch: 'full' },

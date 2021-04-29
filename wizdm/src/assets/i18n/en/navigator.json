@@ -20,7 +20,6 @@
             { "label": "Donate", "link": "donate" }
         ],
         "private": [
-            { "label": "Wizdm", "link": ".", "exact": true },
             { "label": "Explore", "link": "explore" },
             { "label": "Chat", "link": "chat", "handling": "preserve" },
             { "label": "Reference", "link": "docs" },
@@ -37,7 +36,6 @@
             { "label": "Register/Sign-in", "link": "login", "params": { "mode": "signIn" } }
         ],
         "private": [
-            { "label": "Wizdm", "link": ".", "exact": true },
             { "label": "Profile", "icon": "", "link": "@me" },
             { "label": "Explore", "link": "explore" },
             { "label": "Chat", "link": "chat", "handling": "preserve" },

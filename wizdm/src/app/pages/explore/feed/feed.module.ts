@@ -10,14 +10,16 @@ import { GtagModule } from '@wizdm/gtag';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { LazyDialogLoader, LazyDialogModule } from '@wizdm/lazy-dialog';
+import { AuthGuard, loggedIn } from 'app/utils/auth-guard';
 import { PostModule } from './post/post.module';
 import { FeedComponent } from './feed.component';
 
 
 const routes: RoutesWithContent = [{
   path: '',
-  component: FeedComponent,
   content: 'explore-feed',
+  component: FeedComponent,
+  canActivate: [ AuthGuard ], data: { authGuardPipe: loggedIn },  
   children: [
     { path: 'edit', loadChildren: () => import('./edit/edit.module').then(m => m.EditModule), canActivate: [ LazyDialogLoader ] }
   ]

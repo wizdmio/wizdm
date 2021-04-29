@@ -1,23 +1,17 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { ActionLinkObserver } from '@wizdm/actionlink';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BackLinkObserver extends ActionLinkObserver implements OnDestroy {
+export class BackLinkObserver implements CanActivate {
 
-  private sub: Subscription;
+  constructor(private location: Location) { }
 
-  constructor(location: Location, router: Router) { 
-    
-    super(router); 
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
-    // Registers to the 'back' actionlink to navigate back on request
-    this.sub = this.register('back').subscribe( () => location.back() );
+    // Gets back in the location history and prevents further navigation
+    return this.location.back(), false;
   }
-
-  ngOnDestroy() { this.sub.unsubscribe(); }
 }
