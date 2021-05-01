@@ -106,29 +106,51 @@ export class DialogComponent<D=any, R=any> implements MatDialogConfig<D> {
 
   /** Opens the dialog when the passed condition is true */
   @Input() set opened(open: D) { if(coerceBooleanProperty(open)) { this.open(open); } }  
+  
   /** Reports the open status */
   @Output() openedChange = new EventEmitter<boolean>();
+  
   /** Forces the dialog closing with the given value */
   @Input() set closed(value: R) { this.close(value); }  
+  
   /** Reports the value the dialog as been closed with */
   @Output() closedChange = new EventEmitter<R>(); 
+
+  /** Reports the value the dialog as been closed with whenever truthy */
+  @Output() closedTruthy = new EventEmitter<R>(); 
+
+  /** Reports the value the dialog as been closed with whenever falsy*/
+  @Output() closedFalsy = new EventEmitter<R>(); 
   
   /** Opens the dialog returning the reference */
   public open(data?: D): DialogRef<D,R> {
+
     // Prevents multiple opening
     if(!!this.ref) { return this.ref; }
+    
     // Grabs the optional data
     this.data = data;
+    
     // Opens the dialog with the given configuration
     this.ref = this.dialog.open<any,D,R>(this.template, this);
+    
     // Emits the dialog has been opened
     this.ref.afterOpened().subscribe( () => this.openedChange.emit(true) );
+    
     // Emist the dialog is closing
     this.ref.beforeClosed().subscribe( () => this.openedChange.emit(false) );
     
+    // Emits when dialog is closed
     this.ref.afterClosed().subscribe( value => {
+      
       // Emits the dialog closed with value
       this.closedChange.emit(value);
+
+      // Emtits the dialog close value conditinally whenever truthy...
+      if(coerceBooleanProperty(value)) { this.closedTruthy.emit(value); }
+      //.. or falsy
+      else { this.closedFalsy.emit(value); }
+
       // Makes sure the reference goes backundefined when closed 
       this.ref = undefined;
     });
