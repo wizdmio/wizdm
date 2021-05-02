@@ -1,6 +1,6 @@
-import { Router, Route, Routes, ROUTES, ActivatedRouteSnapshot, RouterStateSnapshot, Resolve, ResolveData } from '@angular/router';
-import { Observable, Subscription, isObservable, from, of, forkJoin, throwError } from 'rxjs';
+import { Router, Route, Routes, ROUTES, ActivatedRouteSnapshot, RouterStateSnapshot, Resolve, ResolveData, RouteConfigLoadEnd } from '@angular/router';
 import { Injectable, NgModuleRef, Type, Compiler, Injector, OnDestroy } from '@angular/core';
+import { Observable, Subscription, isObservable, from, of, forkJoin, throwError } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActionLinkObserver, ActionData } from '@wizdm/actionlink';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -11,15 +11,13 @@ import { map, switchMap, tap } from 'rxjs/operators';
 })
 export class LazyDialogLoader extends ActionLinkObserver implements OnDestroy {
 
+  private dialogs = new Map<string, Route>();
+
   private readonly sub: Subscription;
-  private readonly dialogs: Routes;
   
   constructor(router: Router, private injector: Injector) { 
     
     super(router);
-
-    /** Flattens the local routes recurring down the children and filters for the ones using the DialogLoader */
-    this.dialogs = this.flatten( this.routes() ).filter( ({ canActivate }) => canActivate?.indexOf( LazyDialogLoader ) >= 0);
 
     /** Builds the dialogs stream */
     this.sub = this.observers$.pipe( 
@@ -40,9 +38,10 @@ export class LazyDialogLoader extends ActionLinkObserver implements OnDestroy {
 
   /** Activate a dialog programmatically */
   public open<T, R>(dialog: string, data?: T): Promise<R> {
+    
+    // Seeks for the requested dialog within the routes
+    const routeConfig = this.seekDialog(dialog);
 
-    // Seeks for the requested dialog within the local Routes
-    const routeConfig = this.dialogs.find( ({ path }) => path === dialog );
     if(!routeConfig) { return Promise.reject( new Error(`
       Unable to find the requested dialog "${dialog}".
       Make sure the corresponding Route exists within the same module this DialogLoader instance is provided.
@@ -167,15 +166,41 @@ export class LazyDialogLoader extends ActionLinkObserver implements OnDestroy {
     })).pipe( map( resolvedArray => resolvedArray.reduce( (data, item) => (data[item.key] = item.data, data), data || {} ) ));
   }
 
-  /** Flattens the give Routes recurring down the children */
-  private flatten(routes: Routes): Routes {
+  /** Seeks for the requested dialog route configuration */
+  private seekDialog(dialog: string): Route {
 
-    return routes.reduce( (flat, toFlatten) => {
-      
-      return flat.concat( toFlatten.children ? this.flatten(toFlatten.children) : toFlatten );
+    // Checks within the cached values first
+    const route = this.dialogs.get(dialog);
+    if(route) { return route; }
 
-    }, [] );
-  };
+    const parseTree = (dialog: string, match: Route, routes: Routes) => {
+
+      // Parses the router configuration tree otherwise
+      return routes.reduce( (match, route) => {
+
+        // Recurs down the children
+        if('children' in route) { return parseTree(dialog, match, route.children); }
+
+        // Recurs down the lazily loaded modules
+        if('_loadedConfig' in route) { return parseTree(dialog, match, (route as any)._loadedConfig.routes || []); }
+
+        // Does something only when the LazyDailogLoader is there
+        if(route.canActivate?.indexOf( LazyDialogLoader ) >= 0) {
+
+          // Stores the dialog in the cache for the future
+          this.dialogs.set(route.path, route);
+
+          // Returns the ,matching value
+          if(route.path === dialog) { return route; }
+        }
+        
+        return match;
+
+      }, match );
+    }
+
+    return parseTree(dialog, undefined, this.router.config);
+  }
 
   /** Retrives the Routes array for the given Module defaulting to the current Module when not specified */
   private routes(module?: NgModuleRef<any>): Routes {

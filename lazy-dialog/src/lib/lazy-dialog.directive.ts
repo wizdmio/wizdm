@@ -1,16 +1,17 @@
 import { Directive, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { LazyDialogLoader } from './lazy-dialog.service';
+//import { Router, ActivatedRoute } from '@angular/router';
 
 @Directive({
   selector: '[openDialog]'
 })
 export class LazyDialogDirective<T, R> {
 
-  constructor(private loader: LazyDialogLoader) { }
+  constructor(private loader: LazyDialogLoader/*, private router: Router, private route: ActivatedRoute*/) { }
 
   /** Name of the dialog to open */
-  @Input('openDialog') dialog: string;
+  @Input('openDialog') dialog: string;//|any[];
 
   /** Optional dialog data to pass along */
   @Input('dialogData') data: T;
@@ -26,6 +27,10 @@ export class LazyDialogDirective<T, R> {
 
   /** Opens the dialog on click */
   @HostListener('click') onClick() {
+
+    //const commands = Array.isArray(this.dialog) ? this.dialog : [this.dialog];
+    //const url = this.router.createUrlTree(commands, { relativeTo: this.route });
+    //const path = this.router.serializeUrl(url);
 
     !!this.dialog && this.loader.open<T,R>(this.dialog, this.data)
       .then( value => {
