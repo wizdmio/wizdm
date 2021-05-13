@@ -1,8 +1,6 @@
 import { Directive, Input, Inject, HostBinding, HostListener, ElementRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { SafeUrl } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { SAMEORIGIN } from './same-origin';
 import { OnDestroy } from '@angular/core';
 import { Subscription, of } from 'rxjs';
@@ -13,41 +11,33 @@ import { Subscription, of } from 'rxjs';
 })
 export class DownloadDirective implements OnDestroy {
 
+  private sub: Subscription;
+
   /** True if something went wrong attempting to download the resource */
   public error: boolean = false;
 
   /** True when the request is in process */
   public busy: boolean = false;  
   
-  private sub: Subscription;
-  private blob: string;
-  private href: string;
-
   constructor(@Inject(SAMEORIGIN) private sameOrigin: RegExp, 
                                   private http: HttpClient, 
-                                  private ref: ElementRef<HTMLAnchorElement>,
-                                  private sanitizer: DomSanitizer) {}
+                                  private ref: ElementRef<HTMLAnchorElement>) {}
 
   // Turns the 'download' attribute into an input
   @HostBinding('attr.download')
   @Input() download: string;
 
+  // Binds to the href
+  @HostBinding('href') href: string;
+
   // Intercepts the href
   @Input('href') set source(href: string) {
-
-    // Revokes the previous URL object, if any
-    if(this.blob) { URL.revokeObjectURL(this.blob); this.blob = undefined; }
 
     // Resets possible errors
     this.error = false;
 
     // Updates the href
     this.href = href;
-  }
-
-  // Sanitizes the href to accept both urls and blobs
-  @HostBinding('href') get safeHref(): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(this.href);
   }
 
   // Listens to the click events
@@ -68,8 +58,8 @@ export class DownloadDirective implements OnDestroy {
     // Gets the source file as a blob
     this.sub = this.http.get(this.href, { responseType: "blob" }).pipe( 
 
-      // Creates the URL object ready for download
-      map( blob => this.blob = URL.createObjectURL(blob) ),
+      // Converts the blob into a data url
+      switchMap( blob => this.readAsDataUrl(blob) ),
 
       // Catches possible errors such as CORS not allowing the file download
       catchError( error => {
@@ -100,10 +90,22 @@ export class DownloadDirective implements OnDestroy {
     return false;
   }
 
-  ngOnDestroy() { 
+  /** Asyncronously converts a blob into a data url */
+  private readAsDataUrl(blob: Blob): Promise<string> {
 
-    // Revokes the URL object
-    if(this.blob) { URL.revokeObjectURL(this.blob); }
+    return new Promise( (resolve, reject) => {
+
+      const fd = new FileReader();
+
+      fd.onerror = () => reject(fd.error);
+
+      fd.onload = () => resolve(fd.result as string);
+
+      fd.readAsDataURL(blob);
+    });
+  }
+
+  ngOnDestroy() { 
 
     // Unsubscribes the encoder
     if(this.sub) { this.sub.unsubscribe(); }
