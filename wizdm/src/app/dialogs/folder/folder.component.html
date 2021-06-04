@@ -1,0 +1,134 @@
+
+<!-- Gets the localized content -->
+<ng-container *wmContent="let msgs select 'folder'">
+
+  <header mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center" fxFlex="0 0 auto">
+
+    <span>{{ data?.title || msgs?.title || 'Your files' }}</span>
+
+    <!-- Closes the dialog returning the feedback sending result -->
+    <button mat-icon-button mat-dialog-close>
+      <wm-icon inline="true" icon="close"></wm-icon>
+    </button>
+
+    <!-- Thumbnail size selector -->
+    <!--mat-button-toggle-group value="sm" #sizes="matButtonToggleGroup">
+
+      <mat-button-toggle value="sm"><wm-icon icon="fas:fa-th"></wm-icon></mat-button-toggle>
+      
+      <mat-button-toggle value="md"><wm-icon icon="fas:fa-th-large"></wm-icon></mat-button-toggle>
+    
+    </mat-button-toggle-group-->
+
+  </header>
+
+  <mat-dialog-content fxFlex="1 1 auto">
+
+    <div gdColumns="repeat(auto-fill, minmax(250px, 1fr))" gdGap="8px 8px">
+    <!--div class="masonry"-->
+
+      <!-- None selected item -->
+      <ng-container *ngIf="data?.none">
+
+        <wm-image>
+
+          <div imagePlaceholder class="none"></div>
+
+        </wm-image>
+
+        <!--button mat-button (click)="selectFile('none')">
+
+          <wm-thumbnail [name]="msgs?.none || 'None'" [size]="sizes.value" [selected]="isFileSelected('none')">
+            <div class="none"></div>
+          </wm-thumbnail>
+
+        </button-->
+
+      </ng-container>
+
+      <!-- Opens the native file dialog -->
+      <button mat-button class="item mat-elevation-z2" color="primary" 
+              fileDialog accept="image/*" (openFiles)="uploadFile($event[0])"
+              cdkFocusInitial
+      >{{ msgs?.browse || 'Browse' }}</button>
+
+      <!-- List of uploaded items -->
+      <ng-container *ngFor="let file of files$ | async">
+
+        <img class="item mat-elevation-z2" [lazyLoad]="file.url$ | async" />
+
+        <!--wm-image [src]="file.url$ | async" class="item mat-elevation-z2"-->
+
+          <!-- Loading progress -->
+          <!--mat-progress-spinner imageLoading color="prinary" mode="indeterminate"></mat-progress-spinner-->
+
+          <!--wm-icon imageLoading icon="far:fa-image"></wm-icon-->
+
+          <!--span imageLoading class="mat-small">{{ file.name$ | async}}</span-->
+
+        <!--/wm-image>
+
+        <ng-container *ngIf="(file.meta$ | async)?.customMetadata as meta">
+
+          <div class="item">
+
+            <img [src]="meta.thumbnail" width="100%" height="100%" style="object-fit: cover"/>
+
+          </div>
+
+        </ng-container-->
+      
+        <!--button mat-button *ngIf="file.url$ | async as fileUrl" (click)="selectFile(fileUrl)" (dblclick)="close(fileUrl)">
+
+          <wm-thumbnail [src]="fileUrl" [name]="file.name$ | async" [size]="sizes.value" [selected]="isFileSelected(fileUrl)">
+            <wm-spinner></wm-spinner>
+          </wm-thumbnail>
+
+        </button-->
+
+    </ng-container>
+      
+  </div>
+      
+  </mat-dialog-content>
+ 
+  <!-- Buttons -->
+  <!--mat-dialog-actions fxLayout="row" fxLayoutAlign="end" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center"-->
+
+    <!-- Closes the dialog falsely -->
+    <!--button mat-button color="warn" mat-dialog-close>{{ msgs?.cancel || 'Close' }}</button-->
+
+    <!-- Ask to confirm for deletion -->
+    <!--button mat-button color="warn" type="button" (click)="fileDelete.open()" [disabled]="!selectedFile">{{ msgs?.delete || 'Delete' }}</button-->
+  
+    <!-- Opens the native file dialog -->
+    <!--button mat-button color="accent" type="button" (click)="fileOpen.value=''; fileOpen.click()">{{ msgs?.browse || 'Browse' }}</button-->
+
+    <!-- Closes the dialog returning the selected file url -->
+    <!--button mat-button color="primary" [mat-dialog-close]="selectedFile" cdkFocusInitial>{{ msgs?.select || 'Select' }}</button-->
+  
+  <!--/mat-dialog-actions-->
+
+  <!-- Hidden file open control -->
+  <!--input style="display:none" type="file" accept="image/*" (change)="upload($event.target.files[0])" #fileOpen /-->
+
+  <!-- Can Delete confirmation dialog -->
+  <!--wm-dialog role="alertdialog" (closedTruthy)="deleteFile(selectedFile)" #fileDelete>
+
+    <h2 mat-dialog-title><b>{{ msgs.canDelete?.title || 'Deleting files' }}</b></h2>
+
+    <mat-dialog-content [wm-readme]="msgs.canDelete?.message">
+      <b>WARNING!!!</b><br>By proceeding you'll permanently delete the selected file(s).
+    </mat-dialog-content>
+  
+    <mat-dialog-actions align="end">
+
+      <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.canDelete?.cancel || 'Abort' }}</button>
+      
+      <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.canDelete?.ok || 'Proceed' }}</button>
+    
+    </mat-dialog-actions>
+
+  </wm-dialog-->
+  
+</ng-container>

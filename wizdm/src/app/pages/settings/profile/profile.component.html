@@ -39,7 +39,7 @@
   <wm-preferences-form [(value)]="profile" #prefs></wm-preferences-form>
   
   <!-- CanLeave Popup Dialog (based on MatDialog) -->
-  <wm-dialog [dontLeave]="form.dirty || prefs.dirty" (beforeClosed)="$event === 'save' && updateProfile(form.userData)">
+  <wm-dialog role="alertdialog" [dontLeave]="form.dirty || prefs.dirty" (beforeClosed)="$event === 'save' && updateProfile(form.userData)">
 
     <h2 mat-dialog-title><b>{{ msgs.canLeave?.title || 'Unsaved changes' }}</b></h2>
   

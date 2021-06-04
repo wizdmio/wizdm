@@ -77,9 +77,13 @@ export class StorageFolder extends StorageReference {
 
   /** Uploads new files in the current folder */
   public upload(file: File, meta?: UploadMetadata): UploadObservable {
+
+    // Gets the content type from the file by default
+    const metadata = { contentType: file.type, ...meta };
     
     // Creates the UploadObservable
-    const up = this.child(file.name).put(file, meta);
+    const up = this.child(file.name).put(file, metadata);
+
     // Pushes the objesvable along the uploading stream and returns it to the caller
     return this.upload$.next( up ), up;
   }

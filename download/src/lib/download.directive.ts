@@ -1,6 +1,6 @@
 import { Directive, Input, Inject, HostBinding, HostListener, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { catchError, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { SAMEORIGIN } from './same-origin';
 import { OnDestroy } from '@angular/core';
 import { Subscription, of } from 'rxjs';

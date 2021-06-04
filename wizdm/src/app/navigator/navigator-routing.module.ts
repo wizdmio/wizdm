@@ -1,5 +1,5 @@
-import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { BackLinkObserver, LogoutLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { matchUserNameOnly } from 'app/pages/profile/matcher';
 import { matchFullPath } from 'app/pages/static/static-matcher';
 import { NavigatorComponent } from './navigator.component';
@@ -7,7 +7,6 @@ import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { LazyDialogLoader } from '@wizdm/lazy-dialog';
 import { RedirectService } from '@wizdm/redirect';
 import { UserPreferences } from 'app/utils/user';
-
 import { NgModule } from '@angular/core';
 
 const routes: RoutesWithContent = [
@@ -67,8 +66,11 @@ const routes: RoutesWithContent = [
       // Admin tools
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
       
-       // Login dialog
+      // Login dialog
       { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ LazyDialogLoader ] },
+
+      // Folder dialog
+      { path: 'folder', loadChildren: () => import('../dialogs/folder/folder.module').then(m => m.FolderModule), canActivate: [ LazyDialogLoader ] },
 
       // Feedback dialog
       { path: 'contact', loadChildren: () => import('../dialogs/feedback/feedback.module').then(m => m.FeedbackModule), canActivate: [ LazyDialogLoader ] },

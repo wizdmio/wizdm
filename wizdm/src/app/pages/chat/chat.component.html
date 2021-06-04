@@ -108,7 +108,7 @@
   </wm-composer> 
 
   <!-- Can Leave dialog -->
-  <wm-dialog *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
+  <wm-dialog role="alertdialog" *ngIf="msgs.canLeave as leave" [dontLeave]="!!text">
 
     <h2 mat-dialog-title><b>{{ leave.title || 'Unsent message' }}</b></h2>
   

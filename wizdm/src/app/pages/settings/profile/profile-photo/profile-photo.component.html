@@ -22,11 +22,8 @@
 
     <ng-template #uploadBtn>
 
-      <!-- Hidden file open control -->
-      <input style="display:none" type="file" accept="image/*" (change)="uploadFile($event.target.files)" #openfile />
-
       <!-- File upload button -->
-      <button mat-icon-button class="buttons" (click)="openfile.value=''; openfile.click()">
+      <button mat-icon-button class="buttons" fileDialog accept="image/*" (openFiles)="uploadFile($event)">
         <wm-icon [icon]="msgs.upload?.icon || 'cloud_upload'"></wm-icon>
       </button>
 

@@ -18,6 +18,8 @@ import { EmojiSupportModule } from '@wizdm/emoji';
 import { IpInfoModule } from '@wizdm/ipinfo';
 import { GtagModule } from '@wizdm/gtag';
 import { StripeModule } from '@wizdm/stripe';
+import { LazyImageLoader } from '@wizdm/lazy-image';
+import { StorageImageLoader } from 'app/utils/image-loader';
 import { ScrollingModule } from 'app/utils/scrolling';
 import { AppComponent } from './app.component';  
 
@@ -67,6 +69,9 @@ const routes: Routes = [
 
     // Applies the  redirection service to ReadmeComponent from @wizdm/elements
     { provide: ReadmeNavigator, useExisting: RedirectService },
+
+    // Overrides the standard lazy image loader with our custom one from CloudStorage
+    { provide: LazyImageLoader, useClass: StorageImageLoader },
 
     // Provides the MatIconRegistry globally
     MatIconRegistry,

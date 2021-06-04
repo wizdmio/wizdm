@@ -126,6 +126,12 @@
       ],
       "@wizdm/lazy-dialog": [
         "lazy-dialog/src/index.ts"
+      ],
+      "@wizdm/file-dialog": [
+        "file-dialog/src/index.ts"
+      ],
+      "@wizdm/lazy-image": [
+        "lazy-image/src/index.ts"
       ]
     }
   },

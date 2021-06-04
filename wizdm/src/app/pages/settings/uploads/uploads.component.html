@@ -11,7 +11,7 @@
                           diameter="20"></mat-progress-spinner>
 
     <!-- Confirm deleting files dialog -->
-    <wm-dialog #confirmDelete (closedChange)="$event && deleteFiles()">
+    <wm-dialog role="alertdialog" #confirmDelete (closedTruthy)="deleteFiles()">
 
       <h2 mat-dialog-title><b>{{ msgs.confirmDelete?.title || 'Deleting file(s)' }}</b></h2>
     
@@ -38,11 +38,8 @@
 
     </button>
 
-    <!-- Hidden file open control -->
-    <input style="display:none" type="file" accept="image/*" multiple (change)="uploadFiles($event.target.files)" #openfile />
-
     <!-- Confirm overwriting files dialog -->
-    <wm-dialog #confirmOverwrite [opened]="overwriteFiles" (closedChange)="$event && uploadFiles(overwriteFiles, true)">
+    <wm-dialog role="alertdialog" #confirmOverwrite [opened]="overwriteFiles" (closedTruthy)="uploadFiles(overwriteFiles, true)">
 
       <h2 mat-dialog-title><b>{{ msgs.confirmOverwrite?.title || 'Existing file(s)' }}</b></h2>
     
@@ -61,7 +58,10 @@
     <button mat-button [color]="msgs.actions?.upload?.color || 'primary'"
                        [type]="mobile ? 'icon' : 'stroked'" 
                        [disabled]="busy"
-                       (click)="openfile.value=''; openfile.click()">
+                       fileDialog 
+                       accept="image/*"
+                       multiple 
+                       (openFiles)="uploadFiles($event)">
 
       <wm-icon *ngIf="mobile; else uploadTemplate" [icon]="msgs.actions?.upload?.icon || 'backup'"></wm-icon>
       

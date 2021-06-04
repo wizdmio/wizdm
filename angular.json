@@ -1083,6 +1083,86 @@
           }
         }
       }
+    },
+    "file-dialog": {
+      "projectType": "library",
+      "root": "file-dialog",
+      "sourceRoot": "file-dialog/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "file-dialog/tsconfig.lib.json",
+            "project": "file-dialog/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "file-dialog/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "file-dialog/src/test.ts",
+            "tsConfig": "file-dialog/tsconfig.spec.json",
+            "karmaConfig": "file-dialog/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "file-dialog/tsconfig.lib.json",
+              "file-dialog/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "lazy-image": {
+      "projectType": "library",
+      "root": "lazy-image",
+      "sourceRoot": "lazy-image/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "lazy-image/tsconfig.lib.json",
+            "project": "lazy-image/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "lazy-image/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "lazy-image/src/test.ts",
+            "tsConfig": "lazy-image/tsconfig.spec.json",
+            "karmaConfig": "lazy-image/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "lazy-image/tsconfig.lib.json",
+              "lazy-image/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -8,8 +8,8 @@ import { IconModule } from '@wizdm/elements/icon';
 import { ButtonChangerModule } from '@wizdm/elements/button';
 import { GtagModule } from '@wizdm/gtag';
 import { ActionbarModule } from 'app/navigator/actionbar';
-import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { LazyDialogLoader, LazyDialogModule } from '@wizdm/lazy-dialog';
+import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { AuthGuard, loggedIn } from 'app/utils/auth-guard';
 import { PostModule } from './post/post.module';
 import { FeedComponent } from './feed.component';
@@ -39,7 +39,6 @@ const routes: RoutesWithContent = [{
     LazyDialogModule,
     PostModule,
     ContentRouterModule.forChild(routes)
-  ],
-  providers: [ LazyDialogLoader ]
+  ]
 })
 export class FeedModule { }

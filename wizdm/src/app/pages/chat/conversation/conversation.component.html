@@ -64,7 +64,7 @@
           <button mat-menu-item (click)="confirmDelete.open()">{{ msgs.delete?.label || 'Delete chat' }}</button>
 
           <!-- Confirm deleting chat dialog -->
-          <wm-dialog #confirmDelete (closedChange)="$event && delete()">
+          <wm-dialog role="alertdialog" #confirmDelete (closedTruthy)="delete()">
 
             <h2 mat-dialog-title><b>{{ msgs.confirmDelete?.title || 'Deleting chat' }}</b></h2>
           

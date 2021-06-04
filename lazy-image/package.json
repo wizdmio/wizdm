@@ -1,0 +1,27 @@
+{
+  "$schema": "../node_modules/ng-packagr/package.schema.json",
+  "name": "@wizdm/lazy-image",
+  "description": "Lazy loading for images",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["Angular", "Image", "Lazy loading"],
+  "homepage": "https://wizdm.io/docs/lazy-image", 
+  "peerDependencies": {
+    "@angular/common": "^11.0.0",
+    "@angular/core": "^11.0.0",
+    "@wizdm/animate": "^3.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wizdmio/wizdm/tree/master/lazy-image"
+  },
+  "bugs": {
+    "url": "https://github.com/wizdmio/wizdm/issues"
+  }
+}

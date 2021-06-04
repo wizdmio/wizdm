@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
+import { LazyDialogModule } from '@wizdm/lazy-dialog';
 import { ToolbarComponent } from './toolbar.component';
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ToolbarComponent } from './toolbar.component';
     MatIconModule,
     MatMenuModule,
     MatTooltipModule,
-    MatDividerModule
+    MatDividerModule,
+    LazyDialogModule
   ],
   declarations: [ ToolbarComponent ],
   exports: [ ToolbarComponent ]

@@ -66,7 +66,7 @@
           </button>
 
           <!-- CanDelete dialog, hides the post when deleted -->
-          <wm-dialog (closedChange)="(deleted = $event) && delete()" #dlgDelete>
+          <wm-dialog role="alertdialog" (closedTruthy)="deleted = true; delete()" #dlgDelete>
             <h2 mat-dialog-title><b>{{ msgs.canDelete?.title || 'Confirm deletion' }}</b></h2>
     
             <mat-dialog-content [wm-readme]="msgs.canDelete?.message" linkClass="primary">

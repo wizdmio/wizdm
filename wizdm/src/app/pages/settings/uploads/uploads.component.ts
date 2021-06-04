@@ -153,10 +153,10 @@ export class UploadsComponent extends StorageFolder implements DataSource<Upload
     this.uploading = true;
 
     // Starts uploading the given files and waits for all to complete. Catch errors since it is likely a user cancellation
-    forkJoin( allFiles.map( file => this.upload(file, { contentType: file.type }).pipe( catchError( () => of(null) ) ) ) ).toPromise().then( uploads => {
+    forkJoin( allFiles.map( file => this.upload(file).pipe( catchError( () => of(null) ) ) ) ).toPromise().then( uploads => {
 
       // Checks for overrides or cancellations to re-list the files
-      if(overwrite || uploads.some( upload => upload === null)) { 
+      if(overwrite || uploads.some( upload => upload === null )) { 
         
         this.ls("."); 
         

@@ -1,12 +1,12 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import type { ActionData } from '@wizdm/actionlink';
 import { Component, Inject } from '@angular/core';
 import { RedirectService } from '@wizdm/redirect';
 import { GtagService } from '@wizdm/gtag';
 import { User } from '@wizdm/connect/auth';
 import { UserProfile } from 'app/utils/user';
 import { $animations } from './login-animations';
-import type { ActionData } from '@wizdm/actionlink';
 
 export type loginAction = 'social'|'register'|'signIn'|'forgotPassword'|'resetPassword'|'changePassword'|'sendEmailVerification'|'verifyEmail'|'recoverEmail'|'changeEmail'|'delete';
 

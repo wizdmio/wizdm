@@ -20,6 +20,7 @@ import { ButtonChangerModule } from '@wizdm/elements/button';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { MomentPipesModule } from '@wizdm/pipes/moment';
 import { FileSizePipeModule } from '@wizdm/pipes/file-size';
+import { FileDialogModule } from '@wizdm/file-dialog';
 //import { CanLeaveModule, CanLeaveGuard } from 'app/navigator/guards/can-leave';
 import { ActionbarModule } from 'app/navigator/actionbar';
 import { UploadsComponent } from './uploads.component';
@@ -58,6 +59,7 @@ const routes: RoutesWithContent = [
     FileSizePipeModule,
     MomentPipesModule,
     DownloadModule,
+    FileDialogModule,
     ContentRouterModule.forChild(routes)
   ],
   providers:  [

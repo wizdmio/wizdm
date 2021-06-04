@@ -7,8 +7,8 @@ import { ContentModule } from '@wizdm/content';
 import { ReadmeModule } from '@wizdm/readme';
 import { AvatarModule } from '@wizdm/elements/avatar';
 import { IconModule } from '@wizdm/elements/icon';
+import { FileDialogModule } from '@wizdm/file-dialog';
 import { ProfilePhotoComponent } from './profile-photo.component';
-
 
 @NgModule({
   
@@ -20,7 +20,8 @@ import { ProfilePhotoComponent } from './profile-photo.component';
     ContentModule,
     ReadmeModule,
     AvatarModule,
-    IconModule
+    IconModule,
+    FileDialogModule
   ],
   declarations: [ ProfilePhotoComponent ],
   exports: [ ProfilePhotoComponent ]
