@@ -7,7 +7,7 @@
       "firebase/app": "firebase/app"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "firebase"
   ]
 }

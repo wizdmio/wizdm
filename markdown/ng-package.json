@@ -13,7 +13,7 @@
       "unified": "unified"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "path", 
     "remark-align", 
     "remark-parse", 

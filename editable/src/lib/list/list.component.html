@@ -3,12 +3,7 @@
   <ng-container [ngSwitch]="node.type">
 
     <!-- List items -->
-    <ng-container *ngSwitchCase="'paragraph'">
-
-      <!-- Hides the last empty item when in view mode -->
-      <li *ngIf="edit || !(node.last && node.empty)" [class]="customClasses?.li" [wm-editable]="node" [customClasses]="customClasses"></li>
-
-    </ng-container>
+    <li *ngSwitchCase="'paragraph'" [class]="customClasses?.li" [wm-editable]="node" [customClasses]="customClasses"></li>
 
     <!-- Next level indentation ordered list -->
     <ol *ngSwitchCase="'numbered'" [class]="customClasses?.ol" [wm-list]="node" [customClasses]="customClasses"></ol>

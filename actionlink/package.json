@@ -2,14 +2,14 @@
   "$schema": "../node_modules/ng-packagr/package.schema.json",
   "name": "@wizdm/actionlink",
   "description": "Custom actions for Angular Router",
-  "version": "1.0.0",  
+  "version": "1.1.0",
   "license": "MIT",
   "keywords": ["Angular", "Router"],
   "homepage": "https://wizdm.io/docs/actionlink",  
   "peerDependencies": {
-    "@angular/core": "^11.0.0",
-    "@angular/cdk": "^11.0.0",
-    "@angular/material": "^11.0.0"
+    "@angular/core": "^12.0.0",
+    "@angular/cdk": "^12.0.0",
+    "@angular/material": "^12.0.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"

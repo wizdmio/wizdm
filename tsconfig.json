@@ -7,7 +7,6 @@
     "declaration": false,
     "downlevelIteration": true,
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "resolveJsonModule": true,
