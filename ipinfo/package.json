@@ -1,10 +1,11 @@
 {
-  "name": "@wizdm/downloader",
-  "description": "Cross origin downloader helper",
+  "$schema": "../node_modules/ng-packagr/package.schema.json",
+  "name": "@wizdm/ipinfo",
+  "description": "IP Geolocation provider",
   "version": "1.0.0",
   "license": "MIT",
-  "keywords": ["Angular", "Download", "cors"],
-  "homepage": "https://wizdm.io/docs/download",
+  "keywords": ["Angular", "IP info", "Geolocation"],
+  "homepage": "https://wizdm.io/docs/ipinfo",  
   "peerDependencies": {
     "@angular/common": "^12.0.0",
     "@angular/core": "^12.0.0"
@@ -17,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wizdmio/wizdm/tree/master/download"
+    "url": "https://github.com/wizdmio/wizdm/tree/master/ipinfo"
   },
   "bugs": {
     "url": "https://github.com/wizdmio/wizdm/issues"

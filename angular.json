@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "root": "wizdm",
@@ -195,11 +195,6 @@
             "karmaConfig": "animate/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "connect": {
@@ -246,6 +241,18 @@
       "sourceRoot": "redirect/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "redirect/tsconfig.lib.json",
+            "project": "redirect/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "redirect/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -263,11 +270,6 @@
             "tsConfig": "redirect/tsconfig.spec.json",
             "karmaConfig": "redirect/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -306,11 +308,6 @@
             "tsConfig": "elements/tsconfig.spec.json",
             "karmaConfig": "elements/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -388,11 +385,6 @@
             "karmaConfig": "prism/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "editable": {
@@ -457,11 +449,6 @@
             "karmaConfig": "doorbell/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "paypal": {
@@ -499,11 +486,6 @@
             "tsConfig": "paypal/tsconfig.spec.json",
             "karmaConfig": "paypal/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -543,11 +525,6 @@
             "karmaConfig": "stripe/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "ipinfo": {
@@ -556,6 +533,18 @@
       "sourceRoot": "ipinfo/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "ipinfo/tsconfig.lib.json",
+            "project": "ipinfo/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "ipinfo/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -574,11 +563,6 @@
             "karmaConfig": "ipinfo/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "gtag": {
@@ -587,6 +571,18 @@
       "sourceRoot": "gtag/src",
       "prefix": "wm",
       "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "gtag/tsconfig.lib.json",
+            "project": "gtag/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "gtag/tsconfig.lib.prod.json"
+            }
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -604,11 +600,6 @@
             "tsConfig": "gtag/tsconfig.spec.json",
             "karmaConfig": "gtag/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -648,11 +639,6 @@
             "karmaConfig": "emoji/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "teleport": {
@@ -690,11 +676,6 @@
             "tsConfig": "teleport/tsconfig.spec.json",
             "karmaConfig": "teleport/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -734,11 +715,6 @@
             "karmaConfig": "actionlink/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "readme": {
@@ -777,11 +753,6 @@
             "karmaConfig": "readme/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "pipes": {
@@ -807,11 +778,6 @@
             "tsConfig": "pipes/tsconfig.spec.json",
             "karmaConfig": "pipes/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -851,11 +817,6 @@
             "karmaConfig": "download/karma.conf.js"
           }
         }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
-        }
       }
     },
     "admin": {
@@ -881,11 +842,6 @@
             "tsConfig": "admin/tsconfig.spec.json",
             "karmaConfig": "admin/karma.conf.js"
           }
-        }
-      },
-      "schematics": {
-        "@schematics/angular:component": {
-          "styleext": "scss"
         }
       }
     },
@@ -1178,7 +1134,7 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     }
   },
   "defaultProject": "wizdm"
