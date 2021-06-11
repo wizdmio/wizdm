@@ -1,4 +1,4 @@
-import { BackLinkObserver, LogoutLinkObserver, CloseLinkObserver, WelcomeBack } from './utils';
+import { BackLinkObserver, LogoutLinkObserver, CloseLinkObserver, CookieConsent, WelcomeBack, UserPreferences } from './utils';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { matchUserNameOnly } from 'app/pages/profile/matcher';
 import { matchFullPath } from 'app/pages/static/static-matcher';
@@ -6,7 +6,6 @@ import { NavigatorComponent } from './navigator.component';
 import { Oauth2Handler } from 'app/utils/oauth2-handler';
 import { LazyDialogLoader } from '@wizdm/lazy-dialog';
 import { RedirectService } from '@wizdm/redirect';
-import { UserPreferences } from 'app/utils/user';
 import { NgModule } from '@angular/core';
 
 const routes: RoutesWithContent = [
@@ -29,7 +28,7 @@ const routes: RoutesWithContent = [
   {
     path: ':lang',    
     component: NavigatorComponent,    
-    canActivate: [ UserPreferences ],
+    canActivate: [ CookieConsent, UserPreferences ],
     content: 'navigator',
     
     children: [
@@ -65,6 +64,10 @@ const routes: RoutesWithContent = [
 
       // Admin tools
       { path: 'admin', loadChildren: () => import('../pages/admin/admin.module').then(m => m.AdminModule) },
+
+      // Cookies consent dialog
+      { path: 'consent', loadChildren: () => import('../dialogs/consent/consent.module').then(m => m.ConsentModule), canActivate: [ LazyDialogLoader ] },
+      { path: 'ask-consent', redirectTo: 'consent', pathMatch: 'full' }, 
       
       // Login dialog
       { path: 'login', loadChildren: () => import('../dialogs/login/login.module').then(m => m.LoginModule), canActivate: [ LazyDialogLoader ] },
@@ -93,6 +96,6 @@ const routes: RoutesWithContent = [
 @NgModule({
   imports: [ ContentRouterModule.forChild(routes) ],
   exports: [ ContentRouterModule ],
-  providers: [ WelcomeBack, UserPreferences, LazyDialogLoader ]
+  providers: [ CookieConsent, WelcomeBack, UserPreferences ]
 })
 export class NavRoutingModule {}

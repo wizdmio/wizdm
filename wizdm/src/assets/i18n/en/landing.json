@@ -153,8 +153,7 @@
         { 
           "icon": "fas:fa-cookie-bite",
           "title": "Cookie Consent",
-          "description": "Inform your user about the use your app is doing of cookies so to comform with regulations.",
-          "comingSoon": "Coming soon"  
+          "description": "Inform your user about the use your app is doing of cookies so to comform with regulations."
         },
         { 
           "icon": "fas:fa-chart-bar",

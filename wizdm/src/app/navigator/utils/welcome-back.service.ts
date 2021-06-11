@@ -18,7 +18,6 @@ export class WelcomeBack implements CanActivate {
 
       // Jumps to 'welcome-back' whenever loggen-in since we are evidentlly coming back
       return user ? this.router.createUrlTree([ '/', lang, 'welcome-back' ]) : true;
-
     }));
   }
 }

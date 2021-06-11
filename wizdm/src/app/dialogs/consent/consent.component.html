@@ -1,0 +1,30 @@
+<!-- Gets the localized content -->
+<ng-container *wmContent="let msgs select 'consent'">
+
+  <!-- Title -->
+  <h2 mat-dialog-title>{{ msgs.title || 'We uses cookies' }}</h2>
+
+  <mat-dialog-content>
+
+    <!-- Cookie message -->
+    <p [wm-readme]="msgs.body">We use our own and third-party cookies to personalize content and to analyze web traffic.</p>
+      
+  </mat-dialog-content>
+ 
+  <mat-dialog-actions align="center">
+
+    <!-- Reject -->
+    <!--button mat-button [mat-dialog-close]="false" >{{ msgs.cancel || 'Reject' }}</button-->
+
+    <!-- Accept all cookies button -->
+    <button mat-button [mat-dialog-close]="true" color="primary" cdkFocusInitial>
+      
+      <wm-icon icon="fas:fa-cookie-bite"></wm-icon>
+      
+      <span>{{ msgs.ok || 'Accept' }}</span>
+    
+    </button>
+
+  </mat-dialog-actions>
+  
+</ng-container>

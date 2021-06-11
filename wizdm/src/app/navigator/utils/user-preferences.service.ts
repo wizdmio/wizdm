@@ -4,7 +4,7 @@ import { switchMap, map, take, filter } from 'rxjs/operators';
 import { LANGUAGE_MAP, LanguageMap } from '@wizdm/geo';
 import { DarkModeObserver } from 'app/utils/platform';
 import { DateAdapter } from '@angular/material/core';
-import { UserProfile } from './user-profile.service';
+import { UserProfile } from 'app/utils/user';
 import { Injectable, Inject } from '@angular/core';
 import { IpInfo, IpListCC } from '@wizdm/ipinfo';
 import { Subscription, of } from 'rxjs';

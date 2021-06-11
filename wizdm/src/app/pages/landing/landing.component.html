@@ -4,7 +4,6 @@
   
   <!-- Applies a background as per the configuration -->
   <wm-background *ngIf="msgs.background as background"
-    [linearGradients]="background.linearGradients || undefined"
     [attachment]="background.attachment || 'local'"
     [position]="background.position || undefined" 
     [repeat]="background.repeat || 'no-repeat'"    
