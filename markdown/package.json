@@ -10,7 +10,7 @@
     "tslib": "^2.0.0",
     "path": "^0.12.7",
     "remark-align": "^1.2.14",
-    "remark-parse": "^9.0.0",
+    "remark-parse": "^8.0.3",
     "remark-sub-super": "^1.0.20",
     "unified": "^9.2.1"
   },
