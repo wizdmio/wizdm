@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
-import { RedirectModule } from '@wizdm/redirect';
+import { ReadmeModule } from '@wizdm/readme';
 import { IconModule } from '@wizdm/elements/icon';
 import { DoorbellModule } from '@wizdm/doorbell';
 import { FeedbackComponent } from './feedback.component';
@@ -38,7 +38,7 @@ const routes: RoutesWithContent = [{
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
-    RedirectModule,
+    ReadmeModule,
     IconModule,
     // Initialize the doorbell service
     DoorbellModule.init(doorbell),

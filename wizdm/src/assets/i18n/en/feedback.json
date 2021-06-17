@@ -29,10 +29,7 @@
           "sizeExceeded": "File size exceeded"
       }
   },
-  "credits": {
-      "caption": "Powered by Doorbell.io",
-      "url": "https://doorbell.io"
-  },
+  "credits": "Powered by [Doorbell.io](https://doorbell.io)",
   "notifications": {
       "success": "Thank you for reaching us out!\nWe'll get in touch very soon",
       "error": "Seems the feedback didn't go through :/\nPlease retry in a minute"

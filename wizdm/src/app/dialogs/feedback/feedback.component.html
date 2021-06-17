@@ -28,7 +28,7 @@
   </ng-template>
 
   <!-- Feedback form to fill-in -->
-  <form (ngSubmit)="send(lang)" *ngIf="!sent; else thankYou" [disabled]="sending" #form="ngForm">
+  <form (ngSubmit)="send(lang)" *ngIf="!sent; else thankYou" #form="ngForm">
 
     <mat-dialog-content fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="10px">
 
@@ -96,6 +96,6 @@
   </form>
 
   <!-- Credits -->
-  <a *ngIf="msgs.credits as credits" class="mat-small" [wmRedirect]="credits.url">{{ credits.caption }}</a>
+  <div class="mat-small" [wm-readme]="msgs?.credits" linkClass="primary"></div>
 
 </ng-container>

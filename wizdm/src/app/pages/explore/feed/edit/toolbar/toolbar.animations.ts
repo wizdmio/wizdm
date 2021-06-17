@@ -1,6 +1,6 @@
 import { trigger, animate, style, transition } from '@angular/animations';
 
-const $timing = '500ms ease-in-out';//'450ms cubic-bezier(.8, -0.6, 0.2, 1.5)';
+const $timing = '300ms ease-in-out';//'450ms cubic-bezier(.8, -0.6, 0.2, 1.5)';
 
 export const $animations = [
   trigger('slide', [
