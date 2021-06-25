@@ -12,6 +12,7 @@ import { LazyDialogLoader, LazyDialogModule } from '@wizdm/lazy-dialog';
 import { ContentRouterModule, RoutesWithContent } from '@wizdm/content';
 import { AuthGuard, loggedIn } from 'app/utils/auth-guard';
 import { PostModule } from './post/post.module';
+import { CardModule } from './card/card.module';
 import { FeedComponent } from './feed.component';
 
 
@@ -38,6 +39,7 @@ const routes: RoutesWithContent = [{
     ActionbarModule,
     LazyDialogModule,
     PostModule,
+    CardModule,
     ContentRouterModule.forChild(routes)
   ]
 })

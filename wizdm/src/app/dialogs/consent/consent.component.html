@@ -13,17 +13,17 @@
  
   <mat-dialog-actions align="center">
 
-    <!-- Reject -->
-    <!--button mat-button [mat-dialog-close]="false" >{{ msgs.cancel || 'Reject' }}</button-->
-
     <!-- Accept all cookies button -->
-    <button mat-button [mat-dialog-close]="true" color="primary" cdkFocusInitial>
+    <button mat-flat-button [mat-dialog-close]="true" color="accent" cdkFocusInitial>
       
       <wm-icon icon="fas:fa-cookie-bite"></wm-icon>
       
       <span>{{ msgs.ok || 'Accept' }}</span>
     
     </button>
+
+    <!-- Sign-in -->
+    <button mat-button color="primary" routerLink="/login">{{ msgs.cancel || 'Join | Sign-in' }}</button>
 
   </mat-dialog-actions>
   

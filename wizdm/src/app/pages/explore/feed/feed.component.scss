@@ -23,14 +23,15 @@
   .feed-list {
     margin: 0;
     padding: 0;
-    max-width: 700px;
+    //max-width: 700px;
     list-style: none;
   }
 
   .feed-item {
     position: relative;
-    margin-bottom: 20px;
-    border-radius: 8px; 
-    transition: ease-in-out .2s;
+    //margin-bottom: 20px;
+    //border-radius: 8px; 
+    //transition: ease-in-out .2s;
+    padding: 20px;
   }
 }

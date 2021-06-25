@@ -35,16 +35,18 @@
   </ng-template>
 
   <!-- List all posts in descending order -->
-  <ul class="feed-list">
+  <ul class="feed-list" fxLayout="row wrap">
 
-    <li *ngFor="let post of feed$ | async" class="feed-item mat-elevation-z3">
-      <wm-post [post]="post" (navigate)="navigate($event)"></wm-post>
+    <!--li *ngFor="let post of feed$ | async" class="feed-item mat-elevation-z3"-->
+    <li *ngFor="let post of feed$ | async" class="feed-item" fxFlex="33" fxFlex.lt-sm="100">
+      <!--wm-post [post]="post" (navigate)="navigate($event)"></wm-post-->
+      <wm-card [data]="post" (navigate)="navigate($event)"></wm-card>
     </li>
 
     <!-- Dummy empty posts while loading -->
-    <li *ngFor="let dummy of loading$ | async" class="feed-item mat-elevation-z3">
+    <!--li *ngFor="let dummy of loading$ | async" class="feed-item mat-elevation-z3">
       <wm-post [post]="null"></wm-post>
-    </li>
+    </li-->
   </ul>
 
 </ng-container>

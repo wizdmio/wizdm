@@ -1,0 +1,92 @@
+<!-- Loads the localized content -->
+<ng-container *wmContent="let msgs select 'explore-feed.card'">
+
+  <!-- Cover image -->
+  <img class="cover" fxFlex="1 0 0" [src]="data?.cover" />
+
+  <!-- Card body -->
+  <div class="body" fxFlex="1 1 auto" fxLayout="column">
+
+    <h2>{{ data?.title }}</h2>
+
+    <p>{{ data?.brief }}</p>
+
+    <!-- Author's info -->
+    <div class="author" fxLayout="row" *ngIf="author$ | async as author">
+    
+      <!-- Author's picture -->
+      <a [routerLink]="['/', '@' + author.userName]">
+        <wm-avatar class="avatar" [src]="author.photo"></wm-avatar>
+      </a>
+
+      <div class="author-name" fxLayout="column">
+    
+        <!-- Author's name -->
+        <a [routerLink]="['/', '@' + author.userName]"><b>{{ author.fullName }}</b></a>
+        
+        <!-- Post creation time long version (when older than 12 hours) -->
+        <time class="time mat-small" *ngIf="data | createdTime | olderThan:'PT12H'; else shortTime" >{{ 
+          
+          data | createdTime | calendar:msgs.timeFormat || {
+            sameDay : '[Today at] LT',          
+            lastDay : '[Yesterday at] LT',
+            lastWeek : '[Last] dddd [at] LT',
+            sameElse : 'LL'
+          }  
+        
+        }}</time>
+
+        <!-- Post creation time short version (whithin 12 hours) -->
+        <ng-template #shortTime><time class="time mat-small">{{ data | createdTime | fromNow }}</time></ng-template>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions menu -->
+  <button mat-icon-button class="menu" [matMenuTriggerFor]="menuActions">
+    <wm-icon icon="fas:fa-ellipsis-v"></wm-icon>
+  </button>
+
+  <mat-menu #menuActions="matMenu">
+
+    <!-- Save post -->
+    <button mat-menu-item>
+      <wm-icon icon="far:fa-bookmark"></wm-icon>
+      <span>{{ msgs.actions?.save || 'Save post' }}</span>      
+    </button>
+
+    <!-- Enables editing -->
+    <ng-container *ngIf="(author$ | async)?.id === me">
+    
+      <!-- Edit post and updates its data when done -->
+      <button mat-menu-item openDialog="edit" [dialogData]="{ id: data.id }" (dialogClosed)="data = $event || data">
+        <wm-icon icon="far:fa-edit"></wm-icon>
+        <span>{{ msgs.actions?.edit || 'Edit post' }}</span>
+      </button>
+
+      <!-- Delete post -->
+      <button mat-menu-item (click)="dlgDelete.open()">
+        <wm-icon icon="far:fa-trash-alt"></wm-icon>
+        <span>{{ msgs.actions?.delete || 'Delete post' }}</span>
+      </button>
+
+      <!-- CanDelete dialog, hides the post when deleted -->
+      <wm-dialog role="alertdialog" (closedTruthy)="deleted = true; delete()" #dlgDelete>
+        <h2 mat-dialog-title><b>{{ msgs.canDelete?.title || 'Confirm deletion' }}</b></h2>
+
+        <mat-dialog-content [wm-readme]="msgs.canDelete?.message" linkClass="primary">
+          <span>You're about to delete the post.<br>Please confirm.</span>
+        </mat-dialog-content>
+
+        <mat-dialog-actions align="end">
+          <button mat-button color="primary" [mat-dialog-close]="false" cdkFocusInitial>{{ msgs.canDelete?.cancel || 'Cancel' }}</button>
+          <button mat-button color="warn" [mat-dialog-close]="true">{{ msgs.canDelete?.ok || 'Delete' }}</button>
+        </mat-dialog-actions>
+      </wm-dialog>
+
+    </ng-container>
+
+  </mat-menu>
+
+</ng-container>

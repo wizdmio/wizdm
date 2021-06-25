@@ -28,7 +28,7 @@ const routes: RoutesWithContent = [
   {
     path: ':lang',    
     component: NavigatorComponent,    
-    canActivate: [ CookieConsent, UserPreferences ],
+    canActivate: [ UserPreferences, CookieConsent ],
     content: 'navigator',
     
     children: [

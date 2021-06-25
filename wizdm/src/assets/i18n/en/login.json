@@ -13,7 +13,7 @@
     "social": {
       "title": "Sign-in with a social",
       "message": "Welcome to *Wizdm*.\nUse your favorite social to access.",
-      "instructions": "You can also [register](register) with your email or, if already registered, [sign-in](signIn)."
+      "instructions": "You can also [join](register) with your email or, if already registered, [sign-in](signIn)."
     },
     "register": {
       "title": "Register with your email",
@@ -24,7 +24,7 @@
     "signIn": {
       "title": "Sign-in with your email",
       "message": "We're glad to see you again.\nPlease sign-in",
-      "instructions": "Are you a new user?\nYou can [register](register) with your email or login with your [favorite social](social)",
+      "instructions": "Are you a new user?\nYou can [join](register) with your email or login with your [favorite social](social)",
       "caption": "Sign-in with my email"
     },
     "forgotPassword": {

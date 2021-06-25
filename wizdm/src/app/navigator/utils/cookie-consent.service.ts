@@ -18,7 +18,11 @@ export class CookieConsent implements CanActivate {
     this.auth.state$.pipe(take(1), switchMap(user => {
       
       // Terminates if the user is authenticated or the consent has already been expressed
-      if(!!user || this.cookies.get('consent') === 'allowed') { return EMPTY; } 
+      if(!!user || this.cookies.get('consent') === 'allowed') { 
+        
+        console.log('Cookie consent already expressed:', !!user ? 'User logged-in' : 'Cookied allowed');
+        return EMPTY; 
+      } 
       
       // Waits the current navigation to complete
       return this.router.events.pipe(
