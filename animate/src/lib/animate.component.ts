@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, Renderer2, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { startWith, map, takeWhile, delay, distinctUntilChanged } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription } from 'rxjs';
@@ -33,7 +33,8 @@ export type wmAnimations =
     ...bounceOut,...fadeOut,...hinge,...rollOut,...zoomOut,
     // None
     state('none', style('*')), state('idle-none', style('*'))
-  ])]
+  ])],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AnimateComponent implements OnInit, OnDestroy {
 
@@ -48,7 +49,7 @@ export class AnimateComponent implements OnInit, OnDestroy {
   public animating = false;
   public animated = false;
 
-  constructor(private elm: ElementRef, private scroll: AnimateService, private renderer: Renderer2) {}
+  constructor(private elm: ElementRef, private scroll: AnimateService, private renderer: Renderer2, private cd: ChangeDetectorRef) {}
 
   @HostBinding('@animate') 
   public trigger;
@@ -169,7 +170,13 @@ export class AnimateComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
 
       // Triggers the animation to play or to idle
-    ).subscribe( trigger => this.trigger = trigger );
+    ).subscribe( trigger => {
+      
+      this.trigger = trigger;
+
+      // Ensure change detection (this make the animation trigger no matter the container uses OnPush)
+      this.cd.markForCheck();
+    });
   }
 
   // Disposes of the observable
