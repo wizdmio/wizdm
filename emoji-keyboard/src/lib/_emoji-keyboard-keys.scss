@@ -1,3 +1,4 @@
+@use "sass:math";
 // Default empty sheet positions map
 @import './emoji-sheet-map';
 // Default single icon size
@@ -13,7 +14,7 @@ $sheetSize: ($sheetRows * $iconBias) ($sheetRows * $iconBias);
 
 // Computes the single emoji offset position
 @function sheetOffset($x, $y) {
-  @return ($x * -$iconBias - ($iconBias - $iconSize)/2) ($y * -$iconBias - ($iconBias - $iconSize)/2);
+  @return ($x * -$iconBias - math.div($iconBias - $iconSize, 2)) ($y * -$iconBias - math.div($iconBias - $iconSize, 2));
 }
 
 // Defines the emoji key class

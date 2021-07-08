@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $toggler-size: 20px !default;
 
 .wm-toggler {
@@ -19,11 +21,11 @@ $toggler-size: 20px !default;
       position: absolute;
       height: $element-size;
       width: $toggler-size;
-      border-radius: $element-size / 2;
+      border-radius: math.div($element-size, 2);
 
-      &[top]    { top: $toggler-size / 10 - $element-size / 2;}
-      &[middle] { top: ($toggler-size - $element-size) / 2;}
-      &[bottom] { bottom: $toggler-size / 10 - $element-size / 2;}
+      &[top]    { top: math.div($toggler-size, 10) - math.div($element-size, 2); }
+      &[middle] { top: math.div($toggler-size - $element-size, 2); }
+      &[bottom] { bottom: math.div($toggler-size, 10) - math.div($element-size, 2); }
     }
   }
 
@@ -36,11 +38,11 @@ $toggler-size: 20px !default;
       position: absolute;          
       height: $element-size;
       width: $element-size;
-      left: ($toggler-size - $element-size) / 2;
-      border-radius: $element-size / 2;
+      left: math.div($toggler-size - $element-size, 2);
+      border-radius: math.div($element-size, 2);
 
       &[top]    { top: 0;}
-      &[middle] { top: ($toggler-size - $element-size) / 2;}
+      &[middle] { top: math.div($toggler-size - $element-size, 2); }
       &[bottom] { bottom: 0;}
     }
   }
@@ -54,11 +56,11 @@ $toggler-size: 20px !default;
       position: absolute;    
       height: $element-size;
       width: $element-size;
-      top: ($toggler-size - $element-size) / 2;
-      border-radius: $element-size / 2;
+      top: math.div($toggler-size - $element-size, 2);
+      border-radius: math.div($element-size, 2);
 
       &[top]    { left: 0; }
-      &[middle] { left: ($toggler-size - $element-size) / 2; }
+      &[middle] { left: math.div($toggler-size - $element-size, 2); }
       &[bottom] { right: 0; }
     }
   }

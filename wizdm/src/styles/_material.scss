@@ -1,4 +1,4 @@
-
+@use "sass:math";
 /*
 // Creates a customized material typography first...
 $wm-typography: mat-typography-config(
@@ -166,7 +166,7 @@ $wm-theme: extend-material-theme($wm-theme,
     min-width: $size;
     width: auto;
     padding: 0 4px;
-    border-radius: $size / 2;
+    border-radius: math.div($size, 2);
     box-sizing: border-box;
   }
 }

@@ -1,3 +1,4 @@
+@use "sass:math";
 
 @mixin preloader($size, $thickness, $color) {
 
@@ -13,8 +14,8 @@
 
     & > div {
       position: absolute;
-      left: calc(50% - #{$size/2} );
-      top: calc(50% - #{$size/2} );
+      left: calc(50% - #{ math.div($size, 2) });
+      top: calc(50% - #{ math.div($size, 2) });
       width: $size;
       height: $size;
     
