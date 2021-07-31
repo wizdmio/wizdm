@@ -1,61 +1,60 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-theme-colors($theme, $props: ('color', 'background-color', 'border-color', 'stroke', 'fill')) {
+@mixin define-colors($theme, $props: ('color', 'background-color', 'border-color', 'stroke', 'fill')) {
 
-  $background: map-get($theme, 'background');
-  $foreground: map-get($theme, 'foreground');
+  $background: map.get($theme, 'background');
+  $foreground: map.get($theme, 'foreground');
 
-  //.wm-theme-colors {
+  // Styles the text color
+  .text-color { color: map.get($foreground, text); }
 
-    // Styles the text color
-    .text-color { color: map-get($foreground, text); }
+  // Styles the text color
+  .hint-color { color: map.get($foreground, hint-text); }
 
-    // Styles the text color
-    .hint-color { color: map-get($foreground, hint-text); }
+  // Styles the background color
+  .background-color { background-color: map.get($background, 'background'); }
 
-    // Styles the background color
-    .background-color { background-color: map-get($background, 'background'); }
+  // Styles the background on hover as for active items
+  .background-active { cursor: pointer; &:hover { background-color: mat.get-color-from-palette($background, 'hover'); } }
 
-    // Styles the background on hover as for active items
-    .background-active { cursor: pointer; &:hover { background-color: mat-color($background, 'hover'); } }
+  // Styles the given property for disabled color
+  @each $prop in $props { .#{$prop}-disabled { #{$prop}: map.get($foreground, 'disabled'); } }
 
-    // Styles the given property for disabled color
-    @each $prop in $props { .#{$prop}-disabled { #{$prop}: map-get($foreground, 'disabled'); } }
+  // Styles the theme palettes
+  @each $color in ('primary', 'accent', 'warn') {
 
-    // Styles the theme palettes
-    @each $color in ('primary', 'accent', 'warn') {
+    $palette: map.get($theme, #{$color});
 
-      $palette: map-get($theme, #{$color});
+    // Loops on each palette
+    [color=#{$color}], .#{$color}, .mat-#{$color} {
 
-      // Loops on each palette
-      [color=#{$color}], .#{$color}, .mat-#{$color} {
+      // Styles a general selection 
+      &[selected=true], &.selected { 
 
-        // Styles a general selection 
-        &[selected=true], &.selected { 
+        background-color: mat.get-color-from-palette($background, 'selected-button');
+        //color: mat.get-color-from-palette($foreground, 'secondary-text');
+      }
 
-          background-color: mat-color($background, 'selected-button');
-          //color: mat-color($foreground, 'secondary-text');
-        }
+      // Loops on each palette's color tone
+      @each $tone in ('default', 'lighter', 'darker') {
 
-        // Loops on each palette's color tone
-        @each $tone in ('default', 'lighter', 'darker') {
+        // Styles the contrast color
+        &.contrast-#{$tone}, .contrast-#{$tone} { color: map.get($palette, #{$tone}-contrast); }
 
-          // Styles the contrast color
-          &.contrast-#{$tone}, .contrast-#{$tone} { color: map-get($palette, #{$tone}-contrast); }
+        // Styles the desider properties each palette, each tone and the full hues
+        @each $prop in $props {
+      
+          &.#{$prop}-#{$tone}, .#{$prop}-#{$tone} { #{$prop}: mat.get-color-from-palette($palette, $tone); }
 
-          // Styles the desider properties each palette, each tone and the full hues
-          @each $prop in $props {
-        
-            &.#{$prop}-#{$tone}, .#{$prop}-#{$tone} { #{$prop}: mat-color($palette, $tone); }
-
-            // All palette hues
-            @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
-              
-              &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat-color($palette, $hue); }
-            }
+          // All palette hues
+          @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
+            
+            &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat.get-color-from-palette($palette, $hue); }
           }
         }
       }
     }
-  //}
+  }
 }
 

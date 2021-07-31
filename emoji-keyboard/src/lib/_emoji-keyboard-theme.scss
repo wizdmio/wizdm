@@ -1,14 +1,16 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-emoji-keyboard($theme) {
+@mixin theme($theme) {
 
   .wm-emoji-keyboard {
 
-    $foregroud: map-get($theme, foreground);
+    $foregroud: map.get($theme, foreground);
 
-    color: map-get($foregroud, disabled);
+    color: map.get($foregroud, disabled);
 
     .selected {
-      color: mat-color( map-get($theme, primary) );
+      color: mat.get-color-from-palette( map.get($theme, primary) );
     }
   }
 }

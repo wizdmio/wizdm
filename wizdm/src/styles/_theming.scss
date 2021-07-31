@@ -1,41 +1,62 @@
-@import 'emoji-keyboard-theme';
-@import 'elements-theme';
+@forward "~@angular/material";
+@use "~@angular/material" as mat;
+@use 'elements-theme' as elm;
+@use 'emoji-keyboard';
+@use 'skeleton';
+@use 'material';
+@use 'colors';
+@use "sass:map";
 
-// Initilize the global application theme
-@mixin wm-init-application-theme($theme, $typography) {
+// Initilize the global application typography
+@mixin init-typography($typography, $margins) {
 
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  
   // Includes the material core component independent theme styles w/ typography
-  @include mat-core($typography);
-  
-  // Includes a material component specifics theme styles
-  @include angular-material-theme($theme);
+  @include mat.core($typography);
 
   // Ovverrides standard material typo margins
-  @include tweak-material-typo-margins();
+  @include material.tweak-typo-margins(  
+    if( map.has-key($margins, "display-4"),    map.get($margins, "display-4"),    24 ),
+    if( map.has-key($margins, "display-3"),    map.get($margins, "display-3"),    24 ),
+    if( map.has-key($margins, "display-2"),    map.get($margins, "display-2"),    24 ),
+    if( map.has-key($margins, "display-1"),    map.get($margins, "display-1"),    24 ),
+    if( map.has-key($margins, "headline"),     map.get($margins, "headline"),     16 ),
+    if( map.has-key($margins, "title"),        map.get($margins, "title"),        16 ),
+    if( map.has-key($margins, "subheading-2"), map.get($margins, "subheading-2"), 16 ),
+    if( map.has-key($margins, "subheading-1"), map.get($margins, "subheading-1"), 16 ),
+    if( map.has-key($margins, "body"),         map.get($margins, "body"),         12 ),
+  );
+}
 
-  // Tweaks material compoment styles for improved flexibility
-  @include tweak-material-components();
+// Initilize the global application theme
+@mixin init-theme($theme, $foreground: (), $background: ()) {
 
-  // Styles the elements according to the theme
-  @include wm-elements-theme($theme);
+  // Overides the foreground and background maps, whenever needed
+  $theme: material.tweak-theme($theme, $foreground, $background);
 
-  // Styles the emoji-keyboard component
-  @include wm-emoji-keyboard($theme);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
+    
+  // Includes a material component specifics theme styles
+  @include mat.all-component-themes($theme);
 
   // Styles the theme colors globally
-  @include wm-theme-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
+  @include colors.define-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
+
+  // Tweaks material compoment styles for improved flexibility
+  @include material.tweak-components();
+
+  // Styles the elements according to the theme
+  @include elm.all-element-themes($theme);
+
+  // Styles the emoji-keyboard component
+  @include emoji-keyboard.theme($theme);
 
   // Styles the skeleton loading animation class
-  @include skeleton-loading(map-get($foreground, 'divider')) {
+  @include skeleton.loading(map.get($theme, 'foreground', 'divider')) {
     
     // Patches the avatar element color
-    &.wm-avatar { fill: opacify(map-get($foreground, 'divider'), 0.25); }
+    &.wm-avatar { fill: opacify(map.get($theme, 'foreground', 'divider'), 0.25); }
   }
 
   // Styles links
@@ -49,7 +70,7 @@
       
       &[color=#{$color}], &.#{$color} {
 
-        color: mat-color( map-get($theme, #{$color}) ); 
+        color: mat.get-color-from-palette( map.get($theme, #{$color}) ); 
       }
     }
 
@@ -57,14 +78,14 @@
     &[disabled=true], &.disabled {
 
       text-decoration: dotted underline;
-      color: map-get( map-get($theme, 'foreground'), 'disabled');
+      color: map.get($theme, 'foreground', 'disabled');
     }    
   }
 
   // Smoothen the text color on content
   p, li, td { 
     line-height: 1.5;
-    color: rgba( map-get(map-get($theme, 'foreground'), 'text'), 0.8); 
+    color: rgba( map.get($theme, 'foreground', 'text'), 0.8); 
   }
 
   // Defines a global style for blockquotes
@@ -91,7 +112,7 @@
     &:first-of-type { padding-left: 24px; }
     &:last-of-type { padding-right: 24px; }
 
-    border-bottom: 1px solid map-get( map-get($theme, 'foreground'), 'divider'); 
+    border-bottom: 1px solid map.get($theme, 'foreground', 'divider'); 
   }
 
   // Defines a global style for dividers
@@ -102,16 +123,16 @@
     margin: 24px 0;
     border-style: none;
 
-    background-color: map-get( map-get($theme, 'foreground'), 'divider'); 
+    background-color: map.get($theme, 'foreground', 'divider'); 
   }
 
   // Ovverrides the autofill styles to blend in with the theme
   input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     &, &:hover, &:focus, &:active {
       // Use the custom text-fill-color to override the color property
-      -webkit-text-fill-color: map-get( map-get($theme, 'foreground'), 'text') !important;
+      -webkit-text-fill-color: map.get($theme, 'foreground', 'text') !important;
       // Use an inset box-shadow to overlap the autofill background color
-      box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
+      box-shadow: 0 0 0px 1000px map.get($theme, 'background', 'background') inset !important;
     }
   }
 
@@ -120,41 +141,39 @@
     input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
       &, &:hover, &:focus, &:active {
         // Use an inset box-shadow to overlap the autofill background color
-        box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'dialog') inset !important;
+        box-shadow: 0 0 0px 1000px map.get($theme, 'background', 'dialog') inset !important;
       }
     }
   }
 }
 
 // Initialize the application theme colors only (to be used for multiple themes)
-@mixin wm-init-application-colors($theme) {
+@mixin init-colors($theme) {
 
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
+  $background: map.get($theme, background);
+  $foreground: map.get($theme, foreground);
+  $primary: map.get($theme, primary);
+  $accent: map.get($theme, accent);
+  $warn: map.get($theme, warn);
   
   // Includes a material component specifics colors only
-  @include angular-material-color($theme);
-
-  // Tweaks material compoment styles for improved flexibility
-  @include tweak-material-components();
-
-  // Styles the elements according to the theme
-  @include wm-elements-theme($theme);
-
-  // Styles the emoji-keyboard component
-  @include wm-emoji-keyboard($theme);
+  @include mat.core-color($theme);
+  @include mat.all-component-colors($theme);
 
   // Styles the theme colors globally
-  @include wm-theme-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
+  @include colors.define-colors($theme, ('color', 'background-color', 'border-color', 'stroke', 'fill'));
+
+  // Styles the elements according to the theme
+  @include elm.all-element-themes($theme);
+
+  // Styles the emoji-keyboard component
+  @include emoji-keyboard.theme($theme);
 
   // Styles the skeleton loading animation class
-  @include skeleton-loading(map-get($foreground, divider)) {
+  @include skeleton.loading(map.get($theme, 'foreground', 'divider')) {
     
     // Patches the avatar element color
-    &.wm-avatar { fill: opacify(map-get($foreground, divider), 0.25); }
+    &.wm-avatar { fill: opacify(map.get($theme, 'foreground', 'divider'), 0.25); }
   }
 
   // Styles links
@@ -164,32 +183,32 @@
       
       &[color=#{$color}], &.#{$color} { 
         
-        color: mat-color( map-get($theme, #{$color}) ); 
+        color: mat.get-color-from-palette( map.get($theme, #{$color}) ); 
       }
     }
 
     // Styles the disabled link
     &[disabled=true], &.disabled { 
 
-      color: map-get( map-get($theme, 'foreground'), 'disabled'); 
+      color: map.get($theme, 'foreground', 'disabled'); 
     }    
   }
 
   // Smoothen the text color on content
-  p, li, td { color: rgba( map-get(map-get($theme, 'foreground'), 'text'), 0.8); }
+  p, li, td { color: rgba( map.get($theme, 'foreground', 'text'), 0.8); }
 
-  td { border-bottom: 1px solid map-get( map-get($theme, 'foreground'), 'divider'); }
+  td { border-bottom: 1px solid map.get($theme, 'foreground', 'divider'); }
 
   // Defines a global style for dividers
-  hr { background-color: map-get( map-get($theme, 'foreground'), 'divider'); }
+  hr { background-color: map.get($theme, 'foreground', 'divider'); }
 
   // Ovverrides the autofill styles to blend in with the theme
   input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
     &, &:hover, &:focus, &:active {
       // Use an inset box-shadow to overlap the autofill background color
-      box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'background') inset !important;
+      box-shadow: 0 0 0px 1000px map.get($theme, 'background', 'background') inset !important;
       // Use the custom text-fill-color to override the color property
-      -webkit-text-fill-color: map-get( map-get($theme, 'foreground'), 'text') !important;
+      -webkit-text-fill-color: map.get($theme, 'foreground', 'text') !important;
     }
   }
 
@@ -198,7 +217,7 @@
     input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
       &, &:hover, &:focus, &:active {
         // Use an inset box-shadow to overlap the autofill background color
-        box-shadow: 0 0 0px 1000px map-get( map-get($theme, 'background'), 'dialog') inset !important;
+        box-shadow: 0 0 0px 1000px map.get($theme, 'background', 'dialog') inset !important;
       }
     }
   }

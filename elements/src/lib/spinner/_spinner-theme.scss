@@ -1,16 +1,18 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-spinner-theme($theme) {
+@mixin theme($theme) {
  
   .wm-spinner { 
 
     @each $color in ('primary', 'accent', 'warn') {
 
-      $palette: map-get($theme, #{$color});
+      $palette: map.get($theme, #{$color});
 
       &[color=#{$color}] { 
 
         .path { 
-          stroke: mat-color($palette);
+          stroke: mat.get-color-from-palette($palette);
         }
       }
     }

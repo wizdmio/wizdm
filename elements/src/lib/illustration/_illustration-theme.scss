@@ -1,5 +1,7 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-illustration-theme($theme, $props: ('stroke', 'fill')) {
+@mixin theme($theme, $props: ('stroke', 'fill')) {
  
   .wm-illustration { 
     
@@ -7,7 +9,7 @@
 
     @each $color in $colors {
 
-      $palette: map-get($theme, #{$color});
+      $palette: map.get($theme, #{$color});
 
       // Monochromatic illustrations (using alternatively the primary, accent or warn palette)
       &[color=#{$color}], &.#{$color}, .#{$color} { 
@@ -15,18 +17,18 @@
         @each $prop in $props {
 
           // Palette default color
-          &.#{$prop}-default, .#{$prop}-default { #{$prop}: mat-color($palette); }
+          &.#{$prop}-default, .#{$prop}-default { #{$prop}: mat.get-color-from-palette($palette); }
 
           // Palette lighter color
-          &.#{$prop}-lighter, .#{$prop}-lighter { #{$prop}: mat-color($palette, 'lighter'); }
+          &.#{$prop}-lighter, .#{$prop}-lighter { #{$prop}: mat.get-color-from-palette($palette, 'lighter'); }
 
           // Palette darker color
-          &.#{$prop}-darker, .#{$prop}-darker { #{$prop}: mat-color($palette, 'darker'); }
+          &.#{$prop}-darker, .#{$prop}-darker { #{$prop}: mat.get-color-from-palette($palette, 'darker'); }
 
           // All palette hues
           @each $hue in (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700) {
             
-            &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat-color($palette, $hue); }
+            &.#{$prop}-#{$hue}, .#{$prop}-#{$hue} { #{$prop}: mat.get-color-from-palette($palette, $hue); }
           }
         }
       }

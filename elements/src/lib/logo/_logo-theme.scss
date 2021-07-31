@@ -1,6 +1,7 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-
-@mixin wm-logo-theme($theme) {
+@mixin theme($theme) {
   
   .wm-logo {
 
@@ -8,8 +9,8 @@
 
       &[color=#{$color}] {
 
-        $palette: map-get($theme, #{$color});
-        $hue: mat-color($palette);
+        $palette: map.get($theme, #{$color});
+        $hue: mat.get-color-from-palette($palette);
 
         .base  { fill: $hue; }
         .light { fill: lighten($hue, 20%); }

@@ -1,8 +1,9 @@
 @use "sass:math";
 
-@mixin preloader($size, $thickness, $color) {
+@mixin define-class($size, $thickness, $color, $name: "preloader") {
 
-  .preloader {
+  .#{$name} {
+
     position: fixed;
     top: 0;
     left: 0;
@@ -52,7 +53,3 @@
     100% { transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);}
   }
 }
-
-
-
-

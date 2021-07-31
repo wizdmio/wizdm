@@ -1,94 +1,106 @@
+@use 'styles/preloader';
+@use "styles/theming";
+@use 'styles/prism';
+@use 'emoji-keyboard';
+@use "sass:map";
+
 // Resets styles with Normalize.css for browser behaviour consistency
 @import '~normalize.css/normalize.css';
-
-// Import Angular Material theming 
-@import '~@angular/material/theming';
 
 // Load text and icon fonts from the relevant CDN
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:wght@400;700');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Extended');
 @import url('https://use.fontawesome.com/releases/v5.15.3/css/all.css');
 
-/* Load all the other partials */
-@import './styles/preloader';
-@import './styles/skeleton';
-@import './styles/material';
-@import './styles/colors';
-@import './styles/prism';
-@import './styles/theming';
+// Defines the global typography
+@include theming.init-typography(
 
-// Creates a customized material typography first...
-$wm-typography: mat-typography-config(
-  $font-family:   'Ubuntu, sans-serif',
-  $display-4:     mat-typography-level(112px, 112px, 300),
-  $display-3:     mat-typography-level(72px, 72px, 400),
-  $display-2:     mat-typography-level(56px, 56px, 400),
-  $display-1:     mat-typography-level(45px, 48px, 400),
-  $headline:      mat-typography-level(36px, 48px, 400),
-  $title:         mat-typography-level(24px, 32px, 400),
-  $subheading-2:  mat-typography-level(22px, 28px, 400),
-  $subheading-1:  mat-typography-level(20px, 24px, 400),
-  $body-2:        mat-typography-level(18px, 24px, 400),
-  $body-1:        mat-typography-level(16px, 20px, 400),
-  $button:        mat-typography-level(16px, 20px, 400)
-);
+  $typography: theming.define-typography-config(
+    
+    $font-family:   'Ubuntu, sans-serif',
+    $display-4:     theming.define-typography-level(112px, 112px, 300),
+    $display-3:     theming.define-typography-level(72px, 72px, 400),
+    $display-2:     theming.define-typography-level(56px, 56px, 400),
+    $display-1:     theming.define-typography-level(45px, 48px, 400),
+    $headline:      theming.define-typography-level(36px, 48px, 400),
+    $title:         theming.define-typography-level(24px, 32px, 400),
+    $subheading-2:  theming.define-typography-level(22px, 28px, 400),
+    $subheading-1:  theming.define-typography-level(20px, 24px, 400),
+    $body-2:        theming.define-typography-level(18px, 24px, 400),
+    $body-1:        theming.define-typography-level(16px, 20px, 400),
+    $button:        theming.define-typography-level(16px, 20px, 400)
+  ),
 
-// Define the main theme colors palettes.
-$wm-primary: mat-palette($mat-blue);
-$wm-accent:  mat-palette($mat-amber);//, 400, 600, 800);
-$wm-warn:    mat-palette($mat-red);
-
-// Creates a standard material light theme first...
-$wm-light-theme: mat-light-theme($wm-primary, $wm-accent, $wm-warn);
-//... than overrides with customized fore/background values
-$wm-light-theme: tweak-material-theme($wm-light-theme, 
-
-  $foreground: ( // Overrides Material foreground colors
-
-    base:              mat-color($wm-primary, 900),
-    disabled-button:   rgba(mat-color($wm-primary, 900), 0.26),
-    icon:              mat-color($wm-primary),
-    icons:             mat-color($wm-primary),
-    text:              mat-color($wm-primary, 900),
-    //light-text:       mat-color($primary, 50),
-    dark-text:         mat-color($wm-primary, 900)
+  $margins: (
+    display-4:    24,
+    display-3:    24,
+    display-2:    24,
+    display-1:    24,
+    headline:     16,
+    title:        16,
+    subheading-2: 16,
+    subheading-1: 16,
+    body:         12
   )
 );
 
-// Include the keys definition for the emoji-keyboard once
-@import 'emoji-keyboard-keys';
-@include wm-emoji-keyboard-keys("/assets/emoji/sheets/32.png");
+// Define the main theme colors palettes.
+$wm-primary: theming.define-palette(theming.$blue-palette);
+$wm-accent:  theming.define-palette(theming.$amber-palette);//, 400, 600, 800);
+$wm-warn:    theming.define-palette(theming.$red-palette);
+
+// Initialze the global application theme, make sure to call this only once
+@include theming.init-theme(
+  
+  $theme: theming.define-light-theme($wm-primary, $wm-accent, $wm-warn),
+
+  $foreground: ( // Overrides Material foreground colors
+
+    base:              theming.get-color-from-palette($wm-primary, 900),
+    disabled-button:   rgba(theming.get-color-from-palette($wm-primary, 900), 0.26),
+    icon:              theming.get-color-from-palette($wm-primary),
+    icons:             theming.get-color-from-palette($wm-primary),
+    text:              theming.get-color-from-palette($wm-primary, 900),
+    dark-text:         theming.get-color-from-palette($wm-primary, 900)
+  )
+);
+
+// Initializes the dark-theme as well
+.dark-mode {
+
+  @include theming.init-colors(
+  
+    $theme: theming.define-dark-theme(
+
+      $primary: theming.define-palette(theming.$blue-palette, 700, 300, 900, 700),
+
+      $accent: theming.define-palette(theming.$amber-palette, 700, 300, 900, 700),
+
+      $warn: theming.define-palette(theming.$red-palette, 700, 300, 900, 700) 
+    )
+  );  
+}
 
 // Creates the .preloader spinner class applying the theme color
-@include preloader(150px, 3px, mat-color($wm-primary)) {
+@include preloader.define-class(150px, 3px, theming.get-color-from-palette($wm-primary)) {
 
   // Includes a background option adapting to the OS color scheme. This will apply the proper background color
   // until the app loads and the .darl-mode class gets applied according to the user preferences
   &.background {
 
-    @media(prefers-color-scheme: light) { background: map-get($mat-light-theme-background, 'background'); }
-    @media(prefers-color-scheme: dark)  { background: map-get($mat-dark-theme-background,  'background'); }
+    @media(prefers-color-scheme: light) { background: map.get(theming.$light-theme-background-palette, 'background'); }
+    @media(prefers-color-scheme: dark)  { background: map.get(theming.$dark-theme-background-palette,  'background'); }
   }
 };
 
-// Initialze the global application theme, make sure to call this only once
-@include wm-init-application-theme($wm-light-theme, $wm-typography);
+// Include the keys definition for the emoji-keyboard once
+@include emoji-keyboard.keys-define-all("/assets/emoji/sheets/32.png");
 
-.dark-mode {
-
-  // Define the main theme colors palettes.
-  $wm-dark-primary: mat-palette($mat-blue, 700, 300, 900, 700);
-  $wm-dark-accent:  mat-palette($mat-amber, 700, 300, 900, 700);
-  $wm-dark-warn:    mat-palette($mat-red, 700, 300, 900, 700);
-
-  $wm-dark-theme: mat-dark-theme($wm-dark-primary, $wm-dark-accent, $wm-dark-warn);
-
-  // Initialze the global application theme, make sure to call this only once
-  @include wm-init-application-colors($wm-dark-theme);
-}
-
-// Disables outline on all elements
-* { outline: none; }
+// Defines the prism theme for syntax highlighting
+@include prism.theme();
 
 // Applies a smooth scroll behaviour whenever supported
 html { scroll-behavior: smooth; }
+
+// Disables outline on all elements
+* { outline: none; }

@@ -56,7 +56,7 @@ $sheetSize: ($sheetRows * $iconBias) ($sheetRows * $iconBias);
   }
 }
 
-@mixin wm-emoji-keyboard-keys($source: "assets/sheet/32.png") {
+@mixin define-all($source: "assets/sheet/32.png") {
 
   .wm-emoji-keyboard {
 

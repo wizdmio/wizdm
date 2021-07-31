@@ -1,15 +1,17 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-inkbar-theme($theme) {
+@mixin theme($theme) {
  
   .wm-inkbar { 
 
     @each $color in ('primary', 'accent', 'warn') {
 
-      $palette: map-get($theme, #{$color});
+      $palette: map.get($theme, #{$color});
 
       &[color=#{$color}] {
 
-        .inkbar { background-color: mat-color($palette); } 
+        .inkbar { background-color: mat.get-color-from-palette($palette); } 
       }
     }
   }

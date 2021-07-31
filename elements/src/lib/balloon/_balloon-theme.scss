@@ -1,21 +1,23 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-balloon-theme($theme) {
+@mixin theme($theme) {
  
   .wm-balloon { 
 
-    $fore: map-get($theme, 'foreground');
-    $back: map-get($theme, 'background');
-    $dark: map-get($theme, 'is-dark');
+    $fore: map.get($theme, 'foreground');
+    $back: map.get($theme, 'background');
+    $dark: map.get($theme, 'is-dark');
 
-    border: 1px solid map-get($fore, 'divider');
-    background-color: map-get($back, 'background');
+    border: 1px solid map.get($fore, 'divider');
+    background-color: map.get($back, 'background');
 
     @each $color in ('primary', 'accent', 'warn') {
 
-      $palette: map-get($theme, #{$color});
+      $palette: map.get($theme, #{$color});
 
       &[color=#{$color}] {
-        background-color: mat-color($palette, if($dark, 'darker', 'lighter')); 
+        background-color: mat.get-color-from-palette($palette, if($dark, 'darker', 'lighter')); 
       }
     }
   }

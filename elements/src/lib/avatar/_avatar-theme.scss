@@ -1,17 +1,19 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-avatar-theme($theme) {
+@mixin theme($theme) {
 
   .wm-avatar {
     
-    $background: map-get($theme, background);
+    $background: map.get($theme, background);
     
-    border: 2px solid map-get($background, background);
-    background-color: map-get($background, background);
+    border: 2px solid map.get($background, background);
+    background-color: map.get($background, background);
     
     @each $color in ('primary', 'accent', 'warn') { 
 
-      $palette: map-get($theme, #{$color});
-      &[color=#{$color}] { fill: mat-color($palette); }
+      $palette: map.get($theme, #{$color});
+      &[color=#{$color}] { fill: mat.get-color-from-palette($palette); }
     }
   }
 }

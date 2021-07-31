@@ -6,12 +6,12 @@ import { OnCancelData, OnCancelActions } from './types/buttons';
 import { OnClickData, OnClickActions } from './types/buttons';
 import { OnInitData, OnInitActions } from './types/buttons';
 import { SubscriptionRequest } from './types/subscription';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { PAYPAL_INSTANCE } from './paypal-factory';
 import { OnErrorData } from './types/buttons';
 import { OrderRequest } from './types/order';
 import { Funding } from './types/common';
 import { PayPal } from './types/paypal';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { PAYPAL_INSTANCE } from './paypal-factory';
 
 export type ButtonsType = 'checkout'|'subscription';
 

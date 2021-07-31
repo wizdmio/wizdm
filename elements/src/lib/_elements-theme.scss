@@ -1,24 +1,41 @@
+@use './avatar/avatar-theme';
+@forward './avatar/avatar-theme' as avatar-* show avatar-theme;
 
-@import './logo/logo-theme';
-@import './toggler/toggler-theme';
-@import './avatar/avatar-theme';
-@import './spinner/spinner-theme';
-@import './thumbnail/thumbnail-theme';
-@import './inkbar/inkbar-theme';
-@import './illustration/illustration-theme';
-@import './balloon/balloon-theme';
-@import './highlight/highlight-theme';
+@use './balloon/balloon-theme';
+@forward './balloon/balloon-theme' as balloon-* show balloon-theme;
 
-@mixin wm-elements-theme($theme) {
+@use './highlight/highlight-theme';
+@forward './highlight/highlight-theme' as highlight-* show highlight-theme;
+
+@use './illustration/illustration-theme';
+@forward './illustration/illustration-theme' as illustration-* show illustration-theme;
+
+@use './inkbar/inkbar-theme';
+@forward './inkbar/inkbar-theme' as inkbar-* show inkbar-theme;
+
+@use './logo/logo-theme';
+@forward  './logo/logo-theme' as logo-* show logo-theme;
+
+@use './spinner/spinner-theme';
+@forward './spinner/spinner-theme' as spinner-* show spinner-theme;
+
+@use './thumbnail/thumbnail-theme';
+@forward './thumbnail/thumbnail-theme' as thumbnail-* show thumbnail-theme;
+
+@use './toggler/toggler-theme';
+@forward  './toggler/toggler-theme' as toggler-* show toggler-theme;
+
+// Create all themes
+@mixin all-element-themes($theme) {
 
   // Includes element specifics theme styles
-  @include wm-logo-theme($theme);
-  @include wm-toggler-theme($theme);
-  @include wm-avatar-theme($theme);
-  @include wm-spinner-theme($theme);
-  @include wm-thumbnail-theme($theme);
-  @include wm-inkbar-theme($theme);
-  @include wm-balloon-theme($theme);
-  @include wm-highlight-theme($theme);
-  @include wm-illustration-theme($theme, ('stroke', 'fill', 'stop-color'));
+  @include avatar-theme.theme($theme);
+  @include balloon-theme.theme($theme);
+  @include highlight-theme.theme($theme);
+  @include illustration-theme.theme($theme, ('stroke', 'fill', 'stop-color'));
+  @include inkbar-theme.theme($theme);
+  @include logo-theme.theme($theme);
+  @include spinner-theme.theme($theme);
+  @include thumbnail-theme.theme($theme);
+  @include toggler-theme.theme($theme);
 }

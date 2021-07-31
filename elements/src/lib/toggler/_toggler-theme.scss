@@ -1,19 +1,21 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-toggler-theme($theme) {
+@mixin theme($theme) {
 
-  $foreground: map-get($theme, foreground);
+  $foreground: map.get($theme, foreground);
 
   .wm-toggler {
     
     $colors: ('primary', 'accent', 'warn');
 
-    //.toggler-line { background-color: map-get($foreground, text); }
+    //.toggler-line { background-color: map.get($foreground, text); }
 
     @each $color in $colors {
 
-      $palette: map-get($theme, #{$color});
+      $palette: map.get($theme, #{$color});
       &[color=#{$color}] { 
-        .toggler-line { background-color: mat-color($palette); }
+        .toggler-line { background-color: mat.get-color-from-palette($palette); }
       }
     }
   }

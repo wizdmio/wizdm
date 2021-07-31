@@ -1,17 +1,19 @@
+@use "~@angular/material" as mat;
+@use "sass:map";
 
-@mixin wm-thumbnail-theme($theme) {
+@mixin theme($theme) {
  
   .wm-thumbnail { 
 
     @each $color in ('primary', 'accent', 'warn') {
 
-      $palette: map-get($theme, #{$color});
+      $palette: map.get($theme, #{$color});
 
       &[color=#{$color}][selected=true] { 
 
         .seleciton {
-          border: 1px solid mat-color($palette);
-          background-color: mat-color($palette, lighter, 0.25);
+          border: 1px solid mat.get-color-from-palette($palette);
+          background-color: mat.get-color-from-palette($palette, lighter, 0.25);
         }
       }
     }
