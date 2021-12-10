@@ -86,4 +86,9 @@ export class StripeCardNumber extends StripeElementDirective<'cardNumber'> imple
   @Input() set disabled(value: boolean) { 
     this.options.disabled = coerceBooleanProperty(value); 
   }
+  
+   /** Show a card brand icon in the Element */
+  @Input() set showIcon(value: boolean) { 
+    this.options.showIcon = coerceBooleanProperty(value); 
+  }
 }
